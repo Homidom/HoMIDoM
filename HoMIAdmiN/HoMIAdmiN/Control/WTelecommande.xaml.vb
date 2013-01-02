@@ -39,11 +39,11 @@
     Private Sub BtnSaveCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnSaveCmd.Click
         Try
             If IsNumeric(TxtCmdRepeat.Text) = False Then
-                MsgBox("Numérique obligatoire pour repeat !!")
+                MessageBox.Show("Numérique obligatoire pour repeat !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
             If TxtCmdName.Text = "" Or TxtCmdName.Text = " " Then
-                MsgBox("Le nom de la commande est obligatoire !!")
+                MessageBox.Show("Le nom de la commande est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
 
@@ -296,9 +296,9 @@
             End If
 
             If _Driver IsNot Nothing Then
-                MsgBox("OK")
+                MessageBox.Show("OK", "", MessageBoxButton.OK, MessageBoxImage.Information)
             Else
-                MsgBox("VIDE")
+                MessageBox.Show("VIDE", "", MessageBoxButton.OK, MessageBoxImage.Information)
             End If
 
             Dim mytemplate As String = LCase(TxtTplFab.Text) & "-" & LCase(TxtTplMod.Text) & "-" & _Driver.Protocol

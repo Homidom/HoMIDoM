@@ -8,19 +8,19 @@ Partial Public Class uConfigServer
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         Try
             If IsConnect = True Then
-                If TxtIPSOAP.Text = "" Then
+                If String.IsNullOrEmpty(TxtIPSOAP.Text) = True Then
                     MessageBox.Show("L'adresse IP SOAP est erronée !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
                     Exit Sub
                 End If
-                If IsNumeric(TxtSOAP.Text) = False Or TxtSOAP.Text = "" Then
+                If IsNumeric(TxtSOAP.Text) = False Or String.IsNullOrEmpty(TxtSOAP.Text) = True Then
                     MessageBox.Show("Le port SOAP est erroné !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
                     Exit Sub
                 End If
-                If TxtIdSrv.Text = "" Or TxtIdSrv.Text = " " Then
+                If String.IsNullOrEmpty(TxtIdSrv.Text) = True Then
                     MessageBox.Show("L'id du serveur ne peut être vide !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
                     Exit Sub
                 End If
-                If IsNumeric(TxtSave.Text) = False Or TxtSave.Text = "" Or TxtSave.Text = " " Or CInt(TxtSave.Text) < 0 Then
+                If IsNumeric(TxtSave.Text) = False Or String.IsNullOrEmpty(TxtSave.Text) = True Or CInt(TxtSave.Text) < 0 Then
                     MessageBox.Show("La valeur de saubegarde doit être un chiffre et positif !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
                     Exit Sub
                 End If

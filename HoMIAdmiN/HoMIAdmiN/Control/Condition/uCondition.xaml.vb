@@ -124,7 +124,7 @@ Public Class uCondition
                 If InStr(a(5), "5") Then Chk5.IsChecked = True
                 If InStr(a(5), "6") Then Chk6.IsChecked = True
                 If InStr(a(5), "0") Then Chk7.IsChecked = True
-                If a(5) <> "" Then
+                If String.IsNullOrEmpty(a(5)) = False Then
                     If stk3.Visibility = Windows.Visibility.Hidden Then
                         ChkJour.IsChecked = True
                         stk3.Visibility = Windows.Visibility.Visible
@@ -426,27 +426,27 @@ Public Class uCondition
             If _TypeCondition = Action.TypeCondition.DateTime Then
 
                 Dim _myconditiontime As String = ""
-                If TxtSc.Text = "" Then
+                If String.IsNullOrEmpty(TxtSc.Text) = True Then
                     _myconditiontime &= "*#"
                 Else
                     _myconditiontime &= TxtSc.Text & "#"
                 End If
-                If TxtMn.Text = "" Then
+                If String.IsNullOrEmpty(TxtMn.Text) = True Then
                     _myconditiontime &= "*#"
                 Else
                     _myconditiontime &= TxtMn.Text & "#"
                 End If
-                If TxtHr.Text = "" Then
+                If String.IsNullOrEmpty(TxtHr.Text) = True Then
                     _myconditiontime &= "*#"
                 Else
                     _myconditiontime &= TxtHr.Text & "#"
                 End If
-                If TxtJr.Text = "" Then
+                If String.IsNullOrEmpty(TxtJr.Text) = True Then
                     _myconditiontime &= "*#"
                 Else
                     _myconditiontime &= TxtJr.Text & "#"
                 End If
-                If TxtMs.Text = "" Then
+                If String.IsNullOrEmpty(TxtMs.Text) = True Then
                     _myconditiontime &= "*#"
                 Else
                     _myconditiontime &= TxtMs.Text & "#"
@@ -455,42 +455,42 @@ Public Class uCondition
                 Dim _prepajr As String = ""
                 If Chk1.IsChecked = True Then _prepajr = "1"
                 If Chk2.IsChecked = True Then
-                    If _prepajr <> "" Then
+                    If String.IsNullOrEmpty(_prepajr) = False Then
                         _prepajr &= ",2"
                     Else
                         _prepajr = "2"
                     End If
                 End If
                 If Chk3.IsChecked = True Then
-                    If _prepajr <> "" Then
+                    If String.IsNullOrEmpty(_prepajr) = False Then
                         _prepajr &= ",3"
                     Else
                         _prepajr = "3"
                     End If
                 End If
                 If Chk4.IsChecked = True Then
-                    If _prepajr <> "" Then
+                    If String.IsNullOrEmpty(_prepajr) = False Then
                         _prepajr &= ",4"
                     Else
                         _prepajr = "4"
                     End If
                 End If
                 If Chk5.IsChecked = True Then
-                    If _prepajr <> "" Then
+                    If String.IsNullOrEmpty(_prepajr) = False Then
                         _prepajr &= ",5"
                     Else
                         _prepajr = "5"
                     End If
                 End If
                 If Chk6.IsChecked = True Then
-                    If _prepajr <> "" Then
+                    If String.IsNullOrEmpty(_prepajr) = False Then
                         _prepajr &= ",6"
                     Else
                         _prepajr = "6"
                     End If
                 End If
                 If Chk7.IsChecked = True Then
-                    If _prepajr <> "" Then
+                    If String.IsNullOrEmpty(_prepajr) = False Then
                         _prepajr &= ",0"
                     Else
                         _prepajr = "0"
@@ -516,7 +516,7 @@ Public Class uCondition
                     _IdDevice = myService.GetAllDevices(IdSrv).Item(CbDevice.SelectedIndex).ID
                     _PropertyDevice = CbPropertyDevice.Text
                     _Signe = CbSigne2.SelectedIndex
-                    If TxtValue.Tag = "" Then
+                    If String.IsNullOrEmpty(TxtValue.Tag) = True Then
                         _Value = TxtValue.Text
                     Else
                         _Value = TxtValue.Tag
@@ -571,7 +571,7 @@ Public Class uCondition
 #Region "Gestion Date/time"
     Private Sub BtnPHr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPHr.Click
         Dim i As Integer
-        If TxtHr.Text = "" Then
+        If String.IsNullOrEmpty(TxtHr.Text) = True Then
             i = 0
             TxtHr.Text = Format(i, "00")
         Else
@@ -588,7 +588,7 @@ Public Class uCondition
 
     Private Sub BtnPMn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPMn.Click
         Dim i As Integer
-        If TxtMn.Text = "" Then
+        If String.IsNullOrEmpty(TxtMn.Text) = True Then
             i = 0
             TxtMn.Text = Format(i, "00")
         Else
@@ -605,7 +605,7 @@ Public Class uCondition
 
     Private Sub BtnPSc_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPSc.Click
         Dim i As Integer
-        If TxtSc.Text = "" Then
+        If String.IsNullOrEmpty(TxtSc.Text) = True Then
             i = 0
             TxtSc.Text = Format(i, "00")
         Else
@@ -622,7 +622,7 @@ Public Class uCondition
 
     Private Sub BtnMHr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMHr.Click
         Dim i As Integer
-        If TxtHr.Text = "" Then
+        If String.IsNullOrEmpty(TxtHr.Text) = True Then
             i = 23
             TxtHr.Text = Format(i, "00")
         Else
@@ -639,7 +639,7 @@ Public Class uCondition
 
     Private Sub BtnMMn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMMn.Click
         Dim i As Integer
-        If TxtMn.Text = "" Then
+        If String.IsNullOrEmpty(TxtMn.Text) = True Then
             i = 59
             TxtMn.Text = Format(i, "00")
         Else
@@ -657,7 +657,7 @@ Public Class uCondition
 
     Private Sub BtnMSec_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMSec.Click
         Dim i As Integer
-        If TxtSc.Text = "" Then
+        If String.IsNullOrEmpty(TxtSc.Text) = True Then
             i = 59
             TxtSc.Text = Format(i, "00")
         Else
@@ -674,7 +674,7 @@ Public Class uCondition
 
     Private Sub BtnPJr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPJr.Click
         Dim i As Integer
-        If TxtJr.Text = "" Then
+        If String.IsNullOrEmpty(TxtJr.Text) = True Then
             i = 1
             TxtJr.Text = Format(i, "00")
         Else
@@ -690,7 +690,7 @@ Public Class uCondition
 
     Private Sub BtnPMs_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPMs.Click
         Dim i As Integer
-        If TxtMs.Text = "" Then
+        If String.IsNullOrEmpty(TxtMs.Text) = True Then
             i = 1
             TxtMs.Text = Format(i, "00")
         Else
@@ -707,7 +707,7 @@ Public Class uCondition
 
     Private Sub BtnMJr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMJr.Click
         Dim i As Integer
-        If TxtJr.Text = "" Then
+        If String.IsNullOrEmpty(TxtJr.Text) = True Then
             i = 31
             TxtJr.Text = Format(i, "00")
         Else
@@ -724,7 +724,7 @@ Public Class uCondition
 
     Private Sub BtnMMs_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMMs.Click
         Dim i As Integer
-        If TxtMs.Text = "" Then
+        If String.IsNullOrEmpty(TxtMs.Text) = True Then
             i = 12
             TxtMs.Text = Format(i, "00")
         Else
@@ -740,7 +740,7 @@ Public Class uCondition
     End Sub
 
     Private Sub TxtHr_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtHr.TextChanged
-        If TxtHr.Text <> "" Then
+        If String.IsNullOrEmpty(TxtHr.Text) = False Then
             If IsNumeric(TxtHr.Text) = False Then
                 TxtHr.Text = "00"
             End If
@@ -748,7 +748,7 @@ Public Class uCondition
     End Sub
 
     Private Sub TxtMn_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMn.TextChanged
-        If TxtMn.Text <> "" Then
+        If String.IsNullOrEmpty(TxtMn.Text) = False Then
             If IsNumeric(TxtMn.Text) = False Then
                 TxtMn.Text = "00"
             End If
@@ -756,7 +756,7 @@ Public Class uCondition
     End Sub
 
     Private Sub TxtSc_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtSc.TextChanged
-        If TxtSc.Text <> "" Then
+        If String.IsNullOrEmpty(TxtSc.Text) = False Then
             If IsNumeric(TxtSc.Text) = False Then
                 TxtSc.Text = "00"
             End If
@@ -764,7 +764,7 @@ Public Class uCondition
     End Sub
 
     Private Sub TxtJr_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtJr.TextChanged
-        If TxtJr.Text <> "" And TxtJr.Text <> "*" Then
+        If String.IsNullOrEmpty(TxtJr.Text) = False And TxtJr.Text <> "*" Then
             If IsNumeric(TxtJr.Text) = False Then
                 TxtJr.Text = "01"
             End If
@@ -772,7 +772,7 @@ Public Class uCondition
     End Sub
 
     Private Sub TxtMs_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMs.TextChanged
-        If TxtMs.Text <> "" And TxtJr.Text <> "*" Then
+        If String.IsNullOrEmpty(TxtMs.Text) = False And TxtJr.Text <> "*" Then
             If IsNumeric(TxtMs.Text) = False Then
                 TxtMs.Text = "01"
             End If

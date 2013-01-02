@@ -11,14 +11,14 @@ Partial Public Class uZone
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         Try
-            If TxtName.Text = "" Then
+            If String.IsNullOrEmpty(TxtName.Text) = True Then
                 MessageBox.Show("Le nom de la zone est obligatoire!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
 
-            If _ZoneId = "" Then
-                For i As Integer = 0 To myservice.GetAllZones(IdSrv).Count - 1
-                    If myservice.GetAllZones(IdSrv).Item(i).Name = TxtName.Text Then
+            If String.IsNullOrEmpty(_ZoneId) = True Then
+                For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
+                    If myService.GetAllZones(IdSrv).Item(i).Name = TxtName.Text Then
                         MessageBox.Show("Le nom de cette zone est déjà utilisée, veuillez en choisir un autre!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                         Exit Sub
                     End If
@@ -105,12 +105,12 @@ Partial Public Class uZone
                         _ListIdSelect.Add(x.ListElement.Item(j))
                     Next
 
-                    If x.Image <> "" And x.Image <> " " Then
+                    If String.IsNullOrEmpty(x.Image) = False Then
                         ImgZone.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Image))
                         ImgZone.Tag = x.Image
                     End If
 
-                    If x.Icon <> "" And x.Icon <> "" And x.Icon <> " " Then
+                    If String.IsNullOrEmpty(x.Icon) = False Then
                         ImgIcon.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Icon))
                         ImgIcon.Tag = x.Icon
                     End If
@@ -292,8 +292,8 @@ Partial Public Class uZone
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 Dim retour As String = frm.FileName
-                If retour <> "" Then
-                    ImgZone.Source = ConvertArrayToImage(myservice.GetByteFromImage(retour))
+                If String.IsNullOrEmpty(retour) = False Then
+                    ImgZone.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
                     ImgZone.Tag = retour
                 End If
                 frm.Close()
@@ -311,8 +311,8 @@ Partial Public Class uZone
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 Dim retour As String = frm.FileName
-                If retour <> "" Then
-                    ImgIcon.Source = ConvertArrayToImage(myservice.GetByteFromImage(retour))
+                If String.IsNullOrEmpty(retour) = False Then
+                    ImgIcon.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
                     ImgIcon.Tag = retour
                 End If
                 frm.Close()

@@ -14,7 +14,7 @@ Partial Public Class uUser
                 Exit Sub
             End If
 
-            If TxtUsername.Text = "" Or TxtPassword.Password = "" Or ComboProfil.SelectedIndex < 0 Or TxtNom.Text = "" Or TxtPrenom.Text = "" Then
+            If String.IsNullOrEmpty(TxtUsername.Text) = True Or String.IsNullOrEmpty(TxtPassword.Password) = True Or ComboProfil.SelectedIndex < 0 Or String.IsNullOrEmpty(TxtNom.Text) = True Or String.IsNullOrEmpty(TxtPrenom.Text) = True Then
                 MessageBox.Show("Le username, le mot de passe, le profil, le nom et prénom sont obligatoires !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
@@ -62,7 +62,7 @@ Partial Public Class uUser
                     TxtVille.Text = x.Ville
                     TxtCodePostal.Text = x.CodePostal
 
-                    If x.Image <> "" And x.Image <> " " Then
+                    If String.IsNullOrEmpty(x.Image) = False Then
                         ImgIcon.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Image))
                         ImgIcon.Tag = x.Image
                     End If
@@ -79,8 +79,8 @@ Partial Public Class uUser
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 Dim retour As String = frm.FileName
-                If retour <> "" Then
-                    ImgIcon.Source = ConvertArrayToImage(myservice.GetByteFromImage(retour))
+                If String.IsNullOrEmpty(retour) = False Then
+                    ImgIcon.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
                     ImgIcon.Tag = retour
                 End If
                 frm.Close()

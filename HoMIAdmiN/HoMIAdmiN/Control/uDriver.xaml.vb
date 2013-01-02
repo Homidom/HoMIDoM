@@ -130,7 +130,7 @@ Partial Public Class uDriver
                     GroupBox1.Visibility = Windows.Visibility.Collapsed
                 End If
 
-                If x.Picture <> "" And x.Picture <> " " Then
+                If String.IsNullOrEmpty(x.Picture) = False Then
                     ImgDevice.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Picture))
                     ImgDevice.Tag = x.Picture
                 End If
@@ -165,31 +165,31 @@ Partial Public Class uDriver
             'verification of value
             Dim verif As Boolean = True
             'verif of PORT_COM
-            If TxtCom.Text <> "" And TxtCom.Text <> "@" Then
+            If String.IsNullOrEmpty(TxtCom.Text) = False And TxtCom.Text <> "@" Then
                 If Not (TxtCom.Text.StartsWith("COM") Or TxtCom.Text.StartsWith("USB")) Then
                     MessageBox.Show("Le Champ COM doit être configuré avec COMx ou USBx (ou x est un entier)", "Erreur port COM", MessageBoxButton.OK, MessageBoxImage.Error)
                     Exit Sub
                 End If
             End If
-            If TxtPortTCP.Text <> "" And TxtPortTCP.Text <> "@" Then
+            If String.IsNullOrEmpty(TxtPortTCP.Text) = False And TxtPortTCP.Text <> "@" Then
                 If IsValidPortIP(TxtPortTCP.Text) = False Then
                     MessageBox.Show("Le Port TCP doit être compris entre 0 et 65535", "Erreur port COM", MessageBoxButton.OK, MessageBoxImage.Error)
                     Exit Sub
                 End If
             End If
-            If TxtPortUDP.Text <> "" And TxtPortUDP.Text <> "@" Then
+            If String.IsNullOrEmpty(TxtPortUDP.Text) = False And TxtPortUDP.Text <> "@" Then
                 If IsValidPortIP(TxtPortUDP.Text) = False Then
                     MessageBox.Show("Le Port UDP doit être compris entre 0 et 65535", "Erreur port COM", MessageBoxButton.OK, MessageBoxImage.Error)
                     Exit Sub
                 End If
             End If
-            If TxtAdrTCP.Text <> "" And TxtAdrTCP.Text <> "@" Then
+            If String.IsNullOrEmpty(TxtAdrTCP.Text) = False And TxtAdrTCP.Text <> "@" Then
                 If IsValidIP(TxtAdrTCP.Text) = False Then
                     MessageBox.Show("L'adresse IP doit être au format xx.xx.xx.xx", "Erreur port COM", MessageBoxButton.OK, MessageBoxImage.Error)
                     Exit Sub
                 End If
             End If
-            If TxtAdrUDP.Text <> "" And TxtAdrUDP.Text <> "@" Then
+            If String.IsNullOrEmpty(TxtAdrUDP.Text) = False And TxtAdrUDP.Text <> "@" Then
                 If IsValidIP(TxtAdrUDP.Text) = False Then
                     MessageBox.Show("L'adresse UDP doit être au format xx.xx.xx.xx", "Erreur port COM", MessageBoxButton.OK, MessageBoxImage.Error)
                     Exit Sub
@@ -210,7 +210,7 @@ Partial Public Class uDriver
 
     Private Sub TxtRefresh_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtRefresh.TextChanged
         Try
-            If TxtRefresh.Text <> "" And IsNumeric(TxtRefresh.Text) = False Then
+            If String.IsNullOrEmpty(TxtRefresh.Text) = False And IsNumeric(TxtRefresh.Text) = False Then
                 MessageBox.Show("Veuillez saisir une valeur numérique")
                 TxtRefresh.Text = 0
             End If
@@ -271,7 +271,7 @@ Partial Public Class uDriver
             TxtP4.Visibility = Windows.Visibility.Hidden
             TxtP5.Visibility = Windows.Visibility.Hidden
 
-            If CbCmd.Text = "" Then Exit Sub
+            If String.IsNullOrEmpty(CbCmd.Text) = True Then Exit Sub
             If CbCmd.SelectedIndex < 0 Then Exit Sub
 
             Dim Idx As Integer = CbCmd.SelectedIndex
@@ -316,27 +316,27 @@ Partial Public Class uDriver
 
             a.Nom = CbCmd.Text
 
-            If TxtP1.Text <> "" Then
+            If String.IsNullOrEmpty(TxtP1.Text) = False Then
                 Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
                 y.Value = TxtP1.Text
                 a.Parametres.Add(y)
             End If
-            If TxtP2.Text <> "" Then
+            If String.IsNullOrEmpty(TxtP2.Text) = False Then
                 Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
                 y.Value = TxtP2.Text
                 a.Parametres.Add(y)
             End If
-            If TxtP3.Text <> "" Then
+            If String.IsNullOrEmpty(TxtP3.Text) = False Then
                 Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
                 y.Value = TxtP3.Text
                 a.Parametres.Add(y)
             End If
-            If TxtP4.Text <> "" Then
+            If String.IsNullOrEmpty(TxtP4.Text) = False Then
                 Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
                 y.Value = TxtP4.Text
                 a.Parametres.Add(y)
             End If
-            If TxtP5.Text <> "" Then
+            If String.IsNullOrEmpty(TxtP5.Text) = False Then
                 Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
                 y.Value = TxtP5.Text
                 a.Parametres.Add(y)
@@ -361,7 +361,7 @@ Partial Public Class uDriver
 
     Private Sub BtnOkParam_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOkParam.Click
         Try
-            If CbParam.SelectedIndex >= 0 And TxtParam.Text <> "" Then
+            If CbParam.SelectedIndex >= 0 And String.IsNullOrEmpty(TxtParam.Text) = False Then
                 _ListParam.Item(CbParam.SelectedIndex) = TxtParam.Text
             Else
                 MessageBox.Show("Veuillez sélectionner un paramètre ou saisir sa valeur", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
@@ -377,7 +377,7 @@ Partial Public Class uDriver
 
     Private Function IsValidIP(ByVal addr As String) As Boolean
         Try
-            If addr = "" Or addr = " " Then
+            If String.IsNullOrEmpty(addr) = False Then
                 Return True
                 Exit Function
             End If
@@ -390,7 +390,7 @@ Partial Public Class uDriver
             'boolean variable to hold the status
             Dim valid As Boolean = False
             'check to make sure an ip address was provided
-            If addr = "" Then
+            If String.IsNullOrEmpty(addr) = True Then
                 'no address provided so return false
                 valid = False
             Else
@@ -410,7 +410,7 @@ Partial Public Class uDriver
             Dim valid As Boolean = False
             Dim _addr As Integer
 
-            If addr = "" Or addr = " " Then
+            If String.IsNullOrEmpty(addr) = True Then
                 Return True
                 Exit Function
             End If

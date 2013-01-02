@@ -88,25 +88,25 @@ Class uModuleSimple
             Dim resultatmessage As String = ""
 
             'vérifications
-            If TxtNom.Text = "" Then
-                MsgBox("Il faut renseigner un nom de module !", MsgBoxStyle.Critical)
+            If String.IsNullOrEmpty(TxtNom.Text) = True Then
+                MessageBox.Show("Il faut renseigner un nom de module !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
             For Each Mac In listemacros
                 If Mac.Nom.ToString.ToUpper = TxtNom.Text.ToUpper Then
-                    MsgBox("Attention, ce nom existe déjà !", MsgBoxStyle.Critical)
+                    MessageBox.Show("Attention, ce nom existe déjà !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                     TxtNom.Text = ""
                     Exit Sub
                 End If
             Next
             For Each Trig In listetriggers
                 If TxtNom.Text.ToUpper = Split(Trig.Nom.ToString.ToUpper, " :: ")(0) Then
-                    MsgBox("Attention, ce nom existe déjà !", MsgBoxStyle.Critical)
+                    MessageBox.Show("Attention, ce nom existe déjà !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                     TxtNom.Text = ""
                     Exit Sub
                 End If
                 If TxtNom.Text.ToUpper = Trig.Nom.ToString.ToUpper Then
-                    MsgBox("Attention, ce nom existe déjà !", MsgBoxStyle.Critical)
+                    MessageBox.Show("Attention, ce nom existe déjà !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                     TxtNom.Text = ""
                     Exit Sub
                 End If
@@ -167,7 +167,7 @@ Class uModuleSimple
                         End If
                     Next
                     If nbemetteur = 0 Then
-                        MsgBox("Il faut Sélectionner au moins un Emetteur !", MsgBoxStyle.Critical)
+                        MessageBox.Show("Il faut Sélectionner au moins un Emetteur !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                         Exit Sub
                     End If
                 End If
@@ -237,7 +237,7 @@ Class uModuleSimple
                         End If
                     Next
                     If nbrecepteur = 0 Then
-                        MsgBox("Il faut Sélectionner au moins un Récepteur !", MsgBoxStyle.Critical)
+                        MessageBox.Show("Il faut Sélectionner au moins un Récepteur !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                         Exit Sub
                     End If
                 End If
@@ -275,7 +275,7 @@ Class uModuleSimple
                 _actiondevice.IdDevice = CbComposant.SelectedItem.Id
                 _actiondevice.Method = CbAction.Text
                 _actiondevice.Parametres.Clear()
-                If TxtParametre.Text <> "" Then _actiondevice.Parametres.Add(TxtParametre.Text)
+                If String.IsNullOrEmpty(TxtParametre.Text) = False Then _actiondevice.Parametres.Add(TxtParametre.Text)
                 _listeActions.Add(_actiondevice)
                 _MacroId = myService.SaveMacro(IdSrv, "", TxtNom.Text, True, "Macro créée depuis un Module", _listeActions)
                 _listeMacros.Add(_MacroId)
@@ -284,20 +284,20 @@ Class uModuleSimple
 
                 'on créé le trigger Timer
                 Dim _myconditiontime As String = "_cron"
-                If TxtSc.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtSc.Text) & "#"
-                If TxtMn.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtMn.Text) & "#"
-                If TxtHr.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtHr.Text) & "#"
-                If TxtJr.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtJr.Text) & "#"
-                If TxtMs.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtMs.Text) & "#"
+                If String.IsNullOrEmpty(TxtSc.Text) = True Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtSc.Text) & "#"
+                If String.IsNullOrEmpty(TxtMn.Text) = True Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtMn.Text) & "#"
+                If String.IsNullOrEmpty(TxtHr.Text) = True Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtHr.Text) & "#"
+                If String.IsNullOrEmpty(TxtJr.Text) = True Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtJr.Text) & "#"
+                If String.IsNullOrEmpty(TxtMs.Text) = True Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtMs.Text) & "#"
                 Dim _prepajr As String = ""
                 If CheckBox7.IsChecked = True Then _prepajr = "0"
-                If CheckBox1.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",1" Else _prepajr = "1"
-                If CheckBox2.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",2" Else _prepajr = "2"
-                If CheckBox3.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",3" Else _prepajr = "3"
-                If CheckBox4.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",4" Else _prepajr = "4"
-                If CheckBox5.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",5" Else  : _prepajr = "5"
-                If CheckBox6.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",6" Else _prepajr = "6"
-                If _prepajr = "" Then _prepajr = "*"
+                If CheckBox1.IsChecked = True Then If String.IsNullOrEmpty(_prepajr) = False Then _prepajr &= ",1" Else _prepajr = "1"
+                If CheckBox2.IsChecked = True Then If String.IsNullOrEmpty(_prepajr) = False Then _prepajr &= ",2" Else _prepajr = "2"
+                If CheckBox3.IsChecked = True Then If String.IsNullOrEmpty(_prepajr) = False Then _prepajr &= ",3" Else _prepajr = "3"
+                If CheckBox4.IsChecked = True Then If String.IsNullOrEmpty(_prepajr) = False Then _prepajr &= ",4" Else _prepajr = "4"
+                If CheckBox5.IsChecked = True Then If String.IsNullOrEmpty(_prepajr) = False Then _prepajr &= ",5" Else  : _prepajr = "5"
+                If CheckBox6.IsChecked = True Then If String.IsNullOrEmpty(_prepajr) = False Then _prepajr &= ",6" Else _prepajr = "6"
+                If String.IsNullOrEmpty(_prepajr) = True Then _prepajr = "*"
                 _myconditiontime &= _prepajr
                 myService.SaveTrigger(IdSrv, "", TxtNom.Text, True, Trigger.TypeTrigger.TIMER, "Trigger créé depuis un Module", _myconditiontime, "", "", _listeMacros)
                 resultatmessage = resultatmessage & "     - Un Trigger Timer : " & TxtNom.Text & Chr(10)
@@ -307,7 +307,7 @@ Class uModuleSimple
 
 
             'End Select
-            MsgBox(resultatmessage, MsgBoxStyle.Information, "Création d'un module simple")
+            MessageBox.Show(resultatmessage, "Création d'un module simple", MessageBoxButton.OK, MessageBoxImage.Information)
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
             MessageBox.Show("Erreur: ModuleSimple BtnAjouter_Click: " & ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -376,10 +376,10 @@ Class uModuleSimple
 
     Private Sub TxtNom_LostFocus(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles TxtNom.LostFocus
         Try
-            If TxtNom.Text <> "" Then
+            If String.IsNullOrEmpty(TxtNom.Text) = False Then
                 For Each Mac In listemacros
                     If Mac.Nom.ToString.ToUpper = TxtNom.Text.ToUpper Then
-                        MsgBox("Attention, ce nom existe déjà !", MsgBoxStyle.Critical)
+                        MessageBox.Show("Attention, ce nom existe déjà !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                         TxtNom.Text = ""
                         Exit Sub
                     End If
@@ -387,12 +387,12 @@ Class uModuleSimple
                 For Each Trig In listetriggers
                     'If TxtNom.Text.ToUpper = Left(Trig.Nom.ToString.ToUpper, TxtNom.Text.Length) Then
                     If TxtNom.Text.ToUpper = Split(Trig.Nom.ToString.ToUpper, " :: ")(0) Then
-                        MsgBox("Attention, ce nom existe déjà !", MsgBoxStyle.Critical)
+                        MessageBox.Show("Attention, ce nom existe déjà !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                         TxtNom.Text = ""
                         Exit Sub
                     End If
                     If TxtNom.Text.ToUpper = Trig.Nom.ToString.ToUpper Then
-                        MsgBox("Attention, ce nom existe déjà !", MsgBoxStyle.Critical)
+                        MessageBox.Show("Attention, ce nom existe déjà !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                         TxtNom.Text = ""
                         Exit Sub
                     End If
@@ -441,7 +441,7 @@ Class uModuleSimple
     Private Sub BtnPHr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPHr.Click
         Try
             Dim i As Integer
-            If TxtHr.Text = "" Then
+            If String.IsNullOrEmpty(TxtHr.Text) = True Then
                 i = 0
                 TxtHr.Text = Format(i, "00")
             Else
@@ -461,7 +461,7 @@ Class uModuleSimple
     Private Sub BtnPMn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPMn.Click
         Try
             Dim i As Integer
-            If TxtMn.Text = "" Then
+            If String.IsNullOrEmpty(TxtMn.Text) = True Then
                 i = 0
                 TxtMn.Text = Format(i, "00")
             Else
@@ -481,7 +481,7 @@ Class uModuleSimple
     Private Sub BtnPSc_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPSc.Click
         Try
             Dim i As Integer
-            If TxtSc.Text = "" Then
+            If String.IsNullOrEmpty(TxtSc.Text) = True Then
                 i = 0
                 TxtSc.Text = Format(i, "00")
             Else
@@ -501,7 +501,7 @@ Class uModuleSimple
     Private Sub BtnMHr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMHr.Click
         Try
             Dim i As Integer
-            If TxtHr.Text = "" Then
+            If String.IsNullOrEmpty(TxtHr.Text) = True Then
                 i = 23
                 TxtHr.Text = Format(i, "00")
             Else
@@ -521,7 +521,7 @@ Class uModuleSimple
     Private Sub BtnMMn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMMn.Click
         Try
             Dim i As Integer
-            If TxtMn.Text = "" Then
+            If String.IsNullOrEmpty(TxtMn.Text) = True Then
                 i = 59
                 TxtMn.Text = Format(i, "00")
             Else
@@ -541,7 +541,7 @@ Class uModuleSimple
     Private Sub BtnMSec_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMSec.Click
         Try
             Dim i As Integer
-            If TxtSc.Text = "" Then
+            If String.IsNullOrEmpty(TxtSc.Text) = True Then
                 i = 59
                 TxtSc.Text = Format(i, "00")
             Else
@@ -561,7 +561,7 @@ Class uModuleSimple
     Private Sub BtnPJr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPJr.Click
         Try
             Dim i As Integer
-            If TxtJr.Text = "" Then
+            If String.IsNullOrEmpty(TxtJr.Text) = True Then
                 i = 1
                 TxtJr.Text = Format(i, "00")
             Else
@@ -581,7 +581,7 @@ Class uModuleSimple
     Private Sub BtnPMs_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPMs.Click
         Try
             Dim i As Integer
-            If TxtMs.Text = "" Then
+            If String.IsNullOrEmpty(TxtMs.Text) = True Then
                 i = 1
                 TxtMs.Text = Format(i, "00")
             Else
@@ -601,7 +601,7 @@ Class uModuleSimple
     Private Sub BtnMJr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMJr.Click
         Try
             Dim i As Integer
-            If TxtJr.Text = "" Then
+            If String.IsNullOrEmpty(TxtJr.Text) = True Then
                 i = 31
                 TxtJr.Text = Format(i, "00")
             Else
@@ -621,7 +621,7 @@ Class uModuleSimple
     Private Sub BtnMMs_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMMs.Click
         Try
             Dim i As Integer
-            If TxtMs.Text = "" Then
+            If String.IsNullOrEmpty(TxtMs.Text) = True Then
                 i = 12
                 TxtMs.Text = Format(i, "00")
             Else
@@ -640,10 +640,10 @@ Class uModuleSimple
 
     Private Sub TxtHr_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtHr.TextChanged
         Try
-            If TxtHr.Text <> "" Then
+            If String.IsNullOrEmpty(TxtHr.Text) = False Then
                 If IsNumeric(TxtHr.Text) = False Then
                     TxtHr.Text = "0"
-                ElseIf TxtHr.Text <> "" Then
+                ElseIf String.IsNullOrEmpty(TxtHr.Text) = False Then
                     If TxtHr.Text < 0 Then TxtHr.Text = ""
                     If TxtHr.Text > 23 Then TxtHr.Text = ""
                 End If
@@ -655,10 +655,10 @@ Class uModuleSimple
 
     Private Sub TxtMn_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMn.TextChanged
         Try
-            If TxtMn.Text <> "" Then
+            If String.IsNullOrEmpty(TxtMn.Text) = False Then
                 If IsNumeric(TxtMn.Text) = False Then
                     TxtMn.Text = "0"
-                ElseIf TxtMn.Text <> "" Then
+                ElseIf String.IsNullOrEmpty(TxtMn.Text) = False Then
                     If TxtMn.Text < 0 Then TxtMn.Text = ""
                     If TxtMn.Text > 59 Then TxtMn.Text = ""
                 End If
@@ -670,10 +670,10 @@ Class uModuleSimple
 
     Private Sub TxtSc_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtSc.TextChanged
         Try
-            If TxtSc.Text <> "" Then
+            If String.IsNullOrEmpty(TxtSc.Text) = False Then
                 If IsNumeric(TxtSc.Text) = False Then
                     TxtSc.Text = "0"
-                ElseIf TxtSc.Text <> "" Then
+                ElseIf String.IsNullOrEmpty(TxtSc.Text) = False Then
                     If TxtSc.Text < 0 Then TxtSc.Text = ""
                     If TxtSc.Text > 59 Then TxtSc.Text = ""
                 End If
@@ -685,10 +685,10 @@ Class uModuleSimple
 
     Private Sub TxtJr_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtJr.TextChanged
         Try
-            If TxtJr.Text <> "" Then
+            If String.IsNullOrEmpty(TxtJr.Text) = False Then
                 If IsNumeric(TxtJr.Text) = False Then
                     TxtJr.Text = "1"
-                ElseIf TxtJr.Text <> "" Then
+                ElseIf String.IsNullOrEmpty(TxtJr.Text) = False Then
                     If TxtJr.Text < 0 Then TxtJr.Text = ""
                     If TxtJr.Text > 31 Then TxtJr.Text = ""
                 End If
@@ -700,10 +700,10 @@ Class uModuleSimple
 
     Private Sub TxtMs_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMs.TextChanged
         Try
-            If TxtMs.Text <> "" Then
+            If String.IsNullOrEmpty(TxtMs.Text) = False Then
                 If IsNumeric(TxtMs.Text) = False Then
                     TxtMs.Text = "1"
-                ElseIf TxtMs.Text <> "" Then
+                ElseIf String.IsNullOrEmpty(TxtMs.Text) = False Then
                     If TxtMs.Text < 0 Then TxtMs.Text = ""
                     If TxtMs.Text > 12 Then TxtMs.Text = ""
                 End If

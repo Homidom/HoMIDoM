@@ -22,7 +22,7 @@ Public Class WActionParametrage
                 _typ = _ObjAction.TypeAction
                 Select Case _typ
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionDevice
-                        If Cb1.SelectedIndex < 0 Or Cb2.SelectedIndex < 0 Or (TxtValue.Visibility = Windows.Visibility.Visible And TxtValue.Text = "") Then
+                        If Cb1.SelectedIndex < 0 Or Cb2.SelectedIndex < 0 Or (TxtValue.Visibility = Windows.Visibility.Visible And String.IsNullOrEmpty(TxtValue.Text) = True) Then
                             MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                             Exit Sub
                         End If
@@ -32,7 +32,7 @@ Public Class WActionParametrage
                         obj.Method = Cb2.Text
                         obj.Parametres.Clear()
 
-                        If TxtValue.Text <> "" Then obj.Parametres.Add(TxtValue.Text)
+                        If String.IsNullOrEmpty(TxtValue.Text) = False Then obj.Parametres.Add(TxtValue.Text)
                         _ObjAction = obj
 
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionMacro
@@ -46,7 +46,7 @@ Public Class WActionParametrage
                         _ObjAction = obj
 
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionMail
-                        If Cb1.SelectedIndex < 0 Or Txt2.Text = "" Or TxtValue.Text = "" Then
+                        If Cb1.SelectedIndex < 0 Or String.IsNullOrEmpty(Txt2.Text) = True Or String.IsNullOrEmpty(TxtValue.Text) = True Then
                             MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                             Exit Sub
                         End If
@@ -58,7 +58,7 @@ Public Class WActionParametrage
                         _ObjAction = obj
 
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionSpeech
-                        If TxtValue.Text = "" Then
+                        If String.IsNullOrEmpty(TxtValue.Text) = True Then
                             MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                             Exit Sub
                         End If
@@ -68,7 +68,7 @@ Public Class WActionParametrage
                         _ObjAction = obj
 
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionVB
-                        If TxtValue.Text = "" Or Txt2.Text = "" Then
+                        If String.IsNullOrEmpty(TxtValue.Text) = True Or String.IsNullOrEmpty(Txt2.Text) = True Then
                             MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                             Exit Sub
                         End If
@@ -79,7 +79,7 @@ Public Class WActionParametrage
                         _ObjAction = obj
 
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionLogEvent
-                        If TxtValue.Text = "" Then
+                        If String.IsNullOrEmpty(TxtValue.Text) = True Then
                             MessageBox.Show("Veuillez renseigner tous les champs car il n'y a pas de message !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                             Exit Sub
                         End If
@@ -99,7 +99,7 @@ Public Class WActionParametrage
                         _ObjAction = obj
 
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionLogEventHomidom
-                        If TxtValue.Text = "" Then
+                        If String.IsNullOrEmpty(TxtValue.Text) = True Then
                             MessageBox.Show("Veuillez renseigner tous les champs car il n'y a pas de message !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                             Exit Sub
                         End If
@@ -107,7 +107,7 @@ Public Class WActionParametrage
                             MessageBox.Show("Veuillez sélectionner un type de log !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                             Exit Sub
                         End If
-                        If Txt2.Text = "" Then
+                        If String.IsNullOrEmpty(Txt2.Text) = True Then
                             MessageBox.Show("Veuillez saisir le nom de la fonction !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                             Exit Sub
                         End If
@@ -119,7 +119,7 @@ Public Class WActionParametrage
                         _ObjAction = obj
 
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionDOS
-                        If Txt2.Text = "" Then
+                        If String.IsNullOrEmpty(Txt2.Text) = True Then
                             MessageBox.Show("Veuillez saisir le chemin du fichier !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                             Exit Sub
                         End If
@@ -130,7 +130,7 @@ Public Class WActionParametrage
                         _ObjAction = obj
 
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionHttp
-                        If TxtValue.Text = "" Then
+                        If String.IsNullOrEmpty(TxtValue.Text) = True Then
                             MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                             Exit Sub
                         End If

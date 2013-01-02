@@ -928,7 +928,7 @@ Namespace HoMIDom
                                             End If
                                             X = Nothing
                                         End If
-                                        If .ID <> "" And .Name <> "" And .Adresse1 <> "" And .DriverId <> "" Then
+                                        If String.IsNullOrEmpty(.ID) = False And String.IsNullOrEmpty(.Name) = False And String.IsNullOrEmpty(.Adresse1) = False And String.IsNullOrEmpty(.DriverId) = False Then
                                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
                                             If .ID = "soleil01" Then
                                                 trvSoleil = True
@@ -1608,7 +1608,7 @@ Namespace HoMIDom
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("picture")
                     Dim _pict As String = _ListDevices.Item(i).picture
-                    If _pict = "" Or _pict = Nothing Then _pict = " "
+                    If String.IsNullOrEmpty(_pict) = True Or _pict = Nothing Then _pict = " "
                     writer.WriteValue(_pict)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("solo")
@@ -2935,7 +2935,7 @@ Namespace HoMIDom
                 result = Nothing
 
                 'verif si premiere installation
-                If db_uid = "" Then
+                If String.IsNullOrEmpty(db_uid) = True Then
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Premiere Installation :Remerciements")
                     '        ''premiere install : update uid/dateinstall/versiondll puis thanks puis register
                     '        ''on maj la db
@@ -3324,7 +3324,6 @@ Namespace HoMIDom
                 Text = Replace(Text, "#155;", ">")
                 Text = Replace(Text, "#139;", "<")
                 Text = Replace(Text, "#177;", "±")
-                'Text = Replace(Text, "", "&")
                 Text = Replace(Text, "#130;", "‚")
                 Text = Replace(Text, "#131;", "ƒ")
                 Text = Replace(Text, "#132;", "„")
@@ -3692,7 +3691,7 @@ Namespace HoMIDom
                     retour.Add("0")
                     Exit Sub
                 End If
-                If Id = "" Then
+                If String.IsNullOrEmpty(Id) = True Then
                     retour.Add("ERREUR: L'Id est vide")
                     retour.Add("0")
                     Exit Sub
@@ -3867,7 +3866,7 @@ Namespace HoMIDom
                     Exit Function
                 End If
 
-                If Value = "" Or Value = " " Then
+                If String.IsNullOrEmpty(Value) = True Then
                     Return "ERR: l'Id ne peut être null"
                 Else
                     _IdSrv = Value
@@ -3927,7 +3926,7 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Function GetByteFromImage(ByVal file As String) As Byte() Implements IHoMIDom.GetByteFromImage
             Try
-                If file = "" Then Return Nothing
+                If String.IsNullOrEmpty(file) = True Then Return Nothing
                 If IO.File.Exists(file) = False Then
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetByteFromImage", "le fichier n'existe pas: " & file)
                     Return Nothing
@@ -4182,7 +4181,7 @@ Namespace HoMIDom
                 End If
 
                 'On vérifie que datestart et dateend sont bien des dates sinon erreur
-                If (IsDate(DateStart) = False And DateStart <> "") Or (IsDate(DateEnd) = False And DateEnd <> "") Then
+                If (IsDate(DateStart) = False And String.IsNullOrEmpty(DateStart) = True) Or (IsDate(DateEnd) = False And String.IsNullOrEmpty(DateEnd) = False) Then
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetHistoDeviceSource", "Erreur DateStart ou DateEnd doivent être une date")
                     Return Nothing
                     Exit Function
@@ -4217,16 +4216,16 @@ Namespace HoMIDom
                 End Select
 
                 'Prépare la requête sql suivant datestart et dateend
-                If DateStart = "" And DateEnd = "" Then
+                If String.IsNullOrEmpty(DateStart) = True And String.IsNullOrEmpty(DateEnd) = True Then
                     commande = "select " & request_valeur & " from historiques where source='" & Source & "' and device_id='" & idDevice & "'" & request_groupby & ";"
                 End If
-                If DateStart <> "" And DateEnd = "" Then
+                If String.IsNullOrEmpty(DateStart) = False And String.IsNullOrEmpty(DateEnd) = True Then
                     commande = "select " & request_valeur & " from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure>='" & DateStart & "'" & request_groupby & ";"
                 End If
-                If DateStart = "" And DateEnd <> "" Then
+                If String.IsNullOrEmpty(DateStart) = True And String.IsNullOrEmpty(DateEnd) = False Then
                     commande = "select " & request_valeur & " from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure<='" & DateEnd & "'" & request_groupby & ";"
                 End If
-                If DateStart <> "" And DateEnd <> "" Then
+                If String.IsNullOrEmpty(DateStart) = False And String.IsNullOrEmpty(DateEnd) = False Then
                     commande = "select " & request_valeur & " from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure between '" & DateStart & "' and '" & DateEnd & "'" & request_groupby & ";"
                 End If
 
@@ -4268,34 +4267,6 @@ Namespace HoMIDom
                 Dim retour As String = ""
                 Dim result As Long = 0
 
-                'OLD CODE : COULD BE DELETED WHILE CONFIRM THAT IT WORKS
-                'Dim result As New DataTable("HistoDB")
-                'Dim _list As New List(Of Historisation)
-                'If Source = "" Then
-                '    commande = "select * from historiques where device_id='" & IdDevice & "' ;"
-                'Else
-                '    commande = "select * from historiques where source='" & Source & "' and device_id='" & IdDevice & "' ;"
-                'End If
-                'retour = sqlite_homidom.query(commande, result, "")
-                'If UCase(Mid(retour, 1, 3)) <> "ERR" Then
-                '    If result IsNot Nothing Then
-                '        If result.Rows.Count = 0 Then
-                '            rtr = False
-                '        Else
-                '            rtr = True
-                '        End If
-                '    Else
-                '        rtr = False
-                '    End If
-                'Else
-                '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceAsHisto", "Erreur: " & retour)
-                '    rtr = False
-                'End If
-                'result = Nothing
-                '_list = Nothing
-
-
-
                 If Source = "" Then
                     commande = "SELECT COUNT(*) FROM historiques WHERE device_id='" & IdDevice & "' ;"
                 Else
@@ -4330,25 +4301,6 @@ Namespace HoMIDom
 
                 For i As Integer = 0 To _ListDevices.Count - 1
                     IdDevice = _ListDevices.Item(i).ID
-
-                    'OLD CODE : COULD BE DELETED WHILE CONFIRM THAT IT WORKS
-                    'commande = "select * from historiques where device_id='" & IdDevice & "' ;"
-                    'retourDB = sqlite_homidom.query(commande, result, "")
-
-                    'If UCase(Mid(retourDB, 1, 3)) <> "ERR" Then
-                    '    If result IsNot Nothing Then
-                    '        If result.Rows.Count = 0 Then
-                    '            Retour.Add(IdDevice, False)
-                    '        Else
-                    '            Retour.Add(IdDevice, True)
-                    '        End If
-                    '    Else
-                    '        Retour.Add(IdDevice, False)
-                    '    End If
-                    'Else
-                    '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DevicesAsHisto", "Erreur: " & retourDB)
-                    '    Exit For
-                    'End If
 
                     commande = "SELECT COUNT(*) FROM historiques WHERE device_id='" & IdDevice & "' ;"
                     retourDB = sqlite_homidom.count(commande, result)
@@ -5607,7 +5559,7 @@ Namespace HoMIDom
                 Dim myID As String = ""
 
                 'Test si c'est un nouveau device
-                If deviceId = "" Then 'C'est un nouveau device
+                If String.IsNullOrEmpty(deviceId) = True Then 'C'est un nouveau device
 
                     For i1 As Integer = 0 To _ListDevices.Count - 1
                         If LCase(_ListDevices.Item(i1).name) = LCase(name) Then
@@ -6078,7 +6030,7 @@ Namespace HoMIDom
                     End If
                 Next
 
-                If retour.ID <> "" Then
+                If String.IsNullOrEmpty(retour.ID) = False Then
                     Return retour
                 Else
                     Return Nothing
@@ -6181,7 +6133,7 @@ Namespace HoMIDom
                 Dim retour As Object = Nothing
                 Dim listresultat As New ArrayList
                 For i As Integer = 0 To _ListDevices.Count - 1
-                    If (DeviceAdresse = "" Or _ListDevices.Item(i).Adresse1.ToUpper() = DeviceAdresse.ToUpper()) And (DeviceType = "" Or _ListDevices.Item(i).type = DeviceType.ToUpper()) And (DriverID = "" Or _ListDevices.Item(i).DriverID = DriverID.ToUpper()) And _ListDevices.Item(i).Enable = Enable Then
+                    If (String.IsNullOrEmpty(DeviceAdresse) = True Or _ListDevices.Item(i).Adresse1.ToUpper() = DeviceAdresse.ToUpper()) And (DeviceType = "" Or _ListDevices.Item(i).type = DeviceType.ToUpper()) And (DriverID = "" Or _ListDevices.Item(i).DriverID = DriverID.ToUpper()) And _ListDevices.Item(i).Enable = Enable Then
                         retour = _ListDevices.Item(i)
                         listresultat.Add(retour)
                         retour = Nothing
@@ -6327,10 +6279,10 @@ Namespace HoMIDom
                             Exit For
                         End If
                     Next
-                    If Action.Param2 <> "" Then
+                    If String.IsNullOrEmpty(Action.Param2) = False Then
                         _retour = CallByName(x, Action.Nom, CallType.Method, Action.Param1, Action.Param2)
                         Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDeviceCommandSimple", "Effectué: " & x.Name & " Command: " & Action.Nom & " Parametre1/2: " & Action.Param1 & "/" & Action.Param2)
-                    ElseIf Action.Param1 <> "" Then
+                    ElseIf String.IsNullOrEmpty(Action.Param1) = False Then
                         _retour = CallByName(x, Action.Nom, CallType.Method, Action.Param1)
                         Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "ExecuteDeviceCommandSimple", "Effectué: " & x.Name & " Command: " & Action.Nom & " Parametre1: " & Action.Param1)
                     Else
@@ -6496,9 +6448,9 @@ Namespace HoMIDom
 
                 Dim myID As String = ""
 
-                If icon = "" Then icon = _MonRepertoire & "\images\icones\Zone_128.png"
-                If image = "" Then image = _MonRepertoire & "\images\icones\Zone_Image.png"
-                If zoneId = "" Then
+                If String.IsNullOrEmpty(icon) = True Then icon = _MonRepertoire & "\images\icones\Zone_128.png"
+                If String.IsNullOrEmpty(image) = True Then image = _MonRepertoire & "\images\icones\Zone_Image.png"
+                If String.IsNullOrEmpty(zoneId) = True Then
                     Dim x As New Zone
                     With x
                         x.ID = GenerateGUID()
@@ -6807,7 +6759,7 @@ Namespace HoMIDom
                 End If
 
                 Dim myID As String = ""
-                If macroId = "" Then
+                If String.IsNullOrEmpty(macroId) = True Then
                     Dim x As New Macro
                     With x
                         x._Server = Me
@@ -6995,7 +6947,7 @@ Namespace HoMIDom
                 End If
 
                 Dim myID As String = ""
-                If triggerId = "" Then
+                If String.IsNullOrEmpty(triggerId) = True Then
                     Dim x As New Trigger
                     With x
                         x._Server = Me
@@ -7011,7 +6963,7 @@ Namespace HoMIDom
                                 x.ConditionDeviceId = deviceid
                                 x.ConditionDeviceProperty = deviceproperty
                         End Select
-                        If description <> "" Then x.Description = description
+                        If String.IsNullOrEmpty(description) = False Then x.Description = description
                         If macro IsNot Nothing Then
                             If macro.Count > 0 Then
                                 x.ListMacro = macro
@@ -7199,7 +7151,7 @@ Namespace HoMIDom
                 End If
 
                 Dim myID As String = ""
-                If userId = "" Then
+                If String.IsNullOrEmpty(userId) = True Then
                     For i As Integer = 0 To _ListUsers.Count - 1
                         If _ListUsers.Item(i).UserName = UserName Then
                             myID = "ERROR Username déjà utlisé"
@@ -7828,7 +7780,7 @@ Namespace HoMIDom
         Function ReturnLog(Optional ByVal Requete As String = "") As String Implements IHoMIDom.ReturnLog
             Try
                 Dim retour As String = ""
-                If Requete = "" Then
+                If String.IsNullOrEmpty(Requete) = True Then
                     Dim SR As New StreamReader(_MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt")
                     retour = SR.ReadToEnd()
                     retour = HtmlDecode(retour)
