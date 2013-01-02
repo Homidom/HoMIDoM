@@ -55,4 +55,23 @@ Module Fonctions
             MessageBox.Show("ERREUR Sub SaveRealTime: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
+    Public Function ImageFromUri(ByVal Uri As String) As Windows.Media.Imaging.BitmapImage
+        Try
+            Dim bmpImage As New BitmapImage()
+
+            bmpImage.BeginInit()
+            bmpImage.CacheOption = BitmapCacheOption.OnLoad
+            bmpImage.CreateOptions = BitmapCreateOptions.DelayCreation
+            bmpImage.UriSource = New Uri(Uri, UriKind.Absolute)
+            bmpImage.EndInit()
+            If bmpImage.CanFreeze Then bmpImage.Freeze()
+            Return bmpImage
+
+            bmpImage = Nothing
+        Catch ex As Exception
+            MessageBox.Show("ERREUR ImageFromUri: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            Return Nothing
+        End Try
+    End Function
 End Module

@@ -123,7 +123,7 @@ Class Window1
                         Next
                         _tool = Nothing
                     Else
-                        ImgError.Visibility = Windows.Visibility.Collapsed
+                        If ImgError.Visibility = Windows.Visibility.Visible Then ImgError.Visibility = Windows.Visibility.Collapsed
                     End If
                     list = Nothing
 
@@ -139,7 +139,7 @@ Class Window1
                         Next
                         _tool = Nothing
                     Else
-                        ImgDeviceNoMaj.Visibility = Windows.Visibility.Collapsed
+                        If ImgDeviceNoMaj.Visibility = Windows.Visibility.Visible Then ImgDeviceNoMaj.Visibility = Windows.Visibility.Collapsed
                     End If
                     list = Nothing
 
@@ -259,6 +259,7 @@ Class Window1
             CanvasUser = CanvasRight
 
             Return 0
+            binding = Nothing
         Catch ex As Exception
             myChannelFactory.Abort()
             IsConnect = False
@@ -454,7 +455,6 @@ Class Window1
                 Dim stack As New StackPanel
                 Dim img As New Image
                 Dim uri As String = ""
-                Dim bmpImage As New BitmapImage()
                 stack.Orientation = Orientation.Horizontal
 
                 img.Height = 20
@@ -464,14 +464,7 @@ Class Window1
                     img.Source = ConvertArrayToImage(myService.GetByteFromImage(zon.Icon))
                 Else
                     uri = MyRep & "\Images\icones\Zone_32.png"
-                    bmpImage.BeginInit()
-                    bmpImage.CacheOption = BitmapCacheOption.OnLoad
-                    bmpImage.CreateOptions = BitmapCreateOptions.DelayCreation
-                    bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
-                    bmpImage.EndInit()
-                    If bmpImage.CanFreeze Then bmpImage.Freeze()
-                    img.Source = bmpImage
-                    bmpImage = Nothing
+                    img.Source = ImageFromUri(uri)
                 End If
 
                 Dim label As New Label
@@ -550,7 +543,6 @@ Class Window1
                 Dim stack As New StackPanel
                 Dim img As New Image
                 Dim uri As String = ""
-                Dim bmpImage As New BitmapImage()
 
                 stack.Orientation = Orientation.Horizontal
 
@@ -561,14 +553,7 @@ Class Window1
                     img.Source = ConvertArrayToImage(myService.GetByteFromImage(Usr.Image))
                 Else
                     uri = MyRep & "\Images\icones\User_32.png"
-                    bmpImage.BeginInit()
-                    bmpImage.CacheOption = BitmapCacheOption.OnLoad
-                    bmpImage.CreateOptions = BitmapCreateOptions.DelayCreation
-                    bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
-                    bmpImage.EndInit()
-                    If bmpImage.CanFreeze Then bmpImage.Freeze()
-                    img.Source = bmpImage
-                    bmpImage = Nothing
+                    img.Source = ImageFromUri(uri)
                 End If
 
 
@@ -776,7 +761,6 @@ Class Window1
                 stack.Children.Add(Graph)
                 stack.Children.Add(label)
 
-                'newchild.Foreground = New SolidColorBrush(Colors.White)
                 newchild.Header = stack
                 newchild.Uid = Drv.ID
 
@@ -871,14 +855,7 @@ Class Window1
                     Dim bmpImage As New BitmapImage()
                     Dim uri As String = ""
                     uri = MyRep & "\Images\Icones\Composant_32.png"
-                    bmpImage.BeginInit()
-                    bmpImage.CacheOption = BitmapCacheOption.OnLoad
-                    bmpImage.CreateOptions = BitmapCreateOptions.DelayCreation
-                    bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
-                    bmpImage.EndInit()
-                    If bmpImage.CanFreeze Then bmpImage.Freeze()
-                    img.Source = bmpImage
-                    bmpImage = Nothing
+                    img.Source = ImageFromUri(uri)
                 End If
                 stack.Children.Add(img)
 
@@ -912,19 +889,14 @@ Class Window1
                     End If
                 Next
                 If FlagZone = False Then
-                    Dim bmpImage2 As New BitmapImage()
                     Dim uri2 As String = MyRep & "\Images\Icones\ZoneNo_32.png"
                     Dim img2 As New Image
                     img2.Height = 20
                     img2.Width = 20
-                    bmpImage2.BeginInit()
-                    bmpImage2.UriSource = New Uri(uri2, UriKind.Absolute)
-                    bmpImage2.EndInit()
-                    img2.Source = bmpImage2
+                    img2.Source = ImageFromUri(uri2)
                     img2.ToolTip = "Ce composant ne fait pas partie d'une zone"
                     stack.Children.Add(img2)
                     img2 = Nothing
-                    bmpImage2 = Nothing
                     uri2 = Nothing
                 End If
 
@@ -1109,7 +1081,6 @@ Class Window1
                 Dim stack As New StackPanel
                 Dim img As New Image
                 Dim uri As String = ""
-                Dim bmpImage As New BitmapImage()
 
                 stack.Orientation = Orientation.Horizontal
 
@@ -1143,14 +1114,7 @@ Class Window1
                 label.ContextMenu = ctxMenu
 
                 uri = MyRep & "\Images\Icones\Macro_32.png"
-                bmpImage.BeginInit()
-                bmpImage.CacheOption = BitmapCacheOption.OnLoad
-                bmpImage.CreateOptions = BitmapCreateOptions.DelayCreation
-                bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
-                bmpImage.EndInit()
-                If bmpImage.CanFreeze Then bmpImage.Freeze()
-                img.Source = bmpImage
-                bmpImage = Nothing
+                img.Source = ImageFromUri(uri)
 
                 stack.Children.Add(img)
                 stack.Children.Add(label)
@@ -1206,7 +1170,6 @@ Class Window1
                 Dim stack As New StackPanel
                 Dim img As New Image
                 Dim uri As String = ""
-                Dim bmpImage As New BitmapImage()
 
                 stack.Orientation = Orientation.Horizontal
 
@@ -1245,14 +1208,7 @@ Class Window1
                     uri = MyRep & "\Images\Icones\Trigger_device_32.png"
                 End If
 
-                bmpImage.BeginInit()
-                bmpImage.CacheOption = BitmapCacheOption.OnLoad
-                bmpImage.CreateOptions = BitmapCreateOptions.DelayCreation
-                bmpImage.UriSource = New Uri(uri, UriKind.Absolute)
-                bmpImage.EndInit()
-                If bmpImage.CanFreeze Then bmpImage.Freeze()
-                img.Source = bmpImage
-                bmpImage = Nothing
+                img.Source = ImageFromUri(uri)
 
                 stack.Children.Add(img)
                 stack.Children.Add(label)
