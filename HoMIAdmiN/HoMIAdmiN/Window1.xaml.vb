@@ -457,7 +457,7 @@ Class Window1
                 img.Height = 20
                 img.Width = 20
 
-                If Trim(zon.Icon) <> "" Then
+                If String.IsNullOrEmpty(Trim(zon.Icon)) = False Then
                     img.Source = ConvertArrayToImage(myService.GetByteFromImage(zon.Icon))
                 Else
                     uri = MyRep & "\Images\icones\Zone_32.png"
@@ -546,13 +546,12 @@ Class Window1
                 img.Height = 20
                 img.Width = 20
 
-                If Trim(Usr.Image) <> "" Then
+                If String.IsNullOrEmpty(Trim(Usr.Image)) = False Then
                     img.Source = ConvertArrayToImage(myService.GetByteFromImage(Usr.Image))
                 Else
                     uri = MyRep & "\Images\icones\User_32.png"
                     img.Source = ImageFromUri(uri)
                 End If
-
 
                 Dim label As New Label
                 label.Foreground = New SolidColorBrush(Colors.White)
@@ -622,16 +621,15 @@ Class Window1
             TreeViewDriver.Items.Clear()
             If IsConnect = False Then Exit Sub
 
-            Dim ListeDrivers = myService.GetAllDrivers(IdSrv)
+            Dim ListeDrivers As List(Of TemplateDriver) = myService.GetAllDrivers(IdSrv)
             CntDriver.Content = ListeDrivers.Count & " Driver(s)"
 
-            For Each Drv In ListeDrivers
+            For Each Drv As TemplateDriver In ListeDrivers
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 stack.Orientation = Orientation.Horizontal
                 stack.HorizontalAlignment = HorizontalAlignment.Left
                 Dim Graph As Object
-                'Dim bmpImage As New BitmapImage()
                 Dim img As New Image
                 Dim tool As New Label
 
@@ -829,11 +827,11 @@ Class Window1
             TreeViewDevice.Items.Clear()
             If IsConnect = False Then Exit Sub
 
-            Dim ListeDevices = myService.GetAllDevices(IdSrv)
-            Dim ListeZones = myService.GetAllZones(IdSrv)
+            Dim ListeDevices As List(Of TemplateDevice) = myService.GetAllDevices(IdSrv)
+            Dim ListeZones As List(Of Zone) = myService.GetAllZones(IdSrv)
 
             CntDevice.Content = ListeDevices.Count & " Device(s)"
-            For Each Dev In ListeDevices
+            For Each Dev As TemplateDevice In ListeDevices
 
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
@@ -846,7 +844,7 @@ Class Window1
                 'gestion de l'image du composant dans le menu
                 img.Height = 20
                 img.Width = 20
-                If Trim(Dev.Picture) <> "" Then
+                If String.IsNullOrEmpty(Trim(Dev.Picture)) = False Then
                     img.Source = ConvertArrayToImage(myService.GetByteFromImage(Dev.Picture))
                 Else
                     Dim bmpImage As New BitmapImage()
