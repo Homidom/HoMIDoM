@@ -1285,6 +1285,18 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.Server.GetSqliteVersion">
 	<summary>Retourne la version du moteur sqlite</summary>
 	<returns>String : version Moteur sqlite</returns>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetDevise">
+	<summary>
+ Retourne la devise du serveur
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetDevise(System.String)">
+	<summary>
+ Fixe la devise du serveur
+ </summary>
+	<param name="Value"></param>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetHistoDeviceSource(System.String,System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Retourne un datatable d'historique d'un device suivant sa propriété (source) puis suivant une date de début et de fin
@@ -1848,6 +1860,39 @@ HoMIDom
 	<summary>Retourne la valeur IP SOAP</summary>
 	<returns>Numero du port ou -1 si erreur</returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetGererEnergie(System.Boolean)">
+	<summary>
+ True si on doit gérer l'energie
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetGererEnergie">
+	<summary>
+ True si on doit gérer l'energie
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetTarifJour(System.Int32)">
+	<summary>
+ Set Tarif jour
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetTarifJour">
+	<summary>
+ Get Tarif joure
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetTarifNuit(System.Int32)">
+	<summary>
+ Set Tarif nuit
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetTarifNuit">
+	<summary>
+ Get Tarif nuit
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Server">
 	<summary>Classe Server</summary>
 	<remarks></remarks>
@@ -2123,6 +2168,18 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSqliteVersion">
 	<summary>Retourne la version du moteur sqlite</summary>
 	<returns>String : version Sqlite</returns>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetDevise">
+	<summary>
+ Retourne la devise du serveur
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetDevise(System.String)">
+	<summary>
+ Fixe la devise du serveur
+ </summary>
+	<param name="Value"></param>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DevicesAsHisto">
 	<summary>
  Retourne un dictionnary retourant en clé l'id du device et la valeur True/False s'il contient des historiques
