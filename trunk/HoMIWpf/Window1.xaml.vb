@@ -488,8 +488,6 @@ Class Window1
                                         x.ShowEtiquette = list.Item(j).Attributes.Item(k).Value
                                     Case "showstatus"
                                         x.ShowStatus = list.Item(j).Attributes.Item(k).Value
-                                    Case "unite"
-                                        x.Unite = list.Item(j).Attributes.Item(k).Value
                                     Case "etiquette"
                                         x.Etiquette = list.Item(j).Attributes.Item(k).Value
                                     Case "picture"
@@ -784,9 +782,6 @@ Class Window1
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("showstatus")
                 writer.WriteValue(_ListElement.Item(i).ShowStatus)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("unite")
-                writer.WriteValue(_ListElement.Item(i).Unite)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("showpicture")
                 writer.WriteValue(_ListElement.Item(i).ShowPicture)
@@ -1386,7 +1381,6 @@ Class Window1
                             y.Show = True
                             y.Visibility = Windows.Visibility.Visible
                             y.Uid = _ListElement.Item(j).Uid
-                            y.Unite = _ListElement.Item(j).Unite
                             y.Id = z.ElementID
                             y.Type = uWidgetEmpty.TypeOfWidget.Device
                             y.CanEditValue = _ListElement.Item(j).CanEditValue
@@ -1504,7 +1498,6 @@ Class Window1
                     y.ShowPicture = _ListElement.Item(i).ShowPicture
                     y.ShowEtiquette = _ListElement.Item(i).ShowEtiquette
                     y.ShowStatus = _ListElement.Item(i).ShowStatus
-                    y.Unite = _ListElement.Item(i).Unite
                     y.Etiquette = _ListElement.Item(i).Etiquette
                     y.DefautLabelStatus = _ListElement.Item(i).DefautLabelStatus
                     y.TailleStatus = _ListElement.Item(i).TailleStatus

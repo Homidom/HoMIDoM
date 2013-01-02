@@ -105,6 +105,7 @@ Partial Public Class uDevice
                                        Or x.Type = ListeDevices.VITESSEVENT _
                                        Or x.Type = ListeDevices.UV _
                                        Or x.Type = ListeDevices.COMPTEUR _
+                                       Or x.Type = ListeDevices.GENERIQUEVALUE _
                                        Then
                         StkValueLabel.Visibility = Windows.Visibility.Visible
                         StkValue2Label.Visibility = Windows.Visibility.Visible
@@ -386,6 +387,7 @@ Partial Public Class uDevice
                                    Or CbType.Text = "PLUIECOURANT" _
                                    Or CbType.Text = "VITESSEVENT" _
                                    Or CbType.Text = "UV" _
+                                   Or CbType.Text = "GENERIQUEVALUE" _
                                    Then
                     TxtCorrection.Visibility = Windows.Visibility.Visible
                     TxtFormatage.Visibility = Windows.Visibility.Visible

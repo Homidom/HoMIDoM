@@ -54,7 +54,6 @@ Public Class uWidgetEmpty
     Dim _CurrentValue As Object = Nothing
     Dim _type As TypeOfWidget = TypeOfWidget.Empty
     Dim _CanEditValue As Boolean = False
-    Dim _Unite As String = ""
 
     'Variables Widget Web
     Dim _URL As String = ""
@@ -164,7 +163,7 @@ Public Class uWidgetEmpty
                             StkPopup.Children.Add(x)
 
                         Case HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE
-                            If _Unite = "" Then _Unite = " %"
+
                         Case HoMIDom.HoMIDom.Device.ListeDevices.LAMPE
                             Dim x As New uOnOff
                             x.ContentOn = "ON"
@@ -200,9 +199,7 @@ Public Class uWidgetEmpty
                         Case HoMIDom.HoMIDom.Device.ListeDevices.TELECOMMANDE
                             _ShowValue = False
                         Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE
-                            If _Unite = "" Then _Unite = " °"
                         Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE
-                            If _Unite = "" Then _Unite = " °"
                             Dim x As New uEditValue
                             AddHandler x.ChangeValue, AddressOf ChangeValue
                             StkPopup.Children.Add(x)
@@ -231,7 +228,7 @@ Public Class uWidgetEmpty
                     End Select
 
                     If _ShowValue Then
-                        LblStatus.Content = _dev.Value & _Unite
+                        LblStatus.Content = _dev.Value & _dev.Unit
                         _CurrentValue = _dev.Value
                     End If
                 ElseIf _macro IsNot Nothing Then
@@ -284,15 +281,6 @@ Public Class uWidgetEmpty
             Else
                 _type = TypeOfWidget.Device
             End If
-        End Set
-    End Property
-
-    Public Property Unite As String
-        Get
-            Return _Unite
-        End Get
-        Set(ByVal value As String)
-            _Unite = value
         End Set
     End Property
 
@@ -571,9 +559,6 @@ Public Class uWidgetEmpty
                 _dt.Interval = New TimeSpan(0, 0, _Refresh)
                 _dt.Start()
             End If
-
-
-
         End Set
     End Property
 
@@ -851,10 +836,8 @@ Public Class uWidgetEmpty
                         Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE
 
                         Case HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE
-                            _Unite = " %"
 
                         Case HoMIDom.HoMIDom.Device.ListeDevices.LAMPE
-                            _Unite = " %"
                             _IsVariation = True
                         Case HoMIDom.HoMIDom.Device.ListeDevices.METEO
                             _ShowValue = False
@@ -882,7 +865,7 @@ Public Class uWidgetEmpty
 
                     If _ShowValue Then
                         If _CurrentValue <> _dev.Value Then
-                            LblStatus.Content = _dev.Value & _Unite
+                            LblStatus.Content = _dev.Value & _dev.Unit
                             _CurrentValue = _dev.Value
                             If _IsVariation Then
                                 If StkPopup.Children.Count = 2 Then
@@ -910,6 +893,7 @@ Public Class uWidgetEmpty
             Me.UpdateLayout()
         Catch ex As Exception
             MessageBox.Show("Error Refresh: " & ex.Message & vbCrLf, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            _dt.Stop()
         End Try
     End Sub
 

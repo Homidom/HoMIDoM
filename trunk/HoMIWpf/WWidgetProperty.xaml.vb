@@ -34,7 +34,6 @@ Public Class WWidgetProperty
             lblColorStatus.Background = Obj.ColorStatus
             ColorPicker1.SelectedColor = Obj.ColorBackGround
             ColorPicker2.SelectedColor = Obj.ColorStatus
-            TxtUnite.Text = Obj.Unite
             ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(Obj.Picture))
             ImgPicture.Tag = Obj.Picture
             TxtURL.Text = Obj.URL
@@ -198,7 +197,6 @@ Public Class WWidgetProperty
             Obj.Rotation = TxtRotation.Text
             Obj.DefautLabelStatus = TxtDefStatus.Text
             Obj.Picture = ImgPicture.Tag
-            Obj.Unite = TxtUnite.Text
             Obj.ListHttpButton = _listhttpbtn
 
             Try
