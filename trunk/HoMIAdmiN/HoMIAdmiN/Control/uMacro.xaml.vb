@@ -40,7 +40,7 @@
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         Try
-            If TxtNom.Text = "" Then
+            If String.IsNullOrEmpty(TxtNom.Text) = True Then
                 MessageBox.Show("Le nom de la macro est obligatoire!", "Macro", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
@@ -63,7 +63,7 @@
     End Sub
 
     Private Sub BtnTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTest.Click
-        If _MacroId <> "" And IsConnect Then
+        If String.IsNullOrEmpty(_MacroId) = False And IsConnect Then
             myService.RunMacro(IdSrv, _MacroId)
         End If
     End Sub

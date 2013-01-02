@@ -230,15 +230,15 @@ Partial Public Class uDevice
     'Bouton Ok
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         Try
-            If TxtNom.Text = "" Then
+            If String.IsNullOrEmpty(TxtNom.Text) = True Then
                 MessageBox.Show("Le nom du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
-            If CbType.Text = "" Then
+            If String.IsNullOrEmpty(CbType.Text) = True Then
                 MessageBox.Show("Le type du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
-            If CbDriver.Text = "" Then
+            If String.IsNullOrEmpty(CbDriver.Text) = True Then
                 MessageBox.Show("Le driver du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
@@ -280,7 +280,7 @@ Partial Public Class uDevice
             If CbType.Text = "MULTIMEDIA" Then
 
                 If x IsNot Nothing Then
-                    If x.Modele = "" Then
+                    If String.IsNullOrEmpty(x.Modele) = True Then
                         MessageBox.Show("Veuillez sélectionner ou ajouter un template au device!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                         Exit Sub
                     Else
@@ -303,7 +303,7 @@ Partial Public Class uDevice
             End If
 
             VerifDriver(_driverid)
-            If _DeviceId = "" Then _DeviceId = result
+            If String.IsNullOrEmpty(_DeviceId) = True Then _DeviceId = result
             SaveInZone()
             FlagChange = True
             RaiseEvent CloseMe(Me, False)
@@ -350,7 +350,7 @@ Partial Public Class uDevice
 
     Private Sub TxtRefresh_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtRefresh.TextChanged
         Try
-            If TxtRefresh.Text <> "" And IsNumeric(TxtRefresh.Text) = False Then
+            If String.IsNullOrEmpty(TxtRefresh.Text) = False And IsNumeric(TxtRefresh.Text) = False Then
                 MessageBox.Show("Veuillez saisir une valeur numérique")
                 TxtRefresh.Text = 0
             End If
@@ -416,7 +416,7 @@ Partial Public Class uDevice
 
     Private Sub TxtLastChangeDuree_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtLastChangeDuree.TextChanged
         Try
-            If TxtLastChangeDuree.Text <> "" And IsNumeric(TxtLastChangeDuree.Text) = False Then
+            If String.IsNullOrEmpty(TxtLastChangeDuree.Text) = False And IsNumeric(TxtLastChangeDuree.Text) = False Then
                 MessageBox.Show("Veuillez saisir une valeur numérique")
                 TxtLastChangeDuree.Text = 0
             End If
@@ -431,8 +431,8 @@ Partial Public Class uDevice
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 Dim retour As String = frm.FileName
-                If retour <> "" Then
-                    ImgDevice.Source = ConvertArrayToImage(myservice.GetByteFromImage(retour))
+                If String.IsNullOrEmpty(retour) = False Then
+                    ImgDevice.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
                     ImgDevice.Tag = retour
                 End If
                 frm.Close()
@@ -476,19 +476,19 @@ Partial Public Class uDevice
 
     Private Sub BtnSave_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnSave.Click
         Try
-            If TxtNom.Text = "" Then
+            If String.IsNullOrEmpty(TxtNom.Text) = True Then
                 MessageBox.Show("Le nom du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
-            If CbType.Text = "" Then
+            If String.IsNullOrEmpty(CbType.Text) = True Then
                 MessageBox.Show("Le type du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
-            If CbDriver.Text = "" Then
+            If String.IsNullOrEmpty(CbDriver.Text) = True Then
                 MessageBox.Show("Le driver du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
-            If TxtAdresse1.Text = "" Then
+            If String.IsNullOrEmpty(TxtAdresse1.Text) = True Then
                 MessageBox.Show("L'adresse de base du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
@@ -581,7 +581,7 @@ Partial Public Class uDevice
                                     Label6.Visibility = Windows.Visibility.Collapsed
                                 Else
                                     Label6.Content = _Driver.LabelsDevice.Item(k).LabelChamp
-                                    If _Driver.LabelsDevice.Item(k).Tooltip <> "" Then
+                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Tooltip) = False Then
                                         Label6.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                         TxtAdresse1.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                     End If
@@ -594,7 +594,7 @@ Partial Public Class uDevice
                                     Label7.Visibility = Windows.Visibility.Collapsed
                                 Else
                                     Label7.Content = _Driver.LabelsDevice.Item(k).LabelChamp
-                                    If _Driver.LabelsDevice.Item(k).Tooltip <> "" Then
+                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Tooltip) = False Then
                                         Label7.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                         TxtAdresse2.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                     End If
@@ -615,7 +615,7 @@ Partial Public Class uDevice
                                     StkRefresh.Visibility = Windows.Visibility.Collapsed
                                 Else
                                     Label9.Content = _Driver.LabelsDevice.Item(k).LabelChamp
-                                    If _Driver.LabelsDevice.Item(k).Tooltip <> "" Then
+                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Tooltip) = False Then
                                         Label9.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                         TxtRefresh.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                     End If
@@ -629,7 +629,7 @@ Partial Public Class uDevice
                                     Label19.Visibility = Windows.Visibility.Collapsed
                                 Else
                                     Label19.Content = _Driver.LabelsDevice.Item(k).LabelChamp
-                                    If _Driver.LabelsDevice.Item(k).Tooltip = "" Then
+                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Tooltip) = True Then
                                         TxtLastChangeDuree.ToolTip = "Permet de vérifier si le composant a été mis à jour depuis moins de x minutes sinon il apparait en erreur"
                                         Label19.ToolTip = "Permet de vérifier si le composant a été mis à jour depuis moins de x minutes sinon il apparait en erreur"
                                     Else
@@ -650,12 +650,12 @@ Partial Public Class uDevice
                                 Else
                                     Label8.Visibility = Windows.Visibility.Visible
                                     StkModel.Visibility = Windows.Visibility.Visible
-                                    If _Driver.LabelsDevice.Item(k).LabelChamp <> "" Then Label8.Content = _Driver.LabelsDevice.Item(k).LabelChamp
-                                    If _Driver.LabelsDevice.Item(k).Tooltip <> "" Then
+                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).LabelChamp) = False Then Label8.Content = _Driver.LabelsDevice.Item(k).LabelChamp
+                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Tooltip) = False Then
                                         Label8.ToolTip = _Driver.LabelsDevice.Item(k).ToolTip
                                         TxtModele.ToolTip = _Driver.LabelsDevice.Item(k).ToolTip
                                     End If
-                                    If _Driver.LabelsDevice.Item(k).Parametre <> "" Then
+                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Parametre) = False Then
                                         TxtModele.Items.Clear()
                                         Dim a() As String = _Driver.LabelsDevice.Item(k).Parametre.Split("|")
                                         If a.Length > 0 Then
@@ -706,7 +706,7 @@ Partial Public Class uDevice
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 If x IsNot Nothing Then
-                    If x.Modele <> "" And x.Commandes.Count = 0 Then
+                    If String.IsNullOrEmpty(x.Modele) = False And x.Commandes.Count = 0 Then
                         BtnEditTel.Visibility = Windows.Visibility.Collapsed
                     End If
                     frm.Close()
