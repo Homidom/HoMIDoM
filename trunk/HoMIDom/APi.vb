@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports System.Net
 Imports System.Net.Sockets
+Imports System.Windows.Media.Imaging
 
 Namespace HoMIDom
 
@@ -141,6 +142,30 @@ Namespace HoMIDom
             Catch ex As Exception
                 _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "API Evaluation", "Erreur : " & ex.ToString)
                 Return Valeur
+            End Try
+        End Function
+
+        Public Function ConvertArrayToImage(ByVal value As Object) As Object
+            Try
+                Dim ImgSource As BitmapImage = Nothing
+                Dim array As Byte() = TryCast(value, Byte())
+
+                If array IsNot Nothing Then
+                    ImgSource = New BitmapImage()
+                    ImgSource.BeginInit()
+                    ImgSource.CacheOption = BitmapCacheOption.OnLoad
+                    ImgSource.CreateOptions = BitmapCreateOptions.DelayCreation
+                    ImgSource.StreamSource = New MemoryStream(array)
+                    array = Nothing
+                    ImgSource.EndInit()
+                    If ImgSource.CanFreeze Then ImgSource.Freeze()
+                End If
+
+                Return ImgSource
+                ImgSource = Nothing
+            Catch ex As Exception
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "API ConvertArrayToImage", "Erreur : " & ex.ToString)
+                Return Nothing
             End Try
         End Function
 

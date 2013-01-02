@@ -16,6 +16,7 @@
                             <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Name="ChkEnable" VerticalAlignment="Top" IsChecked="True">Enable</CheckBox>
                             <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" HorizontalAlignment="Right" Name="ChKSolo" VerticalAlignment="Top" IsChecked="True" ToolTip="Utiliser dans certains drivers pour permettre de mettre à jour plusieurs composants d'un seul coup si décoché.">Solo</CheckBox>
                         <CheckBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" HorizontalAlignment="Right" Name="ChKLastEtat" VerticalAlignment="Top" IsChecked="False" ToolTip="Prendre en compte l'avant dernier etat d'un device">LastEtat</CheckBox>
+                            <CheckBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" HorizontalAlignment="Right" Name="ChKAllValue" VerticalAlignment="Top" IsChecked="False" ToolTip="Prendre en compte tous les changements d'état d'un device">All Value</CheckBox>
                             <Label Name="LblUnit" Content="Unité:"  Foreground="White"/>
                             <TextBox Text="" Name="TxtUnit" Width="40" Foreground="White" Background="DarkGray" BorderBrush="Black" ToolTip="Unité du composant (ex: °C, km/h, Watt..)"/>
                             <Label Name="LblPuiss" Content="Puissance:"  Foreground="White"/>
@@ -44,19 +45,19 @@
                         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtAdresse2" Height="21.978" VerticalAlignment="Top" Width="215" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
-                        <Label Foreground="White" Name="Label8" Width="215" >Modele:</Label>
-                            <Rectangle Width="10"  Name="rectmodele1"/>
-                        <Label Foreground="White" Name="Label9" Width="90">Refresh (sec):</Label>
-                            <Rectangle Width="10" Name="rectrefresh1"/>
-                        <Label Foreground="White" Name="Label19" >LastChange Duree:</Label>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" >
-                            <ComboBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Width="215" Name="TxtModele" BorderThickness="2" Height="25" VerticalAlignment="Top" IsEditable="True" Tag="0" Visibility="Collapsed" />
-                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtModele2" Width="215" Tag="1" Visibility="Collapsed" />
-                            <Rectangle Width="10" Name="rectmodele2"/>
-                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Width="90" Name="TxtRefresh" ToolTip="Permet d'aller interroger à intervalles régulier le composant (en sec)">0</TextBox>
-                        <Rectangle Width="10" Name="rectrefresh2"/>
-                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Right" Name="TxtLastChangeDuree" Width="90" ToolTip="Permet de mettre en erreur le composant si sa valeur n'a pas été modifié depuis x minutes">0</TextBox>
+                            <StackPanel Margin="3" Name="StkModel">
+                                <Label Foreground="White" Name="Label8" HorizontalAlignment="Left">Modele:</Label>
+                                <ComboBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Width="215" Name="TxtModele" BorderThickness="2" Height="25" VerticalAlignment="Top" IsEditable="True" Tag="0" Visibility="Collapsed" HorizontalAlignment="Left" />
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtModele2" Width="215" Tag="1" Visibility="Collapsed" />
+                            </StackPanel>
+                            <StackPanel Margin="3" Name="StkRefresh">
+                                <Label Foreground="White" Name="Label9" HorizontalAlignment="Left">Refresh (sec):</Label>
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Width="70" Name="TxtRefresh" ToolTip="Permet d'aller interroger à intervalles régulier le composant (en sec)" HorizontalAlignment="Left">0</TextBox>
+                            </StackPanel>
+                            <StackPanel Margin="3">
+                                <Label Foreground="White" Name="Label19" HorizontalAlignment="Left">LastChange Duree:</Label>
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtLastChangeDuree" Width="70" ToolTip="Permet de mettre en erreur le composant si sa valeur n'a pas été modifié depuis x minutes" HorizontalAlignment="Left">0</TextBox>
+                            </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Name="StkValueLabel">
                         <Label Foreground="White" Name="Label10" Width="215" Visibility="Visible">Value Min:</Label>

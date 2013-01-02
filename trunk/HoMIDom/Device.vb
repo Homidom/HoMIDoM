@@ -212,6 +212,7 @@ Namespace HoMIDom
             Protected MyTimer As New Timers.Timer
             Protected _Unit As String = ""
             Protected _Puiss As Integer = 0
+            Protected _AllValue As Boolean = False
 
             '<NonSerialized()> Protected _FirstTime As Boolean = True
             Public Commandes As New List(Of HoMIDom.Telecommande.Commandes)
@@ -415,6 +416,16 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _Puiss = value
+                End Set
+            End Property
+
+            'Prendre toutes les valeurs inchangées ou non
+            Public Property AllValue As Boolean
+                Get
+                    Return _AllValue
+                End Get
+                Set(ByVal value As Boolean)
+                    _AllValue = value
                 End Set
             End Property
 
