@@ -429,5 +429,4 @@ Public Class uMedia
         If _IsLocal Then MediaElement1.Volume = _Volume
     End Sub
 
-
 End Class

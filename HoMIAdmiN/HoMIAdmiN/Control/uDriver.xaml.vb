@@ -44,31 +44,23 @@ Partial Public Class uDriver
                     StkPortUDP.Visibility = Windows.Visibility.Visible
                 End If
                 If x.COM = "@" Then
-                    Label10.Visibility = Windows.Visibility.Collapsed
-                    TxtCom.Visibility = Windows.Visibility.Collapsed
-                    rectcom1.Visibility = Windows.Visibility.Collapsed
-                    rectcom2.Visibility = Windows.Visibility.Collapsed
+                    StkCom.Visibility = Windows.Visibility.Collapsed
                 Else
-                    Label10.Visibility = Windows.Visibility.Visible
-                    TxtCom.Visibility = Windows.Visibility.Visible
+                    StkCom.Visibility = Windows.Visibility.Visible
 
                     For Each serialPortName As String In myService.GetPortComDispo
                         TxtCom.Items.Add(serialPortName)
                     Next
                 End If
                 If x.Modele = "@" Then
-                    Label8.Visibility = Windows.Visibility.Collapsed
-                    TxtModele.Visibility = Windows.Visibility.Collapsed
+                    StkModele.Visibility = Windows.Visibility.Collapsed
                 Else
-                    Label8.Visibility = Windows.Visibility.Visible
-                    TxtModele.Visibility = Windows.Visibility.Visible
+                    StkModele.Visibility = Windows.Visibility.Visible
                 End If
                 If IsNumeric(x.Refresh) = False Then
-                    Label9.Visibility = Windows.Visibility.Collapsed
-                    TxtRefresh.Visibility = Windows.Visibility.Collapsed
+                    StkRefresh.Visibility = Windows.Visibility.Collapsed
                 Else
-                    Label9.Visibility = Windows.Visibility.Visible
-                    TxtRefresh.Visibility = Windows.Visibility.Visible
+                    StkRefresh.Visibility = Windows.Visibility.Visible
                 End If
 
                 'on affiche les parametres avancées
@@ -132,12 +124,9 @@ Partial Public Class uDriver
                     Label1.Content = "Driver SYSTEME"
                     ChkEnable.Visibility = Windows.Visibility.Collapsed
                     CbStartAuto.Visibility = Windows.Visibility.Collapsed
-                    Label8.Visibility = Windows.Visibility.Collapsed
-                    TxtModele.Visibility = Windows.Visibility.Collapsed
-                    Label9.Visibility = Windows.Visibility.Collapsed
-                    TxtRefresh.Visibility = Windows.Visibility.Collapsed
-                    Label11.Visibility = Windows.Visibility.Collapsed
-                    TxtVersion.Visibility = Windows.Visibility.Collapsed
+                    StkModele.Visibility = Windows.Visibility.Collapsed
+                    StkRefresh.Visibility = Windows.Visibility.Collapsed
+                    StkVersion.Visibility = Windows.Visibility.Collapsed
                 End If
             End If
 
