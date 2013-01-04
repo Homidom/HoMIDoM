@@ -24,32 +24,24 @@ Partial Public Class uDriver
             If x IsNot Nothing Then 'on a trouvé le driver
                 'on cache certains champs si leur valeur est @
                 If x.IP_TCP = "@" Then
-                    Label4.Visibility = Windows.Visibility.Collapsed
-                    TxtAdrTCP.Visibility = Windows.Visibility.Collapsed
+                    StkAdrIP.Visibility = Windows.Visibility.Collapsed
                 Else
-                    Label4.Visibility = Windows.Visibility.Visible
-                    TxtAdrTCP.Visibility = Windows.Visibility.Visible
+                    StkAdrIP.Visibility = Windows.Visibility.Visible
                 End If
                 If x.Port_TCP = "@" Then
-                    Label5.Visibility = Windows.Visibility.Collapsed
-                    TxtPortTCP.Visibility = Windows.Visibility.Collapsed
+                    StkPortIP.Visibility = Windows.Visibility.Collapsed
                 Else
-                    Label5.Visibility = Windows.Visibility.Visible
-                    TxtPortTCP.Visibility = Windows.Visibility.Visible
+                    StkPortIP.Visibility = Windows.Visibility.Visible
                 End If
                 If x.IP_UDP = "@" Then
-                    Label7.Visibility = Windows.Visibility.Collapsed
-                    TxtAdrUDP.Visibility = Windows.Visibility.Collapsed
+                    StkAdrUDP.Visibility = Windows.Visibility.Collapsed
                 Else
-                    Label7.Visibility = Windows.Visibility.Visible
-                    TxtAdrUDP.Visibility = Windows.Visibility.Visible
+                    StkAdrUDP.Visibility = Windows.Visibility.Visible
                 End If
                 If x.Port_UDP = "@" Then
-                    Label16.Visibility = Windows.Visibility.Collapsed
-                    TxtPortUDP.Visibility = Windows.Visibility.Collapsed
+                    StkPortUDP.Visibility = Windows.Visibility.Collapsed
                 Else
-                    Label16.Visibility = Windows.Visibility.Visible
-                    TxtPortUDP.Visibility = Windows.Visibility.Visible
+                    StkPortUDP.Visibility = Windows.Visibility.Visible
                 End If
                 If x.COM = "@" Then
                     Label10.Visibility = Windows.Visibility.Collapsed
