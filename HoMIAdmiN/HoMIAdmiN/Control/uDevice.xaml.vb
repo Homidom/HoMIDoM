@@ -77,6 +77,9 @@ Partial Public Class uDevice
                     TxtUnit.Text = x.Unit
                     TxtPuissance.Text = x.Puissance
 
+                    StkID.Visibility = Windows.Visibility.Visible
+                    TxtID.Text = x.ID
+
                     If _Driver IsNot Nothing Then
                         CbDriver.SelectedValue = _Driver.Nom
                     End If
@@ -302,6 +305,9 @@ Partial Public Class uDevice
                 Exit Sub
             End If
 
+            StkID.Visibility = Windows.Visibility.Visible
+            TxtID.Text = result
+
             VerifDriver(_driverid)
             If String.IsNullOrEmpty(_DeviceId) = True Then _DeviceId = result
             SaveInZone()
@@ -509,6 +515,8 @@ Partial Public Class uDevice
             SaveInZone()
 
             BtnRead.Visibility = Windows.Visibility.Visible
+            StkID.Visibility = Windows.Visibility.Visible
+            TxtID.Text = uid
 
             If CbType.SelectedValue = "MULTIMEDIA" Then
                 BtnEditTel.Visibility = Windows.Visibility.Visible
@@ -774,4 +782,5 @@ Partial Public Class uDevice
             TxtPuissance.Undo()
         End If
     End Sub
+
 End Class
