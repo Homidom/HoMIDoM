@@ -31,43 +31,40 @@
                         <Button Content="Ok" Foreground="White" Height="25" HorizontalAlignment="Right" Name="BtnOkParam" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="28" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
-                        <StackPanel Name="StkAdrIP">
+                        <StackPanel Name="StkAdrIP" Margin="0,0,10,0">
                             <Label Foreground="White" HorizontalAlignment="Left" Name="Label4" VerticalAlignment="Top" Visibility="Visible" Width="150">Adresse IP:</Label>
                             <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtAdrTCP" VerticalAlignment="Top" Visibility="Visible" Width="150"></TextBox>
                         </StackPanel>
-                        <Rectangle Width="10" />
-                        <StackPanel Name="StkPortIP">
+                        <StackPanel Name="StkPortIP" Margin="0,0,10,0">
                                <Label Foreground="White" Name="Label5" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Left" Width="70">Port IP:</Label>
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtPortTCP" VerticalAlignment="Top" Visibility="Visible" Width="70" HorizontalAlignment="Left"></TextBox>
                         </StackPanel>
-                        <Rectangle Width="10" />
-                        <StackPanel Name="StkAdrUDP">
+                        <StackPanel Name="StkAdrUDP" Margin="0,0,10,0">
                             <Label Foreground="White" Name="Label7" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Left" Width="150">Adresse UDP:</Label>
                             <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtAdrUDP" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Right" Width="150"></TextBox>
                         </StackPanel>
-                        <Rectangle Width="10" />
                         <StackPanel Name="StkPortUDP">
                             <Label Foreground="White" HorizontalAlignment="Right" Name="Label16" VerticalAlignment="Top" Visibility="Visible">Port UDP:</Label>
                             <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Right" Name="TxtPortUDP" VerticalAlignment="Top" Visibility="Visible" Width="70"></TextBox>
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
-                        <Label Foreground="White"  HorizontalAlignment="Left"  Name="Label10" VerticalAlignment="Top" Width="84">Port COM:</Label>
-                        <Rectangle Width="10" Name="rectcom1"/>
-                        <Label Foreground="White"  Name="Label9" VerticalAlignment="Top" HorizontalAlignment="Left" Width="84">Refresh (ms):</Label>
-                        <Rectangle Width="10" />
-                        <Label Width="49" Foreground="White" Name="Label11" VerticalAlignment="Top">Version:</Label>
-                        <Rectangle Width="10" />
-                        <Label Foreground="White" Name="Label8" VerticalAlignment="Top" Width="100">Modele:</Label>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" >
-                        <ComboBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtCom" Width="84" IsEditable="True">0</ComboBox>
-                        <Rectangle Width="10"  Name="rectcom2" />
-                        <TextBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtRefresh" HorizontalAlignment="Right" Width="84">0</TextBox>
-                        <Rectangle Width="10" />
-                        <TextBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="Black" Name="TxtVersion" Width="49" HorizontalAlignment="Left" IsEnabled="False">0</TextBox>
-                        <Rectangle Width="10" />
-                        <TextBox Height="22" Background="DarkGray" Width="100 " BorderBrush="Black" Foreground="White" Name="TxtModele" />
+                        <StackPanel Name="StkCom" Margin="0,0,10,0">
+                            <Label Foreground="White"  HorizontalAlignment="Left"  Name="Label10" VerticalAlignment="Top">Port COM:</Label>
+                            <ComboBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtCom" Width="84" IsEditable="True">0</ComboBox>
+                        </StackPanel>
+                        <StackPanel Name="StkRefresh" Margin="0,0,10,0">
+                            <Label Foreground="White"  Name="Label9" VerticalAlignment="Top" HorizontalAlignment="Left">Refresh (ms):</Label>
+                            <TextBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtRefresh" HorizontalAlignment="Right" Width="84">0</TextBox>
+                         </StackPanel>
+                        <StackPanel Name="StkVersion" Margin="0,0,10,0">
+                            <Label Width="49" Foreground="White" Name="Label11" VerticalAlignment="Top">Version:</Label>
+                            <TextBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="Black" Name="TxtVersion" Width="49" HorizontalAlignment="Left" IsEnabled="False">0</TextBox>
+                        </StackPanel>
+                        <StackPanel Name="StkModele" Margin="0,0,10,0">
+                            <Label Foreground="White" Name="Label8" VerticalAlignment="Top" Width="100">Modele:</Label>
+                            <TextBox Height="22" Background="DarkGray" Width="100 " BorderBrush="Black" Foreground="White" Name="TxtModele" />
+                        </StackPanel> 
                     </StackPanel>
                     <Rectangle Height="10" />
                     <StackPanel Orientation="Horizontal" >

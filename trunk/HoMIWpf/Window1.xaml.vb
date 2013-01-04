@@ -56,7 +56,6 @@ Class Window1
     Dim _Design As Boolean = False
     Dim mybuttonstyle As Style
     Public _CurrentIdZone As String
-
 #End Region
 
 #Region "Property"
