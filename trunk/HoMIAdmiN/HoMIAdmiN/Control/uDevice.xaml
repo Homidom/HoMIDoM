@@ -7,7 +7,7 @@
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" >
             <StackPanel >
                 <Label Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center">Composant</Label>
-                <Rectangle Height="20" />
+                <Rectangle Height="10" />
                 <StackPanel Orientation="Horizontal" >
                     <StackPanel Orientation="Vertical" Margin="2" HorizontalAlignment="Left">
                     <Label Name="Label2" Foreground="White">Nom:</Label>
@@ -89,7 +89,7 @@
                         <Rectangle Width="10" />
                             <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtFormatage" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="214.5" Visibility="Visible" />
                     </StackPanel>
-                    <Rectangle Height="10" />
+                    <Rectangle Height="7" />
                         <StackPanel HorizontalAlignment="Left">
                             <Label Content="Zones:" Foreground="White" />
                             <Label Content="Visible" Foreground="White" FontSize="10" HorizontalContentAlignment="Right" />
@@ -101,7 +101,10 @@
                                     <GradientStop Color="#9A7F7F7F" Offset="0.788" />
                                 </LinearGradientBrush>
                             </StackPanel.Background>
-
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Name="StkID">
+                            <Label Content="ID:" Foreground="LightGray" FontSize="8" />
+                            <TextBox Name="TxtID" MinWidth="300" FontSize="8" IsReadOnly="True" Foreground="White" Background="Transparent" BorderThickness="0" />
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Margin="5" VerticalAlignment="top" HorizontalAlignment="right" Height="200">
