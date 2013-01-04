@@ -98,51 +98,57 @@ Partial Public Class uDevice
                     ImgDevice.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Picture))
                     ImgDevice.Tag = x.Picture
 
+                    If AsProperty(x, "correction") = False Then StkCorrection.Visibility = Windows.Visibility.Collapsed
+                    If AsProperty(x, "formatage") = False Then StkFormatage.Visibility = Windows.Visibility.Collapsed
+                    If AsProperty(x, "precision") = False Then StkPrecision.Visibility = Windows.Visibility.Collapsed
+                    If AsProperty(x, "ValueMin") = False Then StkValueMin.Visibility = Windows.Visibility.Collapsed
+                    If AsProperty(x, "ValueMax") = False Then StkValueMax.Visibility = Windows.Visibility.Collapsed
+                    If AsProperty(x, "ValueDef") = False Then StkValueDef.Visibility = Windows.Visibility.Collapsed
+
                     'Gestion si Device avec Value
-                    If x.Type = ListeDevices.TEMPERATURE _
-                                       Or x.Type = ListeDevices.HUMIDITE _
-                                       Or x.Type = ListeDevices.TEMPERATURECONSIGNE _
-                                       Or x.Type = ListeDevices.ENERGIETOTALE _
-                                       Or x.Type = ListeDevices.ENERGIEINSTANTANEE _
-                                       Or x.Type = ListeDevices.PLUIETOTAL _
-                                       Or x.Type = ListeDevices.PLUIECOURANT _
-                                       Or x.Type = ListeDevices.VITESSEVENT _
-                                       Or x.Type = ListeDevices.UV _
-                                       Or x.Type = ListeDevices.COMPTEUR _
-                                       Or x.Type = ListeDevices.GENERIQUEVALUE _
-                                       Then
-                        StkValueLabel.Visibility = Windows.Visibility.Visible
-                        StkValue2Label.Visibility = Windows.Visibility.Visible
-                        StkValue3Label.Visibility = Windows.Visibility.Visible
-                        StkValue.Visibility = Windows.Visibility.Visible
-                        StkValue2.Visibility = Windows.Visibility.Visible
-                        StkValue3.Visibility = Windows.Visibility.Visible
-                        TxtCorrection.Text = x.Correction
-                        TxtFormatage.Text = x.Formatage
-                        TxtPrecision.Text = x.Precision
-                        TxtValueMax.Text = x.ValueMax
-                        TxtValueMin.Text = x.ValueMin
-                        TxtValDef.Text = x.ValueDef
-                        Label10.Visibility = Windows.Visibility.Visible
-                        Label11.Visibility = Windows.Visibility.Visible
-                        Label12.Visibility = Windows.Visibility.Visible
-                        Label13.Visibility = Windows.Visibility.Visible
-                        Label14.Visibility = Windows.Visibility.Visible
-                        Label15.Visibility = Windows.Visibility.Visible
-                    Else
-                        StkValueLabel.Visibility = Windows.Visibility.Collapsed
-                        StkValue2Label.Visibility = Windows.Visibility.Collapsed
-                        StkValue3Label.Visibility = Windows.Visibility.Collapsed
-                        StkValue.Visibility = Windows.Visibility.Collapsed
-                        StkValue2.Visibility = Windows.Visibility.Collapsed
-                        StkValue3.Visibility = Windows.Visibility.Collapsed
-                    End If
+                    'If x.Type = ListeDevices.TEMPERATURE _
+                    '                   Or x.Type = ListeDevices.HUMIDITE _
+                    '                   Or x.Type = ListeDevices.TEMPERATURECONSIGNE _
+                    '                   Or x.Type = ListeDevices.ENERGIETOTALE _
+                    '                   Or x.Type = ListeDevices.ENERGIEINSTANTANEE _
+                    '                   Or x.Type = ListeDevices.PLUIETOTAL _
+                    '                   Or x.Type = ListeDevices.PLUIECOURANT _
+                    '                   Or x.Type = ListeDevices.VITESSEVENT _
+                    '                   Or x.Type = ListeDevices.UV _
+                    '                   Or x.Type = ListeDevices.COMPTEUR _
+                    '                   Or x.Type = ListeDevices.GENERIQUEVALUE _
+                    '                   Then
+                    '    StkValueLabel.Visibility = Windows.Visibility.Visible
+                    '    StkValue2Label.Visibility = Windows.Visibility.Visible
+                    '    StkValue3Label.Visibility = Windows.Visibility.Visible
+                    '    StkValue.Visibility = Windows.Visibility.Visible
+                    '    StkValue2.Visibility = Windows.Visibility.Visible
+                    '    StkValue3.Visibility = Windows.Visibility.Visible
+                    '    TxtCorrection.Text = x.Correction
+                    '    TxtFormatage.Text = x.Formatage
+                    '    TxtPrecision.Text = x.Precision
+                    '    TxtValueMax.Text = x.ValueMax
+                    '    TxtValueMin.Text = x.ValueMin
+                    '    TxtValDef.Text = x.ValueDef
+                    '    Label10.Visibility = Windows.Visibility.Visible
+                    '    Label11.Visibility = Windows.Visibility.Visible
+                    '    Label12.Visibility = Windows.Visibility.Visible
+                    '    Label13.Visibility = Windows.Visibility.Visible
+                    '    Label14.Visibility = Windows.Visibility.Visible
+                    '    Label15.Visibility = Windows.Visibility.Visible
+                    'Else
+                    '    StkValueLabel.Visibility = Windows.Visibility.Collapsed
+                    '    StkValue2Label.Visibility = Windows.Visibility.Collapsed
+                    '    StkValue3Label.Visibility = Windows.Visibility.Collapsed
+                    '    StkValue.Visibility = Windows.Visibility.Collapsed
+                    '    StkValue2.Visibility = Windows.Visibility.Collapsed
+                    '    StkValue3.Visibility = Windows.Visibility.Collapsed
+                    'End If
 
                     If x.Type = ListeDevices.MULTIMEDIA Then
                         BtnEditTel.Visibility = Windows.Visibility.Visible
                         TxtModele2.Visibility = Visibility.Collapsed
-                        Label8.Visibility = Windows.Visibility.Collapsed
-                        StkModel.Visibility = Windows.Visibility.Collapsed
+                        StkModel.Visibility = Visibility.Collapsed
                     End If
 
                     'on verifie si le device est un device systeme pour ne pas le rendre modifiable
@@ -156,16 +162,13 @@ Partial Public Class uDevice
                         CbDriver.Foreground = Brushes.Black
                         ChkEnable.Visibility = Windows.Visibility.Collapsed
                         ChKSolo.Visibility = Windows.Visibility.Collapsed
-                        TxtAdresse1.Visibility = Windows.Visibility.Collapsed
-                        TxtAdresse2.Visibility = Windows.Visibility.Collapsed
+                        StkAdr1.Visibility = Windows.Visibility.Collapsed
+                        StkAdr2.Visibility = Windows.Visibility.Collapsed
                         TxtModele.Visibility = Windows.Visibility.Collapsed
-                        TxtRefresh.Visibility = Windows.Visibility.Collapsed
                         TxtLastChangeDuree.Visibility = Windows.Visibility.Collapsed
+                        StkRefresh.Visibility = Windows.Visibility.Collapsed
                         BtnRead.Visibility = Windows.Visibility.Collapsed
-                        Label6.Visibility = Windows.Visibility.Collapsed
-                        Label7.Visibility = Windows.Visibility.Collapsed
                         Label8.Visibility = Windows.Visibility.Collapsed
-                        Label9.Visibility = Windows.Visibility.Collapsed
                         Label19.Visibility = Windows.Visibility.Collapsed
                         TxtUnit.Visibility = Windows.Visibility.Collapsed
                         LblUnit.Visibility = Windows.Visibility.Collapsed
@@ -367,18 +370,25 @@ Partial Public Class uDevice
 
     Private Sub CbType_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles CbType.MouseLeave
         Try
-            TxtCorrection.Visibility = Windows.Visibility.Hidden
-            TxtFormatage.Visibility = Windows.Visibility.Hidden
-            TxtPrecision.Visibility = Windows.Visibility.Hidden
-            TxtValueMax.Visibility = Windows.Visibility.Hidden
-            TxtValueMin.Visibility = Windows.Visibility.Hidden
-            TxtValDef.Visibility = Windows.Visibility.Hidden
-            Label10.Visibility = Windows.Visibility.Hidden
-            Label11.Visibility = Windows.Visibility.Hidden
-            Label12.Visibility = Windows.Visibility.Hidden
-            Label13.Visibility = Windows.Visibility.Hidden
-            Label14.Visibility = Windows.Visibility.Hidden
-            Label15.Visibility = Windows.Visibility.Hidden
+            StkCorrection.Visibility = Windows.Visibility.Collapsed
+            StkFormatage.Visibility = Windows.Visibility.Collapsed
+            StkPrecision.Visibility = Windows.Visibility.Collapsed
+            StkValueMin.Visibility = Windows.Visibility.Collapsed
+            StkValueMax.Visibility = Windows.Visibility.Collapsed
+            StkValueDef.Visibility = Windows.Visibility.Collapsed
+
+            'TxtCorrection.Visibility = Windows.Visibility.Hidden
+            'TxtFormatage.Visibility = Windows.Visibility.Hidden
+            'TxtPrecision.Visibility = Windows.Visibility.Hidden
+            'TxtValueMax.Visibility = Windows.Visibility.Hidden
+            'TxtValueMin.Visibility = Windows.Visibility.Hidden
+            'TxtValDef.Visibility = Windows.Visibility.Hidden
+            'Label10.Visibility = Windows.Visibility.Hidden
+            'Label11.Visibility = Windows.Visibility.Hidden
+            'Label12.Visibility = Windows.Visibility.Hidden
+            'Label13.Visibility = Windows.Visibility.Hidden
+            'Label14.Visibility = Windows.Visibility.Hidden
+            'Label15.Visibility = Windows.Visibility.Hidden
 
             If _Action = EAction.Nouveau Then
                 'Gestion si Device avec Value
@@ -395,18 +405,24 @@ Partial Public Class uDevice
                                    Or CbType.Text = "UV" _
                                    Or CbType.Text = "GENERIQUEVALUE" _
                                    Then
-                    TxtCorrection.Visibility = Windows.Visibility.Visible
-                    TxtFormatage.Visibility = Windows.Visibility.Visible
-                    TxtPrecision.Visibility = Windows.Visibility.Visible
-                    TxtValueMax.Visibility = Windows.Visibility.Visible
-                    TxtValueMin.Visibility = Windows.Visibility.Visible
-                    TxtValDef.Visibility = Windows.Visibility.Visible
-                    Label10.Visibility = Windows.Visibility.Visible
-                    Label11.Visibility = Windows.Visibility.Visible
-                    Label12.Visibility = Windows.Visibility.Visible
-                    Label13.Visibility = Windows.Visibility.Visible
-                    Label14.Visibility = Windows.Visibility.Visible
-                    Label15.Visibility = Windows.Visibility.Visible
+                    StkCorrection.Visibility = Windows.Visibility.Visible
+                    StkFormatage.Visibility = Windows.Visibility.Visible
+                    StkPrecision.Visibility = Windows.Visibility.Visible
+                    StkValueMin.Visibility = Windows.Visibility.Visible
+                    StkValueMax.Visibility = Windows.Visibility.Visible
+                    StkValueDef.Visibility = Windows.Visibility.Visible
+                    'TxtCorrection.Visibility = Windows.Visibility.Visible
+                    'TxtFormatage.Visibility = Windows.Visibility.Visible
+                    'TxtPrecision.Visibility = Windows.Visibility.Visible
+                    'TxtValueMax.Visibility = Windows.Visibility.Visible
+                    'TxtValueMin.Visibility = Windows.Visibility.Visible
+                    'TxtValDef.Visibility = Windows.Visibility.Visible
+                    'Label10.Visibility = Windows.Visibility.Visible
+                    'Label11.Visibility = Windows.Visibility.Visible
+                    'Label12.Visibility = Windows.Visibility.Visible
+                    'Label13.Visibility = Windows.Visibility.Visible
+                    'Label14.Visibility = Windows.Visibility.Visible
+                    'Label15.Visibility = Windows.Visibility.Visible
                 End If
 
                 If CbType.SelectedValue = "MULTIMEDIA" Then
@@ -548,7 +564,6 @@ Partial Public Class uDevice
     Dim tmp As String = ""
 
     Private Sub CbDriver_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbDriver.SelectionChanged
-        'tmp = CbDriver.Text
         MaJDriver()
     End Sub
 
@@ -585,29 +600,25 @@ Partial Public Class uDevice
                         Select Case UCase(_Driver.LabelsDevice.Item(k).NomChamp)
                             Case "ADRESSE1"
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
-                                    TxtAdresse1.Visibility = Windows.Visibility.Collapsed
-                                    Label6.Visibility = Windows.Visibility.Collapsed
+                                    StkAdr1.Visibility = Windows.Visibility.Collapsed
                                 Else
                                     Label6.Content = _Driver.LabelsDevice.Item(k).LabelChamp
                                     If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Tooltip) = False Then
                                         Label6.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                         TxtAdresse1.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                     End If
-                                    Label6.Visibility = Windows.Visibility.Visible
-                                    TxtAdresse1.Visibility = Windows.Visibility.Visible
+                                    StkAdr1.Visibility = Windows.Visibility.Visible
                                 End If
                             Case "ADRESSE2"
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
-                                    TxtAdresse2.Visibility = Windows.Visibility.Collapsed
-                                    Label7.Visibility = Windows.Visibility.Collapsed
+                                    StkAdr2.Visibility = Windows.Visibility.Collapsed
                                 Else
                                     Label7.Content = _Driver.LabelsDevice.Item(k).LabelChamp
                                     If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Tooltip) = False Then
                                         Label7.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                         TxtAdresse2.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                     End If
-                                    TxtAdresse2.Visibility = Windows.Visibility.Visible
-                                    Label7.Visibility = Windows.Visibility.Visible
+                                    StkAdr2.Visibility = Windows.Visibility.Visible
                                 End If
                             Case "SOLO"
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then

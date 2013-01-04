@@ -31,22 +31,25 @@
                         <Button Content="Ok" Foreground="White" Height="25" HorizontalAlignment="Right" Name="BtnOkParam" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="28" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
-                        <Label Foreground="White" HorizontalAlignment="Left" Name="Label4" VerticalAlignment="Top" Visibility="Visible" Width="150">Adresse IP:</Label>
+                        <StackPanel Name="StkAdrIP">
+                            <Label Foreground="White" HorizontalAlignment="Left" Name="Label4" VerticalAlignment="Top" Visibility="Visible" Width="150">Adresse IP:</Label>
+                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtAdrTCP" VerticalAlignment="Top" Visibility="Visible" Width="150"></TextBox>
+                        </StackPanel>
                         <Rectangle Width="10" />
-                        <Label Foreground="White" Name="Label5" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Left" Width="70">Port IP:</Label>
+                        <StackPanel Name="StkPortIP">
+                               <Label Foreground="White" Name="Label5" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Left" Width="70">Port IP:</Label>
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtPortTCP" VerticalAlignment="Top" Visibility="Visible" Width="70" HorizontalAlignment="Left"></TextBox>
+                        </StackPanel>
                         <Rectangle Width="10" />
-                        <Label Foreground="White" Name="Label7" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Left" Width="150">Adresse UDP:</Label>
+                        <StackPanel Name="StkAdrUDP">
+                            <Label Foreground="White" Name="Label7" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Left" Width="150">Adresse UDP:</Label>
+                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtAdrUDP" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Right" Width="150"></TextBox>
+                        </StackPanel>
                         <Rectangle Width="10" />
-                        <Label Foreground="White" HorizontalAlignment="Right" Name="Label16" VerticalAlignment="Top" Visibility="Visible">Port UDP:</Label>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" >
-                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtAdrTCP" VerticalAlignment="Top" Visibility="Visible" Width="150"></TextBox>
-                        <Rectangle Width="10" />
-                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtPortTCP" VerticalAlignment="Top" Visibility="Visible" Width="70" HorizontalAlignment="Left"></TextBox>
-                        <Rectangle Width="10" />
-                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtAdrUDP" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Right" Width="150"></TextBox>
-                        <Rectangle Width="10" />
-                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Right" Name="TxtPortUDP" VerticalAlignment="Top" Visibility="Visible" Width="70"></TextBox>
+                        <StackPanel Name="StkPortUDP">
+                            <Label Foreground="White" HorizontalAlignment="Right" Name="Label16" VerticalAlignment="Top" Visibility="Visible">Port UDP:</Label>
+                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Right" Name="TxtPortUDP" VerticalAlignment="Top" Visibility="Visible" Width="70"></TextBox>
+                        </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
                         <Label Foreground="White"  HorizontalAlignment="Left"  Name="Label10" VerticalAlignment="Top" Width="84">Port COM:</Label>
