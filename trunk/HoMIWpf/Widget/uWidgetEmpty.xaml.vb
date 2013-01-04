@@ -82,6 +82,7 @@ Public Class uWidgetEmpty
     Public Event GestureDroiteGauche(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event ShowZone(ByVal zoneid As String)
 
+#Region "Property"
     Public Property Show As Boolean
         Get
             Return _Show
@@ -230,6 +231,10 @@ Public Class uWidgetEmpty
                     If _ShowValue Then
                         LblStatus.Content = _dev.Value & _dev.Unit
                         _CurrentValue = _dev.Value
+
+                        If IsNumeric(_dev.Value) = True Or IsBoolean(_dev.Value) = True Then
+                            Picture = GetOnOffPicture(_dev.Picture, CSng(_dev.Value))
+                        End If
                     End If
                 ElseIf _macro IsNot Nothing Then
                     Etiquette = _macro.Nom
@@ -461,12 +466,16 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As String)
             _Picture = value
-            If _Show = True Then
-                If Image.Tag <> _Picture Then
-                    Image.Tag = _Picture
-                    Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_Picture))
+            Try
+                If _Show = True Then
+                    If Image.Tag <> _Picture Then
+                        Image.Tag = _Picture
+                        Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_Picture))
+                    End If
                 End If
-            End If
+            Catch ex As Exception
+                MessageBox.Show("Erreur Property Set Picture: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            End Try
         End Set
     End Property
 
@@ -624,6 +633,7 @@ Public Class uWidgetEmpty
             End If
         End Set
     End Property
+#End Region
 
 #Region "Property/Sub Web"
     Public Property URL As String
@@ -867,6 +877,11 @@ Public Class uWidgetEmpty
                         If _CurrentValue <> _dev.Value Then
                             LblStatus.Content = _dev.Value & _dev.Unit
                             _CurrentValue = _dev.Value
+
+                            If IsNumeric(_dev.Value) = True Or IsBoolean(_dev.Value) = True Then
+                                Picture = GetOnOffPicture(_dev.Picture, CSng(_dev.Value))
+                            End If
+
                             If _IsVariation Then
                                 If StkPopup.Children.Count = 2 Then
                                     Dim x2 As uVariateur = StkPopup.Children.Item(1)
@@ -1749,4 +1764,26 @@ Public Class uWidgetEmpty
         End Try
 
     End Sub
+
+    Private Function GetOnOffPicture(ByVal filename As String, ByVal value As Single) As String
+        Try
+            ' On recherche s'il existe des images de type double état (ON/OFF) et si oui:
+            ' - affiche l 'image xxxx_on.jpg si la valeur numérique est différent de zéro (ou False)
+            ' - affiche l 'image xxxx_off.jpg si la valeur numérique est de zéro (ou False)
+            Dim _file As String = filename.ToLower
+            If _file.Contains("_on") = True Or _file.Contains("_off") = True Then
+                If value = 0 Then
+                    GetOnOffPicture = _file.Replace("_on", "_off")
+                Else
+                    GetOnOffPicture = _file.Replace("_off", "_on")
+                End If
+            Else
+                GetOnOffPicture = _file
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur GetOnOffPicture: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            Return filename
+        End Try
+    End Function
+
 End Class

@@ -78,4 +78,18 @@ Module Fonctions
         End Try
     End Function
 
+    ''' <summary>
+    ''' Vérifie si la valeur est un boolean
+    ''' </summary>
+    ''' <param name="value"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function IsBoolean(ByVal value As Object) As Boolean
+        Try
+            Dim x As Boolean = value
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
 End Module
