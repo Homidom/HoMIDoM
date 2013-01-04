@@ -298,6 +298,13 @@ HoMIDom
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.AllValue">
+	<summary>
+ Prendre en compte toutes les valeurs même inchangées
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Adresse1">
 	<summary>
  Adresse par défaut (pour le X10 par exemple)
@@ -1278,6 +1285,18 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.Server.GetSqliteVersion">
 	<summary>Retourne la version du moteur sqlite</summary>
 	<returns>String : version Moteur sqlite</returns>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetDevise">
+	<summary>
+ Retourne la devise du serveur
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetDevise(System.String)">
+	<summary>
+ Fixe la devise du serveur
+ </summary>
+	<param name="Value"></param>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetHistoDeviceSource(System.String,System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Retourne un datatable d'historique d'un device suivant sa propriété (source) puis suivant une date de début et de fin
@@ -1454,7 +1473,7 @@ HoMIDom
 	<summary>Retourne la liste de tous les devices</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.String,System.String,System.Double,System.Double,System.Double,System.Double,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes},System.String,System.Int32)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.String,System.String,System.Double,System.Double,System.Double,System.Double,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes},System.String,System.Int32,System.Boolean)">
 	<summary>
  Sauvegarder ou créer un device
  </summary>
@@ -1841,6 +1860,39 @@ HoMIDom
 	<summary>Retourne la valeur IP SOAP</summary>
 	<returns>Numero du port ou -1 si erreur</returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetGererEnergie(System.Boolean)">
+	<summary>
+ True si on doit gérer l'energie
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetGererEnergie">
+	<summary>
+ True si on doit gérer l'energie
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetTarifJour(System.Int32)">
+	<summary>
+ Set Tarif jour
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetTarifJour">
+	<summary>
+ Get Tarif joure
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetTarifNuit(System.Int32)">
+	<summary>
+ Set Tarif nuit
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetTarifNuit">
+	<summary>
+ Get Tarif nuit
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Server">
 	<summary>Classe Server</summary>
 	<remarks></remarks>
@@ -2116,6 +2168,18 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSqliteVersion">
 	<summary>Retourne la version du moteur sqlite</summary>
 	<returns>String : version Sqlite</returns>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetDevise">
+	<summary>
+ Retourne la devise du serveur
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetDevise(System.String)">
+	<summary>
+ Fixe la devise du serveur
+ </summary>
+	<param name="Value"></param>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DevicesAsHisto">
 	<summary>
  Retourne un dictionnary retourant en clé l'id du device et la valeur True/False s'il contient des historiques
@@ -2297,7 +2361,7 @@ HoMIDom
 	<param name="DeviceDriver">ID driver du device</param>
 	<returns>List de device, Nothing si non trouvé ou ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.String,System.String,System.Double,System.Double,System.Double,System.Double,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes},System.String,System.Int32)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.String,System.String,System.Double,System.Double,System.Double,System.Double,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes},System.String,System.Int32,System.Boolean)">
 	<summary>
  Créer un nouveau device ou sauvegarder la modif (si ID est complété)
  </summary>
