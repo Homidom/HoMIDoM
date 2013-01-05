@@ -1509,8 +1509,24 @@ Class Window1
                 Exit Sub
             End If
 
+            Me.Cursor = Cursors.Wait
+
             myService.StopDriver(IdSrv, sender.tag)
-            AffDriver()
+
+            Dim OK As Boolean = True
+            Dim t As DateTime = DateTime.Now
+            Do While DateTime.Now < t.AddSeconds(10) And OK = True
+                OK = myService.ReturnDriverByID(IdSrv, sender.tag).IsConnect
+                Thread.Sleep(1000)
+            Loop
+
+            If OK = True Then
+                MessageBox.Show("Le driver n'a pas pu être arrêté, veuillez consulter le log pour en connaitre la raison", "INFO", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            Else
+                AffDriver()
+            End If
+
+            Me.Cursor = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub StopDriver: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1524,8 +1540,24 @@ Class Window1
             End If
 
             If myService.ReturnDriverByID(IdSrv, sender.tag).Enable = True Then
+                Me.Cursor = Cursors.Wait
+
                 myService.StartDriver(IdSrv, sender.tag)
-                AffDriver()
+
+                Dim OK As Boolean = False
+                Dim t As DateTime = DateTime.Now
+                Do While DateTime.Now < t.AddSeconds(10) And OK = False
+                    OK = myService.ReturnDriverByID(IdSrv, sender.tag).IsConnect
+                    Thread.Sleep(1000)
+                Loop
+
+                If OK = False Then
+                    MessageBox.Show("Le driver n'a pas pu être démarré, veuillez consulter le log pour en connaitre la raison", "INFO", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Else
+                    AffDriver()
+                End If
+
+                Me.Cursor = Nothing
             Else
                 MessageBox.Show("Le driver ne peut être démarré car sa propriété Enable est à False!", "Avertissement", MessageBoxButton.OK, MessageBoxImage.Exclamation)
             End If
