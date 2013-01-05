@@ -630,7 +630,7 @@
     
     <Window.Triggers>
         <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-            <BeginStoryboard x:Name="OnLoaded1_BeginStoryboard" Storyboard="{StaticResource OnLoaded1}"/>
+            <!--<BeginStoryboard x:Name="OnLoaded1_BeginStoryboard" Storyboard="{StaticResource OnLoaded1}"/>-->
         </EventTrigger>
     </Window.Triggers>
 
