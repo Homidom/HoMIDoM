@@ -65,22 +65,14 @@ Partial Public Class uDriver
 
                 'on affiche les parametres avancées
                 If x.Parametres IsNot Nothing And x.Parametres.Count > 0 Then
-                    Label15.Visibility = Windows.Visibility.Visible
-                    Label14.Visibility = Windows.Visibility.Visible
-                    TxtParam.Visibility = Windows.Visibility.Visible
-                    CbParam.Visibility = Windows.Visibility.Visible
-                    BtnOkParam.Visibility = Windows.Visibility.Visible
+                    StkParam.Visibility = Windows.Visibility.Visible
                     CbParam.Items.Clear()
                     For k As Integer = 0 To x.Parametres.Count - 1
                         CbParam.Items.Add(x.Parametres.Item(k).Nom)
                         _ListParam.Add(x.Parametres.Item(k).Valeur)
                     Next
                 Else
-                    Label15.Visibility = Windows.Visibility.Collapsed
-                    Label14.Visibility = Windows.Visibility.Collapsed
-                    TxtParam.Visibility = Windows.Visibility.Collapsed
-                    CbParam.Visibility = Windows.Visibility.Collapsed
-                    BtnOkParam.Visibility = Windows.Visibility.Collapsed
+                    StkParam.Visibility = Windows.Visibility.Collapsed
                 End If
 
                 TxtNom.Text = x.Nom

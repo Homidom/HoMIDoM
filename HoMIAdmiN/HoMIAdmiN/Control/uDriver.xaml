@@ -6,8 +6,7 @@
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Margin="0">
             <StackPanel>
                 <Label Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center">Driver</Label>
-                <Rectangle Height="40" />
-                <StackPanel Margin="5" Name="Stk1">
+                <StackPanel Margin="5,40,5,5" Name="Stk1" >
                     <Label HorizontalAlignment="Left"  Name="Label2" Foreground="White" VerticalAlignment="Top">Nom:</Label>
                     <StackPanel Orientation="Horizontal" >
                         <TextBox Height="22" HorizontalAlignment="Left" Name="TxtNom" VerticalAlignment="Top" Width="215" Foreground="Black" Background="DarkGray" BorderBrush="Black" IsEnabled="False" SelectionBrush="DarkGray" />
@@ -17,18 +16,19 @@
                     <Label Foreground="White" HorizontalAlignment="Left" Name="Label3" VerticalAlignment="Top" Content="Description:"></Label>
                     <TextBox Background="DarkGray" BorderBrush="Black" Foreground="Black" Name="TxtDescript" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="450" IsEnabled="False" SelectionBrush="DarkGray" />
                     <StackPanel Orientation="Horizontal" >
-                        <Label Foreground="White" HorizontalAlignment="Left" Name="Label6" Width="215" VerticalAlignment="Top">Protocol:</Label>
-                        <Rectangle Width="10" />
-                        <Label Content="Paramètres avancés:" Foreground="White" HorizontalAlignment="Right" Name="Label14" VerticalAlignment="Top" Visibility="Visible" Width="125.493" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" >
-                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="Black" HorizontalAlignment="Left" Name="TxtProtocol" Width="215" Height="22" VerticalAlignment="Top" IsEnabled="False" />
-                        <Rectangle Width="10" />
-                        <ComboBox Height="25" HorizontalAlignment="Left" Name="CbParam" VerticalAlignment="Top" Width="148" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" AllowDrop="True"></ComboBox>
-                        <Label Content="=" Foreground="White" HorizontalAlignment="Right" Name="Label15" VerticalAlignment="Top" Visibility="Visible" Width="24" />
-                        <TextBox Height="25" HorizontalAlignment="Right" Name="TxtParam" VerticalAlignment="Top" Width="144" Background="DarkGray" BorderBrush="Black" Foreground="White" AllowDrop="True" />
-                        <Rectangle Width="15"/>
-                        <Button Content="Ok" Foreground="White" Height="25" HorizontalAlignment="Right" Name="BtnOkParam" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="28" />
+                        <StackPanel Name="StkProtocol">
+                            <Label Foreground="White" HorizontalAlignment="Left" Name="Label6" Width="215" VerticalAlignment="Top">Protocol:</Label>
+                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="Black" HorizontalAlignment="Left" Name="TxtProtocol" Width="215" Height="22" VerticalAlignment="Top" IsEnabled="False" />
+                        </StackPanel>
+                        <StackPanel Name="StkParam" Margin="10,0,0,0">
+                            <Label Content="Paramètres avancés:" Foreground="White" HorizontalAlignment="Left" Name="Label14" VerticalAlignment="Top" Visibility="Visible" Width="125.493" />
+                            <StackPanel Orientation="Horizontal" >
+                                <ComboBox Height="25" HorizontalAlignment="Left" Name="CbParam" VerticalAlignment="Top" Width="148" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" AllowDrop="True"></ComboBox>
+                                <Label Content="=" Foreground="White" HorizontalAlignment="Right" Name="Label15" VerticalAlignment="Top" Visibility="Visible" Width="24" />
+                                <TextBox Height="25" HorizontalAlignment="Right" Name="TxtParam" VerticalAlignment="Top" Width="144" Background="DarkGray" BorderBrush="Black" Foreground="White" AllowDrop="True" />
+                                <Button Margin="15,0,0,0" Content="Ok" Foreground="White" Height="25" HorizontalAlignment="Right" Name="BtnOkParam" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="28" />
+                            </StackPanel>
+                        </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
                         <StackPanel Name="StkAdrIP" Margin="0,0,10,0">
@@ -66,12 +66,11 @@
                             <TextBox Height="22" Background="DarkGray" Width="100 " BorderBrush="Black" Foreground="White" Name="TxtModele" />
                         </StackPanel> 
                     </StackPanel>
-                    <Rectangle Height="10" />
-                    <StackPanel Orientation="Horizontal" >
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
                         <Label HorizontalAlignment="Left" Name="Label12" VerticalAlignment="Bottom" Width="119" Foreground="White" Height="26">Fonctions avancées :</Label>
                         <Button Height="23" Name="BtnAv" Width="22" Template="{DynamicResource GlassButton}" Foreground="White">&gt;&gt;</Button>
                     </StackPanel>
-                    <Rectangle Height="10" />
+                    
                     <GroupBox Header="Fonctions Avancées" Margin="3" Name="GroupBox1" Visibility="Collapsed">
                         <Grid>
                             <StackPanel Margin="10,10,0,0">
@@ -79,8 +78,7 @@
                                     <Label Foreground="White" HorizontalAlignment="Left"  Name="Label13" VerticalAlignment="Top" Width="62">Fonction:</Label>
                                     <ComboBox Height="25" HorizontalAlignment="Left" Name="CbCmd" VerticalAlignment="Top" Width="211" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2"/>
                                 </StackPanel>
-                                <Rectangle Height="8" />
-                                <StackPanel >
+                                <StackPanel Margin="0,8,0,0">
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Foreground="White" HorizontalAlignment="Left" Name="LblP1" VerticalAlignment="Top" Visibility="Hidden" Width="100">##########:</Label>
                                         <TextBox Width="215" Height="20" Name="TxtP1" VerticalAlignment="Top" Visibility="Hidden" Background="DarkGray" BorderBrush="Black" Foreground="White"/>

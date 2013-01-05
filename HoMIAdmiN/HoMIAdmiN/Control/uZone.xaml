@@ -6,8 +6,7 @@
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2">
             <StackPanel >
                 <Label HorizontalAlignment="Center" Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Zone</Label>
-                <Rectangle Height="40" />
-                <StackPanel Orientation="Horizontal" >
+                <StackPanel Orientation="Horizontal" Margin="0,40,0,0">
                     <Label HorizontalAlignment="Left" Name="Label2" VerticalAlignment="Top" Width="55" Foreground="White" Content="Nom :"></Label>
                     <TextBox Height="22" Width="200" Name="TxtName" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White"  />
                 </StackPanel>
@@ -15,8 +14,7 @@
                     <Label Foreground="White" Name="Label3" VerticalAlignment="Top" Width="55" Content="Image :"></Label>
                     <Image Margin="5" Name="ImgZone" Stretch="Fill" HorizontalAlignment="Left" Width="90" Height="90" Source="/HoMIAdmiN;component/Images/Defaut_128.png" />
                 </StackPanel>
-                <Rectangle Height=" 10" />
-                <Label Content="Eléments appartenant à la zone" Foreground="White" ToolTip="Glisser un élément (device, macro ou zone) dans la liste ci-dessous" FontStyle="Oblique" FontWeight="ExtraBold" />
+                <Label Margin="0,10,0,0" Content="Eléments appartenant à la zone" Foreground="White" ToolTip="Glisser un élément (device, macro ou zone) dans la liste ci-dessous" FontStyle="Oblique" FontWeight="ExtraBold" />
                 <StackPanel Orientation="Horizontal">
                     <StackPanel Margin="2">
                         <Label Content="Devices" Foreground="White" Width="250" FontWeight="SemiBold" />
