@@ -10,9 +10,9 @@ Partial Public Class uDevice
     '--- Variables ------------------
     Public Event CloseMe(ByVal MyObject As Object, ByVal Cancel As Boolean)
     Dim _Action As EAction 'Définit si modif ou création d'un device
-    Dim _DeviceId As String 'Id du device à modifier
+    Dim _DeviceId As String = "" 'Id du device à modifier
     Dim FlagNewCmd, FlagNewDevice As Boolean
-    Dim _Driver As HoMIDom.HoMIDom.TemplateDriver
+    Dim _Driver As HoMIDom.HoMIDom.TemplateDriver = Nothing
     Dim x As HoMIDom.HoMIDom.TemplateDevice = Nothing
     Dim ListeDrivers As List(Of TemplateDriver)
 

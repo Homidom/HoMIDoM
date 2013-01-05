@@ -402,6 +402,10 @@ Class Window1
             TreeViewMacro.Items.Clear()
             TreeViewHisto.Items.Clear()
 
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
+
             Me.UpdateLayout()
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub ClearAllTreeview: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -2273,6 +2277,7 @@ Class Window1
                                         x.Uid = System.Guid.NewGuid.ToString()
                                         AddHandler x.CloseMe, AddressOf UnloadControl
                                         CanvasRight.Children.Clear()
+
                                         GC.Collect()
                                         GC.WaitForPendingFinalizers()
                                         GC.Collect()
@@ -2361,6 +2366,7 @@ Class Window1
                                         x.Uid = System.Guid.NewGuid.ToString()
                                         AddHandler x.CloseMe, AddressOf UnloadControl
                                         CanvasRight.Children.Clear()
+
                                         GC.Collect()
                                         GC.WaitForPendingFinalizers()
                                         GC.Collect()
@@ -2502,6 +2508,13 @@ Class Window1
     Private Sub AffControlPageSuite()
         Try
             CanvasRight.Children.Clear()
+
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
+
+            Me.UpdateLayout()
+
             CanvasRight.Children.Add(Objet3)
             AnimationApparition(Objet3)
             Objet3 = Nothing
@@ -2600,6 +2613,13 @@ Class Window1
             x.Height = CanvasRight.ActualHeight - 20
             AddHandler x.CloseMe, AddressOf UnloadControl
             CanvasRight.Children.Clear()
+
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
+
+            Me.UpdateLayout()
+
             CanvasRight.Children.Add(x)
 
             Devices = Nothing

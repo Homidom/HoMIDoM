@@ -7,8 +7,8 @@ Imports System.Text.RegularExpressions
 Partial Public Class uDriver
     '--- Variables ------------------
     Public Event CloseMe(ByVal MyObject As Object)
-    Dim _DriverId As String 'Id du device à modifier
-    Dim x As HoMIDom.HoMIDom.TemplateDriver
+    Dim _DriverId As String = "" 'Id du device à modifier
+    Dim x As HoMIDom.HoMIDom.TemplateDriver = Nothing
     Dim _ListParam As New ArrayList
 
     Public Sub New(ByVal DriverId As String)
@@ -409,4 +409,7 @@ Partial Public Class uDriver
         End Try
     End Function
 
+    Protected Overrides Sub Finalize()
+        MyBase.Finalize()
+    End Sub
 End Class
