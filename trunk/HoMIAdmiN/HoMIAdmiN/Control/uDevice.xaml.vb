@@ -14,7 +14,7 @@ Partial Public Class uDevice
     Dim FlagNewCmd, FlagNewDevice As Boolean
     Dim _Driver As HoMIDom.HoMIDom.TemplateDriver
     Dim x As HoMIDom.HoMIDom.TemplateDevice = Nothing
-    Dim ListeDrivers
+    Dim ListeDrivers As List(Of TemplateDriver)
 
     Public Sub New(ByVal Action As Classe.EAction, ByVal DeviceId As String)
         Try
@@ -165,15 +165,12 @@ Partial Public Class uDevice
                         StkAdr1.Visibility = Windows.Visibility.Collapsed
                         StkAdr2.Visibility = Windows.Visibility.Collapsed
                         TxtModele.Visibility = Windows.Visibility.Collapsed
-                        TxtLastChangeDuree.Visibility = Windows.Visibility.Collapsed
+                        StkLastChange.Visibility = Windows.Visibility.Collapsed
                         StkRefresh.Visibility = Windows.Visibility.Collapsed
                         BtnRead.Visibility = Windows.Visibility.Collapsed
                         Label8.Visibility = Windows.Visibility.Collapsed
-                        Label19.Visibility = Windows.Visibility.Collapsed
-                        TxtUnit.Visibility = Windows.Visibility.Collapsed
-                        LblUnit.Visibility = Windows.Visibility.Collapsed
-                        TxtPuissance.Visibility = Windows.Visibility.Collapsed
-                        LblPuiss.Visibility = Windows.Visibility.Collapsed
+                        StkUnit.Visibility = Windows.Visibility.Collapsed
+                        StkPuiss.Visibility = Windows.Visibility.Collapsed
                     End If
 
                     'affiche du bouton Historique si le device a un historique
@@ -377,19 +374,6 @@ Partial Public Class uDevice
             StkValueMax.Visibility = Windows.Visibility.Collapsed
             StkValueDef.Visibility = Windows.Visibility.Collapsed
 
-            'TxtCorrection.Visibility = Windows.Visibility.Hidden
-            'TxtFormatage.Visibility = Windows.Visibility.Hidden
-            'TxtPrecision.Visibility = Windows.Visibility.Hidden
-            'TxtValueMax.Visibility = Windows.Visibility.Hidden
-            'TxtValueMin.Visibility = Windows.Visibility.Hidden
-            'TxtValDef.Visibility = Windows.Visibility.Hidden
-            'Label10.Visibility = Windows.Visibility.Hidden
-            'Label11.Visibility = Windows.Visibility.Hidden
-            'Label12.Visibility = Windows.Visibility.Hidden
-            'Label13.Visibility = Windows.Visibility.Hidden
-            'Label14.Visibility = Windows.Visibility.Hidden
-            'Label15.Visibility = Windows.Visibility.Hidden
-
             If _Action = EAction.Nouveau Then
                 'Gestion si Device avec Value
                 If CbType.SelectedValue Is Nothing Then Exit Sub
@@ -411,23 +395,9 @@ Partial Public Class uDevice
                     StkValueMin.Visibility = Windows.Visibility.Visible
                     StkValueMax.Visibility = Windows.Visibility.Visible
                     StkValueDef.Visibility = Windows.Visibility.Visible
-                    'TxtCorrection.Visibility = Windows.Visibility.Visible
-                    'TxtFormatage.Visibility = Windows.Visibility.Visible
-                    'TxtPrecision.Visibility = Windows.Visibility.Visible
-                    'TxtValueMax.Visibility = Windows.Visibility.Visible
-                    'TxtValueMin.Visibility = Windows.Visibility.Visible
-                    'TxtValDef.Visibility = Windows.Visibility.Visible
-                    'Label10.Visibility = Windows.Visibility.Visible
-                    'Label11.Visibility = Windows.Visibility.Visible
-                    'Label12.Visibility = Windows.Visibility.Visible
-                    'Label13.Visibility = Windows.Visibility.Visible
-                    'Label14.Visibility = Windows.Visibility.Visible
-                    'Label15.Visibility = Windows.Visibility.Visible
                 End If
 
                 If CbType.SelectedValue = "MULTIMEDIA" Then
-                    TxtModele2.Visibility = Visibility.Collapsed
-                    Label8.Visibility = Windows.Visibility.Collapsed
                     StkModel.Visibility = Windows.Visibility.Collapsed
                 End If
             End If
@@ -569,7 +539,6 @@ Partial Public Class uDevice
 
     Private Sub MaJDriver()
         Try
-            'Dim _Driver As Object = myService.GetAllDrivers(IdSrv).Item(CbDriver.SelectedIndex)
             Dim _Driver As Object = Nothing
 
             'on cherche le driver
@@ -629,8 +598,6 @@ Partial Public Class uDevice
                                 End If
                             Case "REFRESH"
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
-                                    TxtRefresh.Visibility = Windows.Visibility.Collapsed
-                                    Label9.Visibility = Windows.Visibility.Collapsed
                                     StkRefresh.Visibility = Windows.Visibility.Collapsed
                                 Else
                                     Label9.Content = _Driver.LabelsDevice.Item(k).LabelChamp
@@ -638,14 +605,11 @@ Partial Public Class uDevice
                                         Label9.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                         TxtRefresh.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                     End If
-                                    TxtRefresh.Visibility = Windows.Visibility.Visible
                                     StkRefresh.Visibility = Windows.Visibility.Visible
-                                    Label9.Visibility = Windows.Visibility.Visible
                                 End If
                             Case "LASTCHANGEDUREE"
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
-                                    TxtLastChangeDuree.Visibility = Windows.Visibility.Collapsed
-                                    Label19.Visibility = Windows.Visibility.Collapsed
+                                    StkLastChange.Visibility = Windows.Visibility.Collapsed
                                 Else
                                     Label19.Content = _Driver.LabelsDevice.Item(k).LabelChamp
                                     If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Tooltip) = True Then
@@ -655,8 +619,7 @@ Partial Public Class uDevice
                                         TxtLastChangeDuree.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                         Label19.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                     End If
-                                    TxtLastChangeDuree.Visibility = Windows.Visibility.Visible
-                                    Label19.Visibility = Windows.Visibility.Visible
+                                    StkLastChange.Visibility = Windows.Visibility.Visible
                                 End If
                             Case "MODELE"
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
