@@ -76,6 +76,7 @@ Partial Public Class uDevice
                     ChKAllValue.IsChecked = x.AllValue
                     TxtUnit.Text = x.Unit
                     TxtPuissance.Text = x.Puissance
+                    If TxtPuissance.Text = "" Then TxtPuissance.Text = "0"
 
                     StkID.Visibility = Windows.Visibility.Visible
                     TxtID.Text = x.ID
