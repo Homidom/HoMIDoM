@@ -22,7 +22,7 @@
                             </StackPanel>
                             <StackPanel Name="StkPuiss" Orientation="Horizontal" >
                                 <Label Name="LblPuiss" Content="Puissance:"  Foreground="White"/>
-                                <TextBox Text="" Name="TxtPuissance" Width="40" Foreground="White" Background="DarkGray" BorderBrush="Black" ToolTip="Puissance du composant en Watt(ex: 10)"/>
+                                <TextBox Name="TxtPuissance" Width="40" Foreground="White" Background="DarkGray" BorderBrush="Black" ToolTip="Puissance du composant en Watt(ex: 10)">0</TextBox>
                             </StackPanel>
                         </StackPanel>
                     <Label Foreground="White" Name="Label3">Description:</Label>
