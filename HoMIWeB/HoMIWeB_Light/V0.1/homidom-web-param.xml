@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<PARAM>
+<SERVER IP="localhost" PORT="7999" ID="123456789"></SERVER>
+
+<!-- Pour chaque zone, on précise le NAME de la zone dans Homidom -->
+<ZONE NAME="Rez de chaussée">
+
+	<!-- HomiDevice : son nom dans Homidom, et sa position sur l'image de la zone 
+     S'il s'agit d'affichage de valeur, dans ICON on peut spécifier un logo (thermomètre, ...). 
+	 La valeur sera affichée sur la droite de l'ICON -->
+	<HOMIDEVICE NAME="DP-O-0" ICON="" POSX="19" POSY="18">
+
+	<!-- ETAT du device : pour chaque valeur, on peut afficher une image si on le souhaite 
+		(détecteur on / off par exemple)
+		Si la valeur n'est pas dans la liste ci dessous, elle sera affichée telle quelle-->
+		<ETAT VALUE="Normal" IMG="/images/dp-normal.gif" WIDTH="45" HEIGHT="15"></ETAT>
+		<ETAT VALUE="Alarm" IMG="/images/dp-alarm.gif" WIDTH="45" HEIGHT="15"></ETAT>
+	</HOMIDEVICE>
+	<HOMIDEVICE NAME="DP-E-0" ICON="" POSX="125" POSY="470">
+		<ETAT VALUE="Normal" IMG="/images/dp-normal.gif" WIDTH="42" HEIGHT="15"></ETAT>
+		<ETAT VALUE="Alarm" IMG="/images/dp-alarm.gif" WIDTH="42" HEIGHT="15"></ETAT>
+	</HOMIDEVICE>
+	<HOMIDEVICE NAME="DPF-E-0" ICON="" POSX="190" POSY="467">
+		<ETAT VALUE="Normal" IMG="/images/dp-normal.gif" WIDTH="45" HEIGHT="18"></ETAT>
+		<ETAT VALUE="Alarm" IMG="/images/dp-alarm.gif" WIDTH="45" HEIGHT="18"></ETAT>
+	</HOMIDEVICE>
+	<HOMIDEVICE NAME="DPF-O-0" ICON="" POSX="118" POSY="18">
+		<ETAT VALUE="Normal" IMG="/images/dp-normal.gif" WIDTH="118" HEIGHT="15"></ETAT>
+		<ETAT VALUE="Alarm" IMG="/images/dp-alarm.gif" WIDTH="118" HEIGHT="15"></ETAT>
+	</HOMIDEVICE>
+	<HOMIDEVICE NAME="SW-O-0" ICON="" POSX="40" POSY="120">
+		<ETAT VALUE="1" IMG="/images/ampoule-on.gif" WIDTH="30" HEIGHT="35"></ETAT>
+		<ETAT VALUE="NULL" IMG="/images/ampoule-off.gif" WIDTH="30" HEIGHT="35"></ETAT>
+		<!-- Action  : pour chaque Device, on peut associer une action. Le TEXT sera affiché 
+				et la commande NAME avec le paramètre PARAM sera envoyée à Homidom -->
+		<ACTION NAME="WRITE" PARAM="ON" TEXT="Allumer"></ACTION>
+		<ACTION NAME="WRITE" PARAM="OFF" TEXT="Eteindre"></ACTION>
+	</HOMIDEVICE>
+</ZONE>
+
+<ZONE NAME="1er étage">
+	<HOMIDEVICE NAME="ST-E-1" ICON="/images/thermometre.png" POSX="215" POSY="476" WIDTH="25" HEIGHT="32">
+	</HOMIDEVICE>
+	<HOMIDEVICE NAME="DV-S-1" ICON="" POSX="64" POSY="209" WIDTH="" HEIGHT="">
+		<ETAT VALUE="1" IMG="/images/detecteur-b-alarm.gif" WIDTH="25" HEIGHT="25"></ETAT>
+		<ETAT VALUE="NULL" IMG="/images/detecteur-b-normal.gif" WIDTH="25" HEIGHT="25"></ETAT>
+	</HOMIDEVICE>
+	<HOMIDEVICE NAME="DV-O-1" ICON="" POSX="245" POSY="33">
+		<ETAT VALUE="Motion" IMG="/images/detecteur-b-alarm.gif" WIDTH="25" HEIGHT="25"></ETAT>
+		<ETAT VALUE="No Motion" IMG="/images/detecteur-b-normal.gif" WIDTH="25" HEIGHT="25"></ETAT>
+	</HOMIDEVICE>
+	<HOMIDEVICE NAME="SW-E-1" ICON="" POSX="231" POSY="377">
+		<ETAT VALUE="1" IMG="/images/radio-on.png" WIDTH="30" HEIGHT="35"></ETAT>
+		<ETAT VALUE="NULL" IMG="/images/radio-off.png" WIDTH="30" HEIGHT="35"></ETAT>
+	</HOMIDEVICE>
+</ZONE>
+<ZONE NAME="2ème étage">
+	<HOMIDEVICE NAME="ST-E-2" ICON="/images/thermometre.png" POSX="153" POSY="275" WIDTH="25" HEIGHT="32">
+	</HOMIDEVICE>
+	<HOMIDEVICE NAME="SH-E-2" ICON="/images/humidite.png" POSX="153" POSY="300" WIDTH="25" HEIGHT="32">
+	</HOMIDEVICE>
+	<HOMIDEVICE NAME="DP-E-2" ICON="" POSX="121" POSY="360" WIDTH="" HEIGHT="">
+		<ETAT VALUE="Normal" IMG="/images/dp-normal.gif" WIDTH="98" HEIGHT="19"></ETAT>
+		<ETAT VALUE="Alarm" IMG="/images/dp-alarm.gif" WIDTH="98" HEIGHT="19"></ETAT>
+	</HOMIDEVICE>
+</ZONE>
+<ZONE NAME="3ème étage">
+	<HOMIDEVICE NAME="ST-O-3" ICON="/images/thermometre.png" POSX="19" POSY="0" WIDTH="25" HEIGHT="32">
+	</HOMIDEVICE>
+	<HOMIDEVICE NAME="SW-E-3" ICON="" POSX="153" POSY="272">
+		<ETAT VALUE="1" IMG="/images/fan-on.jpg" WIDTH="30" HEIGHT="35"></ETAT>
+		<ETAT VALUE="NULL" IMG="/images/fan-off.jpg" WIDTH="30" HEIGHT="35"></ETAT>
+	</HOMIDEVICE>
+</ZONE>
+</PARAM>
+
