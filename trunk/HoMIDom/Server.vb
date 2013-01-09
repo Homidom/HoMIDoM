@@ -2918,65 +2918,68 @@ Namespace HoMIDom
                         Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New db_cle_register", "La base de donnée Homidom.db n'est pas à jour !")
                     End If
                 End If
-
-                'on recup UID
-                Dim objMOS As ManagementObjectSearcher
-                Dim objMOC As Management.ManagementObjectCollection
-                Dim objMO As Management.ManagementObject
-                objMOS = New ManagementObjectSearcher("Select * From Win32_Processor")
-                objMOC = objMOS.Get
-                For Each objMO In objMOC
-                    uid &= objMO("ProcessorID")
-                Next
-                objMOS.Dispose()
-                objMOS = Nothing
-                objMOC = Nothing
-                objMO = Nothing
                 result = Nothing
+
+                'on recup UID (motherboard serial an processorid)
+                Dim uid1 As String = ""
+                Dim uid2 As String = ""
+                Dim searcher As ManagementObjectSearcher = New ManagementObjectSearcher("select * from Win32_Processor")
+                For Each oReturn As ManagementObject In searcher.Get()
+                    uid1 = oReturn("ProcessorId").ToString
+                Next
+                searcher.Dispose()
+                searcher = Nothing
+                searcher = New ManagementObjectSearcher("select SerialNumber from Win32_BaseBoard")
+                For Each oReturn As ManagementObject In searcher.Get()
+                    uid2 = oReturn("SerialNumber").ToString
+                Next
+                searcher.Dispose()
+                searcher = Nothing
+                uid = uid1 + uid2
+
+                'on recupere la version de Windows
+                Dim osversion As String = My.Computer.Info.OSFullName.ToString() + "--" + Environment.OSVersion.Version.ToString() + "--" + Environment.OSVersion.ServicePack.ToString()
+                If IntPtr.Size = 8 Then osversion += "--64bits" Else osversion += "--32bits"
+                osversion = osversion.Replace(" ", "-")
+                osversion = osversion.Replace(".", "-")
+
+                'on recupere la resolution de l'ecran
+                Dim resolution As String = Windows.Forms.Screen.PrimaryScreen.Bounds.Width.ToString() & "-" & Windows.Forms.Screen.PrimaryScreen.Bounds.Height
 
                 'verif si premiere installation
                 If String.IsNullOrEmpty(db_uid) = True Then
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Premiere Installation :Remerciements")
-                    '        ''premiere install : update uid/dateinstall/versiondll puis thanks puis register
-                    '        ''on maj la db
-                    '        'retour = sqlite_homidom.nonquery("UPDATE config Set valeur=" & uid & " WHERE parametre='uid'")
-                    '        'If Mid(retour, 1, 4) = "ERR:" Then
-                    '        '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update UID", "Erreur Requete sqlite : " & retour)
-                    '        'End If
-                    '        'retour = sqlite_homidom.nonquery("UPDATE config Set valeur=" & Now.ToString("yyyMMdd HH:mm:ss") & " WHERE parametre='date_install'")
-                    '        'If Mid(retour, 1, 4) = "ERR:" Then
-                    '        '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update Date_Install", "Erreur Requete sqlite : " & retour)
-                    '        'End If
-                    '        'retour = sqlite_homidom.nonquery("UPDATE config Set valeur=" & GetServerVersion() & " WHERE parametre='version_dll'")
-                    '        'If Mid(retour, 1, 4) = "ERR:" Then
-                    '        '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update version_dll", "Erreur Requete sqlite : " & retour)
-                    '        'End If
+                    'premiere install : update uid/dateinstall/versiondll puis thanks puis register
+                    'on maj la db
+                    retoursql = sqlite_homidom.nonquery("UPDATE config Set valeur=@parameter0 WHERE parametre='uid'", uid)
+                    If Mid(retoursql, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update UID", "Erreur Requete sqlite : " & retoursql)
+                    retoursql = sqlite_homidom.nonquery("UPDATE config Set valeur=@parameter0 WHERE parametre='date_install'", Now.ToString("yyyMMdd HH:mm:ss"))
+                    If Mid(retoursql, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update Date_Install", "Erreur Requete sqlite : " & retoursql)
+                    retoursql = sqlite_homidom.nonquery("UPDATE config Set valeur=@parameter0 WHERE parametre='version_dll'", GetServerVersion())
+                    If Mid(retoursql, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update version_dll", "Erreur Requete sqlite : " & retoursql)
 
                     'on ouvre la page web de remerciement
-                    'Process.Start("http://www.homidom.com/premiereinstall-" & Now.ToString("yyyMMddHHmmss") & "-" & HtmlEncode(uid) & "-" & HtmlEncode(GetServerVersion().Replace(".", "_")) & ".html")
+                    Process.Start("http://www.homidom.com/premiereinstall_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html")
 
-                    ''Gestion clé enregistrement
+                    'Gestion clé enregistrement
 
                 Else
-                    If db_version <> GetServerVersion() Then
-                        'Homidom.dll a été mis à jour, on update la DB : version et date_maj puis remerciements
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Mise à jour :Remerciements")
+                If db_version <> GetServerVersion() Then
+                    'Homidom.dll a été mis à jour, on update la DB : version et date_maj puis remerciements
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Mise à jour :Remerciements")
 
-                        ''on maj la db
-                        'retour = sqlite_homidom.nonquery("UPDATE config Set valeur=" & Now.ToString("yyyMMdd HH:mm:ss") & " WHERE parametre='date_maj'")
-                        'If Mid(retour, 1, 4) = "ERR:" Then
-                        '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update date_maj", "Erreur Requete sqlite : " & retour)
-                        'End If
-                        'retour = sqlite_homidom.nonquery("UPDATE config Set valeur=" & GetServerVersion() & " WHERE parametre='version_dll'")
-                        'If Mid(retour, 1, 4) = "ERR:" Then
-                        '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update version_dll", "Erreur Requete sqlite : " & retour)
-                        'End If
+                        'on maj la db
+                        retoursql = sqlite_homidom.nonquery("UPDATE config Set valeur=@parameter0 WHERE parametre='date_maj'", Now.ToString("yyyMMdd HH:mm:ss"))
+                        If Mid(retoursql, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update date_maj", "Erreur Requete sqlite : " & retoursql)
+                        retoursql = sqlite_homidom.nonquery("UPDATE config Set valeur=@parameter0 WHERE parametre='version_dll'", GetServerVersion())
+                        If Mid(retoursql, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update version_dll", "Erreur Requete sqlite : " & retoursql)
 
-                        'on ouvre la page web de remerciement
-                        'Process.Start("http://www.homidom.com/miseajour-" & Now.ToString("yyyMMddHHmmss") & "-" & HtmlEncode(uid) & "-" & HtmlEncode(GetServerVersion().Replace(".", "_")) & ".html")
 
-                        ''Gestion clé enregistrement
-                    End If
+                        ' on ouvre la page web de remerciement
+                            Process.Start("http://www.homidom.com/miseajour_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html")
+
+                            'Gestion clé enregistrement
+                        End If
 
                 End If
 
