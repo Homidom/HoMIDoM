@@ -15,21 +15,25 @@ Imports System.Media
 
 ' Auteur : David
 ' Date : 17/09/2012
-'-------------------------------------------------------------------------------------
-'                                                                     
-'                     Software License Agreement                      
-'                                                                     
-' A part of this code is owned by RFXCOM, and is protected under applicable copyright laws.
-' 
-' It is not allowed to use this code or any part of it in an exclusive or patented
-' product without the express prior written permission of RFXCOM.
-' It is not allowed to use this software or any part of it for non-RFXCOM products.
+
+'------------------------------------------------------------------------------------
+'                          Protocol License Agreement                      
+'                                                                    
+' The RFXtrx protocols are owned by RFXCOM, and are protected under applicable
+' copyright laws.
 '
-' Any use in violation of the foregoing restrictions may subject the  
-' user to criminal sanctions under applicable laws, as well as to     
-' civil liability for the breach of the terms and conditions of this license.                                                             
-'                                                                      
+' ==================================================================================
+' = It is only allowed to use this software or any part of it for RFXCOM products. =
+' ==================================================================================
+'
+' The above Protocol License Agreement and the permission notice shall be included
+' in all software using the RFXtrx protocols.
+'
+' Any use in violation of the foregoing restrictions may subject the user to criminal
+' sanctions under applicable laws, as well as to civil liability for the breach of the
+' terms and conditions of this license.
 '-------------------------------------------------------------------------------------
+
 
 ''' <summary>Class Driver_RFXTrx, permet de communiquer avec le RFXtrx Ethernet/COM</summary>
 ''' <remarks>Pour la version USB, necessite l'installation du driver USB RFXCOM</remarks>
