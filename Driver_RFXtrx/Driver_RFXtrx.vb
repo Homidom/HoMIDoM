@@ -2644,7 +2644,7 @@ Imports System.Media
                 Case LIGHTING5.sTypeEMW100
                     'WriteMessage("subtype       = EMW100")
                     'WriteMessage("Sequence nbr  = " & recbuf(LIGHTING5.seqnbr).ToString)
-                    adresse = VB.Right("0" & Hex(recbuf(LIGHTING5.id2)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING5.id3)), 2)
+                    adresse = VB.Right("0" & Hex(recbuf(LIGHTING5.id2)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING5.id3)), 2) & "-" & recbuf(LIGHTING5.unitcode).ToString
                     'WriteMessage("Unit          = " & recbuf(LIGHTING5.unitcode).ToString)
                      Select Case recbuf(LIGHTING5.cmnd)
                         Case LIGHTING5.sOff : valeur = "OFF"
@@ -2656,7 +2656,7 @@ Imports System.Media
                 Case LIGHTING5.sTypeBBSB
                     'WriteMessage("subtype       = BBSB new")
                     ' WriteMessage("Sequence nbr  = " & recbuf(LIGHTING5.seqnbr).ToString)
-                    adresse = VB.Right("0" & Hex(recbuf(LIGHTING5.id1)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING5.id2)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING5.id3)), 2)
+                    adresse = VB.Right("0" & Hex(recbuf(LIGHTING5.id1)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING5.id2)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING5.id3)), 2) & "-" & recbuf(LIGHTING5.unitcode).ToString
                     'WriteMessage("Unit          = " & recbuf(LIGHTING5.unitcode).ToString)
                     Select Case recbuf(LIGHTING5.cmnd)
                         Case LIGHTING5.sOff : valeur = "OFF"
@@ -2682,7 +2682,8 @@ Imports System.Media
                 Case LIGHTING6.sTypeBlyss
                     'WriteMessage("subtype       = BLYSS")
                     'WriteMessage("Sequence nbr  = " & recbuf(LIGHTING6.seqnbr).ToString)
-                    adresse = VB.Right("0" & Hex(recbuf(LIGHTING6.id1)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING6.id2)), 2)
+                    adresse = VB.Right("0" & Hex(recbuf(LIGHTING6.id1)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING6.id2)), 2) & "-" & Chr(recbuf(LIGHTING6.groupcode)) & recbuf(LIGHTING6.unitcode).ToString
+                    'WriteMessage("ID            = " & VB.Right("0" & Hex(recbuf(LIGHTING6.id1)), 2) & VB.Right("0" & Hex(recbuf(LIGHTING6.id2)), 2))
                     'WriteMessage("groupcode     = " & Chr(recbuf(LIGHTING6.groupcode)))
                     'WriteMessage("unitcode      = " & recbuf(LIGHTING6.unitcode).ToString)
                     Select Case recbuf(LIGHTING6.cmnd)
