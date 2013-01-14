@@ -345,9 +345,11 @@ Class Window1
                         For j As Integer = 0 To list.Item(0).Attributes.Count - 1
                             Select Case list.Item(0).Attributes.Item(j).Name
                                 Case "friction"
-                                    m_friction = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", ","))
+                                    'm_friction = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", ","))
+                                    m_friction = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                                 Case "speedtouch"
-                                    m_SpeedTouch = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", ","))
+                                    'm_SpeedTouch = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", ","))
+                                    m_SpeedTouch = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                                 Case Else
                                     Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                             End Select

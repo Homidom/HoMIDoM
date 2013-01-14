@@ -52,8 +52,10 @@ Partial Public Class uConfigServer
                 Dim retour As String = myService.SetTimeSave(IdSrv, tmpSave)
                 If retour <> "0" Then MessageBox.Show(retour, "Erreur SetTimeSave")
 
-                myService.SetLongitude(IdSrv, CDbl(TxtLong.Text.Replace(".", ",")))
-                myService.SetLatitude(IdSrv, CDbl(TxtLat.Text.Replace(".", ",")))
+                'myService.SetLongitude(IdSrv, CDbl(TxtLong.Text.Replace(".", ",")))
+                'myService.SetLatitude(IdSrv, CDbl(TxtLat.Text.Replace(".", ",")))
+                myService.SetLongitude(IdSrv, CDbl(TxtLong.Text.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)))
+                myService.SetLatitude(IdSrv, CDbl(TxtLat.Text.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)))
                 myService.SetHeureCorrectionLever(IdSrv, CInt(HCL.Text))
                 myService.SetHeureCorrectionCoucher(IdSrv, CInt(HCC.Text))
                 myService.SetSMTPMailServeur(IdSrv, TxtMail.Text)
