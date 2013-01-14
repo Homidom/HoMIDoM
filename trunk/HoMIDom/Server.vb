@@ -459,9 +459,11 @@ Namespace HoMIDom
                                 For j As Integer = 0 To list.Item(0).Attributes.Count - 1
                                     Select Case list.Item(0).Attributes.Item(j).Name
                                         Case "longitude"
-                                            _Longitude = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
+                                            '_Longitude = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
+                                            _Longitude = list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                                         Case "latitude"
-                                            _Latitude = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
+                                            '_Latitude = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
+                                            _Latitude = list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                                         Case "heurecorrectionlever"
                                             _HeureLeverSoleilCorrection = list.Item(0).Attributes.Item(j).Value
                                         Case "heurecorrectioncoucher"

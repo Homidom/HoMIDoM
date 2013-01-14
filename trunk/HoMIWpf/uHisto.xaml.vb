@@ -110,9 +110,11 @@ Public Class uHisto
             Dim datestart As String = DateStartSelect.Text
             Dim dateend As String = DateFinSelect.Text 'displaydate
             Dim moyenne As String = ComboBoxMoyenne.Text
-            Dim a() As String = datestart.Split("/")
+            'Dim a() As String = datestart.Split("/")
+            Dim a() As String = datestart.Split(System.Globalization.DateTimeFormatInfo.CurrentInfo.DateSeparator)
             If a.Length = 3 Then datestart = a(2) & "-" & a(1) & "-" & a(0) Else datestart = ""
-            a = dateend.Split("/")
+            'a = dateend.Split("/")
+            a = dateend.Split(System.Globalization.DateTimeFormatInfo.CurrentInfo.DateSeparator)
             If a.Length = 3 Then dateend = a(2) & "-" & a(1) & "-" & a(0) Else dateend = ""
 
             For Each _item In _Devices
@@ -128,7 +130,7 @@ Public Class uHisto
                     Dim cnt As Integer = 0
                     For Each data As Historisation In result
                         'series.Points.AddXY(data.DateTime.ToString("G"), data.Value.Replace(",", "."))
-                        series.Points.AddXY(data.DateTime, data.Value.Replace(",", "."))
+                        series.Points.AddXY(data.DateTime, data.Value.Replace(System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator, "."))
                         cnt += 1
                         If cnt > _MaxData Then Exit For
                     Next
