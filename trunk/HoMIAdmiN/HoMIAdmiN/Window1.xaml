@@ -222,7 +222,7 @@
 
         <StackPanel Height="27" DockPanel.Dock="Bottom" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Orientation="Horizontal" >
             <Label Foreground="White" Name="LblStatus" VerticalAlignment="Stretch">#####</Label>
-            <Ellipse Height="20" Name="Ellipse1" Stroke="Black" Width="20" Fill="Cyan" />
+            <Ellipse Height="20" Name="Ellipse1" Stroke="Black" Width="20" Fill="Red" />
             <Label Foreground="White" Name="LblConnect" VerticalAlignment="Stretch">#####</Label>
             <Rectangle Width="10"/>
             <Image Height="20"  Name="Image3" Stretch="Fill" Width="20" Source="/HoMIAdmiN;component/Images/Soleil_130.png" />

@@ -99,6 +99,7 @@
             AddHandler mnu02.Click, AddressOf menu_contextmenuclick
             ctxMenudrv.Items.Add(mnu02)
             menu_driver.ContextMenu = ctxMenudrv
+            ctxMenudrv = Nothing
 
             'ContextMenu Composants
             Dim ctxMenuComposants As New ContextMenu
@@ -130,6 +131,7 @@
             AddHandler mnu14.Click, AddressOf menu_contextmenuclick
             ctxMenuComposants.Items.Add(mnu14)
             menu_composant.ContextMenu = ctxMenuComposants
+            ctxMenuComposants = Nothing
 
             'ContextMenu Zone
             Dim ctxMenuZone As New ContextMenu
@@ -161,6 +163,7 @@
             AddHandler mnu24.Click, AddressOf menu_contextmenuclick
             ctxMenuZone.Items.Add(mnu24)
             menu_zone.ContextMenu = ctxMenuZone
+            ctxMenuZone = Nothing
 
             'ContextMenu user
             Dim ctxMenuUser As New ContextMenu
@@ -192,6 +195,7 @@
             AddHandler mnu24.Click, AddressOf menu_contextmenuclick
             ctxMenuUser.Items.Add(mnu34)
             menu_user.ContextMenu = ctxMenuUser
+            ctxMenuUser = Nothing
 
             'ContextMenu Trigger
             Dim ctxMenuTrigger As New ContextMenu
@@ -229,6 +233,7 @@
             AddHandler mnu45.Click, AddressOf menu_contextmenuclick
             ctxMenuTrigger.Items.Add(mnu45)
             menu_trigger.ContextMenu = ctxMenuTrigger
+            ctxMenuTrigger = Nothing
 
             'ContextMenu macro
             Dim ctxMenuMacro As New ContextMenu
@@ -260,6 +265,7 @@
             AddHandler mnu54.Click, AddressOf menu_contextmenuclick
             ctxMenuMacro.Items.Add(mnu54)
             menu_macro.ContextMenu = ctxMenuMacro
+            ctxMenuMacro = Nothing
 
             'ContextMenu Config
             Dim ctxMenuConfig As New ContextMenu
@@ -286,6 +292,7 @@
             AddHandler mnu65.Click, AddressOf menu_contextmenuclick
             ctxMenuConfig.Items.Add(mnu65)
             menu_config.ContextMenu = ctxMenuConfig
+            ctxMenuConfig = Nothing
 
             'ContextMenu Quitter
             Dim ctxMenuQuitter As New ContextMenu
@@ -311,6 +318,7 @@
             AddHandler mnu73.Click, AddressOf menu_contextmenuclick
             ctxMenuQuitter.Items.Add(mnu73)
             menu_quitter.ContextMenu = ctxMenuQuitter
+            ctxMenuQuitter = Nothing
 
             'ContextMenu Histo
             Dim ctxMenuHisto As New ContextMenu
@@ -324,6 +332,7 @@
             AddHandler mnu81.Click, AddressOf menu_contextmenuclick
             ctxMenuHisto.Items.Add(mnu81)
             menu_histo.ContextMenu = ctxMenuHisto
+            ctxMenuHisto = Nothing
 
             'ContextMenu Aide
             Dim ctxMenuAide As New ContextMenu
@@ -337,6 +346,7 @@
             AddHandler mnu91.Click, AddressOf menu_contextmenuclick
             ctxMenuAide.Items.Add(mnu91)
             menu_aide.ContextMenu = ctxMenuAide
+            ctxMenuAide = Nothing
 
             'ContextMenu Module
             Dim ctxMenuModule As New ContextMenu
@@ -350,6 +360,7 @@
             AddHandler mnu101.Click, AddressOf menu_contextmenuclick
             ctxMenuModule.Items.Add(mnu101)
             menu_module.ContextMenu = ctxMenuModule
+            ctxMenuModule = Nothing
 
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub uMainMenu New: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)

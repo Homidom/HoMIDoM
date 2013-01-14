@@ -3,13 +3,17 @@ Imports System.Net
 Imports System.Net.Sockets
 
 Module Fonctions
-    Public Function ConvertArrayToImage(ByVal value As Object) As Object
+    Public Function ConvertArrayToImage(ByVal value As Object, Optional ByVal Taille As Integer = 0) As Object
         Try
             Dim ImgSource As BitmapImage = Nothing
             Dim array As Byte() = TryCast(value, Byte())
 
             If array IsNot Nothing Then
                 ImgSource = New BitmapImage()
+                If Taille > 0 Then
+                    ImgSource.DecodePixelHeight = Taille
+                    ImgSource.DecodePixelWidth = Taille
+                End If
                 ImgSource.BeginInit()
                 ImgSource.CacheOption = BitmapCacheOption.OnLoad
                 ImgSource.CreateOptions = BitmapCreateOptions.DelayCreation

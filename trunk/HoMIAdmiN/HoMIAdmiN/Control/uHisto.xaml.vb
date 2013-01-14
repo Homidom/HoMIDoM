@@ -7,7 +7,6 @@ Imports System.Drawing
 
 Public Class uHisto
     Public Event CloseMe(ByVal MyObject As Object)
-    Dim result As New List(Of Historisation)
     Dim _Devices As New List(Of Dictionary(Of String, String))
     Dim _MaxData As Integer = 2000
     Dim _CurrentChart As Chart = Nothing
@@ -79,7 +78,12 @@ Public Class uHisto
 
     Sub Update_Graphe()
         Try
+            Dim result As New List(Of Historisation)
+
             Cursor = Cursors.Wait
+
+            Test.Child = Nothing
+            Me.UpdateLayout()
 
             Dim Chart2 As New System.Windows.Forms.DataVisualization.Charting.Chart()
             ' Add a chart area.
@@ -127,6 +131,7 @@ Public Class uHisto
 
             Do While TabControl1.Items.Count > 1
                 TabControl1.Items.RemoveAt(1)
+                Me.UpdateLayout()
             Loop
 
             Dim datestart As String = DateStartSelect.Text
@@ -215,7 +220,9 @@ Public Class uHisto
             Test.Child = Chart2
             _CurrentChart = Chart2
 
+            result = Nothing
             Me.Cursor = Nothing
+            Me.UpdateLayout()
         Catch ex As Exception
             Me.Cursor = Nothing
             MessageBox.Show("Erreur uHisto Update_Graphe: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -300,6 +307,19 @@ Public Class uHisto
     End Sub
 
     Private Sub uHisto_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
-        Test.Dispose()
+        Try
+            Test.Dispose()
+            _CurrentChart = Nothing
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uHisto_Unloaded: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Protected Overrides Sub Finalize()
+        Try
+            MyBase.Finalize()
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub Finalize: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 End Class

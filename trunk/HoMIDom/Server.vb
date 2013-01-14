@@ -2545,17 +2545,24 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Private Function DelRep(ByVal Message As String) As String
             Try
-                Dim start As Integer = InStr(UCase(Message), "C:\")
+                Dim i As Integer = 1
                 Dim newmess As String = Message
+                Dim start As Integer
 
+                start = InStr(i, UCase(newmess), "C:\")
                 If start = 0 Then
-                    start = InStr(UCase(Message), "D:\")
+                    start = InStr(i, UCase(newmess), "D:\")
                 End If
 
-                If start <> 0 Then
-                    Dim newstart As Integer = InStr(LCase(Message), "\homidom\")
-                    newmess = Mid(Message, 1, start + 2) & "..." & Mid(Message, newstart, Message.Length - newstart + 1)
-                End If
+                Do While start > 0
+                    Dim newstart As Integer = InStr(start, LCase(newmess), "\homidom\")
+                    newmess = Mid(newmess, 1, start + 2) & "..." & Mid(newmess, newstart, newmess.Length - newstart + 1)
+                    i = start + 5
+                    start = InStr(i, UCase(newmess), "C:\")
+                    If start = 0 Then
+                        start = InStr(i, UCase(newmess), "D:\")
+                    End If
+                Loop
 
                 Return newmess
             Catch ex As Exception
