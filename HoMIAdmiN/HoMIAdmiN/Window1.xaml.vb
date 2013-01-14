@@ -31,6 +31,7 @@ Class Window1
     Dim myBrushRouge As New RadialGradientBrush()
     Dim flagTreeV As Boolean = False
     Dim flagShowMainMenu As Boolean = False
+    Dim FlagOK As Boolean = False
 
 #Region "Fonctions de base"
 
@@ -85,18 +86,37 @@ Class Window1
                     LblStatus.Content = Now.ToLongDateString & " " & myService.GetTime & " "
 
                     'Modifie l'adresse/port du serveur connecté
-                    Dim serveurcomplet As String = myChannelFactory.Endpoint.Address.ToString()
-                    serveurcomplet = Mid(serveurcomplet, 8, serveurcomplet.Length - 8)
-                    serveurcomplet = Split(serveurcomplet, "/", 2)(0)
-                    Dim srblbl As String = Split(serveurcomplet, ":", 2)(0) & ":" & Split(serveurcomplet, ":", 2)(1)
-                    LblConnect.ToolTip = "Serveur connecté adresse utilisée: " & srblbl
-                    LblConnect.Content = srblbl
-                    serveurcomplet = Nothing
-                    srblbl = ""
+                    If FlagOK = False Then
+                        Dim serveurcomplet As String = myChannelFactory.Endpoint.Address.ToString()
+                        serveurcomplet = Mid(serveurcomplet, 8, serveurcomplet.Length - 8)
+                        serveurcomplet = Split(serveurcomplet, "/", 2)(0)
+                        Dim srblbl As String = Split(serveurcomplet, ":", 2)(0) & ":" & Split(serveurcomplet, ":", 2)(1)
+                        LblConnect.ToolTip = "Serveur connecté adresse utilisée: " & srblbl
+                        LblConnect.Content = srblbl
+                        serveurcomplet = Nothing
+                        srblbl = ""
+                    End If
 
                     'Modifie les heures du soleil
-                    LHS.Content = CDate(myService.GetHeureLeverSoleil).ToShortTimeString
-                    LCS.Content = CDate(myService.GetHeureCoucherSoleil).ToShortTimeString
+                    If LHS.Tag IsNot Nothing Then
+                        If Now.Minute = 0 And LHS.Content <> LHS.Tag Then
+                            LHS.Content = CDate(myService.GetHeureLeverSoleil).ToShortTimeString
+                            LHS.Tag = LHS.Content
+                        End If
+                    Else
+                        LHS.Content = CDate(myService.GetHeureLeverSoleil).ToShortTimeString
+                        LHS.Tag = LHS.Content
+                    End If
+
+                    If LCS.Tag IsNot Nothing Then
+                        If Now.Minute = 0 And LCS.Content <> LCS.Tag Then
+                            LCS.Content = CDate(myService.GetHeureLeverSoleil).ToShortTimeString
+                            LCS.Tag = LHS.Content
+                        End If
+                    Else
+                        LCS.Content = CDate(myService.GetHeureLeverSoleil).ToShortTimeString
+                        LCS.Tag = LHS.Content
+                    End If
 
                     'Modifie les LOG
                     Dim list As List(Of String) = myService.GetLastLogs
@@ -143,7 +163,11 @@ Class Window1
                     End If
                     list = Nothing
 
-                    Ellipse1.Fill = myBrushVert
+                    If FlagOK = False Then
+                        Ellipse1.Fill = myBrushVert
+                    End If
+
+                    If FlagOK = False Then FlagOK = True
                 Catch ex As Exception
                     IsConnect = False
                     LblStatus.Content = Now.ToLongDateString & " " & Now.ToLongTimeString & " "
@@ -155,13 +179,20 @@ Class Window1
                     CanvasRight.Children.Clear()  'ferme le menu principal
                     PageConnexion() 'affiche la fenetre de connexion
 
-                    Ellipse1.Fill = myBrushRouge
+                    If FlagOK = True Then
+                        Ellipse1.Fill = myBrushRouge
+                        FlagOK = False
+                    End If
                 End Try
             Else
                 LblStatus.Content = Now.ToLongDateString & " " & Now.ToLongTimeString & "      "
-                LblConnect.Content = "Serveur non connecté"
+                If LblConnect.Content <> "Serveur non connecté" Then LblConnect.Content = "Serveur non connecté"
                 IsConnect = False
-                Ellipse1.Fill = myBrushRouge
+
+                If FlagOK = True Then
+                    Ellipse1.Fill = myBrushRouge
+                    FlagOK = False
+                End If
             End If
         Catch ex As Exception
             MessageBox.Show("ERREUR dispatcherTimer_Tick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -170,6 +201,8 @@ Class Window1
 
     Private Sub StoryBoardFinish(ByVal sender As Object, ByVal e As System.EventArgs)
         CanvasRight.Children.Clear()
+        CanvasRight.UpdateLayout()
+
         ShowMainMenu()
     End Sub
 
@@ -305,6 +338,7 @@ Class Window1
                     ListServer = x.Deserialize(objStreamReader)
                     x = Nothing
                     objStreamReader.Close()
+                    objStreamReader = Nothing
                 Catch ex As Exception
                     MessageBox.Show("Erreur lors de l'ouverture du fichier de config xml (" & Myfile & "), vérifiez que toutes les balises requisent soient présentes: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
                 End Try
@@ -395,12 +429,19 @@ Class Window1
     Private Sub ClearAllTreeview()
         Try
             TreeViewDriver.Items.Clear()
+            TreeViewDriver.UpdateLayout()
             TreeViewDevice.Items.Clear()
+            TreeViewDevice.UpdateLayout()
             TreeViewZone.Items.Clear()
+            TreeViewZone.UpdateLayout()
             TreeViewUser.Items.Clear()
+            TreeViewUser.UpdateLayout()
             TreeViewTrigger.Items.Clear()
+            TreeViewTrigger.UpdateLayout()
             TreeViewMacro.Items.Clear()
+            TreeViewMacro.UpdateLayout()
             TreeViewHisto.Items.Clear()
+            TreeViewHisto.UpdateLayout()
 
             GC.Collect()
             GC.WaitForPendingFinalizers()
@@ -420,6 +461,7 @@ Class Window1
             End If
 
             Me.Cursor = Cursors.Wait
+            ClearAllTreeview()
             Select Case Tabcontrol1.SelectedIndex
                 Case 0
                     AffDriver()
@@ -446,12 +488,14 @@ Class Window1
     Public Sub AffZone()
         Try
             TreeViewZone.Items.Clear()
+            TreeViewZone.UpdateLayout()
+
             If IsConnect = False Then Exit Sub
 
-            Dim ListeZones = myService.GetAllZones(IdSrv)
+            Dim ListeZones As List(Of Zone) = myService.GetAllZones(IdSrv)
             CntZone.Content = ListeZones.Count & " Zone(s)"
 
-            For Each zon In ListeZones
+            For Each zon As Zone In ListeZones
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
@@ -462,7 +506,7 @@ Class Window1
                 img.Width = 20
 
                 If String.IsNullOrEmpty(Trim(zon.Icon)) = False Then
-                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(zon.Icon))
+                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(zon.Icon), 20)
                 Else
                     uri = MyRep & "\Images\icones\Zone_32.png"
                     img.Source = ImageFromUri(uri)
@@ -534,12 +578,14 @@ Class Window1
     Public Sub AffUser()
         Try
             TreeViewUser.Items.Clear()
+            TreeViewUser.UpdateLayout()
+
             If IsConnect = False Then Exit Sub
 
-            Dim ListeUsers = myService.GetAllUsers(IdSrv)
+            Dim ListeUsers As List(Of Users.User) = myService.GetAllUsers(IdSrv)
             CntUser.Content = ListeUsers.Count & " User(s)"
 
-            For Each Usr In ListeUsers
+            For Each Usr As Users.User In ListeUsers
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
@@ -623,12 +669,15 @@ Class Window1
     Public Sub AffDriver()
         Try
             TreeViewDriver.Items.Clear()
+            TreeViewDriver.UpdateLayout()
+
             If IsConnect = False Then Exit Sub
 
             Dim ListeDrivers As List(Of TemplateDriver) = myService.GetAllDrivers(IdSrv)
             CntDriver.Content = ListeDrivers.Count & " Driver(s)"
 
-            For Each Drv As TemplateDriver In ListeDrivers
+            Dim Drv As TemplateDriver
+            For Each drv In ListeDrivers
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 stack.Orientation = Orientation.Horizontal
@@ -640,11 +689,11 @@ Class Window1
                 img.Height = 20
                 img.Width = 20
                 img.Margin = New Thickness(2)
-                If String.IsNullOrEmpty(Drv.Picture) = False Then
-                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(Drv.Picture))
+                If String.IsNullOrEmpty(drv.Picture) = False Then
+                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(drv.Picture), 20)
                 End If
 
-                If Drv.IsConnect = True Then
+                If drv.IsConnect = True Then
                     Dim Rect As New Polygon
                     Dim myPointCollection As PointCollection = New PointCollection
                     myPointCollection.Add(New Point(0, 0))
@@ -657,7 +706,7 @@ Class Window1
                     Rect.Height = 9
 
                     Rect.Fill = Brushes.DarkGreen 'myBrush
-                    Rect.Tag = Drv.ID
+                    Rect.Tag = drv.ID
                     Rect.ToolTip = "Arrêter le driver"
                     AddHandler Rect.MouseDown, AddressOf StopDriver
                     Graph = Rect
@@ -669,7 +718,7 @@ Class Window1
 
                     Rect.Fill = Brushes.Red 'myBrush
                     Rect.ToolTip = "Démarrer le driver"
-                    Rect.Tag = Drv.ID
+                    Rect.Tag = drv.ID
                     AddHandler Rect.MouseDown, AddressOf StartDriver
                     Graph = Rect
                     Rect = Nothing
@@ -678,17 +727,17 @@ Class Window1
 
                 '**************************** POPUP ***************************
                 Dim label As New Label
-                If Drv.Enable = True Then
+                If drv.Enable = True Then
                     label.Foreground = New SolidColorBrush(Colors.White)
                 Else
                     label.Foreground = New SolidColorBrush(Colors.Black)
                 End If
-                label.Content = Drv.Nom
-                tool.Content = "Nom: " & Drv.Nom & vbCrLf
-                tool.Content &= "Enable " & Drv.Enable & vbCrLf
-                tool.Content &= "Description: " & Drv.Description & vbCrLf
-                tool.Content &= "Version: " & Drv.Version & vbCrLf
-                If Drv.Modele <> "" Then tool.Content &= "Modele: " & Drv.Modele & vbCrLf
+                label.Content = drv.Nom
+                tool.Content = "Nom: " & drv.Nom & vbCrLf
+                tool.Content &= "Enable " & drv.Enable & vbCrLf
+                tool.Content &= "Description: " & drv.Description & vbCrLf
+                tool.Content &= "Version: " & drv.Version & vbCrLf
+                If drv.Modele <> "" Then tool.Content &= "Modele: " & drv.Modele & vbCrLf
 
                 Dim tl As New ToolTip
                 Dim imgpopup As New Image
@@ -712,11 +761,11 @@ Class Window1
                 ctxMenu.Foreground = System.Windows.Media.Brushes.Black
                 ctxMenu.Background = System.Windows.Media.Brushes.LightGray
                 ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
-                If Drv.Enable = False Then
+                If drv.Enable = False Then
                     Dim mnu1 As New MenuItem
                     mnu1.Header = "Enable"
                     mnu1.Tag = 3
-                    mnu1.Uid = Drv.ID
+                    mnu1.Uid = drv.ID
                     AddHandler mnu1.Click, AddressOf MnuitemDrv_Click
                     ctxMenu.Items.Add(mnu1)
                     mnu1 = Nothing
@@ -724,25 +773,25 @@ Class Window1
                     Dim mnu2 As New MenuItem
                     mnu2.Header = "Disable"
                     mnu2.Tag = 4
-                    mnu2.Uid = Drv.ID
+                    mnu2.Uid = drv.ID
                     AddHandler mnu2.Click, AddressOf MnuitemDrv_Click
                     ctxMenu.Items.Add(mnu2)
                     mnu2 = Nothing
                 End If
-                If Drv.IsConnect = False Then
+                If drv.IsConnect = False Then
                     Dim mnu3 As New MenuItem
                     mnu3.Header = "Démarrer"
                     mnu3.Tag = 0
-                    mnu3.Uid = Drv.ID
+                    mnu3.Uid = drv.ID
                     AddHandler mnu3.Click, AddressOf MnuitemDrv_Click
                     ctxMenu.Items.Add(mnu3)
-                    If Drv.Enable = False Then mnu3.IsEnabled = False
+                    If drv.Enable = False Then mnu3.IsEnabled = False
                     mnu3 = Nothing
                 Else
                     Dim mnu4 As New MenuItem
                     mnu4.Header = "Arrêter"
                     mnu4.Tag = 1
-                    mnu4.Uid = Drv.ID
+                    mnu4.Uid = drv.ID
                     AddHandler mnu4.Click, AddressOf MnuitemDrv_Click
                     ctxMenu.Items.Add(mnu4)
                     mnu4 = Nothing
@@ -750,7 +799,7 @@ Class Window1
                 Dim mnu5 As New MenuItem
                 mnu5.Header = "Modifier"
                 mnu5.Tag = 2
-                mnu5.Uid = Drv.ID
+                mnu5.Uid = drv.ID
                 AddHandler mnu5.Click, AddressOf MnuitemDrv_Click
                 ctxMenu.Items.Add(mnu5)
                 mnu5 = Nothing
@@ -761,7 +810,7 @@ Class Window1
                 stack.Children.Add(label)
 
                 newchild.Header = stack
-                newchild.Uid = Drv.ID
+                newchild.Uid = drv.ID
 
                 Dim marg As New Thickness(-12, 0, 0, 0)
                 newchild.Margin = marg
@@ -775,6 +824,7 @@ Class Window1
                 Graph = Nothing
             Next
 
+            Drv = Nothing
             ListeDrivers = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffDriver: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -829,6 +879,8 @@ Class Window1
     Public Sub AffDevice()
         Try
             TreeViewDevice.Items.Clear()
+            TreeViewDevice.UpdateLayout()
+
             If IsConnect = False Then Exit Sub
 
             Dim ListeDevices As List(Of TemplateDevice) = myService.GetAllDevices(IdSrv)
@@ -849,7 +901,7 @@ Class Window1
                 img.Height = 20
                 img.Width = 20
                 If String.IsNullOrEmpty(Trim(Dev.Picture)) = False Then
-                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(Dev.Picture))
+                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(Dev.Picture), 20)
                 Else
                     Dim bmpImage As New BitmapImage()
                     Dim uri As String = ""
@@ -1070,12 +1122,14 @@ Class Window1
     Public Sub AffScene()
         Try
             TreeViewMacro.Items.Clear()
+            TreeViewMacro.UpdateLayout()
+
             If IsConnect = False Then Exit Sub
 
-            Dim ListeMacros = myService.GetAllMacros(IdSrv)
+            Dim ListeMacros As List(Of Macro) = myService.GetAllMacros(IdSrv)
             CntMacro.Content = ListeMacros.Count & " Macro(s)"
 
-            For Each Mac In ListeMacros
+            For Each Mac As Macro In ListeMacros
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 Dim img As New Image
@@ -1159,9 +1213,11 @@ Class Window1
     Public Sub AffTrigger()
         Try
             TreeViewTrigger.Items.Clear()
+            TreeViewTrigger.UpdateLayout()
+
             If IsConnect = False Then Exit Sub
 
-            Dim ListeTriggers = myService.GetAllTriggers(IdSrv)
+            Dim ListeTriggers As List(Of Trigger) = myService.GetAllTriggers(IdSrv)
             CntTrigger.Content = ListeTriggers.Count & " Trigger(s)"
 
             For Each Trig In ListeTriggers
@@ -1265,9 +1321,10 @@ Class Window1
     Public Sub AffHisto()
         Try
             TreeViewHisto.Items.Clear()
+            TreeViewHisto.UpdateLayout()
 
             Dim x As New List(Of HoMIDom.HoMIDom.Historisation)
-            Dim ListeDevices = myService.GetAllDevices(IdSrv)
+            Dim ListeDevices As List(Of TemplateDevice) = myService.GetAllDevices(IdSrv)
 
             x = myService.GetAllListHisto(IdSrv)
 
@@ -2285,6 +2342,8 @@ Class Window1
 
             If Objet.retour = "CANCEL" Then
                 CanvasRight.Children.Clear()
+                CanvasRight.UpdateLayout()
+
                 GC.Collect()
                 GC.WaitForPendingFinalizers()
                 GC.Collect()
@@ -2309,6 +2368,7 @@ Class Window1
                                         x.Uid = System.Guid.NewGuid.ToString()
                                         AddHandler x.CloseMe, AddressOf UnloadControl
                                         CanvasRight.Children.Clear()
+                                        CanvasRight.UpdateLayout()
 
                                         GC.Collect()
                                         GC.WaitForPendingFinalizers()
@@ -2323,6 +2383,8 @@ Class Window1
                                         x.Uid = System.Guid.NewGuid.ToString()
                                         AddHandler x.CloseMe, AddressOf UnloadControl
                                         CanvasRight.Children.Clear()
+                                        CanvasRight.UpdateLayout()
+
                                         GC.Collect()
                                         GC.WaitForPendingFinalizers()
                                         GC.Collect()
@@ -2336,6 +2398,8 @@ Class Window1
                                         x.Uid = System.Guid.NewGuid.ToString()
                                         AddHandler x.CloseMe, AddressOf UnloadControl
                                         CanvasRight.Children.Clear()
+                                        CanvasRight.UpdateLayout()
+
                                         GC.Collect()
                                         GC.WaitForPendingFinalizers()
                                         GC.Collect()
@@ -2349,6 +2413,8 @@ Class Window1
                                         x.Uid = System.Guid.NewGuid.ToString()
                                         AddHandler x.CloseMe, AddressOf UnloadControl
                                         CanvasRight.Children.Clear()
+                                        CanvasRight.UpdateLayout()
+
                                         GC.Collect()
                                         GC.WaitForPendingFinalizers()
                                         GC.Collect()
@@ -2367,6 +2433,8 @@ Class Window1
                                                 x.Uid = System.Guid.NewGuid.ToString()
                                                 AddHandler x.CloseMe, AddressOf UnloadControl
                                                 CanvasRight.Children.Clear()
+                                                CanvasRight.UpdateLayout()
+
                                                 GC.Collect()
                                                 GC.WaitForPendingFinalizers()
                                                 GC.Collect()
@@ -2381,6 +2449,8 @@ Class Window1
                                                 x.Uid = System.Guid.NewGuid.ToString()
                                                 AddHandler x.CloseMe, AddressOf UnloadControl
                                                 CanvasRight.Children.Clear()
+                                                CanvasRight.UpdateLayout()
+
                                                 GC.Collect()
                                                 GC.WaitForPendingFinalizers()
                                                 GC.Collect()
@@ -2398,6 +2468,7 @@ Class Window1
                                         x.Uid = System.Guid.NewGuid.ToString()
                                         AddHandler x.CloseMe, AddressOf UnloadControl
                                         CanvasRight.Children.Clear()
+                                        CanvasRight.UpdateLayout()
 
                                         GC.Collect()
                                         GC.WaitForPendingFinalizers()
@@ -2517,8 +2588,7 @@ Class Window1
                     myDoubleAnimation.From = 1.0
                     myDoubleAnimation.To = 0.0
                     myDoubleAnimation.Duration = New Duration(TimeSpan.FromMilliseconds(650))
-                    Dim myStoryboard As Storyboard
-                    myStoryboard = New Storyboard()
+                    Dim myStoryboard As Storyboard = New Storyboard()
                     myStoryboard.Children.Add(myDoubleAnimation)
                     AddHandler myStoryboard.Completed, AddressOf AffControlPageSuite
 
@@ -2526,8 +2596,10 @@ Class Window1
                     Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
                     myStoryboard.Begin()
 
+                    myStoryboard = Nothing
                 Next
             End If
+
 
             Objet3 = Objet
         Catch ex As Exception
@@ -2540,6 +2612,7 @@ Class Window1
     Private Sub AffControlPageSuite()
         Try
             CanvasRight.Children.Clear()
+            CanvasRight.UpdateLayout()
 
             GC.Collect()
             GC.WaitForPendingFinalizers()
@@ -2566,8 +2639,7 @@ Class Window1
             myDoubleAnimation.From = 1.0
             myDoubleAnimation.To = 0.0
             myDoubleAnimation.Duration = New Duration(TimeSpan.FromMilliseconds(650))
-            Dim myStoryboard As Storyboard
-            myStoryboard = New Storyboard()
+            Dim myStoryboard As Storyboard = New Storyboard()
             myStoryboard.Children.Add(myDoubleAnimation)
             AddHandler myStoryboard.Completed, AddressOf StoryBoardFinish
 
@@ -2575,6 +2647,7 @@ Class Window1
             Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
             myStoryboard.Begin()
 
+            myStoryboard = Nothing
             Me.Cursor = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub UnloadControl: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -2588,13 +2661,14 @@ Class Window1
                 myDoubleAnimation.From = 0.0
                 myDoubleAnimation.To = 1.0
                 myDoubleAnimation.Duration = New Duration(TimeSpan.FromMilliseconds(650))
-                Dim myStoryboard As Storyboard
-                myStoryboard = New Storyboard()
+                Dim myStoryboard As Storyboard = New Storyboard()
                 myStoryboard.Children.Add(myDoubleAnimation)
 
                 Storyboard.SetTarget(myDoubleAnimation, Objet)
                 Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
                 myStoryboard.Begin()
+
+                myStoryboard = Nothing
             End If
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AnimationApparition: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)

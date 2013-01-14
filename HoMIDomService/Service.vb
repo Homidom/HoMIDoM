@@ -148,11 +148,53 @@ Module Service
                 host.Close()
             End Using
         Catch ex As Exception
-            MsgBox("Erreur lors du service: " & ex.Message & vbCrLf & vbCrLf & ex.ToString, MsgBoxStyle.Critical, "ERREUR SERVICE")
+            Dim message As String = ex.ToString
+            message = DelRep(message)
+
+            MsgBox("Erreur lors du démarrage service: " & ex.Message & vbCrLf & vbCrLf & message, MsgBoxStyle.Critical, "ERREUR SERVICE")
+
+            If LCase(ex.ToString).Contains("badimageformat") And LCase(ex.ToString).Contains("sqlite") Then
+                MsgBox("Veuillez vérifier que la dll sqlite installée correspond bien à la version de votre OS 32 ou 64 bits!!")
+            End If
+
             Console.WriteLine(Now & " ERREUR " & ex.Message & " : " & ex.ToString)
             Console.ReadLine()
         End Try
     End Sub
+
+    ''' <summary>
+    ''' Supprime le répertoire du développeur
+    ''' </summary>
+    ''' <param name="Message"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Private Function DelRep(ByVal Message As String) As String
+        Try
+            Dim i As Integer = 1
+            Dim newmess As String = Message
+            Dim start As Integer
+
+            start = InStr(i, UCase(newmess), "C:\")
+            If start = 0 Then
+                start = InStr(i, UCase(newmess), "D:\")
+            End If
+
+            Do While start > 0
+                Dim newstart As Integer = InStr(start, LCase(newmess), "\homidom\")
+                newmess = Mid(newmess, 1, start + 2) & "..." & Mid(newmess, newstart, newmess.Length - newstart + 1)
+                i = start + 5
+                start = InStr(i, UCase(newmess), "C:\")
+                If start = 0 Then
+                    start = InStr(i, UCase(newmess), "D:\")
+                End If
+            Loop
+
+            Return newmess
+        Catch ex As Exception
+            Return Message
+        End Try
+    End Function
+
 
     Sub HostFaulted(ByVal sender As Object, ByVal e As System.EventArgs)
         Console.WriteLine(Now & " Le serveur s'est mis en erreur")

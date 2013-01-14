@@ -50,7 +50,7 @@
         If Site.Children.Count > 0 Then Site.Children.Clear()
 
         Try
-            Dim j As Integer
+            Dim j As Integer = 0
 
             For i As Integer = 0 To Window1.ListServer.Count - 1
                 Dim x As New uCtrlImgMnu
