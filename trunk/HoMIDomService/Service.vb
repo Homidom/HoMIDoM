@@ -147,6 +147,7 @@ Module Service
                 End Using
                 host.Close()
             End Using
+
         Catch ex As Exception
             Dim message As String = ex.ToString
             message = DelRep(message)
@@ -194,7 +195,6 @@ Module Service
             Return Message
         End Try
     End Function
-
 
     Sub HostFaulted(ByVal sender As Object, ByVal e As System.EventArgs)
         Console.WriteLine(Now & " Le serveur s'est mis en erreur")

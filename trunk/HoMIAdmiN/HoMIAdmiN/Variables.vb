@@ -4,6 +4,7 @@
     Public IsConnect As Boolean = False 'True si connecté au serveur
     Public myService As HoMIDom.HoMIDom.IHoMIDom
 
+
     Public Enum EAction
         Nouveau
         Modifier

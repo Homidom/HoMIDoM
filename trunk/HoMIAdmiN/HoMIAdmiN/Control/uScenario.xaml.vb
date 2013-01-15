@@ -81,8 +81,6 @@ Public Class uScenario
         End Try
     End Sub
 
-
-
     Private Sub ScrollViewer1_DragOver(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs) Handles ScrollViewer2.DragOver
         Try
             If e.Data.GetDataPresent(GetType(String)) Then
