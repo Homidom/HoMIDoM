@@ -154,10 +154,10 @@ Module Service
             MsgBox("Erreur lors du démarrage service: " & ex.Message & vbCrLf & vbCrLf & message, MsgBoxStyle.Critical, "ERREUR SERVICE")
 
             If LCase(ex.ToString).Contains("badimageformat") And LCase(ex.ToString).Contains("sqlite") Then
-                MsgBox("Veuillez vérifier que la dll sqlite installée correspond bien à la version de votre OS 32 ou 64 bits!!")
+                MsgBox("Veuillez vérifier que la dll sqlite installée dans le répertoire du service correspond bien à la version de votre OS (32 ou 64 bits)!!", MsgBoxStyle.Information, "RESOLUTION")
             End If
 
-            Console.WriteLine(Now & " ERREUR " & ex.Message & " : " & ex.ToString)
+            Console.WriteLine(Now & " ERREUR " & ex.Message & " : " & message)
             Console.ReadLine()
         End Try
     End Sub
