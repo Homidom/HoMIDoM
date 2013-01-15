@@ -745,7 +745,7 @@ Imports ZibaseDll
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
             If (listedevices.Count >= 1) Then
                 'on a trouvé un ou plusieurs composants avec cette adresse, on prend le premier
-                WriteLog(listedevices.Item(0).Name & " (" & adresse & ") : Battery Empty")
+                WriteLog("ERR: " & listedevices.Item(0).Name & " (" & adresse & ") : Battery Empty")
             Else
                 'device pas trouvé
                 WriteLog("ERR: Device non trouvé : " & adresse & ": Battery Empty")

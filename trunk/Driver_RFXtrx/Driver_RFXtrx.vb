@@ -73,6 +73,7 @@ Imports System.Media
     'param avancé
     Dim _DEBUG As Boolean = False
     Dim _PARAMMODE As String = "20011111111111111011111111"
+    Dim _AUTODISCOVER As Boolean = True
 
 #End Region
 
@@ -1315,6 +1316,7 @@ Imports System.Media
         Try
             _DEBUG = _Parametres.Item(0).Valeur
             _PARAMMODE = _Parametres.Item(1).Valeur
+            _AUTODISCOVER = _Parametres.Item(2).Valeur
         Catch ex As Exception
             WriteLog("ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
         End Try
@@ -1572,6 +1574,7 @@ Imports System.Media
             'Parametres avancés
             add_paramavance("Debug", "Activer le Debug complet (True/False)", False)
             add_paramavance("ParamMode", "Paramétres (ex: 20011111111111111011111111)", "20011111111111111011111111")
+            add_paramavance("AutoDiscover", "Permet de créer automatiquement des composants si ceux-ci n'existent pas encore (True/False)", True)
 
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
@@ -2107,7 +2110,7 @@ Imports System.Media
         End Try
     End Sub
 
-    Public Sub decode_InterfaceControl()
+    Private Sub decode_InterfaceControl()
         Try
             Dim messagelog As String = ""
             Select Case recbuf(ICMD.subtype)
@@ -5109,7 +5112,7 @@ Imports System.Media
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
             If (listedevices.Count >= 1) Then
                 'on a trouvé un ou plusieurs composants avec cette adresse, on prend le premier
-                WriteLog(listedevices.Item(0).Name & " (" & adresse & ") : Battery Empty")
+                WriteLog("ERR: " & listedevices.Item(0).Name & " (" & adresse & ") : Battery Empty")
             Else
                 'device pas trouvé
                 WriteLog("ERR: Device non trouvé : " & adresse & ": Battery Empty")
@@ -5222,8 +5225,17 @@ Imports System.Media
             ElseIf (listedevices.Count > 1) Then
                 WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)
             Else
-
-                WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
+                'si autodiscover = true alors on crée le composant sinon on logue
+                If _AUTODISCOVER Then
+                    Try
+                        WriteLog("Device non trouvé, AutoCreation du composant : " & type & " " & adresse & ":" & valeur)
+                        _Server.SaveDevice(_IdSrv, "_RFXtrx_" & Date.Now.ToString("ddMMyyHHmmssf"), adresse, False, False, Me._ID, type, 0, "", "", "", "AutoDiscover RFXtrx", 0, False, "0", , "", 0, 999999, -999999, 0, Nothing, "", 0, False)
+                    Catch ex As Exception
+                        WriteLog("ERR: Writeretour Exception : AutoDiscover Creation composant: " & ex.Message)
+                    End Try
+                Else
+                    WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
+                End If
 
                 'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
 
