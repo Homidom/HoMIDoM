@@ -873,7 +873,8 @@ Namespace HoMIDom
                                         If (Not list.Item(j).Attributes.GetNamedItem("datecreated") Is Nothing) Then .DateCreated = list.Item(j).Attributes.GetNamedItem("datecreated").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("lastchange") Is Nothing) Then .LastChange = list.Item(j).Attributes.GetNamedItem("lastchange").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("lastchangeduree") Is Nothing) Then .LastChangeDuree = list.Item(j).Attributes.GetNamedItem("lastchangeduree").Value
-                                        If (Not list.Item(j).Attributes.GetNamedItem("refresh") Is Nothing) Then .Refresh = Replace(list.Item(j).Attributes.GetNamedItem("refresh").Value, ".", ",")
+                                        'If (Not list.Item(j).Attributes.GetNamedItem("refresh") Is Nothing) Then .Refresh = Replace(list.Item(j).Attributes.GetNamedItem("refresh").Value, ".", ",")
+                                        If (Not list.Item(j).Attributes.GetNamedItem("refresh") Is Nothing) Then .Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("modele") Is Nothing) Then .Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("allvalue") Is Nothing) Then .AllValue = list.Item(j).Attributes.GetNamedItem("allvalue").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("unit") Is Nothing) Then .Unit = list.Item(j).Attributes.GetNamedItem("unit").Value
@@ -894,8 +895,11 @@ Namespace HoMIDom
                                             .Picture = _MonRepertoire & "\images\icones\composant_128.png"
                                         End If
                                         If (Not list.Item(j).Attributes.GetNamedItem("solo") Is Nothing) Then .Solo = list.Item(j).Attributes.GetNamedItem("solo").Value
-                                        If (Not list.Item(j).Attributes.GetNamedItem("value") Is Nothing) Then .Value = Replace(list.Item(j).Attributes.GetNamedItem("value").Value, ".", ",")
-                                        If (Not list.Item(j).Attributes.GetNamedItem("valuelast") Is Nothing) Then .ValueLast = Replace(list.Item(j).Attributes.GetNamedItem("valuelast").Value, ".", ",")
+                                        'If (Not list.Item(j).Attributes.GetNamedItem("value") Is Nothing) Then .Value = Replace(list.Item(j).Attributes.GetNamedItem("value").Value, ".",",")
+                                        'If (Not list.Item(j).Attributes.GetNamedItem("valuelast") Is Nothing) Then .ValueLast = Replace(list.Item(j).Attributes.GetNamedItem("valuelast").Value, ".", ",")
+                                        If (Not list.Item(j).Attributes.GetNamedItem("value") Is Nothing) Then .Value = Replace(list.Item(j).Attributes.GetNamedItem("value").Value, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                        If (Not list.Item(j).Attributes.GetNamedItem("valuelast") Is Nothing) Then .ValueLast = Replace(list.Item(j).Attributes.GetNamedItem("valuelast").Value, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+
                                         If (Not list.Item(j).Attributes.GetNamedItem("lastetat") Is Nothing) Then .LastEtat = list.Item(j).Attributes.GetNamedItem("lastetat").Value
                                         '-- propriétés generique value --
                                         If _Dev.Type = "BAROMETRE" _
