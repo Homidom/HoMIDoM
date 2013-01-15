@@ -65,6 +65,8 @@ Imports System.Globalization
     'param avancé
     Dim _PortBaudRate As Long = 4800
     Dim _DEBUG As Boolean = False
+    Dim _AUTODISCOVER As Boolean = True
+
 #End Region
 
 #Region "Variables Internes"
@@ -357,6 +359,7 @@ Imports System.Globalization
             Try
                 _PortBaudRate = _Parametres.Item(0).Valeur
                 _DEBUG = _Parametres.Item(1).Valeur
+                _AUTODISCOVER = _Parametres.Item(2).Valeur
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
             End Try
@@ -574,6 +577,7 @@ Imports System.Globalization
             'Parametres avancés
             add_paramavance("Port BaudRate", "vitesse du port 4800 ou 38400", 4800)
             add_paramavance("Debug", "Activer le Debug complet (True/False)", False)
+            add_paramavance("AutoDiscover", "Permet de créer automatiquement des composants si ceux-ci n'existent pas encore (True/False)", True)
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
@@ -3043,7 +3047,7 @@ Imports System.Globalization
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
                 If (listedevices.Count >= 1) Then
                     'on a trouvé un ou plusieurs composants avec cette adresse, on prend le premier
-                    WriteLog(listedevices.Item(0).Name & " (" & adresse & ") : Battery Empty")
+                    WriteLog("ERR: " & listedevices.Item(0).Name & " (" & adresse & ") : Battery Empty")
                 Else
                     'device pas trouvé
                     WriteLog("ERR: Device non trouvé : RFXCOM " & adresse & ": Battery Empty")
@@ -3111,7 +3115,20 @@ Imports System.Globalization
                             WriteLog("DBG: Reception < 1.5s de deux valeurs pour le meme composant : " & listedevices.Item(0).name & ":" & valeur)
                         End If
                     Else
-                        WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
+
+                        'si autodiscover = true alors on crée le composant sinon on logue
+                        If _AUTODISCOVER Then
+                            Try
+                                WriteLog("Device non trouvé, AutoCreation du composant : " & type & " " & adresse & ":" & valeur)
+                                _Server.SaveDevice(_IdSrv, "_RFXreceiver_" & Date.Now.ToString("ddMMyyHHmmssf"), adresse, False, False, Me._ID, type, 0, "", "", "", "AutoDiscover RFXtrx", 0, False, "0", , "", 0, 999999, -999999, 0, Nothing, "", 0, False)
+                            Catch ex As Exception
+                                WriteLog("ERR: Writeretour Exception : AutoDiscover Creation composant: " & ex.Message)
+                            End Try
+                        Else
+                            WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
+                        End If
+
+
                     End If
 
                     'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
