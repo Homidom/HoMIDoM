@@ -5,9 +5,9 @@ Public Class uCondition
     Dim _Operateur As Action.TypeOperateur
     Dim _Signe As Action.TypeSigne
     Dim _DateTime As String = "0#0#0#0#0#0000000#0#0" '#jj#MMM#JJJ
-    Dim _IdDevice As String
-    Dim _PropertyDevice As String
-    Dim _Value As Object
+    Dim _IdDevice As String = ""
+    Dim _PropertyDevice As String = ""
+    Dim _Value As Object = Nothing
     Dim MyMenuItem As New MenuItem
     Dim mycontextmnu As New ContextMenu
 

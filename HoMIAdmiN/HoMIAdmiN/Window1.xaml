@@ -207,11 +207,6 @@
             <Setter Property="BorderBrush" Value="Black"/>
         </Style>
         
-        <!--<ComboBox.Resources>
-            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="Yellow" />
-            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Red" />
-        </ComboBox.Resources>-->
-
     </Window.Resources>
 
     <DockPanel MinHeight="660" MinWidth="1002">
@@ -222,7 +217,7 @@
 
         <StackPanel Height="27" DockPanel.Dock="Bottom" HorizontalAlignment="Left" VerticalAlignment="Bottom"  Orientation="Horizontal" >
             <Label Foreground="White" Name="LblStatus" VerticalAlignment="Stretch">#####</Label>
-            <Ellipse Height="20" Name="Ellipse1" Stroke="Black" Width="20" Fill="Red" />
+            <Ellipse Height="20" Name="Ellipse1" Width="20" Fill="Red" />
             <Label Foreground="White" Name="LblConnect" VerticalAlignment="Stretch">#####</Label>
             <Rectangle Width="10"/>
             <Image Height="20"  Name="Image3" Stretch="Fill" Width="20" Source="/HoMIAdmiN;component/Images/Soleil_130.png" />
@@ -316,7 +311,7 @@
                         <StackPanel Orientation="Horizontal" Name="StkMnu0" DockPanel.Dock="Bottom">
                             <Label Margin="2" Name="CntDriver" Content="0 Driver(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
                         </StackPanel>
-                        <TreeView Margin="0" Name="TreeViewDriver" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
+                        <TreeView Name="TreeViewDriver" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
                     </DockPanel>
                 </TabItem>
                 <TabItem Header="Composant">
@@ -334,7 +329,7 @@
                         <StackPanel Orientation="Horizontal" Name="StkMnu2" DockPanel.Dock="Bottom">
                             <Label Margin="2" Name="CntZone" Content="0 Zone(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
                         </StackPanel>
-                        <TreeView Margin="0" Name="TreeViewZone" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
+                        <TreeView Name="TreeViewZone" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
                     </DockPanel>
                 </TabItem> 
                 <TabItem Header="Utilisateur">
@@ -342,7 +337,7 @@
                     <StackPanel Orientation="Horizontal" Name="StkMnu3" DockPanel.Dock="Bottom">
                         <Label Margin="2" Name="CntUser" Content="0 User(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
                     </StackPanel>
-                        <TreeView Margin="0" Name="TreeViewUser" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
+                        <TreeView Name="TreeViewUser" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
                     </DockPanel>
                 </TabItem> 
                 <TabItem Header="Trigger" >
@@ -350,7 +345,7 @@
                     <StackPanel Orientation="Horizontal" Name="StkMnu4" DockPanel.Dock="Bottom">
                         <Label Margin="2" Name="CntTrigger" Content="0 Trigger(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
                     </StackPanel>
-                        <TreeView Margin="0" Name="TreeViewTrigger" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
+                        <TreeView Name="TreeViewTrigger" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
                     </DockPanel>
                 </TabItem> 
                 <TabItem Header="Macro" >
@@ -358,7 +353,7 @@
                     <StackPanel Orientation="Horizontal" Name="StkMnu5" DockPanel.Dock="Bottom">
                         <Label Margin="5" Name="CntMacro" Content="0 Macro(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
                     </StackPanel>
-                        <TreeView Margin="0" Name="TreeViewMacro" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
+                        <TreeView Name="TreeViewMacro" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
                     </DockPanel>
                 </TabItem> 
                 <TabItem Header="Historique" >
@@ -369,7 +364,7 @@
                         </Button>
                        
                     </StackPanel>
-                    <TreeView Margin="0" Name="TreeViewHisto" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
+                    <TreeView Name="TreeViewHisto" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" />
                     </DockPanel>
                 </TabItem> 
             </TabControl>

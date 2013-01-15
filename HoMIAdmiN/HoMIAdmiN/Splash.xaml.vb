@@ -12,4 +12,8 @@
             MessageBox.Show("ERREUR Sub New Splash() : " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
+    Protected Overrides Sub Finalize()
+        MyBase.Finalize()
+    End Sub
 End Class

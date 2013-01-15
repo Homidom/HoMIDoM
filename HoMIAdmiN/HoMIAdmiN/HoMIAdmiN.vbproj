@@ -428,9 +428,6 @@
     <Resource Include="Images\Fond_1024_768.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Releve_64.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\Defaut_128.png" />
   </ItemGroup>
   <ItemGroup>
@@ -445,9 +442,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Logs_128.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Supprimer_128.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Homidom_banniere_817_203.png" />
@@ -466,9 +460,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Module_128.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Zone_128.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Modifier_32.png" />
@@ -491,14 +482,6 @@
   <ItemGroup>
     <Resource Include="Images\Export_32.png" />
     <Resource Include="Images\Import_32.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\cd_new_128.png" />
-    <Resource Include="Images\cd_remove_128.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Fleche2_bas_128.png" />
-    <Resource Include="Images\Fleche2_haut_128.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Releve_128.png" />
@@ -524,7 +507,6 @@
     <Resource Include="Images\zoom_avant_32.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Lecture_32.png" />
     <Resource Include="Images\Stop_32.png" />
   </ItemGroup>
   <ItemGroup>
@@ -577,6 +559,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Device_MaJ.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Zone_128.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>

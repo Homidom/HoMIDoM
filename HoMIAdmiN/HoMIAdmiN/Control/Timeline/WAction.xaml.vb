@@ -1,7 +1,7 @@
 ﻿Imports HoMIDom.HoMIDom
 
 Public Class WActionParametrage
-    Dim _ObjAction As Object
+    Dim _ObjAction As Object = Nothing
     Public _Parametres As New ArrayList
     Dim _ListuConditions As New List(Of uCondition)
 
@@ -631,7 +631,7 @@ Public Class WActionParametrage
                 If _StkCondition.Children.Item(i).Uid = uid Then
                     If i = 0 Then Exit Sub
                     'on verifi si c'est le 1er car on peu plus monter
-                    Dim x As Object = _ListuConditions.Item(i - 1)
+                    Dim x As uCondition = _ListuConditions.Item(i - 1)
                     _ListuConditions.Item(i - 1) = _ListuConditions.Item(i)
                     _ListuConditions.Item(i) = x
 

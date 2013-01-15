@@ -32,19 +32,20 @@ Class Window1
     Dim flagTreeV As Boolean = False
     Dim flagShowMainMenu As Boolean = False
     Dim FlagOK As Boolean = False
+    Dim _IsConnect As Boolean = False
 
 #Region "Fonctions de base"
 
     Public Sub New()
         Try
+            ' Cet appel est requis par le Concepteur Windows Form.
+            InitializeComponent()
+
             Me.Title = "HoMIAdmiN v" & My.Application.Info.Version.ToString & " - HoMIDoM"
 
             Dim spl As Window2 = New Window2
             spl.Show()
             Thread.Sleep(1000)
-
-            ' Cet appel est requis par le Concepteur Windows Form.
-            InitializeComponent()
 
             myBrushVert.GradientOrigin = New Point(0.75, 0.25)
             myBrushVert.GradientStops.Add(New GradientStop(Colors.LightGreen, 0.0))
@@ -69,7 +70,7 @@ Class Window1
             dt.Start()
 
             Myfile = MyRep & "\Config\HoMIAdmiN.xml"
-
+            AffIsDisconnect()
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub New: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -84,18 +85,6 @@ Class Window1
 
                     'Modifie la date et Heure
                     LblStatus.Content = Now.ToLongDateString & " " & myService.GetTime & " "
-
-                    'Modifie l'adresse/port du serveur connecté
-                    If FlagOK = False Then
-                        Dim serveurcomplet As String = myChannelFactory.Endpoint.Address.ToString()
-                        serveurcomplet = Mid(serveurcomplet, 8, serveurcomplet.Length - 8)
-                        serveurcomplet = Split(serveurcomplet, "/", 2)(0)
-                        Dim srblbl As String = Split(serveurcomplet, ":", 2)(0) & ":" & Split(serveurcomplet, ":", 2)(1)
-                        LblConnect.ToolTip = "Serveur connecté adresse utilisée: " & srblbl
-                        LblConnect.Content = srblbl
-                        serveurcomplet = Nothing
-                        srblbl = ""
-                    End If
 
                     'Modifie les heures du soleil
                     If LHS.Tag IsNot Nothing Then
@@ -121,9 +110,9 @@ Class Window1
                     'Modifie les LOG
                     Dim list As List(Of String) = myService.GetLastLogs
                     Dim a As String = ""
-                    For i As Integer = 0 To list.Count - 1
-                        a &= list(i)
-                        If (i <> list.Count - 1) Then a &= vbCrLf
+                    For Each logerror In list
+                        a &= logerror & vbCrLf
+                        'If (i <> list.Count - 1) Then a &= vbCrLf
                     Next
                     LOG.ToolTip = a
                     ImgLog.ToolTip = a
@@ -135,7 +124,7 @@ Class Window1
                     If list.Count > 0 Then
                         Dim _tool As String = ""
                         For Each logerror As String In list
-                            If logerror <> "" And logerror <> " " Then
+                            If String.IsNullOrEmpty(logerror) = False Then
                                 _tool &= logerror & vbCrLf
                                 If ImgError.Visibility <> Windows.Visibility.Visible Then ImgError.Visibility = Windows.Visibility.Visible
                                 ImgError.ToolTip = _tool
@@ -151,7 +140,7 @@ Class Window1
                     If list.Count > 0 Then
                         Dim _tool As String = ""
                         For Each logerror As String In list
-                            If logerror <> "" And logerror <> " " Then
+                            If String.IsNullOrEmpty(logerror) = False Then
                                 _tool &= logerror & vbCrLf
                                 If ImgDeviceNoMaj.Visibility <> Windows.Visibility.Visible Then ImgDeviceNoMaj.Visibility = Windows.Visibility.Visible
                                 ImgDeviceNoMaj.ToolTip = _tool
@@ -163,45 +152,63 @@ Class Window1
                     End If
                     list = Nothing
 
-                    If FlagOK = False Then
-                        Ellipse1.Fill = myBrushVert
-                    End If
-
-                    If FlagOK = False Then FlagOK = True
                 Catch ex As Exception
                     IsConnect = False
+                    AffIsDisconnect()
                     LblStatus.Content = Now.ToLongDateString & " " & Now.ToLongTimeString & " "
-                    LblConnect.Content = "Serveur non connecté"
-                    LblConnect.ToolTip = Nothing
 
                     MessageBox.Show("La communication a été perdue avec le serveur, veuillez vérifier que celui-ci est toujours actif", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                     ClearAllTreeview() 'vide le treeview
                     CanvasRight.Children.Clear()  'ferme le menu principal
                     PageConnexion() 'affiche la fenetre de connexion
 
-                    If FlagOK = True Then
-                        Ellipse1.Fill = myBrushRouge
-                        FlagOK = False
-                    End If
                 End Try
             Else
                 LblStatus.Content = Now.ToLongDateString & " " & Now.ToLongTimeString & "      "
-                If LblConnect.Content <> "Serveur non connecté" Then LblConnect.Content = "Serveur non connecté"
-                IsConnect = False
+            End If
 
-                If FlagOK = True Then
-                    Ellipse1.Fill = myBrushRouge
-                    FlagOK = False
+            If _IsConnect <> IsConnect Then
+                _IsConnect = IsConnect
+                If _IsConnect = True Then
+                    AffIsConnect()
+                Else
+                    AffIsDisconnect()
                 End If
             End If
+
+            Me.UpdateLayout()
         Catch ex As Exception
             MessageBox.Show("ERREUR dispatcherTimer_Tick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
+    Private Sub AffIsConnect()
+        'Modifie l'adresse/port du serveur connecté
+        Dim serveurcomplet As String = myChannelFactory.Endpoint.Address.ToString()
+        serveurcomplet = Mid(serveurcomplet, 8, serveurcomplet.Length - 8)
+        serveurcomplet = Split(serveurcomplet, "/", 2)(0)
+        Dim srblbl As String = Split(serveurcomplet, ":", 2)(0) & ":" & Split(serveurcomplet, ":", 2)(1)
+        LblConnect.ToolTip = "Serveur connecté adresse utilisée: " & srblbl
+        LblConnect.Content = srblbl
+        serveurcomplet = Nothing
+        srblbl = ""
+
+        Ellipse1.Fill = myBrushVert
+    End Sub
+
+    Private Sub AffIsDisconnect()
+        Ellipse1.Fill = myBrushRouge
+        LblConnect.Content = "Serveur non connecté"
+        LblConnect.ToolTip = Nothing
+    End Sub
+
     Private Sub StoryBoardFinish(ByVal sender As Object, ByVal e As System.EventArgs)
         CanvasRight.Children.Clear()
         CanvasRight.UpdateLayout()
+
+        GC.Collect()
+        GC.WaitForPendingFinalizers()
+        GC.Collect()
 
         ShowMainMenu()
     End Sub
@@ -430,24 +437,47 @@ Class Window1
         Try
             TreeViewDriver.Items.Clear()
             TreeViewDriver.UpdateLayout()
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
             TreeViewDevice.Items.Clear()
             TreeViewDevice.UpdateLayout()
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
             TreeViewZone.Items.Clear()
             TreeViewZone.UpdateLayout()
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
             TreeViewUser.Items.Clear()
             TreeViewUser.UpdateLayout()
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
             TreeViewTrigger.Items.Clear()
             TreeViewTrigger.UpdateLayout()
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
             TreeViewMacro.Items.Clear()
             TreeViewMacro.UpdateLayout()
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
             TreeViewHisto.Items.Clear()
             TreeViewHisto.UpdateLayout()
-
             GC.Collect()
             GC.WaitForPendingFinalizers()
             GC.Collect()
 
             Me.UpdateLayout()
+
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
+
+
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub ClearAllTreeview: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -462,6 +492,11 @@ Class Window1
 
             Me.Cursor = Cursors.Wait
             ClearAllTreeview()
+
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
+
             Select Case Tabcontrol1.SelectedIndex
                 Case 0
                     AffDriver()
@@ -489,6 +524,10 @@ Class Window1
         Try
             TreeViewZone.Items.Clear()
             TreeViewZone.UpdateLayout()
+
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
 
             If IsConnect = False Then Exit Sub
 
@@ -682,7 +721,7 @@ Class Window1
                 Dim stack As New StackPanel
                 stack.Orientation = Orientation.Horizontal
                 stack.HorizontalAlignment = HorizontalAlignment.Left
-                Dim Graph As Object
+                Dim Graph As Shape
                 Dim img As New Image
                 Dim tool As New Label
 
@@ -2648,6 +2687,7 @@ Class Window1
             myStoryboard.Begin()
 
             myStoryboard = Nothing
+            myDoubleAnimation = Nothing
             Me.Cursor = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub UnloadControl: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -2668,6 +2708,7 @@ Class Window1
                 Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
                 myStoryboard.Begin()
 
+                myDoubleAnimation = Nothing
                 myStoryboard = Nothing
             End If
         Catch ex As Exception

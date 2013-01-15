@@ -83,7 +83,12 @@ Public Class uHisto
             Cursor = Cursors.Wait
 
             Test.Child = Nothing
+            Test.UpdateLayout()
             Me.UpdateLayout()
+
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
 
             Dim Chart2 As New System.Windows.Forms.DataVisualization.Charting.Chart()
             ' Add a chart area.
@@ -144,7 +149,7 @@ Public Class uHisto
             a = dateend.Split(System.Globalization.DateTimeFormatInfo.CurrentInfo.DateSeparator)
             If a.Length = 3 Then dateend = a(2) & "-" & a(1) & "-" & a(0) Else dateend = ""
 
-            For Each _item In _Devices
+            For Each _item As Dictionary(Of String, String) In _Devices
                 For Each kvp As KeyValuePair(Of String, String) In _item
                     Dim _namedevice As String = myService.ReturnDeviceByID(IdSrv, kvp.Key).Name
 
@@ -311,6 +316,7 @@ Public Class uHisto
 
     Private Sub uHisto_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
         Try
+            _Devices = Nothing
             Test.Dispose()
             _CurrentChart = Nothing
         Catch ex As Exception

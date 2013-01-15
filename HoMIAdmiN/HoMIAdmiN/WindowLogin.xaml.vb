@@ -10,7 +10,7 @@
                 MessageBox.Show("L'adresse IP et le port du serveur doivent être renseigné", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
-            If TxtID.Text = "" Or TxtID.Text = " " Then
+            If String.IsNullOrEmpty(TxtID.Text) = True Then
                 MessageBox.Show("L'ID du serveur doit être renseigné", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
