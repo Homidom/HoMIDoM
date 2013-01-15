@@ -110,11 +110,11 @@ Class Window1
 
                     If LCS.Tag IsNot Nothing Then
                         If Now.Minute = 0 And LCS.Content <> LCS.Tag Then
-                            LCS.Content = CDate(myService.GetHeureLeverSoleil).ToShortTimeString
+                            LCS.Content = CDate(myService.GetHeureCoucherSoleil).ToShortTimeString
                             LCS.Tag = LHS.Content
                         End If
                     Else
-                        LCS.Content = CDate(myService.GetHeureLeverSoleil).ToShortTimeString
+                        LCS.Content = CDate(myService.GetHeureCoucherSoleil).ToShortTimeString
                         LCS.Tag = LHS.Content
                     End If
 
