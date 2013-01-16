@@ -5229,7 +5229,7 @@ Imports System.Media
                 If _AUTODISCOVER Then
                     Try
                         WriteLog("Device non trouvé, AutoCreation du composant : " & type & " " & adresse & ":" & valeur)
-                        _Server.SaveDevice(_IdSrv, "_RFXtrx_" & Date.Now.ToString("ddMMyyHHmmssf"), adresse, False, False, Me._ID, type, 0, "", "", "", "AutoDiscover RFXtrx", 0, False, "0", , "", 0, 999999, -999999, 0, Nothing, "", 0, False)
+                        _Server.SaveDevice(_IdSrv, "", "_RFXtrx_" & Date.Now.ToString("ddMMyyHHmmssf"), adresse, False, False, Me._ID, type, 0, "", "", "", "AutoDiscover RFXtrx", 0, False, "0", "", 0, 999999, -999999, 0, Nothing, "", 0, False)
                     Catch ex As Exception
                         WriteLog("ERR: Writeretour Exception : AutoDiscover Creation composant: " & ex.Message)
                     End Try
