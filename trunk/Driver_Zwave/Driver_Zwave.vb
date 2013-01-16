@@ -1203,7 +1203,7 @@ Public Class Driver_ZWave
                                 End If
 
                                 'gestion de l'information de Batterie
-                                If TempInstance = "Battery Level" And TempValeurString <= 10 Then _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traiteValeur ", LocalDevice.nom & " : Battery vide")
+                                If TempLabel = "Battery Level" And TempValeurString <= 10 Then _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traiteValeur ", LocalDevice.nom & " : Battery vide")
 
                                 'Affichage d'information pour le debugage
                                 If _DEBUG Then
