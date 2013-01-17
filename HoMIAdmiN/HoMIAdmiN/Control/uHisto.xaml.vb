@@ -195,6 +195,11 @@ Public Class uHisto
                     Chart2.Series(i).ChartType = SeriesChartType.Bar
                     Chart2.Series(i).ToolTip = "#VALX{dd/MM/yyyy HH:mm:ss}" & " Valeur:" & "#VALY"
                 Next
+            ElseIf ChkStep.IsChecked Then
+                For i As Integer = 0 To Chart2.Series.Count - 1
+                    Chart2.Series(i).ChartType = SeriesChartType.StepLine
+                    Chart2.Series(i).ToolTip = "#VALX{dd/MM/yyyy HH:mm:ss}" & " Valeur:" & "#VALY"
+                Next
             Else
                 For i As Integer = 0 To Chart2.Series.Count - 1
                     Chart2.Series(i).ChartType = SeriesChartType.Pie
