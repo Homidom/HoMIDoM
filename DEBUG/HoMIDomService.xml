@@ -6,14 +6,7 @@ HoMIDomService
 </name>
 </assembly>
 <members>
-<member name="M:HoMIDomService.Service.DelRep(System.String)">
-	<summary>
- Supprime le répertoire du développeur
- </summary>
-	<param name="Message"></param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDomService.My.Resources.Resources.ResourceManager">
+<member name="P:HoMIDomService.My.Resources.Resources.ResourceManager">
 	<summary>
   Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
 </summary>
@@ -26,6 +19,13 @@ HoMIDomService
 	<summary>
   Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
 </summary>
+</member><member name="M:HoMIDomService.Service.DelRep(System.String)">
+	<summary>
+ Supprime le répertoire du développeur
+ </summary>
+	<param name="Message"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member>
 </members>
 </doc>

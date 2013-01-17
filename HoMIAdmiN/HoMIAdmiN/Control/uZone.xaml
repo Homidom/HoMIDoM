@@ -17,7 +17,7 @@
                 <Label Margin="0,10,0,0" Content="Eléments appartenant à la zone" Foreground="White" ToolTip="Glisser un élément (device, macro ou zone) dans la liste ci-dessous" FontStyle="Oblique" FontWeight="ExtraBold" />
                 <StackPanel Orientation="Horizontal">
                     <StackPanel Margin="2">
-                        <Label Content="Devices" Foreground="White" Width="250" FontWeight="SemiBold" />
+                        <Label Content="Composants" Foreground="White" Width="250" FontWeight="SemiBold" />
                         <Label Content="Visible" Foreground="White" FontSize="10" HorizontalContentAlignment="Right" />
                         <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxDevice" Width="250" Height="250" AllowDrop="True" Grid.ColumnSpan="2" />
                         <StackPanel.Background>
