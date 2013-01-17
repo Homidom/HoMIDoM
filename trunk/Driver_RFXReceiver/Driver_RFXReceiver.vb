@@ -3118,12 +3118,16 @@ Imports System.Globalization
 
                         'si autodiscover = true alors on crée le composant sinon on logue
                         If _AUTODISCOVER Then
-                            Try
-                                WriteLog("Device non trouvé, AutoCreation du composant : " & type & " " & adresse & ":" & valeur)
-                                _Server.SaveDevice(_IdSrv, "", "_RFXReceiver_" & Date.Now.ToString("ddMMyyHHmmssf"), adresse, False, False, Me._ID, type, 0, "", "", "", "AutoDiscover RFXreceiver", 0, False, "0", "", 0, 999999, -999999, 0, Nothing, "", 0, False)
-                            Catch ex As Exception
-                                WriteLog("ERR: Writeretour Exception : AutoDiscover Creation composant: " & ex.Message)
-                            End Try
+                            If type = "" Then
+                                WriteLog("Device non trouvé, AutoCreation impossible du composant car le type ne peut etre déterminé : " & adresse & ":" & valeur)
+                            Else
+                                Try
+                                    WriteLog("Device non trouvé, AutoCreation du composant : " & type & " " & adresse & ":" & valeur)
+                                    _Server.SaveDevice(_IdSrv, "", "_RFXReceiver_" & Date.Now.ToString("ddMMyyHHmmssf"), adresse, False, False, Me._ID, type, 0, "", "", "", "AutoDiscover RFXreceiver", 0, False, "0", "", 0, 999999, -999999, 0, Nothing, "", 0, False)
+                                Catch ex As Exception
+                                    WriteLog("ERR: Writeretour Exception : AutoDiscover Creation composant: " & ex.Message)
+                                End Try
+                            End If
                         Else
                             WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
                         End If

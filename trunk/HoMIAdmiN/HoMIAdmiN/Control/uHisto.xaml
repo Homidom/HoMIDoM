@@ -36,6 +36,9 @@
                                 <RadioButton Name="ChkLine_Full" Width="45" Height="25" Background="DarkGray" BorderBrush="Black" Foreground="White" >
                                     <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/line_chart.png" Stretch="Fill"></Image>
                                 </RadioButton>
+                                <RadioButton Background="DarkGray" BorderBrush="Black" Foreground="White" Height="25" IsChecked="false" Name="ChkStep" Width="45">
+                                    <Image Height="25" Source="/HoMIAdmiN;component/Images/Stepline.png" Stretch="Fill" Width="25" />
+                                </RadioButton>
                                 <RadioButton Name="ChkHisto" Width="45" Height="25" Background="DarkGray" BorderBrush="Black" Foreground="White" >
                                     <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/bar_chart.png" Stretch="Fill"></Image>
                                 </RadioButton>
