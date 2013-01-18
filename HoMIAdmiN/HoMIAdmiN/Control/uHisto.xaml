@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
              mc:Ignorable="d" 
-            Margin="10" Width="970">
+            Margin="10" Width="980">
 
     <DockPanel Background="#636060" Opacity="1">
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Margin="0">
