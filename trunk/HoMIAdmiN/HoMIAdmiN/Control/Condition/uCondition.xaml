@@ -89,8 +89,8 @@
 
                             </StackPanel>
                             <StackPanel Orientation="Horizontal ">
-                                <TextBox FontSize="20" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="1" Name="TxtJr" Text="00" VerticalAlignment="Top" Width="35" Background="Black" Foreground="White" />
-                                <TextBox HorizontalAlignment="Left" Margin="1" Name="TxtMs" VerticalAlignment="Top" Width="35" Text="00" FontSize="20" HorizontalContentAlignment="Center" Background="Black" Foreground="White" />
+                                <TextBox FontSize="20" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Margin="1" Name="TxtJr" Text="" VerticalAlignment="Top" Width="35" Background="Black" Foreground="White" />
+                                <TextBox HorizontalAlignment="Left" Margin="1" Name="TxtMs" VerticalAlignment="Top" Width="35" Text="" FontSize="20" HorizontalContentAlignment="Center" Background="Black" Foreground="White" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" >
                                 <Button Height="24" HorizontalAlignment="Left" Margin="1" Name="BtnMJr" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >

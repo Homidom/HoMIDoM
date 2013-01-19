@@ -444,12 +444,20 @@ Public Class uCondition
                 If String.IsNullOrEmpty(TxtJr.Text) = True Then
                     _myconditiontime &= "*#"
                 Else
-                    _myconditiontime &= TxtJr.Text & "#"
+                    If TxtJr.Text = 0 Then
+                        _myconditiontime &= "*#"
+                    Else
+                        _myconditiontime &= TxtJr.Text & "#"
+                    End If
                 End If
                 If String.IsNullOrEmpty(TxtMs.Text) = True Then
                     _myconditiontime &= "*#"
                 Else
-                    _myconditiontime &= TxtMs.Text & "#"
+                    If TxtMs.Text = 0 Then
+                        _myconditiontime &= "*#"
+                    Else
+                        _myconditiontime &= TxtMs.Text & "#"
+                    End If
                 End If
 
                 Dim _prepajr As String = ""
