@@ -191,11 +191,13 @@ Namespace HoMIDom
                                         dd = Now.Day
                                     Else
                                         dd = CInt(_tim(3))
+                                        If dd = 0 Then dd = Now.Day
                                     End If
                                     If _tim(4) = "*" Then
                                         ms = Now.Month
                                     Else
                                         ms = CInt(_tim(4))
+                                        If ms = 0 Then ms = Now.Month
                                     End If
                                     a1 = New Date(Now.Year, ms, dd, hr, mn, sc)
                                 End If
