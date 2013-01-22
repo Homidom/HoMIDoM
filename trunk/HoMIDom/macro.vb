@@ -11,10 +11,10 @@ Namespace HoMIDom
     ''' <remarks>_condition contient un tableau des conditions à vérifier pour lancer les actions si TRUE ou si FALSE</remarks>
     <Serializable()> Public Class Macro
         'Déclaration des variables
-        Dim _ID As String
-        Dim _Nom As String
-        Dim _Description As String
-        Dim _Enable As Boolean
+        Dim _ID As String = ""
+        Dim _Nom As String = ""
+        Dim _Description As String = ""
+        Dim _Enable As Boolean = False
         Dim _ListActions As New ArrayList
         <NonSerialized()> Public _Server As Server
 

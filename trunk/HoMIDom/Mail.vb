@@ -10,16 +10,16 @@ Namespace HoMIDom
     ''' </summary>
     ''' <remarks></remarks>
     Public Class Mail
-        Dim _Server As Server
-        Dim _adresse As String
-        Dim _sujet As String
-        Dim _texte As String
+        Dim _Server As Server = Nothing
+        Dim _adresse As String = ""
+        Dim _sujet As String = ""
+        Dim _texte As String = ""
         Dim _Login As String = ""
         Dim _Password As String = ""
-        Dim _smtpsrv As String
+        Dim _smtpsrv As String = ""
         Dim _smtpport As Integer = 587
         Dim _SSL As Boolean = True
-        Dim _De As String
+        Dim _De As String = ""
 
         Public Sub New(ByVal Server As Server, ByVal De As String, ByVal adresse As String, ByVal sujet As String, ByVal texte As String, ByVal smtpserver As String, ByVal smtpPort As Integer, ByVal UserSSL As Boolean, Optional ByVal Login As String = "", Optional ByVal Password As String = "")
             Try

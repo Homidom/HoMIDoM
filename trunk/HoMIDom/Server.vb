@@ -412,7 +412,7 @@ Namespace HoMIDom
                 Dim file As System.IO.FileInfo
                 Dim files() As System.IO.FileInfo = dirInfo.GetFiles("homidom.xml")
                 Dim myxml As XML
-                Dim myfile As String
+                Dim myfile As String = ""
 
                 If (files IsNot Nothing) Then
                     For Each file In files
