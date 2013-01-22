@@ -15,8 +15,8 @@ Namespace HoMIDom
     ''' </summary>
     ''' <remarks></remarks>
     Public Class ThreadAction
-        Dim _Server As Server
-        Dim _Action As Object
+        Dim _Server As Server = Nothing
+        Dim _Action As Object = Nothing
 
         Public Sub Execute()
             Try
@@ -25,6 +25,7 @@ Namespace HoMIDom
                 t = t.AddSeconds(_Action.timing.Second)
                 t = t.AddMinutes(_Action.timing.Minute)
                 t = t.AddHours(_Action.timing.Hour)
+
                 Do While DateTime.Now < t
 
                 Loop

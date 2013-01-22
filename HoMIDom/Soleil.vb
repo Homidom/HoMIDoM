@@ -13,18 +13,18 @@ Namespace HoMIDom
         Public Sub CalculateSolarTimes(ByVal dLatitude As Double, ByVal dLongitude As Double, ByVal dtDesiredDate As Date, ByRef dtSunrise As Date, ByRef dtSolarNoon As Date, ByRef dtSunset As Date)
             Try
 
-                Dim lDaySavings As Long
-                Dim dGammaSolarNoon As Double
-                Dim dTimeGMT As Double
-                Dim dSolarNoonGMT As Double
-                Dim dTimeLST As Double
-                Dim dSolarNoonLST As Double
-                Dim dSunsetTimeGMT As Double
-                Dim dSunsetTimeLST As Double
+                Dim lDaySavings As Long = 0
+                Dim dGammaSolarNoon As Double = 0
+                Dim dTimeGMT As Double = 0
+                Dim dSolarNoonGMT As Double = 0
+                Dim dTimeLST As Double = 0
+                Dim dSolarNoonLST As Double = 0
+                Dim dSunsetTimeGMT As Double = 0
+                Dim dSunsetTimeLST As Double = 0
                 Dim tsTimeZone As TimeSpan
                 Dim dZone As Double
-                Dim dEquationOfTime As Double
-                Dim dSolarDeclination As Double
+                Dim dEquationOfTime As Double = 0
+                Dim dSolarDeclination As Double = 0
 
                 dLongitude = dLongitude * -1
 
@@ -33,6 +33,7 @@ Namespace HoMIDom
                 Else
                     lDaySavings = 0
                 End If
+
                 tsTimeZone = dtDesiredDate.ToUniversalTime.Subtract(dtDesiredDate)
                 dZone = tsTimeZone.TotalHours
                 If dtDesiredDate.IsDaylightSavingTime Then dZone += 1
@@ -126,8 +127,9 @@ Namespace HoMIDom
 
         Private Function CalculateHourAngle(ByVal dLatitude As Double, ByVal dSolarDeclination As Double, ByVal bIsTime As Boolean) As Double
             Try
-                Dim dRadianLatitude As Double
-                Dim dHourAngle As Double
+                Dim dRadianLatitude As Double = 0
+                Dim dHourAngle As Double = 0
+
                 dRadianLatitude = DegreesToRadians(dLatitude)
                 If bIsTime Then
                     dHourAngle = (Acos(Cos(DegreesToRadians(90.833)) / (Cos(dRadianLatitude) * Cos(dSolarDeclination)) - Tan(dRadianLatitude) * Tan(dSolarDeclination)))
@@ -143,14 +145,14 @@ Namespace HoMIDom
 
         Private Function CalculateSunriseGMT(ByVal lJulianDay As Long, ByVal dLatitude As Double, ByVal dLongitude As Double) As Double
             Try
-                Dim dGamma As Double
-                Dim dEquationOfTime As Double
-                Dim dSolarDeclination As Double
-                Dim dHourAngle As Double
-                Dim dDelta As Double
-                Dim dTimeDifference As Double
-                Dim dTimeGMT As Double
-                Dim dGammaSunrise As Double
+                Dim dGamma As Double = 0
+                Dim dEquationOfTime As Double = 0
+                Dim dSolarDeclination As Double = 0
+                Dim dHourAngle As Double = 0
+                Dim dDelta As Double = 0
+                Dim dTimeDifference As Double = 0
+                Dim dTimeGMT As Double = 0
+                Dim dGammaSunrise As Double = 0
 
                 dGamma = CalculateGamma(lJulianDay)
                 dEquationOfTime = CalculatedEquationOfTime(dGamma)
@@ -177,10 +179,10 @@ Namespace HoMIDom
 
         Private Function CalculateSolarNoonGMT(ByVal nJulianDay As Long, ByVal nLongitude As Double) As Double
             Try
-                Dim dGammaSolarNoon As Double
-                Dim dEquationOfTime As Double
-                Dim dSolarNoonDeclination As Double
-                Dim dSolarNoonGMT As Double
+                Dim dGammaSolarNoon As Double = 0
+                Dim dEquationOfTime As Double = 0
+                Dim dSolarNoonDeclination As Double = 0
+                Dim dSolarNoonGMT As Double = 0
 
                 dGammaSolarNoon = CalculateGamma2(nJulianDay, CLng(12 + (nLongitude / 15)))
                 dEquationOfTime = CalculatedEquationOfTime(dGammaSolarNoon)
@@ -196,14 +198,14 @@ Namespace HoMIDom
 
         Private Function CalculateSunsetGMT(ByVal nJulianDay As Long, ByVal nLatitude As Double, ByVal nLongitude As Double) As Double
             Try
-                Dim dGamma As Double
-                Dim dEquationOfTime As Double
-                Dim dSolarDeclination As Double
-                Dim dHourAngle As Double
-                Dim dDelta As Double
-                Dim dTimeDiff As Double
-                Dim dSetTimeGMT As Double
-                Dim dGammaSunset As Double
+                Dim dGamma As Double = 0
+                Dim dEquationOfTime As Double = 0
+                Dim dSolarDeclination As Double = 0
+                Dim dHourAngle As Double = 0
+                Dim dDelta As Double = 0
+                Dim dTimeDiff As Double = 0
+                Dim dSetTimeGMT As Double = 0
+                Dim dGammaSunset As Double = 0
 
                 dGamma = CalculateGamma(nJulianDay + 1)
                 dEquationOfTime = CalculatedEquationOfTime(dGamma)

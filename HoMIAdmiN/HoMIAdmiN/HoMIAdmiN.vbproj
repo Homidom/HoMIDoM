@@ -542,9 +542,6 @@
     <Resource Include="Images\Log_32.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Refresh.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\bar_chart.png" />
     <Resource Include="Images\Line20Chart.png" />
   </ItemGroup>
@@ -566,10 +563,13 @@
   <ItemGroup>
     <Resource Include="Images\stepline.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Refresh_32.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UseGlobalSettings="False" />
+      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

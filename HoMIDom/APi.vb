@@ -17,14 +17,14 @@ Namespace HoMIDom
         Public Function GenerateGUID() As String
             Dim sGUID As String = ""
             sGUID = System.Guid.NewGuid.ToString()
-            GenerateGUID = sGUID
+            Return sGUID
         End Function
 
         'Liste les propriétés public d'un objet
         'Nom_de_la_propriété|Type_retourné
         Public Function ListProperty(ByVal OBjet As Object) As ArrayList
             Try
-                Dim X As String
+                Dim X As String = ""
                 Dim Info As Reflection.PropertyInfo
                 Dim _Tabl As New ArrayList
 
@@ -33,8 +33,11 @@ Namespace HoMIDom
                         X = (Info.Name.ToString) 'retourne le type string, boolean
                         X &= "|" & Info.PropertyType.FullName.Replace("System.", "") & "|" & CallByName(OBjet, Info.Name.ToString, CallType.Get, Nothing)
                         _Tabl.Add(X)
+                        X = ""
                     End If
                 Next
+
+                Info = Nothing
                 Return _Tabl
             Catch ex As Exception
                 _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "API ListProperty", "Exception : " & ex.ToString)
@@ -123,9 +126,9 @@ Namespace HoMIDom
         'Nom_de_la_methode|parametre1:Type|parametre2:type...
         Public Function ListMethod(ByVal Objet As Object) As ArrayList
             Try
-                Dim X As String
+                Dim X As String = ""
                 Dim Info As Reflection.MethodInfo
-                Dim paraminfos() As Object
+                Dim paraminfos() As Object = Nothing
                 Dim _Tabl As New ArrayList
 
                 For Each Info In Objet.GetType.GetMethods()
@@ -143,6 +146,8 @@ Namespace HoMIDom
                         _Tabl.Add(X)
                     End If
                 Next
+
+                paraminfos = Nothing
                 Return _Tabl
             Catch ex As Exception
                 _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "API ListProperty", "Exception : " & ex.ToString)

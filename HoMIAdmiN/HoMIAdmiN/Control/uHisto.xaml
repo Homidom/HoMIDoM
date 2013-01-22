@@ -57,7 +57,7 @@
                             <TextBox Name="TxtMaxData" Width="40" Text="2000" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" TextAlignment="Center"/>
                             <Rectangle Width="15"/>
                             <Button Height="25" Width="25" Name="Refresh" ToolTip="Rafraichir le graphe" Template="{DynamicResource GlassButton}">
-                                <Image Name="ImgRefrsh" Source="/HoMIAdmiN;component/Images/Refresh.png"/>
+                                <Image Name="ImgRefrsh" Source="/HoMIAdmiN;component/Images/Refresh_32.png"/>
                             </Button>
                             <Rectangle Width="15"/>
                             <Button Height="25" Width="25" Name="BtnSave" Margin="3" ToolTip="Sauvegarder le graphe" Template="{DynamicResource GlassButton}">
