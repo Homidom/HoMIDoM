@@ -323,6 +323,34 @@ Namespace HoMIDom
         ''' <param name="Value"></param>
         ''' <remarks></remarks>
         <OperationContract()> Sub SetDevise(ByVal Value As String)
+
+        ''' <summary>
+        ''' Retourne si le serveur Web est Enable
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetEnableServeurWeb() As Boolean
+
+        ''' <summary>
+        ''' Fixe Enable du serveur web
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetEnableServeurWeb(ByVal Value As Boolean)
+
+        ''' <summary>
+        ''' Retourne le port du serveur Web 
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetPortServeurWeb() As Integer
+
+        ''' <summary>
+        ''' Fixe le port du serveur web
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetPortServeurWeb(ByVal Value As Integer)
 #End Region
 
 #Region "Historisation"

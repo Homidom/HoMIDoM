@@ -16,6 +16,8 @@ Imports System.Text
 Imports System.Web.HttpUtility
 Imports System.Threading
 Imports System.Data.SQLite
+Imports System.Net
+Imports System.Net.Sockets
 Imports System.Net.Mail
 Imports taglib
 #End Region
@@ -76,6 +78,10 @@ Namespace HoMIDom
         <NonSerialized()> Shared _GererEnergie As Boolean = False
         <NonSerialized()> Shared _TarifJour As Integer = "0"
         <NonSerialized()> Shared _TarifNuit As Integer = "0"
+        <NonSerialized()> Shared _EnableSrvWeb As Boolean = False
+        <NonSerialized()> Shared _PortSrvWeb As Integer = 8080
+        <NonSerialized()> Shared _SrvWeb As ServeurWeb = Nothing
+
 #End Region
 
 #Region "Event"
@@ -521,6 +527,10 @@ Namespace HoMIDom
                                             _TarifJour = list.Item(0).Attributes.Item(j).Value
                                         Case "tarifnuit"
                                             _TarifNuit = list.Item(0).Attributes.Item(j).Value
+                                        Case "portweb"
+                                            _PortSrvWeb = list.Item(0).Attributes.Item(j).Value
+                                        Case "enablesrvweb"
+                                            _EnableSrvWeb = list.Item(0).Attributes.Item(j).Value
                                         Case Else
                                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                     End Select
@@ -1391,7 +1401,14 @@ Namespace HoMIDom
                 writer.WriteStartAttribute("tarifnuit")
                 writer.WriteValue(_TarifNuit)
                 writer.WriteEndAttribute()
+                writer.WriteStartAttribute("portweb")
+                writer.WriteValue(_PortSrvWeb)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("enablesrvweb")
+                writer.WriteValue(_EnableSrvWeb)
+                writer.WriteEndAttribute()
                 writer.WriteEndElement()
+
 
                 ''-------------------
                 ''------------drivers
@@ -2768,6 +2785,14 @@ Namespace HoMIDom
                 AddHandler TimerSecond.Elapsed, AddressOf TimerSecTick
                 TimerSecond.Enabled = True
 
+                '--- Démarre le serveur web si besoin
+                If _EnableSrvWeb = True Then
+                    _SrvWeb = New ServeurWeb(Me, _PortSrvWeb)
+                    _SrvWeb.StartSrvWeb()
+                    If _SrvWeb.IsStart Then Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Serveur Web démarré")
+                End If
+
+
                 'test biblio
                 '
                 ' Create a FileSystemWatcher object passing it the folder to watch.
@@ -3596,6 +3621,9 @@ Namespace HoMIDom
 
 #End Region
 
+#Region "Serveur Web"
+
+#End Region
 #End Region
 
 #Region "Interface Client via IHOMIDOM"
@@ -4090,6 +4118,59 @@ Namespace HoMIDom
             End Try
         End Sub
 
+        ''' <summary>
+        ''' Retourne si le serveur Web est Enable
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetEnableServeurWeb() As Boolean Implements IHoMIDom.GetEnableServeurWeb
+            Try
+                Return _EnableSrvWeb
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetEnableServeurWeb", "Erreur: " & ex.Message)
+                Return False
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Fixe Enable du serveur web
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        Public Sub SetEnableServeurWeb(ByVal Value As Boolean) Implements IHoMIDom.SetEnableServeurWeb
+            Try
+                _EnableSrvWeb = Value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetEnableServeurWeb", "Erreur: " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' Retourne le port du serveur Web 
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetPortServeurWeb() As Integer Implements IHoMIDom.GetPortServeurWeb
+            Try
+                Return _PortSrvWeb
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetPortServeurWeb", "Erreur: " & ex.Message)
+                Return False
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Fixe le port du serveur web
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        Public Sub SetPortServeurWeb(ByVal Value As Integer) Implements IHoMIDom.SetPortServeurWeb
+            Try
+                _PortSrvWeb = Value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetPortServeurWeb", "Erreur: " & ex.Message)
+            End Try
+        End Sub
 #End Region
 
 #Region "Historisation"
