@@ -1297,6 +1297,30 @@ HoMIDom
  </summary>
 	<param name="Value"></param>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetEnableServeurWeb">
+	<summary>
+ Retourne si le serveur Web est Enable
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetEnableServeurWeb(System.Boolean)">
+	<summary>
+ Fixe Enable du serveur web
+ </summary>
+	<param name="Value"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetPortServeurWeb">
+	<summary>
+ Retourne le port du serveur Web 
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetPortServeurWeb(System.Int32)">
+	<summary>
+ Fixe le port du serveur web
+ </summary>
+	<param name="Value"></param>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetHistoDeviceSource(System.String,System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Retourne un datatable d'historique d'un device suivant sa propriété (source) puis suivant une date de début et de fin
@@ -2177,6 +2201,30 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetDevise(System.String)">
 	<summary>
  Fixe la devise du serveur
+ </summary>
+	<param name="Value"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetEnableServeurWeb">
+	<summary>
+ Retourne si le serveur Web est Enable
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetEnableServeurWeb(System.Boolean)">
+	<summary>
+ Fixe Enable du serveur web
+ </summary>
+	<param name="Value"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetPortServeurWeb">
+	<summary>
+ Retourne le port du serveur Web 
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetPortServeurWeb(System.Int32)">
+	<summary>
+ Fixe le port du serveur web
  </summary>
 	<param name="Value"></param>
 	<remarks></remarks>
