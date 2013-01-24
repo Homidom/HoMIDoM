@@ -1574,7 +1574,7 @@ Imports System.Media
             'Parametres avancés
             add_paramavance("Debug", "Activer le Debug complet (True/False)", False)
             add_paramavance("ParamMode", "Paramétres (ex: 20011111111111111011111111)", "20011111111111111011111111")
-            add_paramavance("AutoDiscover", "Permet de créer automatiquement des composants si ceux-ci n'existent pas encore (True/False)", True)
+            add_paramavance("AutoDiscover", "Permet de créer automatiquement des composants si ceux-ci n'existent pas encore (True/False)", False)
 
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
@@ -5228,7 +5228,7 @@ Imports System.Media
                 'si autodiscover = true alors on crée le composant sinon on logue
                 If _AUTODISCOVER Then
                     If type = "" Then
-                        WriteLog("Device non trouvé, AutoCreation impossible du composant car le type ne peut etre déterminé : " & adresse & ":" & valeur)
+                        WriteLog("ERR: Device non trouvé, AutoCreation impossible du composant car le type ne peut etre déterminé : " & adresse & ":" & valeur)
                     Else
                         Try
                             WriteLog("Device non trouvé, AutoCreation du composant : " & type & " " & adresse & ":" & valeur)

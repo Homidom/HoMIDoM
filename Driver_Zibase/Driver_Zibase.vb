@@ -52,6 +52,7 @@ Imports ZibaseDll
 
     'param avancé
     Dim _DEBUG As Boolean = False
+    Dim _AUTODISCOVER As Boolean = True
 #End Region
 
 #Region "Variables Internes"
@@ -299,6 +300,7 @@ Imports ZibaseDll
             'récupération des paramétres avancés
             Try
                 _DEBUG = _Parametres.Item(0).Valeur
+                _AUTODISCOVER = _Parametres.Item(1).Valeur
             Catch ex As Exception
                 WriteLog("ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
             End Try
@@ -482,6 +484,7 @@ Imports ZibaseDll
 
             'Parametres avancés
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
+            Add_ParamAvance("AutoDiscover", "Permet de créer automatiquement des composants si ceux-ci n'existent pas encore (True/False)", False)
 
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
@@ -807,7 +810,21 @@ Imports ZibaseDll
                 WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)
             Else
 
-                WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
+                'si autodiscover = true alors on crée le composant sinon on logue
+                If _AUTODISCOVER Then
+                    If type = "" Then
+                        WriteLog("ERR: Device non trouvé, AutoCreation impossible du composant car le type ne peut etre déterminé : " & adresse & ":" & valeur)
+                    Else
+                        Try
+                            WriteLog("Device non trouvé, AutoCreation du composant : " & type & " " & adresse & ":" & valeur)
+                            _Server.SaveDevice(_IdSrv, "", "_RFXtrx_" & Date.Now.ToString("ddMMyyHHmmssf"), adresse, True, False, Me._ID, type, 0, "", "", "", "AutoDiscover RFXtrx", 0, False, "0", "", 0, 999999, -999999, 0, Nothing, "", 0, False)
+                        Catch ex As Exception
+                            WriteLog("ERR: Writeretour Exception : AutoDiscover Creation composant: " & ex.Message)
+                        End Try
+                    End If
+                Else
+                    WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
+                End If
 
                 'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
 

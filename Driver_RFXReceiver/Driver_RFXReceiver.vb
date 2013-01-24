@@ -577,7 +577,7 @@ Imports System.Globalization
             'Parametres avancés
             add_paramavance("Port BaudRate", "vitesse du port 4800 ou 38400", 4800)
             add_paramavance("Debug", "Activer le Debug complet (True/False)", False)
-            add_paramavance("AutoDiscover", "Permet de créer automatiquement des composants si ceux-ci n'existent pas encore (True/False)", True)
+            add_paramavance("AutoDiscover", "Permet de créer automatiquement des composants si ceux-ci n'existent pas encore (True/False)", False)
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
@@ -3119,7 +3119,7 @@ Imports System.Globalization
                         'si autodiscover = true alors on crée le composant sinon on logue
                         If _AUTODISCOVER Then
                             If type = "" Then
-                                WriteLog("Device non trouvé, AutoCreation impossible du composant car le type ne peut etre déterminé : " & adresse & ":" & valeur)
+                                WriteLog("ERR: Device non trouvé, AutoCreation impossible du composant car le type ne peut etre déterminé : " & adresse & ":" & valeur)
                             Else
                                 Try
                                     WriteLog("Device non trouvé, AutoCreation du composant : " & type & " " & adresse & ":" & valeur)
