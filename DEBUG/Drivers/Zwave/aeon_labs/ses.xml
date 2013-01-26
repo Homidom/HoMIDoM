@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Product>
+<Product xmlns='http://code.google.com/p/open-zwave/'>
   <!-- Configuration Parameters -->
   <CommandClass id="112">
     <Value type="list" index="1" genre="config" label="Report type" units="" min="0" max="1" size="1" value="0">
@@ -134,8 +134,7 @@
 	Device tag.
       </Help>
     </Value>
-    <Value type="button" index="255" genre="config" label="Reset device"
-	   units="" write_only="true" value="0">
+    <Value type="button" index="255" genre="config" label="Reset device" units="" write_only="true" value="0">
       <Help>
 	Reset to the default configuration.
       </Help>
@@ -145,9 +144,7 @@
   <!-- Association Groups -->
   <CommandClass id="133">
     <Associations num_groups="1">
-      <Group index="1" max_associations="5" label="Report G1" auto="true" />
-      <Group index="2" max_associations="5" label="Report G2" auto="true" />
-      <Group index="3" max_associations="5" label="Report G3" auto="true" />
+      <Group index="1" max_associations="5" label="Reports" auto="true" />
     </Associations>
   </CommandClass>
 </Product>

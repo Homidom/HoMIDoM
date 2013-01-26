@@ -90,6 +90,9 @@ Public Class Driver_ZWave
             LogLevel_Internal
         End Enum
 
+        Const COMMAND_CLASS_SWITCH_BINARY As Byte = 37 ' 0x25 
+
+
         ' Denition d'un noeud Zwave 
         <Serializable()> Public Class Node
 
@@ -462,11 +465,18 @@ Public Class Driver_ZWave
         ''' <param name="Champ"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
+
         Public Function VerifChamp(ByVal Champ As String, ByVal Value As Object) As String Implements HoMIDom.HoMIDom.IDriver.VerifChamp
             Try
                 Dim retour As String = "0"
-                Select Case UCase(Champ)
 
+                Select Case UCase(Champ)
+                    Case "ADRESSE2"
+                        ' Suppression des espaces inutiles
+                        If InStr(Value, ":") Then
+                            Dim ParaAdr2 = Split(Value, ":")
+                            retour = Trim(ParaAdr2(0)) & ":" & Trim(ParaAdr2(1))
+                        End If
 
                 End Select
                 Return retour
@@ -576,10 +586,6 @@ Public Class Driver_ZWave
         ''' <remarks>pas utilisé</remarks>
         Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
 
-            Dim NodeTemp As Node
-            Dim IndexTemp As Byte
-            Dim ValeurTemp As ZWValueID
-
             Try
                 If _Enable = False Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
@@ -591,57 +597,7 @@ Public Class Driver_ZWave
                     Exit Sub
                 End If
 
-                ' Recuperation du noeud a partir de son ID contenu dans Adresse1
-                NodeTemp = GetNode(m_homeId, Objet.Adresse1)
-                ' Envoi d'une commande de recuperation de l'etat du noeud 
-                m_manager.RequestNodeState(m_homeId, NodeTemp.ID)
-
-                Dim LabelInfo As String = Objet.Adresse2
-                ' Traitement du type de Données à recuperer 
-                If InStr(Objet.Adresse2, ":") Then
-                    Dim ParaAdr2 = Split(Objet.Adresse2, ":")
-                    LabelInfo = ParaAdr2(0)
-
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "Le label de la valeur est : " & ParaAdr2(0) & " avec l'index : " & ParaAdr2(1))
-                End If
-
-                ' L'info contient le nom du label.
-                If (LabelInfo = "") Then
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: le label du device (Adresse2) " & Objet.Adresse2 & " n'est pas défini.")
-                    Exit Sub
-                End If
-
-                'Si le noeud n'existe pas dans le controleur
-                If (IsNothing(NodeTemp)) Then
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: l'adresse du device (Adresse1) " & Objet.Adresse1 & " n'existe pas")
-                Else
-                    If Objet IsNot Nothing Then
-                        ValeurTemp = GetValueID(NodeTemp, LabelInfo.ToString)
-                        If Not (IsNothing(ValeurTemp)) Then   ' Il y a des valeurs pour ce noeud
-                            IndexTemp = ValeurTemp.GetIndex()
-                            Select Case ValeurTemp.GetType()
-                                Case 0 : m_manager.GetValueAsBool(ValeurTemp, Objet.value)
-                                Case 1 : m_manager.GetValueAsByte(ValeurTemp, Objet.value)
-                                Case 2 : m_manager.GetValueAsDecimal(ValeurTemp, Objet.value)
-                                Case 3 : m_manager.GetValueAsInt(ValeurTemp, Objet.value)
-                                    '  Case 4 : m_manager.GetValueListItems(NodeTemp.Values(IndexTemp), Objet.value) ; A voir + tard
-                                Case 6 : m_manager.GetValueAsShort(ValeurTemp, Objet.value)
-                                Case 7 : m_manager.GetValueAsString(ValeurTemp, Objet.value)
-                            End Select
-
-                            ' Affichage d'information pour le debugage
-                            If _DEBUG Then
-                                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "Le nombre de valeurs est de : " & NodeTemp.Values.Count)
-                                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "La valeur n°" & IndexTemp & " a pour Id : " & ValeurTemp.GetId().ToString)
-                            End If
-                            ' Suppression de la valeur lue
-                            NodeTemp.Values.Remove(ValeurTemp)
-                        Else
-                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "Pas de valeur trouvée")
-                            Exit Sub
-                        End If
-                    End If
-                End If
+                traiteValeur(m_notification)
 
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", ex.Message)
@@ -659,6 +615,9 @@ Public Class Driver_ZWave
             Try
                 Dim NodeTemp As New Node
                 Dim texteCommande As String
+                Dim tempValue As String = ""
+                Dim TempVersion As Byte = 0
+
 
                 NodeTemp = GetNode(m_homeId, Objet.Adresse1)
 
@@ -683,8 +642,11 @@ Public Class Driver_ZWave
                     Select Case UCase(Commande)
 
                         Case "ON"
-                            m_manager.SetNodeOn(m_homeId, NodeTemp.ID)
+                            If m_manager.GetNodeClassInformation(m_homeId, NodeTemp.ID, COMMAND_CLASS_SWITCH_BINARY, tempValue, TempVersion) Then
 
+                            Else
+                                m_manager.SetNodeOn(m_homeId, NodeTemp.ID)
+                            End If
                         Case "OFF"
                             m_manager.SetNodeOff(m_homeId, NodeTemp.ID)
 
@@ -979,7 +941,7 @@ Public Class Driver_ZWave
         Sub NotificationHandler(ByVal m_notification As ZWNotification)
             Try
                 If m_notification Is Nothing Then Exit Sub
-                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Une notification a été reçue : ")
+                ' If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Une notification a été reçue : ")
 
                 Select Case m_notification.[GetType]()
                     Case ZWNotification.Type.ValueAdded
@@ -1002,12 +964,12 @@ Public Class Driver_ZWave
 
                     Case ZWNotification.Type.NodeAdded
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - NodeAdded sur node " & m_notification.GetNodeId())
+
                         ' Ajoute une nouveau noeud à notre liste
                         Dim node As New Node
-
                         ' Si ce n'est pas le controleur 
                         If m_notification.GetNodeId() <> m_manager.GetControllerNodeId(m_homeId) Then
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Ajout d'un nouveau noeud ")
+                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Ajout d'un nouveau noeud  " & m_notification.GetNodeId())
                             node.ID = m_notification.GetNodeId()
                             node.HomeID = m_notification.GetHomeId()
                             m_nodeList.Add(node)
@@ -1019,7 +981,7 @@ Public Class Driver_ZWave
                         End If
 
                     Case ZWNotification.Type.NodeRemoved
-                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - NodeRemoved")
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - NodeRemovedsur node " & m_notification.GetNodeId())
                         For Each node As Node In m_nodeList
                             If node.ID = m_notification.GetNodeId() Then
                                 m_nodeList.Remove(node)
@@ -1028,7 +990,7 @@ Public Class Driver_ZWave
                         Next
 
                     Case ZWNotification.Type.NodeProtocolInfo
-                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - NodeProtocolInfo")
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - NodeProtocolInfo sur node " & m_notification.GetNodeId())
                         Dim node As Node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
                         If Not IsNothing(node) Then
                             node.Label = m_manager.GetNodeType(m_homeId, node.ID)
@@ -1045,27 +1007,27 @@ Public Class Driver_ZWave
                         End If
 
                     Case ZWNotification.Type.NodeEvent
-                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - NodeEvent")
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - NodeEvent sur node " & m_notification.GetNodeId())
                         Dim node As Node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
                         If Not IsNothing(node) Then traiteValeur(m_notification)
 
                     Case ZWNotification.Type.PollingDisabled
-                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - PollingDisabled")
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - PollingDisabled sur node " & m_notification.GetNodeId())
 
                     Case ZWNotification.Type.PollingEnabled
-                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - PollingEnabled")
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - PollingEnabled sur node " & m_notification.GetNodeId())
 
                     Case ZWNotification.Type.DriverReady
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - DriverReady")
-                        m_homeId = m_notification.GetHomeId()
 
                     Case ZWNotification.Type.NodeQueriesComplete
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - NodeQueriesComplete")
+                        m_homeId = m_notification.GetHomeId()
 
                     Case ZWNotification.Type.AllNodesQueried
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - AllNodesQueried")
                         ' Pour simulation de noeuds
-                        'Dim nodeTempAdd As New Node
+                        ' Dim nodeTempAdd As New Node
                         'nodeTempAdd.ID = 2
                         'nodeTempAdd.HomeID = 21816633
                         'nodeTempAdd.Manufacturer = "Everspring"
@@ -1077,12 +1039,15 @@ Public Class Driver_ZWave
                         'Dim nodeTempAdd2 As New Node
                         'nodeTempAdd2.ID = 3
                         'nodeTempAdd2.HomeID = 21816633
-                        'nodeTempAdd2.Manufacturer = "Everspring-DEFRE"
-                        'nodeTempAdd2.Product = "ST99 Temperature"
+                        'nodeTempAdd2.Manufacturer = "Everspring"
+                        'nodeTempAdd2.Product = "ST814 Temperature and Humidity Sensor"
                         'nodeTempAdd2.Label = "Temperature and Humidity Sensor"
                         'nodeTempAdd2.Name = "Capteur bureau"
                         'm_nodeList.Add(nodeTempAdd2)
                         m_nodesReady = True
+                        ' Sauvegarde de la configuration 
+                        m_manager.WriteConfig(m_homeId)
+                        Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " Sauvegarde la config Zwave")
 
                     Case ZWNotification.Type.AwakeNodesQueried
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - AwakeNodesQueried")
@@ -1097,13 +1062,13 @@ Public Class Driver_ZWave
         ''' <param name="homeId"></param>
         ''' <param name="nodeId"></param>
         ''' <returns>Node</returns>
-        Private Shared Function GetNode(ByVal homeId As UInt32, ByVal nodeId As Byte) As Node
+        Private Function GetNode(ByVal homeId As UInt32, ByVal nodeId As Byte) As Node
             Try
                 For Each node As Node In m_nodeList
                     If (node.ID = nodeId) And (node.HomeID = homeId) Then Return node
                 Next
             Catch ex As Exception
-                '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Z-Wave GetNode ", "Exception: " & ex.Message)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GetNode ", "Exception: " & ex.Message)
             End Try
             Return Nothing
         End Function
@@ -1112,10 +1077,16 @@ Public Class Driver_ZWave
         ''' <param name="node"></param>
         ''' <param name="valueLabel"></param>
         ''' <returns>ValueId</returns>
-        Function GetValueID(ByVal node As Node, ByVal valueLabel As String) As ZWValueID
+        Private Function GetValueID(ByVal node As Node, ByVal valueLabel As String, Optional ByVal ValueInstance As Byte = 0) As ZWValueID
             Try
                 For Each valueID As ZWValueID In node.Values
-                    If (valueID.GetNodeId = node.ID) And (m_manager.GetValueLabel(valueID) = valueLabel) Then Return valueID
+                    If (valueID.GetNodeId = node.ID) And (m_manager.GetValueLabel(valueID) = valueLabel) Then
+                        If Not (ValueInstance) Then
+                            Return valueID
+                        ElseIf valueID.GetInstance = ValueInstance Then
+                            Return valueID
+                        End If
+                    End If
                 Next
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GetValueID ", "Exception: " & ex.Message)
@@ -1158,15 +1129,9 @@ Public Class Driver_ZWave
                     ' Recherche du composant en fonction de l'adresse1
                     For Each LocalDevice As Object In listedevices
 
-                        ' Reconstruction du label et de l'index - Ceci supprime les eventuels espaces inutiles
-                        If InStr(LocalDevice.Adresse2, ":") Then
-                            tempString = LocalDevice.Adresse2.replace(" ", "")
-                            LocalDevice.Adresse2 = tempString
-                        End If
-
                         ' Le numéro du noeud est passé en Adresse1.
                         ' L'adresse2 correspond au label de la valeur recherchée
-                        ' L'adresse2 peut aussi être vide (pour les notifications de noeud avec label vide, p.ex. détecteur de mouvement)
+                        ' L'adresse2 peut aussi être vide (pour les notifications de noeud sans label, p.ex. détecteur de mouvement)
                         ' En option, l'adresse2 peut contenir l'instance sous le format label:instance
                         If (IsNothing(LocalDevice.adresse2) Or (LocalDevice.adresse2 = TempLabel) Or (LocalDevice.adresse2 = TempLabel & ":" & TempInstance)) Then
 
