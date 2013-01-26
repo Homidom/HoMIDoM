@@ -100,7 +100,7 @@ namespace HoMIDroid.Server
 
             if (zone.Devices == null || zone.Devices.Count == 0)
                 zone.Devices = new List<Device>(this.GetDevicesInZone(zone));
-
+            
             return zone;
         }
 
@@ -114,9 +114,7 @@ namespace HoMIDroid.Server
 
                 this.Server.ExecuteDeviceCommand(this.ServerID, device.Id, action.ToServerAction(device));
 
-                //var updated = this.GetDevice(device.Id);
-                //if (updated != null)
-                //    device.Value = updated.Value;
+                this.RefreshDevice(device);
 
                 return true;
             }
@@ -125,6 +123,36 @@ namespace HoMIDroid.Server
                 Android.Util.Log.Error("HoMIDroid.Server.RealServer", exc.ToString());
                 return false;
             }
+        }
+
+        public override bool ExecuteMacro(Macro macro)
+        {
+            try
+            {
+                Android.Util.Log.Error("HoMIDroid.Server.RealServer", string.Format("Executing macro '{0}'", macro.Name));
+
+                //this.Server.RunMacro(this.ServerID, macro.Id);
+
+                return true;
+            }
+            catch (Exception exc)
+            {
+                Android.Util.Log.Error("HoMIDroid.Server.RealServer", exc.ToString());
+                return false;
+            }
+        }
+
+        public virtual bool RefreshDevice(BO.Device device)
+        {
+            var refreshed = this.getDevice(this.Server.ReturnDeviceByID(device.Id, this.ServerID));
+
+            if (refreshed != null)
+            {
+                device.NumericValue = refreshed.NumericValue;
+                device.Value = refreshed.Value;
+                return true;
+            }
+            return false;
         }
 
         #region Private methods
@@ -150,6 +178,9 @@ namespace HoMIDroid.Server
         }
         private BO.Device getDevice(HmdService.TemplateDevice d)
         {
+            if (d == null)
+                return null;
+
             var isDim = false;
             if (d._DeviceAction != null && d._DeviceAction.Length > 0)
             {// Search if an action is a DIM
@@ -173,7 +204,7 @@ namespace HoMIDroid.Server
                     case HmdService.DeviceListeDevices.GENERIQUEBOOLEEN:
                         return this.getOnOffDevice(d, DeviceCategory.Other);
                     case HmdService.DeviceListeDevices.VOLET:
-                        return this.getOnOffDevice(d, DeviceCategory.Other);
+                        return this.getOnOffDevice(d, DeviceCategory.Flap);
                 }
             }
             return this.getRawDevice(d);
@@ -186,15 +217,13 @@ namespace HoMIDroid.Server
                 Reference = z._Id
             };
 
-            //if (z._ListElement != null && z._ListElement.Length > 0)
-            //{
-            //    zone.SubZones = new List<Zone>(z._ListElement.Length);
-            //    foreach (var subZone in z._ListElement)
-            //    {
-            //        subZone.
-            //        zone.SubZones.Add(this.getZone(subZone));
-            //    }
-            //}
+            if (z._ListElement != null && z._ListElement.Length > 0)
+            {
+                foreach (var zElem in z._ListElement)
+                {
+                    
+                }
+            }
             return zone;
         }
         private List<BO.DeviceAction> getAction(HmdService.DeviceAction action)
@@ -266,10 +295,13 @@ namespace HoMIDroid.Server
                     break;
                 //case HmdService.DeviceListeDevices.BATTERIE:
                 //case HmdService.DeviceListeDevices.COMPTEUR:
-                //case HmdService.DeviceListeDevices.CONTACT:
-                //    break;
+                case HmdService.DeviceListeDevices.CONTACT:
+                    device.DisplayType = DisplayType.Boolean;
+                    device.DeviceCategory = DeviceCategory.Contact;
+                    break;
                 case HmdService.DeviceListeDevices.DETECTEUR:
                     device.DisplayType = DisplayType.Boolean;
+                    device.DeviceCategory = DeviceCategory.Dectect;
                     break;
                 case HmdService.DeviceListeDevices.ENERGIEINSTANTANEE:
                 case HmdService.DeviceListeDevices.ENERGIETOTALE:
@@ -353,6 +385,9 @@ namespace HoMIDroid.Server
                 double d;
                 if (double.TryParse(value.ToString(), out d))
                     return d;
+
+                if (value.ToString().Equals("true", StringComparison.InvariantCultureIgnoreCase))
+                    return 100;
             }
             return null;
         }

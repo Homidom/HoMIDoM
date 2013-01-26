@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,6 +27,11 @@ namespace HoMIDroid.BO
         public override Controllers.BaseController GetController(Context context)
         {
             return new NamedController<Macro>(context, this);
+        }
+
+        public void Execute()
+        {
+
         }
     }
 }

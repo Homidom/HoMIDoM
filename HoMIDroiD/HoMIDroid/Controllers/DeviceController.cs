@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,7 +22,7 @@ namespace HoMIDroid.Controllers
         public DeviceController(Context context, Device device)
             : base(context, device)
         {
-            device.ValueChanged += new EventHandler(device_ValueChanged);
+            device.ValueChanged += device_ValueChanged;
         }
 
 
@@ -44,6 +44,9 @@ namespace HoMIDroid.Controllers
 
         public override bool Click()
         {
+            if (this.Device.IsReadOnly)
+                return false;
+
             var activityType = this.getActivityTypeForDetailedView();
 
             if (activityType != null)
@@ -56,19 +59,23 @@ namespace HoMIDroid.Controllers
                 return this.Device.DefautAction.Visit(this.Device);
             }
 
-            Toast.MakeText(this.Context, "Pas de vue détaillée pour cet appareil.", ToastLength.Long);
+            Toast.MakeText(this.Context, "Pas de vue dÃ©taillÃ©e pour cet appareil.", ToastLength.Long);
 
             return false;
         }
 
+        #region Private methods
         private Type getActivityTypeForDetailedView()
         {
-            switch (this.Device.DeviceType)
+            if (!this.Device.IsReadOnly)
             {
-                case DeviceType.OnOff:
-                    return typeof(DeviceOnOff);
-                case DeviceType.Dim:
-                    return typeof(DeviceDim);
+                switch (this.Device.DeviceType)
+                {
+                    case DeviceType.OnOff:
+                        return typeof(DeviceOnOff);
+                    case DeviceType.Dim:
+                        return typeof(DeviceDim);
+                }
             }
 
             return null; // No view available
@@ -77,14 +84,14 @@ namespace HoMIDroid.Controllers
         private int getViewLayout(Device device)
         {
             if (device.IsReadOnly)
-                return Resource.Layout.ListItemBasicDevice;
+                return Resource.Layout.listItemBasicDevice;
 
             switch (device.DeviceType)
             {
                 case DeviceType.OnOff:
-                    return Resource.Layout.ListItemOnOffDevice;
+                    return Resource.Layout.listItemOnOffDevice;
                 default:
-                    return Resource.Layout.ListItemBasicDevice;
+                    return Resource.Layout.listItemBasicDevice;
             }
         }
 
@@ -111,24 +118,60 @@ namespace HoMIDroid.Controllers
             if (view == null)
                 return;
 
+            this.updateViewLabel(view);
+
+            if (this.Device.DeviceType == DeviceType.OnOff)
+            {
+                if (!this.updateViewButton(view))
+                    this.updateViewValue(view); // Read only OnOff device doesn't have a button
+            }
+            else
+            {
+                this.updateViewValue(view);
+            }
+        }
+
+        private bool updateViewLabel(View view)
+        {
             var textView = view.FindViewById<TextView>(Resource.Id.name);
             if (textView != null)
             {
                 textView.SetText(this.Device.Name, TextView.BufferType.Normal);
+                this.updateTextAppearance(textView);
+                return true;
             }
+            return false;
+        }
 
-            if (this.Device.DeviceType == DeviceType.OnOff)
+        private bool updateViewButton(View view)
+        {
+            var btnView = view.FindViewById(Resource.Id.action) as ToggleButton;
+            if (btnView != null)
             {
-                var btnView = view.FindViewById(Resource.Id.action) as ToggleButton;
-                if (btnView != null)
-                    btnView.Checked = this.Device.NumericValue > 0;
+                btnView.Checked = this.Device.NumericValue > 0;
+                return true;
             }
+            return false;
+        }
+
+        private bool updateViewValue(View view)
+        {
+            var valueView = view.FindViewById(Resource.Id.valueText) as TextView;
+            if (valueView != null)
+            {
+                valueView.SetText(this.Device.ValueFormatted, TextView.BufferType.Normal);
+                this.updateTextAppearance(valueView);
+                return true;
+            }
+            return false;
+        }
+
+        private void updateTextAppearance(TextView valueView)
+        {
+            if (this.getActivityTypeForDetailedView() == null)
+                valueView.SetTextAppearance(this.Context, Resource.Style.disabledText);
             else
-            {
-                var valueView = view.FindViewById(Resource.Id.valueText) as TextView;
-                if (valueView != null)
-                    valueView.SetText(this.Device.ValueFormatted, TextView.BufferType.Normal);
-            }
+                valueView.SetTextAppearance(this.Context, Resource.Style.normalText);
         }
 
         private void startActivity(Type type, string id)
@@ -146,12 +189,15 @@ namespace HoMIDroid.Controllers
         {
             if (this.View != null)
                 this.updateView(this.View);
-        }
+        } 
+        #endregion
 
+        #region IDisposable interface
         public void Dispose()
         {
             if (this.Device != null)
                 this.Device.ValueChanged -= new EventHandler(device_ValueChanged);
-        }
+        } 
+        #endregion
     }
 }

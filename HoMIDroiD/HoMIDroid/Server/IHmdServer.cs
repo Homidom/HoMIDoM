@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +24,8 @@ namespace HoMIDroid.Server
         List<Zone> GetZones();
         Zone GetZone(string id);
         bool ExecuteAction(Device device, DeviceAction action);
+        bool ExecuteMacro(Macro macro);
+        bool RefreshDevice(Device device);
 
         void Clear();
 

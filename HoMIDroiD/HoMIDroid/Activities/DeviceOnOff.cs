@@ -24,7 +24,7 @@ namespace HoMIDroid.Activities
         {
             base.OnCreate(savedInstanceState);
 
-            this.SetContentView(Resource.Layout.DeviceOnOff);
+            this.SetContentView(Resource.Layout.deviceOnOff);
 
             // Retrieve the device to display
             var server = TinyIoC.TinyIoCContainer.Current.Resolve<IHmdServer>();

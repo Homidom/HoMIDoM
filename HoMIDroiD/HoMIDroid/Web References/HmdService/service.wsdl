@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://HoMIDom/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://HoMIDom/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://HoMIDom/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://HoMIDom/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <xsd:schema targetNamespace="http://HoMIDom/Imports">
       <xsd:import schemaLocation="http://localhost:7999/ServiceModelSamples/service?xsd=xsd0" namespace="http://HoMIDom/" />
@@ -8,401 +8,29 @@
       <xsd:import schemaLocation="http://localhost:7999/ServiceModelSamples/service?xsd=xsd3" namespace="http://schemas.datacontract.org/2004/07/HoMIDom.HoMIDom" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IHoMIDom_ListMethod_InputMessage">
-    <wsdl:part name="parameters" element="tns:ListMethod" />
+  <wsdl:message name="IHoMIDom_GetTarifNuit_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTarifNuit" />
   </wsdl:message>
-  <wsdl:message name="IHoMIDom_ListMethod_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ListMethodResponse" />
+  <wsdl:message name="IHoMIDom_GetTarifNuit_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTarifNuitResponse" />
   </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetLastLogs_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetLastLogs" />
+  <wsdl:message name="IHoMIDom_GetSaveRealTime_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSaveRealTime" />
   </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetLastLogs_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetLastLogsResponse" />
+  <wsdl:message name="IHoMIDom_GetSaveRealTime_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSaveRealTimeResponse" />
   </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetLastLogsError_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetLastLogsError" />
+  <wsdl:message name="IHoMIDom_SetSaveRealTime_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetSaveRealTime" />
   </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetLastLogsError_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetLastLogsErrorResponse" />
+  <wsdl:message name="IHoMIDom_SetSaveRealTime_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetSaveRealTimeResponse" />
   </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetTypeLogEnable_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetTypeLogEnable" />
+  <wsdl:message name="IHoMIDom_GetPortComDispo_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetPortComDispo" />
   </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetTypeLogEnable_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetTypeLogEnableResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SetTypeLogEnable_InputMessage">
-    <wsdl:part name="parameters" element="tns:SetTypeLogEnable" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SetTypeLogEnable_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SetTypeLogEnableResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SetMaxMonthLog_InputMessage">
-    <wsdl:part name="parameters" element="tns:SetMaxMonthLog" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SetMaxMonthLog_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SetMaxMonthLogResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetMaxMonthLog_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetMaxMonthLog" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetMaxMonthLog_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetMaxMonthLogResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_Log_InputMessage">
-    <wsdl:part name="parameters" element="tns:Log" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_Log_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LogResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnLog_InputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnLog" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnLog_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnLogResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SetMaxFileSizeLog_InputMessage">
-    <wsdl:part name="parameters" element="tns:SetMaxFileSizeLog" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SetMaxFileSizeLog_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SetMaxFileSizeLogResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetMaxFileSizeLog_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetMaxFileSizeLog" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetMaxFileSizeLog_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetMaxFileSizeLogResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetSMTPServeur_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetSMTPServeur" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetSMTPServeur_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetSMTPServeurResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SetSMTPServeur_InputMessage">
-    <wsdl:part name="parameters" element="tns:SetSMTPServeur" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SetSMTPServeur_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SetSMTPServeurResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetSMTPLogin_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetSMTPLogin" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetSMTPLogin_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetSMTPLoginResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SetSMTPLogin_InputMessage">
-    <wsdl:part name="parameters" element="tns:SetSMTPLogin" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SetSMTPLogin_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SetSMTPLoginResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetSMTPPassword_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetSMTPPassword" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetSMTPPassword_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetSMTPPasswordResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SetSMTPPassword_InputMessage">
-    <wsdl:part name="parameters" element="tns:SetSMTPPassword" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SetSMTPPassword_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SetSMTPPasswordResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetSMTPMailServeur_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetSMTPMailServeur" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetSMTPMailServeur_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetSMTPMailServeurResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SetSMTPMailServeur_InputMessage">
-    <wsdl:part name="parameters" element="tns:SetSMTPMailServeur" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SetSMTPMailServeur_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SetSMTPMailServeurResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetListOfTemplate_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetListOfTemplate" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetListOfTemplate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetListOfTemplateResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_CreateNewTemplate_InputMessage">
-    <wsdl:part name="parameters" element="tns:CreateNewTemplate" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_CreateNewTemplate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CreateNewTemplateResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_StartLearning_InputMessage">
-    <wsdl:part name="parameters" element="tns:StartLearning" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_StartLearning_OutputMessage">
-    <wsdl:part name="parameters" element="tns:StartLearningResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SaveTemplate_InputMessage">
-    <wsdl:part name="parameters" element="tns:SaveTemplate" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SaveTemplate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SaveTemplateResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_TelecommandeSendCommand_InputMessage">
-    <wsdl:part name="parameters" element="tns:TelecommandeSendCommand" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_TelecommandeSendCommand_OutputMessage">
-    <wsdl:part name="parameters" element="tns:TelecommandeSendCommandResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ChangePassword_InputMessage">
-    <wsdl:part name="parameters" element="tns:ChangePassword" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ChangePassword_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ChangePasswordResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnUserByUsername_InputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnUserByUsername" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnUserByUsername_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnUserByUsernameResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetAllUsers_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetAllUsers" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetAllUsers_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetAllUsersResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnUserById_InputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnUserById" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnUserById_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnUserByIdResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SaveUser_InputMessage">
-    <wsdl:part name="parameters" element="tns:SaveUser" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SaveUser_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SaveUserResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetDeviceNoMaJ_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetDeviceNoMaJ" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetDeviceNoMaJ_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetDeviceNoMaJResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetAllDevices_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetAllDevices" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetAllDevices_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetAllDevicesResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ExecuteDeviceCommand_InputMessage">
-    <wsdl:part name="parameters" element="tns:ExecuteDeviceCommand" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ExecuteDeviceCommand_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ExecuteDeviceCommandResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ExecuteDeviceCommandSimple_InputMessage">
-    <wsdl:part name="parameters" element="tns:ExecuteDeviceCommandSimple" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ExecuteDeviceCommandSimple_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ExecuteDeviceCommandSimpleResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteDevice_InputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteDevice" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteDevice_OutputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteDeviceResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteDeviceCommandIR_InputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteDeviceCommandIR" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteDeviceCommandIR_OutputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteDeviceCommandIRResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnDeviceByID_InputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnDeviceByID" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnDeviceByID_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnDeviceByIDResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnDeviceByAdresse1TypeDriver_InputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnDeviceByAdresse1TypeDriver" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnDeviceByAdresse1TypeDriver_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnDeviceByAdresse1TypeDriverResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SaveDevice_InputMessage">
-    <wsdl:part name="parameters" element="tns:SaveDevice" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SaveDevice_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SaveDeviceResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SaveDeviceCommandIR_InputMessage">
-    <wsdl:part name="parameters" element="tns:SaveDeviceCommandIR" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SaveDeviceCommandIR_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SaveDeviceCommandIRResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_StartIrLearning_InputMessage">
-    <wsdl:part name="parameters" element="tns:StartIrLearning" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_StartIrLearning_OutputMessage">
-    <wsdl:part name="parameters" element="tns:StartIrLearningResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_VerifChamp_InputMessage">
-    <wsdl:part name="parameters" element="tns:VerifChamp" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_VerifChamp_OutputMessage">
-    <wsdl:part name="parameters" element="tns:VerifChampResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetAllDrivers_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetAllDrivers" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetAllDrivers_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetAllDriversResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ExecuteDriverCommand_InputMessage">
-    <wsdl:part name="parameters" element="tns:ExecuteDriverCommand" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ExecuteDriverCommand_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ExecuteDriverCommandResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnDriverByID_InputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnDriverByID" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnDriverByID_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnDriverByIDResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteDriver_InputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteDriver" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteDriver_OutputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteDriverResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnDriverByNom_InputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnDriverByNom" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnDriverByNom_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnDriverByNomResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SaveDriver_InputMessage">
-    <wsdl:part name="parameters" element="tns:SaveDriver" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SaveDriver_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SaveDriverResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_StopDriver_InputMessage">
-    <wsdl:part name="parameters" element="tns:StopDriver" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_StopDriver_OutputMessage">
-    <wsdl:part name="parameters" element="tns:StopDriverResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_StartDriver_InputMessage">
-    <wsdl:part name="parameters" element="tns:StartDriver" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_StartDriver_OutputMessage">
-    <wsdl:part name="parameters" element="tns:StartDriverResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ZoneIsEmpty_InputMessage">
-    <wsdl:part name="parameters" element="tns:ZoneIsEmpty" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ZoneIsEmpty_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ZoneIsEmptyResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteZone_InputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteZone" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteZone_OutputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteZoneResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetAllZones_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetAllZones" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetAllZones_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetAllZonesResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetDeviceInZone_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetDeviceInZone" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetDeviceInZone_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetDeviceInZoneResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnZoneByID_InputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnZoneByID" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnZoneByID_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnZoneByIDResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SaveZone_InputMessage">
-    <wsdl:part name="parameters" element="tns:SaveZone" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SaveZone_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SaveZoneResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_AddDeviceToZone_InputMessage">
-    <wsdl:part name="parameters" element="tns:AddDeviceToZone" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_AddDeviceToZone_OutputMessage">
-    <wsdl:part name="parameters" element="tns:AddDeviceToZoneResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteDeviceToZone_InputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteDeviceToZone" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteDeviceToZone_OutputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteDeviceToZoneResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteMacro_InputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteMacro" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteMacro_OutputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteMacroResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_RunMacro_InputMessage">
-    <wsdl:part name="parameters" element="tns:RunMacro" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_RunMacro_OutputMessage">
-    <wsdl:part name="parameters" element="tns:RunMacroResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetAllMacros_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetAllMacros" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetAllMacros_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetAllMacrosResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnMacroById_InputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnMacroById" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnMacroById_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnMacroByIdResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SaveMacro_InputMessage">
-    <wsdl:part name="parameters" element="tns:SaveMacro" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SaveMacro_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SaveMacroResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetAllTriggers_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetAllTriggers" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_GetAllTriggers_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetAllTriggersResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnTriggerById_InputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnTriggerById" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_ReturnTriggerById_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ReturnTriggerByIdResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteTrigger_InputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteTrigger" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_DeleteTrigger_OutputMessage">
-    <wsdl:part name="parameters" element="tns:DeleteTriggerResponse" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SaveTrigger_InputMessage">
-    <wsdl:part name="parameters" element="tns:SaveTrigger" />
-  </wsdl:message>
-  <wsdl:message name="IHoMIDom_SaveTrigger_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SaveTriggerResponse" />
+  <wsdl:message name="IHoMIDom_GetPortComDispo_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetPortComDispoResponse" />
   </wsdl:message>
   <wsdl:message name="IHoMIDom_UploadFile_InputMessage">
     <wsdl:part name="parameters" element="tns:UploadFile" />
@@ -614,6 +242,30 @@
   <wsdl:message name="IHoMIDom_GetListOfImage_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetListOfImageResponse" />
   </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetSqliteBddVersion_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSqliteBddVersion" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetSqliteBddVersion_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSqliteBddVersionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetSqliteVersion_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSqliteVersion" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetSqliteVersion_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSqliteVersionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetDevise_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetDevise" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetDevise_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDeviseResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetDevise_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetDevise" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetDevise_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetDeviseResponse" />
+  </wsdl:message>
   <wsdl:message name="IHoMIDom_DevicesAsHisto_InputMessage">
     <wsdl:part name="parameters" element="tns:DevicesAsHisto" />
   </wsdl:message>
@@ -656,270 +308,496 @@
   <wsdl:message name="IHoMIDom_VerifLogin_OutputMessage">
     <wsdl:part name="parameters" element="tns:VerifLoginResponse" />
   </wsdl:message>
+  <wsdl:message name="IHoMIDom_ChangePassword_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangePassword" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ChangePassword_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangePasswordResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnUserByUsername_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnUserByUsername" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnUserByUsername_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnUserByUsernameResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetAllUsers_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllUsers" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetAllUsers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllUsersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnUserById_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnUserById" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnUserById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnUserByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SaveUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveUser" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SaveUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ChangeValueOfDevice_InputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeValueOfDevice" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ChangeValueOfDevice_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ChangeValueOfDeviceResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetDeviceNoMaJ_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetDeviceNoMaJ" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetDeviceNoMaJ_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDeviceNoMaJResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetAllDevices_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllDevices" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetAllDevices_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllDevicesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ExecuteDeviceCommand_InputMessage">
+    <wsdl:part name="parameters" element="tns:ExecuteDeviceCommand" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ExecuteDeviceCommand_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ExecuteDeviceCommandResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ExecuteDeviceCommandSimple_InputMessage">
+    <wsdl:part name="parameters" element="tns:ExecuteDeviceCommandSimple" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ExecuteDeviceCommandSimple_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ExecuteDeviceCommandSimpleResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_DeleteDevice_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteDevice" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_DeleteDevice_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteDeviceResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_DeleteDeviceCommandIR_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteDeviceCommandIR" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_DeleteDeviceCommandIR_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteDeviceCommandIRResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnDeviceByID_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnDeviceByID" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnDeviceByID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnDeviceByIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnDeviceByAdresse1TypeDriver_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnDeviceByAdresse1TypeDriver" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnDeviceByAdresse1TypeDriver_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnDeviceByAdresse1TypeDriverResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SaveDevice_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveDevice" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SaveDevice_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveDeviceResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SaveDeviceCommandIR_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveDeviceCommandIR" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SaveDeviceCommandIR_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveDeviceCommandIRResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_StartIrLearning_InputMessage">
+    <wsdl:part name="parameters" element="tns:StartIrLearning" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_StartIrLearning_OutputMessage">
+    <wsdl:part name="parameters" element="tns:StartIrLearningResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_VerifChamp_InputMessage">
+    <wsdl:part name="parameters" element="tns:VerifChamp" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_VerifChamp_OutputMessage">
+    <wsdl:part name="parameters" element="tns:VerifChampResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetAllDrivers_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllDrivers" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetAllDrivers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllDriversResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ExecuteDriverCommand_InputMessage">
+    <wsdl:part name="parameters" element="tns:ExecuteDriverCommand" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ExecuteDriverCommand_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ExecuteDriverCommandResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnDriverByID_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnDriverByID" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnDriverByID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnDriverByIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_DeleteDriver_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteDriver" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_DeleteDriver_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteDriverResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnDriverByNom_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnDriverByNom" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnDriverByNom_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnDriverByNomResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SaveDriver_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveDriver" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SaveDriver_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveDriverResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_StopDriver_InputMessage">
+    <wsdl:part name="parameters" element="tns:StopDriver" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_StopDriver_OutputMessage">
+    <wsdl:part name="parameters" element="tns:StopDriverResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_StartDriver_InputMessage">
+    <wsdl:part name="parameters" element="tns:StartDriver" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_StartDriver_OutputMessage">
+    <wsdl:part name="parameters" element="tns:StartDriverResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ZoneIsEmpty_InputMessage">
+    <wsdl:part name="parameters" element="tns:ZoneIsEmpty" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ZoneIsEmpty_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ZoneIsEmptyResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_DeleteZone_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteZone" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_DeleteZone_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteZoneResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetAllZones_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllZones" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetAllZones_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllZonesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetDeviceInZone_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetDeviceInZone" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetDeviceInZone_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetDeviceInZoneResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetZoneInZone_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetZoneInZone" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetZoneInZone_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetZoneInZoneResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetMacroInZone_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMacroInZone" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetMacroInZone_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMacroInZoneResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnZoneByID_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnZoneByID" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnZoneByID_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnZoneByIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SaveZone_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveZone" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SaveZone_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveZoneResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_AddDeviceToZone_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddDeviceToZone" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_AddDeviceToZone_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddDeviceToZoneResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_DeleteDeviceToZone_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteDeviceToZone" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_DeleteDeviceToZone_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteDeviceToZoneResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_DeleteMacro_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteMacro" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_DeleteMacro_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteMacroResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_RunMacro_InputMessage">
+    <wsdl:part name="parameters" element="tns:RunMacro" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_RunMacro_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RunMacroResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetAllMacros_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllMacros" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetAllMacros_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllMacrosResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnMacroById_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnMacroById" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnMacroById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnMacroByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SaveMacro_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveMacro" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SaveMacro_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveMacroResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetAllTriggers_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllTriggers" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetAllTriggers_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetAllTriggersResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnTriggerById_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnTriggerById" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnTriggerById_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnTriggerByIdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_DeleteTrigger_InputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteTrigger" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_DeleteTrigger_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DeleteTriggerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SaveTrigger_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveTrigger" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SaveTrigger_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveTriggerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ListMethod_InputMessage">
+    <wsdl:part name="parameters" element="tns:ListMethod" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ListMethod_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ListMethodResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetLastLogs_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLastLogs" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetLastLogs_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLastLogsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetLastLogsError_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLastLogsError" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetLastLogsError_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLastLogsErrorResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetTypeLogEnable_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTypeLogEnable" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetTypeLogEnable_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTypeLogEnableResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetTypeLogEnable_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetTypeLogEnable" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetTypeLogEnable_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetTypeLogEnableResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetMaxMonthLog_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetMaxMonthLog" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetMaxMonthLog_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetMaxMonthLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetMaxMonthLog_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMaxMonthLog" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetMaxMonthLog_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMaxMonthLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_Log_InputMessage">
+    <wsdl:part name="parameters" element="tns:Log" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_Log_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnLog_InputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnLog" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_ReturnLog_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ReturnLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetMaxFileSizeLog_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetMaxFileSizeLog" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetMaxFileSizeLog_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetMaxFileSizeLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetMaxFileSizeLog_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetMaxFileSizeLog" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetMaxFileSizeLog_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetMaxFileSizeLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_TestSendMail_InputMessage">
+    <wsdl:part name="parameters" element="tns:TestSendMail" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_TestSendMail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TestSendMailResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetSMTPServeur_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSMTPServeur" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetSMTPServeur_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSMTPServeurResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetSMTPServeur_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetSMTPServeur" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetSMTPServeur_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetSMTPServeurResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetSMTPLogin_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSMTPLogin" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetSMTPLogin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSMTPLoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetSMTPLogin_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetSMTPLogin" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetSMTPLogin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetSMTPLoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetSMTPPassword_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSMTPPassword" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetSMTPPassword_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSMTPPasswordResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetSMTPPassword_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetSMTPPassword" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetSMTPPassword_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetSMTPPasswordResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetSMTPMailServeur_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSMTPMailServeur" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetSMTPMailServeur_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSMTPMailServeurResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetSMTPMailServeur_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetSMTPMailServeur" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetSMTPMailServeur_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetSMTPMailServeurResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetSMTPPort_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSMTPPort" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetSMTPPort_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSMTPPortResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetSMTPPort_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetSMTPPort" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetSMTPPort_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetSMTPPortResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetSMTPSSL_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSMTPSSL" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetSMTPSSL_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSMTPSSLResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetSMTPSSL_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetSMTPSSL" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetSMTPSSL_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetSMTPSSLResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetListOfTemplate_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetListOfTemplate" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetListOfTemplate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetListOfTemplateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_CreateNewTemplate_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateNewTemplate" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_CreateNewTemplate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateNewTemplateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_StartLearning_InputMessage">
+    <wsdl:part name="parameters" element="tns:StartLearning" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_StartLearning_OutputMessage">
+    <wsdl:part name="parameters" element="tns:StartLearningResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SaveTemplate_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveTemplate" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SaveTemplate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveTemplateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_TelecommandeSendCommand_InputMessage">
+    <wsdl:part name="parameters" element="tns:TelecommandeSendCommand" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_TelecommandeSendCommand_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TelecommandeSendCommandResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetGererEnergie_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetGererEnergie" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetGererEnergie_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetGererEnergieResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetGererEnergie_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetGererEnergie" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetGererEnergie_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetGererEnergieResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetTarifJour_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetTarifJour" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetTarifJour_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetTarifJourResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetTarifJour_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetTarifJour" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_GetTarifJour_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetTarifJourResponse" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetTarifNuit_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetTarifNuit" />
+  </wsdl:message>
+  <wsdl:message name="IHoMIDom_SetTarifNuit_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetTarifNuitResponse" />
+  </wsdl:message>
   <wsdl:portType name="IHoMIDom">
-    <wsdl:operation name="ListMethod">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ListMethod" message="tns:IHoMIDom_ListMethod_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ListMethodResponse" message="tns:IHoMIDom_ListMethod_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetLastLogs">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetLastLogs" message="tns:IHoMIDom_GetLastLogs_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetLastLogsResponse" message="tns:IHoMIDom_GetLastLogs_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetLastLogsError">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetLastLogsError" message="tns:IHoMIDom_GetLastLogsError_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetLastLogsErrorResponse" message="tns:IHoMIDom_GetLastLogsError_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetTypeLogEnable">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetTypeLogEnable" message="tns:IHoMIDom_GetTypeLogEnable_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetTypeLogEnableResponse" message="tns:IHoMIDom_GetTypeLogEnable_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SetTypeLogEnable">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetTypeLogEnable" message="tns:IHoMIDom_SetTypeLogEnable_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetTypeLogEnableResponse" message="tns:IHoMIDom_SetTypeLogEnable_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SetMaxMonthLog">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetMaxMonthLog" message="tns:IHoMIDom_SetMaxMonthLog_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetMaxMonthLogResponse" message="tns:IHoMIDom_SetMaxMonthLog_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetMaxMonthLog">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetMaxMonthLog" message="tns:IHoMIDom_GetMaxMonthLog_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetMaxMonthLogResponse" message="tns:IHoMIDom_GetMaxMonthLog_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="Log">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/Log" message="tns:IHoMIDom_Log_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/LogResponse" message="tns:IHoMIDom_Log_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ReturnLog">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnLog" message="tns:IHoMIDom_ReturnLog_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnLogResponse" message="tns:IHoMIDom_ReturnLog_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SetMaxFileSizeLog">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetMaxFileSizeLog" message="tns:IHoMIDom_SetMaxFileSizeLog_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetMaxFileSizeLogResponse" message="tns:IHoMIDom_SetMaxFileSizeLog_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetMaxFileSizeLog">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetMaxFileSizeLog" message="tns:IHoMIDom_GetMaxFileSizeLog_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetMaxFileSizeLogResponse" message="tns:IHoMIDom_GetMaxFileSizeLog_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetSMTPServeur">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPServeur" message="tns:IHoMIDom_GetSMTPServeur_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPServeurResponse" message="tns:IHoMIDom_GetSMTPServeur_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SetSMTPServeur">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPServeur" message="tns:IHoMIDom_SetSMTPServeur_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPServeurResponse" message="tns:IHoMIDom_SetSMTPServeur_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetSMTPLogin">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPLogin" message="tns:IHoMIDom_GetSMTPLogin_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPLoginResponse" message="tns:IHoMIDom_GetSMTPLogin_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SetSMTPLogin">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPLogin" message="tns:IHoMIDom_SetSMTPLogin_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPLoginResponse" message="tns:IHoMIDom_SetSMTPLogin_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetSMTPPassword">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPPassword" message="tns:IHoMIDom_GetSMTPPassword_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPPasswordResponse" message="tns:IHoMIDom_GetSMTPPassword_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SetSMTPPassword">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPPassword" message="tns:IHoMIDom_SetSMTPPassword_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPPasswordResponse" message="tns:IHoMIDom_SetSMTPPassword_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetSMTPMailServeur">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPMailServeur" message="tns:IHoMIDom_GetSMTPMailServeur_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPMailServeurResponse" message="tns:IHoMIDom_GetSMTPMailServeur_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SetSMTPMailServeur">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPMailServeur" message="tns:IHoMIDom_SetSMTPMailServeur_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPMailServeurResponse" message="tns:IHoMIDom_SetSMTPMailServeur_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetListOfTemplate">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetListOfTemplate" message="tns:IHoMIDom_GetListOfTemplate_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetListOfTemplateResponse" message="tns:IHoMIDom_GetListOfTemplate_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="CreateNewTemplate">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/CreateNewTemplate" message="tns:IHoMIDom_CreateNewTemplate_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/CreateNewTemplateResponse" message="tns:IHoMIDom_CreateNewTemplate_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="StartLearning">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/StartLearning" message="tns:IHoMIDom_StartLearning_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/StartLearningResponse" message="tns:IHoMIDom_StartLearning_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SaveTemplate">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SaveTemplate" message="tns:IHoMIDom_SaveTemplate_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SaveTemplateResponse" message="tns:IHoMIDom_SaveTemplate_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="TelecommandeSendCommand">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/TelecommandeSendCommand" message="tns:IHoMIDom_TelecommandeSendCommand_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/TelecommandeSendCommandResponse" message="tns:IHoMIDom_TelecommandeSendCommand_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ChangePassword">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ChangePassword" message="tns:IHoMIDom_ChangePassword_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ChangePasswordResponse" message="tns:IHoMIDom_ChangePassword_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ReturnUserByUsername">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnUserByUsername" message="tns:IHoMIDom_ReturnUserByUsername_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnUserByUsernameResponse" message="tns:IHoMIDom_ReturnUserByUsername_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetAllUsers">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetAllUsers" message="tns:IHoMIDom_GetAllUsers_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetAllUsersResponse" message="tns:IHoMIDom_GetAllUsers_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ReturnUserById">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnUserById" message="tns:IHoMIDom_ReturnUserById_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnUserByIdResponse" message="tns:IHoMIDom_ReturnUserById_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SaveUser">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SaveUser" message="tns:IHoMIDom_SaveUser_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SaveUserResponse" message="tns:IHoMIDom_SaveUser_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetDeviceNoMaJ">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetDeviceNoMaJ" message="tns:IHoMIDom_GetDeviceNoMaJ_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetDeviceNoMaJResponse" message="tns:IHoMIDom_GetDeviceNoMaJ_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetAllDevices">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetAllDevices" message="tns:IHoMIDom_GetAllDevices_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetAllDevicesResponse" message="tns:IHoMIDom_GetAllDevices_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ExecuteDeviceCommand">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ExecuteDeviceCommand" message="tns:IHoMIDom_ExecuteDeviceCommand_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ExecuteDeviceCommandResponse" message="tns:IHoMIDom_ExecuteDeviceCommand_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ExecuteDeviceCommandSimple">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ExecuteDeviceCommandSimple" message="tns:IHoMIDom_ExecuteDeviceCommandSimple_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ExecuteDeviceCommandSimpleResponse" message="tns:IHoMIDom_ExecuteDeviceCommandSimple_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="DeleteDevice">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteDevice" message="tns:IHoMIDom_DeleteDevice_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteDeviceResponse" message="tns:IHoMIDom_DeleteDevice_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="DeleteDeviceCommandIR">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteDeviceCommandIR" message="tns:IHoMIDom_DeleteDeviceCommandIR_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteDeviceCommandIRResponse" message="tns:IHoMIDom_DeleteDeviceCommandIR_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ReturnDeviceByID">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnDeviceByID" message="tns:IHoMIDom_ReturnDeviceByID_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnDeviceByIDResponse" message="tns:IHoMIDom_ReturnDeviceByID_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ReturnDeviceByAdresse1TypeDriver">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnDeviceByAdresse1TypeDriver" message="tns:IHoMIDom_ReturnDeviceByAdresse1TypeDriver_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnDeviceByAdresse1TypeDriverResponse" message="tns:IHoMIDom_ReturnDeviceByAdresse1TypeDriver_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SaveDevice">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SaveDevice" message="tns:IHoMIDom_SaveDevice_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SaveDeviceResponse" message="tns:IHoMIDom_SaveDevice_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SaveDeviceCommandIR">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SaveDeviceCommandIR" message="tns:IHoMIDom_SaveDeviceCommandIR_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SaveDeviceCommandIRResponse" message="tns:IHoMIDom_SaveDeviceCommandIR_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="StartIrLearning">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/StartIrLearning" message="tns:IHoMIDom_StartIrLearning_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/StartIrLearningResponse" message="tns:IHoMIDom_StartIrLearning_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="VerifChamp">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/VerifChamp" message="tns:IHoMIDom_VerifChamp_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/VerifChampResponse" message="tns:IHoMIDom_VerifChamp_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetAllDrivers">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetAllDrivers" message="tns:IHoMIDom_GetAllDrivers_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetAllDriversResponse" message="tns:IHoMIDom_GetAllDrivers_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ExecuteDriverCommand">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ExecuteDriverCommand" message="tns:IHoMIDom_ExecuteDriverCommand_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ExecuteDriverCommandResponse" message="tns:IHoMIDom_ExecuteDriverCommand_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ReturnDriverByID">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnDriverByID" message="tns:IHoMIDom_ReturnDriverByID_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnDriverByIDResponse" message="tns:IHoMIDom_ReturnDriverByID_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="DeleteDriver">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteDriver" message="tns:IHoMIDom_DeleteDriver_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteDriverResponse" message="tns:IHoMIDom_DeleteDriver_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ReturnDriverByNom">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnDriverByNom" message="tns:IHoMIDom_ReturnDriverByNom_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnDriverByNomResponse" message="tns:IHoMIDom_ReturnDriverByNom_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SaveDriver">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SaveDriver" message="tns:IHoMIDom_SaveDriver_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SaveDriverResponse" message="tns:IHoMIDom_SaveDriver_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="StopDriver">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/StopDriver" message="tns:IHoMIDom_StopDriver_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/StopDriverResponse" message="tns:IHoMIDom_StopDriver_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="StartDriver">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/StartDriver" message="tns:IHoMIDom_StartDriver_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/StartDriverResponse" message="tns:IHoMIDom_StartDriver_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ZoneIsEmpty">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ZoneIsEmpty" message="tns:IHoMIDom_ZoneIsEmpty_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ZoneIsEmptyResponse" message="tns:IHoMIDom_ZoneIsEmpty_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="DeleteZone">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteZone" message="tns:IHoMIDom_DeleteZone_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteZoneResponse" message="tns:IHoMIDom_DeleteZone_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetAllZones">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetAllZones" message="tns:IHoMIDom_GetAllZones_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetAllZonesResponse" message="tns:IHoMIDom_GetAllZones_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetDeviceInZone">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetDeviceInZone" message="tns:IHoMIDom_GetDeviceInZone_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetDeviceInZoneResponse" message="tns:IHoMIDom_GetDeviceInZone_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ReturnZoneByID">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnZoneByID" message="tns:IHoMIDom_ReturnZoneByID_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnZoneByIDResponse" message="tns:IHoMIDom_ReturnZoneByID_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SaveZone">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SaveZone" message="tns:IHoMIDom_SaveZone_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SaveZoneResponse" message="tns:IHoMIDom_SaveZone_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="AddDeviceToZone">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/AddDeviceToZone" message="tns:IHoMIDom_AddDeviceToZone_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/AddDeviceToZoneResponse" message="tns:IHoMIDom_AddDeviceToZone_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="DeleteDeviceToZone">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteDeviceToZone" message="tns:IHoMIDom_DeleteDeviceToZone_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteDeviceToZoneResponse" message="tns:IHoMIDom_DeleteDeviceToZone_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="DeleteMacro">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteMacro" message="tns:IHoMIDom_DeleteMacro_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteMacroResponse" message="tns:IHoMIDom_DeleteMacro_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="RunMacro">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/RunMacro" message="tns:IHoMIDom_RunMacro_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/RunMacroResponse" message="tns:IHoMIDom_RunMacro_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetAllMacros">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetAllMacros" message="tns:IHoMIDom_GetAllMacros_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetAllMacrosResponse" message="tns:IHoMIDom_GetAllMacros_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ReturnMacroById">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnMacroById" message="tns:IHoMIDom_ReturnMacroById_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnMacroByIdResponse" message="tns:IHoMIDom_ReturnMacroById_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SaveMacro">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SaveMacro" message="tns:IHoMIDom_SaveMacro_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SaveMacroResponse" message="tns:IHoMIDom_SaveMacro_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetAllTriggers">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetAllTriggers" message="tns:IHoMIDom_GetAllTriggers_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetAllTriggersResponse" message="tns:IHoMIDom_GetAllTriggers_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ReturnTriggerById">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnTriggerById" message="tns:IHoMIDom_ReturnTriggerById_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnTriggerByIdResponse" message="tns:IHoMIDom_ReturnTriggerById_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="DeleteTrigger">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteTrigger" message="tns:IHoMIDom_DeleteTrigger_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteTriggerResponse" message="tns:IHoMIDom_DeleteTrigger_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SaveTrigger">
-      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SaveTrigger" message="tns:IHoMIDom_SaveTrigger_InputMessage" />
-      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SaveTriggerResponse" message="tns:IHoMIDom_SaveTrigger_OutputMessage" />
+    <wsdl:operation name="GetTarifNuit">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetTarifNuit" message="tns:IHoMIDom_GetTarifNuit_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetTarifNuitResponse" message="tns:IHoMIDom_GetTarifNuit_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSaveRealTime">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetSaveRealTime" message="tns:IHoMIDom_GetSaveRealTime_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetSaveRealTimeResponse" message="tns:IHoMIDom_GetSaveRealTime_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetSaveRealTime">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetSaveRealTime" message="tns:IHoMIDom_SetSaveRealTime_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetSaveRealTimeResponse" message="tns:IHoMIDom_SetSaveRealTime_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetPortComDispo">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetPortComDispo" message="tns:IHoMIDom_GetPortComDispo_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetPortComDispoResponse" message="tns:IHoMIDom_GetPortComDispo_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UploadFile">
       <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/UploadFile" message="tns:IHoMIDom_UploadFile_InputMessage" />
@@ -1061,6 +939,22 @@
       <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetListOfImage" message="tns:IHoMIDom_GetListOfImage_InputMessage" />
       <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetListOfImageResponse" message="tns:IHoMIDom_GetListOfImage_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetSqliteBddVersion">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetSqliteBddVersion" message="tns:IHoMIDom_GetSqliteBddVersion_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetSqliteBddVersionResponse" message="tns:IHoMIDom_GetSqliteBddVersion_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSqliteVersion">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetSqliteVersion" message="tns:IHoMIDom_GetSqliteVersion_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetSqliteVersionResponse" message="tns:IHoMIDom_GetSqliteVersion_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDevise">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetDevise" message="tns:IHoMIDom_GetDevise_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetDeviseResponse" message="tns:IHoMIDom_GetDevise_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetDevise">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetDevise" message="tns:IHoMIDom_SetDevise_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetDeviseResponse" message="tns:IHoMIDom_SetDevise_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="DevicesAsHisto">
       <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DevicesAsHisto" message="tns:IHoMIDom_DevicesAsHisto_InputMessage" />
       <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DevicesAsHistoResponse" message="tns:IHoMIDom_DevicesAsHisto_OutputMessage" />
@@ -1088,6 +982,322 @@
     <wsdl:operation name="VerifLogin">
       <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/VerifLogin" message="tns:IHoMIDom_VerifLogin_InputMessage" />
       <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/VerifLoginResponse" message="tns:IHoMIDom_VerifLogin_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangePassword">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ChangePassword" message="tns:IHoMIDom_ChangePassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ChangePasswordResponse" message="tns:IHoMIDom_ChangePassword_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReturnUserByUsername">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnUserByUsername" message="tns:IHoMIDom_ReturnUserByUsername_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnUserByUsernameResponse" message="tns:IHoMIDom_ReturnUserByUsername_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllUsers">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetAllUsers" message="tns:IHoMIDom_GetAllUsers_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetAllUsersResponse" message="tns:IHoMIDom_GetAllUsers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReturnUserById">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnUserById" message="tns:IHoMIDom_ReturnUserById_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnUserByIdResponse" message="tns:IHoMIDom_ReturnUserById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveUser">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SaveUser" message="tns:IHoMIDom_SaveUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SaveUserResponse" message="tns:IHoMIDom_SaveUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ChangeValueOfDevice">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ChangeValueOfDevice" message="tns:IHoMIDom_ChangeValueOfDevice_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ChangeValueOfDeviceResponse" message="tns:IHoMIDom_ChangeValueOfDevice_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDeviceNoMaJ">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetDeviceNoMaJ" message="tns:IHoMIDom_GetDeviceNoMaJ_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetDeviceNoMaJResponse" message="tns:IHoMIDom_GetDeviceNoMaJ_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllDevices">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetAllDevices" message="tns:IHoMIDom_GetAllDevices_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetAllDevicesResponse" message="tns:IHoMIDom_GetAllDevices_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ExecuteDeviceCommand">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ExecuteDeviceCommand" message="tns:IHoMIDom_ExecuteDeviceCommand_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ExecuteDeviceCommandResponse" message="tns:IHoMIDom_ExecuteDeviceCommand_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ExecuteDeviceCommandSimple">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ExecuteDeviceCommandSimple" message="tns:IHoMIDom_ExecuteDeviceCommandSimple_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ExecuteDeviceCommandSimpleResponse" message="tns:IHoMIDom_ExecuteDeviceCommandSimple_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteDevice">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteDevice" message="tns:IHoMIDom_DeleteDevice_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteDeviceResponse" message="tns:IHoMIDom_DeleteDevice_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteDeviceCommandIR">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteDeviceCommandIR" message="tns:IHoMIDom_DeleteDeviceCommandIR_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteDeviceCommandIRResponse" message="tns:IHoMIDom_DeleteDeviceCommandIR_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReturnDeviceByID">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnDeviceByID" message="tns:IHoMIDom_ReturnDeviceByID_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnDeviceByIDResponse" message="tns:IHoMIDom_ReturnDeviceByID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReturnDeviceByAdresse1TypeDriver">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnDeviceByAdresse1TypeDriver" message="tns:IHoMIDom_ReturnDeviceByAdresse1TypeDriver_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnDeviceByAdresse1TypeDriverResponse" message="tns:IHoMIDom_ReturnDeviceByAdresse1TypeDriver_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveDevice">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SaveDevice" message="tns:IHoMIDom_SaveDevice_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SaveDeviceResponse" message="tns:IHoMIDom_SaveDevice_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveDeviceCommandIR">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SaveDeviceCommandIR" message="tns:IHoMIDom_SaveDeviceCommandIR_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SaveDeviceCommandIRResponse" message="tns:IHoMIDom_SaveDeviceCommandIR_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StartIrLearning">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/StartIrLearning" message="tns:IHoMIDom_StartIrLearning_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/StartIrLearningResponse" message="tns:IHoMIDom_StartIrLearning_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="VerifChamp">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/VerifChamp" message="tns:IHoMIDom_VerifChamp_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/VerifChampResponse" message="tns:IHoMIDom_VerifChamp_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllDrivers">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetAllDrivers" message="tns:IHoMIDom_GetAllDrivers_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetAllDriversResponse" message="tns:IHoMIDom_GetAllDrivers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ExecuteDriverCommand">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ExecuteDriverCommand" message="tns:IHoMIDom_ExecuteDriverCommand_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ExecuteDriverCommandResponse" message="tns:IHoMIDom_ExecuteDriverCommand_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReturnDriverByID">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnDriverByID" message="tns:IHoMIDom_ReturnDriverByID_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnDriverByIDResponse" message="tns:IHoMIDom_ReturnDriverByID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteDriver">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteDriver" message="tns:IHoMIDom_DeleteDriver_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteDriverResponse" message="tns:IHoMIDom_DeleteDriver_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReturnDriverByNom">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnDriverByNom" message="tns:IHoMIDom_ReturnDriverByNom_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnDriverByNomResponse" message="tns:IHoMIDom_ReturnDriverByNom_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveDriver">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SaveDriver" message="tns:IHoMIDom_SaveDriver_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SaveDriverResponse" message="tns:IHoMIDom_SaveDriver_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StopDriver">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/StopDriver" message="tns:IHoMIDom_StopDriver_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/StopDriverResponse" message="tns:IHoMIDom_StopDriver_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StartDriver">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/StartDriver" message="tns:IHoMIDom_StartDriver_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/StartDriverResponse" message="tns:IHoMIDom_StartDriver_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ZoneIsEmpty">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ZoneIsEmpty" message="tns:IHoMIDom_ZoneIsEmpty_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ZoneIsEmptyResponse" message="tns:IHoMIDom_ZoneIsEmpty_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteZone">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteZone" message="tns:IHoMIDom_DeleteZone_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteZoneResponse" message="tns:IHoMIDom_DeleteZone_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllZones">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetAllZones" message="tns:IHoMIDom_GetAllZones_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetAllZonesResponse" message="tns:IHoMIDom_GetAllZones_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetDeviceInZone">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetDeviceInZone" message="tns:IHoMIDom_GetDeviceInZone_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetDeviceInZoneResponse" message="tns:IHoMIDom_GetDeviceInZone_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetZoneInZone">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetZoneInZone" message="tns:IHoMIDom_GetZoneInZone_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetZoneInZoneResponse" message="tns:IHoMIDom_GetZoneInZone_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMacroInZone">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetMacroInZone" message="tns:IHoMIDom_GetMacroInZone_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetMacroInZoneResponse" message="tns:IHoMIDom_GetMacroInZone_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReturnZoneByID">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnZoneByID" message="tns:IHoMIDom_ReturnZoneByID_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnZoneByIDResponse" message="tns:IHoMIDom_ReturnZoneByID_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveZone">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SaveZone" message="tns:IHoMIDom_SaveZone_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SaveZoneResponse" message="tns:IHoMIDom_SaveZone_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddDeviceToZone">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/AddDeviceToZone" message="tns:IHoMIDom_AddDeviceToZone_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/AddDeviceToZoneResponse" message="tns:IHoMIDom_AddDeviceToZone_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteDeviceToZone">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteDeviceToZone" message="tns:IHoMIDom_DeleteDeviceToZone_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteDeviceToZoneResponse" message="tns:IHoMIDom_DeleteDeviceToZone_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteMacro">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteMacro" message="tns:IHoMIDom_DeleteMacro_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteMacroResponse" message="tns:IHoMIDom_DeleteMacro_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RunMacro">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/RunMacro" message="tns:IHoMIDom_RunMacro_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/RunMacroResponse" message="tns:IHoMIDom_RunMacro_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllMacros">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetAllMacros" message="tns:IHoMIDom_GetAllMacros_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetAllMacrosResponse" message="tns:IHoMIDom_GetAllMacros_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReturnMacroById">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnMacroById" message="tns:IHoMIDom_ReturnMacroById_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnMacroByIdResponse" message="tns:IHoMIDom_ReturnMacroById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveMacro">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SaveMacro" message="tns:IHoMIDom_SaveMacro_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SaveMacroResponse" message="tns:IHoMIDom_SaveMacro_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTriggers">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetAllTriggers" message="tns:IHoMIDom_GetAllTriggers_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetAllTriggersResponse" message="tns:IHoMIDom_GetAllTriggers_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReturnTriggerById">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnTriggerById" message="tns:IHoMIDom_ReturnTriggerById_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnTriggerByIdResponse" message="tns:IHoMIDom_ReturnTriggerById_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTrigger">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/DeleteTrigger" message="tns:IHoMIDom_DeleteTrigger_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/DeleteTriggerResponse" message="tns:IHoMIDom_DeleteTrigger_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveTrigger">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SaveTrigger" message="tns:IHoMIDom_SaveTrigger_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SaveTriggerResponse" message="tns:IHoMIDom_SaveTrigger_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ListMethod">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ListMethod" message="tns:IHoMIDom_ListMethod_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ListMethodResponse" message="tns:IHoMIDom_ListMethod_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLastLogs">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetLastLogs" message="tns:IHoMIDom_GetLastLogs_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetLastLogsResponse" message="tns:IHoMIDom_GetLastLogs_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetLastLogsError">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetLastLogsError" message="tns:IHoMIDom_GetLastLogsError_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetLastLogsErrorResponse" message="tns:IHoMIDom_GetLastLogsError_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTypeLogEnable">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetTypeLogEnable" message="tns:IHoMIDom_GetTypeLogEnable_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetTypeLogEnableResponse" message="tns:IHoMIDom_GetTypeLogEnable_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetTypeLogEnable">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetTypeLogEnable" message="tns:IHoMIDom_SetTypeLogEnable_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetTypeLogEnableResponse" message="tns:IHoMIDom_SetTypeLogEnable_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetMaxMonthLog">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetMaxMonthLog" message="tns:IHoMIDom_SetMaxMonthLog_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetMaxMonthLogResponse" message="tns:IHoMIDom_SetMaxMonthLog_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMaxMonthLog">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetMaxMonthLog" message="tns:IHoMIDom_GetMaxMonthLog_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetMaxMonthLogResponse" message="tns:IHoMIDom_GetMaxMonthLog_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Log">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/Log" message="tns:IHoMIDom_Log_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/LogResponse" message="tns:IHoMIDom_Log_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ReturnLog">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/ReturnLog" message="tns:IHoMIDom_ReturnLog_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/ReturnLogResponse" message="tns:IHoMIDom_ReturnLog_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetMaxFileSizeLog">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetMaxFileSizeLog" message="tns:IHoMIDom_SetMaxFileSizeLog_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetMaxFileSizeLogResponse" message="tns:IHoMIDom_SetMaxFileSizeLog_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMaxFileSizeLog">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetMaxFileSizeLog" message="tns:IHoMIDom_GetMaxFileSizeLog_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetMaxFileSizeLogResponse" message="tns:IHoMIDom_GetMaxFileSizeLog_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TestSendMail">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/TestSendMail" message="tns:IHoMIDom_TestSendMail_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/TestSendMailResponse" message="tns:IHoMIDom_TestSendMail_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSMTPServeur">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPServeur" message="tns:IHoMIDom_GetSMTPServeur_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPServeurResponse" message="tns:IHoMIDom_GetSMTPServeur_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetSMTPServeur">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPServeur" message="tns:IHoMIDom_SetSMTPServeur_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPServeurResponse" message="tns:IHoMIDom_SetSMTPServeur_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSMTPLogin">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPLogin" message="tns:IHoMIDom_GetSMTPLogin_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPLoginResponse" message="tns:IHoMIDom_GetSMTPLogin_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetSMTPLogin">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPLogin" message="tns:IHoMIDom_SetSMTPLogin_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPLoginResponse" message="tns:IHoMIDom_SetSMTPLogin_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSMTPPassword">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPPassword" message="tns:IHoMIDom_GetSMTPPassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPPasswordResponse" message="tns:IHoMIDom_GetSMTPPassword_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetSMTPPassword">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPPassword" message="tns:IHoMIDom_SetSMTPPassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPPasswordResponse" message="tns:IHoMIDom_SetSMTPPassword_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSMTPMailServeur">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPMailServeur" message="tns:IHoMIDom_GetSMTPMailServeur_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPMailServeurResponse" message="tns:IHoMIDom_GetSMTPMailServeur_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetSMTPMailServeur">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPMailServeur" message="tns:IHoMIDom_SetSMTPMailServeur_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPMailServeurResponse" message="tns:IHoMIDom_SetSMTPMailServeur_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSMTPPort">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPPort" message="tns:IHoMIDom_GetSMTPPort_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPPortResponse" message="tns:IHoMIDom_GetSMTPPort_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetSMTPPort">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPPort" message="tns:IHoMIDom_SetSMTPPort_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPPortResponse" message="tns:IHoMIDom_SetSMTPPort_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSMTPSSL">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPSSL" message="tns:IHoMIDom_GetSMTPSSL_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetSMTPSSLResponse" message="tns:IHoMIDom_GetSMTPSSL_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetSMTPSSL">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPSSL" message="tns:IHoMIDom_SetSMTPSSL_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetSMTPSSLResponse" message="tns:IHoMIDom_SetSMTPSSL_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetListOfTemplate">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetListOfTemplate" message="tns:IHoMIDom_GetListOfTemplate_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetListOfTemplateResponse" message="tns:IHoMIDom_GetListOfTemplate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateNewTemplate">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/CreateNewTemplate" message="tns:IHoMIDom_CreateNewTemplate_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/CreateNewTemplateResponse" message="tns:IHoMIDom_CreateNewTemplate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="StartLearning">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/StartLearning" message="tns:IHoMIDom_StartLearning_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/StartLearningResponse" message="tns:IHoMIDom_StartLearning_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveTemplate">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SaveTemplate" message="tns:IHoMIDom_SaveTemplate_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SaveTemplateResponse" message="tns:IHoMIDom_SaveTemplate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TelecommandeSendCommand">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/TelecommandeSendCommand" message="tns:IHoMIDom_TelecommandeSendCommand_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/TelecommandeSendCommandResponse" message="tns:IHoMIDom_TelecommandeSendCommand_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetGererEnergie">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetGererEnergie" message="tns:IHoMIDom_SetGererEnergie_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetGererEnergieResponse" message="tns:IHoMIDom_SetGererEnergie_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetGererEnergie">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetGererEnergie" message="tns:IHoMIDom_GetGererEnergie_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetGererEnergieResponse" message="tns:IHoMIDom_GetGererEnergie_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetTarifJour">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetTarifJour" message="tns:IHoMIDom_SetTarifJour_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetTarifJourResponse" message="tns:IHoMIDom_SetTarifJour_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTarifJour">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/GetTarifJour" message="tns:IHoMIDom_GetTarifJour_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/GetTarifJourResponse" message="tns:IHoMIDom_GetTarifJour_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetTarifNuit">
+      <wsdl:input wsaw:Action="http://HoMIDom/IHoMIDom/SetTarifNuit" message="tns:IHoMIDom_SetTarifNuit_InputMessage" />
+      <wsdl:output wsaw:Action="http://HoMIDom/IHoMIDom/SetTarifNuitResponse" message="tns:IHoMIDom_SetTarifNuit_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
 </wsdl:definitions>

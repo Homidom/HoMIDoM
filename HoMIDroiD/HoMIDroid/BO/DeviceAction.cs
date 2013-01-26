@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -39,6 +39,7 @@ namespace HoMIDroid.BO
             {
                 Toast.MakeText(app, string.Format("{0}: {1} ({2})", device.Name, this.Caption, device.NumericValue), ToastLength.Short).Show();
                 Android.Util.Log.Debug("HoMIDroid.BO.DeviceAction", "device new value: {0}", device.NumericValue);
+                server.Refresh();
                 return true;
             }
             return false;
@@ -55,7 +56,7 @@ namespace HoMIDroid.BO
         }
 
         #region Static Actions
-        public static T Get<T>() where T : DeviceAction, new()
+        public static T Get<T>() where T: DeviceAction, new()
         {
             var item = TinyIoC.TinyIoCContainer.Current.Resolve<T>();
             if (item == null)

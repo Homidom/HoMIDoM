@@ -2,4 +2,5 @@
 <resources>
     <string name="ApplicationName">HoMIDroid</string>
     <string name="Refresh">Refresh List</string>
+    <string name="Quit">Quit</string>
 </resources>

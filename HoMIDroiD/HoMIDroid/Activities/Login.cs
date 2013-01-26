@@ -25,7 +25,7 @@ namespace HoMIDroid.Activities
         {
             base.OnCreate(savedInstanceState);
 
-            this.SetContentView(Resource.Layout.Login);
+            this.SetContentView(Resource.Layout.login);
 
             // Handle button click event
             Button loginBtn = (Button)this.FindViewById(Resource.Id.login_btn_login);
@@ -35,61 +35,32 @@ namespace HoMIDroid.Activities
             // Handle Enter key press on edit text
             EditText loginEditText = (EditText)this.FindViewById(Resource.Id.login_et_server);
             if (loginEditText != null)
-            {
-                //loginEditText.KeyPress = (v, k, e) =>
-                //{
-                //    if (e.Action == KeyEventActions.Down && ((Keycode)k) == Keycode.Enter)
-                //    {
-                //        this.loginAsync();
-                //        return true;
-                //    }
-                //    return false;
-                //};
-
-                loginEditText.KeyPress += delegate(object sender, View.KeyEventArgs e)
-                {
-                    if (e.Event.Action == KeyEventActions.Down && e.KeyCode == Keycode.Enter)
-                    {
-                        this.loginAsync();
-                        e.Handled = true;
-                    }
-                    e.Handled = false;
-                };
-            }
+                loginEditText.KeyPress += new EventHandler<View.KeyEventArgs>(EditText_KeyPress);
+            
 
             // Handle Enter key press on port
             EditText portEditText = (EditText)this.FindViewById(Resource.Id.login_et_server);
             if (loginEditText != null)
-            {
-                //portEditText.KeyPress = (v, k, e) =>
-                //{
-                //    if (e.Action == KeyEventActions.Down && ((Keycode)k) == Keycode.Enter)
-                //    {
-                //        this.loginAsync();
-                //        return true;
-                //    }
-                //    return false;
-                //};
-                portEditText.KeyPress += delegate(object sender, View.KeyEventArgs e)
-                {
-                    if (e.Event.Action == KeyEventActions.Down && e.KeyCode == Keycode.Enter)
-                    {
-                        this.loginAsync();
-                        e.Handled = true;
-                    }
-                    e.Handled = false;
-                };
-            }
+                portEditText.KeyPress += new EventHandler<View.KeyEventArgs>(EditText_KeyPress);
+            
 
             this.showPreferencePopup();
         }
 
-        void loginEditText_KeyPress(object sender, View.KeyEventArgs e)
+        private void EditText_KeyPress(object sender, View.KeyEventArgs e)
         {
-            throw new NotImplementedException();
+            if (e.Event.Action == KeyEventActions.Down && e.KeyCode == Keycode.Enter)
+            {
+                this.loginAsync();
+                e.Handled = true;
+            }
+            else
+            {
+                e.Handled = false;
+            }
         }
 
-        void loginBtn_Click(object sender, EventArgs e)
+        private void loginBtn_Click(object sender, EventArgs e)
         {
             this.loginAsync();
         }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,7 +25,7 @@ namespace HoMIDroid.Activities
         {
             base.OnCreate(savedInstanceState);
 
-            this.SetContentView(Resource.Layout.DeviceDim);
+            this.SetContentView(Resource.Layout.deviceDim);
 
             // Retrieve the device to display
             var server = TinyIoC.TinyIoCContainer.Current.Resolve<IHmdServer>();

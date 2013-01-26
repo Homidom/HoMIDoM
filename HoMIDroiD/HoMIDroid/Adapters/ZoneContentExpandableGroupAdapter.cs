@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,7 +35,7 @@ namespace HoMIDroid.Adapters
 
         public override View GetGroupView(int groupPosition, bool isExpanded, View convertView, ViewGroup parent)
         {
-            var group = this.GetGroup(groupPosition) as Group<BaseObject>;
+            var group= this.GetGroup(groupPosition) as Group<BaseObject>;
             var controller = group.GetController(this.Context);
             var view = controller.GetListItemView(groupPosition);
             view.SetPadding(60, 0, 0, 0);
@@ -49,7 +49,7 @@ namespace HoMIDroid.Adapters
 
             if (zone.Devices != null)
             {
-                var deviceGroup = new Group<BaseObject>(zone.Devices.Count + " Devices");
+                var deviceGroup = new Group<BaseObject>(zone.Devices.Count + " Composant(s)");
                 foreach (var d in zone.Devices)
                     deviceGroup.Elements.Add(d);
                 list.Add(deviceGroup);
@@ -57,7 +57,7 @@ namespace HoMIDroid.Adapters
 
             if (zone.Macros != null)
             {
-                var macroGroup = new Group<BaseObject>(zone.Macros.Count + " Macros");
+                var macroGroup = new Group<BaseObject>(zone.Macros.Count + " Macro(s)");
                 foreach (var m in zone.Macros)
                     macroGroup.Elements.Add(m);
                 list.Add(macroGroup);
@@ -65,7 +65,7 @@ namespace HoMIDroid.Adapters
 
             if (zone.SubZones != null)
             {
-                var subZoneGroup = new Group<BaseObject>(zone.SubZones.Count + " Sub-Zones");
+                var subZoneGroup = new Group<BaseObject>(zone.SubZones.Count + " Zone(s)");
                 foreach (var z in zone.SubZones)
                     subZoneGroup.Elements.Add(z);
                 list.Add(subZoneGroup);

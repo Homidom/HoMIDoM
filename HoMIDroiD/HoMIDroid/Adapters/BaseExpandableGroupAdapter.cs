@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +13,7 @@ using HoMIDroid.BO;
 
 namespace HoMIDroid.Adapters
 {
-    public abstract class BaseExpandableGroupAdapter<T> : BaseExpandableListAdapter where T : BaseObject
+    public abstract class BaseExpandableGroupAdapter<T> : BaseExpandableListAdapter where T: BaseObject
     {
         public Context Context { get; private set; }
         public List<Group<T>> Groups { get; private set; }
