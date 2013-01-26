@@ -546,6 +546,9 @@ Public Class Driver_ZWave
                                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "      -> " & NodeTempID & " : " & NodeTemp.Name & vbTab & m_manager.GetNodeType(m_homeId, NodeTempID) & vbTab & NodeTemp.Manufacturer & "/" & NodeTemp.Product & vbTab & m_manager.GetNodeVersion(m_homeId, NodeTemp.ID) & vbTab & IsSleeping)
                             Next
                         End If
+                        ' Sauvegarde de la configuration 
+                        m_manager.WriteConfig(m_homeId)
+                        Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start -", " Sauvegarde de la config Zwave")
                     End If
                 Else
                     retour = "ERR: Port Com non défini. Impossible d'ouvrir le port !"
@@ -941,7 +944,7 @@ Public Class Driver_ZWave
         Sub NotificationHandler(ByVal m_notification As ZWNotification)
             Try
                 If m_notification Is Nothing Then Exit Sub
-                ' If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Une notification a été reçue : ")
+                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Une notification a été reçue : " & m_notification.[GetType]())
 
                 Select Case m_notification.[GetType]()
                     Case ZWNotification.Type.ValueAdded
@@ -958,6 +961,9 @@ Public Class Driver_ZWave
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - ValueChanged sur node " & m_notification.GetNodeId())
                         Dim node As Node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
                         If Not IsNothing(node) Then traiteValeur(m_notification)
+
+                    Case ZWNotification.Type.ValueRefreshed
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - Refreshed sur node " & m_notification.GetNodeId())
 
                     Case ZWNotification.Type.Group
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - Group sur node " & m_notification.GetNodeId())
@@ -1018,11 +1024,18 @@ Public Class Driver_ZWave
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - PollingEnabled sur node " & m_notification.GetNodeId())
 
                     Case ZWNotification.Type.DriverReady
+                        m_homeId = m_notification.GetHomeId()
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - DriverReady")
+
+                    Case ZWNotification.Type.DriverReset
+                        m_homeId = m_notification.GetHomeId()
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - DriverReset")
+
+                    Case ZWNotification.Type.EssentialNodeQueriesComplete
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - EssentialNodeQueriesComplete")
 
                     Case ZWNotification.Type.NodeQueriesComplete
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - NodeQueriesComplete")
-                        m_homeId = m_notification.GetHomeId()
 
                     Case ZWNotification.Type.AllNodesQueried
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - AllNodesQueried")
@@ -1045,9 +1058,7 @@ Public Class Driver_ZWave
                         'nodeTempAdd2.Name = "Capteur bureau"
                         'm_nodeList.Add(nodeTempAdd2)
                         m_nodesReady = True
-                        ' Sauvegarde de la configuration 
-                        m_manager.WriteConfig(m_homeId)
-                        Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " Sauvegarde la config Zwave")
+
 
                     Case ZWNotification.Type.AwakeNodesQueried
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - AwakeNodesQueried")
