@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,14 +18,19 @@ namespace HoMIDroid.Server
 {
     public class MockServer : BaseServer
     {
+        #region Declarations
         List<Device> listDevices;
-        List<Zone> listZones;
-        
+        List<Zone> listZones; 
+        #endregion
+
+        #region CTor
         public MockServer()
         {
             this.listDevices = this.createDevice();
             this.listZones = this.createZones();
-        }
+        } 
+        #endregion
+
         #region IHmdServer Members
 
         public override Device GetDevice(string id)
@@ -60,10 +65,15 @@ namespace HoMIDroid.Server
         {
             return true;
         }
+
+        public override bool ExecuteMacro(Macro macro)
+        {
+            return true;
+        }
         #endregion
 
-
-        private List<Zone> createZones() 
+        #region Private methods
+        private List<Zone> createZones()
         {
 
             var list = new List<Zone>();
@@ -76,7 +86,7 @@ namespace HoMIDroid.Server
                     new OnOffDevice() { Name = "Ma Lampe #1 - Zone #1", DeviceType = DeviceType.OnOff, DisplayType = DisplayType.Boolean, NumericValue = 0, Id="1" },
                     new OnOffDevice() { Name = "Ma Lampe #2 - Zone #1", DeviceType = DeviceType.OnOff, DisplayType = DisplayType.Boolean, NumericValue = 1, Id="2" },
                     new NumericDevice() { Name = "Ma Lampe DIM - Zone #1", DeviceType = DeviceType.Dim, DisplayType = DisplayType.Percentage, NumericValue = 75, Id="3" },
-                    new NumericDevice() { Name = "Ma Températur - Zone #1", DeviceType = DeviceType.Numeric, DisplayType = DisplayType.Boolean, NumericValue = 20.5, Id="4" }
+                    new NumericDevice() { Name = "Ma TempÃ©ratur - Zone #1", DeviceType = DeviceType.Numeric, DisplayType = DisplayType.Boolean, NumericValue = 20.5, Id="4" }
                 },
                 SubZones = new List<Zone>()
                 {
@@ -103,7 +113,7 @@ namespace HoMIDroid.Server
                     new OnOffDevice() { Name = "Ma Lampe #1 - Zone #2", DeviceType = DeviceType.OnOff, DisplayType = DisplayType.Boolean, NumericValue = 1, Id="6" },
                     new OnOffDevice() { Name = "Ma Lampe #2 - Zone #2", DeviceType = DeviceType.OnOff, DisplayType = DisplayType.Boolean, NumericValue = 0, Id="7" },
                     new NumericDevice() { Name = "Ma Lampe DIM - Zone #2", DeviceType = DeviceType.Dim, DisplayType = DisplayType.Boolean, NumericValue = 25, Id="8" },
-                    new NumericDevice() { Name = "Ma Température - Zone #2", DeviceType = DeviceType.Numeric, DisplayType = DisplayType.Boolean, NumericValue = 22, Id="9" }
+                    new NumericDevice() { Name = "Ma TempÃ©rature - Zone #2", DeviceType = DeviceType.Numeric, DisplayType = DisplayType.Boolean, NumericValue = 22, Id="9" }
                 }
             });
 
@@ -167,7 +177,7 @@ namespace HoMIDroid.Server
 
             list.Add(new NumericDevice()
             {
-                Name = "Ma Température",
+                Name = "Ma TempÃ©rature",
                 DeviceType = DeviceType.Numeric,
                 DisplayType = DisplayType.Temperature,
                 NumericValue = 20.5,
@@ -189,7 +199,7 @@ namespace HoMIDroid.Server
 
             list.Add(new NumericDevice()
             {
-                Name = "Système audio XY",
+                Name = "SystÃ¨me audio XY",
                 DeviceType = DeviceType.Dim,
                 DisplayType = DisplayType.Numeric,
                 NumericValue = 20,
@@ -199,7 +209,7 @@ namespace HoMIDroid.Server
 
             list.Add(new NumericDevice()
             {
-                Name = "Device à nom très long oui vraiment très long",
+                Name = "Device Ã  nom trÃ¨s long oui vraiment trÃ¨s long",
                 DeviceType = DeviceType.Numeric,
                 DisplayType = DisplayType.Numeric,
                 NumericValue = 1102,
@@ -217,7 +227,19 @@ namespace HoMIDroid.Server
                 Id = "9"
             });
 
+
+            list.Add(new OnOffDevice()
+            {
+                Name = "Mon contact #1",
+                DeviceType = DeviceType.Other,
+                DisplayType = DisplayType.Boolean,
+                NumericValue = 0,
+                DeviceCategory = DeviceCategory.Contact,
+                Id = "10"
+            });
+
             return list;
-        }
+        } 
+        #endregion
     }
 }

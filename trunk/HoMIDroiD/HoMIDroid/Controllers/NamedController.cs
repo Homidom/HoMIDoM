@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +13,7 @@ using HoMIDroid.BO;
 
 namespace HoMIDroid.Controllers
 {
-    public class NamedController<T> : BaseController where T : INamedObject
+    public class NamedController<T> : BaseController where T: INamedObject
     {
         public T Item { get; private set; }
 

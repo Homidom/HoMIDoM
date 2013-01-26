@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,7 +25,7 @@ namespace HoMIDroid.Activities
             var server = TinyIoC.TinyIoCContainer.Current.Resolve<IHmdServer>();
             var zones = server.GetZones();
 
-            this.ListAdapter = new ZoneAdapter(this, Resource.Layout.TestItem, zones);
+            this.ListAdapter = new ZoneAdapter(this, Resource.Layout.testItem, zones);
 
             this.ListView.TextFilterEnabled = true;
             this.ListView.Clickable = true;

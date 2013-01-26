@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +13,7 @@ using HoMIDroid.Controllers;
 
 namespace HoMIDroid.BO
 {
-    public class Group<T> : BaseObject, INamedObject where T : BaseObject
+    public class Group<T> : BaseObject, INamedObject where T: BaseObject
     {
         /// <summary>
         /// Gets the group name
@@ -45,19 +45,28 @@ namespace HoMIDroid.BO
             switch(category)
             {
                 case DeviceCategory.Energy:
-                    this.Name = "Énergie";
+                    this.Name = "Ã‰nergie";
                     break;
                 case DeviceCategory.Light:
                     this.Name = "Lampes";
                     break;
                 case DeviceCategory.Meteo:
-                    this.Name = "Météo";
+                    this.Name = "MÃ©tÃ©o";
                     break;
                 case DeviceCategory.Multimedia:
-                    this.Name = "Multimédia";
+                    this.Name = "MultimÃ©dia";
                     break;
                 case DeviceCategory.Switch:
                     this.Name = "Interrupteurs";
+                    break;
+                case DeviceCategory.Flap:
+                    this.Name = "Volets";
+                    break;
+                case DeviceCategory.Contact:
+                    this.Name = "Contacteurs";
+                    break;
+                case DeviceCategory.Dectect:
+                    this.Name = "DÃ©tecteurs";
                     break;
                 default:
                     this.Name = "Autre";

@@ -73,6 +73,7 @@
     <Compile Include="BO\Devices\RawDevice.cs" />
     <Compile Include="BO\INamedObject.cs" />
     <Compile Include="BO\Settings.cs" />
+    <Compile Include="Controllers\MacroController.cs" />
     <Compile Include="Controllers\ZoneController.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Adapters\DeviceAdapter.cs" />
@@ -110,23 +111,18 @@
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
-    <AndroidResource Include="Resources\Layout\DeviceDim.axml" />
-    <AndroidResource Include="Resources\Layout\TabZone.axml" />
-    <AndroidResource Include="Resources\Layout\DeviceList.axml">
+    <AndroidResource Include="Resources\Layout\deviceList.axml" />
+    <AndroidResource Include="Resources\Layout\deviceOnOff.axml" />
+    <AndroidResource Include="Resources\Layout\index.axml" />
+    <AndroidResource Include="Resources\Layout\listItemBasicDevice.axml" />
+    <AndroidResource Include="Resources\Layout\listItemOnOffDevice.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\Layout\ListItemOnOffDevice.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\TestItem.axml">
-      <SubType>AndroidResource</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\ListItemBasicDevice.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\index.axml">
-      <SubType>AndroidResource</SubType>
-    </AndroidResource>
+    <AndroidResource Include="Resources\Layout\login.axml" />
+    <AndroidResource Include="Resources\Layout\main.axml" />
+    <AndroidResource Include="Resources\Layout\tabZone.axml" />
+    <AndroidResource Include="Resources\Layout\testItem.axml" />
+    <AndroidResource Include="Resources\Layout\deviceDim.axml" />
     <None Include="Web References\HmdService\ArrayOfKeyValueOfstringbooleanKeyValueOfstringboolean.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -177,11 +173,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\Layout\Main.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\Values\Strings.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -198,10 +189,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\AndroidManifest.xml" />
-    <AndroidResource Include="Resources\Layout\Login.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\Layout\DeviceOnOff.axml" />
     <AndroidResource Include="Resources\Drawable\minus.png" />
     <AndroidResource Include="Resources\Drawable\plus.png" />
     <AndroidResource Include="Resources\Drawable\light_bulb_off.png" />
@@ -210,6 +197,10 @@
     <AndroidResource Include="Resources\Drawable\switch_ON.png" />
     <AndroidResource Include="Resources\Drawable\logo_small.png" />
     <AndroidResource Include="Resources\Drawable\refresh.png" />
+    <AndroidResource Include="Resources\Drawable\logout.png" />
+    <AndroidResource Include="Resources\Drawable\composant.png" />
+    <AndroidResource Include="Resources\Drawable\zone.png" />
+    <AndroidResource Include="Resources\Values\style.xml" />
     <None Include="Web References\HmdService\service.disco" />
   </ItemGroup>
   <ItemGroup>
@@ -230,6 +221,7 @@
       </CachedSettingsPropName>
     </WebReferenceUrl>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
      Other similar extension points exist, see Microsoft.Common.targets.

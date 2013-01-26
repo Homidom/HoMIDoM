@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -73,6 +73,11 @@ namespace HoMIDroid.Server
             return this.Server.ExecuteAction(device, action);
         }
 
+        public bool ExecuteMacro(BO.Macro macro)
+        {
+            return true;
+        }
+
         public void Clear()
         {
             this.Server.Clear();
@@ -83,5 +88,9 @@ namespace HoMIDroid.Server
             this.Server.Refresh();
         }
 
+        public bool RefreshDevice(BO.Device device)
+        {
+            return this.Server.RefreshDevice(device);
+        }
     }
 }

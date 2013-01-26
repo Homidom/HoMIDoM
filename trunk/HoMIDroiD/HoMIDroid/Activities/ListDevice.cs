@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,7 +30,7 @@ namespace HoMIDroid
             var server = TinyIoC.TinyIoCContainer.Current.Resolve<IHmdServer>();
             var devices = server.GetDevices();
 
-            this.ListAdapter = new DeviceAdapter(this, Resource.Layout.TestItem, devices);
+            this.ListAdapter = new DeviceAdapter(this, Resource.Layout.testItem, devices);
 
             this.ListView.TextFilterEnabled = true;
             this.ListView.Clickable = true;

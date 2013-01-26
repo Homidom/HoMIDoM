@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +18,7 @@ namespace HoMIDroid.Adapters
     public class DeviceExpandableGroupAdapter : BaseExpandableGroupAdapter<Device>
     {
         public DeviceExpandableGroupAdapter(Context context, List<Group<Device>> groups)
-            : base(context, groups)
+            : base(context, groups.OrderBy(g => g.Name).ToList())
         {
             
         }
@@ -34,7 +34,7 @@ namespace HoMIDroid.Adapters
 
         public override View GetGroupView(int groupPosition, bool isExpanded, View convertView, ViewGroup parent)
         {
-            var group = this.GetGroup(groupPosition) as Group<Device>;
+            var group= this.GetGroup(groupPosition) as Group<Device>;
             var view = group.GetController(this.Context).GetListItemView(groupPosition);
 
             view.SetPadding(60, 0, 0, 0);

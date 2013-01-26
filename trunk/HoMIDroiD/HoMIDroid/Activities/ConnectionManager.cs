@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,7 +20,7 @@ namespace HoMIDroid.Activities
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-            this.SetContentView(Resource.Layout.Login);
+            this.SetContentView(Resource.Layout.login);
             this.showDeletePreferencesPopup();
         }
 

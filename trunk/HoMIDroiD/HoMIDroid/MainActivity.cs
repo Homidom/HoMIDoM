@@ -29,7 +29,9 @@ namespace HoMIDroid
         public override bool  OnCreateOptionsMenu(IMenu menu)
         {
             var refreshMenuItem = menu.Add(0, 1, 1, Resource.String.Refresh);
+            var quitMenuItem = menu.Add(0, 1, 1, Resource.String.Quit);
             refreshMenuItem.SetIcon(Resource.Drawable.refresh);
+            quitMenuItem.SetIcon(Resource.Drawable.logout);
             return true;
         }
 
@@ -48,20 +50,20 @@ namespace HoMIDroid
         private void createScreen()
         {
             // Set our view from the "main" layout resource
-            SetContentView(Resource.Layout.Main);
+            SetContentView(Resource.Layout.main);
 
             Intent intent;
             TabHost.TabSpec spec;
 
             intent = new Android.Content.Intent().SetClass(this, typeof(ListZone));
             spec = this.TabHost.NewTabSpec(TAB_ZONE)
-                .SetIndicator("Zone", Resources.GetDrawable(Resource.Drawable.ic_tab_zone))
+                .SetIndicator("Zones", Resources.GetDrawable(Resource.Drawable.zone))
                 .SetContent(intent);
             this.TabHost.AddTab(spec);
 
             intent = new Android.Content.Intent().SetClass(this, typeof(ListGroupDevice));
             spec = this.TabHost.NewTabSpec(TAB_DEVICE)
-                .SetIndicator("Device", Resources.GetDrawable(Resource.Drawable.ic_tab_zone))
+                .SetIndicator("Composants", Resources.GetDrawable(Resource.Drawable.composant))
                 .SetContent(intent);
             this.TabHost.AddTab(spec);
         }

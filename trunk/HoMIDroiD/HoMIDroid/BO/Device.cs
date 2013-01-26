@@ -34,7 +34,7 @@ namespace HoMIDroid.BO
         {
             get
             {
-                return this.Actions.Count == 0;
+                return this.Name.StartsWith("HOMI_");
             }
         }
         public double?          NumericValue    
@@ -60,6 +60,7 @@ namespace HoMIDroid.BO
                 this.OnValueChanged(EventArgs.Empty);
             }
         }
+        public int              DeviceImage     { get; set; }
 
         public virtual List<DeviceAction> Actions   { get; protected set; }
         public virtual DeviceAction DefautAction    { get; protected set; }
@@ -99,7 +100,7 @@ namespace HoMIDroid.BO
             this.Actions = new List<DeviceAction>();
         }
 
-        public bool ExecuteAction<T>() where T : DeviceAction
+        public bool ExecuteAction<T>() where T: DeviceAction
         {
             var action = this.retrieveAction<T>();
             if (action != null)
@@ -134,7 +135,7 @@ namespace HoMIDroid.BO
                 return action.Visit(this);
             return false;
         }
-
+        
         public override Controllers.BaseController GetController(Context context)
         {
             return new DeviceController(context, this);
@@ -146,7 +147,7 @@ namespace HoMIDroid.BO
                 this.ValueChanged(this, e);
         }
 
-        private DeviceAction retrieveAction<T>() where T : DeviceAction
+        private DeviceAction retrieveAction<T>() where T: DeviceAction
         {
             var q = from a in this.Actions
                     where a.GetType() == typeof(T)

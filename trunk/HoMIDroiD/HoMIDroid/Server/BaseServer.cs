@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,6 +30,8 @@ namespace HoMIDroid.Server
 
         public abstract bool ExecuteAction(Device device, DeviceAction action);
 
+        public abstract bool ExecuteMacro(Macro macro);
+
         #endregion
 
 
@@ -44,13 +46,13 @@ namespace HoMIDroid.Server
                 if (!groups.ContainsKey(device.DeviceCategory))
                     groups.Add(device.DeviceCategory, new Group<Device>(device.DeviceCategory));
 
-                group = groups[device.DeviceCategory];
+                group= groups[device.DeviceCategory];
                 group.Elements.Add(device);
             }
 
             // Order the group on the DeviceCategory then returns
             return groups
-                .OrderBy(g => (int)g.Key)
+                .OrderBy(g => g.Value.Name)
                 .Select(g => g.Value)
                 .ToList();
         }
@@ -68,6 +70,11 @@ namespace HoMIDroid.Server
         public virtual void Refresh()
         {
 
+        }
+
+        public virtual bool RefreshDevice(Device device)
+        {
+            return false;
         }
     }
 }
