@@ -24,6 +24,8 @@ Class Window1
     Dim myadress As String = ""
     Dim FlagStart As Boolean = False
     Dim MyRep As String = System.Environment.CurrentDirectory
+    Dim MyRepAppData As String = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) & "\HoMIAdmiN"
+
     Dim WMainMenu As Double = 0
     Dim HMainMenu As Double = 0
     Dim _MainMenuAction As Integer = -1 'NEW,MODIF,SUPP -1 si aucun
@@ -69,7 +71,17 @@ Class Window1
             dt.Interval = New TimeSpan(0, 0, 1)
             dt.Start()
 
-            Myfile = MyRep & "\Config\HoMIAdmiN.xml"
+            'si le repertoire appdata n'existe pas on le crée et copie la config depuis le repertoire courant
+            If Not System.IO.Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) & "\HoMIAdmiN") Then
+                System.IO.Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) & "\HoMIAdmiN")
+            End If
+            MyRepAppData = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) & "\HoMIAdmiN"
+            'Myfile = MyRep & "\Config\HoMIAdmiN.xml"
+            Myfile = MyRepAppData & "\HoMIAdmiN.xml"
+            If Not System.IO.File.Exists(Myfile) Then
+                System.IO.File.Copy(MyRep & "\Config\HoMIAdmiN.xml", Myfile, False)
+            End If
+
             AffIsDisconnect()
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub New: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)

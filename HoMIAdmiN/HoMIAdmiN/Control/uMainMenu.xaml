@@ -47,7 +47,7 @@
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                                 <Image Tag="tag_trigger" Name="img_trigger_gerer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Configurer_32.png" ToolTip="Gérer les tiggers" />
                                 <Image Tag="tag_triggertimer" Name="img_trigger_ajoutertimer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/trigger_clock_128.png" ToolTip="Ajouter un trigger timer" />
-                                <Image Tag="tag_triggerdevice" Name="img_trigger_ajouterdevice" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/trigger_device_128.png" ToolTip="Ajouter un trigger device" />
+                                <Image Tag="tag_triggerdevice" Name="img_trigger_ajouterdevice" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/trigger_device_128.png" ToolTip="Ajouter un trigger composant" />
                                 <Image Tag="tag_trigger" Name="img_trigger_editer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Modifier_32.png" ToolTip="Editer un trigger" />
                                 <Image Tag="tag_trigger" Name="img_trigger_supprimer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/supprimer_32.png" ToolTip="Supprimer un trigger" />
                             </StackPanel>
