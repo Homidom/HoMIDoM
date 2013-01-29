@@ -4171,6 +4171,22 @@ Namespace HoMIDom
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetPortServeurWeb", "Erreur: " & ex.Message)
             End Try
         End Sub
+
+        ''' <summary>
+        ''' Redémarre ou démarre le serveur web
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub RestartServeurWeb() Implements IHoMIDom.RestartServeurWeb
+            Try
+                If _EnableSrvWeb = True Then
+                    _SrvWeb = New ServeurWeb(Me, _PortSrvWeb)
+                    _SrvWeb.StartSrvWeb()
+                    If _SrvWeb.IsStart Then Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Serveur Web démarré")
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "RestartServeurWeb", "Erreur: " & ex.Message)
+            End Try
+        End Sub
 #End Region
 
 #Region "Historisation"

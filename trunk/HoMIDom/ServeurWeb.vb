@@ -291,6 +291,13 @@ Namespace HoMIDom
 
                     If flagIdSrv Then
                         'on va cherche la commande
+                        If String.IsNullOrEmpty(tabl(1)) = True Then
+                            Dim xAuthor As XmlNode = xNode.AppendChild(xDoc.CreateElement("Message"))
+                            xAuthor.InnerText = "Erreur il manque la commande"
+                        ElseIf tabl(1).StartsWith("cmd=") = False Then
+                            Dim xAuthor As XmlNode = xNode.AppendChild(xDoc.CreateElement("Message"))
+                            xAuthor.InnerText = "Erreur il manque le nom de la commande"
+                        End If
                         Dim _tp() As String = tabl(1).Split("=")
                         If _tp.Count <> 2 Then
                             Dim xAuthor As XmlNode = xNode.AppendChild(xDoc.CreateElement("Message"))
@@ -304,22 +311,133 @@ Namespace HoMIDom
                         End If
                     End If
 
-                    If flagcmd Then
-                        Select Case _cmd
-                            Case "ok"
-                                Dim xAuthor As XmlNode = xNode.AppendChild(xDoc.CreateElement("Message"))
-                                xAuthor.InnerText = "OK"
-                            Case "getalldevice"
-                                Dim xAuthor As XmlNode = xNode.AppendChild(xDoc.CreateElement("devices"))
-                                xAuthor.InnerText = "OK"
+                        If flagcmd Then
+                            Select Case _cmd
+                                Case "ok"
+                                    Dim xAuthor As XmlNode = xNode.AppendChild(xDoc.CreateElement("Message"))
+                                    xAuthor.InnerText = "OK"
+                                Case "getalldevices"
+                                    Dim xAuthor As XmlNode = xNode.AppendChild(xDoc.CreateElement("devices"))
+                                    Dim _dev As TemplateDevice
+                                    For Each _dev In _Srv.GetAllDevices(_IdSrv)
+                                        Dim xdev As XmlNode = xAuthor.AppendChild(xDoc.CreateElement("device"))
+                                        Dim xdev1 As XmlNode = xdev.AppendChild(xDoc.CreateElement("id"))
+                                        xdev1.InnerText = _dev.ID
+                                        Dim xdev2 As XmlNode = xdev.AppendChild(xDoc.CreateElement("name"))
+                                    xdev2.InnerText = _dev.Name
+                                    Dim xdev3 As XmlNode = xdev.AppendChild(xDoc.CreateElement("type"))
+                                        xdev3.InnerText = _dev.Type.ToString
+                                        Dim xdev5 As XmlNode = xdev.AppendChild(xDoc.CreateElement("enable"))
+                                        xdev5.InnerText = _dev.Enable
+                                        Dim xdev4 As XmlNode = xdev.AppendChild(xDoc.CreateElement("value"))
+                                        xdev4.InnerText = _dev.Value
+                                    Next
+                                Case "getallzones"
+                                    Dim xAuthor As XmlNode = xNode.AppendChild(xDoc.CreateElement("zones"))
+                                    Dim _zon As Zone
+                                    For Each _zon In _Srv.GetAllZones(_IdSrv)
+                                        Dim xdev As XmlNode = xAuthor.AppendChild(xDoc.CreateElement("zone"))
+                                        Dim xdev1 As XmlNode = xdev.AppendChild(xDoc.CreateElement("id"))
+                                        xdev1.InnerText = _zon.ID
+                                        Dim xdev2 As XmlNode = xdev.AppendChild(xDoc.CreateElement("name"))
+                                        xdev1.InnerText = _zon.Name
+                                        Dim xdev3 As XmlNode = xdev.AppendChild(xDoc.CreateElement("icon"))
+                                        xdev3.InnerText = _zon.Icon
+                                        Dim xdev4 As XmlNode = xdev.AppendChild(xDoc.CreateElement("image"))
+                                        xdev4.InnerText = _zon.Image
+                                        Dim _elmt As Zone.Element_Zone
+                                        Dim xAuthor2 As XmlNode = xdev.AppendChild(xDoc.CreateElement("elements"))
+                                        For Each _elmt In _zon.ListElement
+                                            Dim xelmt1 As XmlNode = xAuthor2.AppendChild(xDoc.CreateElement("element"))
+                                            Dim xelmt2 As XmlNode = xelmt1.AppendChild(xDoc.CreateElement("id"))
+                                            xelmt2.InnerText = _elmt.ElementID
+                                            Dim xelmt3 As XmlNode = xelmt1.AppendChild(xDoc.CreateElement("visible"))
+                                            xelmt3.InnerText = _elmt.Visible
+                                        Next
+                                Next
+                            Case "getdevice"
+                                Dim _id As String = ""
+                                'on va cherche la commande
+                                If String.IsNullOrEmpty(tabl(2)) = True Then
+                                    Dim xAuthor As XmlNode = xNode.AppendChild(xDoc.CreateElement("Message"))
+                                    xAuthor.InnerText = "Erreur il manque l'id du device"
+                                ElseIf tabl(2).StartsWith("id=") = False Then
+                                    Dim xAuthor As XmlNode = xNode.AppendChild(xDoc.CreateElement("Message"))
+                                    xAuthor.InnerText = "Erreur il manque l'id du device"
+                                End If
+                                Dim _tp() As String = tabl(2).Split("=")
+                                If _tp.Count <> 2 Then
+                                    Dim xAuthor As XmlNode = xNode.AppendChild(xDoc.CreateElement("Message"))
+                                    xAuthor.InnerText = "Erreur manque id"
+                                Else
+                                    _id = _tp(1)
+                                    Dim _dev As TemplateDevice = _Srv.ReturnDeviceById(_IdSrv, _id)
+                                    If _dev IsNot Nothing Then
+                                        Dim xdev As XmlNode = xNode.AppendChild(xDoc.CreateElement("device"))
+                                        Dim xdev1 As XmlNode = xdev.AppendChild(xDoc.CreateElement("id"))
+                                        xdev1.InnerText = _dev.ID
+                                        Dim xdev2 As XmlNode = xdev.AppendChild(xDoc.CreateElement("name"))
+                                        xdev1.InnerText = _dev.Name
+                                        Dim xdev3 As XmlNode = xdev.AppendChild(xDoc.CreateElement("type"))
+                                        xdev3.InnerText = _dev.Type.ToString
+                                        Dim xdev5 As XmlNode = xdev.AppendChild(xDoc.CreateElement("enable"))
+                                        xdev5.InnerText = _dev.Enable
+                                        Dim xdev4 As XmlNode = xdev.AppendChild(xDoc.CreateElement("value"))
+                                        xdev4.InnerText = _dev.Value
+                                    End If
+                                End If
+                            Case "ondevice"
+                                Dim _id As String = ""
+                                'on va cherche la commande
+                                If String.IsNullOrEmpty(tabl(2)) = True Then
+                                    Dim xAuthor As XmlNode = xNode.AppendChild(xDoc.CreateElement("Message"))
+                                    xAuthor.InnerText = "Erreur il manque l'id du device"
+                                ElseIf tabl(2).StartsWith("id=") = False Then
+                                    Dim xAuthor As XmlNode = xNode.AppendChild(xDoc.CreateElement("Message"))
+                                    xAuthor.InnerText = "Erreur il manque l'id du device"
+                                End If
+                                Dim _tp() As String = tabl(2).Split("=")
+                                If _tp.Count <> 2 Then
+                                    Dim xAuthor As XmlNode = xNode.AppendChild(xDoc.CreateElement("Message"))
+                                    xAuthor.InnerText = "Erreur manque id"
+                                Else
+                                    _id = _tp(1)
+                                    If _id IsNot Nothing Then
+                                        Dim x As DeviceAction = New DeviceAction
+                                        x.Nom = "On"
+                                        _Srv.ExecuteDeviceCommand(_IdSrv, _id, x)
+                                    End If
+                                End If
+                            Case "offdevice"
+                                Dim _id As String = ""
+                                'on va cherche la commande
+                                If String.IsNullOrEmpty(tabl(2)) = True Then
+                                    Dim xAuthor As XmlNode = xNode.AppendChild(xDoc.CreateElement("Message"))
+                                    xAuthor.InnerText = "Erreur il manque l'id du device"
+                                ElseIf tabl(2).StartsWith("id=") = False Then
+                                    Dim xAuthor As XmlNode = xNode.AppendChild(xDoc.CreateElement("Message"))
+                                    xAuthor.InnerText = "Erreur il manque l'id du device"
+                                End If
+                                Dim _tp() As String = tabl(2).Split("=")
+                                If _tp.Count <> 2 Then
+                                    Dim xAuthor As XmlNode = xNode.AppendChild(xDoc.CreateElement("Message"))
+                                    xAuthor.InnerText = "Erreur manque id"
+                                Else
+                                    _id = _tp(1)
+                                    If _id IsNot Nothing Then
+                                        Dim x As DeviceAction = New DeviceAction
+                                        x.Nom = "Off"
+                                        _Srv.ExecuteDeviceCommand(_IdSrv, _id, x)
+                                    End If
+                                End If
                         End Select
-                    End If
+                        End If
 
-                    ' Create StringWriter to convert XMLDoc to string
-                    Dim xWriter As New IO.StringWriter()
-                    Dim xml_writer As New XmlTextWriter(xWriter)
-                    xDoc.WriteContentTo(xml_writer)
-                    Return xWriter.ToString
+                        ' Create StringWriter to convert XMLDoc to string
+                        Dim xWriter As New IO.StringWriter()
+                        Dim xml_writer As New XmlTextWriter(xWriter)
+                        xDoc.WriteContentTo(xml_writer)
+                        Return xWriter.ToString
                 Catch ex As Exception
                     _Srv.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ReturnResult", "Exception : " & ex.Message)
                     Return Nothing
