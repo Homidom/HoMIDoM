@@ -135,6 +135,22 @@
 
                                 </StackPanel>
                             </GroupBox>
+                            <GroupBox Name="GroupBox28" Margin="2">
+                                <GroupBox.Header>
+                                    <Label Foreground="White" FontWeight="Bold">Serveur Web</Label>
+                                </GroupBox.Header>
+                                <StackPanel >
+                                    <StackPanel Orientation="Horizontal" >
+                                        <CheckBox Name="ChKEnableSrvWeb" IsChecked="True" Background="DarkGray" BorderBrush="Black" Foreground="White" VerticalAlignment="center" Content="Activer" />
+                                        <Button Height="25" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="8,2,2,2" Name="BtnStartSrvWeb" VerticalAlignment="Top" Width="50" Foreground="White">Restart</Button>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" >
+                                        <Label Content="Port:" Foreground=" White" />
+                                        <TextBox Name="TxtPortSrvWeb" Text="8080" Width="40" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
+                                    </StackPanel>
+                                    </StackPanel>
+                            </GroupBox>
+
                             <GroupBox Name="GroupBox24" Margin="2">
                                 <GroupBox.Header>
                                     <Label Foreground="White" FontWeight="Bold">Configuration</Label>

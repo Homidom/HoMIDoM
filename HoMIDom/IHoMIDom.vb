@@ -351,6 +351,12 @@ Namespace HoMIDom
         ''' <param name="Value"></param>
         ''' <remarks></remarks>
         <OperationContract()> Sub SetPortServeurWeb(ByVal Value As Integer)
+
+        ''' <summary>
+        ''' Redémarre ou démarre le serveur web
+        ''' </summary>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub RestartServeurWeb()
 #End Region
 
 #Region "Historisation"

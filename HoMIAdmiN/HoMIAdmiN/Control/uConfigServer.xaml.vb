@@ -73,6 +73,9 @@ Partial Public Class uConfigServer
                 myService.SetTarifJour(TxtTarifJour.Text)
                 myService.SetTarifNuit(TxtTarifNuit.Text)
 
+                myService.SetPortServeurWeb(TxtPortSrvWeb.Text)
+                myService.SetEnableServeurWeb(ChKEnableSrvWeb.IsChecked)
+
                 Dim _list As New List(Of Boolean)
                 If ChkTyp0.IsChecked Then
                     _list.Add(True)
@@ -177,6 +180,9 @@ Partial Public Class uConfigServer
                 ChkEnergie.IsChecked = myService.GetGererEnergie
                 TxtTarifJour.Text = myService.GetTarifJour
                 TxtTarifNuit.Text = myService.GetTarifNuit
+
+                TxtPortSrvWeb.Text = myService.GetPortServeurWeb
+                ChKEnableSrvWeb.IsChecked = myService.GetEnableServeurWeb
 
                 Dim idx = -1
                 For i As Integer = 0 To myService.GetAllVoice.Count - 1
@@ -339,5 +345,20 @@ Partial Public Class uConfigServer
             MessageBox.Show("Veuillez saisir une valeur numérique pour le tarif de jour", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             TxtTarifNuit.Undo()
         End If
+    End Sub
+
+    Private Sub TxtPortSrvWeb_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtPortSrvWeb.TextChanged
+        If IsNumeric(TxtPortSrvWeb.Text) = False Then
+            MessageBox.Show("Veuillez saisir une valeur numérique pour le port du serveur web", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            TxtPortSrvWeb.Undo()
+        End If
+    End Sub
+
+    Private Sub BtnStartSrvWeb_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnStartSrvWeb.Click
+        Try
+            myService.RestartServeurWeb()
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub BtnStartSrvWeb_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 End Class
