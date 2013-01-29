@@ -16,7 +16,7 @@
             Si vous souhaitez utiliser la virtualisation de fichiers et du Registre pour la compatibilité 
             descendante, supprimez le noeud requestedExecutionLevel.
         -->
-        <requestedExecutionLevel level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
       </requestedPrivileges>
     </security>
   </trustInfo>
