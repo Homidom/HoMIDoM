@@ -27,10 +27,10 @@ Driver_Zwave
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.Start">
-	<summary>Démarrer le du driver</summary>
+	<summary>Démarrer le driver</summary>
 	<remarks></remarks>
 </member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.Stop">
-	<summary>Arrêter le du driver</summary>
+	<summary>Arrêter le driver</summary>
 	<remarks></remarks>
 </member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.Restart">
 	<summary>Re-Démarrer le du driver</summary>
