@@ -268,6 +268,35 @@ HoMIDom
  </summary>
 	<param name="Value"></param>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetEnableServeurWeb">
+	<summary>
+ Retourne si le serveur Web est Enable
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetEnableServeurWeb(System.Boolean)">
+	<summary>
+ Fixe Enable du serveur web
+ </summary>
+	<param name="Value"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetPortServeurWeb">
+	<summary>
+ Retourne le port du serveur Web 
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetPortServeurWeb(System.Int32)">
+	<summary>
+ Fixe le port du serveur web
+ </summary>
+	<param name="Value"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.RestartServeurWeb">
+	<summary>
+ Redémarre ou démarre le serveur web
+ </summary>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DevicesAsHisto">
 	<summary>
  Retourne un dictionnary retourant en clé l'id du device et la valeur True/False s'il contient des historiques
@@ -1213,6 +1242,35 @@ HoMIDom
  Fixe la devise du serveur
  </summary>
 	<param name="Value"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetEnableServeurWeb">
+	<summary>
+ Retourne si le serveur Web est Enable
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetEnableServeurWeb(System.Boolean)">
+	<summary>
+ Fixe Enable du serveur web
+ </summary>
+	<param name="Value"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetPortServeurWeb">
+	<summary>
+ Retourne le port du serveur Web 
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetPortServeurWeb(System.Int32)">
+	<summary>
+ Fixe le port du serveur web
+ </summary>
+	<param name="Value"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.RestartServeurWeb">
+	<summary>
+ Redémarre ou démarre le serveur web
+ </summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetHistoDeviceSource(System.String,System.String,System.String,System.String,System.String,System.String)">
 	<summary>
