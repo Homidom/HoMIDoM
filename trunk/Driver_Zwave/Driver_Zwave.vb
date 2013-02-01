@@ -90,7 +90,14 @@ Public Class Driver_ZWave
             LogLevel_Internal
         End Enum
 
-        Const COMMAND_CLASS_SWITCH_BINARY As Byte = 37 ' 0x25 
+        Enum CommandClass As Byte
+            COMMAND_CLASS_NO_OPERATION = 0
+            COMMAND_CLASS_BASIC = 32                ' 0X20
+            COMMAND_CLASS_SWITCH_BINARY = 37        ' 0x25 
+            COMMAND_CLASS_SWITCH_MULTILEVEL = 38    ' 0x26
+        End Enum
+
+
 
 
         ' Denition d'un noeud Zwave 
@@ -104,6 +111,7 @@ Public Class Driver_ZWave
             Dim m_manufacturer As String = ""
             Dim m_product As String = ""
             Dim m_values As New List(Of ZWValueID)
+            Dim m_commandClass As New List(Of CommandClass)
 
 
             Public Property ID() As Byte
@@ -176,7 +184,15 @@ Public Class Driver_ZWave
                 Set(value As List(Of ZWValueID))
                     m_values = value
                 End Set
+            End Property
 
+            Public Property CommandClass() As List(Of CommandClass)
+                Get
+                    Return m_CommandClass
+                End Get
+                Set(ByVal value As List(Of CommandClass))
+                    m_CommandClass = value
+                End Set
             End Property
 
             Shared Sub New()
@@ -485,7 +501,7 @@ Public Class Driver_ZWave
             End Try
         End Function
 
-        ''' <summary>Démarrer le du driver</summary>
+        ''' <summary>Démarrer le driver</summary>
         ''' <remarks></remarks>
         Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
             Dim retour As String = ""
@@ -560,7 +576,7 @@ Public Class Driver_ZWave
             End Try
         End Sub
 
-        ''' <summary>Arrêter le du driver</summary>
+        ''' <summary>Arrêter le driver</summary>
         ''' <remarks></remarks>
         Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
             Dim retour As String
@@ -618,11 +634,9 @@ Public Class Driver_ZWave
             Try
                 Dim NodeTemp As New Node
                 Dim texteCommande As String
-                Dim tempValue As String = ""
+                Dim ValueTemp As ZWValueID = Nothing
                 Dim TempVersion As Byte = 0
-
-
-                NodeTemp = GetNode(m_homeId, Objet.Adresse1)
+                Dim IsMultiLevel As Boolean = False
 
                 If _Enable = False Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
@@ -639,31 +653,51 @@ Public Class Driver_ZWave
                     Exit Sub
                 End If
 
+                NodeTemp = GetNode(m_homeId, Objet.Adresse1)
+                If NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_MULTILEVEL) Then
+                    If InStr(Objet.adresse2, ":") Then
+                        Dim ParaAdr2 = Split(Objet.adresse2, ":")
+                        ValueTemp = GetValueID(NodeTemp, Trim(ParaAdr2(0)), Trim(ParaAdr2(1)))
+                        IsMultiLevel = True
+                    Else
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write ", "Erreur dans la definition du label et de l'instance")
+                    End If
+                End If
+
                 If Objet.Type = "LAMPE" Or Objet.Type = "APPAREIL" Then
                     texteCommande = UCase(Commande)
 
                     Select Case UCase(Commande)
 
                         Case "ON"
-                            If m_manager.GetNodeClassInformation(m_homeId, NodeTemp.ID, COMMAND_CLASS_SWITCH_BINARY, tempValue, TempVersion) Then
-
+                            If IsMultiLevel Then
+                                m_manager.SetValue(ValueTemp, 255)
                             Else
                                 m_manager.SetNodeOn(m_homeId, NodeTemp.ID)
                             End If
+
                         Case "OFF"
-                            m_manager.SetNodeOff(m_homeId, NodeTemp.ID)
+                            If IsMultiLevel Then
+                                m_manager.SetValue(ValueTemp, 0)
+                            Else
+                                m_manager.SetNodeOff(m_homeId, NodeTemp.ID)
+                            End If
 
                         Case "DIM"
                             If Not (IsNothing(Parametre1)) Then
                                 Dim ValDimmer As Byte = Math.Round(Parametre1 * 2.55) ' Reformate la valeur entre 0 : OFF  et 255 :ON 
-                                m_manager.SetNodeLevel(m_homeId, NodeTemp.ID, ValDimmer)
                                 texteCommande = texteCommande & " avec le % = " & Val(Parametre1) & " - " & ValDimmer
+                                If IsMultiLevel Then
+                                    m_manager.SetValue(ValueTemp, 255)
+                                Else
+                                    m_manager.SetNodeLevel(m_homeId, NodeTemp.ID, ValDimmer)
+                                End If
                             End If
 
                     End Select
-                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Passage par la commande " & texteCommande)
+                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Passage par la commande " & texteCommande)
                 Else
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: Le type " & Objet.Type.ToString & " à l'adresse " & Objet.Adresse1 & " n'est pas compatible")
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: Le type " & Objet.Type.ToString & " à l'adresse " & Objet.Adresse1 & " n'est pas compatible")
                 End If
 
             Catch ex As Exception
@@ -973,6 +1007,10 @@ Public Class Driver_ZWave
 
                         ' Ajoute une nouveau noeud à notre liste
                         Dim node As New Node
+                        Dim ClassNameString As String = ""
+                        Dim ClassVersion As Byte = 0
+                        Dim ClassExist As Boolean = False
+
                         ' Si ce n'est pas le controleur 
                         If m_notification.GetNodeId() <> m_manager.GetControllerNodeId(m_homeId) Then
                             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Ajout d'un nouveau noeud  " & m_notification.GetNodeId())
@@ -985,6 +1023,11 @@ Public Class Driver_ZWave
                                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - Nb noeuds: " & m_nodeList.Count & ", Location: " & node.Location & ", Nb values: " & node.Values.Count)
                             End If
                         End If
+
+                        For Each ClassNameSearch As CommandClass In [Enum].GetValues(GetType(CommandClass))
+                            If m_manager.GetNodeClassInformation(m_homeId, m_manager.GetControllerNodeId(m_homeId), ClassNameSearch, ClassNameString, ClassVersion) Then node.CommandClass.Add(ClassNameSearch)
+                        Next
+
 
                     Case ZWNotification.Type.NodeRemoved
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - NodeRemovedsur node " & m_notification.GetNodeId())
@@ -1037,17 +1080,20 @@ Public Class Driver_ZWave
                     Case ZWNotification.Type.NodeQueriesComplete
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - NodeQueriesComplete")
 
+
                     Case ZWNotification.Type.AllNodesQueried
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - AllNodesQueried")
                         ' Pour simulation de noeuds
-                        ' Dim nodeTempAdd As New Node
-                        'nodeTempAdd.ID = 2
-                        'nodeTempAdd.HomeID = 21816633
-                        'nodeTempAdd.Manufacturer = "Everspring"
-                        'nodeTempAdd.Product = "ST814 Temperature and Humidity Sensor"
-                        'nodeTempAdd.Label = "Temperature and Humidity Sensor"
-                        'nodeTempAdd.Name = "Capteur Chambre"
-                        'm_nodeList.Add(nodeTempAdd)
+                        Dim nodeTempAdd As New Node
+                        nodeTempAdd.ID = 2
+                        nodeTempAdd.HomeID = 21816633
+                        nodeTempAdd.Manufacturer = "Everspring"
+                        nodeTempAdd.Product = "ST814 Temperature and Humidity Sensor"
+                        nodeTempAdd.Label = "Temperature and Humidity Sensor"
+                        nodeTempAdd.Name = "Capteur Chambre"
+                        nodeTempAdd.CommandClass.Add(32)
+                        nodeTempAdd.CommandClass.Add(0)
+                        m_nodeList.Add(nodeTempAdd)
 
                         'Dim nodeTempAdd2 As New Node
                         'nodeTempAdd2.ID = 3
@@ -1057,6 +1103,13 @@ Public Class Driver_ZWave
                         'nodeTempAdd2.Label = "Temperature and Humidity Sensor"
                         'nodeTempAdd2.Name = "Capteur bureau"
                         'm_nodeList.Add(nodeTempAdd2)
+                        'Dim node As Node = GetNode(m_notification.GetHomeId(), 2)
+                        'Dim present As Boolean = node.CommandClass.Contains(CommandClass.COMMAND_CLASS_BASIC)
+                        'If present Then
+                        ' Console.WriteLine("Classe trouvée")
+                        ' Else
+                        ' Console.WriteLine("Classe non trouvée")
+                        ' End If
                         m_nodesReady = True
 
 
