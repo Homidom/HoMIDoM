@@ -1084,16 +1084,16 @@ Public Class Driver_ZWave
                     Case ZWNotification.Type.AllNodesQueried
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - AllNodesQueried")
                         ' Pour simulation de noeuds
-                        Dim nodeTempAdd As New Node
-                        nodeTempAdd.ID = 2
-                        nodeTempAdd.HomeID = 21816633
-                        nodeTempAdd.Manufacturer = "Everspring"
-                        nodeTempAdd.Product = "ST814 Temperature and Humidity Sensor"
-                        nodeTempAdd.Label = "Temperature and Humidity Sensor"
-                        nodeTempAdd.Name = "Capteur Chambre"
-                        nodeTempAdd.CommandClass.Add(32)
-                        nodeTempAdd.CommandClass.Add(0)
-                        m_nodeList.Add(nodeTempAdd)
+                        'Dim nodeTempAdd As New Node
+                        'nodeTempAdd.ID = 2
+                        'nodeTempAdd.HomeID = 21816633
+                        'nodeTempAdd.Manufacturer = "Everspring"
+                        'nodeTempAdd.Product = "ST814 Temperature and Humidity Sensor"
+                        'nodeTempAdd.Label = "Temperature and Humidity Sensor"
+                        'nodeTempAdd.Name = "Capteur Chambre"
+                        'nodeTempAdd.CommandClass.Add(32)
+                        'nodeTempAdd.CommandClass.Add(0)
+                        'm_nodeList.Add(nodeTempAdd)
 
                         'Dim nodeTempAdd2 As New Node
                         'nodeTempAdd2.ID = 3
