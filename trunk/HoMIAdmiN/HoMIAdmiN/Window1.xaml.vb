@@ -80,7 +80,6 @@ Class Window1
             Myfile = MyRepAppData & "\HoMIAdmiN.xml"
             If Not System.IO.File.Exists(Myfile) Then
                 System.IO.File.Copy(MyRep & "\Config\HoMIAdmiN.xml", Myfile, False)
-                MessageBox.Show("Creation des fichiers de configuration HoMIAdmiN dans le profil Utilisateur.", "HoMIAdmiN Configuration", MessageBoxButton.OK, MessageBoxImage.Information)
             End If
 
             AffIsDisconnect()
