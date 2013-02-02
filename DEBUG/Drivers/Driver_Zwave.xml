@@ -110,6 +110,8 @@ Driver_Zwave
 </member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.traiteValeur(OpenZWaveDotNet.ZWNotification)">
 	<summary>processing the received value</summary>
 	<param name="m_notification"></param>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.SimulNode">
+	<summary>Simulate a Node</summary>
 </member><member name="T:Driver_Zwave.Driver_ZWave.Driver_ZWave">
 	<summary>Class Driver_ZWave, permet de communiquer avec le controleur Z-Wave</summary>
 	<remarks>Nécessite l'installation des pilotes fournis sur le site </remarks>

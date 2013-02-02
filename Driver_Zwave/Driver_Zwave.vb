@@ -616,7 +616,12 @@ Public Class Driver_ZWave
                     Exit Sub
                 End If
 
-                traiteValeur(m_notification)
+                If Not IsNothing(Objet) Then
+                    traiteValeur(m_notification)
+                Else
+                    Console.WriteLine("Problème : Objet vide")
+                End If
+
 
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", ex.Message)
@@ -654,7 +659,7 @@ Public Class Driver_ZWave
                 End If
 
                 NodeTemp = GetNode(m_homeId, Objet.Adresse1)
-                If NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_MULTILEVEL) Then
+                If NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_MULTILEVEL) Or NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY) Then
                     If InStr(Objet.adresse2, ":") Then
                         Dim ParaAdr2 = Split(Objet.adresse2, ":")
                         ValueTemp = GetValueID(NodeTemp, Trim(ParaAdr2(0)), Trim(ParaAdr2(1)))
@@ -664,7 +669,7 @@ Public Class Driver_ZWave
                     End If
                 End If
 
-                If Objet.Type = "LAMPE" Or Objet.Type = "APPAREIL" Then
+                If Objet.Type = "LAMPE" Or Objet.Type = "APPAREIL" Or Objet.Type = "SWITCH" Then
                     texteCommande = UCase(Commande)
 
                     Select Case UCase(Commande)
@@ -695,9 +700,9 @@ Public Class Driver_ZWave
                             End If
 
                     End Select
-                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Passage par la commande " & texteCommande)
+                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Passage par la commande " & texteCommande)
                 Else
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: Le type " & Objet.Type.ToString & " à l'adresse " & Objet.Adresse1 & " n'est pas compatible")
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: Le type " & Objet.Type.ToString & " à l'adresse " & Objet.Adresse1 & " n'est pas compatible")
                 End If
 
             Catch ex As Exception
@@ -1083,35 +1088,9 @@ Public Class Driver_ZWave
 
                     Case ZWNotification.Type.AllNodesQueried
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - AllNodesQueried")
-                        ' Pour simulation de noeuds
-                        'Dim nodeTempAdd As New Node
-                        'nodeTempAdd.ID = 2
-                        'nodeTempAdd.HomeID = 21816633
-                        'nodeTempAdd.Manufacturer = "Everspring"
-                        'nodeTempAdd.Product = "ST814 Temperature and Humidity Sensor"
-                        'nodeTempAdd.Label = "Temperature and Humidity Sensor"
-                        'nodeTempAdd.Name = "Capteur Chambre"
-                        'nodeTempAdd.CommandClass.Add(32)
-                        'nodeTempAdd.CommandClass.Add(0)
-                        'm_nodeList.Add(nodeTempAdd)
-
-                        'Dim nodeTempAdd2 As New Node
-                        'nodeTempAdd2.ID = 3
-                        'nodeTempAdd2.HomeID = 21816633
-                        'nodeTempAdd2.Manufacturer = "Everspring"
-                        'nodeTempAdd2.Product = "ST814 Temperature and Humidity Sensor"
-                        'nodeTempAdd2.Label = "Temperature and Humidity Sensor"
-                        'nodeTempAdd2.Name = "Capteur bureau"
-                        'm_nodeList.Add(nodeTempAdd2)
-                        'Dim node As Node = GetNode(m_notification.GetHomeId(), 2)
-                        'Dim present As Boolean = node.CommandClass.Contains(CommandClass.COMMAND_CLASS_BASIC)
-                        'If present Then
-                        ' Console.WriteLine("Classe trouvée")
-                        ' Else
-                        ' Console.WriteLine("Classe non trouvée")
-                        ' End If
                         m_nodesReady = True
-
+                        ' Simulation de noeuds 
+                        ' SimulNode()
 
                     Case ZWNotification.Type.AwakeNodesQueried
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - AwakeNodesQueried")
@@ -1171,8 +1150,9 @@ Public Class Driver_ZWave
             Dim listedevices As New ArrayList()
             Dim NotifValueID As ZWValueID
 
-            TempNode = m_notification.GetNodeId()
+
             TempLabel = m_manager.GetValueLabel(m_notification.GetValueID())
+            TempNode = m_notification.GetNodeId()
             TempInstance = m_notification.GetValueID.GetInstance()
             TempValeur = m_notification.GetValueID()
             NotifValueID = m_notification.GetValueID()
@@ -1259,6 +1239,44 @@ Public Class Driver_ZWave
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traiteValeur", " Exception : " & ex.Message)
             End Try
+        End Sub
+
+        ''' <summary>Simulate a Node</summary>
+        Private Sub SimulNode()
+            Try
+                ' Pour simulation de noeuds
+                'Dim nodeTempAdd As New Node
+                'nodeTempAdd.ID = 2
+                'nodeTempAdd.HomeID = 21816633
+                'nodeTempAdd.Manufacturer = "Everspring"
+                'nodeTempAdd.Product = "ST814 Temperature and Humidity Sensor"
+                'nodeTempAdd.Label = "Temperature and Humidity Sensor"
+                'nodeTempAdd.Name = "Capteur Chambre"
+                'nodeTempAdd.CommandClass.Add(32)
+                'nodeTempAdd.CommandClass.Add(0)
+                'm_nodeList.Add(nodeTempAdd)
+
+                Dim nodeTempAdd2 As New Node
+                nodeTempAdd2.ID = 2
+                nodeTempAdd2.HomeID = 21816633
+                nodeTempAdd2.Manufacturer = "Everspring"
+                nodeTempAdd2.Product = "ST814 Temperature and Humidity Sensor"
+                nodeTempAdd2.Label = "Temperature and Humidity Sensor"
+                nodeTempAdd2.Name = "Capteur bureau"
+                m_nodeList.Add(nodeTempAdd2)
+                Dim NodeTempValue As New ZWValueID(21816633, 2, ZWValueID.ValueGenre.Basic, CommandClass.COMMAND_CLASS_BASIC, 1, 1, ZWValueID.ValueType.Byte, 3)
+                nodeTempAdd2.Values.Add(NodeTempValue)
+                ' Dim node As Node = GetNode(m_notification.GetHomeId(), 2)
+                'Dim present As Boolean = node.CommandClass.Contains(CommandClass.COMMAND_CLASS_BASIC)
+                'If present Then
+                ' Console.WriteLine("Classe trouvée")
+                ' Else
+                ' Console.WriteLine("Classe non trouvée")
+                ' End If
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " SimulateNode", " Exception : " & ex.Message)
+            End Try
+
         End Sub
 
 #End Region
