@@ -122,6 +122,7 @@
                 <ComboBox Name="CbPropertyDevice" Width="118" Height="23" />
                 <ComboBox Name="CbSigne2" SelectedIndex="0" Margin="3" Height="22">
                     <ComboBoxItem Content="=" />
+                    <ComboBoxItem Content="&lt;" />
                     <ComboBoxItem Content="&lt;=" />
                     <ComboBoxItem Content="&gt;" />
                     <ComboBoxItem Content="&gt;=" />

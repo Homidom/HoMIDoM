@@ -810,7 +810,7 @@ Public Class uWidgetEmpty
                     If ShowEtiquette And _dev.Name <> _Etiquette And _IsEmpty = False Then
                         Etiquette = _dev.Name
                     End If
-                    If Image.Tag <> _dev.Picture Then
+                    If Image.Tag <> _dev.Picture And _IsEmpty = False Then
                         Image.Tag = _dev.Picture
                         Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_dev.Picture))
                     End If
