@@ -6,6 +6,7 @@
     Public frmMere As Window1
     Public Design As Boolean = False
     Public _MonRepertoire As String = System.Environment.CurrentDirectory
+    Public MyRepAppData As String = ""
 
     'Ecriture dans le fichier log
     Public _Debug As Boolean

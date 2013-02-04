@@ -516,7 +516,7 @@ Namespace HoMIDom
                                             _CycleSave = list.Item(0).Attributes.Item(j).Value
                                         Case "voice"
                                             _Voice = list.Item(0).Attributes.Item(j).Value
-                                            If String.IsNullOrEmpty(_Voice) = False Then _Voice = GetFirstVoice()
+                                            If String.IsNullOrEmpty(_Voice) = True Then _Voice = GetFirstVoice()
                                         Case "saverealtime"
                                             _SaveRealTime = list.Item(0).Attributes.Item(j).Value
                                         Case "devise"
