@@ -915,4 +915,94 @@ Public Class uCondition
         End Try
     End Sub
 
+    Private Sub TxtValue_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtValue.TextChanged
+        Dim _flag As Boolean = False
+        Try
+            If String.IsNullOrEmpty(CbDevice.Text) = False And String.IsNullOrEmpty(CbPropertyDevice.Text) = False And String.IsNullOrEmpty(TxtValue.Text) = False Then
+                Dim _ID As String = myService.GetAllDevices(IdSrv).Item(CbDevice.SelectedIndex).ID
+                Dim _type As String = myService.TypeOfPropertyOfDevice(_ID, CbPropertyDevice.Text)
+                Dim _obj As Object = Nothing
+
+
+                If String.IsNullOrEmpty(_type) = False Then
+                    Select Case _type
+                        Case "string"
+                            Try
+                                _obj = CStr(TxtValue.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type String !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                TxtValue.Text = ""
+                                _flag = True
+                            End Try
+                        Case "boolean"
+                            Try
+                                _obj = CBool(TxtValue.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type Boolean !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                TxtValue.Text = 0
+                                _flag = True
+                            End Try
+                        Case "byte"
+                            Try
+                                _obj = CByte(TxtValue.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type Byte !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                TxtValue.Text = 0
+                                _flag = True
+                            End Try
+                        Case "char"
+                            Try
+                                _obj = CChar(TxtValue.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type Char !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                TxtValue.Text = ""
+                                _flag = True
+                            End Try
+                        Case "datetime"
+                            Try
+                                _obj = CDate(TxtValue.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type DateTime !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                TxtValue.Text = ""
+                                _flag = True
+                            End Try
+                        Case "decimal"
+                            Try
+                                _obj = CDec(TxtValue.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type Decimal !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                TxtValue.Text = 0
+                                _flag = True
+                            End Try
+                        Case "double"
+                            Try
+                                _obj = CDbl(TxtValue.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type Double !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                TxtValue.Text = "0"
+                                _flag = True
+                            End Try
+                        Case "integer" Or "int16" Or "int32" Or "int64"
+                            Try
+                                _obj = CInt(TxtValue.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type Integer !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                TxtValue.Text = "0"
+                                _flag = True
+                            End Try
+                        Case "single"
+                            Try
+                                _obj = CSng(TxtValue.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type Single !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                TxtValue.Text = "0"
+                                _flag = True
+                            End Try
+                    End Select
+                End If
+            End If
+        Catch ex As Exception
+            If _flag = False Then MessageBox.Show("Erreur uCondition TxtValue_TextChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
 End Class
