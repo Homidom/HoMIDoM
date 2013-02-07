@@ -121,6 +121,83 @@ Namespace HoMIDom
             End Try
         End Function
 
+        Public Function TypeOfProperty(ByVal OBjet As Object, ByVal [Property] As String) As String
+            Try
+                Dim Info As Reflection.PropertyInfo
+                Dim _Myobjet As Object = Nothing
+                Dim _result As String = ""
+
+                Select Case OBjet.Type.ToString
+                    Case HoMIDom.Device.ListeDevices.APPAREIL.ToString
+                        _Myobjet = New Device.APPAREIL(Nothing)
+                    Case HoMIDom.Device.ListeDevices.AUDIO.ToString
+                        _Myobjet = New Device.AUDIO(Nothing)
+                    Case HoMIDom.Device.ListeDevices.BAROMETRE.ToString
+                        _Myobjet = New Device.BAROMETRE(Nothing)
+                    Case HoMIDom.Device.ListeDevices.BATTERIE.ToString
+                        _Myobjet = New Device.BATTERIE(Nothing)
+                    Case HoMIDom.Device.ListeDevices.COMPTEUR.ToString
+                        _Myobjet = New Device.COMPTEUR(Nothing)
+                    Case HoMIDom.Device.ListeDevices.CONTACT.ToString
+                        _Myobjet = New Device.CONTACT(Nothing)
+                    Case HoMIDom.Device.ListeDevices.DETECTEUR.ToString
+                        _Myobjet = New Device.DETECTEUR(Nothing)
+                    Case HoMIDom.Device.ListeDevices.DIRECTIONVENT.ToString
+                        _Myobjet = New Device.DIRECTIONVENT(Nothing)
+                    Case HoMIDom.Device.ListeDevices.ENERGIEINSTANTANEE.ToString
+                        _Myobjet = New Device.ENERGIEINSTANTANEE(Nothing)
+                    Case HoMIDom.Device.ListeDevices.ENERGIETOTALE.ToString
+                        _Myobjet = New Device.ENERGIETOTALE(Nothing)
+                    Case HoMIDom.Device.ListeDevices.FREEBOX.ToString
+                        _Myobjet = New Device.FREEBOX(Nothing)
+                    Case HoMIDom.Device.ListeDevices.GENERIQUEBOOLEEN.ToString
+                        _Myobjet = New Device.GENERIQUEBOOLEEN(Nothing)
+                    Case HoMIDom.Device.ListeDevices.GENERIQUESTRING.ToString
+                        _Myobjet = New Device.GENERIQUESTRING(Nothing)
+                    Case HoMIDom.Device.ListeDevices.GENERIQUEVALUE.ToString
+                        _Myobjet = New Device.GENERIQUEVALUE(Nothing)
+                    Case HoMIDom.Device.ListeDevices.HUMIDITE.ToString
+                        _Myobjet = New Device.HUMIDITE(Nothing)
+                    Case HoMIDom.Device.ListeDevices.LAMPE.ToString
+                        _Myobjet = New Device.LAMPE(Nothing)
+                    Case HoMIDom.Device.ListeDevices.METEO.ToString
+                        _Myobjet = New Device.METEO(Nothing)
+                    Case HoMIDom.Device.ListeDevices.MULTIMEDIA.ToString
+                        _Myobjet = New Device.MULTIMEDIA(Nothing)
+                    Case HoMIDom.Device.ListeDevices.PLUIECOURANT.ToString
+                        _Myobjet = New Device.PLUIECOURANT(Nothing)
+                    Case HoMIDom.Device.ListeDevices.PLUIETOTAL.ToString
+                        _Myobjet = New Device.PLUIETOTAL(Nothing)
+                    Case HoMIDom.Device.ListeDevices.SWITCH.ToString
+                        _Myobjet = New Device.SWITCH(Nothing)
+                    Case HoMIDom.Device.ListeDevices.TELECOMMANDE.ToString
+                        _Myobjet = New Device.TELECOMMANDE(Nothing)
+                    Case HoMIDom.Device.ListeDevices.TEMPERATURE.ToString
+                        _Myobjet = New Device.TEMPERATURE(Nothing)
+                    Case HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE.ToString
+                        _Myobjet = New Device.TEMPERATURECONSIGNE(Nothing)
+                    Case HoMIDom.Device.ListeDevices.UV.ToString
+                        _Myobjet = New Device.UV(Nothing)
+                    Case HoMIDom.Device.ListeDevices.VITESSEVENT.ToString
+                        _Myobjet = New Device.VITESSEVENT(Nothing)
+                    Case HoMIDom.Device.ListeDevices.VOLET.ToString
+                        _Myobjet = New Device.VOLET(Nothing)
+                End Select
+
+                For Each Info In _Myobjet.GetType.GetProperties
+                    If LCase(Info.Name.ToString) = LCase([Property]) Then
+                        _result = Info.PropertyType.FullName
+                        _result = LCase(_result)
+                        _result = _result.Replace("system.", "")
+                        Exit For
+                    End If
+                Next
+
+                Return _result
+            Catch ex As Exception
+                Return ""
+            End Try
+        End Function
 
         'Liste les méthodes public d'un objet
         'Nom_de_la_methode|parametre1:Type|parametre2:type...

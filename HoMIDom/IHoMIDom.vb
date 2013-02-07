@@ -494,6 +494,15 @@ Namespace HoMIDom
 
 #Region "Device"
         ''' <summary>
+        ''' Retourne le type d'une propriété d'un device (boolean, string, double...)
+        ''' </summary>
+        ''' <param name="DeviceId">ID du device</param>
+        ''' <param name="Property">Nom de la propriété></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function TypeOfPropertyOfDevice(ByVal DeviceId As String, ByVal [Property] As String) As String
+
+        ''' <summary>
         ''' Permet de changer la valeur d'un device
         ''' </summary>
         ''' <param name="idsrv"></param>

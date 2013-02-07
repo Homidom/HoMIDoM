@@ -955,6 +955,7 @@ Namespace HoMIDom
                                         End If
                                     End With
                                     _ListDevices.Add(_Dev)
+
                                     _Dev = Nothing
                                 Next
                                 If trvSoleil = False Then
@@ -6177,6 +6178,30 @@ Namespace HoMIDom
                 Return Nothing
             End Try
         End Function
+
+        ''' <summary>
+        ''' Retourne le type d'une propriété d'un device (boolean, string, double...)
+        ''' </summary>
+        ''' <param name="DeviceId">ID du device</param>
+        ''' <param name="Property">Nom de la propriété</param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function TypeOfPropertyOfDevice(ByVal DeviceId As String, ByVal [Property] As String) As String Implements IHoMIDom.TypeOfPropertyOfDevice
+            Try
+                Dim _dev As Object = ReturnRealDeviceById(DeviceId)
+                Dim _result As String = ""
+
+                If _dev IsNot Nothing Then
+                    _result = TypeOfProperty(_dev, [Property])
+                End If
+
+                Return _result
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TypeOfPropertyOfDevice", "Exception : " & ex.Message)
+                Return ""
+            End Try
+        End Function
+
 
         ''' <summary>Retourne un device par son nom</summary>
         ''' <param name="Name"></param>
