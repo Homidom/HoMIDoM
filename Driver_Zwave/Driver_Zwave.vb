@@ -667,6 +667,7 @@ Public Class Driver_ZWave
                     Else
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write ", "Erreur dans la definition du label et de l'instance")
                     End If
+                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", " Composant Multilevel " & NodeTemp.CommandClass.ToString)
                 End If
 
                 If Objet.Type = "LAMPE" Or Objet.Type = "APPAREIL" Or Objet.Type = "SWITCH" Then
@@ -676,28 +677,37 @@ Public Class Driver_ZWave
 
                         Case "ON"
                             If IsMultiLevel Then
-                                m_manager.SetValue(ValueTemp, 255)
+                                If NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY) Then
+                                    m_manager.SetValue(ValueTemp, True)
+                                Else
+                                    m_manager.SetValue(ValueTemp, 255)
+                                End If
+
                             Else
                                 m_manager.SetNodeOn(m_homeId, NodeTemp.ID)
                             End If
 
                         Case "OFF"
                             If IsMultiLevel Then
-                                m_manager.SetValue(ValueTemp, 0)
+                                If NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY) Then
+                                    m_manager.SetValue(ValueTemp, False)
+                                Else
+                                    m_manager.SetValue(ValueTemp, 0)
+                                End If
                             Else
                                 m_manager.SetNodeOff(m_homeId, NodeTemp.ID)
                             End If
 
                         Case "DIM"
-                            If Not (IsNothing(Parametre1)) Then
-                                Dim ValDimmer As Byte = Math.Round(Parametre1 * 2.55) ' Reformate la valeur entre 0 : OFF  et 255 :ON 
-                                texteCommande = texteCommande & " avec le % = " & Val(Parametre1) & " - " & ValDimmer
-                                If IsMultiLevel Then
-                                    m_manager.SetValue(ValueTemp, 255)
-                                Else
-                                    m_manager.SetNodeLevel(m_homeId, NodeTemp.ID, ValDimmer)
+                                If Not (IsNothing(Parametre1)) Then
+                                    Dim ValDimmer As Byte = Math.Round(Parametre1 * 2.55) ' Reformate la valeur entre 0 : OFF  et 255 :ON 
+                                    texteCommande = texteCommande & " avec le % = " & Val(Parametre1) & " - " & ValDimmer
+                                    If IsMultiLevel Then
+                                        m_manager.SetValue(ValueTemp, 255)
+                                    Else
+                                        m_manager.SetNodeLevel(m_homeId, NodeTemp.ID, ValDimmer)
+                                    End If
                                 End If
-                            End If
 
                     End Select
                     If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Passage par la commande " & texteCommande)
@@ -986,10 +996,17 @@ Public Class Driver_ZWave
                 If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Une notification a été reçue : " & m_notification.[GetType]())
 
                 Select Case m_notification.[GetType]()
+
                     Case ZWNotification.Type.ValueAdded
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - ValueAdded sur node " & m_notification.GetNodeId())
                         Dim node As Node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
-                        If Not IsNothing(node) Then node.AddValue(m_notification.GetValueID())
+                        If Not IsNothing(node) Then
+                            Dim ValueId As ZWValueID = m_notification.GetValueID()
+                            Console.WriteLine("Nouvelle valeur Id : " & ValueId.GetId() & " de type : " & ValueId.GetType() & " pour le node : " & ValueId.GetNodeId())
+                            Console.WriteLine("avec l'index       : " & ValueId.GetIndex() & " de classe : " & ValueId.GetCommandClassId())
+                            node.AddValue(m_notification.GetValueID())
+                        End If
+
 
                     Case ZWNotification.Type.ValueRemoved
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - ValueRemoved sur node " & m_notification.GetNodeId())
@@ -999,7 +1016,10 @@ Public Class Driver_ZWave
                     Case ZWNotification.Type.ValueChanged
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - ValueChanged sur node " & m_notification.GetNodeId())
                         Dim node As Node = GetNode(m_notification.GetHomeId(), m_notification.GetNodeId())
-                        If Not IsNothing(node) Then traiteValeur(m_notification)
+                        If Not IsNothing(node) Then
+                            traiteValeur(m_notification)
+                        End If
+
 
                     Case ZWNotification.Type.ValueRefreshed
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - Refreshed sur node " & m_notification.GetNodeId())
@@ -1122,11 +1142,14 @@ Public Class Driver_ZWave
         ''' <returns>ValueId</returns>
         Private Function GetValueID(ByVal node As Node, ByVal valueLabel As String, Optional ByVal ValueInstance As Byte = 0) As ZWValueID
             Try
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GetValeurID", " Receive from node:" & node.ID & ":" & "Label:" & valueLabel & " Index:" & ValueInstance)
+
                 For Each valueID As ZWValueID In node.Values
-                    If (valueID.GetNodeId = node.ID) And (m_manager.GetValueLabel(valueID) = valueLabel) Then
+                    If (valueID.GetNodeId() = node.ID) And (m_manager.GetValueLabel(valueID) = valueLabel) Then
                         If Not (ValueInstance) Then
                             Return valueID
-                        ElseIf valueID.GetInstance = ValueInstance Then
+                        ElseIf valueID.GetInstance() = ValueInstance Then
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GetValeurID", " Valeur trouvée  Index:" & ValueInstance)
                             Return valueID
                         End If
                     End If
@@ -1148,15 +1171,14 @@ Public Class Driver_ZWave
             Dim TempValeurString As String = ""
             Dim tempString As String = ""
             Dim listedevices As New ArrayList()
-            Dim NotifValueID As ZWValueID
-
+            
 
             TempLabel = m_manager.GetValueLabel(m_notification.GetValueID())
             TempNode = m_notification.GetNodeId()
             TempInstance = m_notification.GetValueID.GetInstance()
             TempValeur = m_notification.GetValueID()
-            NotifValueID = m_notification.GetValueID()
-            m_manager.GetValueAsString(NotifValueID, TempValeurString)
+            m_manager.GetValueAsString(TempValeur, TempValeurString)
+            Dim ValeurRecue As Object = Nothing
 
             Try
                 ' Log tous les informations en mode debug
@@ -1182,34 +1204,38 @@ Public Class Driver_ZWave
                             'on maj la value si la durée entre les deux receptions est > à 1.5s
                             If (DateTime.Now - Date.Parse(LocalDevice.LastChange)).TotalMilliseconds > 1500 Then
                                 ' Recuperation de la valeur en fonction du type
+
+
                                 Select Case TempValeur.GetType()
-                                    Case 0 : m_manager.GetValueAsBool(TempValeur, LocalDevice.value)
-                                    Case 1 : m_manager.GetValueAsByte(TempValeur, LocalDevice.value)
-                                    Case 2 : m_manager.GetValueAsDecimal(TempValeur, LocalDevice.value)
-                                    Case 3 : m_manager.GetValueAsInt(TempValeur, LocalDevice.value)
+                                    Case 0 : m_manager.GetValueAsBool(TempValeur, ValeurRecue) 'm_manager.GetValueAsBool(TempValeur, LocalDevice.value)
+                                    Case 1 : m_manager.GetValueAsByte(TempValeur, ValeurRecue) ' GetValueAsByte(TempValeur, LocalDevice.value)
+                                    Case 2 : m_manager.GetValueAsDecimal(TempValeur, ValeurRecue) ' GetValueAsDecimal(TempValeur, LocalDevice.value)
+                                    Case 3 : m_manager.GetValueAsInt(TempValeur, ValeurRecue) ' m_manager.GetValueAsInt(TempValeur, LocalDevice.value)
                                         '  Case 4 : m_manager.GetValueListItems(NodeTemp.Values(IndexTemp), LocalDevice.value) ; A voir + tard
-                                    Case 6 : m_manager.GetValueAsShort(TempValeur, LocalDevice.value)
-                                    Case 7 : m_manager.GetValueAsString(TempValeur, LocalDevice.value)
+                                    Case 6 : m_manager.GetValueAsShort(TempValeur, ValeurRecue) ' m_manager.GetValueAsShort(TempValeur, LocalDevice.value)
+                                    Case 7 : m_manager.GetValueAsString(TempValeur, ValeurRecue) ' m_manager.GetValueAsString(TempValeur, LocalDevice.value)
                                 End Select
 
                                 ' Traitement particulier pour les temperatures
                                 If LocalDevice.type = "TEMPERATURE" Or LocalDevice.type = "CONSIGNETEMPERATURE" Then
-                                    Select Case m_manager.GetValueUnits(NotifValueID)
+                                    Select Case m_manager.GetValueUnits(TempValeur)
                                         Case "F"
                                             If LocalDevice.unit = "°C" Then
-                                                Dim myValue As Single = Math.Round(CDec(Int((LocalDevice.value - 32) * 5) / 9), 1)
-
-                                                LocalDevice.value = myValue
+                                                Dim myValue As Single = Math.Round(CDec(Int((ValeurRecue - 32) * 5) / 9), 1)
+                                                ValeurRecue = myValue.ToString
                                             End If
                                         Case "C"
                                             If LocalDevice.unit = "°F" Then
-                                                Dim myValue As Single = Math.Round(CDec(Int((LocalDevice.value * 9) / 5) + 32), 1)
-                                                LocalDevice.value = myValue
+                                                Dim myValue As Single = Math.Round(CDec(Int((ValeurRecue * 9) / 5) + 32), 1)
+                                                ValeurRecue = myValue.ToString
                                             End If
                                         Case Else
-                                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traiteValeur", " Exception : Unité non traitée " & m_manager.GetValueUnits(NotifValueID))
+                                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traiteValeur", " Exception : Unité non traitée " & m_manager.GetValueUnits(TempValeur))
                                     End Select
                                 End If
+
+                                ' Enregistrement de la valeur recue 
+                                LocalDevice.value = ValeurRecue
 
                                 'gestion de l'information de Batterie
                                 If TempLabel = "Battery Level" And TempValeurString <= 10 Then _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traiteValeur ", LocalDevice.nom & " : Battery vide")
@@ -1257,15 +1283,18 @@ Public Class Driver_ZWave
                 'm_nodeList.Add(nodeTempAdd)
 
                 Dim nodeTempAdd2 As New Node
-                nodeTempAdd2.ID = 2
+                nodeTempAdd2.ID = 4
                 nodeTempAdd2.HomeID = 21816633
-                nodeTempAdd2.Manufacturer = "Everspring"
-                nodeTempAdd2.Product = "ST814 Temperature and Humidity Sensor"
-                nodeTempAdd2.Label = "Temperature and Humidity Sensor"
-                nodeTempAdd2.Name = "Capteur bureau"
+                nodeTempAdd2.Manufacturer = "Fibaro"
+                nodeTempAdd2.Product = "FGS-221"
+                nodeTempAdd2.Label = "Binary Power Switch"
+                nodeTempAdd2.Name = "Rad salon Switch 1"
+                nodeTempAdd2.CommandClass.Add(CommandClass.COMMAND_CLASS_SWITCH_BINARY)
                 m_nodeList.Add(nodeTempAdd2)
-                Dim NodeTempValue As New ZWValueID(21816633, 2, ZWValueID.ValueGenre.Basic, CommandClass.COMMAND_CLASS_BASIC, 1, 1, ZWValueID.ValueType.Byte, 3)
+                Dim NodeTempValue As New ZWValueID(21816633, 4, ZWValueID.ValueGenre.Basic, CommandClass.COMMAND_CLASS_SWITCH_BINARY, 1, 1, ZWValueID.ValueType.Byte, 0)
                 nodeTempAdd2.Values.Add(NodeTempValue)
+                Dim NodeTempValue2 As New ZWValueID(21816633, 4, ZWValueID.ValueGenre.Basic, CommandClass.COMMAND_CLASS_SWITCH_BINARY, 1, 2, ZWValueID.ValueType.Byte, 0)
+                nodeTempAdd2.Values.Add(NodeTempValue2)
                 ' Dim node As Node = GetNode(m_notification.GetHomeId(), 2)
                 'Dim present As Boolean = node.CommandClass.Contains(CommandClass.COMMAND_CLASS_BASIC)
                 'If present Then
