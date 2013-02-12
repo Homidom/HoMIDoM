@@ -35,6 +35,7 @@ Namespace HoMIDom
         Private Shared WithEvents _ListDrivers As New ArrayList 'Liste des drivers
         Private Shared _ListImgDrivers As New List(Of Driver)
         Private Shared WithEvents _ListDevices As New ArrayList 'Liste des devices
+        Private Shared WithEvents _ListNewDevices As New List(Of NewDevice) 'Liste des devices découverts
         <NonSerialized()> Private Shared _ListZones As New List(Of Zone) 'Liste des zones
         <NonSerialized()> Private Shared _ListUsers As New List(Of Users.User) 'Liste des users
         <NonSerialized()> Private Shared _ListMacros As New List(Of Macro) 'Liste des macros
@@ -81,6 +82,7 @@ Namespace HoMIDom
         <NonSerialized()> Shared _EnableSrvWeb As Boolean = False
         <NonSerialized()> Shared _PortSrvWeb As Integer = 8080
         <NonSerialized()> Shared _SrvWeb As ServeurWeb = Nothing
+        <NonSerialized()> Shared _ModeDecouverte As Boolean = False 'Mode découverte des nouveaux devices
 
 #End Region
 
@@ -531,6 +533,8 @@ Namespace HoMIDom
                                             _PortSrvWeb = list.Item(0).Attributes.Item(j).Value
                                         Case "enablesrvweb"
                                             _EnableSrvWeb = list.Item(0).Attributes.Item(j).Value
+                                        Case "modedecouverte"
+                                            _ModeDecouverte = list.Item(0).Attributes.Item(j).Value
                                         Case Else
                                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                     End Select
@@ -718,6 +722,49 @@ Namespace HoMIDom
                         Catch ex As Exception
                             Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des utilisateurs : " & ex.ToString)
                         End Try
+
+
+                        ''------------
+                        ''on va chercher les nouveaux composants
+                        ''------------
+                        Try
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des devices détectés:")
+                            list = Nothing
+                            list = myxml.SelectNodes("/homidom/newdevices/newdevice")
+                            If list.Count > 0 Then 'présence des users
+                                For i As Integer = 0 To list.Count - 1
+                                    Dim x As New NewDevice
+                                    For j As Integer = 0 To list.Item(i).Attributes.Count - 1
+                                        Select Case list.Item(i).Attributes.Item(j).Name
+                                            Case "id"
+                                                x.ID = list.Item(i).Attributes.Item(j).Value
+                                            Case "iddriver"
+                                                x.IdDriver = list.Item(i).Attributes.Item(j).Value
+                                            Case "adresse1"
+                                                x.Adresse1 = list.Item(i).Attributes.Item(j).Value
+                                            Case "adresse2"
+                                                x.Adresse2 = list.Item(i).Attributes.Item(j).Value
+                                            Case "name"
+                                                x.Name = list.Item(i).Attributes.Item(j).Value
+                                            Case "type"
+                                                x.Type = list.Item(i).Attributes.Item(j).Value
+                                            Case "ignore"
+                                                x.Ignore = list.Item(i).Attributes.Item(j).Value
+                                            Case "datetetect"
+                                                x.DateTetect = list.Item(i).Attributes.Item(j).Value
+                                            Case Else
+                                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                                        End Select
+                                    Next
+                                    _ListNewDevices.Add(x)
+                                    x = Nothing
+                                Next
+                            End If
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListNewDevices.Count & " nouveau(x) chargé(s)")
+                        Catch ex As Exception
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des nouveaux devices : " & ex.ToString)
+                        End Try
+
 
                         '********************************************
                         'on va chercher les composants
@@ -1408,6 +1455,9 @@ Namespace HoMIDom
                 writer.WriteStartAttribute("enablesrvweb")
                 writer.WriteValue(_EnableSrvWeb)
                 writer.WriteEndAttribute()
+                writer.WriteStartAttribute("modedecouverte")
+                writer.WriteValue(_ModeDecouverte)
+                writer.WriteEndAttribute()
                 writer.WriteEndElement()
 
 
@@ -1572,6 +1622,7 @@ Namespace HoMIDom
                     writer.WriteEndElement()
                 Next
                 writer.WriteEndElement()
+
 
                 ''------------
                 ''Sauvegarde des devices
@@ -1762,6 +1813,41 @@ Namespace HoMIDom
                     writer.WriteEndElement()
                 Next
                 writer.WriteEndElement()
+
+                ''------------
+                ''Sauvegarde des nouveaux devices
+                ''------------
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des newdevices")
+                writer.WriteStartElement("newdevices")
+                For i As Integer = 0 To _ListNewDevices.Count - 1
+                    writer.WriteStartElement("newdevice")
+                    writer.WriteStartAttribute("id")
+                    writer.WriteValue(_ListNewDevices.Item(i).ID)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("iddriver")
+                    writer.WriteValue(_ListNewDevices.Item(i).IdDriver)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("adresse1")
+                    writer.WriteValue(_ListNewDevices.Item(i).Adresse1)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("adresse2")
+                    writer.WriteValue(_ListNewDevices.Item(i).Adresse2)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("name")
+                    writer.WriteValue(_ListNewDevices.Item(i).Name)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("type")
+                    writer.WriteValue(_ListNewDevices.Item(i).Type)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("ignore")
+                    writer.WriteValue(_ListNewDevices.Item(i).Ignore)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("datetetect")
+                    writer.WriteValue(_ListNewDevices.Item(i).DateTetect)
+                    writer.WriteEndAttribute()
+                    writer.WriteEndElement()
+                Next
+                writer.WriteEndElement()
                 ''FIN DES ELEMENTS------------
 
                 writer.WriteEndDocument()
@@ -1774,6 +1860,7 @@ Namespace HoMIDom
             End Try
 
         End Function
+
 
         ''' <summary>
         ''' Ecris les actions dans le fichier de config
@@ -3003,9 +3090,9 @@ Namespace HoMIDom
                     'Gestion clé enregistrement
 
                 Else
-                If db_version <> GetServerVersion() Then
-                    'Homidom.dll a été mis à jour, on update la DB : version et date_maj puis remerciements
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Mise à jour :Remerciements")
+                    If db_version <> GetServerVersion() Then
+                        'Homidom.dll a été mis à jour, on update la DB : version et date_maj puis remerciements
+                        Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Mise à jour :Remerciements")
 
                         'on maj la db
                         retoursql = sqlite_homidom.nonquery("UPDATE config Set valeur=@parameter0 WHERE parametre='date_maj'", Now.ToString("yyyMMdd HH:mm:ss"))
@@ -3015,10 +3102,10 @@ Namespace HoMIDom
 
 
                         ' on ouvre la page web de remerciement
-                            Process.Start("http://www.homidom.com/miseajour_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html")
+                        Process.Start("http://www.homidom.com/miseajour_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html")
 
-                            'Gestion clé enregistrement
-                        End If
+                        'Gestion clé enregistrement
+                    End If
 
                 End If
 
@@ -4111,7 +4198,7 @@ Namespace HoMIDom
         ''' </summary>
         ''' <param name="Value"></param>
         ''' <remarks></remarks>
-        Public Sub SetDevise(ByVal Value As String) Implements IHoMIDom.setdevise
+        Public Sub SetDevise(ByVal Value As String) Implements IHoMIDom.SetDevise
             Try
                 _Devise = Value
             Catch ex As Exception
@@ -8225,6 +8312,45 @@ Namespace HoMIDom
         End Function
 #End Region
 
+#Region "Decouverte"
+        ''' <summary>
+        ''' Retourne True/False si le mode découverte des nouveaux devices est activé
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetModeDecouverte() As Boolean
+            Try
+                Return _ModeDecouverte
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetModeDecouverte", "Exception : " & ex.Message)
+                Return False
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Fixe (True/False) si le mode découverte des nouveaux devices doit être activé
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub SetModeDecouverte(ByVal Value As Boolean)
+            Try
+                _ModeDecouverte = Value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetModeDecouverte", "Exception : " & ex.Message)
+            End Try
+        End Sub
+
+        Public Function AddDetectNewDevice(ByVal Adresse1 As String, ByVal DriverId As String, Optional ByVal Type As String = "", Optional ByVal Adresse2 As String = "") As String
+            Try
+
+                Return 0
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "AddDetectNewDevice", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
+
+#End Region
 #End Region
 
     End Class
