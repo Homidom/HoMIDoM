@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="uNewDevice"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             MinWidth="740" MinHeight="485" Margin="5">
+
+    <DockPanel Background="#636060">
+        <Border Name="Border1" BorderThickness="2" BorderBrush="Gray">
+            <DockPanel>
+                <DockPanel DockPanel.Dock="Top" >
+                    <Image DockPanel.Dock="Left"  Height="53" HorizontalAlignment="Left" Margin="7,1,0,0" Name="ImgDevice" Source="/HoMIAdmiN;component/Images/NouveauComposant_128.png" Stretch="Fill" VerticalAlignment="Top" Width="53">
+                        <Image.LayoutTransform>
+                            <RotateTransform Angle="-10" CenterX="0" CenterY="0" />
+                        </Image.LayoutTransform>
+                    </Image>
+
+                    <StackPanel DockPanel.Dock="Right" >
+                        <Button Height="24.293" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnClose" VerticalAlignment="Top" Width="87.169" Foreground="White">Fermer</Button>
+                        <StackPanel Orientation="Horizontal" >
+                        </StackPanel>
+                    </StackPanel>
+                    <Label FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Name="Label1" VerticalAlignment="Top" HorizontalContentAlignment="Center">Nouveau(x) Composant(s)</Label>
+
+                </DockPanel>
+                <!--<StackPanel >-->
+                <!--<Rectangle Height="20" />-->
+                <DataGrid Name="DGW"  AutoGenerateColumns="False" ItemsSource="{Binding}" Margin="2"/>
+                <!--</StackPanel>-->
+            </DockPanel>
+        </Border>
+    </DockPanel>
+
+
+</UserControl>

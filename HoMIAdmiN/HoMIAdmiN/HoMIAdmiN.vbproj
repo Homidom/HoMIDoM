@@ -152,6 +152,9 @@
     <Compile Include="Control\uModuleSimple.xaml.vb">
       <DependentUpon>uModuleSimple.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Control\uNewDevice.xaml.vb">
+      <DependentUpon>uNewDevice.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Control\uScenario.xaml.vb">
       <DependentUpon>uScenario.xaml</DependentUpon>
     </Compile>
@@ -223,6 +226,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Control\uModuleSimple.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Control\uNewDevice.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -569,10 +576,13 @@
   <ItemGroup>
     <Resource Include="Images\lecture-32.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\NouveauComposant_128.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UseGlobalSettings="False" />
+      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

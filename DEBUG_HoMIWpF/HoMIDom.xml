@@ -1557,6 +1557,14 @@ HoMIDom
 	<param name="DeviceId"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.TypeOfPropertyOfDevice(System.String,System.String)">
+	<summary>
+ Retourne le type d'une propriété d'un device (boolean, string, double...)
+ </summary>
+	<param name="DeviceId">ID du device</param>
+	<param name="Property">Nom de la propriété</param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.ReturnRealDeviceByName(System.String)">
 	<summary>Retourne un device par son nom</summary>
 	<param name="Name"></param>
@@ -1919,6 +1927,45 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.Server.GetTarifNuit">
 	<summary>
  Get Tarif nuit
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetModeDecouverte">
+	<summary>
+ Retourne True/False si le mode découverte des nouveaux devices est activé
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetModeDecouverte(System.Boolean)">
+	<summary>
+ Fixe (True/False) si le mode découverte des nouveaux devices doit être activé
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.AddDetectNewDevice(System.String,System.String,System.String,System.String)">
+	<summary>
+ Ajoute un nouveau device dans la liste découverte
+ </summary>
+	<param name="Adresse1"></param>
+	<param name="DriverId"></param>
+	<param name="Type"></param>
+	<param name="Adresse2"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnNewDevice(System.String)">
+	<summary>
+ Retourne un NewDevice suivant son ID
+ </summary>
+	<param name="Id"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveNewDevice(HoMIDom.HoMIDom.NewDevice)">
+	<summary>
+ Set un NewDevice suivant son ID
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetAllNewDevice">
+	<summary>
+ Retourne tous les nouveaux devices détectés
  </summary>
 	<returns></returns>
 	<remarks></remarks>
@@ -2351,6 +2398,14 @@ HoMIDom
 	<param name="Ville">Ville du user</param>
 	<param name="CodePostal">Code Postal du user</param>
 	<returns>ID du user, -1 si erreur, message d'erreur, 99 si ID du serveur erroné</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.TypeOfPropertyOfDevice(System.String,System.String)">
+	<summary>
+ Retourne le type d'une propriété d'un device (boolean, string, double...)
+ </summary>
+	<param name="DeviceId">ID du device</param>
+	<param name="Property">Nom de la propriété&gt;</param>
+	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ChangeValueOfDevice(System.String,System.String,System.Object)">
 	<summary>

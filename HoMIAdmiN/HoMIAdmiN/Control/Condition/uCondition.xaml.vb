@@ -982,7 +982,31 @@ Public Class uCondition
                                 TxtValue.Text = "0"
                                 _flag = True
                             End Try
-                        Case "integer" Or "int16" Or "int32" Or "int64"
+                        Case "integer"
+                            Try
+                                _obj = CInt(TxtValue.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type Integer !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                TxtValue.Text = "0"
+                                _flag = True
+                            End Try
+                        Case "int16"
+                            Try
+                                _obj = CInt(TxtValue.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type Integer !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                TxtValue.Text = "0"
+                                _flag = True
+                            End Try
+                        Case "int32"
+                            Try
+                                _obj = CInt(TxtValue.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type Integer !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                TxtValue.Text = "0"
+                                _flag = True
+                            End Try
+                        Case "int64"
                             Try
                                 _obj = CInt(TxtValue.Text)
                             Catch ex As Exception

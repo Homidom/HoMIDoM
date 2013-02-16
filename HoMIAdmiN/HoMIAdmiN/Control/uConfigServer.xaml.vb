@@ -76,6 +76,8 @@ Partial Public Class uConfigServer
                 myService.SetPortServeurWeb(TxtPortSrvWeb.Text)
                 myService.SetEnableServeurWeb(ChKEnableSrvWeb.IsChecked)
 
+                myService.SetModeDecouverte(ChkModeDecouv.IsChecked)
+
                 Dim _list As New List(Of Boolean)
                 If ChkTyp0.IsChecked Then
                     _list.Add(True)
@@ -183,6 +185,8 @@ Partial Public Class uConfigServer
 
                 TxtPortSrvWeb.Text = myService.GetPortServeurWeb
                 ChKEnableSrvWeb.IsChecked = myService.GetEnableServeurWeb
+
+                ChkModeDecouv.IsChecked = myService.GetModeDecouverte
 
                 Dim idx = -1
                 For i As Integer = 0 To myService.GetAllVoice.Count - 1

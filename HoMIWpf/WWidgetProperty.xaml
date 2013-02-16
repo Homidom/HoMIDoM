@@ -25,6 +25,12 @@
                                 <Label Width="120" Content="Size Etiquette:" Foreground="White"/>
                                 <TextBox Name="TxtSizeEtiq" Width="50" />
                             </StackPanel>
+                            <StackPanel Orientation="Horizontal" >
+                                <Label Width="120" Content="Color Etiquette:" Foreground="White"/>
+                                <Label Name="lblColorEtiquette" Height="20" Width="20 "/>
+                                <TextBox Name="TxtColorEtiquette" Width="0" Text="" Background="{Binding ElementName=ColorPicker3, Path=SelectedColor}" Visibility="Collapsed" />
+                                <my:Colorpicker x:Name="ColorPicker3" Width="177" />
+                            </StackPanel>
                         </StackPanel>
             <StackPanel Orientation="Horizontal" >
             <Label Width="120" Content="X:" Foreground="White"/>
@@ -72,8 +78,8 @@
                             <StackPanel Orientation="Horizontal" >
                             <Label Width="120" Content="Color Status:" Foreground="White"/>
                             <Label Name="lblColorStatus" Height="20" Width="20 "/>
-                            <TextBox Name="TxtColorStatus" Width="0" Text="" Background="{Binding ElementName=ColorPicker1, Path=SelectedColor}" Visibility="Collapsed" />
-                            <my:Colorpicker x:Name="ColorPicker2" Width="177" />
+                            <TextBox Name="TxtColorStatus" Width="0" Text="" Background="{Binding ElementName=ColorPicker2, Path=SelectedColor}" Visibility="Collapsed" />
+                                <my:Colorpicker x:Name="ColorPicker2" Width="177" />
                         </StackPanel>
                         </StackPanel>
 

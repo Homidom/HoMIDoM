@@ -32,8 +32,10 @@ Public Class WWidgetProperty
             TxtTailleStatus.Text = Obj.TailleStatus
             lblColor.Background = Obj.ColorBackGround
             lblColorStatus.Background = Obj.ColorStatus
+            lblColorEtiquette.Background = Obj.ColorEtiquette
             ColorPicker1.SelectedColor = Obj.ColorBackGround
             ColorPicker2.SelectedColor = Obj.ColorStatus
+            ColorPicker3.SelectedColor = Obj.ColorEtiquette
             ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(Obj.Picture))
             ImgPicture.Tag = Obj.Picture
             TxtURL.Text = Obj.URL
@@ -44,6 +46,9 @@ Public Class WWidgetProperty
                 BtnEditAction.Visibility = Windows.Visibility.Collapsed
                 BtnEditVisu.Visibility = Windows.Visibility.Collapsed
                 BtnDelete.Visibility = Windows.Visibility.Collapsed
+                ImgPicture.IsEnabled = False
+                BtnInitPict.Visibility = Windows.Visibility.Collapsed
+                TxtEtiq.IsReadOnly = True
             Else
                 Select Case Obj.Type
                     Case uWidgetEmpty.TypeOfWidget.Empty
@@ -181,6 +186,7 @@ Public Class WWidgetProperty
 
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
+
     End Sub
 
     Private Sub BtnOk_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOk.Click
@@ -215,6 +221,7 @@ Public Class WWidgetProperty
 
             Obj.ColorBackGround = ColorPicker1.SelectedColor
             Obj.ColorStatus = ColorPicker2.SelectedColor
+            Obj.ColorEtiquette = ColorPicker3.SelectedColor
             Obj.URL = TxtURL.Text
             Obj.UrlRss = TxtURLRss.Text
             'Obj.ListHttpButton = Objet.ListHttpButton
@@ -946,4 +953,140 @@ Public Class WWidgetProperty
 #End Region
 
 
+
+
+    Private Sub TxtValueVisu_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtValueVisu.TextChanged
+        Dim _flag As Boolean = False
+        Try
+            If String.IsNullOrEmpty(CbObjetVisu.Text) = False And String.IsNullOrEmpty(CbPropertyVisu.Text) = False And String.IsNullOrEmpty(TxtValueVisu.Text) = False Then
+                Dim _ID As String = myService.GetAllDevices(IdSrv).Item(CbObjetVisu.SelectedIndex).ID
+                Dim _type As String = myService.TypeOfPropertyOfDevice(_ID, CbPropertyVisu.Text)
+                Dim _obj As Object = Nothing
+
+                If String.IsNullOrEmpty(_type) = False Then
+                    Select Case _type.ToLower
+                        Case "string"
+                            Try
+                                _obj = CStr(TxtValueVisu.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type String !!", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                                TxtValueVisu.Text = ""
+                                _flag = True
+                            End Try
+                        Case "boolean"
+                            Try
+                                _obj = CBool(TxtValueVisu.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type Boolean !!", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                                TxtValueVisu.Text = 0
+                                _flag = True
+                            End Try
+                        Case "byte"
+                            Try
+                                _obj = CByte(TxtValueVisu.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type Byte !!", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                                TxtValueVisu.Text = 0
+                                _flag = True
+                            End Try
+                        Case "char"
+                            Try
+                                _obj = CChar(TxtValueVisu.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type Char !!", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                                TxtValueVisu.Text = ""
+                                _flag = True
+                            End Try
+                        Case "datetime"
+                            Try
+                                _obj = CDate(TxtValueVisu.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type DateTime !!", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                                TxtValueVisu.Text = ""
+                                _flag = True
+                            End Try
+                        Case "decimal"
+                            Try
+                                _obj = CDec(TxtValueVisu.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type Decimal !!", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                                TxtValueVisu.Text = 0
+                                _flag = True
+                            End Try
+                        Case "double"
+                            Try
+                                _obj = CDbl(TxtValueVisu.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type Double !!", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                                TxtValueVisu.Text = "0"
+                                _flag = True
+                            End Try
+                        Case "long"
+                            Try
+                                _obj = CLng(TxtValueVisu.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type Long !!", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                                TxtValueVisu.Text = "0"
+                                _flag = True
+                            End Try
+                        Case "integer"
+                            Try
+                                _obj = CInt(TxtValueVisu.Text)
+                            Catch ex As Exception
+                                TxtValueVisu.Text = "0"
+                                _flag = True
+                                MessageBox.Show("Veuillez saisir un type Integer !!", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                            End Try
+                        Case "int16"
+                            Try
+                                _obj = CInt(TxtValueVisu.Text)
+                            Catch ex As Exception
+                                TxtValueVisu.Text = "0"
+                                _flag = True
+                                MessageBox.Show("Veuillez saisir un type Integer !!", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                            End Try
+                        Case "int32"
+                            Try
+                                _obj = CInt(TxtValueVisu.Text)
+                            Catch ex As Exception
+                                TxtValueVisu.Text = "0"
+                                _flag = True
+                                MessageBox.Show("Veuillez saisir un type Integer !!", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                            End Try
+                        Case "int64"
+                            Try
+                                _obj = CInt(TxtValueVisu.Text)
+                            Catch ex As Exception
+                                TxtValueVisu.Text = "0"
+                                _flag = True
+                                MessageBox.Show("Veuillez saisir un type Integer !!", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                            End Try
+                        Case "single"
+                            Try
+                                _obj = CSng(TxtValueVisu.Text)
+                            Catch ex As Exception
+                                MessageBox.Show("Veuillez saisir un type Single !!", "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                                TxtValueVisu.Text = "0"
+                                _flag = True
+                            End Try
+                    End Select
+                End If
+            End If
+        Catch ex As Exception
+            If _flag = False Then MessageBox.Show("Erreur uCondition TxtValue_TextChanged: " & ex.ToString, "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+
+    Private Sub ColorPicker3_SelectColorChange(ByVal sender As System.Windows.Media.Brush) Handles ColorPicker3.SelectColorChange
+        lblColorEtiquette.Background = ColorPicker3.SelectedColor
+    End Sub
+
+    Private Sub ColorPicker1_SelectColorChange(ByVal sender As System.Windows.Media.Brush) Handles ColorPicker1.SelectColorChange
+        lblColor.Background = ColorPicker1.SelectedColor
+    End Sub
+
+    Private Sub ColorPicker2_SelectColorChange(ByVal sender As System.Windows.Media.Brush) Handles ColorPicker2.SelectColorChange
+        lblColorStatus.Background = ColorPicker2.SelectedColor
+    End Sub
 End Class

@@ -728,7 +728,7 @@ Namespace HoMIDom
                         ''on va chercher les nouveaux composants
                         ''------------
                         Try
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des devices détectés:")
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des nouveaux devices détectés:")
                             list = Nothing
                             list = myxml.SelectNodes("/homidom/newdevices/newdevice")
                             If list.Count > 0 Then 'présence des users
@@ -753,7 +753,7 @@ Namespace HoMIDom
                                             Case "datetetect"
                                                 x.DateTetect = list.Item(i).Attributes.Item(j).Value
                                             Case Else
-                                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la zone est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant au nouveau device est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                         End Select
                                     Next
                                     _ListNewDevices.Add(x)
@@ -8318,7 +8318,7 @@ Namespace HoMIDom
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function GetModeDecouverte() As Boolean
+        Public Function GetModeDecouverte() As Boolean Implements IHoMIDom.GetModeDecouverte
             Try
                 Return _ModeDecouverte
             Catch ex As Exception
@@ -8331,7 +8331,7 @@ Namespace HoMIDom
         ''' Fixe (True/False) si le mode découverte des nouveaux devices doit être activé
         ''' </summary>
         ''' <remarks></remarks>
-        Public Sub SetModeDecouverte(ByVal Value As Boolean)
+        Public Sub SetModeDecouverte(ByVal Value As Boolean) Implements IHoMIDom.SetModeDecouverte
             Try
                 _ModeDecouverte = Value
             Catch ex As Exception
@@ -8339,16 +8339,149 @@ Namespace HoMIDom
             End Try
         End Sub
 
-        Public Function AddDetectNewDevice(ByVal Adresse1 As String, ByVal DriverId As String, Optional ByVal Type As String = "", Optional ByVal Adresse2 As String = "") As String
+        ''' <summary>
+        ''' Ajoute un nouveau device dans la liste découverte
+        ''' </summary>
+        ''' <param name="Adresse1"></param>
+        ''' <param name="DriverId"></param>
+        ''' <param name="Type"></param>
+        ''' <param name="Adresse2"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function AddDetectNewDevice(ByVal Adresse1 As String, ByVal DriverId As String, Optional ByVal Type As String = "", Optional ByVal Adresse2 As String = "") As String Implements IHoMIDom.AddDetectNewDevice
             Try
+                Dim flag As Boolean = False
+                Dim _return As String = ""
 
-                Return 0
+                For Each _dev As NewDevice In _ListNewDevices
+                    If _dev.Adresse1 = Adresse1 And _dev.IdDriver = DriverId And _dev.Adresse2 = Adresse2 Then
+                        Log(TypeLog.DEBUG, TypeSource.SERVEUR, "AddDetectNewDevice", "Le device (" & Adresse1 & ":" & Adresse2 & ") du driver (" & DriverId & "), existe déjà")
+                        flag = True
+                        _return = "Message: Device déjà existant"
+                    End If
+                Next
+
+                If flag = False Then
+                    Dim x As New NewDevice
+                    x.ID = Api.GenerateGUID
+                    x.Adresse1 = Adresse1
+                    x.Adresse2 = Adresse2
+                    x.IdDriver = DriverId
+                    x.Type = Type
+                    x.Ignore = False
+                    x.DateTetect = Now
+                    x.Name = "NouveauComposant" & _ListNewDevices.Count
+
+                    _ListNewDevices.Add(x)
+                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "AddDetectNewDevice", "Le device (" & Adresse1 & ":" & Adresse2 & ") du driver (" & DriverId & ") de type " & Type & ", a été ajouté")
+                    _return = 0
+                End If
+
+                Return _return
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "AddDetectNewDevice", "Exception : " & ex.Message)
                 Return -1
             End Try
         End Function
 
+        ''' <summary>
+        ''' Retourne un NewDevice suivant son ID
+        ''' </summary>
+        ''' <param name="Id"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnNewDevice(ByVal Id As String) As NewDevice Implements IHoMIDom.ReturnNewDevice
+            Try
+                If (From Dev As NewDevice In _ListNewDevices Where Dev.ID = Id Select Dev).Count > 0 Then
+                    Dim Resultat As NewDevice = (From Dev In _ListNewDevices Where Dev.ID = Id Select Dev).First
+                    Return Resultat
+                Else
+                    Return Nothing
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnNewDevice", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Set un NewDevice suivant son ID
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub SaveNewDevice(ByVal NewDevice As NewDevice) Implements IHoMIDom.SaveNewDevice
+            Try
+                If (From Dev As NewDevice In _ListNewDevices Where Dev.ID = NewDevice.ID Select Dev).Count > 0 Then
+                    Dim Resultat As NewDevice = (From Dev In _ListNewDevices Where Dev.ID = NewDevice.ID Select Dev).First
+                    Resultat = NewDevice
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveNewDevice", "Exception : " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' Retourne tous les nouveaux devices détectés
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetAllNewDevice() As List(Of NewDevice) Implements IHoMIDom.GetAllNewDevice
+            Try
+                Return _ListNewDevices
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllNewDevice", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Existe t-il des nouveaux devices non ignorés?
+        ''' </summary>
+        ''' <returns>True si nouveau device</returns>
+        ''' <remarks></remarks>
+        Public Function AsNewDevice() As Boolean Implements IHoMIDom.AsNewDevice
+            Try
+                Dim flag As Boolean = False
+
+                For Each _dev As NewDevice In _ListNewDevices
+                    If _dev.Ignore = False Then flag = True
+                Next
+
+                Return flag
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "AsNewDevice", "Exception : " & ex.Message)
+                Return False
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Supprimer un newdevice de la liste
+        ''' </summary>
+        ''' <param name="IdSrv"></param>
+        ''' <param name="NewDeviceId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function DeleteNewDevice(ByVal IdSrv As String, ByVal NewDeviceId As String) As Integer Implements IHoMIDom.DeleteNewDevice
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
+                For i As Integer = 0 To _ListNewDevices.Count - 1
+                    If _ListNewDevices.Item(i).ID = NewDeviceId Then
+                        _ListDevices.RemoveAt(i)
+
+                        DeleteNewDevice = 0
+                        Exit Function
+                    End If
+                Next
+
+                Return -1
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteNewDevice", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
 
 #End Region
 #End Region
