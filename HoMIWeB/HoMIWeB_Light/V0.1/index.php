@@ -1,5 +1,41 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Frameset//EN">
 
+<?php
+
+include ("./include_php/fonctions.php");
+include ("./include_php/homiclass.php");
+include ("./include_php/homisoap.php");
+
+$FixExist = false;
+$ConExist = false;
+
+$dom = new DomDocument();
+$FicExist = @$dom->load('homidom-web-param.xml');
+if(!$FicExist) {
+	if(!empty($_GET)) { // début test sur zoneid
+		$zoneid=$_GET['zoneid'];
+		if($zoneid <> 'Parametres')
+			header('Location: index.php?zoneid=Parametres'); 
+	} 
+	else
+		header('Location: index.php?zoneid=Parametres'); 
+}
+else {
+		$ListeServer = $dom->getElementsByTagName('SERVER'); // on récupère les paramètres du serveur
+		$server = $ListeServer->item(0);
+		$homidom = new HomidomSoap($server->getAttribute("IP"), $server->getAttribute("PORT"), $server->getAttribute("ID"),true);
+		if($homidom->connect()) {	
+			$ConExist = true;
+			}
+		else {
+			$ConExist = false;
+		}
+}
+if($ConExist) {
+	$ListeHomiZone=$homidom->GetAllZones(); // On récupère la liste des zones dans Homidom (SOAP)
+	$ListeXMLZone = $dom->getElementsByTagName('ZONE'); // on récupère la liste des zones du fichier de configuration
+}
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Frameset//EN">
 <html>
 <head>
 <title>Homiweb Light</title>
@@ -34,40 +70,42 @@
 			overflow: auto; 
 		} 
 
+
 		DIV#MyBody { 
 			position: absolute; 
 			top: 110px; 
 			left: 300px; 
-			width: 600px;
-			height: 600px;
+			width: 600px;  
+			height: 600px; 
 			background-color: #000000;
 			overflow: auto; 
 		} 
 		
 		DIV#DEVICENOXML { 
 			position: absolute; 
-			top: 720px; 
+			top: 700px; 
 			left: 300px; 
 			width: 600px;
-			height: 150px;
+			height: 150px;  
 			background-color: #000000;
 			overflow: auto; 
-		} 
-
+		} 		
+		
+		
 		H1 {
-			font-family:"Times New Roman",Times,Serif;
-			color : #FFFFFF;
+			font-family:Arial,Helvetica,sans-serif;
+			color : #D87801;
 			font-size : 16pt;
 		}
 
 		H2 {
-			font-family:"Times New Roman",Times,Serif;
-			color : #FFFFFF;
+			font-family:Arial,Helvetica,sans-serif;
+			color : #D87801;
 			font-size : 14pt;
 		}
 
 		H3 {
-			font-family:"Times New Roman",Times,Serif;
+			font-family:Arial,Helvetica,sans-serif;
 			color : #FFFFFF;
 			font-size : 12pt;
 		}
@@ -76,6 +114,9 @@
 			font-family:"Times New Roman",Times,Serif;
 			color : #FFFFFF;
 			font-size : 10pt;
+		}
+		TABLE {
+			border-style : ridge;
 		}
 		
 		.ContextMenu { 
@@ -140,6 +181,7 @@
 	</script> 
 
 </head>
+
 <body bgcolor="#000000" onclick="MasquerMenu('CMenu_SW-O-0')">
 <DIV ID="Header">
 <?php include("header.html");?>
@@ -149,18 +191,25 @@
 <?php include("navigation.php");?>
 </DIV>
 
+
+
 <DIV ID="MyBody">
 <?php include("homidom-web.php");?>
 </DIV>
+<?php 	
+	if(!empty($_GET)) { // On affiche ou non les devices non paramétrés
+		$zoneid=$_GET['zoneid'];
+		if($zoneid <> 'Parametres') {
+			echo '<DIV ID="DEVICENOXML"></DIV>';
+		}
+	} 
 
-<DIV ID="DEVICENOXML"></DIV>
-
-<?php
 // ******************  Construction des menus pour les devices  ************************
 
 if(!empty($_GET)) { // début test sur zoneid
 	$zoneid=$_GET['zoneid'];
 	if($zoneid) {
+		if(!empty($ListeDevice))
 		foreach($ListeDevice as $device) {
 			$ListeAction = $device->getElementsByTagName("ACTION");
 			if($ListeAction->length > 0) {
@@ -180,7 +229,8 @@ if(!empty($_GET)) { // début test sur zoneid
 			}
 		}
 	}
-$homidom->disconnect(); 
+if($FicExist)
+	$homidom->disconnect(); 
 ?>
 </BODY>
 </html>
