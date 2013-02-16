@@ -1,9 +1,12 @@
 <?php
 
+if(!$ConExist) {
+		// Si pas de connexion, on affiche la page des paramètres
+		include("homidom-web-param.php");
+}
 if(!empty($_GET)) { // début test sur zoneid
 
 	$zoneid=$_GET['zoneid'];
-
 	switch($zoneid) {
 		
 		case "" :
@@ -16,9 +19,9 @@ if(!empty($_GET)) { // début test sur zoneid
 		break;
 		// *****************  fin bloc pour servercheck *****************
 
-		case "parametre":
+		case "Parametres":
 		// *****************  début bloc pour parametre *****************
-		include("homidom-web-param.php");
+		if($ConExist) include("homidom-web-param.php");
 
 		break;
 		// *****************  fin bloc pour parametre *****************
@@ -28,13 +31,11 @@ if(!empty($_GET)) { // début test sur zoneid
 		$homizone=$homidom->ReturnZoneByID($zoneid);
 
 		$FileNameZone = "imagezone.php?zoneid=" . $zoneid;
-		foreach($ListeZone as $zone) 
-			if(utf8_decode($zone->getAttribute("NAME"))==utf8_decode($homizone->_Name)) {
+	
+		foreach($ListeXMLZone as $zone) 
+			if(utf8_decode($zone->getAttribute("ID"))==utf8_decode($homizone->_Id)) {
 				$ListeDevice = $zone->getElementsByTagName("HOMIDEVICE");
-				$FileNameZone = "imagezone.php?zoneid=" . $zoneid;
-				//$FileNameZone = $zone->getAttribute("FILENAME");
 			}
-			
 ?>
 
 <SCRIPT language=javascript>
@@ -114,11 +115,12 @@ if(!empty($_GET)) { // début test sur zoneid
 				{
 					strValueHomiDevice = null;
 				}
-				switch(NameHomiDevice)	{
+				switch(IDHomiDevice)	{
 <?php 
+if(!empty($ListeDevice))
 foreach($ListeDevice as $device) {
-	echo "					case '" . $device->getAttribute("NAME") . "':\n";
-	echo "						elt = document.getElementById(\"Div" . $device->getAttribute("NAME") . "\");\n";
+	echo "					case '" . $device->getAttribute("ID") . "':\n";
+	echo "						elt = document.getElementById(\"Div_" . $device->getAttribute("ID") . "\");\n";
 	echo "						switch(strValueHomiDevice)\n" ;
 	echo "							{\n";
 	foreach($device->getElementsByTagName("ETAT") as $DeviceValue)
@@ -145,6 +147,7 @@ foreach($ListeDevice as $device) {
 	echo "							}\n";
 	echo "						break;\n\n";
 }
+
 ?>
 					default:
 						if(strValueHomiDevice)
@@ -192,32 +195,42 @@ foreach($ListeDevice as $device) {
 		echo "<DIV ID=\"ZoneName\" STYLE=\"position:absolute; left:100px\"><H1>" . utf8_decode($homizone->_Name) . "</H1></DIV>\n";
 echo "<DIV ID=\"IDFOND\" STYLE=\"position:absolute; top:50px; \"><IMG SRC=\"" . $FileNameZone . "\"></DIV>\n";
 
+if(!empty($ListeDevice))
 		foreach($ListeDevice as $device) {
 			$PosY = $device->getAttribute("POSY") + 50;
 			$PosX = $device->getAttribute("POSX");
 			$ListeAction = $device->getElementsByTagName("ACTION");
 			if($ListeAction->length > 0) {
-				echo "<DIV ID=\"DivIcon" . $device->getAttribute("NAME") . "\" style=\"position: absolute; " . "top:" . ($PosY - 10) . "px; left:" . 
-					($PosX - 20) . "px\" onclick=\"MontrerMenu('CMenu_" . $device->getAttribute("NAME") . "');\">\n" . 
+				echo "<DIV ID=\"DivIcon_" . $device->getAttribute("ID") . "\" style=\"position: absolute; " . "top:" . ($PosY - 10) . "px; left:" . 
+					($PosX - 20) . "px\" onclick=\"MontrerMenu('CMenu_" . $device->getAttribute("ID") . "');\">\n" . 
 					"<IMG SRC=\"" . $device->getAttribute("ICON") . 
 					"\" WIDTH=\"" . $device->getAttribute("WIDTH") . "\" HEIGHT=\"" . $device->getAttribute("HEIGHT") . "\"></DIV>\n"; 
 					
-				echo "<DIV ID=\"Div" . $device->getAttribute("NAME") . "\" style=\"position: absolute; " .
-					  "top:" . $PosY . "px; left:" . $PosX . "px\" onclick=\"MontrerMenu('CMenu_" . $device->getAttribute("NAME") . "');\"></DIV>\n";
+				echo "<DIV ID=\"Div_" . $device->getAttribute("ID") . "\" style=\"position: absolute; " .
+					  "top:" . $PosY . "px; left:" . $PosX . "px\" onclick=\"MontrerMenu('CMenu_" . $device->getAttribute("ID") . "');\"></DIV>\n";
 				}
 			else {
-				echo "<DIV ID=\"DivIcon" . $device->getAttribute("NAME") . "\" style=\"position: absolute; " . "top:" . ($PosY - 10) . "px; left:" . 
+				echo "<DIV ID=\"DivIcon_" . $device->getAttribute("ID") . "\" style=\"position: absolute; " . "top:" . ($PosY - 10) . "px; left:" . 
 					($PosX - 20) . "px\">\n" . 
 					"<IMG SRC=\"" . $device->getAttribute("ICON") . 
 					"\" WIDTH=\"" . $device->getAttribute("WIDTH") . "\" HEIGHT=\"" . $device->getAttribute("HEIGHT") . "\"></DIV>\n"; 
 					
-				echo "<DIV ID=\"Div" . $device->getAttribute("NAME") . "\" style=\"position: absolute; " .
+				echo "<DIV ID=\"Div_" . $device->getAttribute("ID") . "\" style=\"position: absolute; " .
 					  "top:" . $PosY . "px; left:" . $PosX . "px\"></DIV>\n";
 				}
 		  }
+		  
 		// *****************  fin bloc pour zone *****************
 	break;
 	}
 }
+
+/*	if(!empty($_GET)) { // On affiche ou non les devices non paramétrés
+		$zoneid=$_GET['zoneid'];
+		if($zoneid <> 'Parametres') {
+			echo '<DIV ID="DEVICENOXML"></DIV>';
+		}
+	}
+*/
 
 ?>

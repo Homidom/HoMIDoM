@@ -33,6 +33,44 @@ class HomidomSoap {
     public function connect() {
         if($this->_extension) {
             ini_set('soap.wsdl_cache_enabled', 0);
+			ini_set('default_socket_timeout', 20);
+
+            if ($this->_trace) {
+                try {
+					$this->_client = @new SoapClient('http://'.$this->_ip.':'.$this->_port.'/ServiceModelSamples/service?wsdl', array('trace' => 1));
+					$this->_connecte = true;
+					return true;
+					} catch(SoapFault $fault)
+					{
+					$this->_connecte = false;
+					return false;
+					}
+					catch(Exception $e)
+					{
+					$this->_connecte = false;
+					return false;
+					}
+            } else {
+                try {
+					$this->_client = @new SoapClient('http://'.$this->_ip.':'.$this->_port.'/ServiceModelSamples/service?wsdl');
+					$this->_connecte = true;
+					return true;
+					} catch(SoapFault $fault)
+					{
+					$this->_connecte = false;
+					return false;
+					}
+					
+            }
+        } else {
+            $this->_connecte = false;
+        }
+    } 
+
+	/************ ANCIENNE FONCTION : BACKUP = 06/02/2013  ****************/
+/*	 public function connect() {
+        if($this->_extension) {
+            ini_set('soap.wsdl_cache_enabled', 0);
             if ($this->_trace) {
                 $this->_client = new SoapClient('http://'.$this->_ip.':'.$this->_port.'/ServiceModelSamples/service?wsdl', array('trace' => 1));
             } else {
@@ -42,8 +80,9 @@ class HomidomSoap {
         } else {
             $this->_connecte = false;
         }
-    }
+    }  */
 
+  
     public function disconnect() {
         // $_client = ;
         $this->_connecte = false;
