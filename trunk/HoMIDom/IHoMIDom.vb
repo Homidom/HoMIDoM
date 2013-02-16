@@ -1136,6 +1136,70 @@ Namespace HoMIDom
         <OperationContract()> Sub SetTarifNuit(ByVal Value As Integer)
         <OperationContract()> Function GetTarifNuit() As Integer
 #End Region
+
+#Region "Decouverte"
+        ''' <summary>
+        ''' Retourne True/False si le mode découverte des nouveaux devices est activé
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetModeDecouverte() As Boolean
+
+        ''' <summary>
+        ''' Fixe (True/False) si le mode découverte des nouveaux devices doit être activé
+        ''' </summary>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetModeDecouverte(ByVal Value As Boolean)
+
+        ''' <summary>
+        ''' Ajoute un nouveau device dans la liste découverte
+        ''' </summary>
+        ''' <param name="Adresse1"></param>
+        ''' <param name="DriverId"></param>
+        ''' <param name="Type"></param>
+        ''' <param name="Adresse2"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function AddDetectNewDevice(ByVal Adresse1 As String, ByVal DriverId As String, Optional ByVal Type As String = "", Optional ByVal Adresse2 As String = "") As String
+
+        ''' <summary>
+        ''' Retourne un NewDevice suivant son ID
+        ''' </summary>
+        ''' <param name="Id"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function ReturnNewDevice(ByVal Id As String) As NewDevice
+
+        ''' <summary>
+        ''' Set un NewDevice suivant son ID
+        ''' </summary>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SaveNewDevice(ByVal NewDevice As NewDevice)
+
+        ''' <summary>
+        ''' Retourne tous les nouveaux devices détectés
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetAllNewDevice() As List(Of NewDevice)
+
+        ''' <summary>
+        ''' Existe t-il des nouveaux devices non ignorés?
+        ''' </summary>
+        ''' <returns>True si nouveau device</returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function AsNewDevice() As Boolean
+
+        ''' <summary>
+        ''' Supprimer un newdevice de la liste
+        ''' </summary>
+        ''' <param name="IdSrv"></param>
+        ''' <param name="NewDeviceId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function DeleteNewDevice(ByVal IdSrv As String, ByVal NewDeviceId As String) As Integer
+
+#End Region
     End Interface
 
     

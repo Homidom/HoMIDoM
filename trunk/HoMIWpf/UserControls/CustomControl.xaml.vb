@@ -18,6 +18,9 @@ Namespace Customcontrols
     ''' </summary>
     Partial Public Class Colorpicker
         Inherits UserControl
+
+        Public Event SelectColorChange(ByVal sender As Brush)
+
         Public Sub New()
             InitializeComponent()
         End Sub
@@ -34,5 +37,17 @@ Namespace Customcontrols
         ' Using a DependencyProperty as the backing store for SelectedColor.  
         ' This enables animation, styling, binding, etc...
         Public Shared ReadOnly SelectedColorProperty As DependencyProperty = DependencyProperty.Register("SelectedColor", GetType(Brush), GetType(Colorpicker), New UIPropertyMetadata(Nothing))
+
+        Private Sub superCombo_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles superCombo.SelectionChanged
+            'RaiseEvent SelectColorChange(superCombo.SelectedItem)
+            Try
+                Dim a As String = superCombo.SelectedItem.ToString
+                a = a.Replace("System.Windows.Media.Color", "")
+                Dim newColor As Color = DirectCast(ColorConverter.ConvertFromString(a), Color)
+                RaiseEvent SelectColorChange(New SolidColorBrush(newColor))
+            Catch ex As Exception
+                MsgBox(ex.ToString)
+            End Try
+        End Sub
     End Class
 End Namespace

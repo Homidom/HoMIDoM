@@ -26,6 +26,7 @@ Public Class uWidgetEmpty
     Dim _ShowEtiquette As Boolean = True 'Affiche le libellé du composant par défaut - Oui par défaut
     Dim _Etiquette As String = "" 'Etiquette
     Dim _TailleEtiquette As Double = 9
+    Dim _ColorEtiquette As SolidColorBrush = Brushes.White
     Dim _X As Double = 0
     Dim _Y As Double = 0
     Dim _Rotation As Double = 0
@@ -403,6 +404,18 @@ Public Class uWidgetEmpty
             End Try
         End Set
     End Property
+
+    Public Property ColorEtiquette As SolidColorBrush
+        Get
+            Return _ColorEtiquette
+        End Get
+        Set(ByVal value As SolidColorBrush)
+            _ColorEtiquette = value
+            If _Show = False Then Exit Property
+            Lbl.Foreground = value
+        End Set
+    End Property
+
 
     Public Property X As Double
         Get

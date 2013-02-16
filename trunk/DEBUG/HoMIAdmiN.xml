@@ -146,6 +146,14 @@ AddEventHandler
 	<summary>
 GeneratedInternalTypeHelper
 </summary>
+</member><member name="M:WpfApplication1.uNewDevice.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uNewDevice">
+	<summary>
+uNewDevice
+</summary>
 </member><member name="M:WpfApplication1.uSelectElmt.InitializeComponent">
 	<summary>
 InitializeComponent

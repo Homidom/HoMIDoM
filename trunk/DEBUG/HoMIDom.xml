@@ -1930,6 +1930,59 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetModeDecouverte">
+	<summary>
+ Retourne True/False si le mode découverte des nouveaux devices est activé
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetModeDecouverte(System.Boolean)">
+	<summary>
+ Fixe (True/False) si le mode découverte des nouveaux devices doit être activé
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.AddDetectNewDevice(System.String,System.String,System.String,System.String)">
+	<summary>
+ Ajoute un nouveau device dans la liste découverte
+ </summary>
+	<param name="Adresse1"></param>
+	<param name="DriverId"></param>
+	<param name="Type"></param>
+	<param name="Adresse2"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnNewDevice(System.String)">
+	<summary>
+ Retourne un NewDevice suivant son ID
+ </summary>
+	<param name="Id"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveNewDevice(HoMIDom.HoMIDom.NewDevice)">
+	<summary>
+ Set un NewDevice suivant son ID
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetAllNewDevice">
+	<summary>
+ Retourne tous les nouveaux devices détectés
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.AsNewDevice">
+	<summary>
+ Existe t-il des nouveaux devices non ignorés?
+ </summary>
+	<returns>True si nouveau device</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.DeleteNewDevice(System.String,System.String)">
+	<summary>
+ Supprimer un newdevice de la liste
+ </summary>
+	<param name="IdSrv"></param>
+	<param name="NewDeviceId"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Server">
 	<summary>Classe Server</summary>
 	<remarks></remarks>
@@ -2902,6 +2955,59 @@ HoMIDom
 	<param name="IdDevice">Id du device concerné</param>
 	<param name="Commande">Nom de la Commande à envoyée</param>
 	<returns>0 si Ok sinon erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetModeDecouverte">
+	<summary>
+ Retourne True/False si le mode découverte des nouveaux devices est activé
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetModeDecouverte(System.Boolean)">
+	<summary>
+ Fixe (True/False) si le mode découverte des nouveaux devices doit être activé
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.AddDetectNewDevice(System.String,System.String,System.String,System.String)">
+	<summary>
+ Ajoute un nouveau device dans la liste découverte
+ </summary>
+	<param name="Adresse1"></param>
+	<param name="DriverId"></param>
+	<param name="Type"></param>
+	<param name="Adresse2"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnNewDevice(System.String)">
+	<summary>
+ Retourne un NewDevice suivant son ID
+ </summary>
+	<param name="Id"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveNewDevice(HoMIDom.HoMIDom.NewDevice)">
+	<summary>
+ Set un NewDevice suivant son ID
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllNewDevice">
+	<summary>
+ Retourne tous les nouveaux devices détectés
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.AsNewDevice">
+	<summary>
+ Existe t-il des nouveaux devices non ignorés?
+ </summary>
+	<returns>True si nouveau device</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteNewDevice(System.String,System.String)">
+	<summary>
+ Supprimer un newdevice de la liste
+ </summary>
+	<param name="IdSrv"></param>
+	<param name="NewDeviceId"></param>
+	<returns></returns>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.IHoMIDom">
 	<summary>

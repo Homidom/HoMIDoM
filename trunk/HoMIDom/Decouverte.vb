@@ -3,8 +3,8 @@
     <Serializable()> Public Class NewDevice
         Dim _ID As String ' N° créé automatiquement permet d'identifier le device de façon unique
         Dim _IDDriver As String ' N° ID du driver
-        Dim _Adresse1 As String ' Adresse1 du device
-        Dim _Adresse2 As String 'Adresse2 du device (si besoin au cas où, option)
+        Dim _Adresse1 As String = "" ' Adresse1 du device
+        Dim _Adresse2 As String = "" 'Adresse2 du device (si besoin au cas où, option)
         Dim _Name As String 'Nom du device donné automatiquement en attendant du type <Device><Number> (ex: Device12)
         Dim _Type As String 'Type de device par défaut null
         Dim _Ignore As Boolean = False 'Indique si le device doit être ignoré

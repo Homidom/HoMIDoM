@@ -109,6 +109,7 @@
   <ItemGroup>
     <Compile Include="APi.vb" />
     <Compile Include="Audio.vb" />
+    <Compile Include="Decouverte.vb" />
     <Compile Include="DeviceAction.vb" />
     <Compile Include="Driver.vb" />
     <Compile Include="FileServer.vb" />
@@ -192,7 +193,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_AssemblyInfoFilename="" BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UseGlobalSettings="False" />
+      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_AssemblyInfoFilename="" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

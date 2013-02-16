@@ -103,6 +103,17 @@
                                     </StackPanel>
                                 </Grid>
                             </GroupBox>
+                            <GroupBox Name="GroupBox8" Width="389" Margin="2" >
+                                <GroupBox.Header>
+                                    <Label Foreground="White" FontWeight="Bold">Mode Decouverte</Label>
+                                </GroupBox.Header>
+                                <Grid >
+                                    <StackPanel >
+                                        <CheckBox Name="ChkModeDecouv" Content="Activer" Foreground=" White" />
+                                    </StackPanel>
+                                </Grid>
+                            </GroupBox>
+
                         </StackPanel>
                         <StackPanel VerticalAlignment="Top" Margin="3,0,0,0">
                             <GroupBox Name="GroupBox23" Margin="2">

@@ -513,6 +513,12 @@ Class Window1
                                         Dim G As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 6, 2))
                                         Dim B As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 8, 2))
                                         x.ColorStatus = New SolidColorBrush(Color.FromArgb(a, R, G, B))
+                                    Case "coloretiquette"
+                                        Dim a As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 2, 2))
+                                        Dim R As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 4, 2))
+                                        Dim G As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 6, 2))
+                                        Dim B As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 8, 2))
+                                        x.ColorEtiquette = New SolidColorBrush(Color.FromArgb(a, R, G, B))
                                     Case "url"
                                         x.URL = list.Item(j).Attributes.Item(k).Value
                                     Case "urlrss"
@@ -807,6 +813,9 @@ Class Window1
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("colorstatus")
                 writer.WriteValue(_ListElement.Item(i).ColorStatus.ToString)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("coloretiquette")
+                writer.WriteValue(_ListElement.Item(i).ColorEtiquette.ToString)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("url")
                 writer.WriteValue(_ListElement.Item(i).URL)
@@ -1402,6 +1411,7 @@ Class Window1
                             y.TailleEtiquette = _ListElement.Item(j).TailleEtiquette
                             y.ColorBackGround = _ListElement.Item(j).ColorBackGround
                             y.ColorStatus = _ListElement.Item(j).ColorStatus
+                            y.ColorEtiquette = _ListElement.Item(j).ColorEtiquette
                             y.IsHitTestVisible = True 'True:bouge pas False:Bouge
                             AddHandler y.ShowZone, AddressOf ElementShowZone
                             x.Content = y
@@ -1504,6 +1514,7 @@ Class Window1
                     y.TailleStatus = _ListElement.Item(i).TailleStatus
                     y.TailleEtiquette = _ListElement.Item(i).TailleEtiquette
                     y.ColorBackGround = _ListElement.Item(i).ColorBackGround
+                    y.ColorEtiquette = _ListElement.Item(i).ColorEtiquette
                     y.ColorStatus = _ListElement.Item(i).ColorStatus
                     y.IsHitTestVisible = True 'True:bouge pas False:Bouge
                     y.Action_GestureBasHaut = _ListElement.Item(i).Action_GestureBasHaut

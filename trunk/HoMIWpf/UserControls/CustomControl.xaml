@@ -31,7 +31,7 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Width="20" Height="20" Margin="5" 
-			Background="{Binding Name}"/>
+			Background="{Binding Name}" Name="TxtB" />
                         <TextBlock  Text="{Binding Name}"/>
                     </StackPanel>
                 </DataTemplate>
