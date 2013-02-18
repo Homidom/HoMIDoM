@@ -44,19 +44,23 @@ if($FicExist) echo "<IMG SRC=\"images/check.png\">";
 </TR>
 </TABLE>
 <?php
-if($ConExist) {
+if($ConExist) {  // Début condition sur $ConExist
 ?>
 <TABLE BORDER="1">
 <?php
 	$XMLZone = false;
 	$x=$homidom->GetAllZones();
-	foreach($x->Zone as $k=>$v) {
-		$XMLListZones = $XMLServer->getElementsByTagName('ZONE');
-		foreach($XMLListZones as $tmpXMLZone) {
-			if($tmpXMLZone->getAttribute("ID") == $v->_Id) {
-				$XMLZone = $tmpXMLZone;
+	if(property_exists($x,'Zone')) {  // Début condition sur property_exists zone
+		if(!is_array($x->Zone)) 
+			$x->Zone = array($x->Zone);
+		foreach($x->Zone as $k=>$v) {   // Début foreach Zone
+			$XMLListZones = $XMLServer->getElementsByTagName('ZONE');
+			foreach($XMLListZones as $tmpXMLZone) {
+				if($tmpXMLZone->getAttribute("ID") == $v->_Id) {
+					$XMLZone = $tmpXMLZone;
+				}
 			}
-		}
+		
 ?>
 <TR>
 <TD colspan="2" VALIGN="TOP"><H2>ZONE : <?php echo utf8_decode($v->_Name) ?></H2>
@@ -79,29 +83,31 @@ Name : <?php echo utf8_decode($v->_Name) ?></FONT><BR><BR>
 <TD width="5%">
 <?php
 	$x=$homidom->GetDeviceInZone($v->_Id)->TemplateDevice;
-	for($i = 0; $i < count($x); $i++){
+	if(!is_array($x)) 
+		$x = array($x);  
+	foreach($x as $MyDevice) {
+		$XMLDevice = false;
 		if($XMLZone) {
 			$XMLListDevices = $XMLZone->getElementsByTagName('HOMIDEVICE');
-			$XMLDevice = false;
 			foreach($XMLListDevices as $tmpXMLDevice) {
-				if($tmpXMLDevice->getAttribute("ID") == $x[$i]->_ID)
+				if($tmpXMLDevice->getAttribute("ID") == $MyDevice->_ID)
 					$XMLDevice = $tmpXMLDevice;
 			}
 		}
-?><H3>Composant : <?php echo utf8_decode($x[$i]->_Name) ?></H3>
-<H4>ID : <?php echo utf8_decode($x[$i]->_ID) ?><BR>
-Name : <?php echo utf8_decode($x[$i]->_Name) ?><BR>
-Valeur : <?php echo utf8_decode($x[$i]->_Value) ?></H4>
-<INPUT TYPE="HIDDEN" NAME="<?php echo utf8_decode($v->_Id) . "DEVICE_ID[]"?>" VALUE="<?php echo utf8_decode($x[$i]->_ID)?>">
+?><H3>Composant : <?php echo utf8_decode($MyDevice->_Name) ?></H3>
+<H4>ID : <?php echo utf8_decode($MyDevice->_ID) ?><BR>
+Name : <?php echo utf8_decode($MyDevice->_Name) ?><BR>
+Valeur : <?php echo utf8_decode($MyDevice->_Value) ?></H4>
+<INPUT TYPE="HIDDEN" NAME="<?php echo utf8_decode($v->_Id) . "DEVICE_ID[]"?>" VALUE="<?php echo utf8_decode($MyDevice->_ID)?>">
 <TABLE border=0>
 <TR>
 <TD valign="MIDDLE" COLSPAN="9" align="LEFT"><FONT STYLE="color:#D87801;font-family:Times New Roman,Times,Serif;font-size : 10pt">Coordonnées</FONT></TD>
 </TR>
 <TR>
 <TD valign="MIDDLE"><FONT STYLE="color:#FFFFFF;font-family:Times New Roman,Times,Serif;font-size : 10pt">X</FONT></TD>
-<TD valign="MIDDLE"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($x[$i]->_ID) . "_X"?>" VALUE="<?php if($XMLDevice) echo utf8_decode($XMLDevice->getAttribute("POSX"));?>" SIZE="4"></TD>
+<TD valign="MIDDLE"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($MyDevice->_ID) . "_X"?>" VALUE="<?php if($XMLDevice) echo utf8_decode($XMLDevice->getAttribute("POSX"));?>" SIZE="4"></TD>
 <TD valign="MIDDLE"><FONT STYLE="color:#FFFFFF;font-family:Times New Roman,Times,Serif;font-size : 10pt">Y</FONT></TD>
-<TD valign="MIDDLE"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($x[$i]->_ID) . "_Y"?>" VALUE="<?php if($XMLDevice) echo utf8_decode($XMLDevice->getAttribute("POSY"));?>" SIZE="4"></TD>
+<TD valign="MIDDLE"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($MyDevice->_ID) . "_Y"?>" VALUE="<?php if($XMLDevice) echo utf8_decode($XMLDevice->getAttribute("POSY"));?>" SIZE="4"></TD>
 <TD></TD>
 <TD></TD>
 <TD></TD>
@@ -115,11 +121,11 @@ Valeur : <?php echo utf8_decode($x[$i]->_Value) ?></H4>
 <TD></TD>
 <TD></TD>
 <TD valign="MIDDLE"><FONT STYLE="color:#FFFFFF;font-family:Times New Roman,Times,Serif;font-size : 10pt">Hauteur</FONT></TD>
-<TD valign="MIDDLE"  COLSPAN="1"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($x[$i]->_ID) . "_ICON_H"?>" VALUE="<?php if($XMLDevice) echo utf8_decode($XMLDevice->getAttribute("HEIGHT"));?>" SIZE="3"></TD>
+<TD valign="MIDDLE"  COLSPAN="1"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($MyDevice->_ID) . "_ICON_H"?>" VALUE="<?php if($XMLDevice) echo utf8_decode($XMLDevice->getAttribute("HEIGHT"));?>" SIZE="3"></TD>
 <TD valign="MIDDLE"><FONT STYLE="color:#FFFFFF;font-family:Times New Roman,Times,Serif;font-size : 10pt">Largeur</FONT></TD>
-<TD valign="MIDDLE"  COLSPAN="1"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($x[$i]->_ID) . "_ICON_L"?>" VALUE="<?php if($XMLDevice) echo utf8_decode($XMLDevice->getAttribute("WIDTH"));?>" SIZE="3"></TD>
+<TD valign="MIDDLE"  COLSPAN="1"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($MyDevice->_ID) . "_ICON_L"?>" VALUE="<?php if($XMLDevice) echo utf8_decode($XMLDevice->getAttribute("WIDTH"));?>" SIZE="3"></TD>
 <TD valign="MIDDLE"><FONT STYLE="color:#FFFFFF;font-family:Times New Roman,Times,Serif;font-size : 10pt">Fichier</FONT></TD>
-<TD valign="MIDDLE"  COLSPAN="1"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($x[$i]->_ID) . "_ICON"?>" VALUE="<?php if($XMLDevice) echo utf8_decode($XMLDevice->getAttribute("ICON"));?>" SIZE="10"></TD>
+<TD valign="MIDDLE"  COLSPAN="1"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($MyDevice->_ID) . "_ICON"?>" VALUE="<?php if($XMLDevice) echo utf8_decode($XMLDevice->getAttribute("ICON"));?>" SIZE="10"></TD>
 <TD><IMG SRC="<?php if($XMLDevice) echo utf8_decode($XMLDevice->getAttribute("ICON")) ?>" WIDTH="<?php if($XMLDevice) echo utf8_decode($XMLDevice->getAttribute("WIDTH"));?>" HEIGHT="<?php if($XMLDevice) echo utf8_decode($XMLDevice->getAttribute("HEIGHT"));?>"></TD>
 </TR>
 <TR>
@@ -133,41 +139,42 @@ Valeur : <?php echo utf8_decode($x[$i]->_Value) ?></H4>
 ?>
 <TR>
 <TD valign="MIDDLE"><FONT STYLE="color:#FFFFFF;font-family:Times New Roman,Times,Serif;font-size : 10pt">Valeur</FONT></TD>
-<TD valign="MIDDLE"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($x[$i]->_ID) . "_ETAT_VALUE[]"?>" VALUE="<?php if($tmpXMLEtat) echo utf8_decode($tmpXMLEtat->getAttribute("VALUE"));?>" SIZE="5"></TD>
+<TD valign="MIDDLE"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($MyDevice->_ID) . "_ETAT_VALUE[]"?>" VALUE="<?php if($tmpXMLEtat) echo utf8_decode($tmpXMLEtat->getAttribute("VALUE"));?>" SIZE="5"></TD>
 <TD valign="MIDDLE"><FONT STYLE="color:#FFFFFF;font-family:Times New Roman,Times,Serif;font-size : 10pt">Hauteur</FONT></TD>
-<TD valign="MIDDLE"  COLSPAN="1"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($x[$i]->_ID) . "_ETAT_H[]"?>" VALUE="<?php if($tmpXMLEtat) echo utf8_decode($tmpXMLEtat->getAttribute("HEIGHT"));?>" SIZE="3"></TD>
+<TD valign="MIDDLE"  COLSPAN="1"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($MyDevice->_ID) . "_ETAT_H[]"?>" VALUE="<?php if($tmpXMLEtat) echo utf8_decode($tmpXMLEtat->getAttribute("HEIGHT"));?>" SIZE="3"></TD>
 <TD valign="MIDDLE"><FONT STYLE="color:#FFFFFF;font-family:Times New Roman,Times,Serif;font-size : 10pt">Largeur</FONT></TD>
-<TD valign="MIDDLE"  COLSPAN="1"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($x[$i]->_ID) . "_ETAT_L[]"?>" VALUE="<?php if($tmpXMLEtat) echo utf8_decode($tmpXMLEtat->getAttribute("WIDTH"));?>" SIZE="3"></TD>
+<TD valign="MIDDLE"  COLSPAN="1"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($MyDevice->_ID) . "_ETAT_L[]"?>" VALUE="<?php if($tmpXMLEtat) echo utf8_decode($tmpXMLEtat->getAttribute("WIDTH"));?>" SIZE="3"></TD>
 <TD valign="MIDDLE"><FONT STYLE="color:#FFFFFF;font-family:Times New Roman,Times,Serif;font-size : 10pt">Fichier</FONT></TD>
-<TD valign="MIDDLE"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($x[$i]->_ID) . "_ETAT_IMG[]"?>" VALUE="<?php if($tmpXMLEtat) echo utf8_decode($tmpXMLEtat->getAttribute("IMG"));?>" SIZE="10"></TD>
+<TD valign="MIDDLE"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($MyDevice->_ID) . "_ETAT_IMG[]"?>" VALUE="<?php if($tmpXMLEtat) echo utf8_decode($tmpXMLEtat->getAttribute("IMG"));?>" SIZE="10"></TD>
 <TD><IMG SRC="<?php if($tmpXMLEtat) echo utf8_decode($tmpXMLEtat->getAttribute("IMG")) ?>" WIDTH="<?php if($tmpXMLEtat) echo utf8_decode($tmpXMLEtat->getAttribute("WIDTH"));?>" HEIGHT="<?php if($tmpXMLEtat) echo utf8_decode($tmpXMLEtat->getAttribute("HEIGHT"));?>"></TD>
 </TR>
 <?php 		} // Fin liste des états 
 		} // Fin du test sur $XMLDevice ?>
 <TR>
 <TD valign="MIDDLE"><FONT STYLE="color:#FFFFFF;font-family:Times New Roman,Times,Serif;font-size : 10pt">Valeur</FONT></TD>
-<TD valign="MIDDLE"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($x[$i]->_ID) . "_ETAT_VALUE[]"?>" VALUE="" SIZE="5"></TD>
+<TD valign="MIDDLE"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($MyDevice->_ID) . "_ETAT_VALUE[]"?>" VALUE="" SIZE="5"></TD>
 <TD valign="MIDDLE"><FONT STYLE="color:#FFFFFF;font-family:Times New Roman,Times,Serif;font-size : 10pt">Hauteur</FONT></TD>
-<TD valign="MIDDLE"  COLSPAN="1"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($x[$i]->_ID) . "_ETAT_H[]"?>" VALUE="" SIZE="3"></TD>
+<TD valign="MIDDLE"  COLSPAN="1"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($MyDevice->_ID) . "_ETAT_H[]"?>" VALUE="" SIZE="3"></TD>
 <TD valign="MIDDLE"><FONT STYLE="color:#FFFFFF;font-family:Times New Roman,Times,Serif;font-size : 10pt">Largeur</FONT></TD>
-<TD valign="MIDDLE"  COLSPAN="1"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($x[$i]->_ID) . "_ETAT_L[]"?>" VALUE="" SIZE="3"></TD>
+<TD valign="MIDDLE"  COLSPAN="1"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($MyDevice->_ID) . "_ETAT_L[]"?>" VALUE="" SIZE="3"></TD>
 <TD valign="MIDDLE"><FONT STYLE="color:#FFFFFF;font-family:Times New Roman,Times,Serif;font-size : 10pt">Fichier</FONT></TD>
-<TD valign="MIDDLE"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($x[$i]->_ID) . "_ETAT_IMG[]"?>" VALUE="" SIZE="10"></TD>
+<TD valign="MIDDLE"><INPUT TYPE="TEXT" NAME="<?php echo utf8_decode($v->_Id) . "_" . utf8_decode($MyDevice->_ID) . "_ETAT_IMG[]"?>" VALUE="" SIZE="10"></TD>
 <TD><IMG SRC=""></TD>
 </TR>
 </TABLE>
 <HR>
 <?php
-}
+}  // Fin boucle Device
 ?>
 </TD>
 </TR>
 <?php
-}
+}  // Fin foreach Zone
+}  // Fin condition propery_exists zone
 ?>
 </TABLE>
 <?php
-	}
+	} // fin condition sur $ConExist
 ?>
 <INPUT type="SUBMIT" value="Enregistrer">
 </FORM>

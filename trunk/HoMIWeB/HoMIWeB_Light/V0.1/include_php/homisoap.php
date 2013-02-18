@@ -690,7 +690,7 @@ class HomidomSoap {
         }
     }
 	
-/*	
+	
 	public function objectToArray($object)
 	{
 			 if(!is_object($object) && !is_array($object))
@@ -703,7 +703,7 @@ class HomidomSoap {
 			}
 			return $array;
 	}
-*/	
+	
 	
 	public function GetAllZones(){
 		if($this->_connecte) {
