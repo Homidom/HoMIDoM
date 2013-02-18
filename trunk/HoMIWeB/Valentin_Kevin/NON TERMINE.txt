@@ -1,0 +1,40 @@
+NON TERMINE
+
+DEVELOPPEMENT AVEC FRAMEWORK CAKE
+
+
+
+
+
+
+
+
+
+Config PHP :
+ - short_open_tag=on
+
+extensions à activer : 
+ - SOAP
+ - gettext
+ - Ca se peut qu'il y est un module sqlite3 aussi à activer. 
+
+
+Pour apache, je vous conseil de faire un virtualhost. (et d'activer le mod_rewrite)
+
+Exemple:
+
+<VirtualHost *:80>
+      ServerName homidom
+      DocumentRoot "/destination/to/the/folder/homidom"
+      <Directory "/destination/to/the/folder/homidom">
+              Options Includes FollowSymLinks
+              AllowOverride All
+              Order allow,deny
+      Allow from all
+      </Directory>
+</VirtualHost>
+
+
+dans votre fichier hosts: 127.0.0.1	homidom
+
+et dans votre navigateur "http://homidom/" devrait arriver sur la bonne page.
