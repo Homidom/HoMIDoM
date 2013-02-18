@@ -225,12 +225,5 @@ if(!empty($ListeDevice))
 	}
 }
 
-/*	if(!empty($_GET)) { // On affiche ou non les devices non paramétrés
-		$zoneid=$_GET['zoneid'];
-		if($zoneid <> 'Parametres') {
-			echo '<DIV ID="DEVICENOXML"></DIV>';
-		}
-	}
-*/
 
 ?>
