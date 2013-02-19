@@ -1152,10 +1152,11 @@ Class Window1
                     y.Add(sender.uid, "Value")
                     Devices.Add(y)
 
-                    Dim x As New uHisto(Devices)
+                    Dim x As New uHisto(Devices, CanvasRight.ActualWidth)
                     x.Uid = System.Guid.NewGuid.ToString()
-                    x.Width = CanvasRight.ActualWidth - 100
-                    x.Height = CanvasRight.ActualHeight - 50
+                    x.Width = CanvasRight.ActualWidth - 20
+                    x.Height = CanvasRight.ActualHeight - 20
+                    x._with = CanvasRight.ActualWidth - 20
                     AddHandler x.CloseMe, AddressOf UnloadControl
                     CanvasRight.Children.Clear()
                     CanvasRight.Children.Add(x)
@@ -1498,10 +1499,11 @@ Class Window1
             y.Add(sender.uid, "Value")
             Devices.Add(y)
 
-            Dim x As New uHisto(Devices)
+            Dim x As New uHisto(Devices, CanvasRight.ActualWidth)
             x.Uid = System.Guid.NewGuid.ToString()
-            x.Width = CanvasRight.ActualWidth - 100
-            x.Height = CanvasRight.ActualHeight - 50
+            x.Width = CanvasRight.ActualWidth - 20
+            x.Height = CanvasRight.ActualHeight - 20
+            x._with = CanvasRight.ActualWidth - 20
             AddHandler x.CloseMe, AddressOf UnloadControl
             CanvasRight.Children.Clear()
             CanvasRight.Children.Add(x)
@@ -2766,10 +2768,11 @@ Class Window1
                 End If
             Next
 
-            Dim x As New uHisto(Devices)
+            Dim x As New uHisto(Devices, CanvasRight.ActualWidth)
             x.Uid = System.Guid.NewGuid.ToString()
-            x.Width = CanvasRight.ActualWidth - 50
+            x.Width = CanvasRight.ActualWidth - 20
             x.Height = CanvasRight.ActualHeight - 20
+            x._with = CanvasRight.ActualWidth - 20
             AddHandler x.CloseMe, AddressOf UnloadControl
             CanvasRight.Children.Clear()
 
