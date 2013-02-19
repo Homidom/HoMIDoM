@@ -8,6 +8,7 @@ Public Class uCondition
     Dim _IdDevice As String = ""
     Dim _PropertyDevice As String = ""
     Dim _Value As Object = Nothing
+    Dim _IsFirst As Boolean
     Dim MyMenuItem As New MenuItem
     Dim mycontextmnu As New ContextMenu
 
@@ -44,10 +45,26 @@ Public Class uCondition
         Set(ByVal value As Action.TypeOperateur)
             Try
                 _Operateur = value
-                CbOperateur.SelectedIndex = _Operateur
+                If value = 1 Then CbOperateur.SelectedIndex = 0
+                If value = 2 Then CbOperateur.SelectedIndex = 1
             Catch ex As Exception
                 MessageBox.Show("Erreur uCondition Operateur: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
             End Try
+        End Set
+    End Property
+
+    Public Property IsFirst As Boolean
+        Get
+            Return _IsFirst
+        End Get
+        Set(ByVal value As Boolean)
+            _IsFirst = value
+            If _IsFirst Then
+                StkOp.Visibility = Windows.Visibility.Hidden
+            Else
+                StkOp.Visibility = Windows.Visibility.Visible
+                If _Operateur = 0 Then Operateur = 1
+            End If
         End Set
     End Property
 
@@ -421,7 +438,8 @@ Public Class uCondition
     Private Sub uCondition_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Me.MouseLeave
         Try
             If CbOperateur.SelectedIndex < 0 Then Exit Sub
-            _Operateur = CbOperateur.SelectedIndex
+            _Operateur = CbOperateur.SelectedIndex + 1
+            If IsFirst Then _Operateur = 0
 
             If _TypeCondition = Action.TypeCondition.DateTime Then
 
@@ -1029,4 +1047,5 @@ Public Class uCondition
             If _flag = False Then MessageBox.Show("Erreur uCondition TxtValue_TextChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
 End Class

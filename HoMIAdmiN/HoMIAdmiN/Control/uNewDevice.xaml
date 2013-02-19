@@ -24,10 +24,7 @@
                     <Label FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Name="Label1" VerticalAlignment="Top" HorizontalContentAlignment="Center">Nouveau(x) Composant(s)</Label>
 
                 </DockPanel>
-                <!--<StackPanel >-->
-                <!--<Rectangle Height="20" />-->
                 <DataGrid Name="DGW"  AutoGenerateColumns="False" ItemsSource="{Binding}" Margin="2"/>
-                <!--</StackPanel>-->
             </DockPanel>
         </Border>
     </DockPanel>

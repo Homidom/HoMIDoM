@@ -229,6 +229,7 @@ Public Class uHisto
                 Case 6 : Chart2.ChartAreas("Default").BackColor = Color.Transparent
             End Select
 
+
             ' Add the chart to the Windows Form Host.
             Test.Child = Chart2
             _CurrentChart = Chart2
@@ -241,6 +242,7 @@ Public Class uHisto
             MessageBox.Show("Erreur uHisto Update_Graphe: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
 
     Private Sub BtnSave_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnSave.Click
         Try
@@ -335,5 +337,10 @@ Public Class uHisto
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub Finalize: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
+    End Sub
+
+
+    Private Sub MenuItem1_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem1.Click
+        Update_Graphe()
     End Sub
 End Class
