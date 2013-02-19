@@ -26,4 +26,20 @@ Public Class uReleve
             MessageBox.Show("Erreur lors de l'affichage du relevé GridOK: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
+    Private Sub BtnUpdate_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnUpdate.Click
+        Try
+            myService.UpdateHisto(IdSrv, txtID.Text, txtTime.Text, txtValue.Text)
+        Catch ex As Exception
+            MessageBox.Show("Erreur BtnUpdate_Click: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub BtnDelete_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelete.Click
+        Try
+            myService.DeleteHisto(IdSrv, txtID.Text, txtTime.Text)
+        Catch ex As Exception
+            MessageBox.Show("Erreur BtnDelete_Click: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
 End Class
