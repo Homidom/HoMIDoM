@@ -294,7 +294,10 @@ Namespace HoMIDom
                                 For j As Integer = 0 To _ListTriggers.Item(i).ListMacro.Count - 1
                                     'on cherche la macro et on la lance en testant ces conditions
                                     _m = ReturnMacroById(_IdSrv, _ListTriggers.Item(i).ListMacro.Item(j))
-                                    If _m IsNot Nothing Then _m.Execute(Me)
+                                    If _m IsNot Nothing Then
+                                        Log(TypeLog.DEBUG, TypeSource.SERVEUR, "TriggerTimer", "Lancement de la macro: " & _m.Nom & " ,suite au déclenchement du trigger: " & _ListTriggers.Item(i).Nom)
+                                        _m.Execute(Me)
+                                    End If
                                     _m = Nothing
                                 Next
                             End If

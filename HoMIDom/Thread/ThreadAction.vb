@@ -152,6 +152,7 @@ Namespace HoMIDom
                                 Dim Flagjour As Boolean = False 'True si on travail sur un jour
                                 Dim _tim() As String = x.Conditions.Item(i).DateTime.Split("#")
 
+
                                 'On travail juste sur une heure
                                 If (_tim(0) <> "*" Or _tim(1) <> "*" Or _tim(2) <> "*") And _tim(3) = "*" And _tim(4) = "*" And _tim(5) = "" And _tim(6) <> "1" And _tim(7) <> "1" Then
                                     If _tim(0) = "*" Then
@@ -250,47 +251,49 @@ Namespace HoMIDom
                                     a1 = CDate(_Server.GetHeureCoucherSoleil)
                                 End If
 
+                                Dim compare As Integer = DateTime.Compare(Now, a1)
 
                                 Select Case x.Conditions.Item(i).Condition
                                     Case Action.TypeSigne.Egal
-                                        If DateDiff(DateInterval.Second, Now, a1) = 0 Then
+                                        If compare = 0 Then 'DateDiff(DateInterval.Second, Now, a1) = 0 Then
                                             result = True
                                         Else
                                             result = False
                                         End If
                                     Case Action.TypeSigne.Different
-                                        If DateDiff(DateInterval.Second, Now, a1) <> 0 Then
+                                        If compare <> 0 Then 'DateDiff(DateInterval.Second, Now, a1) <> 0 Then
                                             result = True
                                         Else
                                             result = False
                                         End If
                                     Case Action.TypeSigne.Inferieur
-                                        If DateDiff(DateInterval.Second, Now, a1) < 0 Then
+                                        If compare < 0 Then 'DateDiff(DateInterval.Second, Now, a1) < 0 Then
                                             result = True
                                         Else
                                             result = False
                                         End If
                                     Case Action.TypeSigne.InferieurEgal
-                                        If DateDiff(DateInterval.Second, Now, a1) <= 0 Then
+                                        If compare <= 0 Then 'DateDiff(DateInterval.Second, Now, a1) <= 0 Then
                                             result = True
                                         Else
                                             result = False
                                         End If
                                     Case Action.TypeSigne.Superieur
-                                        If DateDiff(DateInterval.Second, Now, a1) > 0 Then
+                                        If compare > 0 Then 'DateDiff(DateInterval.Second, Now, a1) > 0 Then
                                             result = True
                                         Else
                                             result = False
                                         End If
                                     Case Action.TypeSigne.SuperieurEgal
-                                        If DateDiff(DateInterval.Second, Now, a1) >= 0 Then
+                                        If compare >= 0 Then 'DateDiff(DateInterval.Second, Now, a1) >= 0 Then
                                             result = True
                                         Else
                                             result = False
                                         End If
                                 End Select
+
+
                                 If Flagjour = True Then
-                                    Dim jj As String = UCase(Now.ToString("dddd"))
                                     If (InStr(_tim(5), "0") > 0 And Now.DayOfWeek = DayOfWeek.Sunday) Or (InStr(_tim(5), "1") > 0 And Now.DayOfWeek = DayOfWeek.Monday) Or (InStr(_tim(5), "2") > 0 And Now.DayOfWeek = DayOfWeek.Tuesday) Or (InStr(_tim(5), "3") > 0 And Now.DayOfWeek = DayOfWeek.Wednesday) Or (InStr(_tim(5), "4") > 0 And Now.DayOfWeek = DayOfWeek.Thursday) Or (InStr(_tim(5), "5") > 0 And Now.DayOfWeek = DayOfWeek.Friday) Or (InStr(_tim(5), "6") > 0 And Now.DayOfWeek = DayOfWeek.Saturday) Then
                                         result = result And True
                                     Else
@@ -312,6 +315,7 @@ Namespace HoMIDom
                                 End If
                             End If
                         Next
+
                         If flag = True Then
                             For i As Integer = 0 To x.ListTrue.Count - 1
                                 Dim _action As New ThreadAction(_Server, x.ListTrue.Item(i))
