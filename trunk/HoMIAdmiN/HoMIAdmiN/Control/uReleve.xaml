@@ -19,7 +19,44 @@
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" >
                     <Label Name="LblDev" Content="#####" Width="250" Foreground="White" />
                  </StackPanel>
+            <StackPanel Orientation="Horizontal" >
                 <DataGrid Name="DataGrid1" Margin="5" RowBackground="LightBlue" AlternatingRowBackground="LightYellow" Width="400" Height="450"></DataGrid>
+                <StackPanel >
+
+                    <!--show the selected item-->
+
+                    <GroupBox >
+                        <GroupBox.Header>
+                            <Label Foreground="White" FontWeight="Bold">Sélection</Label>
+                        </GroupBox.Header>
+                        <StackPanel >
+                            <TextBox Name="txtID"  Text="{Binding ElementName=DataGrid1,Path=SelectedItem.IdDevice}" Visibility="Collapsed"  />
+                            <StackPanel Orientation="Horizontal" >
+                                <Label Content="DateTime:" Foreground=" white" Width="70"/>
+                                <TextBox  Name="txtTime"  Text="{Binding ElementName=DataGrid1,Path=SelectedItem.DateTime}" Width="150" IsReadOnly="True" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" >
+                                <Label Content="Valeur:" Foreground=" white" Width="70"/>
+                                <TextBox  Name="txtValue"  Text="{Binding ElementName=DataGrid1,Path=SelectedItem.Value}" Width="150"/>
+                            </StackPanel>
+                        </StackPanel>
+                       
+
+                    </GroupBox>
+
+                    <StackPanel Orientation="Horizontal" >
+
+                        <Button  Content="Update" Width="50" Height="30" Name="BtnUpdate" Template="{DynamicResource GlassButton}" Foreground=" white"/>
+                        <Button  Content="Delete"  Width="50" Height="30" Name="BtnDelete" Template="{DynamicResource GlassButton}" Foreground=" white"/>
+
+                    </StackPanel>
+
+
+
+                </StackPanel>
+
+          
+            </StackPanel>
             </StackPanel>
     </Grid>
 

@@ -361,6 +361,27 @@ Namespace HoMIDom
 
 #Region "Historisation"
         ''' <summary>
+        ''' Modifie un historique
+        ''' </summary>
+        ''' <param name="idsrv"></param>
+        ''' <param name="IdDevice"></param>
+        ''' <param name="DateTime"></param>
+        ''' <param name="Value"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function UpdateHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String, ByVal Value As String) As Integer
+
+        ''' <summary>
+        ''' Supprime un historique
+        ''' </summary>
+        ''' <param name="idsrv"></param>
+        ''' <param name="IdDevice"></param>
+        ''' <param name="DateTime"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function DeleteHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String) As Integer
+
+        ''' <summary>
         ''' Retourne un dictionnary retourant en clé l'id du device et la valeur True/False s'il contient des historiques
         ''' </summary>
         ''' <returns></returns>

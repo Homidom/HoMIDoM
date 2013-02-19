@@ -4281,6 +4281,55 @@ Namespace HoMIDom
 #End Region
 
 #Region "Historisation"
+        ''' <summary>
+        ''' Modifie un historique
+        ''' </summary>
+        ''' <param name="idsrv"></param>
+        ''' <param name="IdDevice"></param>
+        ''' <param name="DateTime"></param>
+        ''' <param name="Value"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function UpdateHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String, ByVal Value As String) As Integer Implements IHoMIDom.UpdateHisto
+            Try
+                If VerifIdSrv(idsrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
+                'Mettre Code SQL
+
+                Return 0
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "UpdateHisto", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Supprime un historique
+        ''' </summary>
+        ''' <param name="idsrv"></param>
+        ''' <param name="IdDevice"></param>
+        ''' <param name="DateTime"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function DeleteHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String) As Integer Implements IHoMIDom.DeleteHisto
+            Try
+                If VerifIdSrv(idsrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
+                'Mettre Code SQL
+
+                Return 0
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteHisto", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
         Public Function GetAllListHisto(ByVal idsrv As String) As List(Of Historisation) Implements IHoMIDom.GetAllListHisto
             Try
                 If VerifIdSrv(idsrv) = False Then
