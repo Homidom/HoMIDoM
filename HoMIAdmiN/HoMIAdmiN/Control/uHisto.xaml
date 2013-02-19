@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
              mc:Ignorable="d" 
-            Margin="10" Width="980">
+            Margin="10" Width="900">
 
     <DockPanel Background="#636060" Opacity="1">
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Margin="0">
@@ -23,9 +23,9 @@
                     <StackPanel >
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="2">
                             <Label Content="Debut:" Foreground="White" VerticalAlignment="center"/>
-                            <DatePicker Name="DateStartSelect" Width="150" VerticalAlignment="Center" BorderBrush="{x:Null}" />
+                            <DatePicker Name="DateStartSelect" Width="100" VerticalAlignment="Center" BorderBrush="{x:Null}" />
                             <Label Content="Fin:" Foreground="White" VerticalAlignment="center"/>
-                            <DatePicker Name="DateFinSelect" Width="150" VerticalAlignment="Center" BorderBrush="{x:Null}" />
+                            <DatePicker Name="DateFinSelect" Width="100" VerticalAlignment="Center" BorderBrush="{x:Null}" />
 
                             <Rectangle Width="10"/>
                             <Label Content="Format:" Foreground="White" VerticalAlignment="center"/>
