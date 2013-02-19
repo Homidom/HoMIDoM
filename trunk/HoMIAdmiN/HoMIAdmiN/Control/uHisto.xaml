@@ -148,10 +148,17 @@
                         </TabControl.Resources>
 
                         <TabItem Header="Graphe " >
+                            <TabItem.ContextMenu>
+                                <ContextMenu >
+                                    <MenuItem Name="MenuItem1" IsEnabled="True" Header="Refresh">
+                                    </MenuItem>
+                                </ContextMenu>
+                                
+                            </TabItem.ContextMenu>
                             <StackPanel Orientation="Horizontal" >
                                 <!--<chartingToolkit:Chart Name="Chart1" MinWidth="500" MinHeight="500" Margin="3" FontSize="9" />-->
                                 <WindowsFormsHost Name="Test" >
-
+                                   
                                 </WindowsFormsHost>
                             </StackPanel>
                         </TabItem >

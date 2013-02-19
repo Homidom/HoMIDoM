@@ -371,13 +371,15 @@
        
            </DockPanel>
        
-        <Canvas Name="CanvasRight" Margin="3,3,3,0" >
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <Canvas Name="CanvasRight" Margin="3,3,3,0" >
             <Canvas.Background>
                 <ImageBrush ImageSource="/HoMIAdmiN;component/Images/Fond_1024_768.png"  >
                 </ImageBrush>
             </Canvas.Background>
         </Canvas>
-
+        </ScrollViewer>
+        
     </DockPanel>
 
 </Window>

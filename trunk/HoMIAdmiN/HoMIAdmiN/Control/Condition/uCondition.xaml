@@ -4,24 +4,34 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-              d:DesignWidth="539" Margin="6" Background="Gray">
+              d:DesignWidth="539" Margin="5" Background="Gray">
 
         <Grid>
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Horizontal"> 
                <Label Name="LblTitre" Content="Condition" Foreground="White" />
                 <Rectangle Width="235" />
+                <StackPanel Name="StkOp" Orientation="Horizontal" >
                 <Label Content="Operateur:" Foreground="White" />
                 <ComboBox Name="CbOperateur" SelectedIndex="0" Margin="4">
-                    <ComboBoxItem Content="NONE" />
                     <ComboBoxItem Content="AND" />
                     <ComboBoxItem Content="OR" />
                 </ComboBox>
+                </StackPanel>
                 <Image Name="BtnUp" Width="24" Height="24" Margin="3" Source="/HoMIAdmiN;component/Images/Fleche_haut_32.png" />
                 <Image Name="BtnDelete" Width="24" Height="24" Margin="3" Source="/HoMIAdmiN;component/Images/supprimer_32.png" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" Name="StkTime">
-                <Label Content="Date &amp; Heure" Height="24" Foreground="White" />
+                <StackPanel >
+                    <StackPanel >
+                        <CheckBox Name="ChkHeure" Content="Suivant une heure" IsChecked="True" Foreground="White" FontSize="11" />
+                        <CheckBox Name="ChkDate" Content="Suivant une date" Foreground="White" FontSize="11" />
+                        <CheckBox Name="ChkJour" Content="Suivant un jour" Foreground="White" FontSize="11" />
+                        <CheckBox Name="ChkLeveS" Content="Suivant heure du levé du soleil" Foreground="White" FontSize="11" />
+                        <CheckBox Name="ChkCoucheS" Content="Suivant heure du couché du soleil" Foreground="White" FontSize="11" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" >
+                        <Label Content="Date &amp; Heure" Height="24" Foreground="White" />
                 <ComboBox Name="CbSigne1" SelectedIndex="0" Margin="3" Height="22">
                     <ComboBoxItem Content="=" />
                     <ComboBoxItem Content="&lt;" />
@@ -30,20 +40,15 @@
                     <ComboBoxItem Content="&gt;=" />
                     <ComboBoxItem Content="&lt;&gt;" />
                 </ComboBox>
-                <StackPanel Margin="5">
-                    <StackPanel >
-                        <CheckBox Name="ChkHeure" Content="Suivant une heure" IsChecked="True" Foreground="White" />
-                        <CheckBox Name="ChkDate" Content="Suivant une date" Foreground="White"/>
-                        <CheckBox Name="ChkJour" Content="Suivant un jour" Foreground="White"/>
-                        <CheckBox Name="ChkLeveS" Content="Suivant heure du levé du soleil" Foreground="White"/>
-                        <CheckBox Name="ChkCoucheS" Content="Suivant heure du couché du soleil" Foreground="White"/>
                     </StackPanel>
+                </StackPanel>
+                <StackPanel Margin="5">
                     <StackPanel Orientation="Horizontal" >
                         <StackPanel Name="Stk1">
                             <StackPanel Orientation="Horizontal" >
-                                <Label Content="Hr" HorizontalAlignment="Center" Margin="1" Name="LblH" VerticalAlignment="Top" Width="35" Foreground="White" HorizontalContentAlignment="Center" />
-                                <Label Content="Mn" Foreground="White" HorizontalAlignment="Center" Margin="1" Name="LBLM" VerticalAlignment="Top" Width="35" HorizontalContentAlignment="Center" />
-                                <Label Content="Ss" Foreground="White" HorizontalAlignment="Center"  Margin="1" Name="LBLS" VerticalAlignment="Top" Width="35" HorizontalContentAlignment="Center" />
+                                <Label Content="Hr" HorizontalAlignment="Center" Margin="1" Name="LblH" VerticalAlignment="Top" Width="35" Foreground="White" HorizontalContentAlignment="Center" FontSize="10" />
+                                <Label Content="Mn" Foreground="White" HorizontalAlignment="Center" Margin="1" Name="LBLM" VerticalAlignment="Top" Width="35" HorizontalContentAlignment="Center" FontSize="10" />
+                                <Label Content="Ss" Foreground="White" HorizontalAlignment="Center"  Margin="1" Name="LBLS" VerticalAlignment="Top" Width="35" HorizontalContentAlignment="Center" FontSize="10" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" >
                                 <Button HorizontalAlignment="Left" Margin="1" Name="BtnPHr" Width="35" Height="24" VerticalAlignment="Top" Template="{DynamicResource GlassButton}" Foreground="White" >
@@ -76,8 +81,8 @@
                         <Rectangle Width="20"/>
                         <StackPanel Name="stk2" Visibility="Hidden">
                             <StackPanel Orientation="Horizontal" >
-                                <Label Content="Jr" HorizontalAlignment="Center" Margin="1" Name="LblJour" VerticalAlignment="Top" Width="35" Foreground="White" HorizontalContentAlignment="Center" />
-                                <Label Content="Ms" Foreground="White" HorizontalAlignment="Center" Margin="1" Name="LblMois" VerticalAlignment="Top" Width="35" HorizontalContentAlignment="Center" />
+                                <Label Content="Jr" HorizontalAlignment="Center" Margin="1" Name="LblJour" VerticalAlignment="Top" Width="35" Foreground="White" HorizontalContentAlignment="Center" FontSize="10" />
+                                <Label Content="Ms" Foreground="White" HorizontalAlignment="Center" Margin="1" Name="LblMois" VerticalAlignment="Top" Width="35" HorizontalContentAlignment="Center" FontSize="10" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" >
                                 <Button HorizontalAlignment="Left" Margin="1" Name="BtnPJr" Width="35" Height="24" VerticalAlignment="Top" Template="{DynamicResource GlassButton}" Foreground="White" >

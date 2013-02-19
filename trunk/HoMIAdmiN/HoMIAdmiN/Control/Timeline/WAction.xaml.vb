@@ -437,10 +437,17 @@ Public Class WActionParametrage
                         Dim obj As Action.ActionIf = _ObjAction
 
                         StkCondition.Children.Clear()
+
                         For i As Integer = 0 To obj.Conditions.Count - 1
                             Dim x As New uCondition
+                            If i = 0 Then
+                                x.IsFirst = True
+                            Else
+                                x.IsFirst = False
+                            End If
                             x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
                             x.TypeCondition = obj.Conditions.Item(i).Type
+                            
                             x.Operateur = obj.Conditions.Item(i).Operateur
                             x.Signe = obj.Conditions.Item(i).Condition
                             If x.TypeCondition = Action.TypeCondition.DateTime Then
@@ -590,6 +597,11 @@ Public Class WActionParametrage
             x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
             AddHandler x.DeleteCondition, AddressOf DeleteCondition
             AddHandler x.UpCondition, AddressOf UpCondition
+            If StkCondition.Children.Count = 0 Then
+                x.IsFirst = True
+            Else
+                x.IsFirst = False
+            End If
             StkCondition.Children.Add(x)
             _ListuConditions.Add(x)
         Catch ex As Exception
@@ -604,6 +616,11 @@ Public Class WActionParametrage
             x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
             AddHandler x.DeleteCondition, AddressOf DeleteCondition
             AddHandler x.UpCondition, AddressOf UpCondition
+            If StkCondition.Children.Count = 0 Then
+                x.IsFirst = True
+            Else
+                x.IsFirst = False
+            End If
             StkCondition.Children.Add(x)
             _ListuConditions.Add(x)
         Catch ex As Exception
@@ -620,6 +637,8 @@ Public Class WActionParametrage
                     Exit For
                 End If
             Next
+
+            RefreshCondition()
         Catch ex As Exception
             MessageBox.Show("Erreur WAction DeleteCondition: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -642,8 +661,27 @@ Public Class WActionParametrage
                     Exit For
                 End If
             Next
+
+            RefreshCondition()
         Catch ex As Exception
             MessageBox.Show("Erreur WAction UpCondition: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub RefreshCondition()
+        Try
+            If StkCondition.Children.Count > 0 Then
+                For i As Integer = 0 To StkCondition.Children.Count - 1
+                    Dim x As uCondition = StkCondition.Children.Item(i)
+                    If i = 0 Then
+                        x.IsFirst = True
+                    Else
+                        x.IsFirst = False
+                    End If
+                Next
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur RefreshCondition: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 #End Region
