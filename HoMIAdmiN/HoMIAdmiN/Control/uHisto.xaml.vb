@@ -10,8 +10,9 @@ Public Class uHisto
     Dim _Devices As New List(Of Dictionary(Of String, String))
     Dim _MaxData As Integer = 2000
     Dim _CurrentChart As Chart = Nothing
+    Public _with As Integer = 600
 
-    Public Sub New(ByVal Devices As List(Of Dictionary(Of String, String)))
+    Public Sub New(ByVal Devices As List(Of Dictionary(Of String, String)), ByVal withcontainer As Integer)
 
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
@@ -25,7 +26,7 @@ Public Class uHisto
             DateFinSelect.Text = Now.Date.AddDays(1).ToString
 
             _Devices = Devices
-
+            _with = withcontainer - 20
             Update_Graphe()
 
         Catch ex As Exception
@@ -93,7 +94,8 @@ Public Class uHisto
             Dim Chart2 As New System.Windows.Forms.DataVisualization.Charting.Chart()
             ' Add a chart area.
             Chart2.ChartAreas.Add("Default")
-            Chart2.Width = 925
+            'Chart2.Width = 900
+            Chart2.Width = _with - 20
             Chart2.Height = 500
 
             'AddHandler Chart2.MouseMove, AddressOf Chart2_MouseMove

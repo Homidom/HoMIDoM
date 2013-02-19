@@ -716,10 +716,11 @@ Partial Public Class uDevice
                 y.Add(_DeviceId, "Value")
                 Devices.Add(y)
 
-                Dim x As New uHisto(Devices)
+                Dim x As New uHisto(Devices, Window1.CanvasUser.ActualWidth)
                 x.Uid = System.Guid.NewGuid.ToString()
-                x.Width = Window1.CanvasUser.ActualWidth - 100
-                x.Height = Window1.CanvasUser.ActualHeight - 50
+                x.Width = Window1.CanvasUser.ActualWidth - 20
+                x.Height = Window1.CanvasUser.ActualHeight - 20
+                x._with = Window1.CanvasUser.ActualHeight - 20
                 AddHandler x.CloseMe, AddressOf UnloadControl
                 Window1.CanvasUser.Children.Add(x)
 
