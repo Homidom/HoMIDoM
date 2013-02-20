@@ -4292,12 +4292,19 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Function UpdateHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String, ByVal Value As String) As Integer Implements IHoMIDom.UpdateHisto
             Try
+                Dim retour As String
+
                 If VerifIdSrv(idsrv) = False Then
                     Return 99
                     Exit Function
                 End If
 
-                'Mettre Code SQL
+                'Update de la BDD
+                'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+                retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", IdDevice, "Value", DateTime, Value)
+                If Mid(retour, 1, 4) = "ERR:" Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "AddHisto", "Erreur Requete sqlite : " & retour)
+                End If
 
                 Return 0
             Catch ex As Exception
@@ -4316,12 +4323,19 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Function DeleteHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String) As Integer Implements IHoMIDom.DeleteHisto
             Try
+                Dim retour As String
+
                 If VerifIdSrv(idsrv) = False Then
                     Return 99
                     Exit Function
                 End If
 
-                'Mettre Code SQL
+                'Suppression de la BDD
+                'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+                retour = sqlite_homidom.nonquery("DELETE FROM historiques WHERE device_id=" & IdDevice & " AND dateheure=" & DateTime)
+                If Mid(retour, 1, 4) = "ERR:" Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteHisto", "Erreur Requete sqlite : " & retour)
+                End If
 
                 Return 0
             Catch ex As Exception
@@ -4340,12 +4354,19 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Function AddHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String, ByVal Value As String) As Integer Implements IHoMIDom.AddHisto
             Try
+                Dim retour As String
+
                 If VerifIdSrv(idsrv) = False Then
                     Return 99
                     Exit Function
                 End If
 
-                'Mettre Code SQL
+                'Ajout dans la BDD
+                'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+                retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", IdDevice, "Value", DateTime, Value)
+                If Mid(retour, 1, 4) = "ERR:" Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "AddHisto", "Erreur Requete sqlite : " & retour)
+                End If
 
                 Return 0
             Catch ex As Exception

@@ -17,16 +17,16 @@
         </Image>
         <StackPanel Margin="10,55,10,10">
                 <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" >
-                    <Label Name="LblDev" Content="#####" Width="250" Foreground="White" />
+                    <Label Name="LblDev" Content="#####" Width="250" Foreground="White" HorizontalAlignment="Left" HorizontalContentAlignment="Center" />
                  </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <DataGrid Name="DataGrid1" Margin="5" RowBackground="LightBlue" AlternatingRowBackground="LightYellow" Width="400" Height="450"></DataGrid>
-                <StackPanel >
+                <StackPanel HorizontalAlignment="Left">
                 <StackPanel >
 
                     <!--show the selected item-->
 
-                    <GroupBox >
+                    <GroupBox Margin="5">
                         <GroupBox.Header>
                             <Label Foreground="White" FontWeight="Bold">Sélection</Label>
                         </GroupBox.Header>
@@ -41,26 +41,22 @@
                                 <TextBox  Name="txtValue"  Text="{Binding ElementName=DataGrid1,Path=SelectedItem.Value}" Width="150"/>
                             </StackPanel>
                         </StackPanel>
-                       
-
                     </GroupBox>
+                        <StackPanel Orientation="Horizontal" >
 
-                    <StackPanel Orientation="Horizontal" >
+                            <Rectangle Width="5" />
+                            <Button  Content="Update" Width="50" Height="30" Name="BtnUpdate" Template="{DynamicResource GlassButton}" Foreground=" white"/>
+                            <Rectangle Width="10" />
+                            <Button  Content="Delete"  Width="50" Height="30" Name="BtnDelete" Template="{DynamicResource GlassButton}" Foreground=" white"/>
 
-                        <Button  Content="Update" Width="50" Height="30" Name="BtnUpdate" Template="{DynamicResource GlassButton}" Foreground=" white"/>
-                        <Button  Content="Delete"  Width="50" Height="30" Name="BtnDelete" Template="{DynamicResource GlassButton}" Foreground=" white"/>
-
+                        </StackPanel>
                     </StackPanel>
 
-
-
-                </StackPanel>
-
-                <StackPanel >
+                <StackPanel Margin="5">
 
                     <!--show the selected item-->
 
-                    <GroupBox >
+                    <GroupBox Margin="0,0,0,5">
                         <GroupBox.Header>
                             <Label Foreground="White" FontWeight="Bold">Ajout de données</Label>
                         </GroupBox.Header>
@@ -78,15 +74,12 @@
 
                     </GroupBox>
 
-                    <StackPanel Orientation="Horizontal" >
+                        <StackPanel Orientation="Horizontal" >
+                            <Button  Content="Ajouter" Width="50" Height="30" Name="BtnAdd" Template="{DynamicResource GlassButton}" Foreground=" white"/>
+                        </StackPanel>
 
-                        <Button  Content="Ajouter" Width="50" Height="30" Name="BtnAdd" Template="{DynamicResource GlassButton}" Foreground=" white"/>
 
                     </StackPanel>
-
-
-
-                </StackPanel>
                 </StackPanel>
             </StackPanel>
             </StackPanel>
