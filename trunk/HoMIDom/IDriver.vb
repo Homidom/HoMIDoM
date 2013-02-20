@@ -35,6 +35,7 @@
         Property Parametres() As ArrayList
         Property LabelsDriver As ArrayList
         Property LabelsDevice As ArrayList
+        Property AutoDiscover() As Boolean
 
         Sub Start()
         Sub [Stop]()

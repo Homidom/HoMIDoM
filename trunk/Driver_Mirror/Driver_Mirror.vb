@@ -44,6 +44,7 @@ Imports UsbLibrary
     Dim MyTimer As New Timers.Timer
     Dim _IdSrv As String
     Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
+    Dim _AutoDiscover As Boolean = False
 
     'A ajouter dans les ppt du driver
     Dim _tempsentrereponse As Integer = 1500
@@ -217,7 +218,14 @@ Imports UsbLibrary
             Return _OsPlatform
         End Get
     End Property
-
+    Public Property AutoDiscover() As Boolean Implements HoMIDom.HoMIDom.IDriver.AutoDiscover
+        Get
+            Return _AutoDiscover
+        End Get
+        Set(ByVal value As Boolean)
+            _AutoDiscover = value
+        End Set
+    End Property
 #End Region
 
 #Region "Fonctions génériques"
