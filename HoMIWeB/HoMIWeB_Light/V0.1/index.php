@@ -24,7 +24,11 @@ else {
 		$server = $ListeServer->item(0);
 		$homidom = new HomidomSoap($server->getAttribute("IP"), $server->getAttribute("PORT"), $server->getAttribute("ID"),true);
 		if($homidom->connect()) {	
-			$ConExist = true;
+			if($homidom->GetIdServer() <> '99') {
+				$ConExist = true;
+				}
+			else
+				$ConExist = false;
 			}
 		else {
 			$ConExist = false;

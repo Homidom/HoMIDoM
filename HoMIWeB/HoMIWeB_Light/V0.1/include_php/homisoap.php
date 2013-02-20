@@ -39,26 +39,26 @@ class HomidomSoap {
                 try {
 					$this->_client = @new SoapClient('http://'.$this->_ip.':'.$this->_port.'/ServiceModelSamples/service?wsdl', array('trace' => 1));
 					$this->_connecte = true;
-					return true;
+					return $this->_connecte;
 					} catch(SoapFault $fault)
 					{
 					$this->_connecte = false;
-					return false;
+					return $this->_connecte;
 					}
 					catch(Exception $e)
 					{
 					$this->_connecte = false;
-					return false;
+					return $this->_connecte;
 					}
             } else {
                 try {
 					$this->_client = @new SoapClient('http://'.$this->_ip.':'.$this->_port.'/ServiceModelSamples/service?wsdl');
 					$this->_connecte = true;
-					return true;
+					return $this->_connecte;
 					} catch(SoapFault $fault)
 					{
 					$this->_connecte = false;
-					return false;
+					return $this->_connecte;
 					}
 					
             }
@@ -162,7 +162,8 @@ class HomidomSoap {
 	public function MessageToServer($message){
 		if($this->_connecte) {
             $reponse= $this->_client->MessageToServer(array('Message'=>"$message"));
-            return 0;
+            return $reponse;
+//            return 0;
         } else {
             return "";
         }
@@ -762,7 +763,7 @@ class HomidomSoap {
 	
 	
 	/*--------------------------
-	----------- ZONE -----------
+	----------- MACRO -----------
 	--------------------------*/
 	public function DeleteMacro($macroId){
         if($this->_connecte) {
