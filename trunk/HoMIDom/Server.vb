@@ -4330,6 +4330,31 @@ Namespace HoMIDom
             End Try
         End Function
 
+        ''' <summary>
+        ''' Ajoute un historique
+        ''' </summary>
+        ''' <param name="idsrv"></param>
+        ''' <param name="IdDevice"></param>
+        ''' <param name="DateTime"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function AddHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String, ByVal Value As String) As Integer Implements IHoMIDom.AddHisto
+            Try
+                If VerifIdSrv(idsrv) = False Then
+                    Return 99
+                    Exit Function
+                End If
+
+                'Mettre Code SQL
+
+                Return 0
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "AddHisto", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
+
         Public Function GetAllListHisto(ByVal idsrv As String) As List(Of Historisation) Implements IHoMIDom.GetAllListHisto
             Try
                 If VerifIdSrv(idsrv) = False Then
