@@ -353,6 +353,10 @@ Imports ZibaseDll
             Dim sei As ZiBase.SensorInfo
             Dim retour As String
             If _Enable = False Then Exit Sub
+            If _IsConnect = False Then
+                WriteLog("Le driver n'est pas démarré, impossible de lire sur le port")
+                Exit Sub
+            End If
             If _DEBUG Then WriteLog("DBG: WRITE Read " & Objet.Name)
 
             sei = zba.GetSensorInfo(Objet.adresse1, Objet.Modele)
@@ -378,6 +382,10 @@ Imports ZibaseDll
         Try
             Dim retour As String = ""
             If _Enable = False Then Exit Sub
+            If _IsConnect = False Then
+                WriteLog("Le driver n'est pas démarré, impossible d'écrire sur le port")
+                Exit Sub
+            End If
             If _DEBUG Then WriteLog("DBG: WRITE Device " & Objet.Name & " <-- " & Command)
 
             If IsNothing(Parametre1) Or Str(Parametre1) = "" Then retour = Ecrirecommand(Objet.adresse1, Objet.modele, Objet.adresse2, Command, 0) Else retour = Ecrirecommand(Objet.adresse1, Objet.modele, Objet.adresse2, Command, Parametre1)

@@ -402,6 +402,10 @@ Imports System.IO.Ports
         Dim sendtwice As Boolean = False
         Try
             If _Enable = False Then Exit Sub
+            If _IsConnect = False Then
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "PLCBUS Write", "Le driver n'est pas démarré, impossible d'écrire sur le port")
+                Exit Sub
+            End If
             If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Write", "Ecriture de " & Objet.Name)
             If Parametre1 Is Nothing Then Parametre1 = 0
             If Parametre2 Is Nothing Then Parametre2 = 0
