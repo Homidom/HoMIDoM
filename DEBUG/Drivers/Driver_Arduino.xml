@@ -6,7 +6,20 @@ Driver_Arduino
 </name>
 </assembly>
 <members>
-<member name="M:Driver_Arduino.Driver_Arduino.Read(System.Object)">
+<member name="P:Driver_Arduino.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_Arduino.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_Arduino.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:Driver_Arduino.Driver_Arduino.Read(System.Object)">
 	<summary>
  Aller lire une entrée
  </summary>
@@ -104,19 +117,6 @@ Driver_Arduino
 </member><member name="M:Driver_Arduino.Driver_Arduino.traitement(System.Int32,System.String,System.Int32)">
 	<summary>Va écrire les valeurs dans Homidom</summary>
 	<remarks></remarks>
-</member><member name="P:Driver_Arduino.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:Driver_Arduino.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:Driver_Arduino.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
 </member>
 </members>
 </doc>

@@ -369,7 +369,7 @@ Namespace HoMIDom
         ''' <param name="Value"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function UpdateHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String, ByVal Value As String) As Integer
+        <OperationContract()> Function UpdateHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String, ByVal Value As String, ByVal OldDateTime As String, ByVal OldValue As String, ByVal Source As String) As Integer
 
         ''' <summary>
         ''' Supprime un historique
@@ -379,7 +379,7 @@ Namespace HoMIDom
         ''' <param name="DateTime"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function DeleteHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String) As Integer
+        <OperationContract()> Function DeleteHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String, ByVal Value As String, ByVal Source As String) As Integer
 
         ''' <summary>
         ''' Ajoute un historique
@@ -389,7 +389,7 @@ Namespace HoMIDom
         ''' <param name="DateTime"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function AddHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String, ByVal Value As String) As Integer
+        <OperationContract()> Function AddHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String, ByVal Value As String, ByVal Source As String) As Integer
 
         ''' <summary>
         ''' Retourne un dictionnary retourant en clé l'id du device et la valeur True/False s'il contient des historiques

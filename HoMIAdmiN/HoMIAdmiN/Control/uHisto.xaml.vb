@@ -176,7 +176,7 @@ Public Class uHisto
                     'Tableau de valeur
                     Dim _Tabitem As New TabItem
                     If kvp.Value = "Value" Then _Tabitem.Header = _namedevice Else _Tabitem.Header = _namedevice & ":" & kvp.Value
-                    Dim _Releve As New uReleve(result, _namedevice & ": " & kvp.Value)
+                    Dim _Releve As New uReleve(result, _namedevice & ": " & kvp.Value, kvp.Key, kvp.Value)
                     _Tabitem.Content = _Releve
                     TabControl1.Items.Add(_Tabitem)
                 Next kvp
