@@ -1345,6 +1345,15 @@ HoMIDom
 	<param name="DateTime"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.AddHisto(System.String,System.String,System.String,System.String)">
+	<summary>
+ Ajoute un historique
+ </summary>
+	<param name="idsrv"></param>
+	<param name="IdDevice"></param>
+	<param name="DateTime"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetHistoDeviceSource(System.String,System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Retourne un datatable d'historique d'un device suivant sa propriété (source) puis suivant une date de début et de fin
@@ -2331,6 +2340,15 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteHisto(System.String,System.String,System.String)">
 	<summary>
  Supprime un historique
+ </summary>
+	<param name="idsrv"></param>
+	<param name="IdDevice"></param>
+	<param name="DateTime"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.AddHisto(System.String,System.String,System.String,System.String)">
+	<summary>
+ Ajoute un historique
  </summary>
 	<param name="idsrv"></param>
 	<param name="IdDevice"></param>
