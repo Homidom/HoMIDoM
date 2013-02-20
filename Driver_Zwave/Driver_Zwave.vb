@@ -1,4 +1,5 @@
-﻿Imports HoMIDom
+﻿'Option Strict On
+Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 Imports STRGS = Microsoft.VisualBasic.Strings
@@ -46,6 +47,7 @@ Public Class Driver_ZWave
         Dim MyTimer As New Timers.Timer
         Dim _IdSrv As String
         Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
+        Dim _AutoDiscover As Boolean = False
 
         Private m_manager As New ZWManager
         Private m_options As New ZWOptions
@@ -395,7 +397,14 @@ Public Class Driver_ZWave
                 _StartAuto = value
             End Set
         End Property
-
+        Public Property AutoDiscover() As Boolean Implements HoMIDom.HoMIDom.IDriver.AutoDiscover
+            Get
+                Return _AutoDiscover
+            End Get
+            Set(ByVal value As Boolean)
+                _AutoDiscover = value
+            End Set
+        End Property
 
 #End Region
 

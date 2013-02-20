@@ -79,6 +79,7 @@ Partial Public Class uDriver
                 TxtDescript.Text = x.Description
                 ChkEnable.IsChecked = x.Enable
                 CbStartAuto.IsChecked = x.StartAuto
+                CbAutoDiscover.IsChecked = x.AutoDiscover
                 TxtProtocol.Text = x.Protocol
                 TxtAdrTCP.Text = x.IP_TCP
                 TxtPortTCP.Text = x.Port_TCP
@@ -171,7 +172,7 @@ Partial Public Class uDriver
 
             'if all OK, save the driver and close window
             If verif = True Then
-                myService.SaveDriver(IdSrv, _DriverId, TxtNom.Text, ChkEnable.IsChecked, CbStartAuto.IsChecked, TxtAdrTCP.Text, TxtPortTCP.Text, TxtAdrUDP.Text, TxtPortUDP.Text, TxtCom.Text, TxtRefresh.Text, ImgDevice.Tag, TxtModele.Text, _ListParam)
+                myService.SaveDriver(IdSrv, _DriverId, TxtNom.Text, ChkEnable.IsChecked, CbStartAuto.IsChecked, TxtAdrTCP.Text, TxtPortTCP.Text, TxtAdrUDP.Text, TxtPortUDP.Text, TxtCom.Text, TxtRefresh.Text, ImgDevice.Tag, TxtModele.Text, CbAutoDiscover.IsChecked, _ListParam)
                 FlagChange = True
                 RaiseEvent CloseMe(Me)
             End If

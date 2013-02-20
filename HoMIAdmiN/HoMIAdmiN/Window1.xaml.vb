@@ -913,11 +913,11 @@ Class Window1
                     AffControlPage(x)
                 Case 3 'Enable
                     Dim x As TemplateDriver = myService.ReturnDriverByID(IdSrv, sender.uid)
-                    myService.SaveDriver(IdSrv, sender.uid, x.Nom, True, x.StartAuto, x.IP_TCP, x.Port_TCP, x.IP_UDP, x.Port_UDP, x.COM, x.Refresh, x.Picture, x.Modele)
+                    myService.SaveDriver(IdSrv, sender.uid, x.Nom, True, x.StartAuto, x.IP_TCP, x.Port_TCP, x.IP_UDP, x.Port_UDP, x.COM, x.Refresh, x.Picture, x.Modele, x.AutoDiscover)
                     AffDriver()
                 Case 4 'Disable
                     Dim x As TemplateDriver = myService.ReturnDriverByID(IdSrv, sender.uid)
-                    myService.SaveDriver(IdSrv, sender.uid, x.Nom, False, x.StartAuto, x.IP_TCP, x.Port_TCP, x.IP_UDP, x.Port_UDP, x.COM, x.Refresh, x.Picture, x.Modele)
+                    myService.SaveDriver(IdSrv, sender.uid, x.Nom, False, x.StartAuto, x.IP_TCP, x.Port_TCP, x.IP_UDP, x.Port_UDP, x.COM, x.Refresh, x.Picture, x.Modele, x.AutoDiscover)
                     AffDriver()
             End Select
 

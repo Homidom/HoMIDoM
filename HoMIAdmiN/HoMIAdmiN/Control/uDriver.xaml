@@ -12,6 +12,7 @@
                         <TextBox Height="22" HorizontalAlignment="Left" Name="TxtNom" VerticalAlignment="Top" Width="215" Foreground="Black" Background="DarkGray" BorderBrush="Black" IsEnabled="False" SelectionBrush="DarkGray" />
                         <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Name="ChkEnable" VerticalAlignment="Top" IsChecked="False">Enable</CheckBox>
                         <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" HorizontalAlignment="Right" IsChecked="False" Name="CbStartAuto" VerticalAlignment="Top" >StartAuto</CheckBox>
+                        <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" HorizontalAlignment="Right" IsChecked="False" Name="CbAutoDiscover" VerticalAlignment="Top" >Decouverte Automatique</CheckBox>
                     </StackPanel>
                     <Label Foreground="White" HorizontalAlignment="Left" Name="Label3" VerticalAlignment="Top" Content="Description:"></Label>
                     <TextBox Background="DarkGray" BorderBrush="Black" Foreground="Black" Name="TxtDescript" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" Width="450" IsEnabled="False" SelectionBrush="DarkGray" />

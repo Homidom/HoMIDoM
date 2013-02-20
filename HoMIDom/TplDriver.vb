@@ -26,6 +26,7 @@
         Dim _LabelsDriver As New List(Of Driver.cLabels)
         Dim _LabelsDevice As New List(Of Driver.cLabels)
         Dim _DeviceAction As New List(Of DeviceAction)
+        Dim _AutoDiscover As Boolean = False
 
         Public Property ID() As String  'Identification unique du driver
             Get
@@ -198,7 +199,14 @@
                 _DeviceAction = value
             End Set
         End Property
-
+        Public Property AutoDiscover() As Boolean
+            Get
+                Return _AutoDiscover
+            End Get
+            Set(ByVal value As Boolean)
+                _AutoDiscover = value
+            End Set
+        End Property
     End Class
 
 End Namespace

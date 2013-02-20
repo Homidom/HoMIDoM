@@ -74,6 +74,7 @@ Imports System.Runtime.InteropServices
     Dim MyTimer As New Timers.Timer
     Dim _Idsrv As String
     Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
+    Dim _AutoDiscover As Boolean = False
 
     'param avancé
     Dim _DEBUG As Boolean = False
@@ -254,7 +255,14 @@ Imports System.Runtime.InteropServices
             _StartAuto = value
         End Set
     End Property
-
+    Public Property AutoDiscover() As Boolean Implements HoMIDom.HoMIDom.IDriver.AutoDiscover
+        Get
+            Return _AutoDiscover
+        End Get
+        Set(ByVal value As Boolean)
+            _AutoDiscover = value
+        End Set
+    End Property
 #End Region
 
 #Region "Fonctions génériques"

@@ -725,10 +725,11 @@ Namespace HoMIDom
         ''' <param name="refresh">Valeur de rafraichissement du driver</param>
         ''' <param name="picture">Image du driver</param>
         ''' <param name="modele">Modele de l'interface</param>
+        ''' <param name="autodiscover">Decouverte auto des nouveaux composants</param>
         ''' <param name="Parametres">Paramètres associés au driver</param>
         ''' <returns>ID du driver modifié, 99 si ID du serveur erroné</returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function SaveDriver(ByVal IdSrv As String, ByVal driverId As String, ByVal name As String, ByVal enable As Boolean, ByVal startauto As Boolean, ByVal iptcp As String, ByVal porttcp As String, ByVal ipudp As String, ByVal portudp As String, ByVal com As String, ByVal refresh As Integer, ByVal picture As String, ByVal modele As String, Optional ByVal Parametres As ArrayList = Nothing) As String
+        <OperationContract()> Function SaveDriver(ByVal IdSrv As String, ByVal driverId As String, ByVal name As String, ByVal enable As Boolean, ByVal startauto As Boolean, ByVal iptcp As String, ByVal porttcp As String, ByVal ipudp As String, ByVal portudp As String, ByVal com As String, ByVal refresh As Integer, ByVal picture As String, ByVal modele As String, ByVal autodiscover As Boolean, Optional ByVal Parametres As ArrayList = Nothing) As String
 
         ''' <summary>
         ''' Arrêter un driver

@@ -37,6 +37,7 @@ Imports System.Xml
     Dim MyTimer As New Timers.Timer 'Timer du driver
     Dim _IdSrv As String 'Id du Serveur (pour autoriser à utiliser des commandes)
     Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande) 'Liste des commandes avancées du driver
+    Dim _AutoDiscover As Boolean = False
 
 #End Region
 
@@ -356,6 +357,15 @@ Imports System.Xml
         End Get
         Set(ByVal value As Boolean)
             _StartAuto = value
+        End Set
+    End Property
+
+    Public Property AutoDiscover() As Boolean Implements HoMIDom.HoMIDom.IDriver.AutoDiscover
+        Get
+            Return _AutoDiscover
+        End Get
+        Set(ByVal value As Boolean)
+            _AutoDiscover = value
         End Set
     End Property
 #End Region

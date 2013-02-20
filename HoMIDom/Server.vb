@@ -571,7 +571,12 @@ Namespace HoMIDom
                                         _drv.COM = list.Item(j).Attributes.GetNamedItem("com").Value
                                         _drv.Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
                                         _drv.Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
-
+                                        If list.Item(j).Attributes.GetNamedItem("autodiscover").Value <> Nothing And (list.Item(j).Attributes.GetNamedItem("autodiscover").Value.ToUpper = "TRUE" Or list.Item(j).Attributes.GetNamedItem("autodiscover").Value.ToUpper = "FALSE") Then
+                                            _drv.AutoDiscover = list.Item(j).Attributes.GetNamedItem("autodiscover").Value
+                                        Else
+                                            _drv.AutoDiscover = False
+                                        End If
+                                        
                                         Dim a As String
                                         Dim idx As Integer
                                         For i As Integer = 0 To list.Item(j).Attributes.Count - 1
@@ -1510,6 +1515,9 @@ Namespace HoMIDom
                     writer.WriteStartAttribute("modele")
                     writer.WriteValue(_ListDrivers.Item(i).modele)
                     writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("autodiscover")
+                    writer.WriteValue(_ListDrivers.Item(i).autodiscover)
+                    writer.WriteEndAttribute()
                     If _ListDrivers.Item(i).Parametres IsNot Nothing Then
                         For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
                             writer.WriteStartAttribute("parametre" & j)
@@ -1863,7 +1871,6 @@ Namespace HoMIDom
             End Try
 
         End Function
-
 
         ''' <summary>
         ''' Ecris les actions dans le fichier de config
@@ -5078,6 +5085,7 @@ Namespace HoMIDom
                         .Protocol = _ListDrivers.Item(i).protocol
                         .Refresh = _ListDrivers.Item(i).refresh
                         .StartAuto = _ListDrivers.Item(i).startauto
+                        .AutoDiscover = _ListDrivers.Item(i).autoDiscover
                         .Version = _ListDrivers.Item(i).version
                         For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
                             .DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)
@@ -5174,7 +5182,7 @@ Namespace HoMIDom
         ''' <param name="modele"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function SaveDriver(ByVal IdSrv As String, ByVal driverId As String, ByVal name As String, ByVal enable As Boolean, ByVal startauto As Boolean, ByVal iptcp As String, ByVal porttcp As String, ByVal ipudp As String, ByVal portudp As String, ByVal com As String, ByVal refresh As Integer, ByVal picture As String, ByVal modele As String, Optional ByVal Parametres As ArrayList = Nothing) As String Implements IHoMIDom.SaveDriver
+        Public Function SaveDriver(ByVal IdSrv As String, ByVal driverId As String, ByVal name As String, ByVal enable As Boolean, ByVal startauto As Boolean, ByVal iptcp As String, ByVal porttcp As String, ByVal ipudp As String, ByVal portudp As String, ByVal com As String, ByVal refresh As Integer, ByVal picture As String, ByVal modele As String, ByVal autodiscover As Boolean, Optional ByVal Parametres As ArrayList = Nothing) As String Implements IHoMIDom.SaveDriver
             Try
 
                 If VerifIdSrv(IdSrv) = False Then
@@ -5204,6 +5212,7 @@ Namespace HoMIDom
                         _ListDrivers.Item(i).Refresh = refresh
                         _ListDrivers.Item(i).Picture = picture
                         _ListDrivers.Item(i).Modele = modele
+                        _ListDrivers.Item(i).Autodiscover = Autodiscover
                         If Parametres IsNot Nothing Then
                             For j As Integer = 0 To Parametres.Count - 1
                                 _ListDrivers.Item(i).parametres.item(j).valeur = Parametres.Item(j)
@@ -5251,7 +5260,7 @@ Namespace HoMIDom
                         retour.Refresh = _ListDrivers.Item(i).refresh
                         retour.StartAuto = _ListDrivers.Item(i).startauto
                         retour.Version = _ListDrivers.Item(i).version
-
+                        retour.AutoDiscover = _ListDrivers.Item(i).autoDiscover
                         For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
                             retour.DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)
                         Next
@@ -5372,6 +5381,7 @@ Namespace HoMIDom
                         retour.Refresh = _ListDrivers.Item(i).refresh
                         retour.StartAuto = _ListDrivers.Item(i).startauto
                         retour.Version = _ListDrivers.Item(i).version
+                        retour.AutoDiscover = _ListDrivers.Item(i).autoDiscover
 
                         For j As Integer = 0 To _ListDrivers.Item(i).DeviceSupport.count - 1
                             retour.DeviceSupport.Add(_ListDrivers.Item(i).devicesupport.item(j).ToString)

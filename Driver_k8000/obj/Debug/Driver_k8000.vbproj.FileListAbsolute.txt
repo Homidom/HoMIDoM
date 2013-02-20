@@ -13,3 +13,18 @@ D:\Cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_k8000\obj\Debug\GenerateReso
 D:\Cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_k8000\obj\Debug\Driver_k8000.dll
 D:\Cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_k8000\obj\Debug\Driver_k8000.xml
 D:\Cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\Driver_k8000\obj\Debug\Driver_k8000.pdb
+E:\Homidom\Driver_k8000\bin\Debug\Driver_k8000.dll
+E:\Homidom\Driver_k8000\bin\Debug\Driver_k8000.pdb
+E:\Homidom\Driver_k8000\bin\Debug\Driver_k8000.xml
+E:\Homidom\Driver_k8000\bin\Debug\HoMIDom.dll
+E:\Homidom\Driver_k8000\bin\Debug\System.Data.SQLite.dll
+E:\Homidom\Driver_k8000\bin\Debug\NCrontab.dll
+E:\Homidom\Driver_k8000\bin\Debug\HoMIDom.pdb
+E:\Homidom\Driver_k8000\bin\Debug\HoMIDom.xml
+E:\Homidom\Driver_k8000\obj\Debug\ResolveAssemblyReference.cache
+E:\Homidom\Driver_k8000\obj\Debug\Driver_k8000.Resources.resources
+E:\Homidom\Driver_k8000\obj\Debug\GenerateResource.read.1.tlog
+E:\Homidom\Driver_k8000\obj\Debug\GenerateResource.write.1.tlog
+E:\Homidom\Driver_k8000\obj\Debug\Driver_k8000.dll
+E:\Homidom\Driver_k8000\obj\Debug\Driver_k8000.xml
+E:\Homidom\Driver_k8000\obj\Debug\Driver_k8000.pdb
