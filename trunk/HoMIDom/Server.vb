@@ -538,6 +538,7 @@ Namespace HoMIDom
                                             _EnableSrvWeb = list.Item(0).Attributes.Item(j).Value
                                         Case "modedecouverte"
                                             _ModeDecouverte = list.Item(0).Attributes.Item(j).Value
+                                            If _ModeDecouverte Then Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " Mode découverte activé sur tous les drivers")
                                         Case Else
                                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                     End Select
@@ -571,12 +572,14 @@ Namespace HoMIDom
                                         _drv.COM = list.Item(j).Attributes.GetNamedItem("com").Value
                                         _drv.Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
                                         _drv.Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
-                                        If list.Item(j).Attributes.GetNamedItem("autodiscover").Value <> Nothing And (list.Item(j).Attributes.GetNamedItem("autodiscover").Value.ToUpper = "TRUE" Or list.Item(j).Attributes.GetNamedItem("autodiscover").Value.ToUpper = "FALSE") Then
+
+                                        If Not IsNothing(list.Item(j).Attributes.GetNamedItem("autodiscover")) Then
                                             _drv.AutoDiscover = list.Item(j).Attributes.GetNamedItem("autodiscover").Value
                                         Else
                                             _drv.AutoDiscover = False
                                         End If
-                                        
+                                        'If _ModeDecouverte = True Then _drv.AutoDiscover = True 'si mode decouverte activé sur le serveur, on force à true sur tous les drivers
+
                                         Dim a As String
                                         Dim idx As Integer
                                         For i As Integer = 0 To list.Item(j).Attributes.Count - 1
@@ -8481,6 +8484,7 @@ Namespace HoMIDom
                     x.Name = "NouveauComposant" & _ListNewDevices.Count
 
                     _ListNewDevices.Add(x)
+                    x = Nothing
                     Log(TypeLog.DEBUG, TypeSource.SERVEUR, "AddDetectNewDevice", "Le device (" & Adresse1 & ":" & Adresse2 & ") du driver (" & DriverId & ") de type " & Type & ", a été ajouté")
                     _return = 0
                 End If

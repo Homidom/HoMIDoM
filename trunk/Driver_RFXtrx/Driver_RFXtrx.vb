@@ -1409,6 +1409,10 @@ Imports System.Media
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
             If _Enable = False Then Exit Sub
+            If _IsConnect = False Then
+                WriteLog("Le driver n'est pas démarré, impossible d'écrire sur le port")
+                Exit Sub
+            End If
             If _DEBUG Then WriteLog("DBG: WRITE Device " & Objet.Name & " <-- " & Command)
             'suivant le protocole, on lance la bonne fonction
             'AC / ACEU / ANSLUT / ARC / BLYSS / ELROAB400D / EMW100 / EMW200 / IMPULS / LIGHTWAVERF / PHILIPS / WAVEMAN / X10
@@ -5234,23 +5238,30 @@ Imports System.Media
             ElseIf (listedevices.Count > 1) Then
                 WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)
             Else
-                'si autodiscover = true alors on crée le composant sinon on logue
-                If _AUTODISCOVER Then
-                    If type = "" Then
-                        WriteLog("ERR: Device non trouvé, AutoCreation impossible du composant car le type ne peut etre déterminé : " & adresse & ":" & valeur)
-                    Else
-                        Try
-                            WriteLog("Device non trouvé, AutoCreation du composant : " & type & " " & adresse & ":" & valeur)
-                            _Server.SaveDevice(_IdSrv, "", "_RFXtrx_" & Date.Now.ToString("ddMMyyHHmmssf"), adresse, True, False, Me._ID, type, 0, "", "", "", "AutoDiscover RFXtrx", 0, False, "0", "", 0, 999999, -999999, 0, Nothing, "", 0, False)
-                        Catch ex As Exception
-                            WriteLog("ERR: Writeretour Exception : AutoDiscover Creation composant: " & ex.Message)
-                        End Try
-                    End If
+                'si autodiscover = true ou modedecouverte du serveur actif alors on crée le composant sinon on logue
+                If _AutoDiscover Or _Server.GetModeDecouverte Then
+                    WriteLog("Device non trouvé, AutoCreation du composant : " & type & " " & adresse & ":" & valeur)
+                    _Server.AddDetectNewDevice(adresse, _ID, type, "")
                 Else
                     WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
                 End If
-
-                'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
+                ''si autodiscover = true alors on crée le composant sinon on logue
+                'If _AutoDiscover Then
+                '    If type = "" Then
+                '        WriteLog("ERR: Device non trouvé, AutoCreation impossible du composant car le type ne peut etre déterminé : " & adresse & ":" & valeur)
+                '    Else
+                '        Try
+                '            WriteLog("Device non trouvé, AutoCreation du composant : " & type & " " & adresse & ":" & valeur)
+                '            _Server.SaveDevice(_IdSrv, "", "_RFXtrx_" & Date.Now.ToString("ddMMyyHHmmssf"), adresse, True, False, Me._ID, type, 0, "", "", "", "AutoDiscover RFXtrx", 0, False, "0", "", 0, 999999, -999999, 0, Nothing, "", 0, False)
+                '        Catch ex As Exception
+                '            WriteLog("ERR: Writeretour Exception : AutoDiscover Creation composant: " & ex.Message)
+                '        End Try
+                '    End If
+                'Else
+                '    WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
+                'End If
+                '
+                ''Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
 
             End If
             listedevices = Nothing

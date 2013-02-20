@@ -108,8 +108,8 @@
                                     <Label Foreground="White" FontWeight="Bold">Mode Decouverte</Label>
                                 </GroupBox.Header>
                                 <Grid >
-                                    <StackPanel >
-                                        <CheckBox Name="ChkModeDecouv" Content="Activer" Foreground=" White" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <CheckBox Name="ChkModeDecouv" Content="Activer" Foreground=" White" ToolTip="Si activé, le mode découverte des nouveaux composants est forcé sur tous les drivers sinon il faut le paramétrer dans chaque driver suivant les besoins." />
                                     </StackPanel>
                                 </Grid>
                             </GroupBox>

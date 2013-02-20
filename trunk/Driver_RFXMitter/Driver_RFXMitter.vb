@@ -516,6 +516,10 @@ Imports System.Globalization
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
             If _Enable = False Then Exit Sub
+            If _IsConnect = False Then
+                WriteLog("Le driver n'est pas démarré, impossible d'écrire sur le port")
+                Exit Sub
+            End If
             If _DEBUG Then WriteLog("WRITE Device " & Objet.Name & " <-- " & Command)
             'suivant le protocole, on lance la bonne fonction
             ' AC / X10 / ARC / WAVEMAN
