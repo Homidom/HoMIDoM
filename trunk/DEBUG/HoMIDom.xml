@@ -297,7 +297,7 @@ HoMIDom
  Redémarre ou démarre le serveur web
  </summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.UpdateHisto(System.String,System.String,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.UpdateHisto(System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Modifie un historique
  </summary>
@@ -307,7 +307,7 @@ HoMIDom
 	<param name="Value"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteHisto(System.String,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteHisto(System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Supprime un historique
  </summary>
@@ -316,7 +316,7 @@ HoMIDom
 	<param name="DateTime"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.AddHisto(System.String,System.String,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.AddHisto(System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Ajoute un historique
  </summary>
@@ -1352,7 +1352,7 @@ HoMIDom
  Redémarre ou démarre le serveur web
  </summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.UpdateHisto(System.String,System.String,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.UpdateHisto(System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Modifie un historique
  </summary>
@@ -1362,7 +1362,7 @@ HoMIDom
 	<param name="Value"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.DeleteHisto(System.String,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.DeleteHisto(System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Supprime un historique
  </summary>
@@ -1371,7 +1371,7 @@ HoMIDom
 	<param name="DateTime"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.AddHisto(System.String,System.String,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.AddHisto(System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Ajoute un historique
  </summary>

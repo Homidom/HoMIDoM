@@ -4300,7 +4300,7 @@ Namespace HoMIDom
         ''' <param name="Value"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function UpdateHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String, ByVal Value As String) As Integer Implements IHoMIDom.UpdateHisto
+        Public Function UpdateHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String, ByVal Value As String, ByVal OldDateTime As String, ByVal OldValue As String, ByVal Source As String) As Integer Implements IHoMIDom.UpdateHisto
             Try
                 Dim retour As String
 
@@ -4309,11 +4309,18 @@ Namespace HoMIDom
                     Exit Function
                 End If
 
+                'correction au cas ou
+                If Source = "" Then Source = "Value"
+                DateTime = (Convert.ToDateTime(DateTime)).ToString("yyyy-MM-dd HH:mm:ss") 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+                OldDateTime = (Convert.ToDateTime(OldDateTime)).ToString("yyyy-MM-dd HH:mm:ss") 'OldDateTime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+
                 'Update de la BDD
                 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
-                retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", IdDevice, "Value", DateTime, Value)
+                retour = sqlite_homidom.nonquery("UPDATE historiques SET dateheure=@parameter0, valeur=@parameter1 WHERE device_id='" & IdDevice & "' AND source='" & Source & "' AND valeur='" & OldValue & "' AND dateheure='" & OldDateTime & "'", DateTime, Value)
                 If Mid(retour, 1, 4) = "ERR:" Then
-                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "AddHisto", "Erreur Requete sqlite : " & retour)
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "UpdateHisto", "Erreur Requete sqlite : " & retour)
+                Else
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "UpdateHisto", "Mise à jour manuelle d'un relevé : " & IdDevice & " " & OldValue & "->" & Value & " (" & OldDateTime & "->" & DateTime & ")")
                 End If
 
                 Return 0
@@ -4331,7 +4338,7 @@ Namespace HoMIDom
         ''' <param name="DateTime"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function DeleteHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String) As Integer Implements IHoMIDom.DeleteHisto
+        Public Function DeleteHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String, ByVal Value As String, ByVal Source As String) As Integer Implements IHoMIDom.DeleteHisto
             Try
                 Dim retour As String
 
@@ -4340,11 +4347,17 @@ Namespace HoMIDom
                     Exit Function
                 End If
 
+                'correction au cas ou
+                If Source = "" Then Source = "Value"
+                DateTime = (Convert.ToDateTime(DateTime)).ToString("yyyy-MM-dd HH:mm:ss") 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+
                 'Suppression de la BDD
                 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
-                retour = sqlite_homidom.nonquery("DELETE FROM historiques WHERE device_id=" & IdDevice & " AND dateheure=" & DateTime)
+                retour = sqlite_homidom.nonquery("DELETE FROM historiques WHERE device_id='" & IdDevice & "' AND dateheure='" & DateTime & "' AND source='" & Source & "' AND valeur='" & Value & "'")
                 If Mid(retour, 1, 4) = "ERR:" Then
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteHisto", "Erreur Requete sqlite : " & retour)
+                Else
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "DeleteHisto", "Suppression manuelle d'un relevé : " & IdDevice & " " & DateTime)
                 End If
 
                 Return 0
@@ -4362,7 +4375,7 @@ Namespace HoMIDom
         ''' <param name="DateTime"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function AddHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String, ByVal Value As String) As Integer Implements IHoMIDom.AddHisto
+        Public Function AddHisto(ByVal idsrv As String, ByVal IdDevice As String, ByVal DateTime As String, ByVal Value As String, ByVal Source As String) As Integer Implements IHoMIDom.AddHisto
             Try
                 Dim retour As String
 
@@ -4371,11 +4384,16 @@ Namespace HoMIDom
                     Exit Function
                 End If
 
+                'correction au cas ou
+                If Source = "" Then Source = "Value"
+                DateTime = (Convert.ToDateTime(DateTime)).ToString("yyyy-MM-dd HH:mm:ss") 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+
                 'Ajout dans la BDD
-                'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
-                retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", IdDevice, "Value", DateTime, Value)
+                retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", IdDevice, Source, DateTime, Value)
                 If Mid(retour, 1, 4) = "ERR:" Then
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "AddHisto", "Erreur Requete sqlite : " & retour)
+                Else
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "UpdateHisto", "Ajout Manuel d'un relevé : " & IdDevice & " " & Value & " (" & DateTime & ")")
                 End If
 
                 Return 0

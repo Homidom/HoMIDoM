@@ -6,1013 +6,1039 @@ HoMIDom
 </name>
 </assembly>
 <members>
-<member name="M:HoMIDom.HoMIDom.Sqlite.#ctor(System.String,HoMIDom.HoMIDom.Server)">
-	<summary>          
- Creation de l'objet
- </summary>
-	<param name="basename">Nom de la base de donnée : homidom / medias</param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.getconnecte">
-	<summary>Fourni l'etat d'une connexion à la bdd</summary>
-	<returns>True/False</returns>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.connect">
-	<summary>          
- Connection à une BDD Sqlite
- </summary>
-	<returns>String si OK, String "ERR:..." si erreur</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.disconnect">
+<member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSaveRealTime">
 	<summary>
- DeConnection à une BDD Sqlite 
+ Demande au serveur si on sauvegarde en temps réel
  </summary>
-	<returns>String si OK, String "ERR:..." si erreur</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.nonquery(System.String,System.String[])">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSaveRealTime(System.Boolean)">
 	<summary>
- Requete sans résultat
+ Indique au serveur si on enregistre en temps réel
  </summary>
-	<param name="commande">ex : DELETE FROM contact where Contact_id=10</param>
-	<param name="params">Liste es paramètres utilisés dans la query sous forme @parameter0, @parameter1 etc</param>
-	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<param name="Value"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.query(System.String,System.Data.DataTable@,System.String[])">
-	<summary>Requete avec résultat</summary>
-	<param name="commande">ex : SELECT * FROM contact</param>
-	<param name="resultat">Arralist contenant la liste des résultats</param>
-	<returns>String si OK, String "ERR:..." si erreur</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.querysimple(System.String,System.String@,System.String[])">
-	<summary>Requete avec résultat simple</summary>
-	<param name="commande">ex : SELECT * FROM contact</param>
-	<param name="resultat">Arralist contenant la liste des résultats</param>
-	<returns>String si OK, String "ERR:..." si erreur</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.count(System.String,System.Int32@)">
-	<summary>Compte le nombre de resultat</summary>
-	<param name="commande">ex : SELECT COUNT(*) FROM table WHERE col1 = 'xxx'</param>
-	<param name="resultat">Nombre de resultat</param>
-	<returns>String si OK, String "ERR:..." si erreur</returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Sqlite">
-	<summary>      
- Classe de gestion des base de données sqlite     
- </summary>   
-    ''' <remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Api.GenerateGUID">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetPortComDispo">
 	<summary>
- Génère un ID unique
+ Retourne la liste des ports com dispo sur le serveur
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Api.Evaluation(System.String@,System.Double)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.UploadFile(System.String,System.Byte[],System.String)">
 	<summary>
- Retourne le résultat d'un calcul (formule, ex: *2 +3) en se basant sur une valeur de base (Valeur)
+ Upload un fichier
  </summary>
-	<param name="Formule"></param>
-	<param name="Valeur"></param>
+	<param name="IdSrv"></param>
+	<param name="byteData"></param>
+	<param name="Namefile"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.My.Resources.Resources.ResourceManager">
-	<summary>
-  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
-</summary>
-</member><member name="P:HoMIDom.My.Resources.Resources.Culture">
-	<summary>
-  Remplace la propriété CurrentUICulture du thread actuel pour toutes
-  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
-</summary>
-</member><member name="T:HoMIDom.My.Resources.Resources">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllVoice">
 	<summary>
-  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
-</summary>
-</member><member name="T:HoMIDom.HoMIDom.DeviceAction">
-	<summary>
- Class template pour lister les actions possibles sur un device
+ Retourne la liste des voix installées sur le serveur
  </summary>
+	<returns></returns>
 	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Users.TypeProfil.invite">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetDefautVoice">
 	<summary>
- Invité
+ Retourne la voix par défaut
  </summary>
+	<returns></returns>
 	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Users.TypeProfil.user">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetDefautVoice(System.String)">
 	<summary>
- Utilisateur (actions limitées)
+ Définit la voix par défaut
  </summary>
+	<param name="Voice"></param>
 	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Users.TypeProfil.admin">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.CanDelete(System.String,System.String)">
 	<summary>
- Administrateur
+ Vérifie si un élément existe dans une zone, une macro, un trigger... avant de le supprimer
  </summary>
+	<param name="IdSrv"></param>
+	<param name="Id"></param>
+	<returns>Retourne une erreur commencant par ERREUR ou la liste des noms des macros, zones...</returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Users.TypeProfil">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetTimeSave(System.String)">
 	<summary>
- Type de profil disponible
+ Retourne le paramètre de sauvegarde
  </summary>
+	<param name="IdSrv">ID du serveur</param>
+	<returns>la valeur du paramètre, -1 si l'id du serveur est erronée</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.ID">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetTimeSave(System.String,System.Int32)">
 	<summary>
- ID du user
+ Fixe le paramètre de sauvegarde
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">ID du serveur</param>
+	<param name="Value">Valeur positive qui définit toutes les X minutes une sauvegarde sera effectuée puis à l'arrêt du serveur</param>
+	<returns>0 si réussite</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.UserName">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetIdServer(System.String)">
 	<summary>
- Identifiant pour la connexion
+ Retourne l'Id du serveur pour la communication SOAP
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">ID du serveur</param>
+	<returns>ID du serveur ou 99 si l'IdSrv n'est pas celui du serveur (erreur)</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.Nom">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetIdServer(System.String,System.String)">
 	<summary>
- Nom du user
+ Fixe l'Id du serveur pour SOAP
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">ID du serveur actuel</param>
+	<param name="Value">Nouvelle valeur de l'ID du serveur</param>
+	<returns>0 si l'ID a été pris en compte, 99 si l'IdSrv n'est pas celui du serveur (erreur),si l'ID est vide ça retourne "ERR: l'Id ne peut être null"</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.Prenom">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetServerVersion">
 	<summary>
- Prénom du user
+ Retourne la version du serveur
  </summary>
-	<value></value>
-	<returns></returns>
+	<returns>Version du serveur</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.Profil">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetTime">
 	<summary>
- Profil du user (invité, user, admin)
+ Retourne l'heure du serveur
  </summary>
-	<value></value>
-	<returns></returns>
+	<returns>Heure du serveur</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.Password">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.MessageToServer(System.String)">
 	<summary>
- Password du user
+ Permet d'envoyer un message d'un client vers le server
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="Message"></param>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.NumberIdentification">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveConfig(System.String)">
 	<summary>
- Identification du user utilisé pour RFID, code à barre....
+ Sauvegarde la configuration
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.Image">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ExportConfig(System.String)">
 	<summary>
- Image du user
+ Exporte le fichier de config vers une destination
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">Id du serveur</param>
+	<returns>0 si ok sinon message d'erreur</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.eMail">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ImportConfig(System.String,System.String)">
 	<summary>
- eMail principale du user
+ Importe un fichier de config depuis une source
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="Source">chemin + fichier (homidom.xml)</param>
+	<returns>"0" si ok sinon message d'erreur</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.eMailAutre">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.Start">
 	<summary>
- Adresse secondaire email du user
+ Démarre le service et charge la config
  </summary>
-	<value></value>
-	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.TelFixe">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.Stop(System.String)">
 	<summary>
- Numéro de telephone fixe du user
+ Arrête le service
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="idSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.TelMobile">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReStart(System.String)">
 	<summary>
- Numéro de téléphone mobile du user
+ Redémarre le service et charge la config
  </summary>
-	<value></value>
-	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.TelAutre">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetPortSOAP(System.String,System.Double)">
 	<summary>
- Numéro de téléphone divers pour user
+ Fixe la valeur de port SOAP
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="Value">Valeur du port SOAP</param>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.Adresse">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetPortSOAP">
 	<summary>
- Adresse du user
+ Retourne la valeur de port SOAP
  </summary>
-	<value></value>
-	<returns></returns>
+	<returns>Valeur du port SOAP</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.Ville">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetIPSOAP(System.String,System.String)">
 	<summary>
- Ville du user
+ Fixe l'adresse IP SOAP
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">Id du Serveur</param>
+	<param name="Value">Adresse IP SOAP</param>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Users.User.CodePostal">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetIPSOAP">
 	<summary>
- Code Postal du user
- </summary>
-	<value></value>
+	</summary>
 	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Users.User">
-	<summary>
- Classe permettant d'un user
- </summary>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Users">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetLastStartTime">
 	<summary>
- Classe Users pour gérer les utilisateurs
+ Retourne la date et heure du dernier démarrage du serveur
  </summary>
+	<returns>DateTime du dernier démarrage du serveur</returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Mail">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetHeureLeverSoleil">
 	<summary>
- Envoi un mail
+ Valeur du levé du soleil
  </summary>
+	<returns>Heure du levé du soleil</returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.ThreadAction">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetHeureCoucherSoleil">
 	<summary>
- Execute chaque Action
+ Valeur du couché du soleil
  </summary>
+	<returns>Heure du couché du soleil</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Name">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetLongitude">
 	<summary>
- Nom du device
+ Obtenir la valeur de longitude
  </summary>
-	<value></value>
-	<returns></returns>
+	<returns>Valeur de la longitude du serveur (pour calcul des heures de levé et couché du solseil)</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ID">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetLongitude(System.String,System.Double)">
 	<summary>
- ID du device
+ Appliquer une valeur de longitude
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="Value">Valeur de longitude</param>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Enable">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetLatitude">
 	<summary>
- Activation/désactivation du device
+ Obtenir la valeur de latitude
  </summary>
-	<value></value>
-	<returns></returns>
+	<returns>Valeur de la latitude du serveur (pour calcul des heures de levé et couché du solseil)</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.DriverID">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetLatitude(System.String,System.Double)">
 	<summary>
- ID du driver associé au device
+ Appliquer la valeur de latitude
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="Value">Valeur de latitude</param>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Description">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetHeureCorrectionCoucher">
 	<summary>
- Description qui peut être le modèle du device ou autre chose
+ Obtenir la correction sur l'heure du coucher du soleil
  </summary>
-	<value></value>
-	<returns></returns>
+	<returns>Valeur de correction appliquée sur l'heure du coucher du soleil</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Type">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetHeureCorrectionCoucher(System.String,System.Int32)">
 	<summary>
- Type de device TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
+ Appliquer une correction sur l'heure du coucher du soleil
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="Value">Valeur de correction appliquée sur l'heure du couché du soleil</param>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Unit">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetHeureCorrectionLever">
 	<summary>
- Unité du composant
+ Obtenir la correction sur l'heure de lever du soleil
  </summary>
-	<value></value>
-	<returns></returns>
+	<returns>Valeur de correction appliquée sur l'heure du levé du soleil</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Puissance">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetHeureCorrectionLever(System.String,System.Int32)">
 	<summary>
- Puissance du composant
+ Appliquer une correction sur l'heure du levé du soleil
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="Value">Valeur de correction appliquée sur l'heure du levé du soleil</param>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.AllValue">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetByteFromImage(System.String)">
 	<summary>
- Prendre en compte toutes les valeurs même inchangées
+  Convert a file on a byte array.
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="file">Chemin complet du fichier se trouvant sur le serveur</param>
+	<returns>Tableau de byte représentant le fichier</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Adresse1">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetListOfImage">
 	<summary>
- Adresse par défaut (pour le X10 par exemple)
+ Retourne la liste de tous les fichiers image présents sur le serveur
  </summary>
-	<value></value>
-	<returns></returns>
+	<returns>Liste (Type ImageFile) de tous les fichiers image (png, jpg) présents sur le serveur</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Adresse2">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSqliteBddVersion">
+	<summary>Retourne la version BDD sqlite</summary>
+	<returns>String : version BDD</returns>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSqliteVersion">
+	<summary>Retourne la version du moteur sqlite</summary>
+	<returns>String : version Sqlite</returns>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetDevise">
 	<summary>
- Adresse supplémentaire si besoin (cas du RFXCOM)
+ Retourne la devise du serveur
  </summary>
-	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.DateCreated">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetDevise(System.String)">
 	<summary>
- Date et heure de création du device
+ Fixe la devise du serveur
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="Value"></param>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.LastChange">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetEnableServeurWeb">
 	<summary>
- Date et heure de la derniere modification de Value
+ Retourne si le serveur Web est Enable
  </summary>
-	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.LastChangeDuree">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetEnableServeurWeb(System.Boolean)">
 	<summary>
- Si Lastchanged+LastchangeDuree inférieur à Now alors le composant a un problème car il n'a pas emis depuis au moins lastchangedduree.
+ Fixe Enable du serveur web
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="Value"></param>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Modele">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetPortServeurWeb">
 	<summary>
- Modèle du device
+ Retourne le port du serveur Web 
  </summary>
-	<value></value>
 	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Picture">
-	<summary>
- Adresse de son image
- </summary>
-	<value></value>
-	<returns>Chemin complet du fichier image situé sur le serveur </returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Solo">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetPortServeurWeb(System.Int32)">
 	<summary>
- Si le device est solo ou s'il contient plusieurs I/O
+ Fixe le port du serveur web
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="Value"></param>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.LastEtat">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.RestartServeurWeb">
 	<summary>
- si =true, on ne prend pas en comtpe les modifications style 19.1 19 19.1 19...
+ Redémarre ou démarre le serveur web
  </summary>
-	<value></value>
-	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.DeviceAction">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.UpdateHisto(System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
 	<summary>
- List des actions associées au Device
+ Modifie un historique
  </summary>
-	<value></value>
+	<param name="idsrv"></param>
+	<param name="IdDevice"></param>
+	<param name="DateTime"></param>
+	<param name="Value"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Refresh">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteHisto(System.String,System.String,System.String,System.String,System.String)">
 	<summary>
- Valeur de rafraichissement du device
+ Supprime un historique
  </summary>
-	<value></value>
+	<param name="idsrv"></param>
+	<param name="IdDevice"></param>
+	<param name="DateTime"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Value">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.AddHisto(System.String,System.String,System.String,System.String,System.String)">
 	<summary>
- Valeur du device
+ Ajoute un historique
  </summary>
-	<value></value>
+	<param name="idsrv"></param>
+	<param name="IdDevice"></param>
+	<param name="DateTime"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ValueLast">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DevicesAsHisto">
 	<summary>
- Contien l'avant derniere valeur
+ Retourne un dictionnary retourant en clé l'id du device et la valeur True/False s'il contient des historiques
  </summary>
-	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ValueMin">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetHistoDeviceSource(System.String,System.String,System.String,System.String,System.String,System.String)">
 	<summary>
- Valeur minimale que value peut avoir
+ Retourne un datatable d'historique d'un device suivant sa propriété (source) puis suivant une date de début et de fin
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">ID du serveur</param>
+	<param name="idDevice">ID du device</param>
+	<param name="Source">Source du device (ex: Value)</param>
+	<param name="DateStart">Date de départ</param>
+	<param name="DateEnd">Date de fin</param>
+	<returns>Datatable</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ValueMax">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeviceAsHisto(System.String,System.String)">
 	<summary>
- Valeur maximale que value peut avoir 
+ Retourne le nombre d'historiques d'un device
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdDevice">ID du device</param>
+	<param name="Source">Option propriété du device (ex: Value)</param>
+	<returns>nombre historiques</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ValueDef">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllListHisto(System.String)">
 	<summary>
- Valeur par défaut de Value au démarrage du Device, si Vide = Value
+ Retourne la liste des sources histo (source et id) présents dans la base de données Homidom
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<returns>Liste (Type Historisation), Nothing si l'ID du serveur est erroné </returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Precision">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetHisto(System.String,System.String,System.String)">
 	<summary>
- Precision de value
+ Retourne l'historisation d'une source donnée
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="Source">Source de la donnée</param>
+	<param name="idDevice">ID du device associé à la source de donnée</param>
+	<returns>List de type Historisation, 99 si l'ID du serveur est erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Correction">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteUser(System.String,System.String)">
 	<summary>
- Correction en +/-/*/div à effectuer sur la value
+ Supprime un user
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="userId">ID du user à supprimer</param>
+	<returns>0 si exécuté, -1 si ID non trouvé, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Formatage">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.VerifLogin(System.String,System.String)">
 	<summary>
- Format de value 0.0 ou 0.00...
+ Vérifie le couple username + login  renvoi true si ok
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="Username">Username</param>
+	<param name="Password">Mot de passe</param>
+	<returns>True su identification OK sinon False</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionActuel">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ChangePassword(System.String,System.String,System.String,System.String,System.String)">
 	<summary>
- Condition actuelle (device meteo)
+ Permet de changer le mot de passe d'un user
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="Username">Username</param>
+	<param name="OldPassword">Ancien mot de passe</param>
+	<param name="ConfirmNewPassword">Confirmation nouveau mot de passe</param>
+	<param name="Password">Nouveau mot de passe</param>
+	<returns>True si mot de passe modifié, False si erreur ou mauvais ID du serveur</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.TemperatureActuel">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnUserByUsername(System.String,System.String)">
 	<summary>
- Temperature actuelle (device meteo)
+ Retourne un user par son username
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="Username">Username</param>
+	<returns>Objet de type User correspondant au username</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.HumiditeActuel">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllUsers(System.String)">
 	<summary>
- Humidité actuelle (device meteo)
+ Obtient la liste des users
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<returns>List de type User, Nothing si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconActuel">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnUserById(System.String,System.String)">
 	<summary>
- Icon de la meteo actuelle (device meteo)
+ Retourne un User par son ID
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="UserId">ID du User</param>
+	<returns>Objet de type User si trouvé, sinon Nothing si non trouvé ou ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.VentActuel">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveUser(System.String,System.String,System.String,System.String,HoMIDom.HoMIDom.Users.TypeProfil,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
 	<summary>
- Vitesse du vent actuelle (device meteo)
+ Créer ou modifier un user
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="userId">ID du user (vide si c'est un nouveau, son ID pour le modifier)</param>
+	<param name="UserName">Username du user</param>
+	<param name="Password">Mot de passe du user</param>
+	<param name="Profil">Profil du user</param>
+	<param name="Nom">Nom du user</param>
+	<param name="Prenom">Prénom du user</param>
+	<param name="NumberIdentification">N° d'identification du user (peut être utilisé par exemple pour un N° de puce RFID)</param>
+	<param name="Image">Image du user</param>
+	<param name="eMail">eMail du user (utilisé lors d'envoi de mail dans une macro)</param>
+	<param name="eMailAutre">Second email du user</param>
+	<param name="TelFixe">Numéro de téléphone fixe du user</param>
+	<param name="TelMobile">Numéro de téléphone mobile du user</param>
+	<param name="TelAutre">Autre numéro de téléphone du user</param>
+	<param name="Adresse">Adresse du user</param>
+	<param name="Ville">Ville du user</param>
+	<param name="CodePostal">Code Postal du user</param>
+	<returns>ID du user, -1 si erreur, message d'erreur, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.JourToday">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.TypeOfPropertyOfDevice(System.String,System.String)">
 	<summary>
- Nom du jour actuel (device meteo)
+ Retourne le type d'une propriété d'un device (boolean, string, double...)
  </summary>
-	<value></value>
+	<param name="DeviceId">ID du device</param>
+	<param name="Property">Nom de la propriété&gt;</param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MinToday">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ChangeValueOfDevice(System.String,System.String,System.Object)">
 	<summary>
- Temperature minimale du jour actuel (device meteo)
+ Permet de changer la valeur d'un device
  </summary>
-	<value></value>
+	<param name="idsrv"></param>
+	<param name="IdDevice"></param>
+	<param name="Value"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MaxToday">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllDevices(System.String)">
 	<summary>
- Temperature maximale du jour actuel (device meteo)
+ Obtient la liste des devices
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<returns>List de type TemplateDevice, Nothing si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconToday">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ExecuteDeviceCommand(System.String,System.String,HoMIDom.HoMIDom.DeviceAction)">
 	<summary>
- Icon de la meteo du jour actuel (device meteo)
+ Execute une commande (COMMAND) d'un device (DeviceID) associés à des paramètres (Param)
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="DeviceId">ID du device</param>
+	<param name="Action">Action (de type Action) à exécutée (ex: "ON", "OFF", "DIM",100...)</param>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionToday">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ExecuteDeviceCommandSimple(System.String,System.String,HoMIDom.HoMIDom.DeviceActionSimple)">
 	<summary>
- Condition météorologique du jour actuel (device meteo)
+ Execute une commande (COMMAND) d'un device (DeviceID) associés à des paramètres (Param)
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="DeviceId">ID du device</param>
+	<param name="Action">Action (de type Action) à exécutée (ex: "ON", "OFF", "DIM",100...)</param>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.JourJ1">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteDevice(System.String,System.String)">
 	<summary>
- Nom du jour + 1 (device meteo)
+ Supprimer un device
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="deviceId">ID du device</param>
+	<returns>0 si exécuté, -1 si ID non trouvé, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MinJ1">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteDeviceCommandIR(System.String,System.String,System.String)">
 	<summary>
- Température minimale à J+1 (device meteo)
+ Supprime une commande IR d'un device
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="deviceId">ID du device</param>
+	<param name="CmdName">Nom de la commande IR</param>
+	<returns>0 si exécuté, -1 si ID ou commande non trouvée, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MaxJ1">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnDeviceByID(System.String,System.String)">
 	<summary>
- Température maximale à J+1 (device meteo)
+ Retourne l'objet d'un device par son ID
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="Id">ID du device</param>
+	<returns>Objet de type TemplateDevice, Nothing si non trouvé ou ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconJ1">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnDeviceByAdresse1TypeDriver(System.String,System.String,System.String,System.String,System.Boolean)">
 	<summary>
- Icon de la météo à J+1 (device meteo)
+ Retourne une liste de device suivant l'addresse1 et/ou son type et/ou le driver
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="DeviceAdresse">Adresse1 du device</param>
+	<param name="DeviceType">Type de device</param>
+	<param name="DeviceDriver">ID driver du device</param>
+	<returns>List de device, Nothing si non trouvé ou ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionJ1">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.String,System.String,System.Double,System.Double,System.Double,System.Double,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes},System.String,System.Int32,System.Boolean)">
 	<summary>
- Condition météorologique à J+1 (device meteo)
+ Créer un nouveau device ou sauvegarder la modif (si ID est complété)
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="deviceId">ID du device (vide si nouveau, ID du device si modification)</param>
+	<param name="name">Nom du device</param>
+	<param name="address1">Adresse1 du device</param>
+	<param name="enable">Activer/Désactiver le device</param>
+	<param name="solo">Indique si le Device travail en mode solo</param>
+	<param name="driverid">ID du driver</param>
+	<param name="type">Type de device</param>
+	<param name="refresh">Valeur de rafraichissement du device</param>
+	<param name="address2">Adresse2 du device</param>
+	<param name="image">Image du device</param>
+	<param name="modele">Modèle de device</param>
+	<param name="description">Description du device</param>
+	<param name="lastchangeduree">Dernière valeur</param>
+	<returns>ID du device créé ou modifié, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.JourJ2">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDeviceCommandIR(System.String,System.String,System.String,System.String,System.String)">
 	<summary>
- Nom du jour + 2 (device meteo)
+ Ajouter ou modifier une commande IR à un device (utilisé pour usbuirt)
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="deviceId">ID du device</param>
+	<param name="CmdName">Nom de la commande IR</param>
+	<param name="CmdData">Données IR de la commande</param>
+	<param name="CmdRepeat">Nombre de fois à envoyer la commande</param>
+	<returns>0 si exécuté, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MinJ2">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.StartIrLearning(System.String)">
 	<summary>
- Température minimale à J+2 (device meteo)
+ Commencer l'apprentissage d'un commande IR
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<returns>Données de la commande IR, vide si aucune donnée(s) reçue(s), 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MaxJ2">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.VerifChamp(System.String,System.String,System.String,System.Object)">
 	<summary>
- Température maximale à J+2 (device meteo)
+ Permet de vérifier si un champ a correctement été saisi
  </summary>
-	<value></value>
+	<param name="Idsrv"></param>
+	<param name="DriverId"></param>
+	<param name="Champ"></param>
+	<param name="Value">retourne 0 si Ok sinon le message d'erreur</param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconJ2">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllDrivers(System.String)">
 	<summary>
- Icon de la météo à J+2 (device meteo)
+ Obtient la liste des drivers
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<returns>List de type TemplateDriver, Nothing si ID du serveur erroné (</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionJ2">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ExecuteDriverCommand(System.String,System.String,HoMIDom.HoMIDom.DeviceAction)">
 	<summary>
- Condition météorologique à J+2 (device meteo)
+ Execute une commande (COMMAND) d'un driver (DriverID) associés à des paramètres (Param)
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="DriverId">ID du driver</param>
+	<param name="Action">Action de type DeviceAction à exécuter</param>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.JourJ3">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnDriverByID(System.String,System.String)">
 	<summary>
- Nom du jour à j+3 (device meteo)
+ Retourne l'objet d'un driver par son ID
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="Id">ID du driver</param>
+	<returns>List de type TemplateDriver, Nothing si ID non trouvé ou si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MinJ3">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteDriver(System.String,System.String)">
 	<summary>
- Température minimale à j+3 (device meteo)
+ Supprimer un driver de la config
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="driverId">ID du driver à supprimer</param>
+	<returns>0 si exécuté, -1 si Driver non trouvé, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MaxJ3">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnDriverByNom(System.String,System.String)">
 	<summary>
- Température maximale à j+3 (device meteo)
+ Retourne l'objet d'un driver par son nom
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="name">Nom du driver</param>
+	<returns>Retourne le driver, Nothing si non trouvé ou ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconJ3">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDriver(System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.Boolean,System.Collections.ArrayList)">
 	<summary>
- Icon de la meteo à j+3 (device meteo)
+ Modifier un driver 
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="driverId">ID du driver</param>
+	<param name="name">Nom du driver</param>
+	<param name="enable">Activer/Désactiver le driver</param>
+	<param name="startauto">Démarrage automatique du driver</param>
+	<param name="iptcp">Adresse IP TCP du driver</param>
+	<param name="porttcp">Port TCP du driver</param>
+	<param name="ipudp">Adresse IP UDP du driver</param>
+	<param name="portudp">Port UDP du driver</param>
+	<param name="com">Port COM (RS-232) du driver</param>
+	<param name="refresh">Valeur de rafraichissement du driver</param>
+	<param name="picture">Image du driver</param>
+	<param name="modele">Modele de l'interface</param>
+	<param name="autodiscover">Decouverte auto des nouveaux composants</param>
+	<param name="Parametres">Paramètres associés au driver</param>
+	<returns>ID du driver modifié, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionJ3">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.StopDriver(System.String,System.String)">
 	<summary>
- Condition météorologique à j+3 (device meteo)
+ Arrêter un driver
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="DriverId">ID du driver</param>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.GetDeviceCommandePlus">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.StartDriver(System.String,System.String)">
 	<summary>
- Retourne la liste des commandes avancées
+ Démarrer un driver
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="DriverId">ID du driver</param>
 	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.TemplateDevice.Commandes">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ZoneIsEmpty(System.String,System.String)">
 	<summary>
- Liste des noms des commandes IR (device IR)
+ Indique si la zone ne contient aucun device (exemple à vérifier avant de supprimer une zone)
  </summary>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="zoneId">ID de la zone</param>
+	<returns>True si la zone est vide, False si la zone n'est pas vide ou ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.TemplateDevice">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteZone(System.String,System.String)">
 	<summary>
- Template de class de type Device pour le service web
+ Supprimer une zone 
  </summary>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="zoneId">ID de la zone</param>
+	<returns>0 si exécuté, -1 si erreur ou non trouvé, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.FileData">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllZones(System.String)">
 	<summary>
- Classe de transfert de fichier en streaming
+ Obtient la liste des zones
  </summary>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<returns>List de type Zone, Nothing si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.RequestFileData">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetDeviceInZone(System.String,System.String)">
 	<summary>
- Classe de demande de fichier
+ Retourne la liste des devices d'une zone (par son id)
  </summary>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="zoneId">ID de la zone</param>
+	<returns>List de type TemplateDevice, Nothing si zone non trouvée, vide ou si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Macro.ID">
-	<summary>
- ID de la macro
- </summary>
-	<value></value>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetZoneInZone(System.String,System.String)">
+	<summary>Retourne la liste des zones d'une zone depuis son ID</summary>
+	<param name="ZoneId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Macro.Nom">
-	<summary>
- Nom de la macro
- </summary>
-	<value></value>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetMacroInZone(System.String,System.String)">
+	<summary>Retourne la liste des macros d'une zone depuis son ID</summary>
+	<param name="ZoneId"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Macro.Description">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnZoneByID(System.String,System.String)">
 	<summary>
- Decription de la macro
+ Retourne l'objet d'une zone par son ID
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="Id">ID de la zone</param>
+	<returns>Objet de type Zone, Nothing si zone non trouvée ou si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Macro.Enable">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveZone(System.String,System.String,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.Zone.Element_Zone},System.String,System.String)">
 	<summary>
- Active la macro
+ Créer un nouveau zone ou sauvegarder la modif (si ID est complété)
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="zoneId">ID de la zone (vide si nouvelle zone, ID de la zone à modifier)</param>
+	<param name="name">Nom de la zone</param>
+	<param name="ListElement">Liste des éléments (devices, macros, zones) rattachés à la zone</param>
+	<param name="icon">Icone de la zone (utilisé pour les boutons)</param>
+	<param name="image">Image de la zone (background)</param>
+	<returns>ID de la zone créée ou modifiée, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Macro.ListActions">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.AddDeviceToZone(System.String,System.String,System.String,System.Boolean)">
 	<summary>
- Liste des actions de la macro macro est False
+ Ajouter un device à une zone
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="ZoneId">ID de la zone</param>
+	<param name="DeviceId">ID du device à ajouter</param>
+	<param name="Visible">Si le device doit être visible ou non côté client</param>
+	<returns>0 si exécuté, -1 si zone non trouvée, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Macro.Execute(HoMIDom.HoMIDom.Server)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteDeviceToZone(System.String,System.String,System.String)">
 	<summary>
- Exécuter la macro
+ Supprimer un device à une zone
  </summary>
-	<param name="Server"></param>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="ZoneId">ID de la zone</param>
+	<param name="DeviceId">ID du device à supprimer de la zone</param>
+	<returns>0 si exécuté, -1 si zone non trouvée, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Macro">
-	<summary>Class Macro, Défini le type pour les macros</summary>
-	<remarks>_condition contient un tableau des conditions à vérifier pour lancer les actions si TRUE ou si FALSE</remarks>
-</member><member name="F:HoMIDom.HoMIDom.Trigger.TypeTrigger.TIMER">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteMacro(System.String,System.String)">
 	<summary>
- Trigger sur une date/heure
+ Supprimer une macro de la config
  </summary>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="macroId">ID de la macro</param>
+	<returns>0 si exécuté, -1 si macro non trouvée, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Trigger.TypeTrigger.DEVICE">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.RunMacro(System.String,System.String)">
 	<summary>
- Trigger suivant une propriété d'un device
+ Execute une macro
  </summary>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="Id">ID de la macro</param>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Trigger.TypeTrigger">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllMacros(System.String)">
 	<summary>
- Type de trigger TIME ou DEVICE
+ Retourne la liste de toutes les macros
  </summary>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<returns>List de type Macro, Nothing si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Trigger.ID">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnMacroById(System.String,System.String)">
 	<summary>
- ID du trigger
+ Retourne la macro par son ID
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="MacroId">ID de la macro</param>
+	<returns>Objet de type macro, Nothing si macro non trouvée ou si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Trigger.Nom">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveMacro(System.String,System.String,System.String,System.Boolean,System.String,System.Collections.ArrayList)">
 	<summary>
- Nom du trigger
+ Permet de créer ou modifier une macro
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="macroId">Id de la macro à modifier, mettre une valeur null si c'est une macro à créer</param>
+	<param name="nom">Nom de la macro</param>
+	<param name="enable">Activation/désactivation de la macro</param>
+	<param name="description">Description de la macro</param>
+	<param name="listactions">List des actions associées à la macro</param>
+	<returns>ID de la macro modifée ou créée, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Trigger.Description">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllTriggers(System.String)">
 	<summary>
- Description du trigger
+ Retourne la liste de toutes les triggers
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<returns>List de type Trigger, Nothing si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Trigger.Type">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnTriggerById(System.String,System.String)">
 	<summary>
- Type du trigger 0=Time 1=Device
+ Retourne le trigger par son ID
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="TriggerId">ID du trigger</param>
+	<returns>Objet de type Trigger, Nothing si trigger non trouvé ou si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Trigger.Enable">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteTrigger(System.String,System.String)">
 	<summary>
- Active de trigger
+ Supprimer un trigger 
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="triggerId">ID du trigger</param>
+	<returns>0 si exécuté, -1 si trigger non trouvé, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Trigger.ConditionTime">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveTrigger(System.String,System.String,System.String,System.Boolean,HoMIDom.HoMIDom.Trigger.TypeTrigger,System.String,System.String,System.String,System.String,System.Collections.Generic.List{System.String})">
 	<summary>
- Condition du trigger suivant Date/Time
+ Permet de créer ou modifier un trigger
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="triggerId">ID du trigger (vide si nouveau, ID du trigger pour le modifier)</param>
+	<param name="nom">Nom du trigger</param>
+	<param name="enable">Activer/Désactiver le trigger</param>
+	<param name="TypeTrigger">Type de trigger</param>
+	<param name="description">Description du trigger</param>
+	<param name="conditiontimer">Condition du trigger s'il est de type Timer</param>
+	<param name="deviceid">ID du device à surveiller si trigger de type Device</param>
+	<param name="deviceproperty">Propriété du device à surveiller si trigger de type Device</param>
+	<param name="macro">Liste des ID des macros associées au trigger</param>
+	<returns>ID du trigger créé ou modifié, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Trigger.ConditionDeviceId">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ListMethod(System.String)">
 	<summary>
- Id du device de la condition
+ Liste les méthodes (actions) dispo pour un device (par son id)
+ Retourne pour chaque élément de la liste NOMDELAMETHODE|Parametre1:TypeParametre1|Parametre2:TypeParametre2...
+ '' ex pour la classe lampe cela retourne: DIM|Variation:Int32
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="DeviceId">ID du device</param>
+	<returns>Retourne pour chaque élément de la liste NOMDELAMETHODE|Parametre1:TypeParametre1|Parametre2:TypeParametre2...</returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Trigger.ConditionDeviceProperty">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetLastLogs">
 	<summary>
- Nom de la Propriété du device à surveillé pour le trigger
+ Retourne les derniers logs les plus récents (du plus récent au plus ancien)
  </summary>
-	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Trigger.Prochainedateheure">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetLastLogsError">
 	<summary>
- DateHeure de la prochaine exécution
+ Retourne les derniers logs en erreur les plus récents (du plus récent au plus ancien)
  </summary>
-	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Trigger.ListMacro">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetTypeLogEnable">
 	<summary>
- Liste des macros à déclencher
+ Retourne pour chaque type de log s'il doit être pris en compte ou non
  </summary>
-	<value></value>
 	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Trigger.maj_cron">
-	<summary>convertit la condition au format cron "cron_ss#mm#hh#jj#MMM#JJJ" en dateTime dans le champ prochainedateheure</summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Trigger">
-	<summary>Class trigger, Défini le type pour les triggers Device/timers</summary>
-	<remarks>
- _condition contient un string: DeviceID ou CRON : le déclencheur du trigger
- _macro contient un tableau de string : MacroID : liste des macros à lancer
- </remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionDevice">
-	<summary>
- Action de type Device
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionMail">
-	<summary>
- Action de type envoyer un mail
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionIf">
-	<summary>
- Action de type If Then/else
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionMacro">
-	<summary>
- Action de type lancer une macro
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionSpeech">
-	<summary>
- Action de type parler
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionHttp">
-	<summary>
- Action de type commande http
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionLogEvent">
-	<summary>
- Action de type log windows
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionLogEventHomidom">
-	<summary>
- Action de type log Homidom
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionDOS">
-	<summary>
- Action de type log Commnde Dos
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionVB">
-	<summary>
- Action de type ScriptVB
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Action.TypeAction">
-	<summary>
- Enumération des types d'actions
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeSigne.Egal">
-	<summary>
- Egal
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeSigne.Inferieur">
-	<summary>
- Inférieur
- </summary>
 	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeSigne.InferieurEgal">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetTypeLogEnable(System.Collections.Generic.List{System.Boolean})">
 	<summary>
- Inférieur ou égal
+ ''' Fixe si chaque type de log doit être pris en compte ou non
  </summary>
+	<param name="ListTypeLogEnable"></param>
 	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeSigne.Superieur">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetMaxMonthLog(System.Int32)">
 	<summary>
- Supérieur
+ Retourne le nombre de mois à conserver une archive de log avant de le supprimer
  </summary>
+	<param name="Month">Nombre de mois à conserver</param>
 	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeSigne.SuperieurEgal">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetMaxMonthLog">
 	<summary>
- Supérieur ou égal
+ Définit le nombre de mois à conserver une archive de log avant de le supprimer
  </summary>
+	<returns>Nombre de mois à conserver une archive de log</returns>
 	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeSigne.Different">
-	<summary>
- Différent de
- </summary>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.Log(HoMIDom.HoMIDom.Server.TypeLog,HoMIDom.HoMIDom.Server.TypeSource,System.String,System.String)">
+	<summary>Ecrit un log dans le fichier log au format xml</summary>
+	<param name="TypLog">Type de log ERREUR, MESSAGE, INFO...</param>
+	<param name="Source">Source du log CLIENT, SERVEUR...</param>
+	<param name="Fonction">Nom de la fonction ayant déclenchée le log</param>
+	<param name="Message">Message du log</param>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Action.TypeSigne">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnLog(System.String)">
 	<summary>
- Enumération des types  de signe (inferieur,egal,different...)
+ Renvoi le fichier log suivant une requête xml si besoin
  </summary>
+	<param name="Requete"></param>
+	<returns>Log</returns>
 	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeOperateur.NONE">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetMaxFileSizeLog(System.Int64)">
 	<summary>
- Aucun
+ Fixe la taille max du fichier log en Ko avant d'en créer un nouveau
  </summary>
+	<param name="Value">Taille maximale du fichier log en Ko</param>
 	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeOperateur.AND">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetMaxFileSizeLog">
 	<summary>
- AND
+ Retourne la taille max du fichier log en Ko
  </summary>
+	<returns>Taille maximale du fichier log en Ko</returns>
 	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeOperateur.OR">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.TestSendMail(System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.String,System.String)">
 	<summary>
- OR
+ Permet de tester l'envoi de mail
  </summary>
+	<param name="IdSrv"></param>
+	<param name="Adresse"></param>
+	<returns></returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Action.TypeOperateur">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPServeur(System.String)">
 	<summary>
- Enumération des types d'operateur
+ Retourne l'adresse SMTP du serveur
  </summary>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<returns>Adresse SMTP du serveur, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeCondition.DateTime">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPServeur(System.String,System.String)">
 	<summary>
- Condition du type Date et heure
+ Fixe l'adresse SMTP du serveur
  </summary>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="Value">Adresse SMTP du serveur</param>
 	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeCondition.Device">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPLogin(System.String)">
 	<summary>
- Condition portant sur une propriété d'un device
+ Retourne le login du serveur SMTP
  </summary>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<returns>Login du serveur SMTP, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Action.TypeCondition.Parenthese">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPLogin(System.String,System.String)">
 	<summary>
- Parenthèse (non utilisé)
+ Fixe le login du serveur SMTP
  </summary>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="Value">Login du serveur SMTP</param>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Action.TypeCondition">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPPassword(System.String)">
 	<summary>
- Enumération des types de conditions
+ Retourne le password du serveur SMTP
  </summary>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<returns>Pasword du serveur SMTP, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Action.ActionDevice">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPPassword(System.String,System.String)">
 	<summary>
- Action Device
+ Fixe le password du serveur SMTP
  </summary>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="Value">Password du serveur SMTP</param>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Action.ActionMail">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPMailServeur(System.String)">
 	<summary>
- Action Mail
+ Retourne l'adresse mail du serveur SMTP
  </summary>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<returns>Adresse mail du serveur SMTP, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Action.ActionIf">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPMailServeur(System.String,System.String)">
 	<summary>
- Action If
+ Fixe l'adresse mail du serveur SMTP
  </summary>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="Value">Adresse mail du serveur SMTP</param>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Action.ActionMacro">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPPort(System.String)">
 	<summary>
- Action macro
+ Retourne le port SMTP à utiliser
  </summary>
+	<param name="IdSrv"></param>
+	<returns></returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Action.Condition">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPPort(System.String,System.Int32)">
+	<summary>Fixe le password du serveur SMTP</summary>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPSSL(System.String)">
+	<summary>Retourne si on doit utiliser une connexion SLL pour SMTP</summary>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPSSL(System.String,System.Boolean)">
+	<summary>Fixe si on doit utiliser une connexion SLL pour SMTP</summary>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetListOfTemplate">
 	<summary>
- Condition pour action If
+ Retourne la liste des templates télécommande (fichier xml), présents dans le répertoire templates
  </summary>
+	<returns>List of Templates</returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Action.ActionSpeech">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.CreateNewTemplate(System.String,System.String,System.String,HoMIDom.HoMIDom.Telecommande.TypeEquipement,System.Int32,System.Int32)">
 	<summary>
- Action parler
+ Crée un nouveau template dans le répertoire templates
  </summary>
+	<param name="Fabricant">nom du fabricant</param>
+	<param name="Modele">modele</param>
+	<param name="Driver">driver</param>
+	<param name="Type">Type de base, si différent de VIDE va mettre les commandes de bases par défaut</param>
+	<returns>0 si ok, sinon message d'erreur</returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Action.ActionHttp">
-	<summary>
- Action parler
- </summary>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.StartLearning(System.String,System.String)">
+	<summary>Demander un apprentissage à un driver</summary>
+	<returns></returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Action.ActionLogEvent">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveTemplate(System.String,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes},System.Int32,System.Int32)">
 	<summary>
- Action Log windows
+ Sauvegarde les commandes dans un template donné
  </summary>
+	<param name="IdSrv">Id du Serveur</param>
+	<param name="Template">Nom du template</param>
+	<param name="Commandes">Liste des commandes</param>
+	<returns>O si ok sinon message d'erreur</returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Action.ActionLogEventHomidom">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.TelecommandeSendCommand(System.String,System.String,System.String)">
 	<summary>
- Action Log Homidom
+ Demande au device d'envoyer une commande (telecommande) à son driver
  </summary>
+	<param name="IdSrv">Id du serveur, retourne 99 si non OK</param>
+	<param name="IdDevice">Id du device concerné</param>
+	<param name="Commande">Nom de la Commande à envoyée</param>
+	<returns>0 si Ok sinon erreur</returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Action.ActionDos">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetModeDecouverte">
 	<summary>
- Action Dos 
+ Retourne True/False si le mode découverte des nouveaux devices est activé
  </summary>
+	<returns></returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Action.ActionVB">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetModeDecouverte(System.Boolean)">
 	<summary>
- Action Dos 
+ Fixe (True/False) si le mode découverte des nouveaux devices doit être activé
  </summary>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Action.log">
-	<summary>log dans les fichiers logs et base sqlite</summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Action">
-	<summary>Class action, Défini les actions à réaliser depuis les macros...</summary>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Extension">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.AddDetectNewDevice(System.String,System.String,System.String,System.String)">
 	<summary>
- Nom de l'extension ex: .wma
+ Ajoute un nouveau device dans la liste découverte
  </summary>
-	<value></value>
+	<param name="Adresse1"></param>
+	<param name="DriverId"></param>
+	<param name="Type"></param>
+	<param name="Adresse2"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Enable">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnNewDevice(System.String)">
 	<summary>
- Si l'extension doit être prise en compte
+ Retourne un NewDevice suivant son ID
  </summary>
-	<value></value>
+	<param name="Id"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Audio.ExtensionAudio">
-	<summary>Type d'extension Audio</summary>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Repertoire">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveNewDevice(HoMIDom.HoMIDom.NewDevice)">
 	<summary>
- Chemin du répertoire
+ Set un NewDevice suivant son ID
  </summary>
-	<value></value>
-	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Enable">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllNewDevice">
 	<summary>
- Si le répertoire doit être pris en compte
+ Retourne tous les nouveaux devices détectés
  </summary>
-	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Audio.RepertoireAudio">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.AsNewDevice">
 	<summary>
- Type Répertoire Audio
+ Existe t-il des nouveaux devices non ignorés?
  </summary>
+	<returns>True si nouveau device</returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Audio.FilePlayList">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteNewDevice(System.String,System.String)">
 	<summary>
- Class Fichier Audio
+ Supprimer un newdevice de la liste
  </summary>
+	<param name="IdSrv"></param>
+	<param name="NewDeviceId"></param>
+	<returns></returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Audio">
+</member><member name="T:HoMIDom.HoMIDom.IHoMIDom">
 	<summary>
- Classe de gestion Audio
+ Liste toutes les functions et propriétés accessibles par les clients
  </summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.DriversEvent(System.String,System.String,System.Object)">
@@ -1326,6 +1352,34 @@ HoMIDom
  Redémarre ou démarre le serveur web
  </summary>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.UpdateHisto(System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
+	<summary>
+ Modifie un historique
+ </summary>
+	<param name="idsrv"></param>
+	<param name="IdDevice"></param>
+	<param name="DateTime"></param>
+	<param name="Value"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.DeleteHisto(System.String,System.String,System.String,System.String,System.String)">
+	<summary>
+ Supprime un historique
+ </summary>
+	<param name="idsrv"></param>
+	<param name="IdDevice"></param>
+	<param name="DateTime"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.AddHisto(System.String,System.String,System.String,System.String,System.String)">
+	<summary>
+ Ajoute un historique
+ </summary>
+	<param name="idsrv"></param>
+	<param name="IdDevice"></param>
+	<param name="DateTime"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetHistoDeviceSource(System.String,System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Retourne un datatable d'historique d'un device suivant sa propriété (source) puis suivant une date de début et de fin
@@ -1427,7 +1481,7 @@ HoMIDom
 	<summary>Retourne la liste de tous les drivers</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveDriver(System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.Collections.ArrayList)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveDriver(System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.Boolean,System.Collections.ArrayList)">
 	<summary>Sauvegarde ou créer un driver dans la config</summary>
 	<param name="driverId"></param>
 	<param name="name"></param>
@@ -1969,19 +2023,44 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.AsNewDevice">
+	<summary>
+ Existe t-il des nouveaux devices non ignorés?
+ </summary>
+	<returns>True si nouveau device</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.DeleteNewDevice(System.String,System.String)">
+	<summary>
+ Supprimer un newdevice de la liste
+ </summary>
+	<param name="IdSrv"></param>
+	<param name="NewDeviceId"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Server">
 	<summary>Classe Server</summary>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Groupes.DeviceAction">
+</member><member name="P:HoMIDom.My.Resources.Resources.ResourceManager">
 	<summary>
- List des actions associées au Device
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member><member name="P:HoMIDom.My.Resources.Resources.Culture">
+	<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="T:HoMIDom.My.Resources.Resources">
+	<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
+</member><member name="T:HoMIDom.HoMIDom.FileData">
+	<summary>
+ Classe de transfert de fichier en streaming
  </summary>
-	<value></value>
-	<returns></returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Groupes">
+</member><member name="T:HoMIDom.HoMIDom.RequestFileData">
 	<summary>
- Permet de regrouper un ensemble de devices du même type
+ Classe de demande de fichier
  </summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Soleil">
@@ -1994,958 +2073,196 @@ HoMIDom
  Template de Classe de type Driver pour le service web
  </summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSaveRealTime">
+</member><member name="T:HoMIDom.HoMIDom.Mail">
 	<summary>
- Demande au serveur si on sauvegarde en temps réel
+ Envoi un mail
  </summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSaveRealTime(System.Boolean)">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL">
 	<summary>
- Indique au serveur si on enregistre en temps réel
- </summary>
-	<param name="Value"></param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetPortComDispo">
-	<summary>
- Retourne la liste des ports com dispo sur le serveur
- </summary>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.UploadFile(System.String,System.Byte[],System.String)">
-	<summary>
- Upload un fichier
- </summary>
-	<param name="IdSrv"></param>
-	<param name="byteData"></param>
-	<param name="Namefile"></param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllVoice">
-	<summary>
- Retourne la liste des voix installées sur le serveur
- </summary>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetDefautVoice">
-	<summary>
- Retourne la voix par défaut
- </summary>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetDefautVoice(System.String)">
-	<summary>
- Définit la voix par défaut
- </summary>
-	<param name="Voice"></param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.CanDelete(System.String,System.String)">
-	<summary>
- Vérifie si un élément existe dans une zone, une macro, un trigger... avant de le supprimer
- </summary>
-	<param name="IdSrv"></param>
-	<param name="Id"></param>
-	<returns>Retourne une erreur commencant par ERREUR ou la liste des noms des macros, zones...</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetTimeSave(System.String)">
-	<summary>
- Retourne le paramètre de sauvegarde
- </summary>
-	<param name="IdSrv">ID du serveur</param>
-	<returns>la valeur du paramètre, -1 si l'id du serveur est erronée</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetTimeSave(System.String,System.Int32)">
-	<summary>
- Fixe le paramètre de sauvegarde
- </summary>
-	<param name="IdSrv">ID du serveur</param>
-	<param name="Value">Valeur positive qui définit toutes les X minutes une sauvegarde sera effectuée puis à l'arrêt du serveur</param>
-	<returns>0 si réussite</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetIdServer(System.String)">
-	<summary>
- Retourne l'Id du serveur pour la communication SOAP
- </summary>
-	<param name="IdSrv">ID du serveur</param>
-	<returns>ID du serveur ou 99 si l'IdSrv n'est pas celui du serveur (erreur)</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetIdServer(System.String,System.String)">
-	<summary>
- Fixe l'Id du serveur pour SOAP
- </summary>
-	<param name="IdSrv">ID du serveur actuel</param>
-	<param name="Value">Nouvelle valeur de l'ID du serveur</param>
-	<returns>0 si l'ID a été pris en compte, 99 si l'IdSrv n'est pas celui du serveur (erreur),si l'ID est vide ça retourne "ERR: l'Id ne peut être null"</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetServerVersion">
-	<summary>
- Retourne la version du serveur
- </summary>
-	<returns>Version du serveur</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetTime">
-	<summary>
- Retourne l'heure du serveur
- </summary>
-	<returns>Heure du serveur</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.MessageToServer(System.String)">
-	<summary>
- Permet d'envoyer un message d'un client vers le server
- </summary>
-	<param name="Message"></param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveConfig(System.String)">
-	<summary>
- Sauvegarde la configuration
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ExportConfig(System.String)">
-	<summary>
- Exporte le fichier de config vers une destination
- </summary>
-	<param name="IdSrv">Id du serveur</param>
-	<returns>0 si ok sinon message d'erreur</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ImportConfig(System.String,System.String)">
-	<summary>
- Importe un fichier de config depuis une source
- </summary>
-	<param name="Source">chemin + fichier (homidom.xml)</param>
-	<returns>"0" si ok sinon message d'erreur</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.Start">
-	<summary>
- Démarre le service et charge la config
+ modules pour diriger un appareil  ON/OFF
  </summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.Stop(System.String)">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.AUDIO">
 	<summary>
- Arrête le service
- </summary>
-	<param name="idSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReStart(System.String)">
-	<summary>
- Redémarre le service et charge la config
+ module de type audio
  </summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetPortSOAP(System.String,System.Double)">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.BAROMETRE">
 	<summary>
- Fixe la valeur de port SOAP
+ pour stocker les valeur issu d'un barometre meteo ou web
  </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="Value">Valeur du port SOAP</param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetPortSOAP">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.BATTERIE">
 	<summary>
- Retourne la valeur de port SOAP
+ Pour stocker les valeurs issu d'une batterie
  </summary>
-	<returns>Valeur du port SOAP</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetIPSOAP(System.String,System.String)">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.COMPTEUR">
 	<summary>
- Fixe l'adresse IP SOAP
+ compteur DS2423, RFXPower...
  </summary>
-	<param name="IdSrv">Id du Serveur</param>
-	<param name="Value">Adresse IP SOAP</param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetIPSOAP">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.CONTACT">
 	<summary>
-	</summary>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetLastStartTime">
-	<summary>
- Retourne la date et heure du dernier démarrage du serveur
+ detecteur de contact : switch 1-wire
  </summary>
-	<returns>DateTime du dernier démarrage du serveur</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetHeureLeverSoleil">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.DETECTEUR">
 	<summary>
- Valeur du levé du soleil
+ tous detecteurs : mouvement, obscurite...
  </summary>
-	<returns>Heure du levé du soleil</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetHeureCoucherSoleil">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.DIRECTIONVENT">
 	<summary>
- Valeur du couché du soleil
+ module donnant la direction du vent
  </summary>
-	<returns>Heure du couché du soleil</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetLongitude">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.ENERGIEINSTANTANEE">
 	<summary>
- Obtenir la valeur de longitude
+ Valeur de Puissance d'energie instantanée
  </summary>
-	<returns>Valeur de la longitude du serveur (pour calcul des heures de levé et couché du solseil)</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetLongitude(System.String,System.Double)">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.ENERGIETOTALE">
 	<summary>
- Appliquer une valeur de longitude
+ Valeur de Puissance d'energie totale
  </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="Value">Valeur de longitude</param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetLatitude">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.FREEBOX">
 	<summary>
- Obtenir la valeur de latitude
+ FreeBox
  </summary>
-	<returns>Valeur de la latitude du serveur (pour calcul des heures de levé et couché du solseil)</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetLatitude(System.String,System.Double)">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEBOOLEEN">
 	<summary>
- Appliquer la valeur de latitude
+ Générique Boolean
  </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="Value">Valeur de latitude</param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetHeureCorrectionCoucher">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUESTRING">
 	<summary>
- Obtenir la correction sur l'heure du coucher du soleil
+ Générique de type String
  </summary>
-	<returns>Valeur de correction appliquée sur l'heure du coucher du soleil</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetHeureCorrectionCoucher(System.String,System.Int32)">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE">
 	<summary>
- Appliquer une correction sur l'heure du coucher du soleil
+ Générique de type numérique
  </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="Value">Valeur de correction appliquée sur l'heure du couché du soleil</param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetHeureCorrectionLever">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE">
 	<summary>
- Obtenir la correction sur l'heure de lever du soleil
+ Capteur d'humidité
  </summary>
-	<returns>Valeur de correction appliquée sur l'heure du levé du soleil</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetHeureCorrectionLever(System.String,System.Int32)">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.LAMPE">
 	<summary>
- Appliquer une correction sur l'heure du levé du soleil
+ Module de type lampe avec variation
  </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="Value">Valeur de correction appliquée sur l'heure du levé du soleil</param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetByteFromImage(System.String)">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.METEO">
 	<summary>
-  Convert a file on a byte array.
+ Station meteo (physique ou web)
  </summary>
-	<param name="file">Chemin complet du fichier se trouvant sur le serveur</param>
-	<returns>Tableau de byte représentant le fichier</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetListOfImage">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA">
 	<summary>
- Retourne la liste de tous les fichiers image présents sur le serveur
+ Multimedia
  </summary>
-	<returns>Liste (Type ImageFile) de tous les fichiers image (png, jpg) présents sur le serveur</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSqliteBddVersion">
-	<summary>Retourne la version BDD sqlite</summary>
-	<returns>String : version BDD</returns>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSqliteVersion">
-	<summary>Retourne la version du moteur sqlite</summary>
-	<returns>String : version Sqlite</returns>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetDevise">
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.PLUIECOURANT">
 	<summary>
- Retourne la devise du serveur
+ Valeur de pluie courante
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.PLUIETOTAL">
+	<summary>
+ Valeur de pluie totale
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.SWITCH">
+	<summary>
+ Interrupteur
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.TELECOMMANDE">
+	<summary>
+ Telecommande
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE">
+	<summary>
+ Capteur de température
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE">
+	<summary>
+ Température de consigne (ex: thermostat)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.UV">
+	<summary>
+ Indice UV soleil
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.VITESSEVENT">
+	<summary>
+ Vitesse du vent
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.VOLET">
+	<summary>
+ Volet roulant
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Device.ListeDevices">
+	<summary>Indique la liste des devices gérés</summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Device.DeviceGenerique.GetDefautDeviceImage(System.String)">
+	<summary>
+ Retourne la liste de tous les fichiers image (png ou jpg) présents sur le serveur
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetDevise(System.String)">
-	<summary>
- Fixe la devise du serveur
- </summary>
-	<param name="Value"></param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetEnableServeurWeb">
-	<summary>
- Retourne si le serveur Web est Enable
- </summary>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetEnableServeurWeb(System.Boolean)">
-	<summary>
- Fixe Enable du serveur web
- </summary>
-	<param name="Value"></param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetPortServeurWeb">
-	<summary>
- Retourne le port du serveur Web 
- </summary>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetPortServeurWeb(System.Int32)">
-	<summary>
- Fixe le port du serveur web
- </summary>
-	<param name="Value"></param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.RestartServeurWeb">
-	<summary>
- Redémarre ou démarre le serveur web
- </summary>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DevicesAsHisto">
-	<summary>
- Retourne un dictionnary retourant en clé l'id du device et la valeur True/False s'il contient des historiques
- </summary>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetHistoDeviceSource(System.String,System.String,System.String,System.String,System.String,System.String)">
-	<summary>
- Retourne un datatable d'historique d'un device suivant sa propriété (source) puis suivant une date de début et de fin
- </summary>
-	<param name="IdSrv">ID du serveur</param>
-	<param name="idDevice">ID du device</param>
-	<param name="Source">Source du device (ex: Value)</param>
-	<param name="DateStart">Date de départ</param>
-	<param name="DateEnd">Date de fin</param>
-	<returns>Datatable</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeviceAsHisto(System.String,System.String)">
-	<summary>
- Retourne le nombre d'historiques d'un device
- </summary>
-	<param name="IdDevice">ID du device</param>
-	<param name="Source">Option propriété du device (ex: Value)</param>
-	<returns>nombre historiques</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllListHisto(System.String)">
-	<summary>
- Retourne la liste des sources histo (source et id) présents dans la base de données Homidom
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<returns>Liste (Type Historisation), Nothing si l'ID du serveur est erroné </returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetHisto(System.String,System.String,System.String)">
-	<summary>
- Retourne l'historisation d'une source donnée
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="Source">Source de la donnée</param>
-	<param name="idDevice">ID du device associé à la source de donnée</param>
-	<returns>List de type Historisation, 99 si l'ID du serveur est erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteUser(System.String,System.String)">
-	<summary>
- Supprime un user
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="userId">ID du user à supprimer</param>
-	<returns>0 si exécuté, -1 si ID non trouvé, 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.VerifLogin(System.String,System.String)">
-	<summary>
- Vérifie le couple username + login  renvoi true si ok
- </summary>
-	<param name="Username">Username</param>
-	<param name="Password">Mot de passe</param>
-	<returns>True su identification OK sinon False</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ChangePassword(System.String,System.String,System.String,System.String,System.String)">
-	<summary>
- Permet de changer le mot de passe d'un user
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="Username">Username</param>
-	<param name="OldPassword">Ancien mot de passe</param>
-	<param name="ConfirmNewPassword">Confirmation nouveau mot de passe</param>
-	<param name="Password">Nouveau mot de passe</param>
-	<returns>True si mot de passe modifié, False si erreur ou mauvais ID du serveur</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnUserByUsername(System.String,System.String)">
-	<summary>
- Retourne un user par son username
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="Username">Username</param>
-	<returns>Objet de type User correspondant au username</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllUsers(System.String)">
-	<summary>
- Obtient la liste des users
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<returns>List de type User, Nothing si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnUserById(System.String,System.String)">
-	<summary>
- Retourne un User par son ID
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="UserId">ID du User</param>
-	<returns>Objet de type User si trouvé, sinon Nothing si non trouvé ou ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveUser(System.String,System.String,System.String,System.String,HoMIDom.HoMIDom.Users.TypeProfil,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
-	<summary>
- Créer ou modifier un user
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="userId">ID du user (vide si c'est un nouveau, son ID pour le modifier)</param>
-	<param name="UserName">Username du user</param>
-	<param name="Password">Mot de passe du user</param>
-	<param name="Profil">Profil du user</param>
-	<param name="Nom">Nom du user</param>
-	<param name="Prenom">Prénom du user</param>
-	<param name="NumberIdentification">N° d'identification du user (peut être utilisé par exemple pour un N° de puce RFID)</param>
-	<param name="Image">Image du user</param>
-	<param name="eMail">eMail du user (utilisé lors d'envoi de mail dans une macro)</param>
-	<param name="eMailAutre">Second email du user</param>
-	<param name="TelFixe">Numéro de téléphone fixe du user</param>
-	<param name="TelMobile">Numéro de téléphone mobile du user</param>
-	<param name="TelAutre">Autre numéro de téléphone du user</param>
-	<param name="Adresse">Adresse du user</param>
-	<param name="Ville">Ville du user</param>
-	<param name="CodePostal">Code Postal du user</param>
-	<returns>ID du user, -1 si erreur, message d'erreur, 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.TypeOfPropertyOfDevice(System.String,System.String)">
-	<summary>
- Retourne le type d'une propriété d'un device (boolean, string, double...)
- </summary>
-	<param name="DeviceId">ID du device</param>
-	<param name="Property">Nom de la propriété&gt;</param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ChangeValueOfDevice(System.String,System.String,System.Object)">
-	<summary>
- Permet de changer la valeur d'un device
- </summary>
-	<param name="idsrv"></param>
-	<param name="IdDevice"></param>
-	<param name="Value"></param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllDevices(System.String)">
-	<summary>
- Obtient la liste des devices
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<returns>List de type TemplateDevice, Nothing si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ExecuteDeviceCommand(System.String,System.String,HoMIDom.HoMIDom.DeviceAction)">
-	<summary>
- Execute une commande (COMMAND) d'un device (DeviceID) associés à des paramètres (Param)
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="DeviceId">ID du device</param>
-	<param name="Action">Action (de type Action) à exécutée (ex: "ON", "OFF", "DIM",100...)</param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ExecuteDeviceCommandSimple(System.String,System.String,HoMIDom.HoMIDom.DeviceActionSimple)">
-	<summary>
- Execute une commande (COMMAND) d'un device (DeviceID) associés à des paramètres (Param)
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="DeviceId">ID du device</param>
-	<param name="Action">Action (de type Action) à exécutée (ex: "ON", "OFF", "DIM",100...)</param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteDevice(System.String,System.String)">
-	<summary>
- Supprimer un device
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="deviceId">ID du device</param>
-	<returns>0 si exécuté, -1 si ID non trouvé, 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteDeviceCommandIR(System.String,System.String,System.String)">
-	<summary>
- Supprime une commande IR d'un device
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="deviceId">ID du device</param>
-	<param name="CmdName">Nom de la commande IR</param>
-	<returns>0 si exécuté, -1 si ID ou commande non trouvée, 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnDeviceByID(System.String,System.String)">
-	<summary>
- Retourne l'objet d'un device par son ID
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="Id">ID du device</param>
-	<returns>Objet de type TemplateDevice, Nothing si non trouvé ou ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnDeviceByAdresse1TypeDriver(System.String,System.String,System.String,System.String,System.Boolean)">
-	<summary>
- Retourne une liste de device suivant l'addresse1 et/ou son type et/ou le driver
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="DeviceAdresse">Adresse1 du device</param>
-	<param name="DeviceType">Type de device</param>
-	<param name="DeviceDriver">ID driver du device</param>
-	<returns>List de device, Nothing si non trouvé ou ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.String,System.String,System.Double,System.Double,System.Double,System.Double,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes},System.String,System.Int32,System.Boolean)">
-	<summary>
- Créer un nouveau device ou sauvegarder la modif (si ID est complété)
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="deviceId">ID du device (vide si nouveau, ID du device si modification)</param>
-	<param name="name">Nom du device</param>
-	<param name="address1">Adresse1 du device</param>
-	<param name="enable">Activer/Désactiver le device</param>
-	<param name="solo">Indique si le Device travail en mode solo</param>
-	<param name="driverid">ID du driver</param>
-	<param name="type">Type de device</param>
-	<param name="refresh">Valeur de rafraichissement du device</param>
-	<param name="address2">Adresse2 du device</param>
-	<param name="image">Image du device</param>
-	<param name="modele">Modèle de device</param>
-	<param name="description">Description du device</param>
-	<param name="lastchangeduree">Dernière valeur</param>
-	<returns>ID du device créé ou modifié, 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDeviceCommandIR(System.String,System.String,System.String,System.String,System.String)">
-	<summary>
- Ajouter ou modifier une commande IR à un device (utilisé pour usbuirt)
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="deviceId">ID du device</param>
-	<param name="CmdName">Nom de la commande IR</param>
-	<param name="CmdData">Données IR de la commande</param>
-	<param name="CmdRepeat">Nombre de fois à envoyer la commande</param>
-	<returns>0 si exécuté, 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.StartIrLearning(System.String)">
-	<summary>
- Commencer l'apprentissage d'un commande IR
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<returns>Données de la commande IR, vide si aucune donnée(s) reçue(s), 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.VerifChamp(System.String,System.String,System.String,System.Object)">
-	<summary>
- Permet de vérifier si un champ a correctement été saisi
- </summary>
-	<param name="Idsrv"></param>
-	<param name="DriverId"></param>
-	<param name="Champ"></param>
-	<param name="Value">retourne 0 si Ok sinon le message d'erreur</param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllDrivers(System.String)">
-	<summary>
- Obtient la liste des drivers
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<returns>List de type TemplateDriver, Nothing si ID du serveur erroné (</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ExecuteDriverCommand(System.String,System.String,HoMIDom.HoMIDom.DeviceAction)">
-	<summary>
- Execute une commande (COMMAND) d'un driver (DriverID) associés à des paramètres (Param)
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="DriverId">ID du driver</param>
-	<param name="Action">Action de type DeviceAction à exécuter</param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnDriverByID(System.String,System.String)">
-	<summary>
- Retourne l'objet d'un driver par son ID
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="Id">ID du driver</param>
-	<returns>List de type TemplateDriver, Nothing si ID non trouvé ou si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteDriver(System.String,System.String)">
-	<summary>
- Supprimer un driver de la config
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="driverId">ID du driver à supprimer</param>
-	<returns>0 si exécuté, -1 si Driver non trouvé, 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnDriverByNom(System.String,System.String)">
-	<summary>
- Retourne l'objet d'un driver par son nom
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="name">Nom du driver</param>
-	<returns>Retourne le driver, Nothing si non trouvé ou ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDriver(System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.String,System.String,System.String,System.Int32,System.String,System.String,System.Collections.ArrayList)">
-	<summary>
- Modifier un driver 
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="driverId">ID du driver</param>
-	<param name="name">Nom du driver</param>
-	<param name="enable">Activer/Désactiver le driver</param>
-	<param name="startauto">Démarrage automatique du driver</param>
-	<param name="iptcp">Adresse IP TCP du driver</param>
-	<param name="porttcp">Port TCP du driver</param>
-	<param name="ipudp">Adresse IP UDP du driver</param>
-	<param name="portudp">Port UDP du driver</param>
-	<param name="com">Port COM (RS-232) du driver</param>
-	<param name="refresh">Valeur de rafraichissement du driver</param>
-	<param name="picture">Image du driver</param>
-	<param name="modele">Modele de l'interface</param>
-	<param name="Parametres">Paramètres associés au driver</param>
-	<returns>ID du driver modifié, 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.StopDriver(System.String,System.String)">
-	<summary>
- Arrêter un driver
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="DriverId">ID du driver</param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.StartDriver(System.String,System.String)">
-	<summary>
- Démarrer un driver
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="DriverId">ID du driver</param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ZoneIsEmpty(System.String,System.String)">
-	<summary>
- Indique si la zone ne contient aucun device (exemple à vérifier avant de supprimer une zone)
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="zoneId">ID de la zone</param>
-	<returns>True si la zone est vide, False si la zone n'est pas vide ou ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteZone(System.String,System.String)">
-	<summary>
- Supprimer une zone 
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="zoneId">ID de la zone</param>
-	<returns>0 si exécuté, -1 si erreur ou non trouvé, 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllZones(System.String)">
-	<summary>
- Obtient la liste des zones
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<returns>List de type Zone, Nothing si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetDeviceInZone(System.String,System.String)">
-	<summary>
- Retourne la liste des devices d'une zone (par son id)
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="zoneId">ID de la zone</param>
-	<returns>List de type TemplateDevice, Nothing si zone non trouvée, vide ou si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetZoneInZone(System.String,System.String)">
-	<summary>Retourne la liste des zones d'une zone depuis son ID</summary>
-	<param name="ZoneId"></param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetMacroInZone(System.String,System.String)">
-	<summary>Retourne la liste des macros d'une zone depuis son ID</summary>
-	<param name="ZoneId"></param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnZoneByID(System.String,System.String)">
-	<summary>
- Retourne l'objet d'une zone par son ID
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="Id">ID de la zone</param>
-	<returns>Objet de type Zone, Nothing si zone non trouvée ou si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveZone(System.String,System.String,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.Zone.Element_Zone},System.String,System.String)">
-	<summary>
- Créer un nouveau zone ou sauvegarder la modif (si ID est complété)
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="zoneId">ID de la zone (vide si nouvelle zone, ID de la zone à modifier)</param>
-	<param name="name">Nom de la zone</param>
-	<param name="ListElement">Liste des éléments (devices, macros, zones) rattachés à la zone</param>
-	<param name="icon">Icone de la zone (utilisé pour les boutons)</param>
-	<param name="image">Image de la zone (background)</param>
-	<returns>ID de la zone créée ou modifiée, 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.AddDeviceToZone(System.String,System.String,System.String,System.Boolean)">
-	<summary>
- Ajouter un device à une zone
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="ZoneId">ID de la zone</param>
-	<param name="DeviceId">ID du device à ajouter</param>
-	<param name="Visible">Si le device doit être visible ou non côté client</param>
-	<returns>0 si exécuté, -1 si zone non trouvée, 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteDeviceToZone(System.String,System.String,System.String)">
-	<summary>
- Supprimer un device à une zone
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="ZoneId">ID de la zone</param>
-	<param name="DeviceId">ID du device à supprimer de la zone</param>
-	<returns>0 si exécuté, -1 si zone non trouvée, 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteMacro(System.String,System.String)">
-	<summary>
- Supprimer une macro de la config
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="macroId">ID de la macro</param>
-	<returns>0 si exécuté, -1 si macro non trouvée, 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.RunMacro(System.String,System.String)">
-	<summary>
- Execute une macro
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="Id">ID de la macro</param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllMacros(System.String)">
-	<summary>
- Retourne la liste de toutes les macros
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<returns>List de type Macro, Nothing si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnMacroById(System.String,System.String)">
-	<summary>
- Retourne la macro par son ID
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="MacroId">ID de la macro</param>
-	<returns>Objet de type macro, Nothing si macro non trouvée ou si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveMacro(System.String,System.String,System.String,System.Boolean,System.String,System.Collections.ArrayList)">
-	<summary>
- Permet de créer ou modifier une macro
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="macroId">Id de la macro à modifier, mettre une valeur null si c'est une macro à créer</param>
-	<param name="nom">Nom de la macro</param>
-	<param name="enable">Activation/désactivation de la macro</param>
-	<param name="description">Description de la macro</param>
-	<param name="listactions">List des actions associées à la macro</param>
-	<returns>ID de la macro modifée ou créée, 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllTriggers(System.String)">
-	<summary>
- Retourne la liste de toutes les triggers
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<returns>List de type Trigger, Nothing si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnTriggerById(System.String,System.String)">
-	<summary>
- Retourne le trigger par son ID
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="TriggerId">ID du trigger</param>
-	<returns>Objet de type Trigger, Nothing si trigger non trouvé ou si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteTrigger(System.String,System.String)">
-	<summary>
- Supprimer un trigger 
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="triggerId">ID du trigger</param>
-	<returns>0 si exécuté, -1 si trigger non trouvé, 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveTrigger(System.String,System.String,System.String,System.Boolean,HoMIDom.HoMIDom.Trigger.TypeTrigger,System.String,System.String,System.String,System.String,System.Collections.Generic.List{System.String})">
-	<summary>
- Permet de créer ou modifier un trigger
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="triggerId">ID du trigger (vide si nouveau, ID du trigger pour le modifier)</param>
-	<param name="nom">Nom du trigger</param>
-	<param name="enable">Activer/Désactiver le trigger</param>
-	<param name="TypeTrigger">Type de trigger</param>
-	<param name="description">Description du trigger</param>
-	<param name="conditiontimer">Condition du trigger s'il est de type Timer</param>
-	<param name="deviceid">ID du device à surveiller si trigger de type Device</param>
-	<param name="deviceproperty">Propriété du device à surveiller si trigger de type Device</param>
-	<param name="macro">Liste des ID des macros associées au trigger</param>
-	<returns>ID du trigger créé ou modifié, 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ListMethod(System.String)">
-	<summary>
- Liste les méthodes (actions) dispo pour un device (par son id)
- Retourne pour chaque élément de la liste NOMDELAMETHODE|Parametre1:TypeParametre1|Parametre2:TypeParametre2...
- '' ex pour la classe lampe cela retourne: DIM|Variation:Int32
- </summary>
-	<param name="DeviceId">ID du device</param>
-	<returns>Retourne pour chaque élément de la liste NOMDELAMETHODE|Parametre1:TypeParametre1|Parametre2:TypeParametre2...</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetLastLogs">
-	<summary>
- Retourne les derniers logs les plus récents (du plus récent au plus ancien)
- </summary>
-	<returns></returns>
+</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique">
+	<summary>Class de déclaration du Device Générique</summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetLastLogsError">
-	<summary>
- Retourne les derniers logs en erreur les plus récents (du plus récent au plus ancien)
- </summary>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetTypeLogEnable">
-	<summary>
- Retourne pour chaque type de log s'il doit être pris en compte ou non
- </summary>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetTypeLogEnable(System.Collections.Generic.List{System.Boolean})">
-	<summary>
- ''' Fixe si chaque type de log doit être pris en compte ou non
- </summary>
-	<param name="ListTypeLogEnable"></param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetMaxMonthLog(System.Int32)">
-	<summary>
- Retourne le nombre de mois à conserver une archive de log avant de le supprimer
- </summary>
-	<param name="Month">Nombre de mois à conserver</param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetMaxMonthLog">
-	<summary>
- Définit le nombre de mois à conserver une archive de log avant de le supprimer
- </summary>
-	<returns>Nombre de mois à conserver une archive de log</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.Log(HoMIDom.HoMIDom.Server.TypeLog,HoMIDom.HoMIDom.Server.TypeSource,System.String,System.String)">
-	<summary>Ecrit un log dans le fichier log au format xml</summary>
-	<param name="TypLog">Type de log ERREUR, MESSAGE, INFO...</param>
-	<param name="Source">Source du log CLIENT, SERVEUR...</param>
-	<param name="Fonction">Nom de la fonction ayant déclenchée le log</param>
-	<param name="Message">Message du log</param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnLog(System.String)">
-	<summary>
- Renvoi le fichier log suivant une requête xml si besoin
- </summary>
-	<param name="Requete"></param>
-	<returns>Log</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetMaxFileSizeLog(System.Int64)">
-	<summary>
- Fixe la taille max du fichier log en Ko avant d'en créer un nouveau
- </summary>
-	<param name="Value">Taille maximale du fichier log en Ko</param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetMaxFileSizeLog">
-	<summary>
- Retourne la taille max du fichier log en Ko
- </summary>
-	<returns>Taille maximale du fichier log en Ko</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.TestSendMail(System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.String,System.String)">
-	<summary>
- Permet de tester l'envoi de mail
- </summary>
-	<param name="IdSrv"></param>
-	<param name="Adresse"></param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPServeur(System.String)">
-	<summary>
- Retourne l'adresse SMTP du serveur
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<returns>Adresse SMTP du serveur, 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPServeur(System.String,System.String)">
-	<summary>
- Fixe l'adresse SMTP du serveur
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="Value">Adresse SMTP du serveur</param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPLogin(System.String)">
-	<summary>
- Retourne le login du serveur SMTP
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<returns>Login du serveur SMTP, 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPLogin(System.String,System.String)">
-	<summary>
- Fixe le login du serveur SMTP
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="Value">Login du serveur SMTP</param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPPassword(System.String)">
-	<summary>
- Retourne le password du serveur SMTP
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<returns>Pasword du serveur SMTP, 99 si ID du serveur erroné</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPPassword(System.String,System.String)">
-	<summary>
- Fixe le password du serveur SMTP
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="Value">Password du serveur SMTP</param>
+</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueDouble">
+	<summary>Classe valeur Double avec min/max/def/correction...</summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPMailServeur(System.String)">
-	<summary>
- Retourne l'adresse mail du serveur SMTP
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<returns>Adresse mail du serveur SMTP, 99 si ID du serveur erroné</returns>
+</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueBool">
+	<summary>Classe valeur True/False pour device ON/OFF</summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPMailServeur(System.String,System.String)">
-	<summary>
- Fixe l'adresse mail du serveur SMTP
- </summary>
-	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
-	<param name="Value">Adresse mail du serveur SMTP</param>
+</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueInt">
+	<summary>Classe valeur Integer pour device avec valeur de 0(OFF) à 100(ON)</summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPPort(System.String)">
-	<summary>
- Retourne le port SMTP à utiliser
- </summary>
-	<param name="IdSrv"></param>
-	<returns></returns>
+</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueString">
+	<summary>Classe valeur String </summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPPort(System.String,System.Int32)">
-	<summary>Fixe le password du serveur SMTP</summary>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSMTPSSL(System.String)">
-	<summary>Retourne si on doit utiliser une connexion SLL pour SMTP</summary>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSMTPSSL(System.String,System.Boolean)">
-	<summary>Fixe si on doit utiliser une connexion SLL pour SMTP</summary>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetListOfTemplate">
-	<summary>
- Retourne la liste des templates télécommande (fichier xml), présents dans le répertoire templates
- </summary>
-	<returns>List of Templates</returns>
+</member><member name="M:HoMIDom.HoMIDom.Device.APPAREIL.TestWrite(System.String,System.String,System.String)">
+	<summary>Permet de tester une commande write</summary>
+	<param name="Commande"></param>
+	<param name="Parametre1"></param>
+	<param name="Parametre2"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.CreateNewTemplate(System.String,System.String,System.String,HoMIDom.HoMIDom.Telecommande.TypeEquipement,System.Int32,System.Int32)">
-	<summary>
- Crée un nouveau template dans le répertoire templates
- </summary>
-	<param name="Fabricant">nom du fabricant</param>
-	<param name="Modele">modele</param>
-	<param name="Driver">driver</param>
-	<param name="Type">Type de base, si différent de VIDE va mettre les commandes de bases par défaut</param>
-	<returns>0 si ok, sinon message d'erreur</returns>
+</member><member name="M:HoMIDom.HoMIDom.Device.APPAREIL.TestRead">
+	<summary>Permet de tester une commande read</summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.StartLearning(System.String,System.String)">
-	<summary>Demander un apprentissage à un driver</summary>
-	<returns></returns>
+</member><member name="M:HoMIDom.HoMIDom.Device.AUDIO.TestWrite(System.String,System.String,System.String)">
+	<summary>Permet de tester une commande write</summary>
+	<param name="Commande"></param>
+	<param name="Parametre1"></param>
+	<param name="Parametre2"></param>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveTemplate(System.String,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes},System.Int32,System.Int32)">
-	<summary>
- Sauvegarde les commandes dans un template donné
- </summary>
-	<param name="IdSrv">Id du Serveur</param>
-	<param name="Template">Nom du template</param>
-	<param name="Commandes">Liste des commandes</param>
-	<returns>O si ok sinon message d'erreur</returns>
+</member><member name="M:HoMIDom.HoMIDom.Device.AUDIO.TestRead">
+	<summary>Permet de tester une commande read</summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.TelecommandeSendCommand(System.String,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Device.MULTIMEDIA.EnvoyerCommande(System.String)">
 	<summary>
- Demande au device d'envoyer une commande (telecommande) à son driver
+ Envoyer une commande au driver
  </summary>
-	<param name="IdSrv">Id du serveur, retourne 99 si non OK</param>
-	<param name="IdDevice">Id du device concerné</param>
-	<param name="Commande">Nom de la Commande à envoyée</param>
-	<returns>0 si Ok sinon erreur</returns>
+	<param name="Commande"></param>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.IHoMIDom">
-	<summary>
- Liste toutes les functions et propriétés accessibles par les clients
- </summary>
+</member><member name="T:HoMIDom.HoMIDom.Device">
+	<summary>Class Device, définie tous différents types de devices</summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.XML.#ctor(System.String)">
 	<summary>Constructeur de la classe</summary>
@@ -3140,192 +2457,6 @@ HoMIDom
  </summary>
 	<param name="xpath"></param>
 	<returns>Un entier</returns>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL">
-	<summary>
- modules pour diriger un appareil  ON/OFF
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.AUDIO">
-	<summary>
- module de type audio
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.BAROMETRE">
-	<summary>
- pour stocker les valeur issu d'un barometre meteo ou web
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.BATTERIE">
-	<summary>
- Pour stocker les valeurs issu d'une batterie
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.COMPTEUR">
-	<summary>
- compteur DS2423, RFXPower...
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.CONTACT">
-	<summary>
- detecteur de contact : switch 1-wire
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.DETECTEUR">
-	<summary>
- tous detecteurs : mouvement, obscurite...
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.DIRECTIONVENT">
-	<summary>
- module donnant la direction du vent
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.ENERGIEINSTANTANEE">
-	<summary>
- Valeur de Puissance d'energie instantanée
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.ENERGIETOTALE">
-	<summary>
- Valeur de Puissance d'energie totale
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.FREEBOX">
-	<summary>
- FreeBox
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEBOOLEEN">
-	<summary>
- Générique Boolean
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUESTRING">
-	<summary>
- Générique de type String
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE">
-	<summary>
- Générique de type numérique
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE">
-	<summary>
- Capteur d'humidité
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.LAMPE">
-	<summary>
- Module de type lampe avec variation
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.METEO">
-	<summary>
- Station meteo (physique ou web)
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA">
-	<summary>
- Multimedia
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.PLUIECOURANT">
-	<summary>
- Valeur de pluie courante
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.PLUIETOTAL">
-	<summary>
- Valeur de pluie totale
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.SWITCH">
-	<summary>
- Interrupteur
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.TELECOMMANDE">
-	<summary>
- Telecommande
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE">
-	<summary>
- Capteur de température
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE">
-	<summary>
- Température de consigne (ex: thermostat)
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.UV">
-	<summary>
- Indice UV soleil
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.VITESSEVENT">
-	<summary>
- Vitesse du vent
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.VOLET">
-	<summary>
- Volet roulant
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device.ListeDevices">
-	<summary>Indique la liste des devices gérés</summary>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.DeviceGenerique.GetDefautDeviceImage(System.String)">
-	<summary>
- Retourne la liste de tous les fichiers image (png ou jpg) présents sur le serveur
- </summary>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique">
-	<summary>Class de déclaration du Device Générique</summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueDouble">
-	<summary>Classe valeur Double avec min/max/def/correction...</summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueBool">
-	<summary>Classe valeur True/False pour device ON/OFF</summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueInt">
-	<summary>Classe valeur Integer pour device avec valeur de 0(OFF) à 100(ON)</summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueString">
-	<summary>Classe valeur String </summary>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.APPAREIL.TestWrite(System.String,System.String,System.String)">
-	<summary>Permet de tester une commande write</summary>
-	<param name="Commande"></param>
-	<param name="Parametre1"></param>
-	<param name="Parametre2"></param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.APPAREIL.TestRead">
-	<summary>Permet de tester une commande read</summary>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.AUDIO.TestWrite(System.String,System.String,System.String)">
-	<summary>Permet de tester une commande write</summary>
-	<param name="Commande"></param>
-	<param name="Parametre1"></param>
-	<param name="Parametre2"></param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.AUDIO.TestRead">
-	<summary>Permet de tester une commande read</summary>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.MULTIMEDIA.EnvoyerCommande(System.String)">
-	<summary>
- Envoyer une commande au driver
- </summary>
-	<param name="Commande"></param>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device">
-	<summary>Class Device, définie tous différents types de devices</summary>
-	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Fabricant">
 	<summary>
  Définit ou retourne le fabricant de l'équipement
@@ -3376,6 +2507,953 @@ HoMIDom
 </member><member name="T:HoMIDom.HoMIDom.Telecommande">
 	<summary>
  Class pour gérer les télécommandes
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.#ctor(System.String,HoMIDom.HoMIDom.Server)">
+	<summary>          
+ Creation de l'objet
+ </summary>
+	<param name="basename">Nom de la base de donnée : homidom / medias</param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.getconnecte">
+	<summary>Fourni l'etat d'une connexion à la bdd</summary>
+	<returns>True/False</returns>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.connect">
+	<summary>          
+ Connection à une BDD Sqlite
+ </summary>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.disconnect">
+	<summary>
+ DeConnection à une BDD Sqlite 
+ </summary>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.nonquery(System.String,System.String[])">
+	<summary>
+ Requete sans résultat
+ </summary>
+	<param name="commande">ex : DELETE FROM contact where Contact_id=10</param>
+	<param name="params">Liste es paramètres utilisés dans la query sous forme @parameter0, @parameter1 etc</param>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.query(System.String,System.Data.DataTable@,System.String[])">
+	<summary>Requete avec résultat</summary>
+	<param name="commande">ex : SELECT * FROM contact</param>
+	<param name="resultat">Arralist contenant la liste des résultats</param>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.querysimple(System.String,System.String@,System.String[])">
+	<summary>Requete avec résultat simple</summary>
+	<param name="commande">ex : SELECT * FROM contact</param>
+	<param name="resultat">Arralist contenant la liste des résultats</param>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.count(System.String,System.Int32@)">
+	<summary>Compte le nombre de resultat</summary>
+	<param name="commande">ex : SELECT COUNT(*) FROM table WHERE col1 = 'xxx'</param>
+	<param name="resultat">Nombre de resultat</param>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Sqlite">
+	<summary>      
+ Classe de gestion des base de données sqlite     
+ </summary>   
+    ''' <remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Api.GenerateGUID">
+	<summary>
+ Génère un ID unique
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Api.Evaluation(System.String@,System.Double)">
+	<summary>
+ Retourne le résultat d'un calcul (formule, ex: *2 +3) en se basant sur une valeur de base (Valeur)
+ </summary>
+	<param name="Formule"></param>
+	<param name="Valeur"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.ThreadAction">
+	<summary>
+ Execute chaque Action
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Users.TypeProfil.invite">
+	<summary>
+ Invité
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Users.TypeProfil.user">
+	<summary>
+ Utilisateur (actions limitées)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Users.TypeProfil.admin">
+	<summary>
+ Administrateur
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Users.TypeProfil">
+	<summary>
+ Type de profil disponible
+ </summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.ID">
+	<summary>
+ ID du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.UserName">
+	<summary>
+ Identifiant pour la connexion
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.Nom">
+	<summary>
+ Nom du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.Prenom">
+	<summary>
+ Prénom du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.Profil">
+	<summary>
+ Profil du user (invité, user, admin)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.Password">
+	<summary>
+ Password du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.NumberIdentification">
+	<summary>
+ Identification du user utilisé pour RFID, code à barre....
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.Image">
+	<summary>
+ Image du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.eMail">
+	<summary>
+ eMail principale du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.eMailAutre">
+	<summary>
+ Adresse secondaire email du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.TelFixe">
+	<summary>
+ Numéro de telephone fixe du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.TelMobile">
+	<summary>
+ Numéro de téléphone mobile du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.TelAutre">
+	<summary>
+ Numéro de téléphone divers pour user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.Adresse">
+	<summary>
+ Adresse du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.Ville">
+	<summary>
+ Ville du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Users.User.CodePostal">
+	<summary>
+ Code Postal du user
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Users.User">
+	<summary>
+ Classe permettant d'un user
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Users">
+	<summary>
+ Classe Users pour gérer les utilisateurs
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.DeviceAction">
+	<summary>
+ Class template pour lister les actions possibles sur un device
+ </summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Groupes.DeviceAction">
+	<summary>
+ List des actions associées au Device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Groupes">
+	<summary>
+ Permet de regrouper un ensemble de devices du même type
+ </summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Macro.ID">
+	<summary>
+ ID de la macro
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Macro.Nom">
+	<summary>
+ Nom de la macro
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Macro.Description">
+	<summary>
+ Decription de la macro
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Macro.Enable">
+	<summary>
+ Active la macro
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Macro.ListActions">
+	<summary>
+ Liste des actions de la macro macro est False
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Macro.Execute(HoMIDom.HoMIDom.Server)">
+	<summary>
+ Exécuter la macro
+ </summary>
+	<param name="Server"></param>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Macro">
+	<summary>Class Macro, Défini le type pour les macros</summary>
+	<remarks>_condition contient un tableau des conditions à vérifier pour lancer les actions si TRUE ou si FALSE</remarks>
+</member><member name="F:HoMIDom.HoMIDom.Trigger.TypeTrigger.TIMER">
+	<summary>
+ Trigger sur une date/heure
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Trigger.TypeTrigger.DEVICE">
+	<summary>
+ Trigger suivant une propriété d'un device
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Trigger.TypeTrigger">
+	<summary>
+ Type de trigger TIME ou DEVICE
+ </summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Trigger.ID">
+	<summary>
+ ID du trigger
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Trigger.Nom">
+	<summary>
+ Nom du trigger
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Trigger.Description">
+	<summary>
+ Description du trigger
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Trigger.Type">
+	<summary>
+ Type du trigger 0=Time 1=Device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Trigger.Enable">
+	<summary>
+ Active de trigger
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Trigger.ConditionTime">
+	<summary>
+ Condition du trigger suivant Date/Time
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Trigger.ConditionDeviceId">
+	<summary>
+ Id du device de la condition
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Trigger.ConditionDeviceProperty">
+	<summary>
+ Nom de la Propriété du device à surveillé pour le trigger
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Trigger.Prochainedateheure">
+	<summary>
+ DateHeure de la prochaine exécution
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Trigger.ListMacro">
+	<summary>
+ Liste des macros à déclencher
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Trigger.maj_cron">
+	<summary>convertit la condition au format cron "cron_ss#mm#hh#jj#MMM#JJJ" en dateTime dans le champ prochainedateheure</summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Trigger">
+	<summary>Class trigger, Défini le type pour les triggers Device/timers</summary>
+	<remarks>
+ _condition contient un string: DeviceID ou CRON : le déclencheur du trigger
+ _macro contient un tableau de string : MacroID : liste des macros à lancer
+ </remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionDevice">
+	<summary>
+ Action de type Device
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionMail">
+	<summary>
+ Action de type envoyer un mail
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionIf">
+	<summary>
+ Action de type If Then/else
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionMacro">
+	<summary>
+ Action de type lancer une macro
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionSpeech">
+	<summary>
+ Action de type parler
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionHttp">
+	<summary>
+ Action de type commande http
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionLogEvent">
+	<summary>
+ Action de type log windows
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionLogEventHomidom">
+	<summary>
+ Action de type log Homidom
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionDOS">
+	<summary>
+ Action de type log Commnde Dos
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionVB">
+	<summary>
+ Action de type ScriptVB
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.TypeAction">
+	<summary>
+ Enumération des types d'actions
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeSigne.Egal">
+	<summary>
+ Egal
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeSigne.Inferieur">
+	<summary>
+ Inférieur
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeSigne.InferieurEgal">
+	<summary>
+ Inférieur ou égal
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeSigne.Superieur">
+	<summary>
+ Supérieur
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeSigne.SuperieurEgal">
+	<summary>
+ Supérieur ou égal
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeSigne.Different">
+	<summary>
+ Différent de
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.TypeSigne">
+	<summary>
+ Enumération des types  de signe (inferieur,egal,different...)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeOperateur.NONE">
+	<summary>
+ Aucun
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeOperateur.AND">
+	<summary>
+ AND
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeOperateur.OR">
+	<summary>
+ OR
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.TypeOperateur">
+	<summary>
+ Enumération des types d'operateur
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeCondition.DateTime">
+	<summary>
+ Condition du type Date et heure
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeCondition.Device">
+	<summary>
+ Condition portant sur une propriété d'un device
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeCondition.Parenthese">
+	<summary>
+ Parenthèse (non utilisé)
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.TypeCondition">
+	<summary>
+ Enumération des types de conditions
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionDevice">
+	<summary>
+ Action Device
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionMail">
+	<summary>
+ Action Mail
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionIf">
+	<summary>
+ Action If
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionMacro">
+	<summary>
+ Action macro
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.Condition">
+	<summary>
+ Condition pour action If
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionSpeech">
+	<summary>
+ Action parler
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionHttp">
+	<summary>
+ Action parler
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionLogEvent">
+	<summary>
+ Action Log windows
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionLogEventHomidom">
+	<summary>
+ Action Log Homidom
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionDos">
+	<summary>
+ Action Dos 
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionVB">
+	<summary>
+ Action Dos 
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.log">
+	<summary>log dans les fichiers logs et base sqlite</summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action">
+	<summary>Class action, Défini les actions à réaliser depuis les macros...</summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Name">
+	<summary>
+ Nom du device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ID">
+	<summary>
+ ID du device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Enable">
+	<summary>
+ Activation/désactivation du device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.DriverID">
+	<summary>
+ ID du driver associé au device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Description">
+	<summary>
+ Description qui peut être le modèle du device ou autre chose
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Type">
+	<summary>
+ Type de device TEMPERATURE|HUMIDITE|APPAREIL|LUMIERE|CONTACT|TV…
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Unit">
+	<summary>
+ Unité du composant
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Puissance">
+	<summary>
+ Puissance du composant
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.AllValue">
+	<summary>
+ Prendre en compte toutes les valeurs même inchangées
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Adresse1">
+	<summary>
+ Adresse par défaut (pour le X10 par exemple)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Adresse2">
+	<summary>
+ Adresse supplémentaire si besoin (cas du RFXCOM)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.DateCreated">
+	<summary>
+ Date et heure de création du device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.LastChange">
+	<summary>
+ Date et heure de la derniere modification de Value
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.LastChangeDuree">
+	<summary>
+ Si Lastchanged+LastchangeDuree inférieur à Now alors le composant a un problème car il n'a pas emis depuis au moins lastchangedduree.
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Modele">
+	<summary>
+ Modèle du device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Picture">
+	<summary>
+ Adresse de son image
+ </summary>
+	<value></value>
+	<returns>Chemin complet du fichier image situé sur le serveur </returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Solo">
+	<summary>
+ Si le device est solo ou s'il contient plusieurs I/O
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.LastEtat">
+	<summary>
+ si =true, on ne prend pas en comtpe les modifications style 19.1 19 19.1 19...
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.DeviceAction">
+	<summary>
+ List des actions associées au Device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Refresh">
+	<summary>
+ Valeur de rafraichissement du device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Value">
+	<summary>
+ Valeur du device
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ValueLast">
+	<summary>
+ Contien l'avant derniere valeur
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ValueMin">
+	<summary>
+ Valeur minimale que value peut avoir
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ValueMax">
+	<summary>
+ Valeur maximale que value peut avoir 
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ValueDef">
+	<summary>
+ Valeur par défaut de Value au démarrage du Device, si Vide = Value
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Precision">
+	<summary>
+ Precision de value
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Correction">
+	<summary>
+ Correction en +/-/*/div à effectuer sur la value
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Formatage">
+	<summary>
+ Format de value 0.0 ou 0.00...
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionActuel">
+	<summary>
+ Condition actuelle (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.TemperatureActuel">
+	<summary>
+ Temperature actuelle (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.HumiditeActuel">
+	<summary>
+ Humidité actuelle (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconActuel">
+	<summary>
+ Icon de la meteo actuelle (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.VentActuel">
+	<summary>
+ Vitesse du vent actuelle (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.JourToday">
+	<summary>
+ Nom du jour actuel (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MinToday">
+	<summary>
+ Temperature minimale du jour actuel (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MaxToday">
+	<summary>
+ Temperature maximale du jour actuel (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconToday">
+	<summary>
+ Icon de la meteo du jour actuel (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionToday">
+	<summary>
+ Condition météorologique du jour actuel (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.JourJ1">
+	<summary>
+ Nom du jour + 1 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MinJ1">
+	<summary>
+ Température minimale à J+1 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MaxJ1">
+	<summary>
+ Température maximale à J+1 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconJ1">
+	<summary>
+ Icon de la météo à J+1 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionJ1">
+	<summary>
+ Condition météorologique à J+1 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.JourJ2">
+	<summary>
+ Nom du jour + 2 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MinJ2">
+	<summary>
+ Température minimale à J+2 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MaxJ2">
+	<summary>
+ Température maximale à J+2 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconJ2">
+	<summary>
+ Icon de la météo à J+2 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionJ2">
+	<summary>
+ Condition météorologique à J+2 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.JourJ3">
+	<summary>
+ Nom du jour à j+3 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MinJ3">
+	<summary>
+ Température minimale à j+3 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.MaxJ3">
+	<summary>
+ Température maximale à j+3 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.IconJ3">
+	<summary>
+ Icon de la meteo à j+3 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.ConditionJ3">
+	<summary>
+ Condition météorologique à j+3 (device meteo)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.TemplateDevice.GetDeviceCommandePlus">
+	<summary>
+ Retourne la liste des commandes avancées
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.TemplateDevice.Commandes">
+	<summary>
+ Liste des noms des commandes IR (device IR)
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.TemplateDevice">
+	<summary>
+ Template de class de type Device pour le service web
  </summary>
 	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Zone.ID">
@@ -3435,6 +3513,52 @@ HoMIDom
 </member><member name="T:HoMIDom.HoMIDom.Zone">
 	<summary>
  Classe Zone, une zone peut représenter une maison, un étage, un groupe de pièces, une pièce, un endroit dans une pièce
+ </summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Extension">
+	<summary>
+ Nom de l'extension ex: .wma
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Enable">
+	<summary>
+ Si l'extension doit être prise en compte
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Audio.ExtensionAudio">
+	<summary>Type d'extension Audio</summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Repertoire">
+	<summary>
+ Chemin du répertoire
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Enable">
+	<summary>
+ Si le répertoire doit être pris en compte
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Audio.RepertoireAudio">
+	<summary>
+ Type Répertoire Audio
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Audio.FilePlayList">
+	<summary>
+ Class Fichier Audio
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Audio">
+	<summary>
+ Classe de gestion Audio
  </summary>
 	<remarks></remarks>
 </member>

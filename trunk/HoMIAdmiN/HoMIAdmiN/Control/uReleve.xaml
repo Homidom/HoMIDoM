@@ -10,36 +10,36 @@
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Margin="0">
             <StackPanel Height="550"></StackPanel>
         </Border>
-        <Image Height="40" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgDevice" Stretch="Fill" VerticalAlignment="Top" Width="40" Source="/HoMIAdmiN;component/Images/Releve_128.png">
-            <Image.LayoutTransform >
-                <RotateTransform CenterX="0" CenterY="0" Angle="-10" />
-            </Image.LayoutTransform>
-        </Image>
-        <StackPanel Margin="10,55,10,10">
-                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" >
-                    <Label Name="LblDev" Content="#####" Width="250" Foreground="White" HorizontalAlignment="Left" HorizontalContentAlignment="Center" />
-                 </StackPanel>
+        <StackPanel Margin="10,10,10,10">
             <StackPanel Orientation="Horizontal" >
-                <DataGrid Name="DataGrid1" Margin="5" RowBackground="LightBlue" AlternatingRowBackground="LightYellow" Width="400" Height="450"></DataGrid>
+                <DataGrid Name="DataGrid1" Margin="5" RowBackground="#FFAFAFAF" AlternatingRowBackground="LightGray" Height="525" IsReadOnly="True" Background="#FF636060" BorderBrush="Gray" SelectionMode="Single" UseLayoutRounding="False" HeadersVisibility="Column" AutoGenerateColumns="True" Width="300"></DataGrid>
                 <StackPanel HorizontalAlignment="Left">
                 <StackPanel >
 
                     <!--show the selected item-->
+                        <Label Name="LblDev" Content="#####" Width="250" Foreground="White" HorizontalAlignment="Left" HorizontalContentAlignment="Center" />
 
-                    <GroupBox Margin="5">
+                        <GroupBox Margin="5">
                         <GroupBox.Header>
                             <Label Foreground="White" FontWeight="Bold">Sélection</Label>
                         </GroupBox.Header>
                         <StackPanel >
-                            <TextBox Name="txtID"  Text="{Binding ElementName=DataGrid1,Path=SelectedItem.IdDevice}" Visibility="Collapsed"  />
-                            <StackPanel Orientation="Horizontal" >
+                                <!--
+                                <TextBox Name="txtID"  Text="{Binding ElementName=DataGrid1,Path=SelectedItem.IdDevice}" Visibility="Collapsed"  />
+                                <TextBox Name="txtSource"  Text="{Binding ElementName=DataGrid1,Path=SelectedItem.Source}" Visibility="Collapsed"  />
+                                <TextBox Name="txtTimeOld"  Text="{Binding ElementName=DataGrid1,Path=SelectedItem.DateTime}" Visibility="Collapsed"  />
+                                <TextBox Name="txtValueOld"  Text="{Binding ElementName=DataGrid1,Path=SelectedItem.Value}" Visibility="Collapsed"  />
+                                -->
+                                <StackPanel Orientation="Horizontal" >
                                 <Label Content="DateTime:" Foreground=" white" Width="70"/>
-                                <TextBox  Name="txtTime"  Text="{Binding ElementName=DataGrid1,Path=SelectedItem.DateTime}" Width="150" IsReadOnly="True" />
-                            </StackPanel>
+                                    <!--<TextBox  Name="txtTime"  Text="{Binding ElementName=DataGrid1,Path=SelectedItem.DateTime}" Width="150" IsReadOnly="false" /> -->
+                                    <TextBox  Name="txtTime"  Text="" Width="150" />
+                                </StackPanel>
                             <StackPanel Orientation="Horizontal" >
                                 <Label Content="Valeur:" Foreground=" white" Width="70"/>
-                                <TextBox  Name="txtValue"  Text="{Binding ElementName=DataGrid1,Path=SelectedItem.Value}" Width="150"/>
-                            </StackPanel>
+                                    <!-- <TextBox  Name="txtValue"  Text="{Binding ElementName=DataGrid1,Path=SelectedItem.Value}" Width="150"/> -->
+                                    <TextBox  Name="txtValue"  Text="" Width="150"/>
+                                </StackPanel>
                         </StackPanel>
                     </GroupBox>
                         <StackPanel Orientation="Horizontal" >
@@ -52,11 +52,12 @@
                         </StackPanel>
                     </StackPanel>
 
+                    
                 <StackPanel Margin="5">
 
                     <!--show the selected item-->
 
-                    <GroupBox Margin="0,0,0,5">
+                    <GroupBox Margin="0,10,0,5">
                         <GroupBox.Header>
                             <Label Foreground="White" FontWeight="Bold">Ajout de données</Label>
                         </GroupBox.Header>
