@@ -66,6 +66,7 @@
                             <Image Tag="tag_composant" Name="img_composant" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/Composant_128.png" ToolTip="Gérer les composants" />
                             <Label Name="label_menu_composant" Content="Composants" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Image Tag="tag_composant_nvx" Name="img_composant_gerer_nvx" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/NouveauComposant_32.png" ToolTip="Nouveau(x) composant(s)" />
                                 <Image Tag="tag_composant" Name="img_composant_gerer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Configurer_32.png" ToolTip="Gérer les composants" />
                                 <Image Tag="tag_composant" Name="img_composant_ajouter" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter_32.png" ToolTip="Ajouter un composant" />
                                 <Image Tag="tag_composant" Name="img_composant_editer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Modifier_32.png" ToolTip="Editer un composant" />

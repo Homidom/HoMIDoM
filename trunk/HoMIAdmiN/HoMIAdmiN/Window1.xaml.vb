@@ -119,6 +119,13 @@ Class Window1
                         LCS.Tag = LHS.Content
                     End If
 
+                    'Vérifie si nouveau device
+                    If myService.AsNewDevice Then
+                        If ImgNewDevice.Visibility = Windows.Visibility.Collapsed Then ImgNewDevice.Visibility = Windows.Visibility.Visible
+                    Else
+                        If ImgNewDevice.Visibility = Windows.Visibility.Visible Then ImgNewDevice.Visibility = Windows.Visibility.Collapsed
+                    End If
+
                     'Modifie les LOG
                     Dim list As List(Of String) = myService.GetLastLogs
                     Dim a As String = ""
@@ -2259,7 +2266,14 @@ Class Window1
                     Catch ex As Exception
                         MessageBox.Show("ERREUR Sub MainMenuAutre aide: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
-
+                Case "tag_composant_nvx" 'nvx composants
+                    Try
+                     Dim x As New uNewDevice()
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        AffControlPage(x)
+                    Catch ex As Exception
+                        MessageBox.Show("ERREUR Sub MainMenuAutre nvx composant: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    End Try
                 Case "tag_quitter"
                     Try
                         If IsConnect = True And FlagChange Then
@@ -2823,6 +2837,25 @@ Class Window1
 
 #End Region
 
+    Private Sub ImgNewDevice_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgNewDevice.MouseDown
+        Try
+            If e.ClickCount = 1 Then
+                Dim x As New uNewDevice()
+                AddHandler x.CloseMe, AddressOf UnloadControl
+                AffControlPage(x)
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub ImgNewDevice_MouseDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    'Private Sub BtnTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTest.Click
+    '    Try
+    '        myService.AddDetectNewDevice(Api.GenerateGUID, "DE96B466-2540-11E0-A321-65D7DFD72085")
+    '    Catch ex As Exception
+    '        MsgBox(ex.ToString)
+    '    End Try
+    'End Sub
 End Class
 
 
