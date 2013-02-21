@@ -8477,7 +8477,7 @@ Namespace HoMIDom
         ''' <param name="Adresse2"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function AddDetectNewDevice(ByVal Adresse1 As String, ByVal DriverId As String, Optional ByVal Type As String = "", Optional ByVal Adresse2 As String = "") As String Implements IHoMIDom.AddDetectNewDevice
+        Public Function AddDetectNewDevice(ByVal Adresse1 As String, ByVal DriverId As String, Optional ByVal Type As Integer = -1, Optional ByVal Adresse2 As String = "") As String Implements IHoMIDom.AddDetectNewDevice
             Try
                 Dim flag As Boolean = False
                 Dim _return As String = ""
@@ -8540,10 +8540,21 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub SaveNewDevice(ByVal NewDevice As NewDevice) Implements IHoMIDom.SaveNewDevice
             Try
-                If (From Dev As NewDevice In _ListNewDevices Where Dev.ID = NewDevice.ID Select Dev).Count > 0 Then
-                    Dim Resultat As NewDevice = (From Dev In _ListNewDevices Where Dev.ID = NewDevice.ID Select Dev).First
-                    Resultat = NewDevice
-                End If
+
+                For Each _dev As NewDevice In _ListNewDevices
+                    If _dev.ID = NewDevice.ID Then
+                        _dev.Adresse1 = NewDevice.Adresse1
+                        _dev.Adresse2 = NewDevice.Adresse2
+                        _dev.DateTetect = NewDevice.DateTetect
+                        _dev.ID = NewDevice.ID
+                        _dev.IdDriver = NewDevice.IdDriver
+                        _dev.Name = NewDevice.Name
+                        _dev.Ignore = NewDevice.Ignore
+                        _dev.Type = NewDevice.Type
+                        Exit For
+                    End If
+                Next
+
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveNewDevice", "Exception : " & ex.Message)
             End Try
@@ -8599,7 +8610,7 @@ Namespace HoMIDom
 
                 For i As Integer = 0 To _ListNewDevices.Count - 1
                     If _ListNewDevices.Item(i).ID = NewDeviceId Then
-                        _ListDevices.RemoveAt(i)
+                        _ListNewDevices.RemoveAt(i)
 
                         DeleteNewDevice = 0
                         Exit Function

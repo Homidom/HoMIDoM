@@ -64,7 +64,7 @@
     Private Sub Autre_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_histo.MouseLeftButtonDown, _
         img_config.MouseLeftButtonDown, img_config_log.MouseLeftButtonDown, _
         img_config_sauvegarder.MouseLeftButtonDown, img_aide.MouseLeftButtonDown, img_multimedia.MouseDown, _
-        img_quitter.MouseLeftButtonDown, img_quitter_start.MouseLeftButtonDown, img_quitter_stop.MouseLeftButtonDown
+        img_quitter.MouseLeftButtonDown, img_quitter_start.MouseLeftButtonDown, img_quitter_stop.MouseLeftButtonDown, img_composant_gerer_nvx.MouseLeftButtonDown
         Try
             If e.ClickCount = 1 Then RaiseEvent menu_autre(sender.tag)
         Catch ex As Exception
