@@ -99,26 +99,9 @@ Class Window1
                     LblStatus.Content = Now.ToLongDateString & " " & myService.GetTime & " "
 
                     'Modifie les heures du soleil
-                    If LHS.Tag IsNot Nothing Then
-                        If Now.Minute = 0 And LHS.Content <> LHS.Tag Then
-                            LHS.Content = CDate(myService.GetHeureLeverSoleil).ToShortTimeString
-                            LHS.Tag = LHS.Content
-                        End If
-                    Else
-                        LHS.Content = CDate(myService.GetHeureLeverSoleil).ToShortTimeString
-                        LHS.Tag = LHS.Content
-                    End If
-
-                    If LCS.Tag IsNot Nothing Then
-                        If Now.Minute = 0 And LCS.Content <> LCS.Tag Then
-                            LCS.Content = CDate(myService.GetHeureCoucherSoleil).ToShortTimeString
-                            LCS.Tag = LHS.Content
-                        End If
-                    Else
-                        LCS.Content = CDate(myService.GetHeureCoucherSoleil).ToShortTimeString
-                        LCS.Tag = LHS.Content
-                    End If
-
+                    LHS.Content = CDate(myService.GetHeureLeverSoleil).ToShortTimeString
+                    LCS.Content = CDate(myService.GetHeureCoucherSoleil).ToShortTimeString
+                   
                     'Vérifie si nouveau device
                     If myService.AsNewDevice Then
                         If ImgNewDevice.Visibility = Windows.Visibility.Collapsed Then ImgNewDevice.Visibility = Windows.Visibility.Visible
@@ -128,48 +111,45 @@ Class Window1
 
                     'Modifie les LOG
                     Dim list As List(Of String) = myService.GetLastLogs
-                    Dim a As String = ""
+                    Dim _string As String = ""
                     For Each logerror In list
-                        a &= logerror & vbCrLf
-                        'If (i <> list.Count - 1) Then a &= vbCrLf
+                        _string &= logerror & vbCrLf
                     Next
-                    LOG.ToolTip = a
-                    ImgLog.ToolTip = a
+                    LOG.ToolTip = _string
+                    ImgLog.ToolTip = _string
                     LOG.Content = Mid(list(0), 1, 100) & "..."
-                    a = ""
-                    list = Nothing
+                    list.Clear()
 
                     list = myService.GetLastLogsError
                     If list.Count > 0 Then
-                        Dim _tool As String = ""
                         For Each logerror As String In list
                             If String.IsNullOrEmpty(logerror) = False Then
-                                _tool &= logerror & vbCrLf
+                                _string &= logerror & vbCrLf
                                 If ImgError.Visibility <> Windows.Visibility.Visible Then ImgError.Visibility = Windows.Visibility.Visible
-                                ImgError.ToolTip = _tool
+                                ImgError.ToolTip = _string
                             End If
                         Next
-                        _tool = Nothing
+                        _string = Nothing
                     Else
                         If ImgError.Visibility = Windows.Visibility.Visible Then ImgError.Visibility = Windows.Visibility.Collapsed
                     End If
-                    list = Nothing
+                    list.Clear()
 
                     list = myService.GetDeviceNoMaJ(IdSrv)
                     If list.Count > 0 Then
-                        Dim _tool As String = ""
                         For Each logerror As String In list
                             If String.IsNullOrEmpty(logerror) = False Then
-                                _tool &= logerror & vbCrLf
+                                _string &= logerror & vbCrLf
                                 If ImgDeviceNoMaj.Visibility <> Windows.Visibility.Visible Then ImgDeviceNoMaj.Visibility = Windows.Visibility.Visible
-                                ImgDeviceNoMaj.ToolTip = _tool
+                                ImgDeviceNoMaj.ToolTip = _string
                             End If
                         Next
-                        _tool = Nothing
+                        _string = Nothing
                     Else
                         If ImgDeviceNoMaj.Visibility = Windows.Visibility.Visible Then ImgDeviceNoMaj.Visibility = Windows.Visibility.Collapsed
                     End If
-                    list = Nothing
+                    list.Clear()
+                    _string = Nothing
 
                 Catch ex As Exception
                     IsConnect = False
