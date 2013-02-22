@@ -115,8 +115,8 @@ Partial Public Class uDriver
                 'si c'est le driver virtuel, on cache certains champs
                 If x.Nom = "Virtuel" Then
                     Label1.Content = "Driver SYSTEME"
-                    ChkEnable.Visibility = Windows.Visibility.Collapsed
-                    CbStartAuto.Visibility = Windows.Visibility.Collapsed
+                    'ChkEnable.Visibility = Windows.Visibility.Collapsed
+                    'CbStartAuto.Visibility = Windows.Visibility.Collapsed
                     CbAutoDiscover.Visibility = Windows.Visibility.Collapsed
                     StkModele.Visibility = Windows.Visibility.Collapsed
                     StkRefresh.Visibility = Windows.Visibility.Collapsed

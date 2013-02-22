@@ -3,7 +3,7 @@
     Public FlagChange As Boolean = False
     Public IsConnect As Boolean = False 'True si connecté au serveur
     Public myService As HoMIDom.HoMIDom.IHoMIDom
-
+    Public NewDevice As HoMIDom.HoMIDom.NewDevice = Nothing
 
     Public Enum EAction
         Nouveau

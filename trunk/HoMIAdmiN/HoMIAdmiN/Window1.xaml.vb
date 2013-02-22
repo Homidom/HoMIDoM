@@ -2270,6 +2270,7 @@ Class Window1
                     Try
                      Dim x As New uNewDevice()
                         AddHandler x.CloseMe, AddressOf UnloadControl
+                        AddHandler x.CreateNewDevice, AddressOf CreateNewDevice
                         AffControlPage(x)
                     Catch ex As Exception
                         MessageBox.Show("ERREUR Sub MainMenuAutre nvx composant: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -2842,6 +2843,7 @@ Class Window1
             If e.ClickCount = 1 Then
                 Dim x As New uNewDevice()
                 AddHandler x.CloseMe, AddressOf UnloadControl
+                AddHandler x.CreateNewDevice, AddressOf CreateNewDevice
                 AffControlPage(x)
             End If
         Catch ex As Exception
@@ -2849,13 +2851,19 @@ Class Window1
         End Try
     End Sub
 
-    'Private Sub BtnTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTest.Click
-    '    Try
-    '        myService.AddDetectNewDevice(Api.GenerateGUID, "DE96B466-2540-11E0-A321-65D7DFD72085")
-    '    Catch ex As Exception
-    '        MsgBox(ex.ToString)
-    '    End Try
-    'End Sub
+    Private Sub CreateNewDevice(ByVal MyObject As Object)
+        Try
+            UnloadControl(MyObject)
+
+            Tabcontrol1.SelectedIndex = 1
+            Dim x As New uDevice(Classe.EAction.Nouveau, "")
+            AddHandler x.CloseMe, AddressOf UnloadControl
+            AffControlPage(x)
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub CreateNewDevice: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
 End Class
 
 

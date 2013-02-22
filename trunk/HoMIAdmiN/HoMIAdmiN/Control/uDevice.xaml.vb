@@ -15,6 +15,7 @@ Partial Public Class uDevice
     Dim _Driver As HoMIDom.HoMIDom.TemplateDriver = Nothing
     Dim x As HoMIDom.HoMIDom.TemplateDevice = Nothing
     Dim ListeDrivers As List(Of TemplateDriver)
+    Dim flagnewdev As Boolean = False
 
     Public Sub New(ByVal Action As Classe.EAction, ByVal DeviceId As String)
         Try
@@ -45,6 +46,24 @@ Partial Public Class uDevice
                 ImgDevice.Tag = ""
                 CbType.IsEnabled = False
 
+                If NewDevice IsNot Nothing Then
+                    TxtNom.Text = NewDevice.Name
+                    TxtAdresse1.Text = NewDevice.Adresse1
+                    TxtAdresse2.Text = NewDevice.Adresse2
+                    CbDriver.SelectedValue = myService.ReturnDriverByID(IdSrv, NewDevice.IdDriver).Nom
+                    CbType.IsEnabled = True
+
+                    Dim y As Integer = 0
+                    For Each value As ListeDevices In [Enum].GetValues(GetType(HoMIDom.HoMIDom.Device.ListeDevices))
+                        If y = NewDevice.Type Then
+                            CbType.SelectedValue = value.ToString
+                            CbType_MouseLeave(CbType, Nothing)
+                        End If
+                        y += 1
+                    Next
+
+                    flagnewdev = True
+                End If
             Else 'Modification d'un Device
 
                 FlagNewDevice = False
@@ -228,6 +247,8 @@ Partial Public Class uDevice
 
     'Bouton Fermer
     Private Sub BtnClose_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClose.Click
+        flagnewdev = False
+        NewDevice = Nothing
         RaiseEvent CloseMe(Me, True)
     End Sub
 
@@ -313,6 +334,13 @@ Partial Public Class uDevice
             If String.IsNullOrEmpty(_DeviceId) = True Then _DeviceId = result
             SaveInZone()
             FlagChange = True
+
+            If _Action = EAction.Nouveau And NewDevice IsNot Nothing And flagnewdev Then
+                myService.DeleteNewDevice(IdSrv, NewDevice.ID)
+                NewDevice = Nothing
+                flagnewdev = False
+            End If
+
             RaiseEvent CloseMe(Me, False)
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub uDevice BtnOK_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -509,6 +537,12 @@ Partial Public Class uDevice
                 BtnEditTel.Visibility = Windows.Visibility.Visible
                 TxtModele2.Visibility = Visibility.Hidden
                 Label8.Visibility = Windows.Visibility.Hidden
+            End If
+
+            If NewDevice IsNot Nothing And flagnewdev Then
+                myService.DeleteNewDevice(IdSrv, NewDevice.ID)
+                NewDevice = Nothing
+                flagnewdev = False
             End If
 
             If uid.Length > 3 Then x = myService.ReturnDeviceByID(IdSrv, uid)

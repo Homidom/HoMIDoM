@@ -30,7 +30,7 @@
                     <StackPanel >
 
                         <!--show the selected item-->
-                        <CheckBox  Content="Afficher Tous" Foreground=" White" FontWeight="Bold" IsChecked=" True" Name="CheckBox1" />
+                        <CheckBox  Content="Afficher Tous" Foreground=" White" FontWeight="Bold" Name="CheckBox1" />
                         <GroupBox >
                             <GroupBox.Header>
                                 <Label Foreground="White" FontWeight="Bold">Sélection</Label>
