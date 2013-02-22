@@ -11,7 +11,10 @@
                     <Label HorizontalAlignment="Left" Margin="5" Name="Label2" VerticalAlignment="Top" Width="62" Foreground="White">Fonction:</Label>
                     <ComboBox Height="25" Margin="5" Width="200" Name="CbCmd" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2"/>
                 </StackPanel>
-                <GroupBox Header="Paramètres" Margin="2" Name="GroupBox1" >
+                <GroupBox Margin="2" Name="GroupBox1" >
+                    <GroupBox.Header>
+                        <Label Foreground="White" >Paramètres</Label>
+                    </GroupBox.Header>
                     <Grid>
                         <StackPanel Name="StkParam">
                         <StackPanel Orientation="Horizontal" >
