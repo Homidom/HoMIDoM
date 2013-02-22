@@ -1,11 +1,11 @@
 ﻿<Window x:Class="WindowImg"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Sélectionner une image" Width="750" ResizeMode="NoResize" ShowInTaskbar="True" WindowStartupLocation="CenterScreen" Topmost="False" Icon="/HoMIAdmiN;component/icone.ico">
+    Title="Sélectionner une image" Width="700" ResizeMode="NoResize" ShowInTaskbar="True" WindowStartupLocation="CenterScreen" Topmost="False" Icon="/HoMIAdmiN;component/icone.ico">
 
     <Grid Background="#636060">
         <StackPanel >
-            <ScrollViewer VerticalAlignment="Top" Margin="5" VerticalScrollBarVisibility="Auto" Height="400" Width="650">
+            <ScrollViewer VerticalAlignment="Top" Margin="5" VerticalScrollBarVisibility="Auto" Height="450" Width="650">
                 <WrapPanel Name="Wrp" Background="DarkGray" HorizontalAlignment="Left" />
             </ScrollViewer>
             <StackPanel Margin="5,10,0,0" Orientation="Horizontal" HorizontalAlignment="Right">

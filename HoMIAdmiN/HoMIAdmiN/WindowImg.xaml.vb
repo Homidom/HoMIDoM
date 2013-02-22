@@ -40,7 +40,8 @@ Public Class WindowImg
                 stk.Margin = New Thickness(10)
 
                 Try
-                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Path))
+                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Path), 64)
+                    img.ToolTip = x.FileName
                     lbl.Content = x.FileName
                     lbl.Foreground = New SolidColorBrush(Colors.White)
                     lbl.FontSize = 9

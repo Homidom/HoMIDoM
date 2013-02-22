@@ -1,8 +1,8 @@
 ﻿Namespace HoMIDom
 
     <Serializable()> Public Class ImageFile
-        Dim _Path As String
-        Dim _FileName As String
+        Dim _Path As String = ""
+        Dim _FileName As String = ""
 
         Public Property Path As String
             Get
