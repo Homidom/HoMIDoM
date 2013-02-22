@@ -79,7 +79,7 @@
                                     <Label Foreground="White" HorizontalAlignment="Left"  Name="Label13" VerticalAlignment="Top" Width="62">Fonction:</Label>
                                     <ComboBox Height="25" HorizontalAlignment="Left" Name="CbCmd" VerticalAlignment="Top" Width="211" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2"/>
                                 </StackPanel>
-                                <StackPanel Margin="0,8,0,0">
+                                <StackPanel Margin="0,8,0,10">
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Foreground="White" HorizontalAlignment="Left" Name="LblP1" VerticalAlignment="Top" Visibility="Hidden" Width="100">##########:</Label>
                                         <TextBox Width="215" Height="20" Name="TxtP1" VerticalAlignment="Top" Visibility="Hidden" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
@@ -100,7 +100,6 @@
                                         <Label Foreground="White" HorizontalAlignment="Left" Name="LblP5" VerticalAlignment="Bottom" Visibility="Hidden" Width="100">##########:</Label>
                                         <TextBox Height="20" Width="215" Name="TxtP5" VerticalAlignment="Bottom" Visibility="Hidden" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
                                     </StackPanel>
-                                    <Rectangle Height="10" />
                                 </StackPanel>
                             </StackPanel>
 

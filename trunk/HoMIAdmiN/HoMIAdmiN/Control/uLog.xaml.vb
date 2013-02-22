@@ -114,38 +114,29 @@ Partial Public Class uLog
         Try
             Dim RowDataContaxt As Dictionary(Of String, Object) = TryCast(e.Row.DataContext, Dictionary(Of String, Object))
             If RowDataContaxt IsNot Nothing Then
-                'If RowDataContaxt.Row.IsNull(1) = False Then
                 Select Case RowDataContaxt(keys(1))
                     Case "INFO"
-                        'RowDataContaxt.Row.Item(1) = "INFO"
                         e.Row.Background = Brushes.White
                     Case "ACTION"
-                        'RowDataContaxt.Row.Item(1) = "ACTION"
                         e.Row.Background = Brushes.White
                     Case "MESSAGE"
-                        'RowDataContaxt.Row.Item(1) = "MESSAGE"
                         e.Row.Background = Brushes.White
                     Case "VALEUR CHANGE"
-                        'RowDataContaxt.Row.Item(1) = "VALEUR CHANGE"
                         e.Row.Background = Brushes.White
                     Case "VALEUR INCHANGE"
-                        'RowDataContaxt.Row.Item(1) = "VALEUR INCHANGE"
                         e.Row.Background = Brushes.White
                     Case "VALEUR INCHANGE PRECISION"
-                        'RowDataContaxt.Row.Item(1) = "VALEUR INCHANGE PRECISION"
                         e.Row.Background = Brushes.White
                     Case "VALEUR INCHANGE LASTETAT"
-                        'RowDataContaxt.Row.Item(1) = "VALEUR INCHANGE LASTETAT"
                         e.Row.Background = Brushes.White
                     Case "ERREUR"
-                        'RowDataContaxt.Row.Item(1) = "ERREUR"
                         e.Row.Background = Brushes.Red
                     Case "ERREUR CRITIQUE"
-                        'RowDataContaxt.Row.Item(1) = "ERREUR CRITIQUE"
                         e.Row.Background = Brushes.Red
                     Case "DEBUG"
-                        'RowDataContaxt.Row.Item(1) = "DEBUG"
                         e.Row.Background = Brushes.Yellow
+                    Case Else
+                        e.Row.Background = Brushes.White
                 End Select
             End If
 

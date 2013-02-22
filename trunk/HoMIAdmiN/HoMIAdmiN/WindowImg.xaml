@@ -8,8 +8,7 @@
             <ScrollViewer VerticalAlignment="Top" Margin="5" VerticalScrollBarVisibility="Auto" Height="400" Width="650">
                 <WrapPanel Name="Wrp" Background="DarkGray" HorizontalAlignment="Left" />
             </ScrollViewer>
-            <Rectangle Height="10" />
-            <StackPanel Margin="5" Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel Margin="5,10,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Name="BtnUpload" Height="25" Template="{DynamicResource GlassButton}" Margin="2" Content="Upload" Width="70" Foreground="White" />
                 <Button Name="BtnOK" Height="25" Template="{DynamicResource GlassButton}" Margin="2" Content="Ouvrir" Width="70" Foreground="White" />
                 <Button Name="BtnCancel" Height="25" Template="{DynamicResource GlassButton}" Margin="2" Content="Annuler" Width="70" Foreground="White" />

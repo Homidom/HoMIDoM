@@ -20,8 +20,7 @@
                     <Image Source="/HoMIAdmiN;component/Images/Log_Homidom.png" Height="32" Width="32" ToolTip="Log Homidom" Name="ImgActLogHomidom"></Image>
                     <Image Source="/HoMIAdmiN;component/Images/command_prompt_64.png" Height="32" Width="32" ToolTip="Commande Dos" Name="ImgActDos"></Image>
                     <Image Source="/HoMIAdmiN;component/Images/VBS.png" Height="32" Width="32" ToolTip="Script VB" Name="ImgActVB"></Image>
-                    <Rectangle Width="50"/>
-                    <Image Name="ZoomPlus" Source="/HoMIAdmiN;component/Images/zoom_avant_32.png" Width="23" Height="23" />
+                    <Image Name="ZoomPlus" Margin="50,0,0,0" Source="/HoMIAdmiN;component/Images/zoom_avant_32.png" Width="23" Height="23" />
                     <Image Name="ZoomMoins" Source="/HoMIAdmiN;component/Images/zoom_arriere_32.png" Width="23" Height="23" />
             </StackPanel>
             </StackPanel>
