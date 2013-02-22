@@ -4450,7 +4450,7 @@ Imports System.Media
         Try
             Dim kar(LIGHTING2.size) As Byte
             Dim temp As String = ""
-            If Not (adresse.Length = 9) Then
+            If Not (adresse.Length = 9 Or adresse.Length = 10) Then
                 WriteLog("ERR: Send Lighting2 : Adresse invalide : " & adresse)
                 Exit Sub
             End If
