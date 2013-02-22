@@ -117,6 +117,7 @@ Partial Public Class uDriver
                     Label1.Content = "Driver SYSTEME"
                     ChkEnable.Visibility = Windows.Visibility.Collapsed
                     CbStartAuto.Visibility = Windows.Visibility.Collapsed
+                    CbAutoDiscover.Visibility = Windows.Visibility.Collapsed
                     StkModele.Visibility = Windows.Visibility.Collapsed
                     StkRefresh.Visibility = Windows.Visibility.Collapsed
                     StkVersion.Visibility = Windows.Visibility.Collapsed
