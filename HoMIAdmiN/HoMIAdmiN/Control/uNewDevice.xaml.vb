@@ -5,6 +5,7 @@ Imports HoMIDom.HoMIDom
 
 Public Class uNewDevice
     Public Event CloseMe(ByVal MyObject As Object)
+    Public Event CreateNewDevice(ByVal MyObject As Object)
     Dim _list As New List(Of NewDevice)
 
     Private Sub BtnClose_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClose.Click
@@ -23,10 +24,10 @@ Public Class uNewDevice
             Next
 
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-            Refresh_Grid()
+            Refresh_Grid(CheckBox1.IsChecked)
             AddHandler DGW.Loaded, AddressOf GridOk
 
-            'RefreshGrid()
+
         Catch ex As Exception
             MessageBox.Show("Erreur lors sur la fonction New de uNewDevice: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -80,6 +81,7 @@ Public Class uNewDevice
                         y.Width = 0
                         y.Visibility = Windows.Visibility.Collapsed
                     End If
+                    FlagChange = True
                 End If
 
             End If
@@ -105,6 +107,8 @@ Public Class uNewDevice
                         myService.SaveNewDevice(x)
                     End If
                 End If
+                Refresh_Grid(CheckBox1.IsChecked)
+                FlagChange = True
             End If
         Catch ex As Exception
             MessageBox.Show("Erreur BtnUpdate_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -142,5 +146,26 @@ Public Class uNewDevice
         MyBase.Finalize()
 
         _list.Clear()
+    End Sub
+
+    Private Sub BtnCreate_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnCreate.Click
+        Try
+            If String.IsNullOrEmpty(txtID.Text) Then
+                MessageBox.Show("Veuillez sélectionner un composant dans la grille!", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+
+            Dim x As New NewDevice
+            x.ID = txtID.Text
+            x.IdDriver = txtDriver.Text
+            x.Name = txtName.Text
+            x.Adresse1 = txtAdresse1.Text
+            x.Adresse2 = txtAdresse2.Text
+            x.Type = CbType.SelectedIndex
+            NewDevice = x
+            RaiseEvent CreateNewDevice(Me)
+        Catch ex As Exception
+            MessageBox.Show("Erreur BtnCreate_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 End Class
