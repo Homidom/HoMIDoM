@@ -26,7 +26,7 @@
                 Case "tag_driver"
                     Title = Replace(Title, "{TITLE}", "un Driver")
                     _Type = 0
-                    For Each driver In myService.GetAllDrivers(IdSrv)
+                    For Each driver As HoMIDom.HoMIDom.TemplateDriver In myService.GetAllDrivers(IdSrv)
                         Dim x As New uElement
                         x.ID = driver.ID
                         If IO.File.Exists(driver.Picture) Then
@@ -37,6 +37,7 @@
                         x.Title = driver.Nom
                         x.Width = 300
                         ListBox1.Items.Add(x)
+                        x = Nothing
                     Next
                 Case "tag_composant"
                     Title = Replace(Title, "{TITLE}", "un Composant")
@@ -52,6 +53,7 @@
                         x.Title = device.Name
                         x.Width = 300
                         ListBox1.Items.Add(x)
+                        x = Nothing
                     Next
                 Case "tag_zone"
                     Title = Replace(Title, "{TITLE}", "une Zone")
@@ -63,6 +65,7 @@
                         x.Title = zone.Name
                         x.Width = 300
                         ListBox1.Items.Add(x)
+                        x = Nothing
                     Next
                 Case "tag_user"
                     Title = Replace(Title, "{TITLE}", "un Utilisateur")
@@ -74,6 +77,7 @@
                         x.Title = user.Nom
                         x.Width = 300
                         ListBox1.Items.Add(x)
+                        x = Nothing
                     Next
                 Case "tag_trigger"
                     Title = Replace(Title, "{TITLE}", "un Trigger")
@@ -84,6 +88,7 @@
                         x.Title = trigger.Nom
                         x.Width = 300
                         ListBox1.Items.Add(x)
+                        x = Nothing
                     Next
                 Case "tag_macro"
                     Title = Replace(Title, "{TITLE}", "une Macro")
@@ -94,6 +99,7 @@
                         x.Title = macro.Nom
                         x.Width = 300
                         ListBox1.Items.Add(x)
+                        x = Nothing
                     Next
             End Select
 

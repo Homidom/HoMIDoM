@@ -92,12 +92,13 @@
             mnu01.Uid = "drv_gerer"
             AddHandler mnu01.Click, AddressOf menu_contextmenuclick
             ctxMenudrv.Items.Add(mnu01)
-            Dim mnu02 As New MenuItem
-            mnu02.Header = "Modifier"
-            mnu02.Tag = "drv"
-            mnu02.Uid = "drv_modifier"
-            AddHandler mnu02.Click, AddressOf menu_contextmenuclick
-            ctxMenudrv.Items.Add(mnu02)
+            mnu01 = New MenuItem
+            'Dim mnu02 As New MenuItem
+            mnu01.Header = "Modifier"
+            mnu01.Tag = "drv"
+            mnu01.Uid = "drv_modifier"
+            AddHandler mnu01.Click, AddressOf menu_contextmenuclick
+            ctxMenudrv.Items.Add(mnu01)
             menu_driver.ContextMenu = ctxMenudrv
             ctxMenudrv = Nothing
 
@@ -362,6 +363,7 @@
             menu_module.ContextMenu = ctxMenuModule
             ctxMenuModule = Nothing
 
+            Me.UpdateLayout()
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub uMainMenu New: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
