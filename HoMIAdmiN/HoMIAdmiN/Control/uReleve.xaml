@@ -44,10 +44,8 @@
                     </GroupBox>
                         <StackPanel Orientation="Horizontal" >
 
-                            <Rectangle Width="5" />
-                            <Button  Content="Update" Width="50" Height="30" Name="BtnUpdate" Template="{DynamicResource GlassButton}" Foreground=" white"/>
-                            <Rectangle Width="10" />
-                            <Button  Content="Delete"  Width="50" Height="30" Name="BtnDelete" Template="{DynamicResource GlassButton}" Foreground=" white"/>
+                            <Button  Content="Update" Margin="5,0,0,0" Width="50" Height="30" Name="BtnUpdate" Template="{DynamicResource GlassButton}" Foreground=" white"/>
+                            <Button  Content="Delete" Margin="10,0,0,0"  Width="50" Height="30" Name="BtnDelete" Template="{DynamicResource GlassButton}" Foreground=" white"/>
 
                         </StackPanel>
                     </StackPanel>

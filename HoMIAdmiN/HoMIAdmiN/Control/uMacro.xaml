@@ -6,8 +6,8 @@
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" >
             <StackPanel >
                 <Label Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center">Macro</Label>
-                <Rectangle Height="25" />
-                <StackPanel Orientation="Vertical" >
+                
+                <StackPanel Orientation="Vertical" Margin="0,25,0,0">
                     <StackPanel Orientation="Horizontal" >
                         <Label Width="75" Content="Nom:" HorizontalAlignment="Left" Name="Label2" VerticalAlignment="Top" Foreground="White" />
                         <TextBox Height="21" HorizontalAlignment="Left" Name="TxtNom" VerticalAlignment="Top" Width="218" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
@@ -17,8 +17,7 @@
                         <Label Width="75" Content="Description:" Foreground="White" HorizontalAlignment="Left" Name="Label3" VerticalAlignment="Top" />
                         <TextBox Height="21" HorizontalAlignment="Left" Name="TxtDescription" VerticalAlignment="Top" Width="349" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
                     </StackPanel>
-                    <Rectangle Height="10" />
-                    <my:uScenario HorizontalAlignment="Left" x:Name="UScenario1" VerticalAlignment="Top" Height="450" Width="870" Margin="5" />
+                    <my:uScenario HorizontalAlignment="Left" x:Name="UScenario1" VerticalAlignment="Top" Height="450" Width="870" Margin="5,10,5,5" />
                     <Button Content="Tester" Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,0,5,5" Name="BtnTest" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" />
                 </StackPanel >
             </StackPanel >

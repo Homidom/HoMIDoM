@@ -39,10 +39,9 @@
                                 <Rectangle Width="15" />
                                 <CheckBox  Margin="6" Name="ChkDefaut" Foreground="White" Content="Serveur par défaut" TabIndex="8" Background="DarkGray" BorderBrush="Black" />
                             </StackPanel>
-                            <Rectangle Height="20" />
                         </StackPanel>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Visibility="Hidden" >
+                    <StackPanel Orientation="Horizontal" Visibility="Hidden" Margin="0,20,0,0" >
                         <Label Content="Login :" Margin="1" Name="Label3" Foreground="White" Width="70" HorizontalContentAlignment="Right" />
                         <TextBox Margin="1" Name="TxtUsername" Width="200" Height="20"  TabIndex="0"  Background="DarkGray" BorderBrush="Black" Foreground="White" />
                         <Rectangle Width="5" />

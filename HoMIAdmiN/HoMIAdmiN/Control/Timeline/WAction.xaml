@@ -65,8 +65,7 @@
                                     <Image Name="BtnCondiTime" Source="/HoMIAdmiN;component/Images/horloge_128.png" Height="24" Width="24" Margin="3" />
                                     <Image Name="BtnCondiDevice" Source="/HoMIAdmiN;component/Images/Composant_128.png" Width="24" Height="24" Margin="3" />
                                 </StackPanel>
-                                <Rectangle Height="20" />
-                                <ScrollViewer Name="ScrollViewer1" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True" Width="600" AllowDrop="True" Height="360">
+                                <ScrollViewer Margin="20,0,0,0" Name="ScrollViewer1" VerticalAlignment="Top" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" CanContentScroll="True" Width="600" AllowDrop="True" Height="360">
                                     <StackPanel Name="StkCondition" Orientation="Vertical"  Background="DarkGray" VerticalAlignment="Top" HorizontalAlignment="Left" />
                                 </ScrollViewer>
                             </StackPanel>

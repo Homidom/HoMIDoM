@@ -17,8 +17,8 @@
                 </StackPanel>
                     <Label Name="Label0" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Top">Propriétés du Serveur</Label>
                 </DockPanel>
-                <Rectangle Height="10"/>
-                <StackPanel Margin="5">
+                
+                <StackPanel Margin="5,10,0,0">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Margin="0,0,3,0">
                             <GroupBox Name="GroupBox1" Margin="2">
@@ -217,9 +217,6 @@
                             </GroupBox>
 
                         </StackPanel>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
-
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
