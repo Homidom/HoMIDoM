@@ -20,6 +20,10 @@ Partial Public Class uConfigServer
                     MessageBox.Show("L'id du serveur ne peut être vide !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
                     Exit Sub
                 End If
+                If TxtIdSrv.Text = "99" Then
+                    MessageBox.Show("L'id du serveur ne peut être 99, ce nombre est réservé pour le système.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                    Exit Sub
+                End If
                 If IsNumeric(TxtSave.Text) = False Or String.IsNullOrEmpty(TxtSave.Text) = True Or CInt(TxtSave.Text) < 0 Then
                     MessageBox.Show("La valeur de saubegarde doit être un chiffre et positif !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
                     Exit Sub
