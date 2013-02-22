@@ -580,6 +580,13 @@ Namespace HoMIDom
                                         End If
                                         'If _ModeDecouverte = True Then _drv.AutoDiscover = True 'si mode decouverte activé sur le serveur, on force à true sur tous les drivers
 
+                                        'Force le driver virtuel 
+                                        If _drv.ID = "DE96B466-2540-11E0-A321-65D7DFD72085" Then
+                                            _drv.Enable = True
+                                            _drv.StartAuto = True
+                                            _drv.AutoDiscover = False
+                                        End If
+
                                         Dim a As String
                                         Dim idx As Integer
                                         For i As Integer = 0 To list.Item(j).Attributes.Count - 1
