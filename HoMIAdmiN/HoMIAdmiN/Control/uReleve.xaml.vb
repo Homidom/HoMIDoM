@@ -45,7 +45,12 @@ Public Class uReleve
         Try
             Dim retour As Integer = myService.UpdateHisto(IdSrv, _CurrentId, txtTime.Text, txtValue.Text, _CurrentDateTime, _CurrentValue, _CurrentSource)
 
-            If retour <> 0 Then MessageBox.Show("Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            If retour <> 0 Then
+                MessageBox.Show("Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            Else
+                '    DataGrid1.SelectedItem.Value = txtValue.Text
+                '    DataGrid1.SelectedItem.DateTime = txtTime.Text
+            End If
         Catch ex As Exception
             MessageBox.Show("Erreur BtnUpdate_Click: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -71,6 +76,7 @@ Public Class uReleve
             End If
 
             Dim retour As Integer = myService.AddHisto(IdSrv, _CurrentId, txtTime2.Text, txtValue2.Text, _CurrentSource)
+
 
             If retour <> 0 Then MessageBox.Show("Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
         Catch ex As Exception
