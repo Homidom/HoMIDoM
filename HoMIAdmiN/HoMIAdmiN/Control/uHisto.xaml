@@ -27,8 +27,8 @@
                             <Label Content="Fin:" Foreground="White" VerticalAlignment="center"/>
                             <DatePicker Name="DateFinSelect" Width="100" VerticalAlignment="Center" BorderBrush="{x:Null}" />
 
-                            <Rectangle Width="5"/>
-                            <Label Content="Format:" Foreground="White" VerticalAlignment="center"/>
+                            
+                            <Label Margin="5,0,0,0" Content="Format:" Foreground="White" VerticalAlignment="center"/>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                 <RadioButton Name="ChkLine" IsChecked="True" Width="45" Height="25" Background="DarkGray" BorderBrush="Black" Foreground="White" >
                                     <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/Line20Chart.png" Stretch="Fill"></Image>
@@ -46,8 +46,7 @@
                                     <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/pie_chart.png" Stretch="Fill"></Image>
                                 </RadioButton>
                             </StackPanel>
-                            <Rectangle Width="20"/>
-                            <Button Height="25" Width="25" Name="Refresh" ToolTip="Rafraichir le graphe" Template="{DynamicResource GlassButton}">
+                            <Button Height="25" Width="25" Margin="20,0,0,0" Name="Refresh" ToolTip="Rafraichir le graphe" Template="{DynamicResource GlassButton}">
                                 <Image Name="ImgRefrsh" Source="/HoMIAdmiN;component/Images/Refresh_32.png"/>
                             </Button>
                         </StackPanel>
@@ -60,8 +59,7 @@
                             </ComboBox>
                             <Label Content="Max Data:" Foreground="White" />
                             <TextBox Name="TxtMaxData" Width="40" Text="2000" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" TextAlignment="Center" />
-                            <Rectangle Width="170" />
-                            <Label Content="BackColor:" Foreground="White" VerticalAlignment="Center" />
+                            <Label Content="BackColor:" Foreground="White" VerticalAlignment="Center" Margin=" 5,0,0,0" />
                             <ComboBox Name="CbBackColor" Width="80" VerticalAlignment="Center" SelectedIndex="5" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2">
                                 <ComboBoxItem Content="Blanc" />
                                 <ComboBoxItem Content="Bleu" />
@@ -71,8 +69,7 @@
                                 <ComboBoxItem Content="Gris" />
                                 <ComboBoxItem Content="Transparent" />
                             </ComboBox>
-                            <Rectangle Width="20" />
-                            <Button Height="25" Width="25" Name="BtnSave" ToolTip="Sauvegarder le graphe" Template="{DynamicResource GlassButton}">
+                            <Button Height="25" Width="25" Margin="15,0,0,0" Name="BtnSave" ToolTip="Sauvegarder le graphe" Template="{DynamicResource GlassButton}">
                                 <Image Source="/HoMIAdmiN;component/Images/save_32.png" />
                             </Button>
                         </StackPanel>
