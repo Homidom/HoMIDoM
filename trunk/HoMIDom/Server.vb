@@ -4126,6 +4126,7 @@ Namespace HoMIDom
                 dirInfo = Nothing
 
                 Return _list
+                _list = Nothing
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetListOfImage", "Exception : " & ex.Message)
                 Return Nothing

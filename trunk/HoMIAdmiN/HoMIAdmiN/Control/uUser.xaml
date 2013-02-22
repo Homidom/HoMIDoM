@@ -62,7 +62,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <Label Foreground="White" Height="25" HorizontalAlignment="Left" Name="Label13" VerticalAlignment="Bottom" Width="80" Content="Tel Autre :"></Label>
-                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtTelAutre" VerticalAlignment="Bottom" Width="223" HorizontalAlignment="Left" BorderThickness="2" TabIndex="11" />
+                <TextBox Background="DarkGray"  BorderBrush="Black" Foreground="White" Height="22" Name="TxtTelAutre" VerticalAlignment="Bottom" Width="223" HorizontalAlignment="Left" TabIndex="11" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <Label Foreground="White" Height="25" HorizontalAlignment="Left" Name="Label14" VerticalAlignment="Bottom" Width="80" Content="Adresse :"></Label>
