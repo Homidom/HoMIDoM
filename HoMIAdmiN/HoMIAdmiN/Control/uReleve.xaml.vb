@@ -7,6 +7,7 @@ Public Class uReleve
     Dim _CurrentValue As String = "" 'Valeur du relevé selectionne
     Dim _CurrentDateTime As String = "" 'DateTime  du relevé selectionne
 
+    Public Event Refresh()
 
     Public Sub New(ByVal ListReleve As List(Of Historisation), ByVal Label As String, ByVal DeviceID As String, ByVal Source As String)
         Try
@@ -22,11 +23,20 @@ Public Class uReleve
             _CurrentSource = Source
             txtTime2.Text = DateTime.Now
             txtValue2.Text = ""
+
             'If ListReleve.Count > 0 Then
             '    _CurrentId = ListReleve(0).IdDevice
             'End If
         Catch ex As Exception
             MessageBox.Show("Erreur lors de l'affichage du relevé: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub RefreshGrid()
+        Try
+            RaiseEvent Refresh()
+        Catch ex As Exception
+            MessageBox.Show("Erreur lors de l'affichage du relevé RefreshGrid: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -48,8 +58,7 @@ Public Class uReleve
             If retour <> 0 Then
                 MessageBox.Show("Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
             Else
-                '    DataGrid1.SelectedItem.Value = txtValue.Text
-                '    DataGrid1.SelectedItem.DateTime = txtTime.Text
+                RefreshGrid()
             End If
         Catch ex As Exception
             MessageBox.Show("Erreur BtnUpdate_Click: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -60,7 +69,11 @@ Public Class uReleve
         Try
             Dim retour As Integer = myService.DeleteHisto(IdSrv, _CurrentId, _CurrentDateTime, _CurrentValue, _CurrentSource)
 
-            If retour <> 0 Then MessageBox.Show("Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            If retour <> 0 Then
+                MessageBox.Show("Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            Else
+                RefreshGrid()
+            End If
         Catch ex As Exception
             MessageBox.Show("Erreur BtnDelete_Click: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -78,7 +91,11 @@ Public Class uReleve
             Dim retour As Integer = myService.AddHisto(IdSrv, _CurrentId, txtTime2.Text, txtValue2.Text, _CurrentSource)
 
 
-            If retour <> 0 Then MessageBox.Show("Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            If retour <> 0 Then
+                MessageBox.Show("Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            Else
+                RefreshGrid()
+            End If
         Catch ex As Exception
             MessageBox.Show("Erreur BtnAdd_Click: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
