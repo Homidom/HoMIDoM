@@ -262,7 +262,9 @@ Public Class uHisto
                 saveFileDialog1.RestoreDirectory = True
 
                 ' Set image file format
-                If saveFileDialog1.ShowDialog() = Forms.DialogResult.OK Then
+                Dim _return As Boolean = saveFileDialog1.ShowDialog
+
+                If _return = True Then
                     Dim format As ChartImageFormat = ChartImageFormat.Bmp
 
                     If saveFileDialog1.FileName.EndsWith("bmp") Then
@@ -291,7 +293,7 @@ Public Class uHisto
                     _CurrentChart.SaveImage(saveFileDialog1.FileName, format)
                 End If
             Else
-                MessageBox.Show("No curent")
+                MessageBox.Show("Pas de graphique en cours!!")
             End If
         Catch ex As Exception
             MessageBox.Show("Erreur uHisto BtnSave_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
