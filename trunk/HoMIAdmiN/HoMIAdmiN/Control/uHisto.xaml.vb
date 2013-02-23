@@ -77,7 +77,7 @@ Public Class uHisto
     '    End Try
     'End Sub
 
-    Sub Update_Graphe()
+    Public Sub Update_Graphe()
         Try
             Dim result As New List(Of Historisation)
 
@@ -177,6 +177,7 @@ Public Class uHisto
                     Dim _Tabitem As New TabItem
                     If kvp.Value = "Value" Then _Tabitem.Header = _namedevice Else _Tabitem.Header = _namedevice & ":" & kvp.Value
                     Dim _Releve As New uReleve(result, _namedevice & ": " & kvp.Value, kvp.Key, kvp.Value)
+                    AddHandler _Releve.Refresh, AddressOf RefreshGraph
                     _Tabitem.Content = _Releve
                     TabControl1.Items.Add(_Tabitem)
                 Next kvp
@@ -345,4 +346,9 @@ Public Class uHisto
     Private Sub MenuItem1_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem1.Click
         Update_Graphe()
     End Sub
+
+    Private Sub RefreshGraph()
+        Update_Graphe()
+    End Sub
+
 End Class
