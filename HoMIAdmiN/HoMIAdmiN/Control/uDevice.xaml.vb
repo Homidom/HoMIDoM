@@ -750,7 +750,7 @@ Partial Public Class uDevice
                 y.Add(_DeviceId, "Value")
                 Devices.Add(y)
 
-                Dim x As New uHisto(Devices, Window1.CanvasUser.ActualWidth)
+                Dim x As New uHisto(Devices)
                 x.Uid = System.Guid.NewGuid.ToString()
                 x.Width = Window1.CanvasUser.ActualWidth - 20
                 x.Height = Window1.CanvasUser.ActualHeight - 20

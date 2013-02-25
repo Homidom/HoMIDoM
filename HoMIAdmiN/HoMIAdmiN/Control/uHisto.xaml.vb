@@ -12,7 +12,7 @@ Public Class uHisto
     Dim _CurrentChart As Chart = Nothing
     Public _with As Integer = 600
 
-    Public Sub New(ByVal Devices As List(Of Dictionary(Of String, String)), ByVal withcontainer As Integer)
+    Public Sub New(ByVal Devices As List(Of Dictionary(Of String, String)))
 
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
@@ -26,7 +26,7 @@ Public Class uHisto
             DateFinSelect.Text = Now.Date.AddDays(1).ToString
 
             _Devices = Devices
-            _with = withcontainer - 20
+            '_with = withcontainer - 20
             Update_Graphe()
 
         Catch ex As Exception

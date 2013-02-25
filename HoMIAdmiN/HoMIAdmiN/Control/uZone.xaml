@@ -17,9 +17,9 @@
                 <Label Margin="0,10,0,0" Content="Eléments appartenant à la zone" Foreground="White" ToolTip="Glisser un élément (device, macro ou zone) dans la liste ci-dessous" FontStyle="Oblique" FontWeight="ExtraBold" />
                 <StackPanel Orientation="Horizontal">
                     <StackPanel Margin="2">
-                        <Label Content="Composants" Foreground="White" Width="250" FontWeight="SemiBold" />
+                        <Label Content="Composants" Foreground="White" Width="240" FontWeight="SemiBold" />
                         <Label Content="Visible" Foreground="White" FontSize="10" HorizontalContentAlignment="Right" />
-                        <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxDevice" Width="250" Height="250" AllowDrop="True" Grid.ColumnSpan="2" />
+                        <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxDevice" Width="240" Height="250" AllowDrop="True" Grid.ColumnSpan="2" />
                         <StackPanel.Background>
                             <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
                                 <GradientStop Color="#35000000" Offset="0.576" />
@@ -30,9 +30,9 @@
 
                     </StackPanel >
                     <StackPanel Margin="2">
-                        <Label Content="Zones" Foreground="White" Width="250" FontWeight="SemiBold"/>
+                        <Label Content="Zones" Foreground="White" Width="240" FontWeight="SemiBold"/>
                         <Label Content="Visible" Foreground="White" FontSize="10" HorizontalContentAlignment="Right" />
-                        <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxZone" Width="250" Height="250" AllowDrop="True" Grid.ColumnSpan="2" />
+                        <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxZone" Width="240" Height="250" AllowDrop="True" Grid.ColumnSpan="2" />
                         <StackPanel.Background>
                             <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
                                 <GradientStop Color="#35000000" Offset="0.576" />
@@ -43,9 +43,9 @@
 
                     </StackPanel>
                     <StackPanel Margin="2">
-                        <Label Content="Macros" Foreground="White" Width="250"  FontWeight="SemiBold"/>
+                        <Label Content="Macros" Foreground="White" Width="240"  FontWeight="SemiBold"/>
                         <Label Content="Visible" Foreground="White" FontSize="10" HorizontalContentAlignment="Right" />
-                        <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxMacro" Width="250" Height="250" AllowDrop="True" Grid.ColumnSpan="2" />
+                        <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3" Padding="2" Name="ListBxMacro" Width="240" Height="250" AllowDrop="True" Grid.ColumnSpan="2" />
                         <StackPanel.Background>
                             <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
                                 <GradientStop Color="#35000000" Offset="0.576" />

@@ -1139,7 +1139,7 @@ Class Window1
                     y.Add(sender.uid, "Value")
                     Devices.Add(y)
 
-                    Dim x As New uHisto(Devices, CanvasRight.ActualWidth)
+                    Dim x As New uHisto(Devices)
                     x.Uid = System.Guid.NewGuid.ToString()
                     x.Width = CanvasRight.ActualWidth - 20
                     x.Height = CanvasRight.ActualHeight - 20
@@ -1236,6 +1236,10 @@ Class Window1
             Select Case sender.tag
                 Case 0 'Modifier
                     Dim x As New uMacro(Classe.EAction.Modifier, sender.uid)
+                    x.Width = CanvasRight.ActualWidth - 20
+                    x._Width = CanvasRight.ActualWidth - 20
+                    x.Height = CanvasRight.ActualHeight - 20
+                    x._Height = CanvasRight.ActualHeight - 20
                     AddHandler x.CloseMe, AddressOf UnloadControl
                     AddHandler x.Loaded, AddressOf ControlLoaded
                     AffControlPage(x)
@@ -1486,7 +1490,7 @@ Class Window1
             y.Add(sender.uid, "Value")
             Devices.Add(y)
 
-            Dim x As New uHisto(Devices, CanvasRight.ActualWidth)
+            Dim x As New uHisto(Devices)
             x.Uid = System.Guid.NewGuid.ToString()
             x.Width = CanvasRight.ActualWidth - 20
             x.Height = CanvasRight.ActualHeight - 20
@@ -1552,6 +1556,10 @@ Class Window1
                         End If
                     Case "TreeViewMacro"  'macros
                         Dim x As New uMacro(Classe.EAction.Modifier, sender.SelectedItem.uid)
+                        x.Width = CanvasRight.ActualWidth - 20
+                        x._Width = CanvasRight.ActualWidth - 20
+                        x.Height = CanvasRight.ActualHeight - 20
+                        x._Height = CanvasRight.ActualHeight - 20
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AddHandler x.Loaded, AddressOf ControlLoaded
                         AffControlPage(x)
@@ -1868,6 +1876,10 @@ Class Window1
                             Try
                                 Tabcontrol1.SelectedIndex = 3
                                 Dim x As New uMacro(Classe.EAction.Nouveau, "")
+                                x.Width = CanvasRight.ActualWidth - 20
+                                x._Width = CanvasRight.ActualWidth - 20
+                                x.Height = CanvasRight.ActualHeight - 20
+                                x._Height = CanvasRight.ActualHeight - 20
                                 AddHandler x.CloseMe, AddressOf UnloadControl
                                 AffControlPage(x)
                             Catch ex As Exception
@@ -2138,6 +2150,10 @@ Class Window1
                     Try
                         Tabcontrol1.SelectedIndex = 5
                         Dim x As New uMacro(Classe.EAction.Nouveau, "")
+                        x.Width = CanvasRight.ActualWidth - 20
+                        x._Width = CanvasRight.ActualWidth - 20
+                        x.Height = CanvasRight.ActualHeight - 20
+                        x._Height = CanvasRight.ActualHeight - 20
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
@@ -2514,6 +2530,10 @@ Class Window1
 
                                         Dim x As New uMacro(Classe.EAction.Modifier, Objet.retour)
                                         x.Uid = System.Guid.NewGuid.ToString()
+                                        x.Width = CanvasRight.ActualWidth - 20
+                                        x._Width = CanvasRight.ActualWidth - 20
+                                        x.Height = CanvasRight.ActualHeight - 20
+                                        x._Height = CanvasRight.ActualHeight - 20
                                         AddHandler x.CloseMe, AddressOf UnloadControl
                                         CanvasRight.Children.Clear()
                                         CanvasRight.UpdateLayout()
@@ -2763,7 +2783,7 @@ Class Window1
                 End If
             Next
 
-            Dim x As New uHisto(Devices, CanvasRight.ActualWidth)
+            Dim x As New uHisto(Devices)
             x.Uid = System.Guid.NewGuid.ToString()
             x.Width = CanvasRight.ActualWidth - 20
             x.Height = CanvasRight.ActualHeight - 20
