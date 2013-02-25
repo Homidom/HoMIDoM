@@ -3,6 +3,8 @@
 
     Dim _Action As EAction
     Dim _MacroId As String
+    Public _Width As Integer = 600
+    Public _Height As Integer = 450
 
     Private Sub BtnClose_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClose.Click
         RaiseEvent CloseMe(Me)
@@ -21,7 +23,7 @@
             If _Action = EAction.Nouveau Then 'Nouvelle macro
 
             Else 'Modifier Macro
-                Dim x As HoMIDom.HoMIDom.Macro = myservice.ReturnMacroById(IdSrv, MacroId)
+                Dim x As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, MacroId)
 
                 If x IsNot Nothing Then
                     TxtNom.Text = x.Nom
@@ -72,4 +74,13 @@
         BtnTest.Visibility = Windows.Visibility.Collapsed
     End Sub
 
+    Private Sub UScenario1_Loaded(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles UScenario1.Loaded
+        UScenario1.Width = _Width - 15
+        UScenario1.Height = _Height - 160
+    End Sub
+
+    Private Sub StackPanel1_Loaded(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles StackPanel1.Loaded
+        UScenario1.Width = _Width - 15
+        UScenario1.Height = _Height - 160
+    End Sub
 End Class

@@ -2,9 +2,9 @@
 Imports System.Threading
 
 Public Class uScenario
-    Dim Span As Integer = 60 / 5 'Espacement correspondant à 1 seconde
-    Dim _Duree As Integer = 2
-    Dim _Zoom As Integer = 1
+    Dim Span As Integer = 60 / 5 'Espacement correspondant à 1 seconde default 60/5
+    Dim _Duree As Integer = 10 'default 2
+    Dim _Zoom As Integer = 1 'default 1
     Dim _ListAction As New ArrayList 'liste des actions
     Dim t As Double
     Dim _Width As Double = 0
@@ -401,4 +401,7 @@ Public Class uScenario
 
 
 
+    Private Sub uScenario_Loaded(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles MyBase.Loaded
+        StackPanel1.Height = uScenario.Height - 110
+    End Sub
 End Class
