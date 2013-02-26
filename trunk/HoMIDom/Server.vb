@@ -8490,11 +8490,12 @@ Namespace HoMIDom
                 Dim flag As Boolean = False
                 Dim _return As String = ""
 
+                'check si le composant existe déjà (meme adresse1, adresse2 et driver_id)
                 For Each _dev As NewDevice In _ListNewDevices
                     If _dev.Adresse1 = Adresse1 And _dev.IdDriver = DriverId And _dev.Adresse2 = Adresse2 Then
-                        Log(TypeLog.DEBUG, TypeSource.SERVEUR, "AddDetectNewDevice", "Le device (" & Adresse1 & ":" & Adresse2 & ") du driver (" & DriverId & "), existe déjà")
+                        Log(TypeLog.DEBUG, TypeSource.SERVEUR, "AddDetectNewDevice", "Le composant (" & Adresse1 & ":" & Adresse2 & ") du driver (" & DriverId & "), existe déjà")
                         flag = True
-                        _return = "Message: Device déjà existant"
+                        _return = "Message: Composant déjà existant"
                     End If
                 Next
 
@@ -8511,7 +8512,7 @@ Namespace HoMIDom
 
                     _ListNewDevices.Add(x)
                     x = Nothing
-                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "AddDetectNewDevice", "Le device (" & Adresse1 & ":" & Adresse2 & ") du driver (" & DriverId & ") de type " & Type & ", a été ajouté")
+                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "AddDetectNewDevice", "Le composant (" & Adresse1 & ":" & Adresse2 & ") du driver (" & DriverId & ") de type " & Type & ", a été ajouté")
                     _return = 0
                 End If
 

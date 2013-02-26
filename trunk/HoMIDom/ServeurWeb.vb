@@ -100,7 +100,7 @@ Namespace HoMIDom
             Public Sub readHeaders()
                 _Srv.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "readHeaders", "readHeaders()")
 
-                Dim line As [String]
+                Dim line As [String] = ""
                 While (InlineAssignHelper(line, streamReadLine(inputStream))) IsNot Nothing
                     If line.Equals("") Then
                         _Srv.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "readHeaders", "got headers")
