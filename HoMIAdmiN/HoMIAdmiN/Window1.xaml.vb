@@ -1053,7 +1053,8 @@ Class Window1
                 mnu4.Header = "Historique"
                 mnu4.Tag = 4
                 mnu4.Uid = Dev.ID
-                If _nbhisto <= 0 Then mnu4.IsEnabled = False
+                'If _nbhisto <= 0 Then mnu4.IsEnabled = False
+                If _nbhisto <= 0 Then mnu4.FontStyle = System.Windows.FontStyles.Italic
                 AddHandler mnu4.Click, AddressOf MnuitemDev_Click
                 ctxMenu.Items.Add(mnu4)
                 mnu4 = Nothing
@@ -1388,14 +1389,17 @@ Class Window1
                         y.Background = New SolidColorBrush(Colors.DarkGray)
                         y.BorderBrush = New SolidColorBrush(Colors.Black)
                         y.Margin = New Thickness(-15, 1, 0, 0)
-                        y.IsEnabled = False
+                        'y.IsEnabled = False
                         y.Uid = _dev.ID
+                        AddHandler y.MouseDoubleClick, AddressOf MnuitemHisto_Click
                     End If
 
                     If x IsNot Nothing Then
                         For i As Integer = 0 To x.Count - 1
 
                             Dim a As Historisation = x.Item(i)
+
+                            'AddHandler y.MouseDoubleClick, AddressOf MnuitemHisto_Click
 
                             If _dev.ID = a.IdDevice And IsNode = False Then
                                 y.Tag = a.Nom
@@ -1419,7 +1423,7 @@ Class Window1
 
                                 TreeViewHisto.Items.Add(y)
                                 trv = True
-                                mnu0 = Nothing
+                                 mnu0 = Nothing
                                 ctxMenu = Nothing
                             ElseIf _dev.ID = a.IdDevice And IsNode = True Then
                                 Dim y1 As New CheckBox

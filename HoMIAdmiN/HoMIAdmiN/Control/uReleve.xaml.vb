@@ -58,7 +58,7 @@ Public Class uReleve
             If retour <> 0 Then
                 MessageBox.Show("Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
             Else
-                RefreshGrid()
+                If Chk_refresh.IsChecked Then RefreshGrid()
             End If
         Catch ex As Exception
             MessageBox.Show("Erreur BtnUpdate_Click: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -72,7 +72,7 @@ Public Class uReleve
             If retour <> 0 Then
                 MessageBox.Show("Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
             Else
-                RefreshGrid()
+                If Chk_refresh.IsChecked Then RefreshGrid()
             End If
         Catch ex As Exception
             MessageBox.Show("Erreur BtnDelete_Click: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -94,7 +94,7 @@ Public Class uReleve
             If retour <> 0 Then
                 MessageBox.Show("Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
             Else
-                RefreshGrid()
+                If Chk_refresh.IsChecked Then RefreshGrid()
             End If
         Catch ex As Exception
             MessageBox.Show("Erreur BtnAdd_Click: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)

@@ -194,7 +194,25 @@ Partial Public Class uDevice
                     End If
 
                     'affiche du bouton Historique si le device a un historique
-                    If myService.DeviceAsHisto(DeviceId) > 0 Then BtnHisto.Visibility = Windows.Visibility.Visible
+                    'If myService.DeviceAsHisto(DeviceId) > 0 Then BtnHisto.Visibility = Windows.Visibility.Visible
+                    Dim nbhisto As Double = myService.DeviceAsHisto(DeviceId)
+                    If nbhisto > 0 Then
+                        BtnHisto.FontStyle = System.Windows.FontStyles.Italic
+                        Dim tl As New ToolTip
+                        tl.Foreground = System.Windows.Media.Brushes.White
+                        tl.Background = System.Windows.Media.Brushes.WhiteSmoke
+                        tl.BorderBrush = System.Windows.Media.Brushes.Black
+                        Dim stkpopup As New StackPanel
+                        Dim tool As New Label
+                        tool.Content &= "Derniere Valeur: " & x.Value & vbCrLf
+                        tool.Content &= "Date MAJ: " & x.LastChange & vbCrLf
+                        tool.Content &= "Nb Histo: " & nbhisto & vbCrLf
+                        stkpopup.Children.Add(tool)
+                        tool = Nothing
+                        tl.Content = stkpopup
+                        stkpopup = Nothing
+                        BtnHisto.ToolTip = tl
+                    End If
                 End If
             End If
 
