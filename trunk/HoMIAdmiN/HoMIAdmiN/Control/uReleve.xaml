@@ -14,11 +14,11 @@
             <StackPanel Orientation="Horizontal" >
                 <DataGrid Name="DataGrid1" Margin="5" RowBackground="#FFAFAFAF" AlternatingRowBackground="LightGray" Height="525" IsReadOnly="True" Background="#FF636060" BorderBrush="Gray" SelectionMode="Single"  HeadersVisibility="Column" AutoGenerateColumns="True" Width="300"></DataGrid>
                 <StackPanel HorizontalAlignment="Left">
-                <StackPanel >
+                    <Label Name="LblDev" Content="#####" Width="250" Foreground="White" HorizontalContentAlignment="Center" />
+                    <CheckBox Content="Rafraichir le graphe/relevés" Height="16" Name="Chk_refresh" HorizontalAlignment="Right" Foreground=" white" IsChecked="True" />
+                    <StackPanel >
 
                     <!--show the selected item-->
-                        <Label Name="LblDev" Content="#####" Width="250" Foreground="White" HorizontalAlignment="Left" HorizontalContentAlignment="Center" />
-
                         <GroupBox Margin="5">
                         <GroupBox.Header>
                             <Label Foreground="White" FontWeight="Bold">Sélection</Label>
