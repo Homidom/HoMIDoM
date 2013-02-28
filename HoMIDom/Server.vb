@@ -30,6 +30,8 @@ Namespace HoMIDom
     <Serializable()> Public Class Server
         Implements HoMIDom.IHoMIDom 'implémente l'interface dans cette class
 
+        Public Shared Property Instance() As Server
+
 #Region "Declaration des variables"
 
         Private Shared WithEvents _ListDrivers As New ArrayList 'Liste des drivers
@@ -2765,6 +2767,7 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub New()
             Try
+                Instance = Me
                 'Check If Homidom Run in 32 or 64 bits
                 If IntPtr.Size = 8 Then _OsPlatForm = "64" Else _OsPlatForm = "32"
             Catch ex As Exception
@@ -3105,7 +3108,7 @@ Namespace HoMIDom
                     If Mid(retoursql, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update version_dll", "Erreur Requete sqlite : " & retoursql)
 
                     'on ouvre la page web de remerciement
-                    Process.Start("http://www.homidom.com/premiereinstall_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html")
+                    'Process.Start("http://www.homidom.com/premiereinstall_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html")
 
                     'Gestion clé enregistrement
 

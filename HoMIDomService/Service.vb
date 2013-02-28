@@ -126,6 +126,10 @@ Module Service
                     Console.WriteLine(Now & " ERREUR: Erreur lors du lancement du service SOAP: " & ex.Message)
                 End Try
 
+                Dim apiServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP)
+                HoMIDomWebAPI.HoMIDomAPI.CurrentServer = Server.Instance
+                HoMIDomWebAPI.HoMIDomAPI.Start(apiServerAddress.ToString(), _IdSrv)
+
                 Using hostFileServer As New ServiceHost(GetType(HoMIDom.HoMIDom.FileServer), fileServerAddress)
                     hostFileServer.Open()
                     Console.WriteLine(Now & " Démarrage du serveur de fichiers OK")
