@@ -3108,7 +3108,7 @@ Namespace HoMIDom
                     If Mid(retoursql, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update version_dll", "Erreur Requete sqlite : " & retoursql)
 
                     'on ouvre la page web de remerciement
-                    'Process.Start("http://www.homidom.com/premiereinstall_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html")
+                    Process.Start("http://www.homidom.com/premiereinstall_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html")
 
                     'Gestion clé enregistrement
 
