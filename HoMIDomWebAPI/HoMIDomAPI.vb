@@ -20,6 +20,9 @@ Public Class HoMIDomAPI
          .action = "ExecuteCommand" _
         })
 
+        ' Add jsonp formatter for cross domain call
+        config.Formatters(0) = New WebApiContrib.Formatting.Jsonp.JsonpMediaTypeFormatter() ' Replace default JSON by JSONP formatter
+
         Console.WriteLine(String.Format("{0} Starting Web API on  {1}", Now, url))
         server = New HttpSelfHostServer(config)
         server.OpenAsync()

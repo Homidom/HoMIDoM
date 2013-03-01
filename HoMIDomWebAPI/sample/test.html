@@ -1,0 +1,63 @@
+
+<html>
+	<head>
+		<title>HoMIDom Web API Test</title>
+		<meta charset="utf-8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="jquery.jsonp-2.4.0.min.js"></script>
+	</head>
+	<body>
+		Devices:
+		
+		
+		<script type="text/javascript">
+			$(document).ready(function () {
+				$.jsonp({
+					url: 'http://localhost:7999/api/123456789/device/',
+					callbackParameter: "callback",
+					success: onSuccess,
+					error: onError
+				})
+			});
+			
+			function onError(jqXHR, textStatus, errorThrown ) {
+				alert('erreur:' + textStatus);
+			}
+			
+			function onSuccess(data) {
+				var items = [];
+				$.each(data, function(index, device) {
+					items.push('<li id="' + device._ID + '">' + device._Name);
+					var actions = [];
+					$.each(device._DeviceAction, function(i, command) {
+						actions.push('<li class="command"><a href="#" onClick="execute(\''+device._ID+'\', \''+command.Nom+'\')">' + command.Nom + '</a></li>');
+					});
+					
+					if (actions.length > 0)
+						items.push('<ul>' + actions.join('') + '</ul>');
+					
+					items.push('</li>');
+				});
+				$('<ul/>', {
+					'class': 'my-new-list',
+					html: items.join('')
+				}).appendTo('body');
+			}
+			
+			function execute(deviceId, command) {
+				$.jsonp({
+					url: 'http://localhost:7999/api/123456789/command/device/'+deviceId+'/'+command,
+					type: 'POST',
+					callbackParameter: "callback",
+					success: onExecuteSuccess,
+					error: onError
+				})
+			}
+			
+			function onExecuteSuccess() {
+				alert('Commande executée');
+			}
+		</script>
+	</body>
+</html>
