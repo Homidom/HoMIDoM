@@ -8,3 +8,10 @@ D:\Domotique\Homidom\Driver_DMX\obj\Debug\GenerateResource.write.1.tlog
 D:\Domotique\Homidom\Driver_DMX\obj\Debug\Driver_DMX.dll
 D:\Domotique\Homidom\Driver_DMX\obj\Debug\Driver_DMX.xml
 D:\Domotique\Homidom\Driver_DMX\obj\Debug\Driver_DMX.pdb
+D:\Domotique\Homidom\Drivers\Driver_DMX\obj\Debug\ResolveAssemblyReference.cache
+D:\Domotique\Homidom\Drivers\Driver_DMX\obj\Debug\Driver_DMX.Resources.resources
+D:\Domotique\Homidom\Drivers\Driver_DMX\obj\Debug\GenerateResource.read.1.tlog
+D:\Domotique\Homidom\Drivers\Driver_DMX\obj\Debug\GenerateResource.write.1.tlog
+D:\Domotique\Homidom\Drivers\Driver_DMX\obj\Debug\Driver_DMX.dll
+D:\Domotique\Homidom\Drivers\Driver_DMX\obj\Debug\Driver_DMX.xml
+D:\Domotique\Homidom\Drivers\Driver_DMX\obj\Debug\Driver_DMX.pdb

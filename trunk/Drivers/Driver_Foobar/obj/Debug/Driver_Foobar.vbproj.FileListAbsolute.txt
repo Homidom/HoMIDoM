@@ -8,3 +8,10 @@ D:\Domotique\Homidom\Driver_Foobar\obj\Debug\GenerateResource.write.1.tlog
 D:\Domotique\Homidom\Driver_Foobar\obj\Debug\Driver_Foobar.dll
 D:\Domotique\Homidom\Driver_Foobar\obj\Debug\Driver_Foobar.xml
 D:\Domotique\Homidom\Driver_Foobar\obj\Debug\Driver_Foobar.pdb
+D:\Domotique\Homidom\Drivers\Driver_Foobar\obj\Debug\ResolveAssemblyReference.cache
+D:\Domotique\Homidom\Drivers\Driver_Foobar\obj\Debug\Driver_Foobar.Resources.resources
+D:\Domotique\Homidom\Drivers\Driver_Foobar\obj\Debug\GenerateResource.read.1.tlog
+D:\Domotique\Homidom\Drivers\Driver_Foobar\obj\Debug\GenerateResource.write.1.tlog
+D:\Domotique\Homidom\Drivers\Driver_Foobar\obj\Debug\Driver_Foobar.dll
+D:\Domotique\Homidom\Drivers\Driver_Foobar\obj\Debug\Driver_Foobar.xml
+D:\Domotique\Homidom\Drivers\Driver_Foobar\obj\Debug\Driver_Foobar.pdb

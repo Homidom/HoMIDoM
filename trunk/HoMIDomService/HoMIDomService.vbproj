@@ -151,6 +151,7 @@
     <ProjectReference Include="..\HoMIDomWebAPI\HoMIDomWebAPI.vbproj">
       <Project>{96963754-902F-4F02-AB66-D06A0D2E3242}</Project>
       <Name>HoMIDomWebAPI</Name>
+      <Private>False</Private>
     </ProjectReference>
     <ProjectReference Include="..\HoMIDom\HoMIDom.vbproj">
       <Project>{1F0CE8B5-5BA9-4704-8B5E-52682635F803}</Project>
@@ -181,7 +182,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="False" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

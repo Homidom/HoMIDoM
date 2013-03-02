@@ -6,20 +6,7 @@ Driver_DMX
 </name>
 </assembly>
 <members>
-<member name="P:Driver_DMX.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:Driver_DMX.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:Driver_DMX.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
-</member><member name="M:Driver_DMX.Driver_DMX.ExecuteCommand(System.Object,System.String,System.Object[])">
+<member name="M:Driver_DMX.Driver_DMX.ExecuteCommand(System.Object,System.String,System.Object[])">
 	<summary>Execute une commande avancée</summary>
 	<param name="MyDevice">Objet représentant le Device </param>
 	<param name="Command">Nom de la commande avancée à éxécuter</param>
@@ -60,6 +47,19 @@ Driver_DMX
 </member><member name="T:Driver_DMX.Driver_DMX">
 	<summary>Driver DMX</summary>
 	<remarks></remarks>
+</member><member name="P:Driver_DMX.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_DMX.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_DMX.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
 </member>
 </members>
 </doc>

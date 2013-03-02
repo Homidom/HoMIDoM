@@ -1,0 +1,4 @@
+D:\Domotique\Homidom\HoMIDomWebAPI\obj\Debug\ResolveAssemblyReference.cache
+D:\Domotique\Homidom\HoMIDomWebAPI\obj\Debug\HoMIDomWebAPI.Resources.resources
+D:\Domotique\Homidom\HoMIDomWebAPI\obj\Debug\GenerateResource.read.1.tlog
+D:\Domotique\Homidom\HoMIDomWebAPI\obj\Debug\GenerateResource.write.1.tlog

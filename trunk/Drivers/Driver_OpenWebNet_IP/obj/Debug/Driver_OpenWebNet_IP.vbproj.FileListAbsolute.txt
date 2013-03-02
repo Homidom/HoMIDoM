@@ -8,3 +8,10 @@ D:\Domotique\Homidom\Driver_OpenWebNet_IP\obj\Debug\GenerateResource.write.1.tlo
 D:\Domotique\Homidom\Driver_OpenWebNet_IP\obj\Debug\Driver_OpenWebNet_IP.dll
 D:\Domotique\Homidom\Driver_OpenWebNet_IP\obj\Debug\Driver_OpenWebNet_IP.xml
 D:\Domotique\Homidom\Driver_OpenWebNet_IP\obj\Debug\Driver_OpenWebNet_IP.pdb
+D:\Domotique\Homidom\Drivers\Driver_OpenWebNet_IP\obj\Debug\ResolveAssemblyReference.cache
+D:\Domotique\Homidom\Drivers\Driver_OpenWebNet_IP\obj\Debug\Driver_OpenWebNet_IP.Resources.resources
+D:\Domotique\Homidom\Drivers\Driver_OpenWebNet_IP\obj\Debug\GenerateResource.read.1.tlog
+D:\Domotique\Homidom\Drivers\Driver_OpenWebNet_IP\obj\Debug\GenerateResource.write.1.tlog
+D:\Domotique\Homidom\Drivers\Driver_OpenWebNet_IP\obj\Debug\Driver_OpenWebNet_IP.dll
+D:\Domotique\Homidom\Drivers\Driver_OpenWebNet_IP\obj\Debug\Driver_OpenWebNet_IP.xml
+D:\Domotique\Homidom\Drivers\Driver_OpenWebNet_IP\obj\Debug\Driver_OpenWebNet_IP.pdb

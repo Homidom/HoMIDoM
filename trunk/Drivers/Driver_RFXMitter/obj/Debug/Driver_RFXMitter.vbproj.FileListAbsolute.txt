@@ -8,3 +8,10 @@ D:\Domotique\Homidom\Driver_RFXMitter\obj\Debug\GenerateResource.write.1.tlog
 D:\Domotique\Homidom\Driver_RFXMitter\obj\Debug\Driver_RFXMitter.dll
 D:\Domotique\Homidom\Driver_RFXMitter\obj\Debug\Driver_RFXMitter.xml
 D:\Domotique\Homidom\Driver_RFXMitter\obj\Debug\Driver_RFXMitter.pdb
+D:\Domotique\Homidom\Drivers\Driver_RFXMitter\obj\Debug\ResolveAssemblyReference.cache
+D:\Domotique\Homidom\Drivers\Driver_RFXMitter\obj\Debug\Driver_RFXMitter.Resources.resources
+D:\Domotique\Homidom\Drivers\Driver_RFXMitter\obj\Debug\GenerateResource.read.1.tlog
+D:\Domotique\Homidom\Drivers\Driver_RFXMitter\obj\Debug\GenerateResource.write.1.tlog
+D:\Domotique\Homidom\Drivers\Driver_RFXMitter\obj\Debug\Driver_RFXMitter.dll
+D:\Domotique\Homidom\Drivers\Driver_RFXMitter\obj\Debug\Driver_RFXMitter.xml
+D:\Domotique\Homidom\Drivers\Driver_RFXMitter\obj\Debug\Driver_RFXMitter.pdb

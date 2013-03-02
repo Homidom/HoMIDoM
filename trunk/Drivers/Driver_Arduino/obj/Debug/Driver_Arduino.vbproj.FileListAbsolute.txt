@@ -8,3 +8,10 @@ D:\Domotique\Homidom\Driver_Arduino\obj\Debug\GenerateResource.write.1.tlog
 D:\Domotique\Homidom\Driver_Arduino\obj\Debug\Driver_Arduino.dll
 D:\Domotique\Homidom\Driver_Arduino\obj\Debug\Driver_Arduino.xml
 D:\Domotique\Homidom\Driver_Arduino\obj\Debug\Driver_Arduino.pdb
+D:\Domotique\Homidom\Drivers\Driver_Arduino\obj\Debug\ResolveAssemblyReference.cache
+D:\Domotique\Homidom\Drivers\Driver_Arduino\obj\Debug\Driver_Arduino.Resources.resources
+D:\Domotique\Homidom\Drivers\Driver_Arduino\obj\Debug\GenerateResource.read.1.tlog
+D:\Domotique\Homidom\Drivers\Driver_Arduino\obj\Debug\GenerateResource.write.1.tlog
+D:\Domotique\Homidom\Drivers\Driver_Arduino\obj\Debug\Driver_Arduino.dll
+D:\Domotique\Homidom\Drivers\Driver_Arduino\obj\Debug\Driver_Arduino.xml
+D:\Domotique\Homidom\Drivers\Driver_Arduino\obj\Debug\Driver_Arduino.pdb

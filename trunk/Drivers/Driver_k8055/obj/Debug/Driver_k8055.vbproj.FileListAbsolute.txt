@@ -8,3 +8,10 @@ D:\Domotique\Homidom\Driver_k8055\obj\Debug\GenerateResource.write.1.tlog
 D:\Domotique\Homidom\Driver_k8055\obj\Debug\Driver_k8055.dll
 D:\Domotique\Homidom\Driver_k8055\obj\Debug\Driver_k8055.xml
 D:\Domotique\Homidom\Driver_k8055\obj\Debug\Driver_k8055.pdb
+D:\Domotique\Homidom\Drivers\Driver_k8055\obj\Debug\ResolveAssemblyReference.cache
+D:\Domotique\Homidom\Drivers\Driver_k8055\obj\Debug\Driver_k8055.Resources.resources
+D:\Domotique\Homidom\Drivers\Driver_k8055\obj\Debug\GenerateResource.read.1.tlog
+D:\Domotique\Homidom\Drivers\Driver_k8055\obj\Debug\GenerateResource.write.1.tlog
+D:\Domotique\Homidom\Drivers\Driver_k8055\obj\Debug\Driver_k8055.dll
+D:\Domotique\Homidom\Drivers\Driver_k8055\obj\Debug\Driver_k8055.xml
+D:\Domotique\Homidom\Drivers\Driver_k8055\obj\Debug\Driver_k8055.pdb

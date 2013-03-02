@@ -8,3 +8,10 @@ D:\Domotique\Homidom\Driver_Phidget\obj\Debug\GenerateResource.write.1.tlog
 D:\Domotique\Homidom\Driver_Phidget\obj\Debug\Driver_Phidget.dll
 D:\Domotique\Homidom\Driver_Phidget\obj\Debug\Driver_Phidget.xml
 D:\Domotique\Homidom\Driver_Phidget\obj\Debug\Driver_Phidget.pdb
+D:\Domotique\Homidom\Drivers\Driver_Phidget\obj\Debug\ResolveAssemblyReference.cache
+D:\Domotique\Homidom\Drivers\Driver_Phidget\obj\Debug\Driver_Phidget.Resources.resources
+D:\Domotique\Homidom\Drivers\Driver_Phidget\obj\Debug\GenerateResource.read.1.tlog
+D:\Domotique\Homidom\Drivers\Driver_Phidget\obj\Debug\GenerateResource.write.1.tlog
+D:\Domotique\Homidom\Drivers\Driver_Phidget\obj\Debug\Driver_Phidget.dll
+D:\Domotique\Homidom\Drivers\Driver_Phidget\obj\Debug\Driver_Phidget.xml
+D:\Domotique\Homidom\Drivers\Driver_Phidget\obj\Debug\Driver_Phidget.pdb

@@ -6,20 +6,7 @@ Driver_PLCBUS
 </name>
 </assembly>
 <members>
-<member name="P:Driver_PLCBUS.My.Resources.Resources.ResourceManager">
-	<summary>
-  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
-</summary>
-</member><member name="P:Driver_PLCBUS.My.Resources.Resources.Culture">
-	<summary>
-  Remplace la propriété CurrentUICulture du thread actuel pour toutes
-  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
-</summary>
-</member><member name="T:Driver_PLCBUS.My.Resources.Resources">
-	<summary>
-  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
-</summary>
-</member><member name="M:Driver_PLCBUS.Driver_PLCBUS.GetCommandPlus">
+<member name="M:Driver_PLCBUS.Driver_PLCBUS.GetCommandPlus">
 	<summary>
  Retourne la liste des Commandes avancées
  </summary>
@@ -133,6 +120,19 @@ Driver_PLCBUS
 </member><member name="T:Driver_PLCBUS.Driver_PLCBUS">
 	<summary>Class Driver_PLCBUS, permet de commander et recevoir des ordres avec les périphériques PLCBUS via un 1141 ou 1141+</summary>
 	<remarks>Pour la version USB, necessite l'installation du driver</remarks>
+</member><member name="P:Driver_PLCBUS.My.Resources.Resources.ResourceManager">
+	<summary>
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member><member name="P:Driver_PLCBUS.My.Resources.Resources.Culture">
+	<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="T:Driver_PLCBUS.My.Resources.Resources">
+	<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
 </member>
 </members>
 </doc>
