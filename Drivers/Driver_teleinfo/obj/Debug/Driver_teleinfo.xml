@@ -1,0 +1,122 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Driver_teleinfo
+</name>
+</assembly>
+<members>
+<member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.GetCommandPlus">
+	<summary>
+ Retourne la liste des Commandes avancées
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.ExecuteCommand(System.Object,System.String,System.Object[])">
+	<summary>Execute une commande avancée</summary>
+	<param name="MyDevice">Objet représentant le Device </param>
+	<param name="Command">Nom de la commande avancée à éxécuter</param>
+	<param name="Param">tableau de paramétres</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.VerifChamp(System.String,System.Object)">
+	<summary>
+ Permet de vérifier si un champ est valide
+ </summary>
+	<param name="Champ"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.Start">
+	<summary>Démarrer le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.Stop">
+	<summary>Arrêter le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.Restart">
+	<summary>Re-Démarrer le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.Read(System.Object)">
+	<summary>Intérroger un device</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<remarks>pas utilisé</remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.Write(System.Object,System.String,System.Object,System.Object)">
+	<summary>Commander un device</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<param name="Command">La commande à passer</param>
+	<param name="Parametre1"></param>
+	<param name="Parametre2"></param>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.DeleteDevice(System.String)">
+	<summary>Fonction lancée lors de la suppression d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.NewDevice(System.String)">
+	<summary>Fonction lancée lors de l'ajout d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.Add_DeviceCommande(System.String,System.String,System.Int32)">
+	<summary>ajout des commandes avancées pour les devices</summary>
+	<param name="nom">Nom de la commande avancée</param>
+	<param name="description">Description qui sera affichée dans l'admin</param>
+	<param name="nbparam">Nombre de parametres attendus</param>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.Add_LibelleDriver(System.String,System.String,System.String,System.String)">
+	<summary>ajout Libellé pour le Driver</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.Add_LibelleDevice(System.String,System.String,System.String,System.String)">
+	<summary>Ajout Libellé pour les Devices</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.Add_ParamAvance(System.String,System.String,System.Object)">
+	<summary>ajout de parametre avancés</summary>
+	<param name="nom">Nom du parametre (sans espace)</param>
+	<param name="description">Description du parametre</param>
+	<param name="valeur">Sa valeur</param>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.#ctor">
+	<summary>Creation d'un objet de type</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.TimerTick(System.Object,System.Timers.ElapsedEventArgs)">
+	<summary>Si refresh &gt;0 gestion du timer</summary>
+	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.ouvrir(System.String)">
+	<summary>Ouvrir le port Teleinfo</summary>
+	<param name="numero">Nom/Numero du port COM: COM2</param>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.fermer">
+	<summary>Fermer le port TeleInfo</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.DataReceived(System.Object,System.IO.Ports.SerialDataReceivedEventArgs)">
+	<summary>Fonction lancée sur reception de données sur le port COM</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.ProcessReceivedChar(System.Byte)">
+	<summary>Rassemble un message complet pour ensuite l'envoyer à displaymess</summary>
+	<param name="temp">Byte recu</param>
+	<remarks></remarks>
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.Process(System.String[]@)">
+	<summary>Recomponse les messages reçu</summary>
+	<remarks></remarks>
+</member><member name="T:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo">
+	<summary>Class Driver_Teleinfo, permet de communiquer avec le module USB de A DAUGUET</summary>
+	<remarks>Nécessite l'installation des pilotes fournis sur le site </remarks>
+</member><member name="P:Driver_teleinfo.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_teleinfo.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_teleinfo.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+</members>
+</doc>

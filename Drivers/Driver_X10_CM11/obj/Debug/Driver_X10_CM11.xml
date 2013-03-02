@@ -1,0 +1,178 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Driver_X10_CM11
+</name>
+</assembly>
+<members>
+<member name="P:Driver_X10_CM11.My.Resources.Resources.ResourceManager">
+	<summary>
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member><member name="P:Driver_X10_CM11.My.Resources.Resources.Culture">
+	<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="T:Driver_X10_CM11.My.Resources.Resources">
+	<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.GetCommandPlus">
+	<summary>
+ Retourne la liste des Commandes avancées
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.ExecuteCommand(System.Object,System.String,System.Object[])">
+	<summary>Execute une commande avancée</summary>
+	<param name="MyDevice">Objet représentant le Device </param>
+	<param name="Command">Nom de la commande avancée à éxécuter</param>
+	<param name="Param">tableau de paramétres</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.VerifChamp(System.String,System.Object)">
+	<summary>
+ Permet de vérifier si un champ est valide
+ </summary>
+	<param name="Champ"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.Start">
+	<summary>Démarrer le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.Stop">
+	<summary>Arrêter le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.Restart">
+	<summary>Re-Démarrer le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.Read(System.Object)">
+	<summary>Intérroger un device</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<remarks>pas utilisé</remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.Write(System.Object,System.String,System.Object,System.Object)">
+	<summary>Commander un device</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<param name="Command">La commande à passer</param>
+	<param name="Parametre1"></param>
+	<param name="Parametre2"></param>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.DeleteDevice(System.String)">
+	<summary>Fonction lancée lors de la suppression d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.NewDevice(System.String)">
+	<summary>Fonction lancée lors de l'ajout d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.add_devicecommande(System.String,System.String,System.Int32)">
+	<summary>ajout des commandes avancées pour les devices</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.Add_LibelleDriver(System.String,System.String,System.String,System.String)">
+	<summary>ajout Libellé pour le Driver</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.Add_LibelleDevice(System.String,System.String,System.String,System.String)">
+	<summary>Ajout Libellé pour les Devices</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.#ctor">
+	<summary>Creation d'un objet de type</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.TimerTick(System.Object,System.Timers.ElapsedEventArgs)">
+	<summary>Si refresh &gt;0 gestion du timer</summary>
+	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.DataReceived(System.Object,System.IO.Ports.SerialDataReceivedEventArgs)">
+	<summary>
+ Traite les infos reçus
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.TraiteLire(System.Byte[])">
+	<summary>
+ Traite la trame reçu provenant d'un device
+ </summary>
+	<param name="Data"></param>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.traitement(System.String,System.String)">
+	<summary>Traite les paquets reçus</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.X10_GetClock">
+	<summary>
+ Retourne la date et l'heure, la version
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.GetFunction(System.String)">
+	<summary>
+ Renvoi la fonction depuis la valeur binaire
+ </summary>
+	<param name="Bin"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.GetDevice(System.String)">
+	<summary>
+ Renvoi le numéro d'adresse depuis la valeur Binaire
+ </summary>
+	<param name="Bin"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.GetHouse(System.String)">
+	<summary>
+ Renvoi le Code House depuis la valeur Binaire
+ </summary>
+	<param name="Bin"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.Int2Bin(System.Int32)">
+	<summary>
+ Conversion Entier en Binaire
+ </summary>
+	<param name="Dec"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.Bin2Int(System.String)">
+	<summary>
+ Conversion Binaire en Entier
+ </summary>
+	<param name="Bin"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.Bin2Day(System.String)">
+	<summary>
+ Conversion Bin en jour
+ </summary>
+	<param name="Bin"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.Bin2dbl(System.String)">
+	<summary>
+ Conversion Binaire en Double
+ </summary>
+	<param name="Bin"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.Jour2Date(System.Int32)">
+	<summary>
+ Convertie le nombre de jour en date
+ </summary>
+	<param name="NbJour"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_X10_CM11.Driver_X10_CM11.GetAdd(System.String)">
+	<summary>
+ Renvoi l'adresse pour getclock
+ </summary>
+	<param name="Bin"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member>
+</members>
+</doc>

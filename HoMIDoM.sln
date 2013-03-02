@@ -1,81 +1,83 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Foobar", "Driver_Foobar\Driver_Foobar.vbproj", "{62C5EA60-2FE8-4F56-BC66-BE2D7B14CA5B}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Foobar", "Drivers\Driver_Foobar\Driver_Foobar.vbproj", "{62C5EA60-2FE8-4F56-BC66-BE2D7B14CA5B}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_k8055", "Driver_k8055\Driver_k8055.vbproj", "{B1154B53-619A-4878-8915-9A98904EEEF5}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_k8055", "Drivers\Driver_k8055\Driver_k8055.vbproj", "{B1154B53-619A-4878-8915-9A98904EEEF5}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_k8056", "Driver_k8056\Driver_k8056.vbproj", "{E45EDD1D-4BED-4782-9050-D42EF782C28E}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_k8056", "Drivers\Driver_k8056\Driver_k8056.vbproj", "{E45EDD1D-4BED-4782-9050-D42EF782C28E}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "HoMIDomService", "HoMIDomService\HoMIDomService.vbproj", "{37B0A6AC-01E4-46EE-83DF-C4B8E91E3633}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "HoMIDom", "HoMIDom\HoMIDom.vbproj", "{1F0CE8B5-5BA9-4704-8B5E-52682635F803}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_OneWire", "Driver_onewire\Driver_OneWire.vbproj", "{B0602976-1274-4BDB-8158-9A655821E14D}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_OneWire", "Drivers\Driver_onewire\Driver_OneWire.vbproj", "{B0602976-1274-4BDB-8158-9A655821E14D}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1F0CE8B5-5BA9-4704-8B5E-52682635F803} = {1F0CE8B5-5BA9-4704-8B5E-52682635F803}
 	EndProjectSection
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_PLCBUS", "Driver_PLCBUS\Driver_PLCBUS.vbproj", "{DBF3A25F-E50B-40F9-A7D3-312BC11CB08A}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_PLCBUS", "Drivers\Driver_PLCBUS\Driver_PLCBUS.vbproj", "{DBF3A25F-E50B-40F9-A7D3-312BC11CB08A}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_USBuirt", "Driver_USBuirt\Driver_USBuirt.vbproj", "{246DB066-8785-455D-8431-F43CE60D5CA1}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_USBuirt", "Drivers\Driver_USBuirt\Driver_USBuirt.vbproj", "{246DB066-8785-455D-8431-F43CE60D5CA1}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Virtuel", "Driver_Virtuel\Driver_Virtuel.vbproj", "{3A236F04-48E0-4FD9-AD24-641928DC2621}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Virtuel", "Drivers\Driver_Virtuel\Driver_Virtuel.vbproj", "{3A236F04-48E0-4FD9-AD24-641928DC2621}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Zibase", "Driver_Zibase\Driver_Zibase.vbproj", "{0B857806-380B-4290-94DB-80EE647CBEB2}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Zibase", "Drivers\Driver_Zibase\Driver_Zibase.vbproj", "{0B857806-380B-4290-94DB-80EE647CBEB2}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "HoMIAdmiN", "HoMIAdmiN\HoMIAdmiN\HoMIAdmiN.vbproj", "{6BB2F741-F077-4D87-90C5-619AF11786FF}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1F0CE8B5-5BA9-4704-8B5E-52682635F803} = {1F0CE8B5-5BA9-4704-8B5E-52682635F803}
 	EndProjectSection
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Mirror", "Driver_Mirror\Driver_Mirror.vbproj", "{CCD77A3B-B127-4EA4-8653-E810CA8243B2}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Mirror", "Drivers\Driver_Mirror\Driver_Mirror.vbproj", "{CCD77A3B-B127-4EA4-8653-E810CA8243B2}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_RFXMitter", "Driver_RFXMitter\Driver_RFXMitter.vbproj", "{F8190EE1-FE56-4181-BE8B-2E5558A086CE}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_RFXMitter", "Drivers\Driver_RFXMitter\Driver_RFXMitter.vbproj", "{F8190EE1-FE56-4181-BE8B-2E5558A086CE}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_DMX", "Driver_DMX\Driver_DMX.vbproj", "{E6E5D9D5-A67A-4CFE-84EB-EFCCDB62F351}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_DMX", "Drivers\Driver_DMX\Driver_DMX.vbproj", "{E6E5D9D5-A67A-4CFE-84EB-EFCCDB62F351}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Phidget", "Driver_Phidget\Driver_Phidget.vbproj", "{27A91FC0-0859-43A8-8A35-6B3C159889D9}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Phidget", "Drivers\Driver_Phidget\Driver_Phidget.vbproj", "{27A91FC0-0859-43A8-8A35-6B3C159889D9}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_X10_CM15", "Driver_X10_CM15\Driver_X10_CM15.vbproj", "{7D4D3AFA-4377-4B3A-8B6D-6E06CCA0C73E}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_X10_CM15", "Drivers\Driver_X10_CM15\Driver_X10_CM15.vbproj", "{7D4D3AFA-4377-4B3A-8B6D-6E06CCA0C73E}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Arduino", "Driver_Arduino\Driver_Arduino.vbproj", "{BBBA21FA-21D8-4A73-B392-43D85D3BF076}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Arduino", "Drivers\Driver_Arduino\Driver_Arduino.vbproj", "{BBBA21FA-21D8-4A73-B392-43D85D3BF076}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_teleinfo", "Driver_teleinfo\Driver_teleinfo.vbproj", "{47A7B1DB-9947-4508-912C-E84EEB9E6D1E}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_teleinfo", "Drivers\Driver_teleinfo\Driver_teleinfo.vbproj", "{47A7B1DB-9947-4508-912C-E84EEB9E6D1E}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_X10_CM11", "Driver_X10_CM11\Driver_X10_CM11.vbproj", "{5301E9F1-4D8F-40AA-ADBA-1C209984CD5B}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_X10_CM11", "Drivers\Driver_X10_CM11\Driver_X10_CM11.vbproj", "{5301E9F1-4D8F-40AA-ADBA-1C209984CD5B}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_RFXtrx", "Driver_RFXtrx\Driver_RFXtrx.vbproj", "{3E707D1C-C9E9-4236-BC79-3199128EC3C5}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_RFXtrx", "Drivers\Driver_RFXtrx\Driver_RFXtrx.vbproj", "{3E707D1C-C9E9-4236-BC79-3199128EC3C5}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_http", "Driver_http\Driver_http.vbproj", "{3F2AFCD6-F1E0-4DE0-AD67-1087FBF90FE4}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_http", "Drivers\Driver_http\Driver_http.vbproj", "{3F2AFCD6-F1E0-4DE0-AD67-1087FBF90FE4}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Zwave", "Driver_Zwave\Driver_Zwave.vbproj", "{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Zwave", "Drivers\Driver_Zwave\Driver_Zwave.vbproj", "{37AF0456-F7F6-4E41-9C4C-ADC14D5802FD}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_RFXReceiver", "Driver_RFXReceiver\Driver_RFXReceiver.vbproj", "{42022F14-ACC9-44BD-B5AF-E2F6ABCFE9A4}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_RFXReceiver", "Drivers\Driver_RFXReceiver\Driver_RFXReceiver.vbproj", "{42022F14-ACC9-44BD-B5AF-E2F6ABCFE9A4}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "HoMIWpF", "HoMIWpf\HoMIWpF.vbproj", "{B2E1A76D-CCD9-4C87-B0A2-FA23396D78D0}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_HomeSeer", "Driver_HomeSeer\Driver_HomeSeer.vbproj", "{98E7E9D3-1D26-46E2-AD72-3B70DCF2BC54}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_HomeSeer", "Drivers\Driver_HomeSeer\Driver_HomeSeer.vbproj", "{98E7E9D3-1D26-46E2-AD72-3B70DCF2BC54}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_OpenWebNet_USB", "Driver_OpenWebNet_USB\Driver_OpenWebNet_USB.vbproj", "{E579A0E8-350D-48FE-B852-C5ABB2FCDF35}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_OpenWebNet_USB", "Drivers\Driver_OpenWebNet_USB\Driver_OpenWebNet_USB.vbproj", "{E579A0E8-350D-48FE-B852-C5ABB2FCDF35}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Weather", "Driver_Weather\Driver_Weather.vbproj", "{29C20DFB-7DAB-451D-AD8C-F5E6CEDBF400}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Weather", "Drivers\Driver_Weather\Driver_Weather.vbproj", "{29C20DFB-7DAB-451D-AD8C-F5E6CEDBF400}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_OpenWebNet_IP", "Driver_OpenWebNet_IP\Driver_OpenWebNet_IP.vbproj", "{53F1CB03-DD58-4A63-B308-B099A47E9E86}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_OpenWebNet_IP", "Drivers\Driver_OpenWebNet_IP\Driver_OpenWebNet_IP.vbproj", "{53F1CB03-DD58-4A63-B308-B099A47E9E86}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_CurrentCost", "Driver_CurrentCost\Driver_CurrentCost.vbproj", "{DF378B58-7FC8-4B66-9AE3-7A8EFDAE04B6}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_CurrentCost", "Drivers\Driver_CurrentCost\Driver_CurrentCost.vbproj", "{DF378B58-7FC8-4B66-9AE3-7A8EFDAE04B6}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Gsm", "Driver_Gsm\Driver_Gsm.vbproj", "{3FF36C8E-49D2-4BBC-BF08-94AC1560F0D5}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Gsm", "Drivers\Driver_Gsm\Driver_Gsm.vbproj", "{3FF36C8E-49D2-4BBC-BF08-94AC1560F0D5}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_System", "Driver_System\Driver_System.vbproj", "{B70BAE66-3932-44F4-A411-C7EA6F1342AD}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_System", "Drivers\Driver_System\Driver_System.vbproj", "{B70BAE66-3932-44F4-A411-C7EA6F1342AD}"
 EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_k8000", "Driver_k8000\Driver_k8000.vbproj", "{64F4D426-C8EB-4A90-908C-2BB45BE6C136}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_k8000", "Drivers\Driver_k8000\Driver_k8000.vbproj", "{64F4D426-C8EB-4A90-908C-2BB45BE6C136}"
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Homidom_Install", "Homidom_Install\Homidom_Install.vdproj", "{6C06D56D-8A32-456A-B66F-2ADF5BB3A534}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Drivers", "Drivers", "{47765C06-B882-436A-B79C-BA6CA3B2ECF3}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "HoMIDomWebAPI", "HoMIDomWebAPI\HoMIDomWebAPI.vbproj", "{96963754-902F-4F02-AB66-D06A0D2E3242}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Teracom", "Drivers\Driver_Teracom\Driver_Teracom.vbproj", "{E2E39EA8-8B98-4DF9-9F7B-EEA0B9AAEF70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -390,6 +392,16 @@ Global
 		{96963754-902F-4F02-AB66-D06A0D2E3242}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{96963754-902F-4F02-AB66-D06A0D2E3242}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{96963754-902F-4F02-AB66-D06A0D2E3242}.Release|x86.ActiveCfg = Release|Any CPU
+		{E2E39EA8-8B98-4DF9-9F7B-EEA0B9AAEF70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2E39EA8-8B98-4DF9-9F7B-EEA0B9AAEF70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2E39EA8-8B98-4DF9-9F7B-EEA0B9AAEF70}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E2E39EA8-8B98-4DF9-9F7B-EEA0B9AAEF70}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E2E39EA8-8B98-4DF9-9F7B-EEA0B9AAEF70}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E2E39EA8-8B98-4DF9-9F7B-EEA0B9AAEF70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2E39EA8-8B98-4DF9-9F7B-EEA0B9AAEF70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2E39EA8-8B98-4DF9-9F7B-EEA0B9AAEF70}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E2E39EA8-8B98-4DF9-9F7B-EEA0B9AAEF70}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E2E39EA8-8B98-4DF9-9F7B-EEA0B9AAEF70}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -423,11 +435,12 @@ Global
 		{B70BAE66-3932-44F4-A411-C7EA6F1342AD} = {47765C06-B882-436A-B79C-BA6CA3B2ECF3}
 		{64F4D426-C8EB-4A90-908C-2BB45BE6C136} = {47765C06-B882-436A-B79C-BA6CA3B2ECF3}
 		{62C5EA60-2FE8-4F56-BC66-BE2D7B14CA5B} = {47765C06-B882-436A-B79C-BA6CA3B2ECF3}
+		{E2E39EA8-8B98-4DF9-9F7B-EEA0B9AAEF70} = {47765C06-B882-436A-B79C-BA6CA3B2ECF3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_UseGlobalSettings = False
-		BuildVersion_BuildVersioningStyle = None.None.Increment.None
-		BuildVersion_UpdateFileVersion = True
 		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_BuildVersioningStyle = None.None.Increment.None
+		BuildVersion_UseGlobalSettings = False
 	EndGlobalSection
 EndGlobal
