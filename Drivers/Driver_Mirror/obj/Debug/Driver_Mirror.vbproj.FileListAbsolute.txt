@@ -8,3 +8,10 @@ D:\Domotique\Homidom\Driver_Mirror\obj\Debug\GenerateResource.write.1.tlog
 D:\Domotique\Homidom\Driver_Mirror\obj\Debug\Driver_Mirror.dll
 D:\Domotique\Homidom\Driver_Mirror\obj\Debug\Driver_Mirror.xml
 D:\Domotique\Homidom\Driver_Mirror\obj\Debug\Driver_Mirror.pdb
+D:\Domotique\Homidom\Drivers\Driver_Mirror\obj\Debug\ResolveAssemblyReference.cache
+D:\Domotique\Homidom\Drivers\Driver_Mirror\obj\Debug\Driver_Mirror.Resources.resources
+D:\Domotique\Homidom\Drivers\Driver_Mirror\obj\Debug\GenerateResource.read.1.tlog
+D:\Domotique\Homidom\Drivers\Driver_Mirror\obj\Debug\GenerateResource.write.1.tlog
+D:\Domotique\Homidom\Drivers\Driver_Mirror\obj\Debug\Driver_Mirror.dll
+D:\Domotique\Homidom\Drivers\Driver_Mirror\obj\Debug\Driver_Mirror.xml
+D:\Domotique\Homidom\Drivers\Driver_Mirror\obj\Debug\Driver_Mirror.pdb

@@ -1,9 +1,0 @@
-C:\Users\Marc\Documents\Visual Studio 2012\Projects\Homidom\homidom\DEBUG\Drivers\Driver_Zwave.dll
-C:\Users\Marc\Documents\Visual Studio 2012\Projects\Homidom\homidom\DEBUG\Drivers\Driver_Zwave.pdb
-C:\Users\Marc\Documents\Visual Studio 2012\Projects\Homidom\homidom\DEBUG\Drivers\Driver_Zwave.xml
-C:\Users\Marc\Documents\Visual Studio 2012\Projects\Homidom\homidom\Driver_Zwave\obj\Debug\Driver_Zwave.vbprojResolveAssemblyReference.cache
-C:\Users\Marc\Documents\Visual Studio 2012\Projects\Homidom\homidom\Driver_Zwave\obj\Debug\Driver_Zwave.Resources.resources
-C:\Users\Marc\Documents\Visual Studio 2012\Projects\Homidom\homidom\Driver_Zwave\obj\Debug\Driver_Zwave.vbproj.GenerateResource.Cache
-C:\Users\Marc\Documents\Visual Studio 2012\Projects\Homidom\homidom\Driver_Zwave\obj\Debug\Driver_Zwave.dll
-C:\Users\Marc\Documents\Visual Studio 2012\Projects\Homidom\homidom\Driver_Zwave\obj\Debug\Driver_Zwave.xml
-C:\Users\Marc\Documents\Visual Studio 2012\Projects\Homidom\homidom\Driver_Zwave\obj\Debug\Driver_Zwave.pdb

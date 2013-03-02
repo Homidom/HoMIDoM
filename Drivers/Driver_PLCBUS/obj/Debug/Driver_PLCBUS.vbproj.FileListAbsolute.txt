@@ -8,3 +8,10 @@ D:\Domotique\Homidom\Driver_PLCBUS\obj\Debug\GenerateResource.write.1.tlog
 D:\Domotique\Homidom\Driver_PLCBUS\obj\Debug\Driver_PLCBUS.dll
 D:\Domotique\Homidom\Driver_PLCBUS\obj\Debug\Driver_PLCBUS.xml
 D:\Domotique\Homidom\Driver_PLCBUS\obj\Debug\Driver_PLCBUS.pdb
+D:\Domotique\Homidom\Drivers\Driver_PLCBUS\obj\Debug\ResolveAssemblyReference.cache
+D:\Domotique\Homidom\Drivers\Driver_PLCBUS\obj\Debug\Driver_PLCBUS.Resources.resources
+D:\Domotique\Homidom\Drivers\Driver_PLCBUS\obj\Debug\GenerateResource.read.1.tlog
+D:\Domotique\Homidom\Drivers\Driver_PLCBUS\obj\Debug\GenerateResource.write.1.tlog
+D:\Domotique\Homidom\Drivers\Driver_PLCBUS\obj\Debug\Driver_PLCBUS.dll
+D:\Domotique\Homidom\Drivers\Driver_PLCBUS\obj\Debug\Driver_PLCBUS.xml
+D:\Domotique\Homidom\Drivers\Driver_PLCBUS\obj\Debug\Driver_PLCBUS.pdb

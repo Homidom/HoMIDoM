@@ -8,12 +8,12 @@ Imports System.Runtime.InteropServices
 
 ' Passez en revue les valeurs des attributs de l'assembly
 
-<Assembly: AssemblyTitle("Driver_k8000")> 
+<Assembly: AssemblyTitle("Driver K8000")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("CVO-Europe")> 
+<Assembly: AssemblyCompany("HoMIDoM")> 
 <Assembly: AssemblyProduct("Driver_k8000")> 
-<Assembly: AssemblyCopyright("Copyright © CVO-Europe 2013")> 
-<Assembly: AssemblyTrademark("")> 
+<Assembly: AssemblyCopyright("Copyright ©HoMIDoM 2013")> 
+<Assembly: AssemblyTrademark("HoMIDoM")> 
 
 <Assembly: ComVisible(False)>
 
