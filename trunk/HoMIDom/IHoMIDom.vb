@@ -1192,7 +1192,7 @@ Namespace HoMIDom
         ''' <param name="Adresse2"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function AddDetectNewDevice(ByVal Adresse1 As String, ByVal DriverId As String, Optional ByVal Type As Integer = -1, Optional ByVal Adresse2 As String = "") As String
+        <OperationContract()> Function AddDetectNewDevice(ByVal Adresse1 As String, ByVal DriverId As String, Optional ByVal Type As String = "", Optional ByVal Adresse2 As String = "") As String
 
         ''' <summary>
         ''' Retourne un NewDevice suivant son ID

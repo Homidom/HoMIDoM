@@ -1,0 +1,36 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Voir url suivante pour exemple: http://www.codeproject.com/Articles/123460/Simplest-Way-to-Implement-Multilingual-WPF-Applica-->
+    <system:String  x:Key="fermer">Fermer</system:String >
+    <system:String  x:Key="connexion">Connexion</system:String >
+    <system:String  x:Key="driver">Driver</system:String >
+    <system:String  x:Key="composant">Composant</system:String >
+    <system:String  x:Key="zone">Zone</system:String >
+    <system:String  x:Key="utilisateur">Utilisateur</system:String >
+    <system:String  x:Key="trigger">Trigger</system:String >
+    <system:String  x:Key="macro">Macro</system:String >
+    <system:String  x:Key="historique">Historique</system:String >
+    <system:String  x:Key="macro">Macro</system:String >
+    <system:String  x:Key="nom">Nom</system:String >
+    <system:String  x:Key="idserver">ID Server</system:String >
+    <system:String  x:Key="adresseip">Adresse IP</system:String >
+    <system:String  x:Key="port">Port</system:String >
+    <system:String  x:Key="serveurpardefaut">Serveur par défaut</system:String >
+    <system:String  x:Key="login">Login</system:String >
+    <system:String  x:Key="motdepasse">Mot de passe</system:String >
+    <system:String  x:Key="password">Password</system:String >
+    <system:String  x:Key="serveurpardefaut">Serveur par défaut</system:String >
+    <system:String  x:Key="sesouvenirdumotdepasse">Se souvenir du mot de passe</system:String >
+    <system:String  x:Key="ok">Ok</system:String >
+    <system:String  x:Key="annuler">Annuler</system:String >
+    <system:String  x:Key="serveurpardefaut">Serveur par défaut</system:String >
+    <system:String  x:Key="appliquer">Appliquer</system:String >
+    <system:String  x:Key="supprimerunserveur">Supprimer un serveur</system:String >
+    <system:String  x:Key="proprietesduserveur">Propriétés du serveur</system:String >
+    <system:String  x:Key="ouvrir">Ouvrir</system:String >
+    <system:String  x:Key="parametresduserveur">Paramètres du serveur</system:String >
+    <system:String  x:Key="ipsoap">IP SOAP</system:String >
+    <system:String  x:Key="upload">Upload</system:String >
+</ResourceDictionary>

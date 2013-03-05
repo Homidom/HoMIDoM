@@ -102,7 +102,7 @@ Public Class uNewDevice
 
                     If x IsNot Nothing Then
                         x.Name = txtName.Text
-                        x.Type = CbType.SelectedIndex
+                        x.Type = CbType.SelectedValue
                         x.Ignore = ChkIgnore.IsChecked
                         myService.SaveNewDevice(x)
                     End If
@@ -161,7 +161,7 @@ Public Class uNewDevice
             x.Name = txtName.Text
             x.Adresse1 = txtAdresse1.Text
             x.Adresse2 = txtAdresse2.Text
-            x.Type = CbType.SelectedIndex
+            x.Type = CbType.Text
             NewDevice = x
             RaiseEvent CreateNewDevice(Me)
         Catch ex As Exception
