@@ -76,6 +76,10 @@
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HoMIDom, Version=1.0.382.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\DEBUG\HoMIDom.dll</HintPath>
+    </Reference>
     <Reference Include="HoMIDomWebAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DEBUG\HoMIDomWebAPI.dll</HintPath>
@@ -152,13 +156,6 @@
     <None Include="My Project\VisualBasic" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HoMIDom\HoMIDom.vbproj">
-      <Project>{1F0CE8B5-5BA9-4704-8B5E-52682635F803}</Project>
-      <Name>HoMIDom</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="icone.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -181,7 +178,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="False" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
