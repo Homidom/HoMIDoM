@@ -1,4 +1,5 @@
 ﻿Imports HoMIDom.HoMIDom
+Imports HoMIDomWebAPI
 Imports System.IO
 Imports System.Xml
 Imports System.Xml.XPath
@@ -127,6 +128,7 @@ Module Service
                 End Try
 
                 Dim apiServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP)
+                Console.WriteLine(Now & " Adresse du serveur de fichiers= " & "http://" & _Addrip & ":" & PortSOAP)
                 HoMIDomWebAPI.HoMIDomAPI.CurrentServer = Server.Instance
                 HoMIDomWebAPI.HoMIDomAPI.Start(apiServerAddress.ToString(), _IdSrv)
 

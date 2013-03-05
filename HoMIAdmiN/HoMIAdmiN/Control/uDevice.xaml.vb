@@ -52,16 +52,8 @@ Partial Public Class uDevice
                     TxtAdresse2.Text = NewDevice.Adresse2
                     CbDriver.SelectedValue = myService.ReturnDriverByID(IdSrv, NewDevice.IdDriver).Nom
                     CbType.IsEnabled = True
-
-                    Dim y As Integer = 0
-                    For Each value As ListeDevices In [Enum].GetValues(GetType(HoMIDom.HoMIDom.Device.ListeDevices))
-                        If y = NewDevice.Type Then
-                            CbType.SelectedValue = value.ToString
-                            CbType_MouseLeave(CbType, Nothing)
-                        End If
-                        y += 1
-                    Next
-
+                    CbType.SelectedValue = NewDevice.Type
+                    CbType_MouseLeave(CbType, Nothing)
                     flagnewdev = True
                 End If
             Else 'Modification d'un Device
