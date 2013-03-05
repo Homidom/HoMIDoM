@@ -415,12 +415,6 @@ Imports System.Net.Sockets
         Try
             If MyDevice IsNot Nothing Then
                 ' Code
-                If Command = "LISTCONTROLS" Then
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Liste des contrôles supportés : ")
-                    For i As Integer = 1 To 19
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, ControlType(i).ToString)
-                    Next
-                End If
                 Return True
             Else
                 Return False
@@ -526,7 +520,7 @@ Imports System.Net.Sockets
                     End If
                 Next
                 If (myControlNum = 0) Then
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read ", "Erreur: le composant n'est pas d'un type défini! Utilisez la commande ListControls pour la liste des types reconnus.")
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read ", "Erreur: le composant n'est pas d'un type défini!")
                     Exit Sub
                 End If
 
@@ -607,7 +601,7 @@ Imports System.Net.Sockets
                     End If
                 Next
                 If (myControlNum = 0) Then
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write ", "Erreur: le composant n'est pas d'un type défini! Utilisez la commande ListControls pour la liste des types reconnus.")
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write ", "Erreur: le composant n'est pas d'un type défini!")
                     Exit Sub
                 End If
 
@@ -766,17 +760,19 @@ Imports System.Net.Sockets
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
-            Add_DeviceCommande("ListControls", "Affiche la liste des contrôles dans le log.", 0)
 
+            'Libellé Driver
+            Add_LibelleDriver("HELP", "Aide...", "Ce module permet de contrôler un composant d'un boîtier Teracom. Attention, le mode SNMP doit être activé dans le boîtier!")
 
             'Libellé Device
             Add_LibelleDevice("ADRESSE1", "Adresse IP", "Adresse IP ou nom d'hôte du boîtier Teracom")
             Add_LibelleDevice("ADRESSE2", "Port SNMP", "Port SNMP utilisé pour accéder au boîtier")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "Composant", "Composant du boîtier à interroger")
+            Add_LibelleDevice("MODELE", "Contrôle", "Composant du boîtier à interroger", "TCW12x_TEMPERATURE_1|TCW12x_TEMPERATURE_2|TCW12x_HUMIDITY_1|TCW12x_HUMIDITY_2|TCW12x_DIGITAL_IN_1|TCW12x_DIGITAL_IN_2|TCW12x_ANALOG_IN_1|TCW12x_ANALOG_IN_2|TCW12x_RELAY_1|TCW12x_RELAY_2|TCW18x_RELAY_1|TCW18x_RELAY_2|TCW18x_RELAY_3|TCW18x_RELAY_4|TCW18x_RELAY_5|TCW18x_RELAY_6|TCW18x_RELAY_7|TCW18x_RELAY_8|TCW18x_DIGITAL_IN")
             Add_LibelleDevice("REFRESH", "Refresh", "Intervalle de rafraîchissement des données")
             Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
+            ' Initialisation des arrays
             ControlType(1) = "TCW12x_TEMPERATURE_1"
             ControlType(2) = "TCW12x_TEMPERATURE_2"
             ControlType(3) = "TCW12x_HUMIDITY_1"
@@ -818,16 +814,6 @@ Imports System.Net.Sockets
             ValueType(18) = "Boolean"
             ValueType(19) = "Boolean"
 
-            'Libellé Driver
-            Dim LongHelp As String
-            LongHelp = "Ce module permet de contrôler un composant d'un boîtier Teracom. Attention, le mode SNMP doit être activé dans le boîtier!"
-            LongHelp = LongHelp & vbCrLf & "Liste des contrôles supportés : " & vbCrLf
-            LongHelp = LongHelp & ControlType(1).ToString
-            For i As Integer = 2 To 19
-                LongHelp = LongHelp & ", " & ControlType(i).ToString
-            Next
-            Add_LibelleDriver("HELP", "Aide...", LongHelp)
-
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " New", ex.Message)
         End Try
@@ -843,7 +829,7 @@ Imports System.Net.Sockets
 
 #Region "Fonctions internes"
     'Insérer ci-dessous les fonctions propres au driver et nom communes (ex: start)
- 
+
 #End Region
 
 
@@ -891,7 +877,7 @@ Friend Class Teracom_TCW
         Get
             Host = myHost
         End Get
-        Set(value As String)
+        Set(ByVal value As String)
             myHost = value
         End Set
     End Property
@@ -900,7 +886,7 @@ Friend Class Teracom_TCW
         Get
             Port = myPort
         End Get
-        Set(value As Integer)
+        Set(ByVal value As Integer)
             myPort = value
         End Set
     End Property
@@ -909,7 +895,7 @@ Friend Class Teracom_TCW
         Get
             Return myControl
         End Get
-        Set(value As ControlTypes)
+        Set(ByVal value As ControlTypes)
             myControl = value
         End Set
     End Property
@@ -918,7 +904,7 @@ Friend Class Teracom_TCW
         Get
             Description = myDesc(myControl)
         End Get
-        Set(value As String)
+        Set(ByVal value As String)
         End Set
     End Property
 
@@ -926,7 +912,7 @@ Friend Class Teracom_TCW
         Get
             Label = myLabel
         End Get
-        Set(value As String)
+        Set(ByVal value As String)
             myLabel = value
         End Set
     End Property
@@ -935,7 +921,7 @@ Friend Class Teracom_TCW
         Get
             Value = myValue
         End Get
-        Set(value As String)
+        Set(ByVal value As String)
         End Set
     End Property
 
@@ -943,7 +929,7 @@ Friend Class Teracom_TCW
         Get
             Min = myMin
         End Get
-        Set(value As String)
+        Set(ByVal value As String)
             myMin = value
         End Set
     End Property
@@ -952,7 +938,7 @@ Friend Class Teracom_TCW
         Get
             Max = myMax
         End Get
-        Set(value As String)
+        Set(ByVal value As String)
             myMax = value
         End Set
     End Property
@@ -961,7 +947,7 @@ Friend Class Teracom_TCW
         Get
             Hyst = myHyst
         End Get
-        Set(value As String)
+        Set(ByVal value As String)
             myHyst = value
         End Set
     End Property
@@ -970,7 +956,7 @@ Friend Class Teracom_TCW
         Get
             PublicCommunity = myPublicCommunity
         End Get
-        Set(value As String)
+        Set(ByVal value As String)
             myPublicCommunity = value
         End Set
     End Property
@@ -979,7 +965,7 @@ Friend Class Teracom_TCW
         Get
             PrivateCommunity = myPrivateCommunity
         End Get
-        Set(value As String)
+        Set(ByVal value As String)
             myPrivateCommunity = value
         End Set
     End Property
@@ -1077,7 +1063,7 @@ Friend Class Teracom_TCW
     End Function
 
 
-    Public Function SetValue(Value As String) As String
+    Public Function SetValue(ByVal Value As String) As String
         Dim result As String = String.Empty
         Select Case myControl
             Case ControlTypes.TYPE_TCW12x_RELAY_1, ControlTypes.TYPE_TCW12x_RELAY_2, ControlTypes.TYPE_TCW18x_DIGITAL_IN, ControlTypes.TYPE_TCW18x_RELAY_1, ControlTypes.TYPE_TCW18x_RELAY_2, ControlTypes.TYPE_TCW18x_RELAY_3, ControlTypes.TYPE_TCW18x_RELAY_4, ControlTypes.TYPE_TCW18x_RELAY_5, ControlTypes.TYPE_TCW18x_RELAY_6, ControlTypes.TYPE_TCW18x_RELAY_7, ControlTypes.TYPE_TCW18x_RELAY_8
@@ -1106,12 +1092,12 @@ Friend Class Teracom_TCW
         Get
             Return "Teracom TCW controller class by Marc Froidevaux"
         End Get
-        Set(value As String)
+        Set(ByVal value As String)
 
         End Set
     End Property
 
-    Private Function GetSnmp(ByVal host As String, oid As String) As String
+    Private Function GetSnmp(ByVal host As String, ByVal oid As String) As String
         Dim community As String
         Dim showHelp__1 As Boolean = False
         Dim showVersion As Boolean = False
@@ -1163,7 +1149,7 @@ Friend Class Teracom_TCW
         End Try
     End Function
 
-    Private Function SetSnmp(ByVal host As String, oid As String, value As String, ValueInteger As Boolean) As String
+    Private Function SetSnmp(ByVal host As String, ByVal oid As String, ByVal value As String, ByVal ValueInteger As Boolean) As String
         Dim community As String
         Dim showHelp__1 As Boolean = False
         Dim showVersion As Boolean = False
@@ -1220,7 +1206,7 @@ Friend Class Teracom_TCW
         End Try
     End Function
 
-    Public Sub GetMinMaxHyst(SetMin As Boolean, SetMax As Boolean, setHyst As Boolean)
+    Public Sub GetMinMaxHyst(ByVal SetMin As Boolean, ByVal SetMax As Boolean, ByVal setHyst As Boolean)
 
         Dim result As String
         myMin = String.Empty
@@ -1257,7 +1243,7 @@ Friend Class Teracom_TCW
 
     End Sub
 
-    Public Sub SetMinMaxHyst(SetMin As Boolean, SetMax As Boolean, setHyst As Boolean)
+    Public Sub SetMinMaxHyst(ByVal SetMin As Boolean, ByVal SetMax As Boolean, ByVal setHyst As Boolean)
 
         Dim result As String
         Dim myValue As String
@@ -1277,7 +1263,7 @@ Friend Class Teracom_TCW
 
     End Sub
 
-    Public Function GetDescription(myControl As Integer) As String
+    Public Function GetDescription(ByVal myControl As Integer) As String
 
         GetDescription = myDesc(myControl)
 

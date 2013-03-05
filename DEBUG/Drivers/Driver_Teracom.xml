@@ -6,7 +6,20 @@ Driver_Teracom
 </name>
 </assembly>
 <members>
-<member name="E:Driver_Teracom.Driver_Teracom.DriverEvent">
+<member name="P:Driver_Teracom.My.Resources.Resources.ResourceManager">
+	<summary>
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member><member name="P:Driver_Teracom.My.Resources.Resources.Culture">
+	<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="T:Driver_Teracom.My.Resources.Resources">
+	<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
+</member><member name="E:Driver_Teracom.Driver_Teracom.DriverEvent">
 	<summary>
  Evènement déclenché par le driver au serveur
  </summary>
@@ -237,19 +250,6 @@ Driver_Teracom
 </member><member name="T:Driver_Teracom.Driver_Teracom">
 	<summary>Class Driver_Teracom, permet de communiquer avec les boîtiers Teracom TCW</summary>
 	<remarks>Nécessite l'installation des pilotes fournis sur le site </remarks>
-</member><member name="P:Driver_Teracom.My.Resources.Resources.ResourceManager">
-	<summary>
-  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
-</summary>
-</member><member name="P:Driver_Teracom.My.Resources.Resources.Culture">
-	<summary>
-  Remplace la propriété CurrentUICulture du thread actuel pour toutes
-  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
-</summary>
-</member><member name="T:Driver_Teracom.My.Resources.Resources">
-	<summary>
-  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
-</summary>
 </member>
 </members>
 </doc>
