@@ -300,6 +300,68 @@ Public Class uHisto
         End Try
     End Sub
 
+    Private Sub BtnExport_Click(sender As Object, e As RoutedEventArgs) Handles BtnExport.Click
+        Try
+            If _CurrentChart IsNot Nothing Then
+
+                ' Create a new save file dialog
+                Dim saveFileDialog1 As New Microsoft.Win32.SaveFileDialog()
+
+                ' Sets the current file name filter string, which determines 
+                ' the choices that appear in the "Save as file type" or 
+                ' "Files of type" box in the dialog box.
+                saveFileDialog1.Filter = "Fichier texte CSV (*.csv)|*.csv"
+                saveFileDialog1.FilterIndex = 2
+                saveFileDialog1.RestoreDirectory = True
+
+                Dim DlgResult As Forms.DialogResult
+                DlgResult = saveFileDialog1.ShowDialog()
+                If DlgResult = Forms.DialogResult.OK Or DlgResult = -1 Then
+                    If saveFileDialog1.FileName.EndsWith("csv") Then
+                    ElseIf saveFileDialog1.FileName.Contains(".") = False Then
+                        saveFileDialog1.FileName = saveFileDialog1.FileName & ".csv"
+                    Else
+                        MessageBox.Show("Format non supporté!")
+                        Exit Sub
+                    End If
+
+                    Dim result As New List(Of Historisation)
+                    Dim datestart As String = DateStartSelect.Text
+                    Dim dateend As String = DateFinSelect.Text 'displaydate
+                    Dim moyenne As String = ComboBoxMoyenne.Text
+                    Dim a() As String = datestart.Split(System.Globalization.DateTimeFormatInfo.CurrentInfo.DateSeparator)
+                    If a.Length = 3 Then datestart = a(2) & "-" & a(1) & "-" & a(0) Else datestart = ""
+                    a = dateend.Split(System.Globalization.DateTimeFormatInfo.CurrentInfo.DateSeparator)
+                    a = dateend.Split(System.Globalization.DateTimeFormatInfo.CurrentInfo.DateSeparator)
+                    If a.Length = 3 Then dateend = a(2) & "-" & a(1) & "-" & a(0) Else dateend = ""
+
+                    Dim sw As New IO.StreamWriter(saveFileDialog1.FileName, False, System.Text.Encoding.Default)
+                    sw.WriteLine("DateTime;DeviceID;Name;Source;Value")
+
+                    ' Bouclage sur les composants sélectionnés
+                    For Each _item In _Devices
+                        For Each kvp As KeyValuePair(Of String, String) In _item
+                            'Recuperation des historiques
+                            result = myService.GetHistoDeviceSource(IdSrv, kvp.Key, kvp.Value, datestart, dateend, moyenne)
+                            Dim cnt As Integer = 0
+                            For Each data As Historisation In result
+                                sw.WriteLine(data.DateTime.ToString & ";" & data.IdDevice.ToString & ";" & myService.ReturnDeviceByID(IdSrv, kvp.Key).Name & ";" & data.Nom.ToString & ";" & data.Value.ToString)
+                                cnt += 1
+                                If cnt > _MaxData Then Exit For
+                            Next
+                        Next kvp
+                    Next
+                    sw.Close()
+                    MessageBox.Show("Exportation terminée.", "HoMIAdmiN", MessageBoxButton.OK, MessageBoxImage.Information)
+                End If
+            Else
+                MessageBox.Show("Aucune donnée!", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur uHisto BtnExport_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
     Private Sub CbBackColor_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbBackColor.SelectionChanged
         Try
             If _CurrentChart IsNot Nothing Then
