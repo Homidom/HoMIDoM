@@ -1,6 +1,8 @@
 ﻿Imports System.IO
 Imports System.Net
 Imports System.Net.Sockets
+Imports System.Runtime.Serialization.Formatters.Soap
+Imports System.ServiceModel
 
 Module Fonctions
     Public Function ConvertArrayToImage(ByVal value As Object, Optional ByVal Taille As Integer = 0) As Object
@@ -78,4 +80,79 @@ Module Fonctions
             Return Nothing
         End Try
     End Function
+
+    Public Function Download() As Integer
+        Dim _myadress As String = myadress
+        Dim myServiceFile As HoMIDom.HoMIDom.IFileServer = Nothing
+        Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IFileServer) = Nothing
+
+        Try
+            myadress = Replace(_myadress, "/service", "/fileServer")
+
+            If UrlIsValid(_myadress) = False Then
+                MessageBox.Show("Erreur lors de la connexion au serveur de fichier, veuillez vérifier que celui-ci est démarré", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Return -1
+            End If
+
+            Dim binding As New ServiceModel.BasicHttpBinding
+            binding.MaxBufferPoolSize = 250000000
+            binding.MaxReceivedMessageSize = 250000000
+            binding.MaxBufferSize = 250000000
+            binding.ReaderQuotas.MaxArrayLength = 250000000
+            binding.ReaderQuotas.MaxNameTableCharCount = 250000000
+            binding.ReaderQuotas.MaxBytesPerRead = 250000000
+            binding.ReaderQuotas.MaxStringContentLength = 250000000
+            binding.SendTimeout = TimeSpan.FromMinutes(60)
+            binding.CloseTimeout = TimeSpan.FromMinutes(60)
+            binding.OpenTimeout = TimeSpan.FromMinutes(60)
+            binding.ReceiveTimeout = TimeSpan.FromMinutes(60)
+
+            myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IFileServer)(binding, New System.ServiceModel.EndpointAddress(_myadress))
+            myServiceFile = myChannelFactory.CreateChannel()
+
+            'On vérifie qu'on est bien connecté
+            If myChannelFactory.State <> CommunicationState.Opened Then
+                MessageBox.Show("Erreur lors de la connexion au serveur de fichier", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                Return -1
+                Exit Function
+            Else
+                Dim x As HoMIDom.HoMIDom.RequestFileData = Nothing
+                With x
+                    .Name = "C:\source.txt"
+                End With
+
+                Dim fileInfo As HoMIDom.HoMIDom.FileData = myServiceFile.Download(x)
+
+                'Using writeStream As FileStream = File.Open("c:\destination.txt", FileMode.Create, FileAccess.Write)
+                '    copyStream(streamWithProgress, writeStream)
+                '    HoMIDom.HoMIDom.FileData.FileStream.Close()
+                'End Using
+
+                myChannelFactory.Close()
+                Return 0
+                binding = Nothing
+            End If
+        Catch ex As Exception
+            myChannelFactory.Abort()
+            MessageBox.Show("Erreur lors de la connexion au serveur de fichier sélectionné: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            Return -1
+        End Try
+    End Function
+
+    Private Sub copyStream(ByVal readStream As Stream, ByVal writeStream As Stream)
+
+        Dim Length As Integer = 4096
+
+        ' 4k
+        Dim buffer As [Byte]() = New [Byte](Length - 1) {}
+
+        Dim bytesRead As Integer = readStream.Read(buffer, 0, Length)
+        ' write the required bytes
+        While bytesRead > 0
+            writeStream.Write(buffer, 0, bytesRead)
+            bytesRead = readStream.Read(buffer, 0, Length)
+        End While
+
+    End Sub
+
 End Module

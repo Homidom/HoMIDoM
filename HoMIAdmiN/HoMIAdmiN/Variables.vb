@@ -4,6 +4,8 @@
     Public IsConnect As Boolean = False 'True si connecté au serveur
     Public myService As HoMIDom.HoMIDom.IHoMIDom
     Public NewDevice As HoMIDom.HoMIDom.NewDevice = Nothing
+    Public MyPort As String = ""
+    Public myadress As String = ""
 
     Public Enum EAction
         Nouveau

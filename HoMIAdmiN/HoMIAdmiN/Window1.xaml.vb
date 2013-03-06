@@ -19,9 +19,7 @@ Class Window1
     Public Shared ListServer As New List(Of ClServer)
 
     Dim Myfile As String
-    Dim MyPort As String = ""
     Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
-    Dim myadress As String = ""
     Dim FlagStart As Boolean = False
     Dim MyRep As String = System.Environment.CurrentDirectory
     Dim MyRepAppData As String = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) & "\HoMIAdmiN"
