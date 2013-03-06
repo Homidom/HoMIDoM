@@ -2811,9 +2811,9 @@ Namespace HoMIDom
                     System.IO.Directory.CreateDirectory(_MonRepertoire & "\Logs")
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier logs")
                 End If
-                If System.IO.Directory.Exists(_MonRepertoire & "\Captures") = False Then
-                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\captures")
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier captures")
+                If System.IO.Directory.Exists(_MonRepertoire & "\Fichiers") = False Then
+                    System.IO.Directory.CreateDirectory(_MonRepertoire & "\Fichiers")
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier Fichiers")
                 End If
                 If System.IO.Directory.Exists(_MonRepertoire & "\Config") = False Then
                     System.IO.Directory.CreateDirectory(_MonRepertoire & "\config")
