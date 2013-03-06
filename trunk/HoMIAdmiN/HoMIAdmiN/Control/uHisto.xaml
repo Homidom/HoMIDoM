@@ -72,6 +72,10 @@
                             <Button Height="25" Width="25" Margin="15,0,0,0" Name="BtnSave" ToolTip="Sauvegarder le graphe" Template="{DynamicResource GlassButton}">
                                 <Image Source="/HoMIAdmiN;component/Images/save_32.png" />
                             </Button>
+                            <Rectangle Width="15"/>
+                            <Button Height="25" Width="25" Name="BtnExport" Margin="3" ToolTip="Exporter les données" Template="{DynamicResource GlassButton}">
+                                <Image Source="/HoMIAdmiN;component/Images/Export_32.png"/>
+                            </Button>
                         </StackPanel>
                     </StackPanel>
                 </DockPanel>
