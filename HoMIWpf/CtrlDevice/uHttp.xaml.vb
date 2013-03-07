@@ -34,7 +34,6 @@ Public Class uHttp
         Set(ByVal value As Integer)
             _Refresh = value
             If 0 < _Refresh < 3600 Then
-                'Timer pour afficher la date & heure et levé/couché soleil
                 dt.Stop()
                 dt.Interval = New TimeSpan(0, 0, _Refresh)
                 dt.Start()
@@ -121,11 +120,12 @@ Public Class uHttp
 
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
         Try
-            WebBrowser1.Refresh()
+            WebBrowser1.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() WebBrowser1.Refresh(), ThreadStart))
         Catch ex As Exception
             MessageBox.Show("Erreur uHttp.dispatcherTimer_Tick: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
+
 
     Public Sub New()
 
@@ -171,6 +171,7 @@ Public Class uHttp
     End Sub
 
     Private Sub uHttp_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
+        dt.Stop()
         WebBrowser1.Dispose()
     End Sub
 End Class

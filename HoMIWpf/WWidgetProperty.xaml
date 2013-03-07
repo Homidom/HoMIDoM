@@ -209,7 +209,7 @@
                             <Label Foreground=" White" Content="URL:" Width="70" />
                             <TextBox Name="TxtURL" Width="200" Text=""/>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="2" Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal" Margin="2" >
                             <Label Foreground=" White" Content="Refresh:" Width="70" />
                             <TextBox Name="TxtRefresh" Width="35" Text="0"/>
                         </StackPanel>

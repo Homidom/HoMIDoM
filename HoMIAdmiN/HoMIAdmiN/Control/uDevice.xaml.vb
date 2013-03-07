@@ -733,8 +733,9 @@ Partial Public Class uDevice
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 If x IsNot Nothing Then
-                    If String.IsNullOrEmpty(x.Modele) = False And x.Commandes.Count = 0 Then
-                        BtnEditTel.Visibility = Windows.Visibility.Collapsed
+                    If String.IsNullOrEmpty(x.Modele) = False Then 'On vérifie si on viens de changer de template
+                        'If x.Commandes.Count = 0 The
+                        'BtnEditTel.Visibility = Windows.Visibility.Collapsed
                     End If
                     frm.Close()
                 End If

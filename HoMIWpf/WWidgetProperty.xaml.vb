@@ -40,6 +40,7 @@ Public Class WWidgetProperty
             ImgPicture.Tag = Obj.Picture
             TxtURL.Text = Obj.URL
             TxtURLRss.Text = Obj.UrlRss
+            TxtRefresh.Text = Obj.HttpRefresh
             _listhttpbtn = Obj.ListHttpButton
 
             If Obj.IsEmpty = False Then
@@ -204,6 +205,7 @@ Public Class WWidgetProperty
             Obj.DefautLabelStatus = TxtDefStatus.Text
             Obj.Picture = ImgPicture.Tag
             Obj.ListHttpButton = _listhttpbtn
+            Obj.HttpRefresh = TxtRefresh.Text
 
             Try
                 Obj.TailleStatus = TxtTailleStatus.Text

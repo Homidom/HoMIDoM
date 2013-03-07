@@ -686,6 +686,10 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As Integer)
             _RefreshHttp = value
+
+            If _Show = False Then Exit Property
+
+            If _Webbrowser IsNot Nothing Then _Webbrowser.Refresh = value
         End Set
     End Property
 #End Region
