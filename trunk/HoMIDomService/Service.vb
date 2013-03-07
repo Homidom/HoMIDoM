@@ -1,5 +1,5 @@
 ﻿Imports HoMIDom.HoMIDom
-Imports HoMIDomWebAPI
+'Imports HoMIDomWebAPI
 Imports System.IO
 Imports System.Xml
 Imports System.Xml.XPath
@@ -19,7 +19,7 @@ Imports System.Net
 
 Module Service
 
-    Dim myService As HoMIDom.HoMIDom.IHoMIDom
+    Dim myService As IHoMIDom
     Dim MyRep As String = System.Environment.CurrentDirectory
     Dim _IdSrv As String
     Dim _Addrip As String = "localhost"
@@ -96,7 +96,7 @@ Module Service
                 Console.WriteLine("")
 
                 'Connexion au serveur
-                Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
+                Dim myChannelFactory As ServiceModel.ChannelFactory(Of IHoMIDom) = Nothing
 
                 Try
                     'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
@@ -115,7 +115,7 @@ Module Service
                     binding.CloseTimeout = TimeSpan.FromMinutes(60)
                     binding.OpenTimeout = TimeSpan.FromMinutes(60)
                     binding.ReceiveTimeout = TimeSpan.FromMinutes(60)
-                    myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
+                    myChannelFactory = New ServiceModel.ChannelFactory(Of IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
 
                     myService = myChannelFactory.CreateChannel()
 
@@ -132,7 +132,7 @@ Module Service
                 HoMIDomWebAPI.HoMIDomAPI.CurrentServer = Server.Instance
                 HoMIDomWebAPI.HoMIDomAPI.Start(apiServerAddress.ToString(), _IdSrv)
 
-                Using hostFileServer As New ServiceHost(GetType(HoMIDom.HoMIDom.FileServer), fileServerAddress)
+                Using hostFileServer As New ServiceHost(GetType(FileServer), fileServerAddress)
                     hostFileServer.Open()
                     Console.WriteLine(Now & " Démarrage du serveur de fichiers OK")
 

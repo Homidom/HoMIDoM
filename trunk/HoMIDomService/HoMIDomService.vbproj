@@ -57,7 +57,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\RELEASE\</OutputPath>
     <DocumentationFile>HoMIDomService.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022,42353,42354,42355</NoWarn>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -79,10 +79,12 @@
     <Reference Include="HoMIDom, Version=1.0.382.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\DEBUG\HoMIDom.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="HoMIDomWebAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DEBUG\HoMIDomWebAPI.dll</HintPath>
+      <HintPath>..\RELEASE\HoMIDomWebAPI.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

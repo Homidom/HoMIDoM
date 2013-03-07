@@ -44,7 +44,7 @@
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\..\RELEASE\Drivers\</OutputPath>
     <DocumentationFile>Driver_System.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
@@ -61,8 +61,9 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HoMIDom">
-      <HintPath>..\..\DEBUG\HoMIDom.dll</HintPath>
+    <Reference Include="HoMIDom, Version=1.0.384.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RELEASE\HoMIDom.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Interop.WUApiLib, Version=2.0.0.0, Culture=neutral, processorArchitecture=x86">
