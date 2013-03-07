@@ -527,6 +527,8 @@ Class Window1
                                         x.IDMeteo = list.Item(j).Attributes.Item(k).Value
                                     Case "idkeypad"
                                         x.IDKeyPad = list.Item(j).Attributes.Item(k).Value
+                                    Case "httprefresh"
+                                        x.HttpRefresh = list.Item(j).Attributes.Item(k).Value
                                 End Select
                             Next
 
@@ -828,6 +830,9 @@ Class Window1
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("idkeypad")
                 writer.WriteValue(_ListElement.Item(i).IDKeyPad)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("httprefresh")
+                writer.WriteValue(_ListElement.Item(i).HttpRefresh)
                 writer.WriteEndAttribute()
 
                 If _ListElement.Item(i).Type = uWidgetEmpty.TypeOfWidget.Web Then
@@ -1525,6 +1530,7 @@ Class Window1
                     y.Action_On_LongClick = _ListElement.Item(i).Action_On_LongClick
                     y.Visuel = _ListElement.Item(i).Visuel
                     y.URL = _ListElement.Item(i).URL
+                    y.HttpRefresh = _ListElement.Item(i).HttpRefresh
                     y.UrlRss = _ListElement.Item(i).UrlRss
                     y.ListHttpButton = _ListElement.Item(i).ListHttpButton
                     y.IDMeteo = _ListElement.Item(i).IDMeteo
