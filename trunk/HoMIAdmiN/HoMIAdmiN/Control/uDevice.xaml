@@ -18,15 +18,15 @@
                             <CheckBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" HorizontalAlignment="Right" Name="ChKAllValue" VerticalAlignment="Top" IsChecked="False" ToolTip="Prendre en compte tous les changements d'état d'un device">All Value</CheckBox>
                             <StackPanel Name="StkUnit" Orientation="Horizontal" >
                                 <Label Name="LblUnit" Content="Unité:"  Foreground="White"/>
-                                <TextBox Text="" Name="TxtUnit" Width="40" Foreground="White" Background="DarkGray" BorderBrush="Black" ToolTip="Unité du composant (ex: °C, km/h, Watt..)"/>
+                                <TextBox Text="" Name="TxtUnit" Width="40" Height="22" Foreground="White" Background="DarkGray" BorderBrush="Black" ToolTip="Unité du composant (ex: °C, km/h, Watt..)"/>
                             </StackPanel>
                             <StackPanel Name="StkPuiss" Orientation="Horizontal" >
                                 <Label Name="LblPuiss" Content="Puissance:"  Foreground="White"/>
-                                <TextBox Name="TxtPuissance" Width="40" Foreground="White" Background="DarkGray" BorderBrush="Black" ToolTip="Puissance du composant en Watt(ex: 10)">0</TextBox>
+                                <TextBox Name="TxtPuissance" Width="40" Height="22" Foreground="White" Background="DarkGray" BorderBrush="Black" ToolTip="Puissance du composant en Watt(ex: 10)">0</TextBox>
                             </StackPanel>
                         </StackPanel>
                     <Label Foreground="White" Name="Label3">Description:</Label>
-                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtDescript" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="450" />
+                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtDescript" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="440" />
                     <StackPanel Orientation="Horizontal" >
                             <StackPanel >
                                 <Label Foreground="White" Name="Label5"  Width="215">Driver:</Label>
@@ -99,7 +99,7 @@
                         <StackPanel HorizontalAlignment="Left" Margin="0,7,0,0">
                             <Label Content="Zones:" Foreground="White" />
                             <Label Content="Visible" Foreground="White" FontSize="10" HorizontalContentAlignment="Right" />
-                            <ListBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Name="ListZone" Margin="5" Padding="2" Width="250" Height="120" ToolTip="Liste des zones pour lesquels le composant y est associé" />
+                            <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="ListZone" Margin="5" Padding="2" Width="250" Height="120" ToolTip="Liste des zones pour lesquels le composant y est associé" />
                             <StackPanel.Background>
                                 <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
                                     <GradientStop Color="#35000000" Offset="0.576" />

@@ -17,7 +17,7 @@
                     </Image>
 
                     <StackPanel DockPanel.Dock="Right" >
-                        <Button Height="24.293" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnClose" VerticalAlignment="Top" Width="87.169" Foreground="White">Fermer</Button>
+                        <Button Height="25" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnClose" VerticalAlignment="Top" Width="90" Foreground="White">Fermer</Button>
                         <StackPanel Orientation="Horizontal" >
                         </StackPanel>
                     </StackPanel>
@@ -26,12 +26,12 @@
                 </DockPanel>
                 
                 <StackPanel Orientation="Horizontal" >
-                    <DataGrid Name="DGW"  Margin="2" MinWidth="200" MaxWidth="550" IsReadOnly="True" />
+                    <DataGrid Name="DGW" MinWidth="200" MaxWidth="550" IsReadOnly="True" Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Padding="2" />
                     <StackPanel >
 
                         <!--show the selected item-->
-                        <CheckBox  Content="Afficher Tous" Foreground=" White" FontWeight="Bold" Name="CheckBox1" />
-                        <GroupBox >
+                        <CheckBox  Content="Afficher Tous" Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" FontWeight="Bold" Name="CheckBox1" />
+                        <GroupBox  Margin="2">
                             <GroupBox.Header>
                                 <Label Foreground="White" FontWeight="Bold">Sélection</Label>
                             </GroupBox.Header>
@@ -40,31 +40,31 @@
                                 <StackPanel Orientation="Horizontal" >
                                     <Label Content="Driver:" Foreground=" white" Width="80"/>
                                     <TextBox  Name="txtDriver"  Text="{Binding ElementName=DGW,Path=SelectedItem.IdDriver}" IsReadOnly="True" Visibility="Collapsed" Width="0"/>
-                                    <TextBox Name="LblDriver" Width="150" FontWeight="Bold" IsReadOnly="True" Background="Silver" Foreground="White"></TextBox>
+                                    <TextBox Name="LblDriver" Width="150" FontWeight="Bold" IsReadOnly="True" Foreground="White" Background="DarkGray" BorderBrush="Black" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left"></TextBox>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" >
                                     <Label Content="Adresse1:" Foreground=" white" Width="80"/>
-                                    <TextBox  Name="txtAdresse1"  Text="{Binding ElementName=DGW,Path=SelectedItem.Adresse1}" Width="150" IsReadOnly="True" Background="Silver" Foreground="White"></TextBox>
+                                    <TextBox  Name="txtAdresse1"  Text="{Binding ElementName=DGW,Path=SelectedItem.Adresse1}" Width="150" IsReadOnly="True" Foreground="White" Background="DarkGray" BorderBrush="Black" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left"></TextBox>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" >
                                     <Label Content="Adresse2:" Foreground=" white" Width="80"/>
-                                    <TextBox  Name="txtAdresse2"  Text="{Binding ElementName=DGW,Path=SelectedItem.Adresse2}" Width="150" IsReadOnly="True" Background="Silver" Foreground="White"></TextBox>
+                                    <TextBox  Name="txtAdresse2"  Text="{Binding ElementName=DGW,Path=SelectedItem.Adresse2}" Width="150" IsReadOnly="True" Foreground="White" Background="DarkGray" BorderBrush="Black" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left"></TextBox>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" >
                                     <Label Content="Name:" Foreground=" white" Width="80"/>
-                                    <TextBox  Name="txtName"  Text="{Binding ElementName=DGW,Path=SelectedItem.Name}" Width="150" Background="Silver" Foreground="White"></TextBox>
+                                    <TextBox  Name="txtName"  Text="{Binding ElementName=DGW,Path=SelectedItem.Name}" Width="150" Foreground="White" Background="DarkGray" BorderBrush="Black" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left"></TextBox>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" >
                                     <Label Content="Type:" Foreground=" white" Width="80"/>
-                                    <ComboBox   Name="CbType"  SelectedIndex ="{Binding ElementName=DGW,Path=SelectedItem.Type}" Width="150" Background="Silver" Foreground="White"/>
+                                    <ComboBox   Name="CbType"  SelectedIndex ="{Binding ElementName=DGW,Path=SelectedItem.Type}" Width="150" Foreground="White" Background="DarkGray" BorderBrush="Black" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" BorderThickness="2"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" >
                                     <Label Content="Ignore:" Foreground=" white" Width="80"/>
-                                    <CheckBox   Name="ChkIgnore"  IsChecked ="{Binding ElementName=DGW,Path=SelectedItem.Ignore}" Width="150"/>
+                                    <CheckBox   Name="ChkIgnore"  IsChecked ="{Binding ElementName=DGW,Path=SelectedItem.Ignore}" Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Width="140"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" >
                                     <Label Content="DateDetect:" Foreground=" white" Width="80"/>
-                                    <TextBox  Name="txtDateTime"  Text="{Binding ElementName=DGW,Path=SelectedItem.DateTetect}" Width="150" IsReadOnly="True" Background="Silver" Foreground="White"></TextBox>
+                                    <TextBox  Name="txtDateTime"  Text="{Binding ElementName=DGW,Path=SelectedItem.DateTetect}" Width="150" IsReadOnly="True" Foreground="White" Background="DarkGray" BorderBrush="Black" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left"></TextBox>
                                 </StackPanel>
                             </StackPanel>
 
@@ -73,9 +73,9 @@
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 
-                            <Button  Content="Enregistrer" Width="65" Height="30" Name="BtnUpdate" Template="{DynamicResource GlassButton}" Foreground=" white"/>
-                            <Button  Content="Supprimer"  Width="65" Height="30" Name="BtnDelete" Template="{DynamicResource GlassButton}" Foreground=" white"/>
-                            <Button  Content="Créer"  Width="65" Height="30" Name="BtnCreate" Template="{DynamicResource GlassButton}" Foreground=" white"/>
+                            <Button  Content="Enregistrer" Width="65" Height="30" Margin="2" Name="BtnUpdate" Template="{DynamicResource GlassButton}" Foreground=" white"/>
+                            <Button  Content="Supprimer"  Width="65" Height="30" Margin="2" Name="BtnDelete" Template="{DynamicResource GlassButton}" Foreground=" white"/>
+                            <Button  Content="Créer"  Width="65" Height="30" Margin="2" Name="BtnCreate" Template="{DynamicResource GlassButton}" Foreground=" white"/>
 
                         </StackPanel>
 
