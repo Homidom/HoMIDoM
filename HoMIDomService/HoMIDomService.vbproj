@@ -76,16 +76,6 @@
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HoMIDom, Version=1.0.382.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\DEBUG\HoMIDom.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="HoMIDomWebAPI, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\RELEASE\HoMIDomWebAPI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
@@ -178,15 +168,25 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HoMIDomWebAPI\HoMIDomWebAPI.vbproj">
+      <Project>{96963754-902F-4F02-AB66-D06A0D2E3242}</Project>
+      <Name>HoMIDomWebAPI</Name>
+      <Private>False</Private>
+    </ProjectReference>
     <ProjectReference Include="..\HoMIDom\HoMIDom.vbproj">
       <Project>{1F0CE8B5-5BA9-4704-8B5E-52682635F803}</Project>
       <Name>HoMIDom</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\HoMIDom\HoMIDom.vbproj">
+      <Project>{1F0CE8B5-5BA9-4704-8B5E-52682635F803}</Project>
+      <Name>HoMIDom</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="False" />
+      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
