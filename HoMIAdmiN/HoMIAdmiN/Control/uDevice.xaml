@@ -50,7 +50,7 @@
                         </StackPanel>
                     <StackPanel Orientation="Horizontal" >
                             <StackPanel Margin="3" Name="StkModel">
-                                <Label Foreground="White" Name="Label8" HorizontalAlignment="Left">Modele:</Label>
+                                <Label Foreground="White" Name="Label8" HorizontalAlignment="Left" Visibility="Collapsed">Modele:</Label>
                                 <ComboBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Width="215" Name="TxtModele" BorderThickness="2" Height="25" VerticalAlignment="Top" IsEditable="True" Tag="0" Visibility="Collapsed" HorizontalAlignment="Left" />
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtModele2" Width="215" Tag="1" Visibility="Collapsed" />
                             </StackPanel>
