@@ -7,16 +7,24 @@ Namespace HoMIDom
 
     <ServiceContract(Namespace:="http://HoMIDom/")> Public Interface IFileServer
         <OperationContract()> Function Download(ByVal Fichier As RequestFileData) As FileData
+        <OperationContract()> Function Upload(ByVal Fichier As UploadFileData) As Boolean
 
     End Interface
 
     <Serializable()> Public Class FileServer
         Implements IFileServer
 
+        Private BasePath = "\Fichiers"
+
         Public Function Download(ByVal Fichier As RequestFileData) As FileData Implements IFileServer.Download
             Try
-                If System.IO.File.Exists(Fichier.Name) Then
-                    Dim Stream As System.IO.FileStream = New System.IO.FileStream(Fichier.Name, IO.FileMode.Open)
+                If Not Server.Instance.VerifIdSrv(Fichier.IdServ) Then
+                    Return Nothing
+                End If
+
+                Dim path = Me.getPath(Fichier.Name)
+                If System.IO.File.Exists(path) Then
+                    Dim Stream As System.IO.FileStream = New System.IO.FileStream(path, IO.FileMode.Open)
                     Return New FileData(Stream)
                 End If
                 Return Nothing
@@ -24,6 +32,37 @@ Namespace HoMIDom
 
                 Return Nothing
             End Try
+        End Function
+
+
+        Public Function Upload(ByVal Fichier As UploadFileData) As Boolean Implements IFileServer.Upload
+
+            If Not Server.Instance.VerifIdSrv(Fichier.IdServ) Then
+                Return Nothing
+            End If
+
+            Dim path = Me.getPath(Fichier.FilePath)
+
+            If System.IO.File.Exists(path) And Not Fichier.Overwrite Then
+                Return False
+            End If
+
+            Dim fileStream = Fichier.Stream
+            Using outputStream = New System.IO.FileInfo(path).OpenWrite()
+                Fichier.Stream.CopyTo(outputStream)
+            End Using
+
+            Return True
+        End Function
+
+        Private Function getPath(ByVal file As String)
+            Dim basePath = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Me.BasePath)
+            Dim fullPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(Me.BasePath, file))
+            If fullPath.StartsWith(basePath) Then
+                Return fullPath
+            End If
+
+            Throw New ArgumentException("Invalid path")
         End Function
 
     End Class
@@ -55,6 +94,18 @@ Namespace HoMIDom
     ''' <remarks></remarks>
     <Serializable()> <MessageContract()> Public Class RequestFileData
         Dim _Name As String
+
+
+        ''' <summary>
+        ''' Id du serveur
+        ''' </summary>
+        ''' <remarks></remarks>
+        <MessageHeader(MustUnderstand:=True)> Public IdServ As String
+
+        ''' <summary>
+        ''' Nom et chemin du fichier a télécharger. P.ex: /Musique/xyz.mp3
+        ''' </summary>
+        ''' <remarks></remarks>
         <MessageBodyMember()> Public Property Name() As String
             Get
                 Return _Name
@@ -63,9 +114,52 @@ Namespace HoMIDom
                 _Name = value
             End Set
         End Property
-
-        'Public Sub New(Optional ByVal S As String = "")
-        '    Name = S
-        'End Sub
     End Class
+
+
+    ''' <summary>
+    ''' Classe d'envoi de fichier
+    ''' </summary>
+    ''' <remarks></remarks>
+    <MessageContract()> Public Class UploadFileData
+        Implements IDisposable
+
+        ''' <summary>
+        ''' Id du serveur
+        ''' </summary>
+        ''' <remarks></remarks>
+        <MessageHeader(MustUnderstand:=True)> Public IdServ As String
+
+        ''' <summary>
+        ''' Nom du fichier & chemin où il doit être stocké. P.ex: /Musique/xyz.mp3
+        ''' </summary>
+        ''' <remarks></remarks>
+        <MessageHeader(MustUnderstand:=True)> Public FilePath As String
+
+        ''' <summary>
+        ''' Longueur du fichier en byte
+        ''' </summary>
+        ''' <remarks></remarks>
+        <MessageHeader(MustUnderstand:=True)> Public Length As Long
+
+        ''' <summary>
+        ''' Spécifier si il faut écraser le fichier si celui-ci existe déjà
+        ''' </summary>
+        ''' <remarks></remarks>
+        <MessageHeader(MustUnderstand:=True)> Public Overwrite As Boolean
+
+        ''' <summary>
+        ''' Flux de donnée du fichier
+        ''' </summary>
+        ''' <remarks></remarks>
+        <MessageBodyMember(Order:=1)> Public Stream As System.IO.Stream
+
+        Public Sub Dispose() Implements System.IDisposable.Dispose
+            If Stream IsNot Nothing Then
+                Stream.Close()
+                Stream = Nothing
+            End If
+        End Sub
+    End Class
+
 End Namespace
