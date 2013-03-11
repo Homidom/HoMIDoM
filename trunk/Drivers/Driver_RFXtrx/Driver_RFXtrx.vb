@@ -1415,8 +1415,7 @@ Imports System.Media
             End If
             If _DEBUG Then WriteLog("DBG: WRITE Device " & Objet.Name & " <-- " & Command)
             'suivant le protocole, on lance la bonne fonction
-            'AC / ACEU / ANSLUT / ARC / BLYSS / ELROAB400D / EMW100 / EMW200 / IMPULS / LIGHTWAVERF / PHILIPS / WAVEMAN / X10
-
+            'AC / ACEU / ANSLUT / ARC / BLYSS / ELROAB400D / EMW100 / EMW200 / IMPULS / LIGHTWAVERF / PHILIPS / RISINGSUN / WAVEMAN / X10
             Select Case UCase(Objet.Modele)
                 Case "AC" 'AC : Chacon...
                     If IsNothing(parametre1) Then
@@ -1449,9 +1448,9 @@ Imports System.Media
                         End If
                     End If
                 Case "ARC"
-                        send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeARC)
+                    send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeARC)
                 Case "BLYSS"
-                        send_lighting6(Objet.Adresse1, Command, LIGHTING6.sTypeBlyss)
+                    send_lighting6(Objet.Adresse1, Command, LIGHTING6.sTypeBlyss)
                 Case "ELROAB400D"
                         send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeAB400D)
                 Case "EMW100"
@@ -1479,6 +1478,8 @@ Imports System.Media
                     Else
                         WriteLog("ERR: WRITE Il manque un parametre")
                     End If
+                Case "RISINGSUN"
+                    send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeRisingSun)
                 Case "PHILIPS"
                     send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypePhilips)
                 Case "WAVEMAN"
@@ -1631,7 +1632,7 @@ Imports System.Media
             Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole")
             Add_LibelleDevice("ADRESSE2", "@", "")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : aucun/AC/ACEU/ANSLUT/ARC/BLYSS/ELROAB400D/EMW100/EMW200/LIGHTWAVERF/IMPULS/PHILIPS/WAVEMAN/X10", "aucun|AC|ACEU|ANSLUT|ARC|BLYSS|ELROAB400D|EMW100|EMW200|IMPULS|LIGHTWAVERF|PHILIPS|WAVEMAN|X10")
+            Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : aucun/AC/ACEU/ANSLUT/ARC/BLYSS/ELROAB400D/EMW100/EMW200/LIGHTWAVERF/IMPULS/PHILIPS/RISINGSUN/WAVEMAN/X10", "aucun|AC|ACEU|ANSLUT|ARC|BLYSS|ELROAB400D|EMW100|EMW200|IMPULS|LIGHTWAVERF|PHILIPS|RISINGSUN|WAVEMAN|X10")
             Add_LibelleDevice("REFRESH", "@", "")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
