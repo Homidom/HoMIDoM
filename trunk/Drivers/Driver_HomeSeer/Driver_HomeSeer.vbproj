@@ -61,16 +61,23 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HomeSeer2">
-      <HintPath>..\Dll_externes\Homidom-32bits\HomeSeer2.dll</HintPath>
+    <Reference Include="HomeSeer2, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\HomeSeer2.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="HS2Util">
-      <HintPath>..\Dll_externes\Homidom-32bits\HS2Util.dll</HintPath>
+    <Reference Include="HoMIDom">
+      <HintPath>..\..\RELEASE\HoMIDom.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Scheduler">
-      <HintPath>..\Dll_externes\Homidom-32bits\Scheduler.dll</HintPath>
+    <Reference Include="HS2Util, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\HS2Util.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Scheduler, Version=2.1.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\Scheduler.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -128,13 +135,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\HoMIDom\HoMIDom.vbproj">
-      <Project>{1F0CE8B5-5BA9-4704-8B5E-52682635F803}</Project>
-      <Name>HoMIDom</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4 %28x86 et x64%29</ProductName>
@@ -159,7 +159,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="False" />
+      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
