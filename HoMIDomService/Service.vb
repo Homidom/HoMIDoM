@@ -128,13 +128,12 @@ Module Service
                 End Try
 
                 Dim apiServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP)
-                Console.WriteLine(Now & " Adresse du serveur de fichiers= " & "http://" & _Addrip & ":" & PortSOAP)
                 HoMIDomWebAPI.HoMIDomAPI.CurrentServer = Server.Instance
                 HoMIDomWebAPI.HoMIDomAPI.Start(apiServerAddress.ToString(), _IdSrv)
 
                 Using hostFileServer As New ServiceHost(GetType(FileServer), fileServerAddress)
                     hostFileServer.Open()
-                    Console.WriteLine(Now & " Démarrage du serveur de fichiers OK")
+                    Console.WriteLine(Now & " Serveur de fichiers démarré sur l'adresse: " & fileServerAddress.ToString())
 
                     'démarrage OK
                     '                    Console.Beep()
