@@ -2,12 +2,13 @@
 Imports System.ServiceModel
 Imports System.Runtime.Serialization
 Imports System.Linq
+Imports System.Drawing
 
 Namespace HoMIDom
 
     <ServiceContract(Namespace:="http://HoMIDom/")> Public Interface IFileServer
         <OperationContract()> Function Download(ByVal Fichier As RequestFileData) As FileData
-        <OperationContract()> Function Upload(ByVal Fichier As UploadFileData) As Boolean
+        <OperationContract()> Function Upload(ByVal Fichier As UploadFileData) As UploadFileDataResult
 
     End Interface
 
@@ -35,16 +36,19 @@ Namespace HoMIDom
         End Function
 
 
-        Public Function Upload(ByVal Fichier As UploadFileData) As Boolean Implements IFileServer.Upload
+        Public Function Upload(ByVal Fichier As UploadFileData) As UploadFileDataResult Implements IFileServer.Upload
+
+            Dim result = New UploadFileDataResult()
+            result.Success = False
 
             If Not Server.Instance.VerifIdSrv(Fichier.IdServ) Then
-                Return Nothing
+                Return result
             End If
 
             Dim path = Me.getPath(Fichier.FilePath)
 
             If System.IO.File.Exists(path) And Not Fichier.Overwrite Then
-                Return False
+                Return result
             End If
 
             Dim fileStream = Fichier.Stream
@@ -52,7 +56,8 @@ Namespace HoMIDom
                 Fichier.Stream.CopyTo(outputStream)
             End Using
 
-            Return True
+            result.Success = True
+            Return result
         End Function
 
         Private Function getPath(ByVal file As String)
@@ -121,7 +126,7 @@ Namespace HoMIDom
     ''' Classe d'envoi de fichier
     ''' </summary>
     ''' <remarks></remarks>
-    <MessageContract()> Public Class UploadFileData
+    <Serializable()> <MessageContract()> Public Class UploadFileData
         Implements IDisposable
 
         ''' <summary>
@@ -131,7 +136,7 @@ Namespace HoMIDom
         <MessageHeader(MustUnderstand:=True)> Public IdServ As String
 
         ''' <summary>
-        ''' Nom du fichier & chemin où il doit être stocké. P.ex: /Musique/xyz.mp3
+        ''' Nom du fichier et chemin où il doit être stocké. P.ex: /Musique/xyz.mp3
         ''' </summary>
         ''' <remarks></remarks>
         <MessageHeader(MustUnderstand:=True)> Public FilePath As String
@@ -152,7 +157,7 @@ Namespace HoMIDom
         ''' Flux de donnée du fichier
         ''' </summary>
         ''' <remarks></remarks>
-        <MessageBodyMember(Order:=1)> Public Stream As System.IO.Stream
+        <MessageBodyMember()> Public Stream As System.IO.Stream
 
         Public Sub Dispose() Implements System.IDisposable.Dispose
             If Stream IsNot Nothing Then
@@ -162,4 +167,18 @@ Namespace HoMIDom
         End Sub
     End Class
 
+
+    ''' <summary>
+    ''' Classe de retour d'information sur l'envoi du fichier
+    ''' </summary>
+    ''' <remarks></remarks>
+    <Serializable()> <MessageContract()> Public Class UploadFileDataResult
+
+        ''' <summary>
+        ''' Retourne si l'upload s'est correctement déroulé
+        ''' </summary>
+        ''' <remarks></remarks>
+        <MessageBodyMember()> Public Success As Boolean
+
+    End Class
 End Namespace
