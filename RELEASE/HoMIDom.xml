@@ -1041,16 +1041,6 @@ HoMIDom
  Liste toutes les functions et propriétés accessibles par les clients
  </summary>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.TemplateDriver">
-	<summary>
- Template de Classe de type Driver pour le service web
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Mail">
-	<summary>
- Envoi un mail
- </summary>
-	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.DriversEvent(System.String,System.String,System.Object)">
 	<summary>Evenement provenant des drivers </summary>
 	<param name="DriveName"></param>
@@ -2050,16 +2040,594 @@ HoMIDom
 </member><member name="T:HoMIDom.HoMIDom.Server">
 	<summary>Classe Server</summary>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Groupes.DeviceAction">
+</member><member name="P:HoMIDom.My.Resources.Resources.ResourceManager">
 	<summary>
- List des actions associées au Device
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member><member name="P:HoMIDom.My.Resources.Resources.Culture">
+	<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="T:HoMIDom.My.Resources.Resources">
+	<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
+</member><member name="T:HoMIDom.HoMIDom.FileData">
+	<summary>
+ Classe de transfert de fichier en streaming
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.RequestFileData.IdServ">
+	<summary>
+ Id du serveur
+ </summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.RequestFileData.Name">
+	<summary>
+ Nom et chemin du fichier a télécharger. P.ex: /Musique/xyz.mp3
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.RequestFileData">
+	<summary>
+ Classe de demande de fichier
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.UploadFileData.IdServ">
+	<summary>
+ Id du serveur
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.UploadFileData.FilePath">
+	<summary>
+ Nom du fichier et chemin où il doit être stocké. P.ex: /Musique/xyz.mp3
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.UploadFileData.Length">
+	<summary>
+ Longueur du fichier en byte
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.UploadFileData.Overwrite">
+	<summary>
+ Spécifier si il faut écraser le fichier si celui-ci existe déjà
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.UploadFileData.Stream">
+	<summary>
+ Flux de donnée du fichier
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.UploadFileData">
+	<summary>
+ Classe d'envoi de fichier
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.UploadFileDataResult.Success">
+	<summary>
+ Retourne si l'upload s'est correctement déroulé
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.UploadFileDataResult">
+	<summary>
+ Classe de retour d'information sur l'envoi du fichier
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Soleil">
+	<summary>
+ Classe permettant le calcul des heures de lever et coucher du soleil
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.TemplateDriver">
+	<summary>
+ Template de Classe de type Driver pour le service web
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Mail">
+	<summary>
+ Envoi un mail
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL">
+	<summary>
+ modules pour diriger un appareil  ON/OFF
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.AUDIO">
+	<summary>
+ module de type audio
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.BAROMETRE">
+	<summary>
+ pour stocker les valeur issu d'un barometre meteo ou web
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.BATTERIE">
+	<summary>
+ Pour stocker les valeurs issu d'une batterie
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.COMPTEUR">
+	<summary>
+ compteur DS2423, RFXPower...
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.CONTACT">
+	<summary>
+ detecteur de contact : switch 1-wire
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.DETECTEUR">
+	<summary>
+ tous detecteurs : mouvement, obscurite...
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.DIRECTIONVENT">
+	<summary>
+ module donnant la direction du vent
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.ENERGIEINSTANTANEE">
+	<summary>
+ Valeur de Puissance d'energie instantanée
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.ENERGIETOTALE">
+	<summary>
+ Valeur de Puissance d'energie totale
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.FREEBOX">
+	<summary>
+ FreeBox
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEBOOLEEN">
+	<summary>
+ Générique Boolean
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUESTRING">
+	<summary>
+ Générique de type String
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE">
+	<summary>
+ Générique de type numérique
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE">
+	<summary>
+ Capteur d'humidité
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.LAMPE">
+	<summary>
+ Module de type lampe avec variation
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.METEO">
+	<summary>
+ Station meteo (physique ou web)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA">
+	<summary>
+ Multimedia
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.PLUIECOURANT">
+	<summary>
+ Valeur de pluie courante
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.PLUIETOTAL">
+	<summary>
+ Valeur de pluie totale
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.SWITCH">
+	<summary>
+ Interrupteur
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.TELECOMMANDE">
+	<summary>
+ Telecommande
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE">
+	<summary>
+ Capteur de température
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE">
+	<summary>
+ Température de consigne (ex: thermostat)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.UV">
+	<summary>
+ Indice UV soleil
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.VITESSEVENT">
+	<summary>
+ Vitesse du vent
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.VOLET">
+	<summary>
+ Volet roulant
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Device.ListeDevices">
+	<summary>Indique la liste des devices gérés</summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Device.DeviceGenerique.GetDefautDeviceImage(System.String)">
+	<summary>
+ Retourne la liste de tous les fichiers image (png ou jpg) présents sur le serveur
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique">
+	<summary>Class de déclaration du Device Générique</summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueDouble">
+	<summary>Classe valeur Double avec min/max/def/correction...</summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueBool">
+	<summary>Classe valeur True/False pour device ON/OFF</summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueInt">
+	<summary>Classe valeur Integer pour device avec valeur de 0(OFF) à 100(ON)</summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueString">
+	<summary>Classe valeur String </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Device.APPAREIL.TestWrite(System.String,System.String,System.String)">
+	<summary>Permet de tester une commande write</summary>
+	<param name="Commande"></param>
+	<param name="Parametre1"></param>
+	<param name="Parametre2"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Device.APPAREIL.TestRead">
+	<summary>Permet de tester une commande read</summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Device.AUDIO.TestWrite(System.String,System.String,System.String)">
+	<summary>Permet de tester une commande write</summary>
+	<param name="Commande"></param>
+	<param name="Parametre1"></param>
+	<param name="Parametre2"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Device.AUDIO.TestRead">
+	<summary>Permet de tester une commande read</summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Device.MULTIMEDIA.EnvoyerCommande(System.String)">
+	<summary>
+ Envoyer une commande au driver
+ </summary>
+	<param name="Commande"></param>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Device">
+	<summary>Class Device, définie tous différents types de devices</summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.XML.#ctor(System.String)">
+	<summary>Constructeur de la classe</summary>
+	<param name="leFichier"></param>
+	<remarks>leFichier doit obligatoirement être un fichier existant</remarks>
+</member><member name="M:HoMIDom.HoMIDom.XML.#ctor">
+	<summary>
+ Constructeur de la classe
+ </summary>
+	<remarks>
+ Ne nécessite pas de fichier xml existant
+ </remarks>
+</member><member name="P:HoMIDom.HoMIDom.XML.leFichier">
+	<summary>
+ définit/retourne le nom du fichier
+ </summary>
+	<value>Un fichier .xml existant</value>
+	<remarks>
+ Veillez à indiquer un fichier XML existant!
+ </remarks>
+</member><member name="M:HoMIDom.HoMIDom.XML.SelectValue(System.String)">
+	<summary>
+ Retourne la valeur du premier noeud correspondant à la requête XPath.
+ Cette fonction devrait être la plus utilisée car elle permet de retourner le résultat de n'importe quelle requête XPath.
+ Quelques exemples qui montrent la puissance de XPath :
+ /cd/piste[5]/titre/text() renvoie le titre de la piste 5
+ /cd/piste[@numero='3']/titre renvoie le titre de la piste dont l'attribut numéro est '3'
+ /cd[artiste='Pink Floyd'][3]/piste[5]/titre renvoie le titre de la 5ème piste du 3ème CD ayant "Pink Floyd" comme artiste.
+ /cd[artiste='Pink Floyd' and id='PF004']/piste[2]/duree renvoie la durée de la seconde piste du CD de Pink Floyd ayant l'ID 'PF004'
+ </summary>
+	<param name="query">Une requête XPath de sélection</param>
+	<returns>Une chaine de caractère contenant la valeur du noeud</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.XML.SetNode(System.String,System.Xml.XmlNode,System.Int32)">
+	<summary>Remplace le premier noeud correspondant à la requête XPath par un nouveau.</summary>
+	<param name="xpath">Une requête XPath de sélection</param>
+	<param name="node">Un noeud (XmlNode)</param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.XML.SelectFirstNode(System.String)">
+	<summary>
+ Retourne le premier noeud correspondant à la requête XPath, Nothing si aucun noeud n'est trouvé
+ </summary>
+	<param name="xpath">La requête XPath</param>
+	<returns>Un noeud (XmlNode)</returns>
+</member><member name="M:HoMIDom.HoMIDom.XML.SelectNodes(System.String)">
+	<summary>
+ Retourne la liste des noeuds correspondants à la requête XPath ou Nothing si rien n'est trouvé
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<returns>Une liste de noeuds (XmlNodeList)</returns>
+</member><member name="M:HoMIDom.HoMIDom.XML.getElementValue(System.String,System.Int32)">
+	<summary>
+ Objectif : Renvoie la valeur du n-ème élément pointé par la requête XPath
+ Attention : Le premier noeud possède l'index 1
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<param name="index">L'index de l'élément</param>
+	<returns>Chaine de caractères</returns>
+	<remarks>
+ Utilisation |
+ exemple 1 : getElementValue("/polygone/point", 2) renvoie la valeur du 2ème "point" de "polygone" |
+ exemple 2 : getElementValue("/polygone/point[2]") renvoie la même chose
+ </remarks>
+</member><member name="M:HoMIDom.HoMIDom.XML.setElementValue(System.String,System.String,System.Int32)">
+	<summary>
+ Ecrit la valeur pour le n-ième élément pointé par la requête path
+ Attention : Le premier noeud possède l'index 1
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<param name="valeur">La valeur à écrire</param>
+	<param name="index">L'index de l'élément dans lequel écrire</param>
+	<remarks>
+ Utilisation |
+ exemple 1 : setElementValue("/polygone/point", "30;40", 5) spécifie que le 5ème élément "point" de "polygone" aura comme valeur "(30;40)" |
+ exemple 2 : setElementValue("/polygone/point[5]", "30;40") fait exactement la même chose.
+ </remarks>
+</member><member name="M:HoMIDom.HoMIDom.XML.addElement(System.String,System.String,System.String,System.Int32)">
+ -----------------------------------------------------------------------------
+ <summary>
+ Ajoute un element pointé par le n-ième noeud de la requête XPath
+ Attention : Le premier noeud possède l'index 1
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<param name="nom">Le nom de l'élément à ajouter</param>
+	<param name="valeur">La valeur de l'élément à ajouter</param>
+	<param name="index">L'index de l'élément parent dans lequel on ajoute l'élément enfant "nom"</param>
+	<remarks>
+ Utilisation |
+ exemple 1 : addElement("/cd/piste", "titre", "54 Cymru beats", 5) ajoute un élément enfant "titre" au 5ème élément "piste", sa valeur sera "54 Cymru beats" |
+ exemple 2 : addElement("/cd/piste[5]", "titre", "54 Cymru beats") fait exactement la même chose.
+ </remarks>
+</member><member name="M:HoMIDom.HoMIDom.XML.deleteElement(System.String,System.String,System.Int32)">
+	<summary>
+ supprime le n-ième element pointé par la requête XPath
+ Attention : Le premier noeud possède l'index 1
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<param name="nom">Le nom de l'élément à supprimer</param>
+	<param name="index">L'index de l'élément à supprimer</param>
+	<remarks>
+ Utilisation |
+ exemple : deleteElement("/cd", "piste", 3) supprime le 3ème élément "piste"
+ </remarks>
+</member><member name="M:HoMIDom.HoMIDom.XML.deleteElement(System.String)">
+	<summary>
+ supprime le 1er élément pointé par la requête XPath
+ Attention : Le premier noeud possède l'index 1
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<remarks>
+ Utilisation |
+ exemple 1 : deleteElement("/cd/piste[3]) supprime le 3ème élément "piste"
+ exemple 2 : deleteElement("/cd/piste) supprime la première piste uniquement
+ </remarks>
+</member><member name="M:HoMIDom.HoMIDom.XML.addAttribute(System.String,System.String,System.String,System.Int32)">
+	<summary>
+ Ajoute un attribut "nom" de valeur "valeur" n-ième élément pointé par la requête XPath
+ Attention : Le premier noeud possède l'index 1
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<param name="nom">Le nom de l'attribut à ajouter</param>
+	<param name="valeur">La valeur de l'attribut à ajouter</param>
+	<param name="index">L'index de l'élément auquel on ajoute l'attribut</param>
+	<remarks>
+ Utilisation |
+ exemple 1 : addAttribute("/cd/piste","numero", "3", 5) ajoute l'attribut "numero" de valeur "3" au 5ème élément "piste" du "cd"
+ exemple 2 : addAttribute("/cd/piste[5]","numero", "3") fait la même chose.
+ </remarks>
+</member><member name="M:HoMIDom.HoMIDom.XML.setAttribute(System.String,System.String,System.String,System.Int32)">
+	<summary>
+ Affecte à l'attribut "nom" la valeur "valeur" au n-ième élément pointé par la requête "path"
+ Attention : Le premier noeud possède l'index 1
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<param name="nom">Le nom de l'attribut à affecter</param>
+	<param name="valeur">La nouvelle valeur de l'attribut</param>
+	<param name="index">L'index de l'élément auquel on affecte la nouvelle valeur de l'attribut</param>
+	<remarks>
+ Utilisation |
+ exemple 1 : setAttribute("/cd/piste","numero", "3", 5) définit l'attribut "numero" du 5ème élément "piste" de "cd" à la valeur "3"
+ exemple 2 : setAttribute("/cd/piste[5]","numero", "3") fait exactement la même chose
+ </remarks>
+</member><member name="M:HoMIDom.HoMIDom.XML.getAttribute(System.String,System.String,System.String,System.Int32)">
+	<summary>
+ Retourne la valeur de l'attribut "nom" du n-ième élément pointé par la requête "XPath"
+ Attention : Le premier noeud possède l'index 1
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<param name="nom">Le nom de l'attribut dont la valeur sera retournée</param>
+	<param name="index">L'index de l'élément auquel appartient l'attribut</param>
+	<returns>La valeur de l'attribut sélectionné</returns>
+	<remarks>
+ Utilisation |
+ exemple 1 : getAttribute("/cd/piste","numero", 5) retourne la valeur de l'attribut "numero" du 5ème élément "piste" de "cd"
+ exemple 2 : getAttribute("/cd/piste[5]","numero") fait la même chose.
+ </remarks>
+</member><member name="M:HoMIDom.HoMIDom.XML.createRoot(System.String,System.String)">
+	<summary>
+ Ajoute l'element racine "nom"
+ </summary>
+	<param name="nom">Le nom de l'élément racine qui sera créé</param>
+	<remarks>
+ Utilisation | exemple : createRoot("Bibliothèque")
+ </remarks>
+</member><member name="M:HoMIDom.HoMIDom.XML.createNewFile(System.String)">
+	<summary>
+ Crée un nouveau fichier vierge
+ </summary>
+	<param name="nomFichier">[Chemin et ] Nom du fichier</param>
+	<remarks>
+ Veiller à ce que le fichier n'existe pas déjà sous peine d'écrasement de l'existant
+ </remarks>
+</member><member name="M:HoMIDom.HoMIDom.XML.getFormatedXMLString">
+	<summary>
+ Permet de renvoyer sous forme de chaine le contenu du fichier XML.
+ </summary>
+	<returns>Une chaine de caractères</returns>
+	<remarks>
+ Le document contient des retours à la ligne pour une meilleure lecture
+ </remarks>
+</member><member name="M:HoMIDom.HoMIDom.XML.getIndexOfElementContaining(System.String,System.String)">
+	<summary>
+ Renvoie l'index de l'élément pointé par XPath et de valeur valeur, -1 si pas trouvé
+ Attention : Le premier noeud possède l'index 1
+ </summary>
+	<param name="xpath">Une requête XPath</param>
+	<param name="valeur">La valeur à rechercher</param>
+	<returns>Un entier</returns>
+</member><member name="M:HoMIDom.HoMIDom.XML.countElements(System.String)">
+	<summary>
+ Renvoie le nombre d'éléments pointés par XPath
+ </summary>
+	<param name="xpath"></param>
+	<returns>Un entier</returns>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Fabricant">
+	<summary>
+ Définit ou retourne le fabricant de l'équipement
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Groupes">
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Modele">
 	<summary>
- Permet de regrouper un ensemble de devices du même type
+ Définit ou retourne le modèle d'équipement
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Driver">
+	<summary>
+ Définit ou retourne le type de driver (ex: http, ir, rs232...)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.File">
+	<summary>
+ Donne le nom du fichier ainsi que son extension (ex: TOTO.xml)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Ligne">
+	<summary>
+ Nombre de lignes de la grille du template
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Colonne">
+	<summary>
+ Nombre de colonnes de la grille du template
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Telecommande.TypeEquipement">
+	<summary>
+ Type d'équipement par défaut, pour définir ensuite les commandes de bases
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Telecommande">
+	<summary>
+ Class pour gérer les télécommandes
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.#ctor(System.String,HoMIDom.HoMIDom.Server)">
+	<summary>          
+ Creation de l'objet
+ </summary>
+	<param name="basename">Nom de la base de donnée : homidom / medias</param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.getconnecte">
+	<summary>Fourni l'etat d'une connexion à la bdd</summary>
+	<returns>True/False</returns>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.connect">
+	<summary>          
+ Connection à une BDD Sqlite
+ </summary>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.disconnect">
+	<summary>
+ DeConnection à une BDD Sqlite 
+ </summary>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.nonquery(System.String,System.String[])">
+	<summary>
+ Requete sans résultat
+ </summary>
+	<param name="commande">ex : DELETE FROM contact where Contact_id=10</param>
+	<param name="params">Liste es paramètres utilisés dans la query sous forme @parameter0, @parameter1 etc</param>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.query(System.String,System.Data.DataTable@,System.String[])">
+	<summary>Requete avec résultat</summary>
+	<param name="commande">ex : SELECT * FROM contact</param>
+	<param name="resultat">Arralist contenant la liste des résultats</param>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.querysimple(System.String,System.String@,System.String[])">
+	<summary>Requete avec résultat simple</summary>
+	<param name="commande">ex : SELECT * FROM contact</param>
+	<param name="resultat">Arralist contenant la liste des résultats</param>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Sqlite.count(System.String,System.Int32@)">
+	<summary>Compte le nombre de resultat</summary>
+	<param name="commande">ex : SELECT COUNT(*) FROM table WHERE col1 = 'xxx'</param>
+	<param name="resultat">Nombre de resultat</param>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Sqlite">
+	<summary>      
+ Classe de gestion des base de données sqlite     
+ </summary>   
+    ''' <remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Api.GenerateGUID">
+	<summary>
+ Génère un ID unique
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Api.Evaluation(System.String@,System.Double)">
+	<summary>
+ Retourne le résultat d'un calcul (formule, ex: *2 +3) en se basant sur une valeur de base (Valeur)
+ </summary>
+	<param name="Formule"></param>
+	<param name="Valeur"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.ThreadAction">
+	<summary>
+ Execute chaque Action
  </summary>
 	<remarks></remarks>
 </member><member name="F:HoMIDom.HoMIDom.Users.TypeProfil.invite">
@@ -2204,103 +2772,21 @@ HoMIDom
  Classe Users pour gérer les utilisateurs
  </summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Api.GenerateGUID">
+</member><member name="T:HoMIDom.HoMIDom.DeviceAction">
 	<summary>
- Génère un ID unique
- </summary>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Api.Evaluation(System.String@,System.Double)">
-	<summary>
- Retourne le résultat d'un calcul (formule, ex: *2 +3) en se basant sur une valeur de base (Valeur)
- </summary>
-	<param name="Formule"></param>
-	<param name="Valeur"></param>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.My.Resources.Resources.ResourceManager">
-	<summary>
-  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
-</summary>
-</member><member name="P:HoMIDom.My.Resources.Resources.Culture">
-	<summary>
-  Remplace la propriété CurrentUICulture du thread actuel pour toutes
-  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
-</summary>
-</member><member name="T:HoMIDom.My.Resources.Resources">
-	<summary>
-  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
-</summary>
-</member><member name="T:HoMIDom.HoMIDom.Soleil">
-	<summary>
- Classe permettant le calcul des heures de lever et coucher du soleil
+ Class template pour lister les actions possibles sur un device
  </summary>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Fabricant">
+</member><member name="P:HoMIDom.HoMIDom.Groupes.DeviceAction">
 	<summary>
- Définit ou retourne le fabricant de l'équipement
+ List des actions associées au Device
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Modele">
+</member><member name="T:HoMIDom.HoMIDom.Groupes">
 	<summary>
- Définit ou retourne le modèle d'équipement
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Driver">
-	<summary>
- Définit ou retourne le type de driver (ex: http, ir, rs232...)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.File">
-	<summary>
- Donne le nom du fichier ainsi que son extension (ex: TOTO.xml)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Ligne">
-	<summary>
- Nombre de lignes de la grille du template
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Colonne">
-	<summary>
- Nombre de colonnes de la grille du template
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Telecommande.TypeEquipement">
-	<summary>
- Type d'équipement par défaut, pour définir ensuite les commandes de bases
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Telecommande">
-	<summary>
- Class pour gérer les télécommandes
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.FileData">
-	<summary>
- Classe de transfert de fichier en streaming
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.RequestFileData">
-	<summary>
- Classe de demande de fichier
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.ThreadAction">
-	<summary>
- Execute chaque Action
+ Permet de regrouper un ensemble de devices du même type
  </summary>
 	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Macro.ID">
@@ -2631,354 +3117,6 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action">
 	<summary>Class action, Défini les actions à réaliser depuis les macros...</summary>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Extension">
-	<summary>
- Nom de l'extension ex: .wma
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Enable">
-	<summary>
- Si l'extension doit être prise en compte
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Audio.ExtensionAudio">
-	<summary>Type d'extension Audio</summary>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Repertoire">
-	<summary>
- Chemin du répertoire
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Enable">
-	<summary>
- Si le répertoire doit être pris en compte
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Audio.RepertoireAudio">
-	<summary>
- Type Répertoire Audio
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Audio.FilePlayList">
-	<summary>
- Class Fichier Audio
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Audio">
-	<summary>
- Classe de gestion Audio
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.DeviceAction">
-	<summary>
- Class template pour lister les actions possibles sur un device
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL">
-	<summary>
- modules pour diriger un appareil  ON/OFF
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.AUDIO">
-	<summary>
- module de type audio
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.BAROMETRE">
-	<summary>
- pour stocker les valeur issu d'un barometre meteo ou web
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.BATTERIE">
-	<summary>
- Pour stocker les valeurs issu d'une batterie
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.COMPTEUR">
-	<summary>
- compteur DS2423, RFXPower...
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.CONTACT">
-	<summary>
- detecteur de contact : switch 1-wire
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.DETECTEUR">
-	<summary>
- tous detecteurs : mouvement, obscurite...
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.DIRECTIONVENT">
-	<summary>
- module donnant la direction du vent
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.ENERGIEINSTANTANEE">
-	<summary>
- Valeur de Puissance d'energie instantanée
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.ENERGIETOTALE">
-	<summary>
- Valeur de Puissance d'energie totale
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.FREEBOX">
-	<summary>
- FreeBox
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEBOOLEEN">
-	<summary>
- Générique Boolean
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUESTRING">
-	<summary>
- Générique de type String
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE">
-	<summary>
- Générique de type numérique
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE">
-	<summary>
- Capteur d'humidité
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.LAMPE">
-	<summary>
- Module de type lampe avec variation
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.METEO">
-	<summary>
- Station meteo (physique ou web)
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA">
-	<summary>
- Multimedia
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.PLUIECOURANT">
-	<summary>
- Valeur de pluie courante
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.PLUIETOTAL">
-	<summary>
- Valeur de pluie totale
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.SWITCH">
-	<summary>
- Interrupteur
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.TELECOMMANDE">
-	<summary>
- Telecommande
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE">
-	<summary>
- Capteur de température
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE">
-	<summary>
- Température de consigne (ex: thermostat)
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.UV">
-	<summary>
- Indice UV soleil
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.VITESSEVENT">
-	<summary>
- Vitesse du vent
- </summary>
-	<remarks></remarks>
-</member><member name="F:HoMIDom.HoMIDom.Device.ListeDevices.VOLET">
-	<summary>
- Volet roulant
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device.ListeDevices">
-	<summary>Indique la liste des devices gérés</summary>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.DeviceGenerique.GetDefautDeviceImage(System.String)">
-	<summary>
- Retourne la liste de tous les fichiers image (png ou jpg) présents sur le serveur
- </summary>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique">
-	<summary>Class de déclaration du Device Générique</summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueDouble">
-	<summary>Classe valeur Double avec min/max/def/correction...</summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueBool">
-	<summary>Classe valeur True/False pour device ON/OFF</summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueInt">
-	<summary>Classe valeur Integer pour device avec valeur de 0(OFF) à 100(ON)</summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueString">
-	<summary>Classe valeur String </summary>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.APPAREIL.TestWrite(System.String,System.String,System.String)">
-	<summary>Permet de tester une commande write</summary>
-	<param name="Commande"></param>
-	<param name="Parametre1"></param>
-	<param name="Parametre2"></param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.APPAREIL.TestRead">
-	<summary>Permet de tester une commande read</summary>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.AUDIO.TestWrite(System.String,System.String,System.String)">
-	<summary>Permet de tester une commande write</summary>
-	<param name="Commande"></param>
-	<param name="Parametre1"></param>
-	<param name="Parametre2"></param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.AUDIO.TestRead">
-	<summary>Permet de tester une commande read</summary>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.MULTIMEDIA.EnvoyerCommande(System.String)">
-	<summary>
- Envoyer une commande au driver
- </summary>
-	<param name="Commande"></param>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Device">
-	<summary>Class Device, définie tous différents types de devices</summary>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.#ctor(System.String,HoMIDom.HoMIDom.Server)">
-	<summary>          
- Creation de l'objet
- </summary>
-	<param name="basename">Nom de la base de donnée : homidom / medias</param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.getconnecte">
-	<summary>Fourni l'etat d'une connexion à la bdd</summary>
-	<returns>True/False</returns>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.connect">
-	<summary>          
- Connection à une BDD Sqlite
- </summary>
-	<returns>String si OK, String "ERR:..." si erreur</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.disconnect">
-	<summary>
- DeConnection à une BDD Sqlite 
- </summary>
-	<returns>String si OK, String "ERR:..." si erreur</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.nonquery(System.String,System.String[])">
-	<summary>
- Requete sans résultat
- </summary>
-	<param name="commande">ex : DELETE FROM contact where Contact_id=10</param>
-	<param name="params">Liste es paramètres utilisés dans la query sous forme @parameter0, @parameter1 etc</param>
-	<returns>String si OK, String "ERR:..." si erreur</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.query(System.String,System.Data.DataTable@,System.String[])">
-	<summary>Requete avec résultat</summary>
-	<param name="commande">ex : SELECT * FROM contact</param>
-	<param name="resultat">Arralist contenant la liste des résultats</param>
-	<returns>String si OK, String "ERR:..." si erreur</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.querysimple(System.String,System.String@,System.String[])">
-	<summary>Requete avec résultat simple</summary>
-	<param name="commande">ex : SELECT * FROM contact</param>
-	<param name="resultat">Arralist contenant la liste des résultats</param>
-	<returns>String si OK, String "ERR:..." si erreur</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Sqlite.count(System.String,System.Int32@)">
-	<summary>Compte le nombre de resultat</summary>
-	<param name="commande">ex : SELECT COUNT(*) FROM table WHERE col1 = 'xxx'</param>
-	<param name="resultat">Nombre de resultat</param>
-	<returns>String si OK, String "ERR:..." si erreur</returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Sqlite">
-	<summary>      
- Classe de gestion des base de données sqlite     
- </summary>   
-    ''' <remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Zone.ID">
-	<summary>
- Identification unique de la zone
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Zone.Image">
-	<summary>
- Image de la zone pour arrière plan, plan.. (grand format)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Zone.Icon">
-	<summary>
- Icone de la zone (pour bouton, treeview, représentation...)
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Zone.Name">
-	<summary>
- Nom de la zone
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Zone.ListElement">
-	<summary>
- Contient la liste des devices associés à la zone de type Device_Zone
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Zone.Element_Zone.ElementID">
-	<summary>
- ID du device
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Zone.Element_Zone.Visible">
-	<summary>
- Si le device doit être visible dans la zone
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Zone.Element_Zone">
-	<summary>
- Class Device_zone représente un device dans une zone
- </summary>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Zone">
-	<summary>
- Classe Zone, une zone peut représenter une maison, un étage, un groupe de pièces, une pièce, un endroit dans une pièce
- </summary>
 	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.TemplateDevice.Name">
 	<summary>
@@ -3368,199 +3506,111 @@ HoMIDom
  Template de class de type Device pour le service web
  </summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.XML.#ctor(System.String)">
-	<summary>Constructeur de la classe</summary>
-	<param name="leFichier"></param>
-	<remarks>leFichier doit obligatoirement être un fichier existant</remarks>
-</member><member name="M:HoMIDom.HoMIDom.XML.#ctor">
+</member><member name="P:HoMIDom.HoMIDom.Zone.ID">
 	<summary>
- Constructeur de la classe
+ Identification unique de la zone
  </summary>
-	<remarks>
- Ne nécessite pas de fichier xml existant
- </remarks>
-</member><member name="P:HoMIDom.HoMIDom.XML.leFichier">
-	<summary>
- définit/retourne le nom du fichier
- </summary>
-	<value>Un fichier .xml existant</value>
-	<remarks>
- Veillez à indiquer un fichier XML existant!
- </remarks>
-</member><member name="M:HoMIDom.HoMIDom.XML.SelectValue(System.String)">
-	<summary>
- Retourne la valeur du premier noeud correspondant à la requête XPath.
- Cette fonction devrait être la plus utilisée car elle permet de retourner le résultat de n'importe quelle requête XPath.
- Quelques exemples qui montrent la puissance de XPath :
- /cd/piste[5]/titre/text() renvoie le titre de la piste 5
- /cd/piste[@numero='3']/titre renvoie le titre de la piste dont l'attribut numéro est '3'
- /cd[artiste='Pink Floyd'][3]/piste[5]/titre renvoie le titre de la 5ème piste du 3ème CD ayant "Pink Floyd" comme artiste.
- /cd[artiste='Pink Floyd' and id='PF004']/piste[2]/duree renvoie la durée de la seconde piste du CD de Pink Floyd ayant l'ID 'PF004'
- </summary>
-	<param name="query">Une requête XPath de sélection</param>
-	<returns>Une chaine de caractère contenant la valeur du noeud</returns>
+	<value></value>
+	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.XML.SetNode(System.String,System.Xml.XmlNode,System.Int32)">
-	<summary>Remplace le premier noeud correspondant à la requête XPath par un nouveau.</summary>
-	<param name="xpath">Une requête XPath de sélection</param>
-	<param name="node">Un noeud (XmlNode)</param>
+</member><member name="P:HoMIDom.HoMIDom.Zone.Image">
+	<summary>
+ Image de la zone pour arrière plan, plan.. (grand format)
+ </summary>
+	<value></value>
+	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.XML.SelectFirstNode(System.String)">
+</member><member name="P:HoMIDom.HoMIDom.Zone.Icon">
 	<summary>
- Retourne le premier noeud correspondant à la requête XPath, Nothing si aucun noeud n'est trouvé
+ Icone de la zone (pour bouton, treeview, représentation...)
  </summary>
-	<param name="xpath">La requête XPath</param>
-	<returns>Un noeud (XmlNode)</returns>
-</member><member name="M:HoMIDom.HoMIDom.XML.SelectNodes(System.String)">
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Zone.Name">
 	<summary>
- Retourne la liste des noeuds correspondants à la requête XPath ou Nothing si rien n'est trouvé
+ Nom de la zone
  </summary>
-	<param name="xpath">Une requête XPath</param>
-	<returns>Une liste de noeuds (XmlNodeList)</returns>
-</member><member name="M:HoMIDom.HoMIDom.XML.getElementValue(System.String,System.Int32)">
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Zone.ListElement">
 	<summary>
- Objectif : Renvoie la valeur du n-ème élément pointé par la requête XPath
- Attention : Le premier noeud possède l'index 1
+ Contient la liste des devices associés à la zone de type Device_Zone
  </summary>
-	<param name="xpath">Une requête XPath</param>
-	<param name="index">L'index de l'élément</param>
-	<returns>Chaine de caractères</returns>
-	<remarks>
- Utilisation |
- exemple 1 : getElementValue("/polygone/point", 2) renvoie la valeur du 2ème "point" de "polygone" |
- exemple 2 : getElementValue("/polygone/point[2]") renvoie la même chose
- </remarks>
-</member><member name="M:HoMIDom.HoMIDom.XML.setElementValue(System.String,System.String,System.Int32)">
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Zone.Element_Zone.ElementID">
 	<summary>
- Ecrit la valeur pour le n-ième élément pointé par la requête path
- Attention : Le premier noeud possède l'index 1
+ ID du device
  </summary>
-	<param name="xpath">Une requête XPath</param>
-	<param name="valeur">La valeur à écrire</param>
-	<param name="index">L'index de l'élément dans lequel écrire</param>
-	<remarks>
- Utilisation |
- exemple 1 : setElementValue("/polygone/point", "30;40", 5) spécifie que le 5ème élément "point" de "polygone" aura comme valeur "(30;40)" |
- exemple 2 : setElementValue("/polygone/point[5]", "30;40") fait exactement la même chose.
- </remarks>
-</member><member name="M:HoMIDom.HoMIDom.XML.addElement(System.String,System.String,System.String,System.Int32)">
- -----------------------------------------------------------------------------
- <summary>
- Ajoute un element pointé par le n-ième noeud de la requête XPath
- Attention : Le premier noeud possède l'index 1
- </summary>
-	<param name="xpath">Une requête XPath</param>
-	<param name="nom">Le nom de l'élément à ajouter</param>
-	<param name="valeur">La valeur de l'élément à ajouter</param>
-	<param name="index">L'index de l'élément parent dans lequel on ajoute l'élément enfant "nom"</param>
-	<remarks>
- Utilisation |
- exemple 1 : addElement("/cd/piste", "titre", "54 Cymru beats", 5) ajoute un élément enfant "titre" au 5ème élément "piste", sa valeur sera "54 Cymru beats" |
- exemple 2 : addElement("/cd/piste[5]", "titre", "54 Cymru beats") fait exactement la même chose.
- </remarks>
-</member><member name="M:HoMIDom.HoMIDom.XML.deleteElement(System.String,System.String,System.Int32)">
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Zone.Element_Zone.Visible">
 	<summary>
- supprime le n-ième element pointé par la requête XPath
- Attention : Le premier noeud possède l'index 1
+ Si le device doit être visible dans la zone
  </summary>
-	<param name="xpath">Une requête XPath</param>
-	<param name="nom">Le nom de l'élément à supprimer</param>
-	<param name="index">L'index de l'élément à supprimer</param>
-	<remarks>
- Utilisation |
- exemple : deleteElement("/cd", "piste", 3) supprime le 3ème élément "piste"
- </remarks>
-</member><member name="M:HoMIDom.HoMIDom.XML.deleteElement(System.String)">
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Zone.Element_Zone">
 	<summary>
- supprime le 1er élément pointé par la requête XPath
- Attention : Le premier noeud possède l'index 1
+ Class Device_zone représente un device dans une zone
  </summary>
-	<param name="xpath">Une requête XPath</param>
-	<remarks>
- Utilisation |
- exemple 1 : deleteElement("/cd/piste[3]) supprime le 3ème élément "piste"
- exemple 2 : deleteElement("/cd/piste) supprime la première piste uniquement
- </remarks>
-</member><member name="M:HoMIDom.HoMIDom.XML.addAttribute(System.String,System.String,System.String,System.Int32)">
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Zone">
 	<summary>
- Ajoute un attribut "nom" de valeur "valeur" n-ième élément pointé par la requête XPath
- Attention : Le premier noeud possède l'index 1
+ Classe Zone, une zone peut représenter une maison, un étage, un groupe de pièces, une pièce, un endroit dans une pièce
  </summary>
-	<param name="xpath">Une requête XPath</param>
-	<param name="nom">Le nom de l'attribut à ajouter</param>
-	<param name="valeur">La valeur de l'attribut à ajouter</param>
-	<param name="index">L'index de l'élément auquel on ajoute l'attribut</param>
-	<remarks>
- Utilisation |
- exemple 1 : addAttribute("/cd/piste","numero", "3", 5) ajoute l'attribut "numero" de valeur "3" au 5ème élément "piste" du "cd"
- exemple 2 : addAttribute("/cd/piste[5]","numero", "3") fait la même chose.
- </remarks>
-</member><member name="M:HoMIDom.HoMIDom.XML.setAttribute(System.String,System.String,System.String,System.Int32)">
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Extension">
 	<summary>
- Affecte à l'attribut "nom" la valeur "valeur" au n-ième élément pointé par la requête "path"
- Attention : Le premier noeud possède l'index 1
+ Nom de l'extension ex: .wma
  </summary>
-	<param name="xpath">Une requête XPath</param>
-	<param name="nom">Le nom de l'attribut à affecter</param>
-	<param name="valeur">La nouvelle valeur de l'attribut</param>
-	<param name="index">L'index de l'élément auquel on affecte la nouvelle valeur de l'attribut</param>
-	<remarks>
- Utilisation |
- exemple 1 : setAttribute("/cd/piste","numero", "3", 5) définit l'attribut "numero" du 5ème élément "piste" de "cd" à la valeur "3"
- exemple 2 : setAttribute("/cd/piste[5]","numero", "3") fait exactement la même chose
- </remarks>
-</member><member name="M:HoMIDom.HoMIDom.XML.getAttribute(System.String,System.String,System.String,System.Int32)">
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Enable">
 	<summary>
- Retourne la valeur de l'attribut "nom" du n-ième élément pointé par la requête "XPath"
- Attention : Le premier noeud possède l'index 1
+ Si l'extension doit être prise en compte
  </summary>
-	<param name="xpath">Une requête XPath</param>
-	<param name="nom">Le nom de l'attribut dont la valeur sera retournée</param>
-	<param name="index">L'index de l'élément auquel appartient l'attribut</param>
-	<returns>La valeur de l'attribut sélectionné</returns>
-	<remarks>
- Utilisation |
- exemple 1 : getAttribute("/cd/piste","numero", 5) retourne la valeur de l'attribut "numero" du 5ème élément "piste" de "cd"
- exemple 2 : getAttribute("/cd/piste[5]","numero") fait la même chose.
- </remarks>
-</member><member name="M:HoMIDom.HoMIDom.XML.createRoot(System.String,System.String)">
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Audio.ExtensionAudio">
+	<summary>Type d'extension Audio</summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Repertoire">
 	<summary>
- Ajoute l'element racine "nom"
+ Chemin du répertoire
  </summary>
-	<param name="nom">Le nom de l'élément racine qui sera créé</param>
-	<remarks>
- Utilisation | exemple : createRoot("Bibliothèque")
- </remarks>
-</member><member name="M:HoMIDom.HoMIDom.XML.createNewFile(System.String)">
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Audio.RepertoireAudio.Enable">
 	<summary>
- Crée un nouveau fichier vierge
+ Si le répertoire doit être pris en compte
  </summary>
-	<param name="nomFichier">[Chemin et ] Nom du fichier</param>
-	<remarks>
- Veiller à ce que le fichier n'existe pas déjà sous peine d'écrasement de l'existant
- </remarks>
-</member><member name="M:HoMIDom.HoMIDom.XML.getFormatedXMLString">
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Audio.RepertoireAudio">
 	<summary>
- Permet de renvoyer sous forme de chaine le contenu du fichier XML.
+ Type Répertoire Audio
  </summary>
-	<returns>Une chaine de caractères</returns>
-	<remarks>
- Le document contient des retours à la ligne pour une meilleure lecture
- </remarks>
-</member><member name="M:HoMIDom.HoMIDom.XML.getIndexOfElementContaining(System.String,System.String)">
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Audio.FilePlayList">
 	<summary>
- Renvoie l'index de l'élément pointé par XPath et de valeur valeur, -1 si pas trouvé
- Attention : Le premier noeud possède l'index 1
+ Class Fichier Audio
  </summary>
-	<param name="xpath">Une requête XPath</param>
-	<param name="valeur">La valeur à rechercher</param>
-	<returns>Un entier</returns>
-</member><member name="M:HoMIDom.HoMIDom.XML.countElements(System.String)">
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Audio">
 	<summary>
- Renvoie le nombre d'éléments pointés par XPath
+ Classe de gestion Audio
  </summary>
-	<param name="xpath"></param>
-	<returns>Un entier</returns>
+	<remarks></remarks>
 </member>
 </members>
 </doc>

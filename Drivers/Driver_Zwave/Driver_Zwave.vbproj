@@ -61,8 +61,9 @@
     <OptionInfer>Off</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OpenZWaveDotNet">
-      <HintPath>..\DEBUG\OpenZWaveDotNet.dll</HintPath>
+    <Reference Include="OpenZWaveDotNet, Version=1.0.4801.43051, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\OpenZWaveDotNet.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -151,7 +152,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="False" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

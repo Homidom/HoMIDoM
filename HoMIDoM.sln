@@ -74,14 +74,16 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_System", "Drivers\Dr
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_k8000", "Drivers\Driver_k8000\Driver_k8000.vbproj", "{64F4D426-C8EB-4A90-908C-2BB45BE6C136}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Homidom_Install", "Homidom_Install\Homidom_Install.vdproj", "{6C06D56D-8A32-456A-B66F-2ADF5BB3A534}"
-EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "HoMIDomWebAPI", "HoMIDomWebAPI\HoMIDomWebAPI.vbproj", "{96963754-902F-4F02-AB66-D06A0D2E3242}"
 	ProjectSection(ProjectDependencies) = postProject
 		{1F0CE8B5-5BA9-4704-8B5E-52682635F803} = {1F0CE8B5-5BA9-4704-8B5E-52682635F803}
 	EndProjectSection
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Teracom", "Drivers\Driver_Teracom\Driver_Teracom.vbproj", "{E2E39EA8-8B98-4DF9-9F7B-EEA0B9AAEF70}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Homidom_Install_x64", "Homidom_Install_x64\Homidom_Install_x64.vdproj", "{B1E864FA-03E0-4544-90C3-79225BBF6C65}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Homidom_Install_x86", "Homidom_Install_x86\Homidom_Install_x86.vdproj", "{63940C07-21EB-4E27-A8FA-DE742AC8D0A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -387,18 +389,6 @@ Global
 		{64F4D426-C8EB-4A90-908C-2BB45BE6C136}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{64F4D426-C8EB-4A90-908C-2BB45BE6C136}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{64F4D426-C8EB-4A90-908C-2BB45BE6C136}.Release|x86.ActiveCfg = Release|Any CPU
-		{6C06D56D-8A32-456A-B66F-2ADF5BB3A534}.Debug|Any CPU.ActiveCfg = Debug
-		{6C06D56D-8A32-456A-B66F-2ADF5BB3A534}.Debug|Any CPU.Build.0 = Debug
-		{6C06D56D-8A32-456A-B66F-2ADF5BB3A534}.Debug|Mixed Platforms.ActiveCfg = Debug
-		{6C06D56D-8A32-456A-B66F-2ADF5BB3A534}.Debug|Mixed Platforms.Build.0 = Debug
-		{6C06D56D-8A32-456A-B66F-2ADF5BB3A534}.Debug|x86.ActiveCfg = Debug
-		{6C06D56D-8A32-456A-B66F-2ADF5BB3A534}.Debug|x86.Build.0 = Debug
-		{6C06D56D-8A32-456A-B66F-2ADF5BB3A534}.Release|Any CPU.ActiveCfg = Release
-		{6C06D56D-8A32-456A-B66F-2ADF5BB3A534}.Release|Any CPU.Build.0 = Release
-		{6C06D56D-8A32-456A-B66F-2ADF5BB3A534}.Release|Mixed Platforms.ActiveCfg = Release
-		{6C06D56D-8A32-456A-B66F-2ADF5BB3A534}.Release|Mixed Platforms.Build.0 = Release
-		{6C06D56D-8A32-456A-B66F-2ADF5BB3A534}.Release|x86.ActiveCfg = Release
-		{6C06D56D-8A32-456A-B66F-2ADF5BB3A534}.Release|x86.Build.0 = Release
 		{96963754-902F-4F02-AB66-D06A0D2E3242}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{96963754-902F-4F02-AB66-D06A0D2E3242}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{96963754-902F-4F02-AB66-D06A0D2E3242}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -419,14 +409,38 @@ Global
 		{E2E39EA8-8B98-4DF9-9F7B-EEA0B9AAEF70}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E2E39EA8-8B98-4DF9-9F7B-EEA0B9AAEF70}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E2E39EA8-8B98-4DF9-9F7B-EEA0B9AAEF70}.Release|x86.ActiveCfg = Release|Any CPU
+		{B1E864FA-03E0-4544-90C3-79225BBF6C65}.Debug|Any CPU.ActiveCfg = Debug
+		{B1E864FA-03E0-4544-90C3-79225BBF6C65}.Debug|Any CPU.Build.0 = Debug
+		{B1E864FA-03E0-4544-90C3-79225BBF6C65}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{B1E864FA-03E0-4544-90C3-79225BBF6C65}.Debug|Mixed Platforms.Build.0 = Debug
+		{B1E864FA-03E0-4544-90C3-79225BBF6C65}.Debug|x86.ActiveCfg = Debug
+		{B1E864FA-03E0-4544-90C3-79225BBF6C65}.Debug|x86.Build.0 = Debug
+		{B1E864FA-03E0-4544-90C3-79225BBF6C65}.Release|Any CPU.ActiveCfg = Release
+		{B1E864FA-03E0-4544-90C3-79225BBF6C65}.Release|Any CPU.Build.0 = Release
+		{B1E864FA-03E0-4544-90C3-79225BBF6C65}.Release|Mixed Platforms.ActiveCfg = Release
+		{B1E864FA-03E0-4544-90C3-79225BBF6C65}.Release|Mixed Platforms.Build.0 = Release
+		{B1E864FA-03E0-4544-90C3-79225BBF6C65}.Release|x86.ActiveCfg = Release
+		{B1E864FA-03E0-4544-90C3-79225BBF6C65}.Release|x86.Build.0 = Release
+		{63940C07-21EB-4E27-A8FA-DE742AC8D0A8}.Debug|Any CPU.ActiveCfg = Debug
+		{63940C07-21EB-4E27-A8FA-DE742AC8D0A8}.Debug|Any CPU.Build.0 = Debug
+		{63940C07-21EB-4E27-A8FA-DE742AC8D0A8}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{63940C07-21EB-4E27-A8FA-DE742AC8D0A8}.Debug|Mixed Platforms.Build.0 = Debug
+		{63940C07-21EB-4E27-A8FA-DE742AC8D0A8}.Debug|x86.ActiveCfg = Debug
+		{63940C07-21EB-4E27-A8FA-DE742AC8D0A8}.Debug|x86.Build.0 = Debug
+		{63940C07-21EB-4E27-A8FA-DE742AC8D0A8}.Release|Any CPU.ActiveCfg = Release
+		{63940C07-21EB-4E27-A8FA-DE742AC8D0A8}.Release|Any CPU.Build.0 = Release
+		{63940C07-21EB-4E27-A8FA-DE742AC8D0A8}.Release|Mixed Platforms.ActiveCfg = Release
+		{63940C07-21EB-4E27-A8FA-DE742AC8D0A8}.Release|Mixed Platforms.Build.0 = Release
+		{63940C07-21EB-4E27-A8FA-DE742AC8D0A8}.Release|x86.ActiveCfg = Release
+		{63940C07-21EB-4E27-A8FA-DE742AC8D0A8}.Release|x86.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_UpdateAssemblyVersion = True
-		BuildVersion_UpdateFileVersion = True
-		BuildVersion_BuildVersioningStyle = None.None.Increment.None
 		BuildVersion_UseGlobalSettings = False
+		BuildVersion_BuildVersioningStyle = None.None.Increment.None
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_UpdateAssemblyVersion = True
 	EndGlobalSection
 EndGlobal
