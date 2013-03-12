@@ -190,7 +190,8 @@ Module Fonctions
                     .Stream = System.IO.File.Open(Fichier, FileMode.Open, FileAccess.Read)
                 End With
 
-                If myServiceFile.Upload(data) Then
+                Dim resultat = myServiceFile.Upload(data)
+                If resultat.Success Then
                     Return 1
                 End If
 
