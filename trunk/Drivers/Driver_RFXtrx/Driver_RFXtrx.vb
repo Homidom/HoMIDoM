@@ -4662,7 +4662,7 @@ Imports System.Media
     End Sub
 
     ''' <summary>Gestion du protocole BLYSS</summary>
-    ''' <param name="adresse">Adresse du type FFFF-A1  avec A1 A/D et 1/4</param>
+    ''' <param name="adresse">Adresse du type FFFF-A1  avec A1 A/P et 1/4</param>
     ''' <param name="commande">commande ON, OFF</param>
     ''' <param name="type">0=BLYSS</param>
     ''' <remarks></remarks>
