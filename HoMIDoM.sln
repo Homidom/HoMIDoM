@@ -85,6 +85,8 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Homidom_Install_x64", "Homi
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Homidom_Install_x86", "Homidom_Install_x86\Homidom_Install_x86.vdproj", "{63940C07-21EB-4E27-A8FA-DE742AC8D0A8}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "HoMIWpF_Install", "HoMIWpF_Install\HoMIWpF_Install.vdproj", "{C48BEAE4-3099-4192-8D43-9D6E6A5ED150}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -433,14 +435,26 @@ Global
 		{63940C07-21EB-4E27-A8FA-DE742AC8D0A8}.Release|Mixed Platforms.Build.0 = Release
 		{63940C07-21EB-4E27-A8FA-DE742AC8D0A8}.Release|x86.ActiveCfg = Release
 		{63940C07-21EB-4E27-A8FA-DE742AC8D0A8}.Release|x86.Build.0 = Release
+		{C48BEAE4-3099-4192-8D43-9D6E6A5ED150}.Debug|Any CPU.ActiveCfg = Debug
+		{C48BEAE4-3099-4192-8D43-9D6E6A5ED150}.Debug|Any CPU.Build.0 = Debug
+		{C48BEAE4-3099-4192-8D43-9D6E6A5ED150}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{C48BEAE4-3099-4192-8D43-9D6E6A5ED150}.Debug|Mixed Platforms.Build.0 = Debug
+		{C48BEAE4-3099-4192-8D43-9D6E6A5ED150}.Debug|x86.ActiveCfg = Debug
+		{C48BEAE4-3099-4192-8D43-9D6E6A5ED150}.Debug|x86.Build.0 = Debug
+		{C48BEAE4-3099-4192-8D43-9D6E6A5ED150}.Release|Any CPU.ActiveCfg = Release
+		{C48BEAE4-3099-4192-8D43-9D6E6A5ED150}.Release|Any CPU.Build.0 = Release
+		{C48BEAE4-3099-4192-8D43-9D6E6A5ED150}.Release|Mixed Platforms.ActiveCfg = Release
+		{C48BEAE4-3099-4192-8D43-9D6E6A5ED150}.Release|Mixed Platforms.Build.0 = Release
+		{C48BEAE4-3099-4192-8D43-9D6E6A5ED150}.Release|x86.ActiveCfg = Release
+		{C48BEAE4-3099-4192-8D43-9D6E6A5ED150}.Release|x86.Build.0 = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_UseGlobalSettings = False
-		BuildVersion_BuildVersioningStyle = None.None.Increment.None
-		BuildVersion_UpdateFileVersion = True
 		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_BuildVersioningStyle = None.None.Increment.None
+		BuildVersion_UseGlobalSettings = False
 	EndGlobalSection
 EndGlobal
