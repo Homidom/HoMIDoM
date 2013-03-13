@@ -239,7 +239,7 @@ Namespace HoMIDom
         ''' <param name="Valeur"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function Evaluation(ByRef Formule As String, ByVal Valeur As Double) As Double
+        Public Function Evaluation(ByVal Formule As String, ByVal Valeur As Double) As Double
             Try
                 Dim PosSep As Integer
                 Dim PosCour As Integer

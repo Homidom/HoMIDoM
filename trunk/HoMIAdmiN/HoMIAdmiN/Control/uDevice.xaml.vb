@@ -163,6 +163,7 @@ Partial Public Class uDevice
                     End If
 
                     'Affiche du bouton Historique, avec un tooltip si il y a des valeurs
+                    BtnHisto.Visibility = Windows.Visibility.Visible
                     Dim tl As New ToolTip
                     tl.Foreground = System.Windows.Media.Brushes.White
                     tl.Background = System.Windows.Media.Brushes.WhiteSmoke
@@ -171,11 +172,11 @@ Partial Public Class uDevice
                     Dim tool As New Label
                     Dim nbhisto As Double = myService.DeviceAsHisto(DeviceId)
                     If nbhisto > 0 Then
-                        BtnHisto.FontStyle = System.Windows.FontStyles.Italic
                         tool.Content &= "Derniere Valeur: " & x.Value & vbCrLf
                         tool.Content &= "Date MAJ: " & x.LastChange & vbCrLf
                         tool.Content &= "Nb Histo: " & nbhisto & vbCrLf
                     Else
+                        BtnHisto.FontStyle = System.Windows.FontStyles.Italic
                         tool.Content = "Aucun Historique"
                     End If
                     stkpopup.Children.Add(tool)
@@ -728,6 +729,7 @@ Partial Public Class uDevice
             'Dim uid As String = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, CBModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text)
 
             BtnTest.Visibility = Windows.Visibility.Visible
+            BtnHisto.Visibility = Windows.Visibility.Visible
             If CbType.SelectedValue = "MULTIMEDIA" Then
                 BtnEditTel.Visibility = Windows.Visibility.Visible
                 TxtModele.Visibility = Visibility.Hidden
