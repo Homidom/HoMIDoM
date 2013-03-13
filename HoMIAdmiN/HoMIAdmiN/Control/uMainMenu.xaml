@@ -116,6 +116,9 @@
                                 <Image Tag="tag_histo" Name="img_histo" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/courbe_128.png" ToolTip="Consulter les historiques" />
                             </Border>
                             <Label Name="label_menu_histo" Content="Historiques" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                                <Image Tag="tag_histo_import" x:Name="img_histo_import" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Import_32.png" ToolTip="Importer des données" />
+                            </StackPanel>
                         </StackPanel>
                     </Border>
                     <Border CornerRadius="5" BorderThickness="2" Margin="5" BorderBrush="Gray">

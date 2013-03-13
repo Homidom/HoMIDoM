@@ -2221,6 +2221,47 @@ Class Window1
             Me.Cursor = Cursors.Wait
             Select Case index
                 Case "tag_histo" : Tabcontrol1.SelectedIndex = 6
+                Case "tag_histo_import"
+                    Try
+                        Dim result As String
+                        Dim openFileDialog1 As New Microsoft.Win32.OpenFileDialog()
+                        openFileDialog1.Filter = "Fichier texte CSV (*.csv)|*.csv"
+                        openFileDialog1.FilterIndex = 2
+                        openFileDialog1.RestoreDirectory = True
+                        Dim DlgResult As Forms.DialogResult
+                        DlgResult = openFileDialog1.ShowDialog()
+                        If DlgResult = Forms.DialogResult.OK Or DlgResult = -1 Then
+                            If openFileDialog1.FileName.EndsWith("csv") Then
+                                ' Le fichier est apparemment ok.
+                                ' On regarde si l'admin est connecté en local, auquel cas
+                                ' pas besoin d'uploader le fichier sur le serveur
+                                Dim serveur As String = myChannelFactory.Endpoint.Address.ToString()
+                                serveur = Mid(serveur, 8, serveur.Length - 8)
+                                serveur = Split(serveur, "/", 2)(0)
+                                serveur = Split(serveur, ":", 2)(0)
+                                If serveur = "localhost" Then
+                                    Mouse.OverrideCursor = Cursors.Wait
+                                    result = myService.ImportHisto(openFileDialog1.FileName)
+                                    Mouse.OverrideCursor = Nothing
+                                Else
+                                    ' TODO: transférer le fichier sur le serveur puis lancer la commande
+                                    ' Upload(openFileDialog1.FileName)
+                                    MessageBox.Show("L'importation n'est possible que si la console d'administration est lancée sur le serveur!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                                    Exit Try
+                                End If
+                            Else
+                                MessageBox.Show("Format non supporté!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                                Exit Try
+                            End If
+                            If result.Contains("ERR") = True Then
+                                MessageBox.Show(result, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                            Else
+                                MessageBox.Show("Importation terminée.", "HoMIAdmiN", MessageBoxButton.OK, MessageBoxImage.Information)
+                            End If
+                        End If
+                    Catch ex As Exception
+                        MessageBox.Show("ERREUR Sub MainMenuAutre import_histo: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                    End Try
                 Case "tag_config_log"
                     Try
                         If IsConnect = False Then

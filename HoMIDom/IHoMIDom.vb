@@ -436,6 +436,13 @@ Namespace HoMIDom
         ''' <returns>List de type Historisation, 99 si l'ID du serveur est erroné</returns>
         ''' <remarks></remarks>
         <OperationContract()> Function GetHisto(ByVal IdSrv As String, ByVal Source As String, ByVal idDevice As String) As List(Of Historisation)
+
+        ''' <summary>Importation d'historiques</summary>          
+        ''' <param name="fichier">Fichier texte CSV</param>          
+        ''' <param name="separateur">caractère de séparation, si omis point-virgule</param>          
+        ''' <returns>String si OK, String "ERR:..." si erreur</returns>          
+        ''' <remarks></remarks>          
+        <OperationContract()> Function ImportHisto(ByVal fichier As String, Optional ByVal separateur As String = ";") As String
 #End Region
 
 #Region "Audio"

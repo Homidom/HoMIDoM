@@ -64,7 +64,8 @@
     Private Sub Autre_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles img_histo.MouseLeftButtonDown, _
         img_config.MouseLeftButtonDown, img_config_log.MouseLeftButtonDown, _
         img_config_sauvegarder.MouseLeftButtonDown, img_aide.MouseLeftButtonDown, img_multimedia.MouseDown, _
-        img_quitter.MouseLeftButtonDown, img_quitter_start.MouseLeftButtonDown, img_quitter_stop.MouseLeftButtonDown, img_composant_gerer_nvx.MouseLeftButtonDown
+        img_quitter.MouseLeftButtonDown, img_quitter_start.MouseLeftButtonDown, img_quitter_stop.MouseLeftButtonDown, img_composant_gerer_nvx.MouseLeftButtonDown, _
+        img_histo_import.MouseLeftButtonDown
         Try
             If e.ClickCount = 1 Then RaiseEvent menu_autre(sender.tag)
         Catch ex As Exception
@@ -332,6 +333,12 @@
             mnu81.Uid = "hst_gérer"
             AddHandler mnu81.Click, AddressOf menu_contextmenuclick
             ctxMenuHisto.Items.Add(mnu81)
+            Dim mnu85 As New MenuItem
+            mnu85.Header = "Importer des données d'historiques"
+            mnu85.Tag = "hst"
+            mnu85.Uid = "hst_importer"
+            AddHandler mnu85.Click, AddressOf menu_contextmenuclick
+            ctxMenuHisto.Items.Add(mnu85)
             menu_histo.ContextMenu = ctxMenuHisto
             ctxMenuHisto = Nothing
 
