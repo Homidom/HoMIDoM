@@ -551,8 +551,16 @@ Public Class Driver_X10_CM15
                             listedevices.Item(0).Value = True
                         End If
                     End If
-                Else
+                ElseIf (listedevices.Count > 1) Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " RecvAction", "Aucun ou Plusieurs devices correspondent à : " & vParm2 & ":" & vParm3)
+                Else
+                    'si autodiscover = true ou modedecouverte du serveur actif alors on crée le composant sinon on logue
+                    If _AutoDiscover Or _Server.GetModeDecouverte Then
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 traitement", "Device non trouvé, AutoCreation du composant : " & vParm1 & ":" & vParm2)
+                        _Server.AddDetectNewDevice(vParm1, _ID, "", "")
+                    Else
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 traitement", "Device non trouvé : " & vParm1 & ":" & vParm2)
+                    End If
                 End If
 
             Catch ex As Exception

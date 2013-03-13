@@ -1204,7 +1204,16 @@ Imports System.IO.Ports
                 ElseIf (listedevices.Count > 1) Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
                 Else
-                    If erreursidevicepastrouve Then _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process", "Device non trouvé : " & adresse & ":" & valeur)
+                    If erreursidevicepastrouve Then
+                        'si autodiscover = true ou modedecouverte du serveur actif alors on crée le composant sinon on logue
+                        If _AutoDiscover Or _Server.GetModeDecouverte Then
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "PLCBUS Process", "Device non trouvé, AutoCreation du composant : " & adresse & ":" & valeur)
+                            _Server.AddDetectNewDevice(adresse, _ID, "", "")
+                        Else
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process", "Device non trouvé : " & adresse & ":" & valeur)
+                        End If
+                    End If
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process", "Device non trouvé : " & adresse & ":" & valeur)
 
 
                     'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)

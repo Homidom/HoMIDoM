@@ -519,7 +519,13 @@ Public Class Driver_Phidget
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget InterfaceKit Process", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
             Else
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget InterfaceKit Process", "Device non trouvé : " & adresse & ":" & valeur)
-
+                'si autodiscover = true ou modedecouverte du serveur actif alors on crée le composant sinon on logue
+                If _AutoDiscover Or _Server.GetModeDecouverte Then
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Phidget InterfaceKit Process", "Device non trouvé, AutoCreation du composant : " & adresse & ":" & valeur)
+                    _Server.AddDetectNewDevice(adresse, _ID, "", "")
+                Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget InterfaceKit Process", "Device non trouvé : " & adresse & ":" & valeur)
+                End If
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget InterfaceKit traitement", "Exception : " & ex.Message & " --> " & adresse & " : " & valeur)

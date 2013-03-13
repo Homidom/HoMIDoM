@@ -74,7 +74,6 @@ Imports System.Media
     'param avancé
     Dim _DEBUG As Boolean = False
     Dim _PARAMMODE As String = "20011111111111111011111111"
-    'Dim _AUTODISCOVER As Boolean = True
 
 #End Region
 
@@ -1325,7 +1324,7 @@ Imports System.Media
         Try
             _DEBUG = _Parametres.Item(0).Valeur
             _PARAMMODE = _Parametres.Item(1).Valeur
-            _AUTODISCOVER = _Parametres.Item(2).Valeur
+            '_AUTODISCOVER = _Parametres.Item(2).Valeur
         Catch ex As Exception
             WriteLog("ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
         End Try
@@ -1588,7 +1587,7 @@ Imports System.Media
             'Parametres avancés
             add_paramavance("Debug", "Activer le Debug complet (True/False)", False)
             add_paramavance("ParamMode", "Paramétres (ex: 20011111111111111011111111)", "20011111111111111011111111")
-            add_paramavance("AutoDiscover", "Permet de créer automatiquement des composants si ceux-ci n'existent pas encore (True/False)", False)
+            'add_paramavance("AutoDiscover", "Permet de créer automatiquement des composants si ceux-ci n'existent pas encore (True/False)", False)
 
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)

@@ -796,8 +796,13 @@ Public Class Driver_Arduino
             ElseIf (listedevices.Count > 1) Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traitement", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
             Else
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " traitement", "Le device à l'adresse : " & adresse & " de type " & _Type & " nexiste pas")
-                'Le Device n'existe pas dans Homidom
+                'si autodiscover = true ou modedecouverte du serveur actif alors on crée le composant sinon on logue
+                If _AutoDiscover Or _Server.GetModeDecouverte Then
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " traitement", "Device non trouvé, AutoCreation du composant : " & type & " " & adresse & ":" & valeur)
+                    _Server.AddDetectNewDevice(adresse, _ID, type, "")
+                Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traitement", "Device non trouvé : " & type & " " & adresse & ":" & valeur)
+                End If
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traitement", "Exception : " & ex.Message & " --> " & adresse & " : " & valeur)
