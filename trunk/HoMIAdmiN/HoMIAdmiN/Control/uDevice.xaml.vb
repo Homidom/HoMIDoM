@@ -122,14 +122,14 @@ Partial Public Class uDevice
                     End If
                     If AsProperty(x, "ValueDef") And AsProperty(x, "precision") Then
                         StkValueDefaultPrecision.Visibility = Windows.Visibility.Visible
-                        TxtValDef.Text = x.ValueMin
-                        TxtPrecision.Text = x.ValueMax
+                        TxtValDef.Text = x.ValueDef
+                        TxtPrecision.Text = x.Precision
                     Else : StkValueDefaultPrecision.Visibility = Windows.Visibility.Collapsed
                     End If
                     If AsProperty(x, "correction") And AsProperty(x, "formatage") Then
                         StkValueCorrectionFormatage.Visibility = Windows.Visibility.Visible
-                        TxtCorrection.Text = x.ValueMin
-                        TxtFormatage.Text = x.ValueMax
+                        TxtCorrection.Text = x.Correction
+                        TxtFormatage.Text = x.Formatage
                     Else : StkValueCorrectionFormatage.Visibility = Windows.Visibility.Collapsed
                     End If
 
