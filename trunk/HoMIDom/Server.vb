@@ -4667,6 +4667,173 @@ Namespace HoMIDom
                 Return Nothing
             End Try
         End Function
+
+        ''' <summary>Importation d'historiques</summary>          
+        ''' <param name="fichier">Fichier texte CSV</param>          
+        ''' <param name="separateur">caractère de séparation, si omis point-virgule</param>          
+        ''' <returns>String si OK, String "ERR:..." si erreur</returns>          
+        ''' <remarks></remarks>          
+        Public Function ImportHisto(ByVal fichier As String, Optional ByVal separateur As String = ";") As String Implements IHoMIDom.ImportHisto
+            ' Le format d'importation est un fichier CSV codé en ANSI type export Microsoft Excel.
+            ' Les fichiers produits avec la fonction d'export des historiques dans le module Admin sont compatibles.
+            Try
+                If Not IO.File.Exists(fichier) Then
+                    Return "ERR: fichier non trouvé."
+                    Exit Function
+                End If
+
+                Dim deviceID_courant As String = ""
+                Dim nom_courant As String = ""
+                Dim type_courant As HoMIDom.Device.ListeDevices
+                Dim _dev As TemplateDevice
+                Dim lignes() = IO.File.ReadAllLines(fichier, Encoding.Default)
+                Dim colonnes() As String
+                Dim nb_lignes As Long = lignes.Count
+                Dim ColDeviceID As Integer = -1
+                Dim ColDateTime As Integer = -1
+                Dim ColName As Integer = -1
+                Dim ColValue As Integer = -1
+                Dim ColSource As Integer = -1
+
+                ' première ligne: on contrôle les colonnes.
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Importation en cours. ", "Vérification des champs.")
+                colonnes = lignes(0).Split(separateur)
+                For a As Integer = 0 To colonnes.Count - 1
+                    If colonnes(a).ToLower = "datetime" Or colonnes(a).ToLower = "dateheure" Then
+                        ColDateTime = a
+                    ElseIf colonnes(a).ToLower = "name" Or colonnes(a).ToLower = "nom" Then
+                        ColName = a
+                    ElseIf colonnes(a).ToLower = "deviceid" Or colonnes(a).ToLower = "device_id" Then
+                        ColDeviceID = a
+                    ElseIf colonnes(a).ToLower = "value" Or colonnes(a).ToLower = "valeur" Then
+                        ColValue = a
+                    ElseIf colonnes(a).ToLower = "source" Then
+                        ColSource = a
+                    End If
+                Next
+                If ColDateTime = -1 Or ColValue = -1 Or (ColName = -1 And ColDeviceID = -1) Then
+                    ' On n'a pas les colonnes nécessaires (au minimum: date, valeur et nom/device_id).
+                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Importation interrompue. ", "Les champs nécessaires n'ont pas été trouvés.")
+                    Return "ERR: Erreur à l'importation de " & fichier & ". Erreur: la première ligne doit contenir les noms de champs appropriés."
+                    Exit Function
+                End If
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Importation en cours. ", "Vérification des champs terminée.")
+
+                ' Vérification de tous les enregistrements
+                For i As Long = 1 To nb_lignes - 1
+                    If (i + 1) Mod 1000 = 0 Then
+                        Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Importation en cours... ", "Vérification ligne " & (i + 1).ToString & ".")
+                    End If
+                    colonnes = lignes(i).Split(separateur)
+
+                    ' Contrôle de la date
+                    If IsDate(colonnes(ColDateTime)) = False Then
+                        Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Importation interrompue à la ligne " & (i + 1).ToString, ". La date est invalide.")
+                        Return "ERR: Erreur à la vérification de la ligne " & (i + 1).ToString & ". La date est invalide."
+                        Exit Function
+                    End If
+
+                    ' Contrôle du device_id ou du nom
+                    If ColDeviceID > -1 Then
+                        ' on privilégie la colonne deviceID et on contrôle que l'ID existe dans le système
+                        ' deviceID_courant est utilisé pour ne pas faire lancer la boucle de recherche à chaque ligne,
+                        ' mais seulement si le deviceID_courant a changé (très probablement il y a de nombreuses lignes avec le même nom)
+                        If colonnes(ColDeviceID) <> deviceID_courant Then
+                            ' But: accélérer l'opération en ne recontrôlant les device id que s'il y a un changement
+                            ' suite du fichier
+                            _dev = ReturnDeviceById(_IdSrv, colonnes(ColDeviceID))
+                            If _dev.ID = colonnes(ColDeviceID) Then
+                                deviceID_courant = colonnes(ColDeviceID)
+                                type_courant = _dev.Type
+                            Else
+                                ' Le composant n'a pas été trouvé. On stoppe l'importation
+                                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Importation interrompue à la ligne " & (i + 1).ToString, ". Le composant " & colonnes(ColDeviceID) & " n'a pas été trouvé.")
+                                Return "ERR: Erreur à la vérification de la ligne " & (i + 1).ToString & ". Le composant " & colonnes(ColDeviceID) & " n'a pas été trouvé."
+                                Exit Function
+                            End If
+                        End If
+                    Else
+                        ' c'est un nom de composant donc il faut retrouver le deviceid
+                        ' nom_courant est utilisé pour ne pas faire lancer la boucle de recherche à chaque ligne,
+                        ' mais seulement si le nom a changé (très probablement il y a de nombreuses lignes avec le même nom)
+                        If colonnes(ColName) <> nom_courant Then
+                            nom_courant = ""
+                            For Each _dev In GetAllDevices(_IdSrv)
+                                If _dev.Name = colonnes(ColName) Then
+                                    nom_courant = colonnes(ColName)
+                                    deviceID_courant = _dev.ID
+                                    type_courant = _dev.Type
+                                    ' on remplace le nom par le device ID pour l'importation des données dans la BDD
+                                    colonnes(ColName) = _dev.ID
+                                    Exit For
+                                End If
+                            Next
+                            If nom_courant = "" Then
+                                ' Le composant n'a pas été trouvé. On stoppe l'importation
+                                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Importation interrompue à la ligne " & (i + 1).ToString, ". Le composant " & colonnes(ColName) & " n'a pas été trouvé.")
+                                Return "ERR: Erreur à la vérification de la ligne " & (i + 1).ToString & ". Le composant " & colonnes(ColName) & " n'a pas été trouvé."
+                                Exit Function
+                            End If
+                        Else
+                            colonnes(ColName) = deviceID_courant
+                        End If
+                    End If
+                    Select Case type_courant
+                        Case Device.ListeDevices.GENERIQUEBOOLEEN
+                            If colonnes(ColValue) = "True" Or "TRUE" Or "true" Or "Vrai" Or "VRAI" Or "vrai" Or "1" Or "-1" Then
+                                colonnes(ColValue) = "True"
+                            ElseIf colonnes(ColValue) = "False" Or "FALSE" Or "false" Or "Faux" Or "FAUX" Or "faux" Or "0" Then
+                                colonnes(ColValue) = "False"
+                            Else
+                                ' La valeur n'est pas interprétable. On stoppe l'importation.
+                                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Importation interrompue à la ligne " & (i + 1).ToString, ". La valeur du composant " & colonnes(ColName) & " doit être de type Vrai/Faux.")
+                                Return "ERR: Erreur à la vérification de la ligne " & (i + 1).ToString & ". La valeur du composant " & colonnes(ColName) & " doit être de type Vrai/Faux."
+                                Exit Function
+                            End If
+                    End Select
+                    ' Finalement, on reconstruit la ligne avec les valeurs éventuellement modifées des colonnes
+                    For a As Integer = 0 To colonnes.Count - 1
+                        If a = 0 Then
+                            lignes(i) = colonnes(0)
+                        Else
+                            lignes(i) = lignes(i) & separateur & colonnes(a)
+                        End If
+                    Next
+                Next
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Vérification terminée. ", (nb_lignes - 1).ToString & " enregistrements vérifiés.")
+
+                ' Importation finale dans la BDD
+                Dim retour As String
+                Dim source As String
+                If ColDeviceID = -1 Then
+                    ColDeviceID = ColName
+                End If
+                For i As Long = 1 To nb_lignes - 1
+                    If (i + 1) Mod 100 = 0 Then
+                        Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Importation en cours... ", "Enregistrement ligne " & (i + 1).ToString & ".")
+                    End If
+                    colonnes = lignes(i).Split(separateur)
+                    If ColSource = -1 Then
+                        source = "Value"
+                    Else
+                        source = colonnes(ColSource)
+                    End If
+                    retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", colonnes(ColDeviceID), source, Format(DateAndTime.DateValue(colonnes(ColDateTime)), "yyyy-MM-dd") & " " & Format(DateAndTime.TimeValue(colonnes(ColDateTime)), "hh:mm:ss"), colonnes(ColValue).Replace(",", "."))
+                    If Mid(retour, 1, 4) = "ERR:" Then
+                        Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Importation interrompue à la ligne " & (i + 1).ToString, retour)
+                        Return "ERR: Erreur à la vérification de la ligne " & (i + 1).ToString & ": " & retour
+                        Exit Function
+                    End If
+                Next
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Importation terminée. ", (nb_lignes - 1).ToString & " enregistrements importés.")
+                Return (nb_lignes - 1).ToString & " enregistrements importés avec succès."
+
+
+            Catch ex As Exception
+                Return "ERR: Erreur à l'importation de " & fichier & ". Erreur: " & ex.ToString
+            End Try
+        End Function
+
 #End Region
 
 #Region "Audio"
