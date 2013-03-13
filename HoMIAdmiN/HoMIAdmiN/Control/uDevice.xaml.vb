@@ -558,6 +558,10 @@ Partial Public Class uDevice
                 MessageBox.Show("Le driver du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
+            If String.IsNullOrEmpty(TxtAdresse1.Text) = True Then
+                MessageBox.Show("L'adresse de base du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
             retour = myService.VerifChamp(IdSrv, _driverid, "ADRESSE1", TxtAdresse1.Text)
             If retour <> "0" Then
                 MessageBox.Show("Champ " & LabelAdresse1.Content & ": " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
@@ -602,6 +606,7 @@ Partial Public Class uDevice
                 MessageBox.Show("Le nom du device: " & TxtNom.Text & " existe déjà impossible de l'enregister", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                 Exit Sub
             End If
+
             'on affiche l'ID du composant (si c'était un nouveau composant, il n'y avait pas encore d'ID)
             TxtID.Text = retour
 
@@ -640,6 +645,21 @@ Partial Public Class uDevice
 
     Private Sub BtnSave_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnSave.Click
         Try
+            Dim retour As String = ""
+            Dim _driverid As String = ""
+
+            'on recupere le DriverID depuis le combobox
+            For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
+                If myService.GetAllDrivers(IdSrv).Item(i).Nom = CbDriver.Text Then
+                    _driverid = myService.GetAllDrivers(IdSrv).Item(i).ID
+                    Exit For
+                End If
+            Next
+
+            'on corrige certains valeurs
+            TxtRefresh.Text = Replace(TxtRefresh.Text, ".", ",")
+
+            'on check les valeurs renseignés
             If String.IsNullOrEmpty(TxtNom.Text) = True Then
                 MessageBox.Show("Le nom du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
@@ -657,37 +677,64 @@ Partial Public Class uDevice
                 Exit Sub
             End If
 
-            TxtRefresh.Text = Replace(TxtRefresh.Text, ".", ",")
-
-            Dim _driverid As String = ""
-            For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
-                If myService.GetAllDrivers(IdSrv).Item(i).Nom = CbDriver.Text Then
-                    _driverid = myService.GetAllDrivers(IdSrv).Item(i).ID
-                    Exit For
+            'on recupere le bon champ Modele : Combobox ou texte
+            Dim _modele As String
+            If CBModele.Tag = 1 Then
+                _modele = CBModele.Text
+            Else
+                If TxtModele.Tag = 1 Then
+                    _modele = TxtModele.Text
+                Else
+                    _modele = ""
                 End If
-            Next
+            End If
 
-            Dim uid As String = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, CBModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text)
+            'on sauvegarde le composant
+            If CbType.Text = "MULTIMEDIA" Then
+                If x IsNot Nothing Then
+                    If String.IsNullOrEmpty(x.Modele) = True Then
+                        MessageBox.Show("Veuillez sélectionner ou ajouter un template au device!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        Exit Sub
+                    End If
+                    _modele = x.Modele
+                End If
+                If _Action = EAction.Modifier Then
+                    If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
+                Else
+                    retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
+                End If
+            Else
+                retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
+            End If
+            If retour = "98" Then
+                MessageBox.Show("Le nom du device: " & TxtNom.Text & " existe déjà impossible de l'enregister", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                Exit Sub
+            End If
+
+            'on affiche l'ID du composant (si c'était un nouveau composant, il n'y avait pas encore d'ID)
+            TxtID.Text = retour
 
             VerifDriver(_driverid)
+            If String.IsNullOrEmpty(_DeviceId) = True Then _DeviceId = retour
             SaveInZone()
+            FlagChange = True
+
+            If _Action = EAction.Nouveau And NewDevice IsNot Nothing And flagnewdev Then
+                myService.DeleteNewDevice(IdSrv, NewDevice.ID)
+                NewDevice = Nothing
+                flagnewdev = False
+            End If
+
+            'Dim uid As String = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, CBModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text)
 
             BtnTest.Visibility = Windows.Visibility.Visible
-            TxtID.Text = uid
-
             If CbType.SelectedValue = "MULTIMEDIA" Then
                 BtnEditTel.Visibility = Windows.Visibility.Visible
                 TxtModele.Visibility = Visibility.Hidden
                 LabelModele.Visibility = Windows.Visibility.Hidden
             End If
 
-            If NewDevice IsNot Nothing And flagnewdev Then
-                myService.DeleteNewDevice(IdSrv, NewDevice.ID)
-                NewDevice = Nothing
-                flagnewdev = False
-            End If
-
-            If uid.Length > 3 Then x = myService.ReturnDeviceByID(IdSrv, uid)
+            If _DeviceId.Length > 3 Then x = myService.ReturnDeviceByID(IdSrv, _DeviceId)
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub uDevice BtnSave_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
