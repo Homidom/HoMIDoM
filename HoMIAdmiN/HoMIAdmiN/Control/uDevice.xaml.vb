@@ -46,6 +46,12 @@ Partial Public Class uDevice
                 ImgDevice.Tag = ""
                 CbType.IsEnabled = False
 
+                'on cache des champs qui ne seront rendu visible que si le type selectionné le necessite
+                StkValueMINMAX.Visibility = Windows.Visibility.Collapsed
+                StkValueDefaultPrecision.Visibility = Windows.Visibility.Collapsed
+                StkValueCorrectionFormatage.Visibility = Windows.Visibility.Collapsed
+
+                'si c'est un nouveau device créé depuis un autocreateddevice alors on pré-rempli certains champs
                 If NewDevice IsNot Nothing Then
                     TxtNom.Text = NewDevice.Name
                     TxtAdresse1.Text = NewDevice.Adresse1
@@ -56,6 +62,7 @@ Partial Public Class uDevice
                     CbType_MouseLeave(CbType, Nothing)
                     flagnewdev = True
                 End If
+
             Else 'Modification d'un Device
 
                 FlagNewDevice = False
@@ -80,90 +87,60 @@ Partial Public Class uDevice
 
                     'Affiche les propriétés du device
                     TxtNom.Text = x.Name
-                    TxtDescript.Text = x.Description
                     ChkEnable.IsChecked = x.Enable
                     ChKSolo.IsChecked = x.Solo
                     ChKLastEtat.IsChecked = x.LastEtat
                     ChKAllValue.IsChecked = x.AllValue
                     TxtUnit.Text = x.Unit
                     TxtPuissance.Text = x.Puissance
+                    TxtDescript.Text = x.Description
                     If TxtPuissance.Text = "" Then TxtPuissance.Text = "0"
-
-                    StkID.Visibility = Windows.Visibility.Visible
-                    TxtID.Text = x.ID
-
                     If _Driver IsNot Nothing Then
                         CbDriver.SelectedValue = _Driver.Nom
                     End If
-
                     CbType.SelectedValue = x.Type.ToString
                     CbType.IsEnabled = False
                     CbType.Foreground = Brushes.Black
-                    BtnRead.Visibility = Windows.Visibility.Visible
                     TxtAdresse1.Text = x.Adresse1
                     TxtAdresse2.Text = x.Adresse2
+                    CBModele.Text = x.Modele
                     TxtModele.Text = x.Modele
-                    TxtModele2.Text = x.Modele
                     TxtRefresh.Text = x.Refresh
                     TxtLastChangeDuree.Text = x.LastChangeDuree
+                    TxtID.Text = x.ID
 
+                    'affichage de l'image du composant
                     ImgDevice.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Picture))
                     ImgDevice.Tag = x.Picture
 
-                    If AsProperty(x, "correction") = False Then StkCorrection.Visibility = Windows.Visibility.Collapsed
-                    If AsProperty(x, "formatage") = False Then StkFormatage.Visibility = Windows.Visibility.Collapsed
-                    If AsProperty(x, "precision") = False Then StkPrecision.Visibility = Windows.Visibility.Collapsed
-                    If AsProperty(x, "ValueMin") = False Then StkValueMin.Visibility = Windows.Visibility.Collapsed
-                    If AsProperty(x, "ValueMax") = False Then StkValueMax.Visibility = Windows.Visibility.Collapsed
-                    If AsProperty(x, "ValueDef") = False Then StkValueDef.Visibility = Windows.Visibility.Collapsed
+                    'gestion des champs des composants avec VALUE INTEGER/DOUBLE/LONG
+                    If AsProperty(x, "ValueMin") And AsProperty(x, "ValueMax") Then
+                        StkValueMINMAX.Visibility = Windows.Visibility.Visible
+                        TxtValueMin.Text = x.ValueMin
+                        TxtValueMax.Text = x.ValueMax
+                    Else : StkValueMINMAX.Visibility = Windows.Visibility.Collapsed
+                    End If
+                    If AsProperty(x, "ValueDef") And AsProperty(x, "precision") Then
+                        StkValueDefaultPrecision.Visibility = Windows.Visibility.Visible
+                        TxtValDef.Text = x.ValueMin
+                        TxtPrecision.Text = x.ValueMax
+                    Else : StkValueDefaultPrecision.Visibility = Windows.Visibility.Collapsed
+                    End If
+                    If AsProperty(x, "correction") And AsProperty(x, "formatage") Then
+                        StkValueCorrectionFormatage.Visibility = Windows.Visibility.Visible
+                        TxtCorrection.Text = x.ValueMin
+                        TxtFormatage.Text = x.ValueMax
+                    Else : StkValueCorrectionFormatage.Visibility = Windows.Visibility.Collapsed
+                    End If
 
-                    'Gestion si Device avec Value
-                    'If x.Type = ListeDevices.TEMPERATURE _
-                    '                   Or x.Type = ListeDevices.HUMIDITE _
-                    '                   Or x.Type = ListeDevices.TEMPERATURECONSIGNE _
-                    '                   Or x.Type = ListeDevices.ENERGIETOTALE _
-                    '                   Or x.Type = ListeDevices.ENERGIEINSTANTANEE _
-                    '                   Or x.Type = ListeDevices.PLUIETOTAL _
-                    '                   Or x.Type = ListeDevices.PLUIECOURANT _
-                    '                   Or x.Type = ListeDevices.VITESSEVENT _
-                    '                   Or x.Type = ListeDevices.UV _
-                    '                   Or x.Type = ListeDevices.COMPTEUR _
-                    '                   Or x.Type = ListeDevices.GENERIQUEVALUE _
-                    '                   Then
-                    '    StkValueLabel.Visibility = Windows.Visibility.Visible
-                    '    StkValue2Label.Visibility = Windows.Visibility.Visible
-                    '    StkValue3Label.Visibility = Windows.Visibility.Visible
-                    '    StkValue.Visibility = Windows.Visibility.Visible
-                    '    StkValue2.Visibility = Windows.Visibility.Visible
-                    '    StkValue3.Visibility = Windows.Visibility.Visible
-                    '    TxtCorrection.Text = x.Correction
-                    '    TxtFormatage.Text = x.Formatage
-                    '    TxtPrecision.Text = x.Precision
-                    '    TxtValueMax.Text = x.ValueMax
-                    '    TxtValueMin.Text = x.ValueMin
-                    '    TxtValDef.Text = x.ValueDef
-                    '    Label10.Visibility = Windows.Visibility.Visible
-                    '    Label11.Visibility = Windows.Visibility.Visible
-                    '    Label12.Visibility = Windows.Visibility.Visible
-                    '    Label13.Visibility = Windows.Visibility.Visible
-                    '    Label14.Visibility = Windows.Visibility.Visible
-                    '    Label15.Visibility = Windows.Visibility.Visible
-                    'Else
-                    '    StkValueLabel.Visibility = Windows.Visibility.Collapsed
-                    '    StkValue2Label.Visibility = Windows.Visibility.Collapsed
-                    '    StkValue3Label.Visibility = Windows.Visibility.Collapsed
-                    '    StkValue.Visibility = Windows.Visibility.Collapsed
-                    '    StkValue2.Visibility = Windows.Visibility.Collapsed
-                    '    StkValue3.Visibility = Windows.Visibility.Collapsed
-                    'End If
+                    BtnTest.Visibility = Windows.Visibility.Visible
 
                     If x.Type = ListeDevices.MULTIMEDIA Then
                         BtnEditTel.Visibility = Windows.Visibility.Visible
-                        TxtModele2.Visibility = Visibility.Collapsed
                         StkModel.Visibility = Visibility.Collapsed
                     End If
 
-                    'on verifie si le device est un device systeme pour ne pas le rendre modifiable
+                    'on verifie si le device est un device systeme pour le rendre NON modifiable
                     If Left(x.Name, 5) = "HOMI_" Then
                         Label1.Content = "Device SYSTEME"
                         TxtNom.IsReadOnly = True
@@ -176,35 +153,36 @@ Partial Public Class uDevice
                         ChKSolo.Visibility = Windows.Visibility.Collapsed
                         StkAdr1.Visibility = Windows.Visibility.Collapsed
                         StkAdr2.Visibility = Windows.Visibility.Collapsed
-                        TxtModele.Visibility = Windows.Visibility.Collapsed
+                        CBModele.Visibility = Windows.Visibility.Collapsed
                         StkLastChange.Visibility = Windows.Visibility.Collapsed
                         StkRefresh.Visibility = Windows.Visibility.Collapsed
-                        BtnRead.Visibility = Windows.Visibility.Collapsed
-                        Label8.Visibility = Windows.Visibility.Collapsed
+                        BtnTest.Visibility = Windows.Visibility.Collapsed
+                        LabelModele.Visibility = Windows.Visibility.Collapsed
                         StkUnit.Visibility = Windows.Visibility.Collapsed
                         StkPuiss.Visibility = Windows.Visibility.Collapsed
                     End If
 
-                    'affiche du bouton Historique si le device a un historique
-                    'If myService.DeviceAsHisto(DeviceId) > 0 Then BtnHisto.Visibility = Windows.Visibility.Visible
+                    'Affiche du bouton Historique, avec un tooltip si il y a des valeurs
+                    Dim tl As New ToolTip
+                    tl.Foreground = System.Windows.Media.Brushes.White
+                    tl.Background = System.Windows.Media.Brushes.WhiteSmoke
+                    tl.BorderBrush = System.Windows.Media.Brushes.Black
+                    Dim stkpopup As New StackPanel
+                    Dim tool As New Label
                     Dim nbhisto As Double = myService.DeviceAsHisto(DeviceId)
                     If nbhisto > 0 Then
                         BtnHisto.FontStyle = System.Windows.FontStyles.Italic
-                        Dim tl As New ToolTip
-                        tl.Foreground = System.Windows.Media.Brushes.White
-                        tl.Background = System.Windows.Media.Brushes.WhiteSmoke
-                        tl.BorderBrush = System.Windows.Media.Brushes.Black
-                        Dim stkpopup As New StackPanel
-                        Dim tool As New Label
                         tool.Content &= "Derniere Valeur: " & x.Value & vbCrLf
                         tool.Content &= "Date MAJ: " & x.LastChange & vbCrLf
                         tool.Content &= "Nb Histo: " & nbhisto & vbCrLf
-                        stkpopup.Children.Add(tool)
-                        tool = Nothing
-                        tl.Content = stkpopup
-                        stkpopup = Nothing
-                        BtnHisto.ToolTip = tl
+                    Else
+                        tool.Content = "Aucun Historique"
                     End If
+                    stkpopup.Children.Add(tool)
+                    tool = Nothing
+                    tl.Content = stkpopup
+                    stkpopup = Nothing
+                    BtnHisto.ToolTip = tl
                 End If
             End If
 
@@ -213,38 +191,28 @@ Partial Public Class uDevice
                 Dim ch1 As New CheckBox
                 Dim ch2 As New CheckBox
                 Dim ImgZone As New Image
-
                 Dim stk As New StackPanel
                 stk.Orientation = Orientation.Horizontal
-
                 ImgZone.Width = 32
                 ImgZone.Height = 32
                 ImgZone.Margin = New Thickness(2)
                 ImgZone.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.GetAllZones(IdSrv).Item(i).Icon))
-
                 ch1.Width = 80
                 ch1.Content = myService.GetAllZones(IdSrv).Item(i).Name
                 ch1.ToolTip = ch1.Content
                 ch1.Uid = myService.GetAllZones(IdSrv).Item(i).ID
                 AddHandler ch1.Click, AddressOf ChkElement_Click
-
                 ch2.Content = "Visible"
                 ch2.ToolTip = "Visible dans la zone côté client"
                 ch2.Visibility = Windows.Visibility.Collapsed
-
                 For j As Integer = 0 To myService.GetAllZones(IdSrv).Item(i).ListElement.Count - 1
                     If myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).ElementID = _DeviceId Then
-
                         ch1.IsChecked = True
                         ch2.Visibility = Windows.Visibility.Visible
-
-                        If myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).Visible = True Then
-                            ch2.IsChecked = True
-                        End If
+                        If myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).Visible = True Then ch2.IsChecked = True
                         Exit For
                     End If
                 Next
-
                 stk.Children.Add(ImgZone)
                 stk.Children.Add(ch1)
                 stk.Children.Add(ch2)
@@ -252,108 +220,6 @@ Partial Public Class uDevice
             Next
         Catch Ex As Exception
             MessageBox.Show("Erreur: " & Ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
-    'Bouton Fermer
-    Private Sub BtnClose_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClose.Click
-        flagnewdev = False
-        NewDevice = Nothing
-        RaiseEvent CloseMe(Me, True)
-    End Sub
-
-    'Bouton Ok
-    Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
-        Try
-            If String.IsNullOrEmpty(TxtNom.Text) = True Then
-                MessageBox.Show("Le nom du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                Exit Sub
-            End If
-            If String.IsNullOrEmpty(CbType.Text) = True Then
-                MessageBox.Show("Le type du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                Exit Sub
-            End If
-            If String.IsNullOrEmpty(CbDriver.Text) = True Then
-                MessageBox.Show("Le driver du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                Exit Sub
-            End If
-
-            TxtRefresh.Text = Replace(TxtRefresh.Text, ".", ",")
-
-            Dim _driverid As String = ""
-            For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
-                If myService.GetAllDrivers(IdSrv).Item(i).Nom = CbDriver.Text Then
-                    _driverid = myService.GetAllDrivers(IdSrv).Item(i).ID
-                    Exit For
-                End If
-            Next
-
-            Dim retour As String = myService.VerifChamp(IdSrv, _driverid, "ADRESSE1", TxtAdresse1.Text)
-            If retour <> "0" Then
-                MessageBox.Show("Champ " & Label6.Content & ": " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                Exit Sub
-            End If
-            retour = myService.VerifChamp(IdSrv, _driverid, "ADRESSE2", TxtAdresse2.Text)
-            If retour <> "0" Then
-                MessageBox.Show("Champ " & Label7.Content & ": " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                Exit Sub
-            End If
-
-            Dim _modele As String
-            If TxtModele.Tag = 1 Then
-                _modele = TxtModele.Text
-            Else
-                If TxtModele2.Tag = 1 Then
-                    _modele = TxtModele2.Text
-                Else
-                    _modele = ""
-                End If
-            End If
-
-            Dim result As String = ""
-
-            If CbType.Text = "MULTIMEDIA" Then
-
-                If x IsNot Nothing Then
-                    If String.IsNullOrEmpty(x.Modele) = True Then
-                        MessageBox.Show("Veuillez sélectionner ou ajouter un template au device!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                        Exit Sub
-                    Else
-                        _modele = x.Modele
-                    End If
-                End If
-
-                If _Action = EAction.Modifier Then
-                    If x IsNot Nothing Then result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
-                Else
-                    result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
-                End If
-            Else
-                result = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
-            End If
-
-            If result = "98" Then
-                MessageBox.Show("Le nom du device: " & TxtNom.Text & " existe déjà impossible de l'enregister", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-                Exit Sub
-            End If
-
-            StkID.Visibility = Windows.Visibility.Visible
-            TxtID.Text = result
-
-            VerifDriver(_driverid)
-            If String.IsNullOrEmpty(_DeviceId) = True Then _DeviceId = result
-            SaveInZone()
-            FlagChange = True
-
-            If _Action = EAction.Nouveau And NewDevice IsNot Nothing And flagnewdev Then
-                myService.DeleteNewDevice(IdSrv, NewDevice.ID)
-                NewDevice = Nothing
-                flagnewdev = False
-            End If
-
-            RaiseEvent CloseMe(Me, False)
-        Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uDevice BtnOK_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -365,7 +231,7 @@ Partial Public Class uDevice
                 Dim x2 As CheckBox = stk.Children.Item(2)
                 Dim trv As Boolean = False
 
-                For Each dev In myservice.GetDeviceInZone(IdSrv, x1.Uid)
+                For Each dev In myService.GetDeviceInZone(IdSrv, x1.Uid)
                     If dev IsNot Nothing Then
                         If dev.ID = _DeviceId Then
                             trv = True
@@ -375,14 +241,12 @@ Partial Public Class uDevice
                 Next
 
                 If trv = True And x1.IsChecked = False Then
-                    myservice.DeleteDeviceToZone(IdSrv, x1.Uid, _DeviceId)
+                    myService.DeleteDeviceToZone(IdSrv, x1.Uid, _DeviceId)
                 Else
                     If trv = True And x1.IsChecked = True Then
-                        myservice.AddDeviceToZone(IdSrv, x1.Uid, _DeviceId, X2.IsChecked)
+                        myService.AddDeviceToZone(IdSrv, x1.Uid, _DeviceId, x2.IsChecked)
                     Else
-                        If trv = False And x1.IsChecked = True Then
-                            myservice.AddDeviceToZone(IdSrv, x1.Uid, _DeviceId, X2.IsChecked)
-                        End If
+                        If trv = False And x1.IsChecked = True Then myService.AddDeviceToZone(IdSrv, x1.Uid, _DeviceId, x2.IsChecked)
                     End If
                 End If
             Next
@@ -391,6 +255,192 @@ Partial Public Class uDevice
             MessageBox.Show("Erreur dans le programme SaveInZone: " & ex.ToString, "Admin", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
 
+    End Sub
+
+    'Modif des champs suivant le driver sélectionné
+    Private Sub CbDriver_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbDriver.SelectionChanged
+        MaJDriver()
+    End Sub
+    Private Sub MaJDriver()
+        Try
+            Dim _Driver As Object = Nothing
+
+            'on cherche le driver
+            For i As Integer = 0 To ListeDrivers.Count - 1
+                If ListeDrivers.Item(i).Nom = CbDriver.SelectedItem.ToString Then
+                    _Driver = myService.ReturnDriverByID(IdSrv, ListeDrivers.Item(i).ID)
+                    Exit For
+                End If
+            Next
+            'si on a trouvé le driver selectionné
+            If _Driver IsNot Nothing Then
+                'Si c'est un nouveau device, on peut modifier le type sinon non
+                If FlagNewDevice Then
+                    Dim mem As String = CbType.Text
+                    CbType.IsEnabled = True
+                    CbType.Items.Clear()
+
+                    For j As Integer = 0 To _Driver.DeviceSupport.count - 1
+                        CbType.Items.Add(_Driver.DeviceSupport.item(j).ToString)
+                    Next
+                    CbType.IsEnabled = True
+                    CbType.Text = mem
+                End If
+
+                'Suivant le driver, on change les champs (personnalisation des Labels, affichage suivant @...
+                If _Driver.LabelsDevice.Count > 0 Then
+                    For k As Integer = 0 To _Driver.LabelsDevice.Count - 1
+                        Select Case UCase(_Driver.LabelsDevice.Item(k).NomChamp)
+                            Case "ADRESSE1"
+                                If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
+                                    StkAdr1.Visibility = Windows.Visibility.Collapsed
+                                Else
+                                    LabelAdresse1.Content = _Driver.LabelsDevice.Item(k).LabelChamp
+                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Tooltip) = False Then
+                                        LabelAdresse1.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                        TxtAdresse1.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                    End If
+                                    StkAdr1.Visibility = Windows.Visibility.Visible
+                                End If
+                            Case "ADRESSE2"
+                                If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
+                                    StkAdr2.Visibility = Windows.Visibility.Collapsed
+                                Else
+                                    LabelAdresse2.Content = _Driver.LabelsDevice.Item(k).LabelChamp
+                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Tooltip) = False Then
+                                        LabelAdresse2.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                        TxtAdresse2.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                    End If
+                                    StkAdr2.Visibility = Windows.Visibility.Visible
+                                End If
+                            Case "SOLO"
+                                If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
+                                    ChKSolo.Visibility = Windows.Visibility.Collapsed
+                                Else
+                                    ChKSolo.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                    ChKSolo.Visibility = Windows.Visibility.Visible
+                                End If
+                            Case "REFRESH"
+                                If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
+                                    StkRefresh.Visibility = Windows.Visibility.Collapsed
+                                Else
+                                    LabelRefresh.Content = _Driver.LabelsDevice.Item(k).LabelChamp
+                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Tooltip) = False Then
+                                        LabelRefresh.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                        TxtRefresh.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                    End If
+                                    StkRefresh.Visibility = Windows.Visibility.Visible
+                                End If
+                            Case "LASTCHANGEDUREE"
+                                If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
+                                    StkLastChange.Visibility = Windows.Visibility.Collapsed
+                                Else
+                                    LabelLastChangeDuree.Content = _Driver.LabelsDevice.Item(k).LabelChamp
+                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Tooltip) = True Then
+                                        TxtLastChangeDuree.ToolTip = "Permet de vérifier si le composant a été mis à jour depuis moins de x minutes sinon il apparait en erreur"
+                                        LabelLastChangeDuree.ToolTip = "Permet de vérifier si le composant a été mis à jour depuis moins de x minutes sinon il apparait en erreur"
+                                    Else
+                                        TxtLastChangeDuree.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                        LabelLastChangeDuree.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                    End If
+                                    StkLastChange.Visibility = Windows.Visibility.Visible
+                                End If
+                            Case "MODELE"
+                                If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
+                                    CBModele.Visibility = Windows.Visibility.Collapsed
+                                    CBModele.Tag = 0
+                                    TxtModele.Visibility = Windows.Visibility.Collapsed
+                                    TxtModele.Tag = 0
+                                    LabelModele.Visibility = Windows.Visibility.Collapsed
+                                    StkModel.Visibility = Windows.Visibility.Collapsed
+                                Else
+                                    LabelModele.Visibility = Windows.Visibility.Visible
+                                    StkModel.Visibility = Windows.Visibility.Visible
+                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).LabelChamp) = False Then LabelModele.Content = _Driver.LabelsDevice.Item(k).LabelChamp
+                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Tooltip) = False Then
+                                        LabelModele.ToolTip = _Driver.LabelsDevice.Item(k).ToolTip
+                                        CBModele.ToolTip = _Driver.LabelsDevice.Item(k).ToolTip
+                                    End If
+                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Parametre) = False Then
+                                        CBModele.Items.Clear()
+                                        Dim a() As String = _Driver.LabelsDevice.Item(k).Parametre.Split("|")
+                                        If a.Length > 0 Then
+                                            For g As Integer = 0 To a.Length - 1
+                                                CBModele.Items.Add(a(g))
+                                            Next
+                                            CBModele.IsEditable = False
+                                            CBModele.Visibility = Windows.Visibility.Visible
+                                            CBModele.Tag = 1
+                                            TxtModele.Visibility = Windows.Visibility.Collapsed
+                                            TxtModele.Tag = 0
+                                        Else
+                                            CBModele.Visibility = Windows.Visibility.Collapsed
+                                            CBModele.Tag = 0
+                                            TxtModele.Visibility = Windows.Visibility.Visible
+                                            TxtModele.Tag = 1
+                                            TxtModele.Text = a(0)
+                                        End If
+                                    Else
+                                        CBModele.Visibility = Windows.Visibility.Collapsed
+                                        CBModele.Tag = 0
+                                        TxtModele.Visibility = Windows.Visibility.Visible
+                                        TxtModele.Tag = 1
+                                    End If
+                                End If
+                        End Select
+                    Next
+                End If
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    'Verification du driver suivant son ID
+    Private Sub VerifDriver(ByVal IdDriver As String)
+        Try
+            Dim x As TemplateDriver = myService.ReturnDriverByID(IdSrv, IdDriver)
+            If x IsNot Nothing Then
+                If x.Enable = False Then
+                    MessageBox.Show("Le driver " & x.Nom & " n'est pas activé (Enable), le composant ne pourra pas être utilisé!", "INFO", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                End If
+                If x.IsConnect = False Then MessageBox.Show("Le driver " & x.Nom & " n'est pas démarré, le composant ne pourra pas être utilisé!", "INFO", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            Else
+                MessageBox.Show("Le driver n'a pas pu être trouvé ! (ID du driver: " & IdDriver & ")", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR VerifDriver: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    'Quand on change le TYPE d'un composant
+    Private Sub CbType_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles CbType.MouseLeave
+        Try
+            If _Action = EAction.Nouveau Then
+                'Gestion si Device avec Value
+                If CbType.SelectedValue Is Nothing Then Exit Sub
+                If CbType.SelectedValue = "TEMPERATURE" Or CbType.Text = "COMPTEUR" Or CbType.Text = "HUMIDITE" Or CbType.Text = "TEMPERATURECONSIGNE" _
+                        Or CbType.Text = "ENERGIETOTALE" Or CbType.Text = "ENERGIEINSTANTANEE" Or CbType.Text = "PLUIETOTAL" _
+                        Or CbType.Text = "PLUIECOURANT" Or CbType.Text = "VITESSEVENT" Or CbType.Text = "UV" Or CbType.Text = "GENERIQUEVALUE" Then
+                    StkValueMINMAX.Visibility = Windows.Visibility.Visible
+                    StkValueDefaultPrecision.Visibility = Windows.Visibility.Visible
+                    StkValueCorrectionFormatage.Visibility = Windows.Visibility.Visible
+                Else
+                    StkValueMINMAX.Visibility = Windows.Visibility.Collapsed
+                    StkValueDefaultPrecision.Visibility = Windows.Visibility.Collapsed
+                    StkValueCorrectionFormatage.Visibility = Windows.Visibility.Collapsed
+                End If
+
+                If CbType.SelectedValue = "MULTIMEDIA" Then
+                    StkModel.Visibility = Windows.Visibility.Collapsed
+                Else
+                    StkModel.Visibility = Windows.Visibility.Visible
+                End If
+            End If
+        Catch Ex As Exception
+            MessageBox.Show("Erreur lors du changement de type: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub TxtRefresh_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtRefresh.TextChanged
@@ -404,47 +454,6 @@ Partial Public Class uDevice
         End Try
     End Sub
 
-    Private Sub CbType_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles CbType.MouseLeave
-        Try
-            StkCorrection.Visibility = Windows.Visibility.Collapsed
-            StkFormatage.Visibility = Windows.Visibility.Collapsed
-            StkPrecision.Visibility = Windows.Visibility.Collapsed
-            StkValueMin.Visibility = Windows.Visibility.Collapsed
-            StkValueMax.Visibility = Windows.Visibility.Collapsed
-            StkValueDef.Visibility = Windows.Visibility.Collapsed
-
-            If _Action = EAction.Nouveau Then
-                'Gestion si Device avec Value
-                If CbType.SelectedValue Is Nothing Then Exit Sub
-                If CbType.SelectedValue = "TEMPERATURE" _
-                                   Or CbType.Text = "COMPTEUR" _
-                                   Or CbType.Text = "HUMIDITE" _
-                                   Or CbType.Text = "TEMPERATURECONSIGNE" _
-                                   Or CbType.Text = "ENERGIETOTALE" _
-                                   Or CbType.Text = "ENERGIEINSTANTANEE" _
-                                   Or CbType.Text = "PLUIETOTAL" _
-                                   Or CbType.Text = "PLUIECOURANT" _
-                                   Or CbType.Text = "VITESSEVENT" _
-                                   Or CbType.Text = "UV" _
-                                   Or CbType.Text = "GENERIQUEVALUE" _
-                                   Then
-                    StkCorrection.Visibility = Windows.Visibility.Visible
-                    StkFormatage.Visibility = Windows.Visibility.Visible
-                    StkPrecision.Visibility = Windows.Visibility.Visible
-                    StkValueMin.Visibility = Windows.Visibility.Visible
-                    StkValueMax.Visibility = Windows.Visibility.Visible
-                    StkValueDef.Visibility = Windows.Visibility.Visible
-                End If
-
-                If CbType.SelectedValue = "MULTIMEDIA" Then
-                    StkModel.Visibility = Windows.Visibility.Collapsed
-                End If
-            End If
-        Catch Ex As Exception
-            MessageBox.Show("Erreur lors du changement de type: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
     Private Sub TxtLastChangeDuree_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtLastChangeDuree.TextChanged
         Try
             If String.IsNullOrEmpty(TxtLastChangeDuree.Text) = False And IsNumeric(TxtLastChangeDuree.Text) = False Then
@@ -454,6 +463,13 @@ Partial Public Class uDevice
         Catch ex As Exception
             MessageBox.Show("Erreur uDevice TxtLastChangeDuree_TextChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
+    End Sub
+
+    Private Sub TxtPuissance_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtPuissance.TextChanged
+        If IsNumeric(TxtPuissance.Text) = False Then
+            MessageBox.Show("Veuillez saisir une valeur numérique !!", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            TxtPuissance.Undo()
+        End If
     End Sub
 
     Private Sub ImgDevice_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgDevice.MouseLeftButtonDown
@@ -476,19 +492,19 @@ Partial Public Class uDevice
         End Try
     End Sub
 
-    Private Sub BtnRead_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnRead.Click
+    'Gestion des zones
+    Private Sub ChkElement_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs)
         Try
-            If myService.ReturnDeviceByID(IdSrv, _DeviceId).Enable = False Then
-                MessageBox.Show("Vous ne pouvez pas exécuter de commandes car le device n'est pas activé (propriété Enable)!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                Exit Sub
-            End If
-
-            Dim y As New uTestDevice(_DeviceId)
-            y.Uid = System.Guid.NewGuid.ToString()
-            AddHandler y.CloseMe, AddressOf UnloadControl
-            Window1.CanvasUser.Children.Add(y)
+            For Each stk As StackPanel In ListZone.Items
+                Dim x As CheckBox = stk.Children.Item(1)
+                If x.IsChecked = True Then
+                    stk.Children.Item(2).Visibility = Windows.Visibility.Visible
+                Else
+                    stk.Children.Item(2).Visibility = Windows.Visibility.Collapsed
+                End If
+            Next
         Catch ex As Exception
-            MessageBox.Show("Erreur Tester: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur uDevice ChkElement_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -502,6 +518,123 @@ Partial Public Class uDevice
             Next
         Catch ex As Exception
             MessageBox.Show("Erreur uDevice UnloadControl: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+#Region "Gestion des BOUTONS"
+
+    Private Sub BtnClose_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClose.Click
+        flagnewdev = False
+        NewDevice = Nothing
+        RaiseEvent CloseMe(Me, True)
+    End Sub
+
+    Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
+        Try
+            Dim retour As String = ""
+            Dim _driverid As String = ""
+
+            'on recupere le DriverID depuis le combobox
+            For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
+                If myService.GetAllDrivers(IdSrv).Item(i).Nom = CbDriver.Text Then
+                    _driverid = myService.GetAllDrivers(IdSrv).Item(i).ID
+                    Exit For
+                End If
+            Next
+
+            'on corrige certains valeurs
+            TxtRefresh.Text = Replace(TxtRefresh.Text, ".", ",")
+
+            'on check les valeurs renseignés
+            If String.IsNullOrEmpty(TxtNom.Text) = True Then
+                MessageBox.Show("Le nom du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+            If String.IsNullOrEmpty(CbType.Text) = True Then
+                MessageBox.Show("Le type du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+            If String.IsNullOrEmpty(CbDriver.Text) = True Then
+                MessageBox.Show("Le driver du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+            retour = myService.VerifChamp(IdSrv, _driverid, "ADRESSE1", TxtAdresse1.Text)
+            If retour <> "0" Then
+                MessageBox.Show("Champ " & LabelAdresse1.Content & ": " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+            retour = myService.VerifChamp(IdSrv, _driverid, "ADRESSE2", TxtAdresse2.Text)
+            If retour <> "0" Then
+                MessageBox.Show("Champ " & LabelAdresse2.Content & ": " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+
+            'on recupere le bon champ Modele : Combobox ou texte
+            Dim _modele As String
+            If CBModele.Tag = 1 Then
+                _modele = CBModele.Text
+            Else
+                If TxtModele.Tag = 1 Then
+                    _modele = TxtModele.Text
+                Else
+                    _modele = ""
+                End If
+            End If
+
+            'on sauvegarde le composant
+            If CbType.Text = "MULTIMEDIA" Then
+                If x IsNot Nothing Then
+                    If String.IsNullOrEmpty(x.Modele) = True Then
+                        MessageBox.Show("Veuillez sélectionner ou ajouter un template au device!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        Exit Sub
+                    End If
+                    _modele = x.Modele
+                End If
+                If _Action = EAction.Modifier Then
+                    If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
+                Else
+                    retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
+                End If
+            Else
+                retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
+            End If
+            If retour = "98" Then
+                MessageBox.Show("Le nom du device: " & TxtNom.Text & " existe déjà impossible de l'enregister", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                Exit Sub
+            End If
+            'on affiche l'ID du composant (si c'était un nouveau composant, il n'y avait pas encore d'ID)
+            TxtID.Text = retour
+
+            VerifDriver(_driverid)
+            If String.IsNullOrEmpty(_DeviceId) = True Then _DeviceId = retour
+            SaveInZone()
+            FlagChange = True
+
+            If _Action = EAction.Nouveau And NewDevice IsNot Nothing And flagnewdev Then
+                myService.DeleteNewDevice(IdSrv, NewDevice.ID)
+                NewDevice = Nothing
+                flagnewdev = False
+            End If
+
+            RaiseEvent CloseMe(Me, False)
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub uDevice BtnOK_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
+    Private Sub BtnTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTest.Click
+        Try
+            If myService.ReturnDeviceByID(IdSrv, _DeviceId).Enable = False Then
+                MessageBox.Show("Vous ne pouvez pas exécuter de commandes car le device n'est pas activé (propriété Enable)!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+
+            Dim y As New uTestDevice(_DeviceId)
+            y.Uid = System.Guid.NewGuid.ToString()
+            AddHandler y.CloseMe, AddressOf UnloadControl
+            Window1.CanvasUser.Children.Add(y)
+        Catch ex As Exception
+            MessageBox.Show("Erreur Tester: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -534,19 +667,18 @@ Partial Public Class uDevice
                 End If
             Next
 
-            Dim uid As String = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, TxtModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text)
+            Dim uid As String = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, CBModele.Text, TxtDescript.Text, TxtLastChangeDuree.Text)
 
             VerifDriver(_driverid)
             SaveInZone()
 
-            BtnRead.Visibility = Windows.Visibility.Visible
-            StkID.Visibility = Windows.Visibility.Visible
+            BtnTest.Visibility = Windows.Visibility.Visible
             TxtID.Text = uid
 
             If CbType.SelectedValue = "MULTIMEDIA" Then
                 BtnEditTel.Visibility = Windows.Visibility.Visible
-                TxtModele2.Visibility = Visibility.Hidden
-                Label8.Visibility = Windows.Visibility.Hidden
+                TxtModele.Visibility = Visibility.Hidden
+                LabelModele.Visibility = Windows.Visibility.Hidden
             End If
 
             If NewDevice IsNot Nothing And flagnewdev Then
@@ -558,164 +690,6 @@ Partial Public Class uDevice
             If uid.Length > 3 Then x = myService.ReturnDeviceByID(IdSrv, uid)
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub uDevice BtnSave_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
-    Private Sub ChkElement_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs)
-        Try
-            For Each stk As StackPanel In ListZone.Items
-                Dim x As CheckBox = stk.Children.Item(1)
-                If x.IsChecked = True Then
-                    stk.Children.Item(2).Visibility = Windows.Visibility.Visible
-                Else
-                    stk.Children.Item(2).Visibility = Windows.Visibility.Collapsed
-                End If
-            Next
-        Catch ex As Exception
-            MessageBox.Show("Erreur uDevice ChkElement_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
-    Dim tmp As String = ""
-
-    Private Sub CbDriver_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbDriver.SelectionChanged
-        MaJDriver()
-    End Sub
-
-    Private Sub MaJDriver()
-        Try
-            Dim _Driver As Object = Nothing
-
-            'on cherche le driver
-            For i As Integer = 0 To ListeDrivers.Count - 1
-                If ListeDrivers.Item(i).Nom = CbDriver.SelectedItem.ToString Then
-                    _Driver = myService.ReturnDriverByID(IdSrv, ListeDrivers.Item(i).ID)
-                    Exit For
-                End If
-            Next
-
-            If _Driver IsNot Nothing Then
-
-                'Si c'est un nouveau device, on peut modifier le type sinon non
-                If FlagNewDevice Then
-                    Dim mem As String = CbType.Text
-                    CbType.IsEnabled = True
-                    CbType.Items.Clear()
-
-                    For j As Integer = 0 To _Driver.DeviceSupport.count - 1
-                        CbType.Items.Add(_Driver.DeviceSupport.item(j).ToString)
-                    Next
-                    CbType.IsEnabled = True
-                    CbType.Text = mem
-                End If
-
-                If _Driver.LabelsDevice.Count > 0 Then
-                    For k As Integer = 0 To _Driver.LabelsDevice.Count - 1
-                        Select Case UCase(_Driver.LabelsDevice.Item(k).NomChamp)
-                            Case "ADRESSE1"
-                                If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
-                                    StkAdr1.Visibility = Windows.Visibility.Collapsed
-                                Else
-                                    Label6.Content = _Driver.LabelsDevice.Item(k).LabelChamp
-                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Tooltip) = False Then
-                                        Label6.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
-                                        TxtAdresse1.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
-                                    End If
-                                    StkAdr1.Visibility = Windows.Visibility.Visible
-                                End If
-                            Case "ADRESSE2"
-                                If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
-                                    StkAdr2.Visibility = Windows.Visibility.Collapsed
-                                Else
-                                    Label7.Content = _Driver.LabelsDevice.Item(k).LabelChamp
-                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Tooltip) = False Then
-                                        Label7.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
-                                        TxtAdresse2.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
-                                    End If
-                                    StkAdr2.Visibility = Windows.Visibility.Visible
-                                End If
-                            Case "SOLO"
-                                If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
-                                    ChKSolo.Visibility = Windows.Visibility.Collapsed
-                                Else
-                                    ChKSolo.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
-                                    ChKSolo.Visibility = Windows.Visibility.Visible
-                                End If
-                            Case "REFRESH"
-                                If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
-                                    StkRefresh.Visibility = Windows.Visibility.Collapsed
-                                Else
-                                    Label9.Content = _Driver.LabelsDevice.Item(k).LabelChamp
-                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Tooltip) = False Then
-                                        Label9.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
-                                        TxtRefresh.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
-                                    End If
-                                    StkRefresh.Visibility = Windows.Visibility.Visible
-                                End If
-                            Case "LASTCHANGEDUREE"
-                                If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
-                                    StkLastChange.Visibility = Windows.Visibility.Collapsed
-                                Else
-                                    Label19.Content = _Driver.LabelsDevice.Item(k).LabelChamp
-                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Tooltip) = True Then
-                                        TxtLastChangeDuree.ToolTip = "Permet de vérifier si le composant a été mis à jour depuis moins de x minutes sinon il apparait en erreur"
-                                        Label19.ToolTip = "Permet de vérifier si le composant a été mis à jour depuis moins de x minutes sinon il apparait en erreur"
-                                    Else
-                                        TxtLastChangeDuree.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
-                                        Label19.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
-                                    End If
-                                    StkLastChange.Visibility = Windows.Visibility.Visible
-                                End If
-                            Case "MODELE"
-                                If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
-                                    TxtModele.Visibility = Windows.Visibility.Collapsed
-                                    TxtModele.Tag = 0
-                                    TxtModele2.Visibility = Windows.Visibility.Collapsed
-                                    TxtModele2.Tag = 0
-                                    Label8.Visibility = Windows.Visibility.Collapsed
-                                    StkModel.Visibility = Windows.Visibility.Collapsed
-                                Else
-                                    Label8.Visibility = Windows.Visibility.Visible
-                                    StkModel.Visibility = Windows.Visibility.Visible
-                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).LabelChamp) = False Then Label8.Content = _Driver.LabelsDevice.Item(k).LabelChamp
-                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Tooltip) = False Then
-                                        Label8.ToolTip = _Driver.LabelsDevice.Item(k).ToolTip
-                                        TxtModele.ToolTip = _Driver.LabelsDevice.Item(k).ToolTip
-                                    End If
-                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Parametre) = False Then
-                                        TxtModele.Items.Clear()
-                                        Dim a() As String = _Driver.LabelsDevice.Item(k).Parametre.Split("|")
-                                        If a.Length > 0 Then
-                                            For g As Integer = 0 To a.Length - 1
-                                                TxtModele.Items.Add(a(g))
-                                            Next
-                                            TxtModele.IsEditable = False
-                                            TxtModele.Visibility = Windows.Visibility.Visible
-                                            TxtModele.Tag = 1
-                                            TxtModele2.Visibility = Windows.Visibility.Collapsed
-                                            TxtModele2.Tag = 0
-                                        Else
-                                            TxtModele.Visibility = Windows.Visibility.Collapsed
-                                            TxtModele.Tag = 0
-                                            TxtModele2.Visibility = Windows.Visibility.Visible
-                                            TxtModele2.Tag = 1
-                                            TxtModele2.Text = a(0)
-                                        End If
-                                    Else
-                                        TxtModele.Visibility = Windows.Visibility.Collapsed
-                                        TxtModele.Tag = 0
-                                        TxtModele2.Visibility = Windows.Visibility.Visible
-                                        TxtModele2.Tag = 1
-                                    End If
-                                End If
-                        End Select
-                    Next
-                End If
-                'Exit For
-            End If
-            'Next
-        Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
 
@@ -776,32 +750,5 @@ Partial Public Class uDevice
         End Try
     End Sub
 
-    Private Sub VerifDriver(ByVal IdDriver As String)
-        Try
-            Dim retour = ""
-
-            Dim x As TemplateDriver = myService.ReturnDriverByID(IdSrv, IdDriver)
-            If x IsNot Nothing Then
-                If x.Enable = False Then
-                    MessageBox.Show("Le driver " & x.Nom & " n'est pas activé (Enable), le composant ne pourra pas être utilisé!", "INFO", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                    Exit Sub
-                End If
-                If x.IsConnect = False Then
-                    MessageBox.Show("Le driver " & x.Nom & " n'est pas démarré, le composant ne pourra pas être utilisé!", "INFO", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                End If
-            Else
-                MessageBox.Show("Le driver n'a pas pu être trouvé ! (ID du driver: " & IdDriver & ")", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            End If
-        Catch ex As Exception
-            MessageBox.Show("ERREUR VerifDriver: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
-
-    Private Sub TxtPuissance_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtPuissance.TextChanged
-        If IsNumeric(TxtPuissance.Text) = False Then
-            MessageBox.Show("Veuillez saisir une valeur numérique !!", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-            TxtPuissance.Undo()
-        End If
-    End Sub
-
+#End Region
 End Class
