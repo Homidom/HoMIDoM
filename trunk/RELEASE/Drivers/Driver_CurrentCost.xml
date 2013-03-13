@@ -101,7 +101,7 @@ Driver_CurrentCost
 	<param name="sender"></param>
 	<param name="e"></param>
 	<remarks></remarks>
-</member><member name="M:Driver_CurrentCost.Driver_CurrentCost.traitement(System.String,System.Object)">
+</member><member name="M:Driver_CurrentCost.Driver_CurrentCost.traitement(System.String,System.String,System.Object)">
 	<summary>Traite les paquets reçus</summary>
 	<remarks></remarks>
 </member>

@@ -1233,9 +1233,13 @@ Imports System.Threading
             Else
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM ReceptionSMS", "Composant non trouvé : " & numero & ":" & texte)
 
-
-                'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
-
+                'si autodiscover = true ou modedecouverte du serveur actif alors on crée le composant sinon on logue
+                If _AutoDiscover Or _Server.GetModeDecouverte Then
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM ReceptionSMS", "Device non trouvé, AutoCreation du composant : " & type & " " & numero & ":" & texte)
+                    _Server.AddDetectNewDevice(numero, _ID, type, "")
+                Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM ReceptionSMS", "Device non trouvé : " & type & " " & numero & ":" & texte)
+                End If
 
             End If
         Catch ex As Exception

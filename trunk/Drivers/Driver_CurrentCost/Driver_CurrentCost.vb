@@ -503,6 +503,9 @@ Public Class Driver_CurrentCost
 
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.GENERIQUESTRING.ToString)
+            _DeviceSupport.Add(ListeDevices.TEMPERATURE.ToString)
+            _DeviceSupport.Add(ListeDevices.ENERGIEINSTANTANEE.ToString)
+            '_DeviceSupport.Add(ListeDevices.ENERGIETOTALE.ToString)
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", 0)
@@ -550,11 +553,11 @@ Public Class Driver_CurrentCost
                 Dim update As New CurrentCostUpdate(line)
 
                 If update.ValidUpdate Then
-                    traitement("tmpr", update.Temperature)
-                    traitement("ch1", update.Channel1Watts)
-                    traitement("ch2", update.Channel2Watts)
-                    traitement("ch3", update.Channel3Watts)
-                    traitement("time", update.Time)
+                    traitement("TEMPERATURE", "tmpr", update.Temperature)
+                    traitement("ENERGIEINSTANTANEE", "ch1", update.Channel1Watts)
+                    traitement("ENERGIEINSTANTANEE", "ch2", update.Channel2Watts)
+                    traitement("ENERGIEINSTANTANEE", "ch3", update.Channel3Watts)
+                    traitement("GENERIQUESTRING", "time", update.Time)
                 Else
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ErrorReceived", "Update non réussi")
                 End If
@@ -586,11 +589,11 @@ Public Class Driver_CurrentCost
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "ch1: " & update.Channel1Watts)
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "ch2: " & update.Channel2Watts)
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "ch3: " & update.Channel3Watts)
-                    traitement("tmpr", update.Temperature)
-                    traitement("ch1", update.Channel1Watts)
-                    traitement("ch2", update.Channel2Watts)
-                    traitement("ch3", update.Channel3Watts)
-                    traitement("time", update.Time)
+                    traitement("TEMPERATURE", "tmpr", update.Temperature)
+                    traitement("ENERGIEINSTANTANEE", "ch1", update.Channel1Watts)
+                    traitement("ENERGIEINSTANTANEE", "ch2", update.Channel2Watts)
+                    traitement("ENERGIEINSTANTANEE", "ch3", update.Channel3Watts)
+                    traitement("GENERIQUESTRING", "time", update.Time)
                 Else
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "Update non réussi")
                 End If
@@ -603,7 +606,7 @@ Public Class Driver_CurrentCost
 
     ''' <summary>Traite les paquets reçus</summary>
     ''' <remarks></remarks>
-    Private Sub traitement(ByVal adresse As String, ByVal data As Object)
+    Private Sub traitement(ByVal type As String, ByVal adresse As String, ByVal valeur As Object)
         Try
             'Recherche si un device affecté
             Dim listedevices As New ArrayList
@@ -612,16 +615,23 @@ Public Class Driver_CurrentCost
             'un device trouvé on maj la value
             If (listedevices.Count = 1) Then
                 'correction valeur pour correspondre au type de value
-                listedevices.Item(0).Value = data
+                listedevices.Item(0).Value = valeur
 
             ElseIf (listedevices.Count > 1) Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Process", "Plusieurs devices correspondent à : " & adresse)
             Else
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Process", "Device non trouvé : " & adresse & ":" & adresse)
+                'si autodiscover = true ou modedecouverte du serveur actif alors on crée le composant sinon on logue
+                If _AutoDiscover Or _Server.GetModeDecouverte Then
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Process", "Device non trouvé, AutoCreation du composant : " & type & " " & adresse & ":" & valeur)
+                    _Server.AddDetectNewDevice(adresse, _ID, type, "")
+                Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Process", "Device non trouvé : " & type & " " & adresse & ":" & valeur)
+                End If
+
 
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traitement", "Exception : " & ex.Message & " --> " & adresse & " : " & data)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traitement", "Exception : " & ex.Message & " --> " & adresse & " : " & valeur)
         End Try
     End Sub
 
