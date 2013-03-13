@@ -4455,6 +4455,12 @@ Namespace HoMIDom
             End Try
         End Function
 
+        ''' <summary>Retourne tous les historiques d'un composant</summary>
+        ''' <param name="IdSrv">ID serveur</param>
+        ''' <param name="IdDevice">Id du composant</param>
+        ''' <param name="Source">Value ou autre champ</param>
+        ''' <returns>true si le composant a un historique</returns>
+        ''' <remarks></remarks>
         Public Function GetHisto(ByVal IdSrv As String, ByVal Source As String, ByVal idDevice As String) As List(Of Historisation) Implements IHoMIDom.GetHisto
             Try
                 If VerifIdSrv(IdSrv) = False Then
@@ -4464,7 +4470,7 @@ Namespace HoMIDom
 
                 Dim result As New DataTable("HistoDB")
                 Dim retour As String = ""
-                Dim commande As String = "select * from historiques where source='" & Source & "' and device_id='" & idDevice & "' ;"
+                Dim commande As String = "select * from historiques where source='" & Source & "' and device_id='" & idDevice & "' ORDER BY dateheure;"
                 Dim _list As New List(Of Historisation)
 
                 retour = sqlite_homidom.query(commande, result, "")
@@ -4555,16 +4561,16 @@ Namespace HoMIDom
 
                 'Prépare la requête sql suivant datestart et dateend
                 If String.IsNullOrEmpty(DateStart) = True And String.IsNullOrEmpty(DateEnd) = True Then
-                    commande = "select " & request_valeur & " from historiques where source='" & Source & "' and device_id='" & idDevice & "'" & request_groupby & ";"
+                    commande = "select " & request_valeur & " from historiques where source='" & Source & "' and device_id='" & idDevice & "'" & request_groupby & " ORDER BY dateheure;"
                 End If
                 If String.IsNullOrEmpty(DateStart) = False And String.IsNullOrEmpty(DateEnd) = True Then
-                    commande = "select " & request_valeur & " from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure>='" & DateStart & "'" & request_groupby & ";"
+                    commande = "select " & request_valeur & " from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure>='" & DateStart & "'" & request_groupby & " ORDER BY dateheure;"
                 End If
                 If String.IsNullOrEmpty(DateStart) = True And String.IsNullOrEmpty(DateEnd) = False Then
-                    commande = "select " & request_valeur & " from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure<='" & DateEnd & "'" & request_groupby & ";"
+                    commande = "select " & request_valeur & " from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure<='" & DateEnd & "'" & request_groupby & " ORDER BY dateheure;"
                 End If
                 If String.IsNullOrEmpty(DateStart) = False And String.IsNullOrEmpty(DateEnd) = False Then
-                    commande = "select " & request_valeur & " from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure between '" & DateStart & "' and '" & DateEnd & "'" & request_groupby & ";"
+                    commande = "select " & request_valeur & " from historiques where source='" & Source & "' and device_id='" & idDevice & "' and dateheure between '" & DateStart & "' and '" & DateEnd & "'" & request_groupby & " ORDER BY dateheure;"
                 End If
 
                 'execute la requête sql
@@ -4594,7 +4600,7 @@ Namespace HoMIDom
             End Try
         End Function
 
-        ''' <summary>Permet de savoir si un device a des hostiques associés dans la BD</summary>
+        ''' <summary>Permet de savoir si un device a des historiques associés dans la BDD</summary>
         ''' <param name="IdDevice"></param>
         ''' <param name="Source"></param>
         ''' <returns>true si le composant a un historique</returns>
