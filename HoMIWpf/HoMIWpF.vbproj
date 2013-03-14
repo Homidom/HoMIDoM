@@ -88,6 +88,9 @@
       <HintPath>..\Dll_externes\HoMIWpF\Jarloo.Calendar.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="MjpegProcessor">
+      <HintPath>..\Dll_externes\Homidom-32bits\MjpegProcessor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -148,6 +151,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="CtrlDevice\uCamera.xaml.vb">
+      <DependentUpon>uCamera.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CtrlDevice\uEditValue.xaml.vb">
       <DependentUpon>uEditValue.xaml</DependentUpon>
     </Compile>
@@ -192,6 +198,10 @@
     <Compile Include="WWidgetProperty.xaml.vb">
       <DependentUpon>WWidgetProperty.xaml</DependentUpon>
     </Compile>
+    <Page Include="CtrlDevice\uCamera.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CtrlDevice\uEditValue.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

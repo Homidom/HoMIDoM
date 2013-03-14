@@ -462,6 +462,8 @@ Class Window1
                                                 x.Type = uWidgetEmpty.TypeOfWidget.Media
                                             Case uWidgetEmpty.TypeOfWidget.Web.ToString
                                                 x.Type = uWidgetEmpty.TypeOfWidget.Web
+                                            Case uWidgetEmpty.TypeOfWidget.Camera.ToString
+                                                x.Type = uWidgetEmpty.TypeOfWidget.Camera
                                             Case uWidgetEmpty.TypeOfWidget.Rss.ToString
                                                 x.Type = uWidgetEmpty.TypeOfWidget.Rss
                                             Case uWidgetEmpty.TypeOfWidget.Meteo.ToString
@@ -575,7 +577,7 @@ Class Window1
                                         Next
                                     End If
 
-                                    If UCase(list.Item(j).ChildNodes.Item(l).Name) = "WEB" Then
+                                    If UCase(list.Item(j).ChildNodes.Item(l).Name) = "WEB" Or UCase(list.Item(j).ChildNodes.Item(l).Name) = "CAMERA" Then
                                         For m As Integer = 0 To list.Item(j).ChildNodes.Item(l).ChildNodes.Count - 1
                                             Dim _btn As New uHttp.ButtonHttp
                                             With _btn
@@ -586,7 +588,7 @@ Class Window1
                                             End With
 
                                             x.ListHttpButton.Add(_btn)
-                                           
+
                                         Next
                                     End If
                                 Next
@@ -835,7 +837,7 @@ Class Window1
                 writer.WriteValue(_ListElement.Item(i).HttpRefresh)
                 writer.WriteEndAttribute()
 
-                If _ListElement.Item(i).Type = uWidgetEmpty.TypeOfWidget.Web Then
+                If _ListElement.Item(i).Type = uWidgetEmpty.TypeOfWidget.Web Or _ListElement.Item(i).Type = uWidgetEmpty.TypeOfWidget.Camera Then
                     writer.WriteStartElement("web")
                     For j As Integer = 0 To _ListElement.Item(i).ListHttpButton.Count - 1
                         writer.WriteStartElement("httpbutton")
@@ -1952,6 +1954,41 @@ Class Window1
         End Try
     End Sub
 
+    Private Sub NewWidgetCamera_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetCamera.Click
+        Try
+            'Ajouter un nouveau Control
+            Dim x As New ContentControl
+            x.Width = 640
+            x.Height = 480
+            x.Style = mybuttonstyle
+            x.Tag = True
+            x.Uid = System.Guid.NewGuid.ToString()
+
+            'Ajoute l'élément dans la liste
+            Dim elmt As New uWidgetEmpty
+            elmt.Uid = x.Uid
+            elmt.ZoneId = _CurrentIdZone
+            elmt.Width = 640
+            elmt.Height = 480
+            elmt.Rotation = 0
+            elmt.X = 300
+            elmt.Y = 300
+            elmt.IsEmpty = True
+            elmt.Type = uWidgetEmpty.TypeOfWidget.Camera
+            elmt.ShowStatus = False
+            elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
+            _ListElement.Add(elmt)
+
+            elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
+            x.Content = elmt
+            Canvas1.Children.Add(x)
+            Canvas.SetLeft(x, 300)
+            Canvas.SetTop(x, 300)
+        Catch ex As Exception
+            MessageBox.Show("Erreur NewWidgetCamera: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
+
 #Region "Menu"
 
     Private Sub ViewLog_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ViewLog.Click
@@ -2088,7 +2125,6 @@ Class Window1
             MessageBox.Show("Erreur Window1_Loaded: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
-
 
 
 End Class

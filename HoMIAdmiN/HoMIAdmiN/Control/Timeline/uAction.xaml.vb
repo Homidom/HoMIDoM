@@ -119,6 +119,9 @@ Public Class uAction
                             Dim x As Action.ActionVB = _ObjAction
                             Label1.Content = "Script VB"
                             If x.Label IsNot Nothing Then Label2.Content = x.Label
+                        Case Action.TypeAction.ActionStop
+                            Dim x As Action.ActionSTOP = _ObjAction
+                            Label1.Content = "STOP"
                     End Select
                     Refresh_Position()
                 End If

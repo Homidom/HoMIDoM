@@ -1217,6 +1217,10 @@ Namespace HoMIDom
                                     Dim o As New Action.ActionVB
                                     _Act = o
                                     o = Nothing
+                                Case "ActionStop"
+                                    Dim o As New Action.ActionSTOP
+                                    _Act = o
+                                    o = Nothing
                             End Select
                             For j3 As Integer = 0 To list.ChildNodes.Item(j2).Attributes.Count - 1
                                 Select Case list.ChildNodes.Item(j2).Attributes.Item(j3).Name
@@ -8661,7 +8665,7 @@ Namespace HoMIDom
         ''' <param name="Adresse2"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function AddDetectNewDevice(ByVal Adresse1 As String, ByVal DriverId As String, Optional ByVal Type As String = "", Optional ByVal Adresse2 As String = "") As String Implements IHoMIDom.AddDetectNewDevice
+        Public Function AddDetectNewDevice(ByVal Adresse1 As String, ByVal DriverId As String, Optional ByVal Type As String = "", Optional ByVal Adresse2 As String = "", Optional ByVal Value As String = "") As String Implements IHoMIDom.AddDetectNewDevice
             Try
                 Dim flag As Boolean = False
                 Dim _return As String = ""
@@ -8684,6 +8688,7 @@ Namespace HoMIDom
                     x.Type = Type
                     x.Ignore = False
                     x.DateTetect = Now
+                    x.Value = Value
                     x.Name = "NouveauComposant" & _ListNewDevices.Count
 
                     _ListNewDevices.Add(x)
@@ -8736,6 +8741,7 @@ Namespace HoMIDom
                         _dev.Name = NewDevice.Name
                         _dev.Ignore = NewDevice.Ignore
                         _dev.Type = NewDevice.Type
+                        _dev.Value = NewDevice.Value
                         Exit For
                     End If
                 Next

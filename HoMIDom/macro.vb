@@ -16,6 +16,7 @@ Namespace HoMIDom
         Dim _Description As String = ""
         Dim _Enable As Boolean = False
         Dim _ListActions As New ArrayList
+        <NonSerialized()> Dim _ListThread As New List(Of Thread)
         <NonSerialized()> Public _Server As Server
 
         'Propriétés
@@ -105,11 +106,20 @@ Namespace HoMIDom
             Try
 
                 For i As Integer = 0 To _ListActions.Count - 1
-                    Dim _action As New ThreadAction(_Server, _ListActions.Item(i))
-                    Dim y As New Thread(AddressOf _action.Execute)
-                    y.Name = "Traitement du script"
-                    y.Start()
-                    y = Nothing
+                    If _ListActions.Item(i)._Action.TypeAction = Action.TypeAction.ActionStop Then
+                        Dim _action As New ThreadAction(_Server, _ListActions.Item(i))
+                        Dim y As New Thread(AddressOf _action.Execute)
+                        y.Name = "Traitement du script"
+                        y.Start()
+                        _ListThread.Add(y)
+                        y = Nothing
+                    Else
+                        If _ListThread.Count > 0 Then
+                            For Each thr In _ListThread
+                                thr.Abort()
+                            Next
+                        End If
+                    End If
                 Next
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.SCRIPT, "Execute macro", ex.ToString)
@@ -413,6 +423,12 @@ Namespace HoMIDom
             ''' </summary>
             ''' <remarks></remarks>
             ActionVB = 9
+
+            ''' <summary>
+            ''' Action de type ScriptVB
+            ''' </summary>
+            ''' <remarks></remarks>
+            ActionStop = 10
         End Enum
 
         ''' <summary>
@@ -1060,6 +1076,28 @@ Namespace HoMIDom
 
         End Sub
 
+        ''' <summary>
+        ''' Action Dos 
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Class ActionSTOP
+            Dim _Timing As DateTime
+
+            Public ReadOnly Property TypeAction As TypeAction
+                Get
+                    Return TypeAction.ActionStop
+                End Get
+            End Property
+
+            Public Property Timing As DateTime
+                Get
+                    Return _Timing
+                End Get
+                Set(ByVal value As DateTime)
+                    _Timing = value
+                End Set
+            End Property
+        End Class
     End Class
 
 

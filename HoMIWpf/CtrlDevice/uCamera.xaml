@@ -1,0 +1,12 @@
+﻿<UserControl x:Class="uCamera"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" >
+    
+    <StackPanel VerticalAlignment="Top">
+        <Image x:Name="image" Width="640" Height="480" />
+        <StackPanel Name="StkButton" Orientation="Horizontal" Background="Black" MinHeight="15"/>
+    </StackPanel>
+</UserControl>

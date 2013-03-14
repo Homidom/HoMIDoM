@@ -466,6 +466,10 @@ Public Class WActionParametrage
 
                         UScenario1.Items = obj.ListTrue
                         UScenario2.Items = obj.ListFalse
+                    Case HoMIDom.HoMIDom.Action.TypeAction.ActionStop
+
+                        StkProperty.Visibility = Windows.Visibility.Collapsed
+                        TabControl1.Visibility = Windows.Visibility.Collapsed
                 End Select
 
                 Dim t1 As Integer

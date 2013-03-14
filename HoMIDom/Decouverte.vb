@@ -9,6 +9,7 @@
         Dim _Type As String = "" 'Type de device par défaut null
         Dim _Ignore As Boolean = False 'Indique si le device doit être ignoré
         Dim _DateTetect As DateTime 'Indique la date et l'heure quand le nouveau device a été ajouté (permettant de les différencier/retrouver)
+        Dim _Value As String = "" 'valeur actuel du device
 
         Public Property ID As String
             Get
@@ -82,7 +83,14 @@
             End Set
         End Property
 
-
+        Public Property Value As String
+            Get
+                Return _Value
+            End Get
+            Set(ByVal value As String)
+                _Value = value
+            End Set
+        End Property
     End Class
 
 End Namespace
