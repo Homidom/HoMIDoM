@@ -236,7 +236,7 @@ Class Window1
             End If
 
             'Chargement des paramètres
-            Log(TypeLog.INFO, TypeSource.CLIENT, "LOADCONFIG", "Message: " & LoadConfig(_MonRepertoire & "\Config\"))
+            Log(TypeLog.INFO, TypeSource.CLIENT, "LOADCONFIG", "Message: " & LoadConfig(_MonRepertoireAppData & "\Config\"))
 
             ' Create StackPanel and set child elements to horizontal orientation
             imgStackPnl.HorizontalAlignment = HorizontalAlignment.Center
@@ -1353,7 +1353,7 @@ Class Window1
     'Bouton Quitter
     Private Sub BtnQuit_Click_1(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnQuit.Click
         Try
-            SaveConfig(_MonRepertoire & "\config\HoMIWpF.xml")
+            SaveConfig(_MonRepertoireAppData & "\config\HoMIWpF.xml")
             Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermture de l'application")
             End
         Catch ex As Exception
