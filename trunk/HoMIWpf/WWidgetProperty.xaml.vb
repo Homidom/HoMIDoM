@@ -101,7 +101,7 @@ Public Class WWidgetProperty
                             lbl1 = Nothing
                             lbl2 = Nothing
                         Next
-                    Case uWidgetEmpty.TypeOfWidget.Web
+                    Case uWidgetEmpty.TypeOfWidget.Web Or uWidgetEmpty.TypeOfWidget.Camera
                         StkPicture.Visibility = Visibility.Collapsed
                         StkStatus.Visibility = Visibility.Collapsed
                         BtnEditAction.Visibility = Windows.Visibility.Collapsed
@@ -856,8 +856,7 @@ Public Class WWidgetProperty
                 MessageBox.Show("L'URL du nouveau bouton est obligatoire!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 Exit Sub
             ElseIf UrlIsValid(TxtHttpURL.Text) = False Then
-                MessageBox.Show("L'URL n'est pas valide!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-                Exit Sub
+                MessageBox.Show("L'URL du widget n'est pas valide!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             ElseIf String.IsNullOrEmpty(TxtHttpWidth.Text) = True Then
                 MessageBox.Show("La propriété Width du nouveau bouton est obligatoire!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
                 Exit Sub
@@ -953,8 +952,6 @@ Public Class WWidgetProperty
     End Sub
 
 #End Region
-
-
 
 
     Private Sub TxtValueVisu_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtValueVisu.TextChanged

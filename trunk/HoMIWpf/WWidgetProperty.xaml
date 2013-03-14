@@ -212,6 +212,7 @@
                         <StackPanel Orientation="Horizontal" Margin="2" >
                             <Label Foreground=" White" Content="Refresh:" Width="70" />
                             <TextBox Name="TxtRefresh" Width="35" Text="0"/>
+                            <Label Foreground=" White" Content="seconde(s)" Width="70" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="2">
                             <Label Foreground=" White" Content="Bouton:" Width="70" />

@@ -137,6 +137,9 @@ Public Class uScenario
                         Dim y As New Action.ActionVB
                         y.Script = My.Resources.ExempleVBS
                         x.ObjAction = y
+                    Case "ACTIONSTOP"
+                        Dim y As New Action.ActionSTOP
+                        x.ObjAction = y
                 End Select
                 x.Span = Span
                 x.Zoom = _Zoom
@@ -396,6 +399,14 @@ Public Class uScenario
         Dim obj As New DataObject()
         obj.SetData(GetType(String), "ACTIONVB")
         effects = DragDrop.DoDragDrop(Me.ImgActVB, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+    End Sub
+
+    'Ajouter action STOP
+    Private Sub ImgActSTOP_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgActSTOP.MouseLeftButtonDown
+        Dim effects As DragDropEffects
+        Dim obj As New DataObject()
+        obj.SetData(GetType(String), "ACTIONSTOP")
+        effects = DragDrop.DoDragDrop(Me.ImgActSTOP, obj, DragDropEffects.Copy Or DragDropEffects.Move)
     End Sub
 #End Region
 

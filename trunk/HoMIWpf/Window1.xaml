@@ -63,6 +63,7 @@
                                 <MenuItem Name="NewWidgetMeteo" Header="Nouveau Widget Meteo" FontSize="10" />
                                 <MenuItem Name="NewWidgetKeyPad" Header="Nouveau Widget KeyPad" FontSize="10" />
                                 <MenuItem Name="NewWidgetLabel" Header="Nouveau Widget Label" FontSize="10" />
+                                <MenuItem Name="NewWidgetCamera" Header="Nouveau Widget Camera" FontSize="10" />
                             </MenuItem>
                         <MenuItem Name="ViewLog" Header="Consulter les logs" FontSize="10" >
                             <MenuItem.Icon>

@@ -66,6 +66,10 @@
                                     <Label Content="DateDetect:" Foreground=" white" Width="80"/>
                                     <TextBox  Name="txtDateTime"  Text="{Binding ElementName=DGW,Path=SelectedItem.DateTetect}" Width="150" IsReadOnly="True" Foreground="White" Background="DarkGray" BorderBrush="Black" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left"></TextBox>
                                 </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="3">
+                                    <Label Content="Value:" Foreground=" white" Width="80"/>
+                                    <TextBox  Name="txtValue"  Text="{Binding ElementName=DGW,Path=SelectedItem.Value}" Width="150" IsReadOnly="True" Foreground="White" Background="DarkGray" BorderBrush="Black" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left"></TextBox>
+                                </StackPanel>
                             </StackPanel>
 
 

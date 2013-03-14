@@ -11,6 +11,7 @@ Public Class uWidgetEmpty
         Meteo = 4
         KeyPad = 5
         Label = 6
+        Camera = 7
         Device = 99
     End Enum
 
@@ -56,9 +57,10 @@ Public Class uWidgetEmpty
     Dim _type As TypeOfWidget = TypeOfWidget.Empty
     Dim _CanEditValue As Boolean = False
 
-    'Variables Widget Web
+    'Variables Widget Web/Camera
     Dim _URL As String = ""
     Dim _Webbrowser As uHttp = Nothing
+    Dim _Camera As uCamera = Nothing
     Dim _ListHttpBtn As New List(Of uHttp.ButtonHttp)
     Dim _RefreshHttp As Integer = 0
 
@@ -306,6 +308,11 @@ Public Class uWidgetEmpty
                         StkTool.Visibility = Windows.Visibility.Visible
                         _Webbrowser = New uHttp
                         StkTool.Children.Add(_Webbrowser)
+                    Case TypeOfWidget.Camera
+                        StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
+                        StkTool.Visibility = Windows.Visibility.Visible
+                        _Camera = New uCamera
+                        StkTool.Children.Add(_Camera)
                     Case TypeOfWidget.Rss
                         StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
                         StkTool.Visibility = Windows.Visibility.Visible
@@ -658,9 +665,12 @@ Public Class uWidgetEmpty
             If _Show = False Then Exit Property
 
             Try
-                If My.Computer.Network.IsAvailable = True And _Webbrowser IsNot Nothing And _type = TypeOfWidget.Web Then
-                    _Webbrowser.URL = _URL
-                    '_Webbrowser.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() _Webbrowser.Navigate(New Uri(_URL)), ThreadStart))
+                If My.Computer.Network.IsAvailable = True Then
+                    If _Webbrowser IsNot Nothing And _type = TypeOfWidget.Web Then
+                        _Webbrowser.URL = _URL
+                    ElseIf _Camera IsNot Nothing And _type = TypeOfWidget.Camera Then
+                        _Camera.URL = _URL
+                    End If
                 End If
             Catch ex As Exception
                 MessageBox.Show("Erreur UWidget.Empty.URL: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -677,6 +687,7 @@ Public Class uWidgetEmpty
             If _Show = False Then Exit Property
 
             If _Webbrowser IsNot Nothing Then _Webbrowser.ListButton = value
+            If _Camera IsNot Nothing Then _Camera.ListButton = value
         End Set
     End Property
 
@@ -944,6 +955,9 @@ Public Class uWidgetEmpty
                 Case TypeOfWidget.Rss
                     _RSS.Width = Me.ActualWidth
                     _RSS.Height = Me.ActualHeight
+                Case TypeOfWidget.Camera
+                    _Camera.Width = Me.ActualWidth
+                    _Camera.Height = Me.ActualHeight
             End Select
         Catch ex As Exception
             MessageBox.Show("Erreur uWidgetEmpty_Loaded: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -1715,6 +1729,9 @@ Public Class uWidgetEmpty
                 Case TypeOfWidget.Web
                     _Webbrowser.Width = Me.ActualWidth
                     _Webbrowser.Height = Me.ActualHeight - 20
+                Case TypeOfWidget.Camera
+                    _Camera.Width = Me.ActualWidth
+                    _Camera.Height = Me.ActualHeight - 2
                 Case TypeOfWidget.Rss
                     _RSS.Width = Me.ActualWidth
                     _RSS.Height = Me.ActualHeight - 20
@@ -1776,6 +1793,7 @@ Public Class uWidgetEmpty
             _RSS = Nothing
             _METEO = Nothing
             _KeyPad = Nothing
+            _Camera = Nothing
         Catch ex As Exception
             MessageBox.Show("Erreur uWidgetEmpty_Unloaded: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
