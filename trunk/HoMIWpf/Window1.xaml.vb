@@ -218,6 +218,23 @@ Class Window1
                     UriKind.RelativeOrAbsolute)
             mybuttonstyle = mystyles("DesignerItemStyle")
 
+            'si le repertoire appdata n'existe pas on le crée et copie la config depuis le repertoire d'installation
+            If Not System.IO.Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) & "\HoMIWpF") Then
+                System.IO.Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) & "\HoMIWpF")
+            End If
+            _MonRepertoireAppData = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) & "\HoMIWpF"
+            If Not System.IO.Directory.Exists(_MonRepertoireAppData & "\Config") Then
+                System.IO.Directory.CreateDirectory(_MonRepertoireAppData & "\Config")
+                Dim oSource As DirectoryInfo = New DirectoryInfo(_MonRepertoire & "\Config")
+                Dim oDestination As DirectoryInfo = New DirectoryInfo(_MonRepertoireAppData & "\Config")
+                For Each oFichier As FileInfo In oSource.GetFiles()
+                    oFichier.CopyTo(Path.Combine(oDestination.FullName, oFichier.Name))
+                Next
+            End If
+            If Not System.IO.Directory.Exists(_MonRepertoireAppData & "\Logs") Then
+                System.IO.Directory.CreateDirectory(_MonRepertoireAppData & "\Logs")
+            End If
+
             'Chargement des paramètres
             Log(TypeLog.INFO, TypeSource.CLIENT, "LOADCONFIG", "Message: " & LoadConfig(_MonRepertoire & "\Config\"))
 
@@ -1011,7 +1028,7 @@ Class Window1
 #End Region
 
 #Region "Log"
-    Dim _File As String = _MonRepertoire & "\logs\logClientWPF.xml" 'Représente le fichier log: ex"C:\homidom\log\log.xml"
+    Dim _File As String = _MonRepertoireAppData & "\logs\logClientWPF.xml" 'Représente le fichier log: ex"C:\users\xxx\homiwpf\logs\log.xml"
     Dim _MaxFileSize As Long = 5120 'en Koctets
 
     ''' <summary>
