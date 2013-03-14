@@ -59,7 +59,6 @@ Public Class Driver_Teleinfo
         Private port_name As String = ""
         Private BufferIn(8192) As Byte
         Private DebutTrame As Boolean = False
-        Private DebutInfo As Boolean = False
 
         Private bytecnt As Integer = 0
         Private messcnt As Integer = 0
@@ -640,7 +639,6 @@ Public Class Driver_Teleinfo
             Try             
                 If (temp = 2) Then ' Debut de trame recu 
                     DebutTrame = True
-                    DebutInfo = False
                     bytecnt = 0
                     messcnt = 0
                     mess = False
