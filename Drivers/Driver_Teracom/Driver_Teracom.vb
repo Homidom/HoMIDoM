@@ -67,8 +67,9 @@ Imports System.Net.Sockets
         LogLevel_Internal
     End Enum
 
-    Dim ControlType(19) As String
-    Dim ValueType(19) As String
+    Private Const NbControls As Integer = 26
+    Dim ControlType(NbControls) As String
+    Dim ValueType(NbControls) As String
 
 #End Region
 
@@ -513,7 +514,7 @@ Imports System.Net.Sockets
             End If
 
             If Objet IsNot Nothing Then
-                For i As Integer = 1 To 19
+                For i As Integer = 1 To NbControls
                     If myControl = ControlType(i) Then
                         myControlNum = i
                         Exit For
@@ -594,7 +595,7 @@ Imports System.Net.Sockets
             End If
 
             If Objet IsNot Nothing Then
-                For i As Integer = 1 To 19
+                For i As Integer = 1 To NbControls
                     If myControl = ControlType(i) Then
                         myControlNum = i
                         Exit For
@@ -768,7 +769,7 @@ Imports System.Net.Sockets
             Add_LibelleDevice("ADRESSE1", "Adresse IP", "Adresse IP ou nom d'hôte du boîtier Teracom")
             Add_LibelleDevice("ADRESSE2", "Port SNMP", "Port SNMP utilisé pour accéder au boîtier")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "Contrôle", "Composant du boîtier à interroger", "TCW12x_TEMPERATURE_1|TCW12x_TEMPERATURE_2|TCW12x_HUMIDITY_1|TCW12x_HUMIDITY_2|TCW12x_DIGITAL_IN_1|TCW12x_DIGITAL_IN_2|TCW12x_ANALOG_IN_1|TCW12x_ANALOG_IN_2|TCW12x_RELAY_1|TCW12x_RELAY_2|TCW18x_RELAY_1|TCW18x_RELAY_2|TCW18x_RELAY_3|TCW18x_RELAY_4|TCW18x_RELAY_5|TCW18x_RELAY_6|TCW18x_RELAY_7|TCW18x_RELAY_8|TCW18x_DIGITAL_IN")
+            Add_LibelleDevice("MODELE", "Contrôle", "Composant du boîtier à interroger", "TCW12x_TEMPERATURE_1|TCW12x_TEMPERATURE_2|TCW12x_HUMIDITY_1|TCW12x_HUMIDITY_2|TCW12x_DIGITAL_IN_1|TCW12x_DIGITAL_IN_2|TCW12x_ANALOG_IN_1|TCW12x_ANALOG_IN_2|TCW12x_RELAY_1|TCW12x_RELAY_2|TCW18x_RELAY_1|TCW18x_RELAY_2|TCW18x_RELAY_3|TCW18x_RELAY_4|TCW18x_RELAY_5|TCW18x_RELAY_6|TCW18x_RELAY_7|TCW18x_RELAY_8|TCW18x_DIGITAL_IN|TCW120_TEMPERATURE|TCW120_DIGITAL_IN_1|TCW120_DIGITAL_IN_2|TCW120_ANALOG_IN_1|TCW120_ANALOG_IN_2|TCW120_RELAY_1|TCW120_RELAY_2")
             Add_LibelleDevice("REFRESH", "Refresh", "Intervalle de rafraîchissement des données")
             Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
@@ -792,6 +793,13 @@ Imports System.Net.Sockets
             ControlType(17) = "TCW18x_RELAY_7"
             ControlType(18) = "TCW18x_RELAY_8"
             ControlType(19) = "TCW18x_DIGITAL_IN"
+            ControlType(20) = "TCW120_TEMPERATURE"
+            ControlType(21) = "TCW120_DIGITAL_IN_1"
+            ControlType(22) = "TCW120_DIGITAL_IN_2"
+            ControlType(23) = "TCW120_ANALOG_IN_1"
+            ControlType(24) = "TCW120_ANALOG_IN_2"
+            ControlType(25) = "TCW120_RELAY_1"
+            ControlType(26) = "TCW120_RELAY_2"
 
             ValueType(0) = "Boolean"
             ValueType(1) = "Single"
@@ -813,6 +821,14 @@ Imports System.Net.Sockets
             ValueType(17) = "Boolean"
             ValueType(18) = "Boolean"
             ValueType(19) = "Boolean"
+            ValueType(20) = "Single"
+            ValueType(21) = "Boolean"
+            ValueType(22) = "Boolean"
+            ValueType(23) = "Single"
+            ValueType(24) = "Single"
+            ValueType(25) = "Boolean"
+            ValueType(26) = "Boolean"
+
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " New", ex.Message)
@@ -829,14 +845,14 @@ Imports System.Net.Sockets
 
 #Region "Fonctions internes"
     'Insérer ci-dessous les fonctions propres au driver et nom communes (ex: start)
-
+ 
 #End Region
 
 
 End Class
 
-' TCW12x/TCW18x Controller Class
-' Copyright (C) 2012 Marc Froidevaux - marc@froidevaux.org
+' TCW12x/TCW18x/TCW120 Controller Class
+' Copyright (C) 2012-2013 Marc Froidevaux - marc@froidevaux.org
 '
 ' This program is free software: you can redistribute it and/or modify
 ' it under the terms of the GNU General Public License as published by
@@ -853,7 +869,7 @@ End Class
 
 Friend Class Teracom_TCW
 
-    Private myDesc(20) As String
+    Private myDesc(27) As String
     Private myHost As String
     Private myPort As Integer
     Private myControl As ControlTypes
@@ -864,20 +880,21 @@ Friend Class Teracom_TCW
     Private myHyst As String
     Private myPublicCommunity As String
     Private myPrivateCommunity As String
-    Private MIB(20) As String
-    Private MIBMin(20) As String
-    Private MIBMax(20) As String
-    Private MIBHyst(20) As String
+    Private MIB(27) As String
+    Private MIBMin(27) As String
+    Private MIBMax(27) As String
+    Private MIBHyst(27) As String
     Private Const BaseOID As String = "1.3.6.1.4.1.38783."
     Private Const TCW12x_SaveSettings As String = "3.13.0"
     Private Const TCW18x_SaveSettings As String = "6.0"
-    Public Const TYPE_COUNT As Integer = 19
+    Private Const TCW120_SaveSettings As String = "8.0"
+    Public Const TYPE_COUNT As Integer = 26
 
     Public Property Host As String
         Get
             Host = myHost
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             myHost = value
         End Set
     End Property
@@ -886,7 +903,7 @@ Friend Class Teracom_TCW
         Get
             Port = myPort
         End Get
-        Set(ByVal value As Integer)
+        Set(value As Integer)
             myPort = value
         End Set
     End Property
@@ -895,7 +912,7 @@ Friend Class Teracom_TCW
         Get
             Return myControl
         End Get
-        Set(ByVal value As ControlTypes)
+        Set(value As ControlTypes)
             myControl = value
         End Set
     End Property
@@ -904,7 +921,7 @@ Friend Class Teracom_TCW
         Get
             Description = myDesc(myControl)
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
         End Set
     End Property
 
@@ -912,7 +929,7 @@ Friend Class Teracom_TCW
         Get
             Label = myLabel
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             myLabel = value
         End Set
     End Property
@@ -921,7 +938,7 @@ Friend Class Teracom_TCW
         Get
             Value = myValue
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
         End Set
     End Property
 
@@ -929,7 +946,7 @@ Friend Class Teracom_TCW
         Get
             Min = myMin
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             myMin = value
         End Set
     End Property
@@ -938,7 +955,7 @@ Friend Class Teracom_TCW
         Get
             Max = myMax
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             myMax = value
         End Set
     End Property
@@ -947,7 +964,7 @@ Friend Class Teracom_TCW
         Get
             Hyst = myHyst
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             myHyst = value
         End Set
     End Property
@@ -956,7 +973,7 @@ Friend Class Teracom_TCW
         Get
             PublicCommunity = myPublicCommunity
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             myPublicCommunity = value
         End Set
     End Property
@@ -965,7 +982,7 @@ Friend Class Teracom_TCW
         Get
             PrivateCommunity = myPrivateCommunity
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
             myPrivateCommunity = value
         End Set
     End Property
@@ -993,6 +1010,14 @@ Friend Class Teracom_TCW
         MIB(17) = "3.8.0"
         MIB(18) = "3.9.0"
         MIB(19) = "3.1.0"
+        MIB(20) = "3.4.0"
+        MIB(21) = "3.3.1.0"
+        MIB(22) = "3.3.2.0"
+        MIB(23) = "3.2.1.0"
+        MIB(24) = "3.2.3.0"
+        MIB(25) = "3.1.1.0"
+        MIB(26) = "3.1.2.0"
+
         MIBMin(1) = "2.5.1.1.0"
         MIBMax(1) = "2.5.1.2.0"
         MIBHyst(1) = "2.5.1.3.0"
@@ -1011,6 +1036,9 @@ Friend Class Teracom_TCW
         MIBMin(8) = "2.7.2.1.0"
         MIBMax(8) = "2.7.2.2.0"
         MIBHyst(8) = "2.7.2.3.0"
+        MIBMin(20) = "2.1.10.1.0"
+        MIBMax(20) = "2.1.10.2.0"
+        MIBHyst(20) = "0"
 
         myPort = 161
         myHost = String.Empty
@@ -1035,6 +1063,13 @@ Friend Class Teracom_TCW
         myDesc(17) = "TCW18x Relay 7"
         myDesc(18) = "TCW18x Relay 8"
         myDesc(19) = "TCW18x Digital Input"
+        myDesc(20) = "TCW120 Temperature Sensor"
+        myDesc(21) = "TCW120 Digital Input 1"
+        myDesc(22) = "TCW120 Digital Input 2"
+        myDesc(23) = "TCW120 Analog Input 1"
+        myDesc(24) = "TCW120 Analog Input 2"
+        myDesc(25) = "TCW120 Relay 1"
+        myDesc(26) = "TCW120 Relay 2"
 
     End Sub
 
@@ -1048,9 +1083,15 @@ Friend Class Teracom_TCW
                 ElseIf result = "0" Then
                     result = "0"
                 End If
-            Case ControlTypes.TYPE_TCW12x_DIGITAL_IN_1, ControlTypes.TYPE_TCW12x_DIGITAL_IN_2, ControlTypes.TYPE_TCW12x_RELAY_1, ControlTypes.TYPE_TCW12x_RELAY_2, ControlTypes.TYPE_TCW18x_DIGITAL_IN, ControlTypes.TYPE_TCW18x_RELAY_1, ControlTypes.TYPE_TCW18x_RELAY_2, ControlTypes.TYPE_TCW18x_RELAY_3, ControlTypes.TYPE_TCW18x_RELAY_4, ControlTypes.TYPE_TCW18x_RELAY_5, ControlTypes.TYPE_TCW18x_RELAY_6, ControlTypes.TYPE_TCW18x_RELAY_7, ControlTypes.TYPE_TCW18x_RELAY_8
+            Case ControlTypes.TYPE_TCW12x_DIGITAL_IN_1, ControlTypes.TYPE_TCW12x_DIGITAL_IN_2, ControlTypes.TYPE_TCW12x_RELAY_1, ControlTypes.TYPE_TCW12x_RELAY_2, ControlTypes.TYPE_TCW18x_DIGITAL_IN, ControlTypes.TYPE_TCW18x_RELAY_1, ControlTypes.TYPE_TCW18x_RELAY_2, ControlTypes.TYPE_TCW18x_RELAY_3, ControlTypes.TYPE_TCW18x_RELAY_4, ControlTypes.TYPE_TCW18x_RELAY_5, ControlTypes.TYPE_TCW18x_RELAY_6, ControlTypes.TYPE_TCW18x_RELAY_7, ControlTypes.TYPE_TCW18x_RELAY_8, ControlTypes.TYPE_TCW120_DIGITAL_IN_1, ControlTypes.TYPE_TCW120_DIGITAL_IN_2, ControlTypes.TYPE_TCW120_RELAY_1, ControlTypes.TYPE_TCW120_RELAY_2
                 If Val(result) = 1 Then
                     result = "1"
+                ElseIf result = "0" Then
+                    result = "0"
+                End If
+            Case ControlTypes.TYPE_TCW120_ANALOG_IN_1, ControlTypes.TYPE_TCW120_ANALOG_IN_2, ControlTypes.TYPE_TCW120_TEMPERATURE
+                If Val(result) <> 0 Then
+                    result = Format$(Val(result), "0.0")
                 ElseIf result = "0" Then
                     result = "0"
                 End If
@@ -1063,10 +1104,10 @@ Friend Class Teracom_TCW
     End Function
 
 
-    Public Function SetValue(ByVal Value As String) As String
+    Public Function SetValue(Value As String) As String
         Dim result As String = String.Empty
         Select Case myControl
-            Case ControlTypes.TYPE_TCW12x_RELAY_1, ControlTypes.TYPE_TCW12x_RELAY_2, ControlTypes.TYPE_TCW18x_DIGITAL_IN, ControlTypes.TYPE_TCW18x_RELAY_1, ControlTypes.TYPE_TCW18x_RELAY_2, ControlTypes.TYPE_TCW18x_RELAY_3, ControlTypes.TYPE_TCW18x_RELAY_4, ControlTypes.TYPE_TCW18x_RELAY_5, ControlTypes.TYPE_TCW18x_RELAY_6, ControlTypes.TYPE_TCW18x_RELAY_7, ControlTypes.TYPE_TCW18x_RELAY_8
+            Case ControlTypes.TYPE_TCW12x_RELAY_1, ControlTypes.TYPE_TCW12x_RELAY_2, ControlTypes.TYPE_TCW18x_RELAY_1, ControlTypes.TYPE_TCW18x_RELAY_2, ControlTypes.TYPE_TCW18x_RELAY_3, ControlTypes.TYPE_TCW18x_RELAY_4, ControlTypes.TYPE_TCW18x_RELAY_5, ControlTypes.TYPE_TCW18x_RELAY_6, ControlTypes.TYPE_TCW18x_RELAY_7, ControlTypes.TYPE_TCW18x_RELAY_8, ControlTypes.TYPE_TCW120_RELAY_1, ControlTypes.TYPE_TCW120_RELAY_2
                 result = SetSnmp(myHost, BaseOID & MIB(myControl), Value, True)
             Case Else
                 result = "Not set (read-only)."
@@ -1078,9 +1119,12 @@ Friend Class Teracom_TCW
     Public Function SaveSettings() As String
         Dim result As String = String.Empty
         Select Case myControl
-            Case ControlTypes.TYPE_TCW18x_RELAY_1, ControlTypes.TYPE_TCW18x_RELAY_2, ControlTypes.TYPE_TCW18x_RELAY_3, ControlTypes.TYPE_TCW18x_RELAY_4, ControlTypes.TYPE_TCW18x_RELAY_5, ControlTypes.TYPE_TCW18x_RELAY_6, ControlTypes.TYPE_TCW18x_RELAY_7, ControlTypes.TYPE_TCW18x_RELAY_8, ControlTypes.TYPE_TCW18x_DIGITAL_IN
+            Case ControlTypes.TYPE_TCW18x_RELAY_1, ControlTypes.TYPE_TCW18x_RELAY_2, ControlTypes.TYPE_TCW18x_RELAY_3, ControlTypes.TYPE_TCW18x_RELAY_4, ControlTypes.TYPE_TCW18x_RELAY_5, ControlTypes.TYPE_TCW18x_RELAY_6, ControlTypes.TYPE_TCW18x_RELAY_7, ControlTypes.TYPE_TCW18x_RELAY_8
                 ' TCW18x
                 result = SetSnmp(myHost, BaseOID & TCW18x_SaveSettings, Value, True)
+            Case ControlTypes.TYPE_TCW120_RELAY_1, ControlTypes.TYPE_TCW120_RELAY_2
+                ' TCW120
+                result = SetSnmp(myHost, BaseOID & TCW120_SaveSettings, Value, True)
             Case Else
                 ' TCW12x
                 result = SetSnmp(myHost, BaseOID & TCW12x_SaveSettings, Value, True)
@@ -1092,12 +1136,12 @@ Friend Class Teracom_TCW
         Get
             Return "Teracom TCW controller class by Marc Froidevaux"
         End Get
-        Set(ByVal value As String)
+        Set(value As String)
 
         End Set
     End Property
 
-    Private Function GetSnmp(ByVal host As String, ByVal oid As String) As String
+    Private Function GetSnmp(ByVal host As String, oid As String) As String
         Dim community As String
         Dim showHelp__1 As Boolean = False
         Dim showVersion As Boolean = False
@@ -1149,7 +1193,7 @@ Friend Class Teracom_TCW
         End Try
     End Function
 
-    Private Function SetSnmp(ByVal host As String, ByVal oid As String, ByVal value As String, ByVal ValueInteger As Boolean) As String
+    Private Function SetSnmp(ByVal host As String, oid As String, value As String, ValueInteger As Boolean) As String
         Dim community As String
         Dim showHelp__1 As Boolean = False
         Dim showVersion As Boolean = False
@@ -1206,7 +1250,7 @@ Friend Class Teracom_TCW
         End Try
     End Function
 
-    Public Sub GetMinMaxHyst(ByVal SetMin As Boolean, ByVal SetMax As Boolean, ByVal setHyst As Boolean)
+    Public Sub GetMinMaxHyst(SetMin As Boolean, SetMax As Boolean, setHyst As Boolean)
 
         Dim result As String
         myMin = String.Empty
@@ -1243,7 +1287,7 @@ Friend Class Teracom_TCW
 
     End Sub
 
-    Public Sub SetMinMaxHyst(ByVal SetMin As Boolean, ByVal SetMax As Boolean, ByVal setHyst As Boolean)
+    Public Sub SetMinMaxHyst(SetMin As Boolean, SetMax As Boolean, setHyst As Boolean)
 
         Dim result As String
         Dim myValue As String
@@ -1263,7 +1307,7 @@ Friend Class Teracom_TCW
 
     End Sub
 
-    Public Function GetDescription(ByVal myControl As Integer) As String
+    Public Function GetDescription(myControl As Integer) As String
 
         GetDescription = myDesc(myControl)
 
@@ -1290,6 +1334,13 @@ Friend Class Teracom_TCW
         TYPE_TCW18x_RELAY_7 = 17
         TYPE_TCW18x_RELAY_8 = 18
         TYPE_TCW18x_DIGITAL_IN = 19
+        TYPE_TCW120_TEMPERATURE = 20
+        TYPE_TCW120_DIGITAL_IN_1 = 21
+        TYPE_TCW120_DIGITAL_IN_2 = 22
+        TYPE_TCW120_ANALOG_IN_1 = 23
+        TYPE_TCW120_ANALOG_IN_2 = 24
+        TYPE_TCW120_RELAY_1 = 25
+        TYPE_TCW120_RELAY_2 = 26
     End Enum
 
 End Class
