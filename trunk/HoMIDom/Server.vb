@@ -1734,6 +1734,7 @@ Namespace HoMIDom
                     Or _ListDevices.Item(i).Type = "VITESSEVENT" _
                     Or _ListDevices.Item(i).Type = "UV" _
                     Or _ListDevices.Item(i).Type = "COMPTEUR" _
+                    Or _ListDevices.Item(i).Type = "GENERIQUEVALUE" _
                     Then
                         writer.WriteStartAttribute("valuemin")
                         writer.WriteValue(_ListDevices.Item(i).valuemin)

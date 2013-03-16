@@ -366,6 +366,12 @@ HoMIDom
 	<param name="idDevice">ID du device associé à la source de donnée</param>
 	<returns>List de type Historisation, 99 si l'ID du serveur est erroné</returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ImportHisto(System.String,System.String)">
+	<summary>Importation d'historiques</summary>
+	<param name="fichier">Fichier texte CSV</param>
+	<param name="separateur">caractère de séparation, si omis point-virgule</param>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteUser(System.String,System.String)">
 	<summary>
  Supprime un user
@@ -994,7 +1000,7 @@ HoMIDom
  Fixe (True/False) si le mode découverte des nouveaux devices doit être activé
  </summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.AddDetectNewDevice(System.String,System.String,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.AddDetectNewDevice(System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Ajoute un nouveau device dans la liste découverte
  </summary>
@@ -1410,6 +1416,12 @@ HoMIDom
  Retourne un dictionnary retourant en clé l'id du device et la valeur True/False s'il contient des historiques
  </summary>
 	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ImportHisto(System.String,System.String)">
+	<summary>Importation d'historiques</summary>
+	<param name="fichier">Fichier texte CSV</param>
+	<param name="separateur">caractère de séparation, si omis point-virgule</param>
+	<returns>String si OK, String "ERR:..." si erreur</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.TestSendMail(System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.String,System.String)">
 	<summary>
@@ -2002,7 +2014,7 @@ HoMIDom
  Fixe (True/False) si le mode découverte des nouveaux devices doit être activé
  </summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.AddDetectNewDevice(System.String,System.String,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.AddDetectNewDevice(System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Ajoute un nouveau device dans la liste découverte
  </summary>
@@ -2984,6 +2996,11 @@ HoMIDom
  Action de type ScriptVB
  </summary>
 	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionStop">
+	<summary>
+ Action de type ScriptVB
+ </summary>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action.TypeAction">
 	<summary>
  Enumération des types d'actions
@@ -3121,6 +3138,11 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action.log">
 	<summary>log dans les fichiers logs et base sqlite</summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionSTOP">
+	<summary>
+ Action Dos 
+ </summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action">
 	<summary>Class action, Défini les actions à réaliser depuis les macros...</summary>

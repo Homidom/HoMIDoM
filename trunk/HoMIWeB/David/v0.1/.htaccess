@@ -1,0 +1,13 @@
+ErrorDocument 404 /homiweb/commun/erreur404.html
+RewriteEngine on
+
+RewriteRule ^$ /homiweb/commun/index.php  [L]
+
+RewriteRule ^index.html$ /homiweb/commun/index.php	[L]
+RewriteRule ^connexion.html$ /homiweb/commun/connexion.php	[L]
+RewriteRule ^homiweb.html$ /homiweb/commun/homiweb.php	[L]
+RewriteRule ^erreur404.html$ /homiweb/commun/homiweb.php?page=erreur&msg=erreur404	[L]
+
+RewriteRule ^zone-([a-zA-Z0-9]*).html$ /homiweb/commun/homiweb.php?page=zone&zoneid=$1	[L]
+RewriteRule ^zone_([^_]*).html$ /homiweb/commun/homiweb.php?page=zone&zoneid=$1	[L]
+RewriteRule ^parametres.html$ /homiweb/commun/homiweb.php?page=parametres	[L]
