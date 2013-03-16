@@ -36,6 +36,7 @@ Public Class WWidgetProperty
             ColorPicker1.SelectedColor = Obj.ColorBackGround
             ColorPicker2.SelectedColor = Obj.ColorStatus
             ColorPicker3.SelectedColor = Obj.ColorEtiquette
+            Slider1.Value = CDec("&H" & Obj.ColorBackGround.ToString.Substring(1, 2))
             ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(Obj.Picture))
             ImgPicture.Tag = Obj.Picture
             TxtURL.Text = Obj.URL
@@ -221,7 +222,7 @@ Public Class WWidgetProperty
                 Exit Sub
             End Try
 
-            Obj.ColorBackGround = ColorPicker1.SelectedColor
+            Obj.ColorBackGround = lblColor.Background
             Obj.ColorStatus = ColorPicker2.SelectedColor
             Obj.ColorEtiquette = ColorPicker3.SelectedColor
             Obj.URL = TxtURL.Text
@@ -1082,10 +1083,35 @@ Public Class WWidgetProperty
     End Sub
 
     Private Sub ColorPicker1_SelectColorChange(ByVal sender As System.Windows.Media.Brush) Handles ColorPicker1.SelectColorChange
-        lblColor.Background = ColorPicker1.SelectedColor
+
+        'lblColor.Background = ColorPicker1.SelectedColor
+        ' L'utilisation de couleurs nommées (p.ex. colors.antiqueblue) rend impossible l'attribution de la transparence
+        ' par affectation de la valeur alpha dans les valeurs ARGB.
+        ' Chaque fois que l'utilisateur choisit une couleur nommée dans la liste, on la convertir en valeur ARGB
+        Dim mycolor As System.Windows.Media.Color
+        Dim R, G, B As Byte
+        R = CByte("&H" & ColorPicker1.SelectedColor.ToString.Substring(3, 2))
+        G = CByte("&H" & ColorPicker1.SelectedColor.ToString.Substring(5, 2))
+        B = CByte("&H" & ColorPicker1.SelectedColor.ToString.Substring(7, 2))
+        mycolor = System.Windows.Media.Color.FromRgb(R, G, B)
+        Dim mybrush = New SolidColorBrush(mycolor)
+        mybrush.Opacity = Slider1.Value / 255
+        lblColor.Background = mybrush
     End Sub
 
     Private Sub ColorPicker2_SelectColorChange(ByVal sender As System.Windows.Media.Brush) Handles ColorPicker2.SelectColorChange
         lblColorStatus.Background = ColorPicker2.SelectedColor
+    End Sub
+
+    Private Sub Slider1_ValueChanged(sender As Object, e As RoutedPropertyChangedEventArgs(Of Double)) Handles Slider1.ValueChanged
+        Dim mycolor As System.Windows.Media.Color
+        Dim R, G, B As Byte
+        R = CByte("&H" & lblColor.Background.ToString.Substring(3, 2))
+        G = CByte("&H" & lblColor.Background.ToString.Substring(5, 2))
+        B = CByte("&H" & lblColor.Background.ToString.Substring(7, 2))
+        mycolor = System.Windows.Media.Color.FromRgb(R, G, B)
+        Dim mybrush = New SolidColorBrush(mycolor)
+        mybrush.Opacity = Slider1.Value / 255
+        lblColor.Background = mybrush
     End Sub
 End Class

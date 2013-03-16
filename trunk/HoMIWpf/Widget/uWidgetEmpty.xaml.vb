@@ -840,7 +840,7 @@ Public Class uWidgetEmpty
                     End If
                     If Image.Tag <> _dev.Picture And _IsEmpty = False Then
                         Image.Tag = _dev.Picture
-                        Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_dev.Picture))
+                        Image.Source = ConvertArrayToImage(myService.GetByteFromImage(GetOnOffPicture(_dev.Picture, CSng(_dev.Value))))
                     End If
 
                     Dim _ShowValue As Boolean = True
@@ -1653,7 +1653,10 @@ Public Class uWidgetEmpty
 
                         x.Close()
 
-                        frmMere.ShowZone(frmMere._CurrentIdZone)
+                        ' <Horizon99> Suppression de la mise à jour immédiate: cela crée une sorte de "deuxième couche" de widgets.
+                        ' S'il y a un problème de rafraîchissement on peut cliquer 
+                        ' sur l 'icône de la zone pour faire un refresh manuel
+                        'frmMere.ShowZone(frmMere._CurrentIdZone)
                     Else
                         x.Close()
                     End If
