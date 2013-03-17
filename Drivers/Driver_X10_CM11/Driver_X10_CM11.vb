@@ -848,7 +848,7 @@ Public Class Driver_X10_CM11
                     'si autodiscover = true ou modedecouverte du serveur actif alors on crée le composant sinon on logue
                     If _AutoDiscover Or _Server.GetModeDecouverte Then
                         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 traitement", "Device non trouvé, AutoCreation du composant : " & adresse & ":" & valeur)
-                        _Server.AddDetectNewDevice(adresse, _ID, "", "")
+                        _Server.AddDetectNewDevice(adresse, _ID, "", "", valeur)
                     Else
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 traitement", "Device non trouvé : " & adresse & ":" & valeur)
                     End If
