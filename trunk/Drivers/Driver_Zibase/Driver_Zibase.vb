@@ -828,7 +828,7 @@ Imports ZibaseDll
                 'si autodiscover = true ou modedecouverte du serveur actif alors on crée le composant sinon on logue
                 If _AutoDiscover Or _Server.GetModeDecouverte Then
                     WriteLog("DBG: Device non trouvé, AutoCreation du composant : " & type & " " & adresse & ":" & valeur)
-                    _Server.AddDetectNewDevice(adresse, _ID, type, "")
+                    _Server.AddDetectNewDevice(adresse, _ID, type, "", valeur)
                 Else
                     WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
                 End If

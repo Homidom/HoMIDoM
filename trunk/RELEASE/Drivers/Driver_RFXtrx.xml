@@ -137,7 +137,7 @@ Driver_RFXtrx
 	<remarks></remarks>
 </member><member name="M:Driver_RFXtrx.Driver_RFXtrx.send_lighting6(System.String,System.String,System.Int32)">
 	<summary>Gestion du protocole BLYSS</summary>
-	<param name="adresse">Adresse du type FFFF-A1  avec A1 A/D et 1/4</param>
+	<param name="adresse">Adresse du type FFFF-A1  avec A1 A/P et 1/4</param>
 	<param name="commande">commande ON, OFF</param>
 	<param name="type">0=BLYSS</param>
 	<remarks></remarks>
