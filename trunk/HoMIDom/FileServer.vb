@@ -15,7 +15,7 @@ Namespace HoMIDom
     <Serializable()> Public Class FileServer
         Implements IFileServer
 
-        Private BasePath = "\Fichiers"
+        Private BasePath = "Fichiers"
 
         Public Function Download(ByVal Fichier As RequestFileData) As FileData Implements IFileServer.Download
             Try
@@ -51,6 +51,11 @@ Namespace HoMIDom
                 Return result
             End If
 
+            Dim fileInfo = New System.IO.FileInfo(path)
+            If Not fileInfo.Directory.Exists Then
+                fileInfo.Directory.Create()
+            End If
+
             Dim fileStream = Fichier.Stream
             Using outputStream = New System.IO.FileInfo(path).OpenWrite()
                 Fichier.Stream.CopyTo(outputStream)
@@ -62,7 +67,7 @@ Namespace HoMIDom
 
         Private Function getPath(ByVal file As String)
             Dim basePath = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, Me.BasePath)
-            Dim fullPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(Me.BasePath, file))
+            Dim fullPath = System.IO.Path.GetFullPath(System.IO.Path.Combine(basePath, file))
             If fullPath.StartsWith(basePath) Then
                 Return fullPath
             End If
