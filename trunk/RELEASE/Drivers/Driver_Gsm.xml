@@ -93,14 +93,20 @@ Driver_Gsm
 	<summary>Lit les SMS non lus sur le modem/tel</summary>
 	<remarks></remarks>
 </member><member name="M:Driver_Gsm.Driver_Gsm.MessageReceived(System.Object,GsmComm.GsmCommunication.MessageReceivedEventArgs)">
-	<summary>Gestion des SMS/Notifications automatiquement reçus</summary>
+	<summary>Gestion des SMS/Notifications automatiquement reçus pour le mode PDU</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Gsm.Driver_Gsm.DataReceived(System.Object,System.IO.Ports.SerialDataReceivedEventArgs)">
+	<summary>Gestion des SMS/Notifications automatiquement reçus pour le mode TEXTE</summary>
 	<remarks></remarks>
 </member><member name="M:Driver_Gsm.Driver_Gsm.ReceptionSMS(System.String,System.String,System.String,System.String)">
 	<summary>Reception de SMS</summary>
+</member><member name="M:Driver_Gsm.Driver_Gsm.IsSimpinOk">
+	<summary>vérification codepin</summary>
+	<remarks></remarks>
 </member><member name="T:Driver_Gsm.Driver_Gsm">
 	<summary>Class Driver GSM </summary>
 	<remarks>Les drivers de votre modem doivent etre installés
- Nécessite les dll GSMCommServer.dll,  GSMCommunication.dll, GSMCommShared.dll,  PDUConverter.dll </remarks>
+ Nécessite les dll GSMCommServer.dll,  GSMCommunication.dll, GSMCommShared.dll,PDUConverter.dll </remarks>
 </member><member name="P:Driver_Gsm.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.

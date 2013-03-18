@@ -383,6 +383,24 @@ uReleve
 	<param name="sender"></param>
 	<param name="e"></param>
 	<remarks></remarks>
+</member><member name="M:WpfApplication1.Fonctions.Download(System.String,System.String,System.String)">
+	<summary>
+ Télécharge un fichier depuis le serveur
+ </summary>
+	<param name="IdServ">Id du serveur</param>
+	<param name="Fichier">Chemin local vers le fichier à envoyer, p.ex "C:\zik.mp3"</param>
+	<param name="Location">Endroit où stocker le fichier sur le serveur, p.ex. "Musique/zik.mp3"</param>
+	<returns>-1 en cas d'erreur, 0 en cas de réussite.</returns>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.Fonctions.Upload(System.String,System.String,System.String)">
+	<summary>
+ Envoi un fichier au serveur
+ </summary>
+	<param name="IdServ">Id du serveur</param>
+	<param name="Fichier">Chemin local vers le fichier à envoyer, p.ex "C:\zik.mp3"</param>
+	<param name="Location">Endroit où stocker le fichier sur le serveur, p.ex. "Musique/zik.mp3"</param>
+	<returns>-1 en cas d'erreur, 0 en cas de réussite.</returns>
+	<remarks></remarks>
 </member><member name="P:WpfApplication1.My.Resources.Resources.ResourceManager">
 	<summary>
   Retourne l'instance ResourceManager mise en cache utilisée par cette classe.

@@ -4324,6 +4324,63 @@ Imports System.Media
         End Try
     End Function
 
+    ''' <summary>Converti un id... en byte (Blyss)</summary>
+    ''' <param name="id">id (de type A1)</param>
+    ''' <returns>Byte représentant le housecode</returns>
+    Private Function convert_id(ByVal id As String) As Byte
+        Try
+            Dim t(2), temp As Byte
+
+
+            Select Case id.Substring(0, 1)
+                Case "0" : t(0) = &H0
+                Case "1" : t(0) = &H10
+                Case "2" : t(0) = &H20
+                Case "3" : t(0) = &H30
+                Case "4" : t(0) = &H40
+                Case "5" : t(0) = &H50
+                Case "6" : t(0) = &H60
+                Case "7" : t(0) = &H70
+                Case "8" : t(0) = &H80
+                Case "9" : t(0) = &H90
+                Case "A" : t(0) = &HA0
+                Case "B" : t(0) = &HB0
+                Case "C" : t(0) = &HC0
+                Case "D" : t(0) = &HD0
+                Case "E" : t(0) = &HE0
+                Case "F" : t(0) = &HF0
+                Case Else : WriteLog("ERR: convert_id Id Incorrect : " & id)
+            End Select
+
+            Select Case id.Substring(1, 1)
+                Case "0" : t(1) = &H0
+                Case "1" : t(1) = &H1
+                Case "2" : t(1) = &H2
+                Case "3" : t(1) = &H3
+                Case "4" : t(1) = &H4
+                Case "5" : t(1) = &H5
+                Case "6" : t(1) = &H6
+                Case "7" : t(1) = &H7
+                Case "8" : t(1) = &H8
+                Case "9" : t(1) = &H9
+                Case "A" : t(1) = &HA
+                Case "B" : t(1) = &HB
+                Case "C" : t(1) = &HC
+                Case "D" : t(1) = &HD
+                Case "E" : t(1) = &HE
+                Case "F" : t(1) = &HF
+                Case Else : WriteLog("ERR: convert_id Id Incorrect : " & id)
+            End Select
+            temp = (t(0) Or t(1))
+            WriteLog("DBG: INPUT: " & id & ", OUTPUT : " & t(0) & " || " & t(1) & " = " & temp)
+
+            Return (temp)
+        Catch ex As Exception
+            WriteLog("ERR: convert_id Exception : " & ex.Message)
+            Return 0 + &H41
+        End Try
+    End Function
+
     ''' <summary>Gestion du protocole X10/ARC/ELRO AB400D/Waveman/EMW200/Impuls/RisingSun/Philips SBC</summary>
     ''' <param name="adresse">Adresse du type A1</param>
     ''' <param name="commande">commande ON, OFF, BRIGHT, DIM, ALL_LIGHT_ON, ALL_LIGHT_OFF</param>
@@ -4684,8 +4741,10 @@ Imports System.Media
                 Dim adressetab As String() = adresse.Split(CChar("-"))
                 kar(LIGHTING6.groupcode) = convert_housecode(adressetab(1).Substring(0, 1))
                 kar(LIGHTING6.unitcode) = CByte(adressetab(1).Substring(1, 1))
-                kar(LIGHTING6.id1) = CByte(adressetab(0).Substring(0, 2))
-                kar(LIGHTING6.id2) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(2, 2)))
+                'kar(LIGHTING6.id1) = CByte(adressetab(0).Substring(0, 2))
+                'kar(LIGHTING6.id2) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(2, 2)))
+                kar(LIGHTING6.id1) = convert_id(adressetab(0).Substring(0, 2))
+                kar(LIGHTING6.id2) = convert_id(adressetab(0).Substring(2, 2))
             Catch ex As Exception
                 WriteLog("ERR: Send lighting6 Exception : Adresse incorrecte")
             End Try

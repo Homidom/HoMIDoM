@@ -115,6 +115,10 @@ Driver_RFXtrx
 	<summary>Converti un house de type A, B... en byte</summary>
 	<param name="housecode">HouseCode du type A (de A1)</param>
 	<returns>Byte représentant le housecode</returns>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.convert_id(System.String)">
+	<summary>Converti un id... en byte (Blyss)</summary>
+	<param name="id">id (de type A1)</param>
+	<returns>Byte représentant le housecode</returns>
 </member><member name="M:Driver_RFXtrx.Driver_RFXtrx.send_lighting1(System.String,System.String,System.Int32)">
 	<summary>Gestion du protocole X10/ARC/ELRO AB400D/Waveman/EMW200/Impuls/RisingSun/Philips SBC</summary>
 	<param name="adresse">Adresse du type A1</param>

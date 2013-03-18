@@ -5908,7 +5908,7 @@ Namespace HoMIDom
                             Case "APPAREIL" : .Type = Device.ListeDevices.APPAREIL  'modules pour diriger un appareil  ON/OFF
                             Case "AUDIO" : .Type = Device.ListeDevices.AUDIO
                             Case "BAROMETRE" : .Type = Device.ListeDevices.BAROMETRE  'pour stocker les valeur issu d'un barometre meteo ou web
-                            Case "BATTERIE" : .Type = Device.ListeDevices.BAROMETRE
+                            Case "BATTERIE" : .Type = Device.ListeDevices.BATTERIE
                             Case "COMPTEUR" : .Type = Device.ListeDevices.COMPTEUR  'compteur DS2423, RFXPower...
                             Case "CONTACT" : .Type = Device.ListeDevices.CONTACT  'detecteur de contact : switch 1-wire
                             Case "DETECTEUR" : .Type = Device.ListeDevices.DETECTEUR  'tous detecteurs : mouvement, obscurite...
