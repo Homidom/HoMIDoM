@@ -2244,11 +2244,11 @@ Class Window1
                                     result = myService.ImportHisto(openFileDialog1.FileName)
                                     Mouse.OverrideCursor = Nothing
                                 Else
-                                    ' TODO: transférer le fichier sur le serveur puis lancer la commande
                                     Dim fileInfo = New FileInfo(openFileDialog1.FileName)
                                     Upload(IdSrv, openFileDialog1.FileName, "Histo\\" & fileInfo.Name)
-                                    MessageBox.Show("L'importation n'est possible que si la console d'administration est lancée sur le serveur!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-                                    Exit Try
+                                    Mouse.OverrideCursor = Cursors.Wait
+                                    result = myService.ImportHisto("Histo\" & fileInfo.Name)
+                                    Mouse.OverrideCursor = Nothing
                                 End If
                             Else
                                 MessageBox.Show("Format non supporté!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
