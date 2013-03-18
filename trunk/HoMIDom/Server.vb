@@ -4681,6 +4681,13 @@ Namespace HoMIDom
         Public Function ImportHisto(ByVal fichier As String, Optional ByVal separateur As String = ";") As String Implements IHoMIDom.ImportHisto
             ' Le format d'importation est un fichier CSV codé en ANSI type export Microsoft Excel.
             ' Les fichiers produits avec la fonction d'export des historiques dans le module Admin sont compatibles.
+
+            Dim DeleteFileAfterImport As Boolean = False
+            If fichier.StartsWith("Histo\") = True Then
+                ' Le fichier a été uploadé, le chemin indiqué en paramètre est relatif
+                fichier = _MonRepertoire & "\Fichiers\" & fichier
+                DeleteFileAfterImport = True
+            End If
             Try
                 If Not IO.File.Exists(fichier) Then
                     Return "ERR: fichier non trouvé."
@@ -4720,6 +4727,7 @@ Namespace HoMIDom
                     ' On n'a pas les colonnes nécessaires (au minimum: date, valeur et nom/device_id).
                     Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Importation interrompue. ", "Les champs nécessaires n'ont pas été trouvés.")
                     Return "ERR: Erreur à l'importation de " & fichier & ". Erreur: la première ligne doit contenir les noms de champs appropriés."
+                    If DeleteFileAfterImport = True Then IO.File.Delete(fichier)
                     Exit Function
                 End If
                 Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Importation en cours. ", "Vérification des champs terminée.")
@@ -4735,6 +4743,7 @@ Namespace HoMIDom
                     If IsDate(colonnes(ColDateTime)) = False Then
                         Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Importation interrompue à la ligne " & (i + 1).ToString, ". La date est invalide.")
                         Return "ERR: Erreur à la vérification de la ligne " & (i + 1).ToString & ". La date est invalide."
+                        If DeleteFileAfterImport = True Then IO.File.Delete(fichier)
                         Exit Function
                     End If
 
@@ -4754,6 +4763,7 @@ Namespace HoMIDom
                                 ' Le composant n'a pas été trouvé. On stoppe l'importation
                                 Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Importation interrompue à la ligne " & (i + 1).ToString, ". Le composant " & colonnes(ColDeviceID) & " n'a pas été trouvé.")
                                 Return "ERR: Erreur à la vérification de la ligne " & (i + 1).ToString & ". Le composant " & colonnes(ColDeviceID) & " n'a pas été trouvé."
+                                If DeleteFileAfterImport = True Then IO.File.Delete(fichier)
                                 Exit Function
                             End If
                         End If
@@ -4777,6 +4787,7 @@ Namespace HoMIDom
                                 ' Le composant n'a pas été trouvé. On stoppe l'importation
                                 Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Importation interrompue à la ligne " & (i + 1).ToString, ". Le composant " & colonnes(ColName) & " n'a pas été trouvé.")
                                 Return "ERR: Erreur à la vérification de la ligne " & (i + 1).ToString & ". Le composant " & colonnes(ColName) & " n'a pas été trouvé."
+                                If DeleteFileAfterImport = True Then IO.File.Delete(fichier)
                                 Exit Function
                             End If
                         Else
@@ -4793,6 +4804,7 @@ Namespace HoMIDom
                                 ' La valeur n'est pas interprétable. On stoppe l'importation.
                                 Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Importation interrompue à la ligne " & (i + 1).ToString, ". La valeur du composant " & colonnes(ColName) & " doit être de type Vrai/Faux.")
                                 Return "ERR: Erreur à la vérification de la ligne " & (i + 1).ToString & ". La valeur du composant " & colonnes(ColName) & " doit être de type Vrai/Faux."
+                                If DeleteFileAfterImport = True Then IO.File.Delete(fichier)
                                 Exit Function
                             End If
                     End Select
@@ -4827,14 +4839,16 @@ Namespace HoMIDom
                     If Mid(retour, 1, 4) = "ERR:" Then
                         Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Importation interrompue à la ligne " & (i + 1).ToString, retour)
                         Return "ERR: Erreur à la vérification de la ligne " & (i + 1).ToString & ": " & retour
+                        If DeleteFileAfterImport = True Then IO.File.Delete(fichier)
                         Exit Function
                     End If
                 Next
                 Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Importation terminée. ", (nb_lignes - 1).ToString & " enregistrements importés.")
+                If DeleteFileAfterImport = True Then IO.File.Delete(fichier)
                 Return (nb_lignes - 1).ToString & " enregistrements importés avec succès."
 
-
             Catch ex As Exception
+                If DeleteFileAfterImport = True Then IO.File.Delete(fichier)
                 Return "ERR: Erreur à l'importation de " & fichier & ". Erreur: " & ex.ToString
             End Try
         End Function
