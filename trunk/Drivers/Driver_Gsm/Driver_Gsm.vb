@@ -26,6 +26,9 @@ Imports System.Management
 
 Imports System.IO.Ports
 Imports System.Threading
+
+
+
 ' Auteur : Fabien
 ' Date : 09/09/2012
 '-------------------------------------------------------------------------------------
@@ -36,11 +39,14 @@ Imports System.Threading
 ' Driver GSM
 ''' <summary>Class Driver GSM </summary>
 ''' <remarks>Les drivers de votre modem doivent etre installés
-''' Nécessite les dll GSMCommServer.dll,  GSMCommunication.dll, GSMCommShared.dll,  PDUConverter.dll </remarks>
+''' Nécessite les dll GSMCommServer.dll,  GSMCommunication.dll, GSMCommShared.dll,PDUConverter.dll </remarks>
 
 
 <Serializable()> Public Class Driver_Gsm
+
+
     Implements HoMIDom.HoMIDom.IDriver
+
 
 
 #Region "Variables génériques"
@@ -78,7 +84,7 @@ Imports System.Threading
     'param avancé
     Dim _DEBUG As Boolean = False
     Dim _MODE As String = "PDU"
-    Dim _BAUD As Integer = "57600"
+    Dim _BAUD As Integer = "9600"
     Dim _PinCode As String = ""
 
 #End Region
@@ -93,22 +99,22 @@ Imports System.Threading
     Private port_name As String = ""
 
     Dim MODES As Array
-
+    Dim STOCKAGE As Array
     ' declaration
     Private BufferIn(8196) As Byte
     Private DebutTrame As Boolean = False
-    Private DebutInfo As Boolean = False
+    'Private DebutInfo As Boolean = False
     Private bytecnt As Integer = 0
     Private messcnt As Integer = 0
 
-    <NonSerialized()> Dim TimerSecond As New Timers.Timer 'Timer à la seconde
+    '<NonSerialized()> Dim TimerSecond As New Timers.Timer 'Timer à la seconde
     Private recbuf(300), recbytes, recbits As Byte
     Private InfoTrame() As String
-
     Private mess As Boolean = False
     Private trame As Boolean = False
+    'Private CommandeAT As String = ""
+    'Dim startdecodesms As Boolean = False
 
-    Private CommandeAT As String = ""
 
 
 #End Region
@@ -138,6 +144,7 @@ Imports System.Threading
             Return _DeviceSupport
         End Get
     End Property
+
     Public Property Parametres() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.Parametres
         Get
             Return _Parametres
@@ -163,9 +170,7 @@ Imports System.Threading
             _LabelsDevice = value
         End Set
     End Property
-
     Public Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object) Implements HoMIDom.HoMIDom.IDriver.DriverEvent
-
     Public Property Enable() As Boolean Implements HoMIDom.HoMIDom.IDriver.Enable
         Get
             Return _Enable
@@ -179,7 +184,6 @@ Imports System.Threading
             Return _ID
         End Get
     End Property
-
     Public Property IP_TCP() As String Implements HoMIDom.HoMIDom.IDriver.IP_TCP
         Get
             Return _IP_TCP
@@ -248,10 +252,12 @@ Imports System.Threading
             Return _Refresh
         End Get
         Set(ByVal value As Integer)
-            _Refresh = value
+            If value >= 1 Then
+                _Refresh = value
+
+            End If
         End Set
     End Property
-
     Public Property Server() As HoMIDom.HoMIDom.Server Implements HoMIDom.HoMIDom.IDriver.Server
         Get
             Return _Server
@@ -265,7 +271,6 @@ Imports System.Threading
             Return _Version
         End Get
     End Property
-
     Public ReadOnly Property OsPlatform() As String Implements HoMIDom.HoMIDom.IDriver.OsPlatform
         Get
             Return _OsPlatform
@@ -287,8 +292,8 @@ Imports System.Threading
             _AutoDiscover = value
         End Set
     End Property
-
 #End Region
+
 
 #Region "Fonctions génériques"
     ''' <summary>
@@ -336,6 +341,7 @@ Imports System.Threading
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Function VerifChamp(ByVal Champ As String, ByVal Value As Object) As String Implements HoMIDom.HoMIDom.IDriver.VerifChamp
+
         Try
 
             Dim retour As String = "0"
@@ -353,7 +359,7 @@ Imports System.Threading
                     '
                     'End If
                     'If (Len(Value) > 150) Then
-                    'retour = "Veuillez saisir un message de taille inférieure à 150 characteres"
+                    'retour = "Veuillez saisir un message de taille inférieure à 150 characteres("")
 
                     ' End If
 
@@ -364,6 +370,7 @@ Imports System.Threading
             Return retour
         Catch ex As Exception
             Return "Une erreur est apparue lors de la vérification du champ " & Champ & ": " & ex.ToString
+
         End Try
     End Function
 
@@ -412,6 +419,7 @@ Imports System.Threading
             '????
             For i As Integer = 0 To _Server.Devices.Count - 1
                 If _Server.Devices.Item(i).Type = "Gsm" And _Server.Devices.Item(i).Adresse1 <> "" Then
+
                     Dim ProcId As Object = Shell(_Server.Devices.Item(i).Adresse1 & " /exit", AppWinStyle.Hide)
                 End If
             Next
@@ -496,12 +504,14 @@ Imports System.Threading
                                         '+CPIN: (READY,SIM PIN,SIM PUK,SIM PIN2,SIM PUK2,PH-SIM PIN,PH-NET PIN,PH-NETSUB PIN,PH-SP PIN,PH-CORP PIN,PH-ESL PIN,PH-SIMLOCK PIN,BLOCKED)
                                         'AT+CPIN? doit on rentrer un code pin ?
 
-                                        '   Do Until (Left(sIncomming, 12) = "+CPIN: READY" Or Left(sIncomming, 14) = "+CPIN: SIM PIN" Or Left(sIncomming, 14) = "+CPIN: SIM PUK" Or Left(sIncomming, 15) = "+CPIN: SIM PIN2" Or Left(sIncomming, 15) = "+CPIN: SIM PUK2" Or Left(sIncomming, 17) = "+CPIN: PH-SIM PIN" Or Left(sIncomming, 14) = "+CPIN: BLOCKED")
-                                        ATport.WriteLine("AT+CPIN?" & vbCrLf) ' vbcrlf
-                                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
-                                        Thread.Sleep(200)
-                                        sIncomming = ATport.ReadLine()
-                                        '  Loop
+                                        Do Until (Left(sIncomming, 12) = "+CPIN: READY" Or Left(sIncomming, 14) = "+CPIN: SIM PIN" Or Left(sIncomming, 14) = "+CPIN: SIM PUK" Or Left(sIncomming, 15) = "+CPIN: SIM PIN2" Or Left(sIncomming, 15) = "+CPIN: SIM PUK2" Or Left(sIncomming, 17) = "+CPIN: PH-SIM PIN" Or Left(sIncomming, 14) = "+CPIN: BLOCKED")
+                                            ATport.WriteLine("AT+CPIN?" & vbCrLf) ' 
+
+                                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
+                                            Thread.Sleep(100)
+                                            sIncomming = ATport.ReadLine()
+                                            '  MsgBox(sIncomming)
+                                        Loop
                                         _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * AT+CPIN")
                                         _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
 
@@ -512,14 +522,15 @@ Imports System.Threading
                                                 ' Do Until (Left(sIncomming, 2) = "OK" Or Left(sIncomming, 11) = "+CME ERROR:" Or Left(sIncomming, 5) = "ERROR")
                                                 ATport.WriteLine("AT+CPIN=" & _PinCode & vbCrLf) ' vbcrlf
                                                 _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> AT+CPIN=" & _PinCode)
-                                                Thread.Sleep(150)
+                                                Thread.Sleep(100)
                                                 sIncomming = ATport.ReadLine()
                                                 _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
                                                 'Loop
                                                 _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> AT+CPIN=" & _PinCode & " - " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
 
                                             Else
-                                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> Votre modem indique qu'il est necessaire d'entrée le code PIN de votre carte SIM. Merci de remplir le parametre Code PIN du Driver")
+                                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> Votre modem indique qu'il est necessaire d 'entrée le code PIN de votre carte SIM. Merci de remplir le parametre Code PIN du Driver")
+
 
                                             End If
 
@@ -530,7 +541,8 @@ Imports System.Threading
                                         sIncomming = ""
                                         ' Do Until Left(sIncomming, 2) = "OK"
                                         'SMS auformat Texte
-                                        ATport.WriteLine("AT+CMGF=1" & vbCrLf) ' vbcrlf
+                                        ATport.WriteLine("AT+CMGF=1" & vbCrLf) ' 
+
                                         Thread.Sleep(50)
                                         sIncomming = ATport.ReadLine()
                                         sIncomming = sIncomming.Replace(vbCr, "").Replace(vbLf, "")
@@ -538,11 +550,11 @@ Imports System.Threading
                                         '  Loop
 
                                         ' SMSPort.WriteLine("AT+CSCA=""+33689004000""" & vbCrLf) 'set service center address (orange) 
-                                        ATport.WriteLine("AT+CMGS=" & Objet.adresse1.ToString & vbCrLf) ' enter the mobile number whom you want to send the SMS
+                                        ATport.WriteLine("AT+CMGS=" & Objet.adresse1.ToString & vbCrLf) ' enter the mobile number whom you want to send the SMS.
                                         Thread.Sleep(400)
                                         ATport.WriteLine(Parametre1 & vbCrLf & Chr(26)) 'SMS sending
 
-                                        '+CMGS:xx  Le modem retourne le numéro d’identification du SMS
+                                        '+CMGS:xx  Le modem retourne le numéro d'identification du SMS
                                         ' sIncomming = ""
                                         Do Until Left(sIncomming, 6) = "+CMGS:"
                                             Thread.Sleep(400)
@@ -606,6 +618,7 @@ Imports System.Threading
     ''' <param name="DeviceId">Objet représetant le device à interroger</param>
     ''' <remarks></remarks>
     Public Sub DeleteDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.DeleteDevice
+
         Try
 
         Catch ex As Exception
@@ -636,8 +649,7 @@ Imports System.Threading
             x.DescriptionCommand = Description
             x.CountParam = NbParam
             _DeviceCommandPlus.Add(x)
-        Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+        Catch ex As Exception            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -698,7 +710,7 @@ Imports System.Threading
     ''' <remarks></remarks>
     Public Sub New()
         Try
-            _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
+            _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString()
 
             'Liste des devices compatibles
             '_DeviceSupport.Add(ListeDevices.GENERIQUESTRING.ToString)
@@ -741,7 +753,6 @@ Imports System.Threading
     End Sub
 
 #End Region
-
 #Region "Fonctions internes"
 
     ''' <summary>Ouvrir le port du modem</summary>
@@ -749,9 +760,11 @@ Imports System.Threading
     ''' <remarks></remarks>
     Private Function ouvrir(ByVal numero As String) As String
         port_name = numero 'pour se rapeller du nom du port 
+        Dim sIncomming As String
         Try
+
             If Not _IsConnect Then
-                Dim sIncomming As String
+
                 Try
 
                     'lecture AT+CMGF=? pour connaitre les modes supportés par le modem gsm connecté PDU ou TEXT
@@ -763,7 +776,10 @@ Imports System.Threading
                     ATport.Parity = Parity.None 'pas de parité
                     ATport.StopBits = StopBits.One '1 bit d'arrêt par octet
                     ATport.DataBits = 8 'nombre de bit par octet
-                    'RS232Port.Encoding = System.Text.Encoding.GetEncoding(1252)  'Extended ASCII (8-bits)
+
+                    'ATport.Encoding = System.Text.Encoding.GetEncoding(1252)  
+                    'Extended ASCII (8-bits)
+
                     ATport.Handshake = Handshake.RequestToSend
                     ATport.ReadBufferSize = CInt(4096)
                     'RS232Port.ReceivedBytesThreshold = 1
@@ -790,10 +806,10 @@ Imports System.Threading
 
                     Thread.Sleep(50)
                     Do Until (Left(sIncomming, 2) = "OK")
-                        ReDim Preserve mystring(Myincomingindex)
+                        ReDim Preserve mystring(MyIncomingIndex)
                         sIncomming = ATport.ReadLine()
-                        mystring(Myincomingindex) = sIncomming.Replace(vbCr, "").Replace(vbLf, "")
-                        Myincomingindex = Myincomingindex + 1
+                        mystring(MyIncomingIndex) = sIncomming.Replace(vbCr, "").Replace(vbLf, "")
+                        MyIncomingIndex = MyIncomingIndex + 1
                     Loop
                     Dim phonemanufacturer = mystring(mystring.Length - 3)
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * AT+CGMI ( manufacturer )")
@@ -813,48 +829,52 @@ Imports System.Threading
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * AT+CGMM ( model )")
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> " & phonemodel)
 
+
                     If Not ((phonemanufacturer = "NOKIA") Or (phonemanufacturer = " WAVECOM MODEM")) Then
                         ' Si ce n'est pas un Nokia
                         ' regardons ce que votre modem a dans le ventre ! 
                         ' 
                         _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * AT+CLAC Start listes des commandes du modem :")
                         ATport.WriteLine("AT+CLAC" & vbCrLf) ' vbcrlf
+                        Thread.Sleep(100)
                         sIncomming = ATport.ReadLine()
                         _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
                     End If
 
 
 
-                    '+CPIN: (READY,SIM PIN,SIM PUK,SIM PIN2,SIM PUK2,PH-SIM PIN,PH-NET PIN,PH-NETSUB PIN,PH-SP PIN,PH-CORP PIN,PH-ESL PIN,PH-SIMLOCK PIN,BLOCKED)
-                    'AT+CPIN? doit on rentrer un code pin ?
-                    sIncomming = ""
-                    Do Until (Left(sIncomming, 12) = "+CPIN: READY" Or Left(sIncomming, 14) = "+CPIN: SIM PIN" Or Left(sIncomming, 14) = "+CPIN: SIM PUK" Or Left(sIncomming, 15) = "+CPIN: SIM PIN2" Or Left(sIncomming, 15) = "+CPIN: SIM PUK2" Or Left(sIncomming, 17) = "+CPIN: PH-SIM PIN" Or Left(sIncomming, 14) = "+CPIN: BLOCKED")
-                        ATport.WriteLine("AT+CPIN?" & vbCrLf) ' vbcrlf
-                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM Mode", "    -> " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
-                        sIncomming = ATport.ReadLine()
-                    Loop
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * AT+CPIN")
-                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
+                    '               '+CPIN: (READY,SIM PIN,SIM PUK,SIM PIN2,SIM PUK2,PH-SIM PIN,PH-NET PIN,PH-NETSUB PIN,PH-SP PIN,PH-CORP PIN,PH-ESL PIN,PH-SIMLOCK PIN,BLOCKED)
+                    '               'AT+CPIN? doit on rentrer un code pin ?
+                    '               sIncomming = ""
+                    '               ' Do Until (Left(sIncomming, 12) = "+CPIN: READY" Or Left(sIncomming, 14) = "+CPIN: SIM PIN" Or Left(sIncomming, 14) = "+CPIN: SIM PUK" Or Left(sIncomming, 15) = "+CPIN: SIM PIN2" Or Left(sIncomming, 15) = "+CPIN: SIM PUK2" Or Left(sIncomming, 17) = "+CPIN: PH-SIM PIN" Or Left(sIncomming, 14) = "+CPIN: BLOCKED(")")
+                    '               ATport.WriteLine("AT+CPIN?" & vbCrLf) ' vbcrlf
+                    '               Thread.Sleep(100)
+                    '               sIncomming = ATport.ReadLine()
+                    '               If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM Mode", "    -> " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
+                    '
+                    '                    ' Loop
+                    '                   _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * AT+CPIN")
+                    '                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
+                    '
+                    '                    ' on insère le code pin
+                    '                    If sIncomming.Replace(vbCr, "").Replace(vbLf, "") = "+CPIN: SIM PIN" Then
+                    ' If _PinCode <> "" Then
+                    ' sIncomming = ""
+                    ' Do Until (Left(sIncomming, 2) = "OK" Or Left(sIncomming, 11) = "+CME ERROR:" Or Left(sIncomming, 5) = "ERROR")
+                    ' ATport.WriteLine("AT+CPIN=" & _PinCode & vbCrLf) ' vbcrlf
+                    ' If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM Mode", "    -> AT+CPIN=" & _PinCode)
+                    ' Thread.Sleep(100)
+                    ' sIncomming = ATport.ReadLine()
+                    ' If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM Mode", "    -> " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
+                    ' Loop
+                    ' _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> AT+CPIN=" & _PinCode & " - " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
+                    '
+                    '            Else
+                    '                    _Server.Log(Server.TypeLog.INFO,                     Server.TypeSource.DRIVER, "GSM Mode", "    -> Votre modem indique qu'il est necessaire d 'entrée le code PIN de votre carte SIM. Merci de remplir le parametre Code PIN du Driver(")")
+                    '
+                    '            End If
 
-                    ' on insère le code pin
-                    If sIncomming.Replace(vbCr, "").Replace(vbLf, "") = "+CPIN: SIM PIN" Then
-                        If _PinCode <> "" Then
-                            sIncomming = ""
-                            Do Until (Left(sIncomming, 2) = "OK" Or Left(sIncomming, 11) = "+CME ERROR:" Or Left(sIncomming, 5) = "ERROR")
-                                ATport.WriteLine("AT+CPIN=" & _PinCode & vbCrLf) ' vbcrlf
-                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM Mode", "    -> AT+CPIN=" & _PinCode)
-                                Thread.Sleep(50)
-                                sIncomming = ATport.ReadLine()
-                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM Mode", "    -> " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
-                            Loop
-                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> AT+CPIN=" & _PinCode & " - " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
-
-                        Else
-                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> Votre modem indique qu'il est necessaire d'entrée le code PIN de votre carte SIM. Merci de remplir le parametre Code PIN du Driver")
-
-                        End If
-
-                    End If
+                    '                    End If
 
 
 
@@ -876,7 +896,6 @@ Imports System.Threading
 
                     sIncomming = ""
                     'AT+CMFG=?  lister les mode supporté
-
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * Lecture des mode Supportés")
                     MyIncomingIndex = 0
                     Dim mystring4(MyIncomingIndex) As String
@@ -904,8 +923,7 @@ Imports System.Threading
                                 MODES(m) = "PDU"
                                 _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MODE", "    -> Mode " & m & " (PDU) possible")
                             Case "1"
-                                MODES(m) = "TEXTE"
-                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MODE", "    -> Mode " & m & " (TEXTE) possible")
+                                MODES(m) = "TEXTE"                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MODE", "    -> Mode " & m & " (TEXTE) possible")
                             Case Else
                                 MODES(m) = "UNKNOW"
                                 _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MODE", "    -> Mode " & m & " inconnu (ne sera pas utilisé)")
@@ -921,10 +939,119 @@ Imports System.Threading
 
                     '  Loop
 
+                    'AT+CPMS=?  stokage supporté
+                    sIncomming = ""
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * Lecture des mode Supportés")
+                    MyIncomingIndex = 0
+                    Dim mystring5(MyIncomingIndex) As String
+                    ATport.WriteLine("AT+CPMS=?" & vbCrLf) ' vbcrlf
+                    Do Until (Left(sIncomming, 2) = "OK")
+                        ReDim Preserve mystring5(MyIncomingIndex)
+                        sIncomming = ATport.ReadLine()
+                        mystring5(MyIncomingIndex) = sIncomming.Replace(vbCr, "").Replace(vbLf, "")
+                        MyIncomingIndex = MyIncomingIndex + 1
+                    Loop
+
+                    Dim TypeStockage = mystring5(mystring5.Length - 3)
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM TypeStockage", "   * AT+CPMS=? ( stockage )")
+                    '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM TypeStockage", "    -> " & TypeStockage)
+                    sIncomming = TypeStockage.Replace("+CPMS: ", "")
+                    Dim indexts As Integer
+                    Dim response(indexts)
+
+
+                    Dim stringSeparators() As String = {"),("}
+                    response = TypeStockage.Replace("+CPMS: ", "").Trim().Split(stringSeparators, StringSplitOptions.RemoveEmptyEntries)
+                    Dim i As Integer
+                    For i = 0 To response.Length - 1
+                        response(i) = response(i).Replace("""", "")
+                        response(i) = response(i).Replace("(", "")
+                        response(i) = response(i).Replace(")", "")
+                        response(i) = response(i).Replace(",", "")
+                    Next
+                    'MsgBox(response.Length)
+                    'For i = 0 To response.Length - 1
+                    'MsgBox(response(i))
+                    'Next
+
+                    Dim tmpindex
+                    Dim offsset = 0
+                    ' If response(0).length > 0 Then
+
+                    For i = 0 To response.Length - 1
+
+
+                        offsset = 0
+
+                        For tmpindex = 0 To ((response(i).ToString.Length / 2) - 1)
+                            offsset = offsset + 1
+                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM TypeStockage", "    -> stockage " & Mid(response(i), (tmpindex + offsset), 2) & " possible")
+
+                            ' MsgBox(Mid(response(0), (tmpindex + offsset), 2))
+                        Next
+
+                    Next
+
+                    'Description
+                    'SM
+                    'Read SMS messages from the SIM card. This storage is supported on every GSM phone,
+                    ' because a SIM card should always be present. Usually a SIM card can store up to 15 messages.
+                    '
+                    'Me
+                    'Read SMS messages from the modem or mobile phone memory.
+                    ' The number of messages that can be stored here depends on the size of the phones memory.
+                    '
+                    'MT
+                    'Read SMS messages from all storages on the mobile phone.
+                    ' For instance when the phone supports "ME" and "SM", the "MT"
+                    ' memory combines the "ME" and "SM" memories as if it was a single storage.
+                    '
+                    'BM
+                    'This storage is only used to read stored incoming cell broadcast
+                    ' messages. It is normally not used to store SMS messages.
+                    'SR
+                    'When you enable status reports when sending SMS messages,
+                    ' the status reports that are received are stored in this memory.
+                    ' These reports can read the same way as SMS messages
+
+                    '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM TypeStockage", "a titre indicatif ( non traité ):" & sIncomming)
+
+                    ' Dim startIndex2 As Integer = sIncomming.IndexOf("(") + "(".Length
+                    ' Dim endIndex2 As Integer = sIncomming.IndexOf(")")
+                    ' Dim result2 As String = sIncomming.Substring(startIndex2, endIndex2 - startIndex2)
+                    ' _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM TypeStockage", "Read:" & result2)
+                    'STOCKAGE = result2.Split(New Char() {","c})
+                    'Dim SuportedStockage As String = ""
+                    ' For s = 0 To (STOCKAGE.Length - 1)
+                    ''
+                    '' (("SM","BM","SR"),("SM")) ou ME)
+                    'Select Case STOCKAGE(s).ToString
+                    '    Case "SM"
+                    '' MODES(m) = "PDU"
+                    '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM TypeStockage", "    -> Mode " & s & " (SM) possible")
+                    '    Case "ME"
+                    '' MODES(m) = "TEXTE"
+                    '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM TypeStockage", "    -> Mode " & s & " (ME) possible")
+                    '    Case "MT"
+                    '' MODES(m) = "PDU"
+                    '' _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM TypeStockage", "    -> Mode " & s & " (MT) possible")
+                    '   Case "BM"
+                    '' MODES(m) = "TEXTE"
+                    '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM TypeStockage", "    -> Mode " & s & " (BM) possible")
+                    '    Case "SR"
+                    '' MODES(m) = "PDU"
+                    '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM TypeStockage", "    -> Mode " & s & " (SR) possible")
+                    '    Case Else
+                    'STOCKAGE(s) = "UNKNOW"
+                    '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM TypeStockage", "    -> Mode " & s & " inconnu (ne sera pas utilisé)")
+                    'End Select
+                    'Next
+                    '
+
+
 
                     sIncomming = Nothing
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * Fermeture du port COM pour le testing")
-
                     ATport.Close()
                 Catch ex As Exception
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "   * Erreur dans les tests de lecture des infos: " & ex.Message)
@@ -964,6 +1091,12 @@ Imports System.Threading
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "    -> Erreur Dans la verification du mode " & ex.Message)
                 End Try
 
+
+
+
+
+
+
             End If
         Catch ex As Exception
             Return ("ERR: " & ex.Message)
@@ -977,7 +1110,7 @@ Imports System.Threading
                         _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * ouverture du port : " & port_name & " à " & _BAUD & " bauds")
                         Dim portnumber As Integer
                         If (Integer.TryParse(port_name.Substring(3), portnumber)) Then
-                            comm = New GsmCommMain(portnumber, _BAUD, 100) 'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
+                            comm = New GsmCommMain(portnumber, _BAUD, 100) 'vitesse du port(300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200)
                         End If
                         comm.Open()
                         _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Start", "   * Activation des notifications")
@@ -1003,19 +1136,74 @@ Imports System.Threading
                         ATport.Parity = Parity.None 'pas de parité
                         ATport.StopBits = StopBits.One '1 bit d'arrêt par octet
                         ATport.DataBits = 8 'nombre de bit par octet
-                        'RS232Port.Encoding = System.Text.Encoding.GetEncoding(1252)  'Extended ASCII (8-bits)
+                        ' ATport.Encoding = System.Text.Encoding.GetEncoding(1252)  
+                        'Extended ASCII (8-bits)
+                        '  ATport.Encoding = Encoding.GetEncoding("iso-8859-1")
                         ATport.Handshake = Handshake.RequestToSend
                         ATport.ReadBufferSize = CInt(4096)
+                        'ATport.Encoding = Encoding.GetEncoding("iso-8859-1")
                         'RS232Port.ReceivedBytesThreshold = 1
                         ATport.ReadTimeout = 300
                         ATport.WriteTimeout = 300
                         ATport.Open()
-                        'AddHandler ATport.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
-                        _IsConnect = True
+
+                        If IsSimpinOk() = True Then
 
 
 
-                        Return ("Port " & port_name & " ouvert à " & _BAUD & " bauds.")
+                            sIncomming = ""
+                            Do Until Left(sIncomming, 2) = "OK"
+                                'SMS auformat Texte
+                                ATport.WriteLine("AT+CMGF=1" & vbCrLf) ' vbcrlf
+                                Thread.Sleep(100)
+                                sIncomming = ATport.ReadLine()
+                                sIncomming = sIncomming.Replace(vbCr, "").Replace(vbLf, "")
+                                ' MsgBox(sIncomming)
+                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "AT+CMGF=1 : " & sIncomming)
+                            Loop
+
+                            sIncomming = ""
+                            ' SMSPort.WriteLine("AT+CSCA=""+33689004000""" & vbCrLf) 
+                            'set service center address (orange) 
+                            ATport.WriteLine("AT+CMEE=1" & vbCrLf) '
+                            Thread.Sleep(100)
+                            sIncomming = ATport.ReadLine()
+                            sIncomming = (sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
+                            'MsgBox(sIncomming)
+                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "AT+CMEE=1 : " & sIncomming)
+
+                            sIncomming = ""
+                            ' A GSM/GPRS modem or mobile phone uses +CMTI ( AT+CNMI=X,2,X,X,X ) 
+                            'to forward a newly received SMS message to the computer / PC.
+                            'A GSM/GPRS modem or mobile phone uses +CMTI ( AT+CNMI=X,1,X,X,X )to notify the computer / PC
+                            ' that a new SMS message has been received and the memory location where it is stored
+
+
+                            'reponse a trapper lors du handle lors de la reception  : +CMTI: "SM",<index>
+
+                            ATport.WriteLine("AT+CNMI=1,1,0,0,0" & vbCrLf) '
+                            Thread.Sleep(100)
+                            sIncomming = ATport.ReadLine()
+                            sIncomming = (sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
+                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "AT+CNMI=1,1,0,0,0 : " & sIncomming)
+
+                            _IsConnect = True
+
+                            sIncomming = Nothing
+
+                            'suppression des 50 msg 
+                            '   For i = 1 To 50
+                            ' ATport.WriteLine("AT+CMGD=" & i & vbCrLf) '
+                            ' Thread.Sleep(500)
+                            ' _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "delete msg : " & i)
+                            ' Next
+
+                            ATport.DiscardInBuffer()
+                            ATport.DiscardOutBuffer()
+
+                            AddHandler ATport.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
+                            Return ("Port " & port_name & " ouvert à " & _BAUD & " bauds.")
+                        End If
                     Else
                         Return ("Port " & port_name & " dejà ouvert")
                     End If
@@ -1025,6 +1213,7 @@ Imports System.Threading
         Catch ex As Exception
             Return ("ERR: Port COM non ouvert" & ex.Message)
         End Try
+
     End Function
 
     ''' <summary>Fermer le port du modem</summary>
@@ -1059,7 +1248,10 @@ Imports System.Threading
                     If _IsConnect Then
                         If (Not (ATport Is Nothing)) Then ' The COM port exists.
                             If ATport.IsOpen Then
+                                RemoveHandler ATport.DataReceived, AddressOf DataReceived
+
                                 ATport.Close()
+
                                 _IsConnect = False
                                 Return ("Port " & _Com & " fermé")
                             Else
@@ -1095,14 +1287,16 @@ Imports System.Threading
             If _Enable = False Then Exit Sub
             If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM Lecture_sms", "Lecture des nouveaux SMS")
 
-            If comm.IsConnected() = True Then
-                Select Case _MODE
-                    Case "PDU"
+            Select Case _MODE
+                Case "PDU"
+                    If comm.IsConnected() = True Then
                         Try
                             Dim MsgLocation As Integer
                             Dim counter As Integer = 0
-                            ' Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.ReceivedUnread, PhoneStorageType.Sim)
-                            ' Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.All, PhoneStorageType.Phone)
+                            ' Dim messages As DecodedShortMessage() = 
+                            comm.ReadMessages(PhoneMessageStatus.ReceivedUnread, PhoneStorageType.Sim)
+                            ' Dim messages As DecodedShortMessage() = 
+                            comm.ReadMessages(PhoneMessageStatus.All, PhoneStorageType.Phone)
                             Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.ReceivedUnread, PhoneStorageType.Phone)
                             For Each Message In messages
                                 If TypeOf Message.Data Is SmsDeliverPdu Then
@@ -1142,22 +1336,134 @@ Imports System.Threading
                         Catch ex As GsmComm.GsmCommunication.CommException
                             _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM Lecture_sms", "error:" & ex.InnerException.Message)
                         End Try
-                    Case "TEXTE"
+
+                    Else
+                        _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM Lecture_sms", "Téléphone/Modem non connecté")
+                    End If
+                Case "TEXTE"
+
+
+                    Try
+
+                        If ATport.IsOpen Then
+
+                            Dim sIncomming As String = ""
+
+                            ATport.WriteLine("AT+CPMS=" & Chr(34) & "SM" & Chr(34) & vbCrLf) ' 
+                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "reception sms : " & "AT+CPMS=" & Chr(34) & "SM" & Chr(34))
+
+                            '+CMGS:xx  Le modem retourne le numéro d’identification du SMS
+                            ' sIncomming = ""
+                            Do Until Left(sIncomming, 6) = "+CPMS:"
+                                Thread.Sleep(50)
+                                sIncomming = ATport.ReadLine()
+                                sIncomming = (sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
+                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "reception sms : " & sIncomming)
+
+                            Loop
+
+
+                            If Left(sIncomming, 6) = "+CPMS:" Then
+                                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "reception sms : " & (sIncomming.Replace(vbCr, "").Replace(vbLf, "")))
+
+                                Dim msgs
+                                msgs = sIncomming.Replace("+CPMS: ", "").Replace(vbCr, "").Replace(vbLf, "").Split(New Char() {","c})
+
+
+                                ' MsgBox(msgs(0))
+                                For i = Convert.ToInt32(msgs(0)) To 1 Step -1
+                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "reception sms : " & "AT+CMGR=" & i)
+                                    ATport.WriteLine("AT+CMGR=" & i & vbCrLf)
+                                    '+CMGR: <status>,<from_address>,<mr>,<scts><CRLF><data> 
+                                    '  at(+cmgr = 6)
+                                    '+CMGR: "REC READ","+33608604109",,"13/03/09,22:19:14+04"
+                                    ' msgtexte
+                                    '
+                                    'OK
+
+                                    Thread.Sleep(400)
+                                    'ATport.WriteLine("AT+CMGD=" & i & vbCrLf)
+                                    ' sIncomming = ATport.ReadLine() ' texte
+                                    ' MsgBox(sIncomming)
+                                    'sIncomming.Replace(vbCrLf, "|").Split(New Char() {","c})
+                                    ' MsgBox(sIncomming.Replace(vbCrLf, "|"))
+                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "reception sms : " & sIncomming)
+                                    Thread.Sleep(400)
+
+                                Next
 
 
 
 
-                    Case Else : _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "No MODE configured")
-                End Select
-            Else
-                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM Lecture_sms", "Téléphone/Modem non connecté")
-            End If
+                            End If
+
+
+                        End If
+
+                    Catch ex As Exception
+                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "Error receiving SMS: " & ex.ToString)
+                    End Try
+
+
+
+
+
+                    '                 Try
+                    'Dim MsgLocation As Integer
+                    'Dim counter As Integer = 0
+                    '' Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.ReceivedUnread, PhoneStorageType.Sim)
+                    '' Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.All, PhoneStorageType.Phone)
+                    'Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.ReceivedUnread, PhoneStorageType.Phone)
+                    'For Each Message In messages
+                    ' If TypeOf Message.Data Is SmsDeliverPdu Then
+                    ' Dim data As SmsDeliverPdu = CType(Message.Data, SmsDeliverPdu)
+                    ' ReceptionSMS("RECEIVED", data.OriginatingAddress, data.UserDataText, data.SCTimestamp.ToString())
+                    ' ElseIf TypeOf Message.Data Is SmsSubmitPdu Then
+                    ' Dim data As SmsSubmitPdu = CType(Message.Data, SmsSubmitPdu)
+                    ' ReceptionSMS("STORED", data.DestinationAddress, data.UserDataText, "")
+                    ' '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Lecture_sms", " -> sms envoyé à " & data.DestinationAddress & " : " & data.UserDataText)
+                    ' ElseIf TypeOf Message.Data Is SmsStatusReportPdu Then
+                    ' Dim data As SmsStatusReportPdu = CType(Message.Data, SmsStatusReportPdu)
+                    ' _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Lecture_sms", " -> sms status report de " & data.RecipientAddress & ", Status: " & data.Status.ToString() & ", Date: " & data.DischargeTime.ToString())
+                    ' Else
+                    ' _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Lecture_sms", " -> Format de SMS non reconnu: " & Message.Data.UserDataText)
+                    ' End If
+                    '
+                    '                        ' Message.Data.UserDataText) '& (Message.Status).ToString & (Message.Storage).ToString & (Message.Index).ToString
+                    '                        counter = counter + 1
+                    '                        'Thread.Sleep(1000)
+                    '                        MsgLocation = Message.Index
+                    '                        Try
+                    '                            comm.DeleteMessage(MsgLocation, PhoneStorageType.Phone)
+                    ' If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM Lecture_sms", " -> Message effacé.")
+                    ' Catch ex As Exception
+                    '_Server.Log() '(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Lecture_sms", " -> Error deleting from inbox")
+                    'Exit Sub
+                    'Finally
+                    ' messages = Nothing
+                    ' End Try
+                    '                 Next
+                    '                If counter = 0 Then
+                    '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Lecture_sms", "Aucun message n'a été recu")
+                    ''comm.Close()
+                    'End If
+                    'Exit Sub
+                    '  If counter > 0 Then NewMsg = True
+                    'Catch ex As GsmComm.GsmCommunication.CommException
+                    ' _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM Lecture_sms", "error:" & ex.InnerException.Message)
+                    'End Try
+
+
+
+                Case Else : _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "No MODE configured")
+            End Select
+
         Catch ex As Exception
             _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM Lecture_sms", "error:" & ex.Message)
         End Try
     End Sub
 
-    ''' <summary>Gestion des SMS/Notifications automatiquement reçus</summary>
+    ''' <summary>Gestion des SMS/Notifications automatiquement reçus pour le mode PDU</summary>
     ''' <remarks></remarks>
     Private Sub MessageReceived(ByVal sender As Object, ByVal e As MessageReceivedEventArgs) Handles comm.MessageReceived
         Dim obj As IMessageIndicationObject = e.IndicationObject
@@ -1170,7 +1476,7 @@ Imports System.Threading
             If TypeOf obj Is MemoryLocation Then
                 Dim loc As MemoryLocation = CType(obj, MemoryLocation)
                 If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM MessageReceived", String.Format("Nouveau message reçu : {0}, index {1}.", loc.Storage, loc.Index))
-                'si le routage n'est pas actif, on lance une lecture manuelle du sms reçu
+                'si le routage n'est pas actif, on lance une lecture manuelle du sms reçu.
                 If _SMSROUTING = False Then Lecture_sms()
                 Exit Sub
             End If
@@ -1209,6 +1515,108 @@ Imports System.Threading
         End Try
     End Sub
 
+
+    ''' <summary>Gestion des SMS/Notifications automatiquement reçus pour le mode TEXTE</summary>
+    ''' <remarks></remarks>
+    Private Sub DataReceived(ByVal sender As Object, ByVal e As SerialDataReceivedEventArgs)
+        Dim sIncomming As String = ""
+        sIncomming = ATport.ReadLine
+
+        ' MsgBox(sIncomming)
+        Try
+
+            ''           'une notification de sms arrive
+            If Left(sIncomming, 7) = "+CMTI: " Then
+                Dim storemsg As String
+                Dim indexmsg As String
+
+                sIncomming = sIncomming.Replace("+CMTI: ", "").Replace(vbCr, "").Replace(vbLf, "")
+                'décodage de l'index du message arrivé
+                Dim decodecmti() As String = sIncomming.Split(New Char() {","c})
+                storemsg = decodecmti(0)
+                indexmsg = decodecmti(1)
+
+
+                ATport.WriteLine("AT+CMGR=" & indexmsg & vbCrLf)
+                Thread.Sleep(100)
+
+                'lecture du message
+                If _DEBUG Then _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Datareceived", " : le message " & indexmsg & " et stocké dans " & storemsg & " à été recu, l'information n'est pas encore traitée par HMIDom")
+
+                ATport.WriteLine("AT+CMGD=" & indexmsg & vbCrLf)
+                Thread.Sleep(100)
+                If _DEBUG Then _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Datareceived", " : le message " & indexmsg & " et stocké dans " & storemsg & " à été effacé")
+
+                'flush()
+                ATport.DiscardInBuffer()
+                ATport.DiscardOutBuffer()
+
+
+            End If
+
+            'lecture du message
+            If Left(sIncomming, 6) = "+CMGR:" Then
+                '+CMGR: <status>,<from_address>,<mr>,<scts><CRLF><data> 
+                '  at(+cmgr = 6)
+                '+CMGR: "REC READ","+33608604109",,"13/03/09,22:19:14+04"
+                ' msgtexte
+                '
+                'OK
+
+                '//On sort le reste des infos de la 1e ligne
+                Dim i As Integer = 0
+
+                Dim statut = ""
+                Dim numero = ""
+                Dim mr = ""
+                Dim datetimereception = ""
+                Dim ladate = ""
+
+                Dim tmp_expl2 As String() = sIncomming.Split(New Char() {","c})
+                statut = tmp_expl2(0).Replace("+CMGR: ", "").Replace(Chr(34), "")
+                numero = tmp_expl2(1).Replace(Chr(34), "")
+                mr = tmp_expl2(2).Replace(Chr(34), "")
+                datetimereception = tmp_expl2(3).Replace(Chr(34), "") & " " & Left((tmp_expl2(4).Replace(Chr(34), "")), Len(tmp_expl2(4).Replace(Chr(34), "")) - 4)
+                'On sort le reste des infos de le message
+                'MsgBox(statut)
+                'MsgBox(numero)
+                'MsgBox(mr) ' en general vide 
+                ' MsgBox(datetimereception)
+                'arrive en format yy/MM/dd H:mm:ss+04
+                'MsgBox("#" & datetimereception)
+                Dim dateValue As DateTime
+                DateTime.TryParseExact(datetimereception, "yy/MM/dd H:mm:ss", Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, dateValue)
+
+                ' transformation au format d/MM/yyyy H:mm:ss
+                datetimereception = dateValue.ToString("d/MM/yyyy h:mm:ss")
+                'MsgBox("#" & datetimereception)
+                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Datareceived", "msg : " & datetimereception)
+
+                sIncomming = ATport.ReadExisting
+                Dim msg As String = sIncomming.Replace(vbCr, "").Replace(vbLf, "").Replace("OK", "")
+                ReceptionSMS("RECEIVED", numero, msg, datetimereception)
+                ' _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Datareceived", "msg : " & msg & " à " & datetimereception)
+
+                ' If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM ReceptionSMS", "Reception d'un SMS de type " & Type & ", numéro " & numero & ", texte " & texte & ",  Date " & dateenvoi)
+                ' If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM ReceptionSMS", "Reception d'un SMS de type " & Type & ", numéro " & numero & ", texte " & texte & ",  Date " & dateenvoi)
+
+            End If
+
+
+            If Left(sIncomming, 4) = "RING" Then
+                ' ATA
+                ATport.WriteLine("ATA" & vbCrLf)
+                Thread.Sleep(100)
+                '  ATH <Enter>
+            End If
+
+        Catch Ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Datareceived", "Exception : " & Ex.Message)
+        End Try
+    End Sub
+
+
+
     ''' <summary>Reception de SMS</summary>
     Private Sub ReceptionSMS(ByVal type As String, ByVal numero As String, ByVal texte As String, ByVal dateenvoi As String)
         Try
@@ -1233,13 +1641,9 @@ Imports System.Threading
             Else
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM ReceptionSMS", "Composant non trouvé : " & numero & ":" & texte)
 
-                'si autodiscover = true ou modedecouverte du serveur actif alors on crée le composant sinon on logue
-                If _AutoDiscover Or _Server.GetModeDecouverte Then
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM ReceptionSMS", "Device non trouvé, AutoCreation du composant : " & type & " " & numero & ":" & texte)
-                    _Server.AddDetectNewDevice(numero, _ID, type, "")
-                Else
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM ReceptionSMS", "Device non trouvé : " & type & " " & numero & ":" & texte)
-                End If
+
+                'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
+
 
             End If
         Catch ex As Exception
@@ -1248,11 +1652,70 @@ Imports System.Threading
     End Sub
 
 
+    ''' <summary>vérification codepin</summary>
+    ''' <remarks></remarks>
+    Function IsSimpinOk() As Boolean
 
+        '+CPIN: (READY,SIM PIN,SIM PUK,SIM PIN2,SIM PUK2,PH-SIM PIN,PH-NET PIN,PH-NETSUB PIN,PH-SP PIN,PH-CORP PIN,PH-ESL PIN,PH-SIMLOCK PIN,BLOCKED)
+        'AT+CPIN? doit on rentrer un code pin ?
+        Dim sIncomming As String = ""
+        Do Until (Left(sIncomming, 12) = "+CPIN: READY" Or Left(sIncomming, 14) = "+CPIN: SIM PIN" Or Left(sIncomming, 14) = "+CPIN: SIM PUK" Or Left(sIncomming, 15) = "+CPIN: SIM PIN2" Or Left(sIncomming, 15) = "+CPIN: SIM PUK2" Or Left(sIncomming, 17) = "+CPIN: PH-SIM PIN" Or Left(sIncomming, 14) = "+CPIN: BLOCKED")
+            ATport.WriteLine("AT+CPIN?" & vbCrLf) ' vbcrlf
+            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM Mode", "    -> " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
+            sIncomming = ATport.ReadLine()
+        Loop
+        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * AT+CPIN")
+        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
+
+        ' on insère le code pin
+        Select Case sIncomming.Replace(vbCr, "").Replace(vbLf, "")
+            Case "+CPIN: SIM PUK"
+                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Pin", "    -> Veuillez consulter la notice de votre materiel et inserer le code PUK")
+                Return False
+            Case "+CPIN: SIM PIN2"
+                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> Veuillez consulter la notice de votre materiel : SIM PIN2")
+                Return False
+            Case "+CPIN: SIM PUK2"
+                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> Veuillez consulter la notice de votre materiel : SIM PUK2")
+                Return False
+            Case "+CPIN: PH-SIM PIN"
+                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> Veuillez consulter la notice de votre materiel : PH-SIM PIN")
+                Return False
+            Case "+CPIN: BLOCKED"
+                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> Veuillez consulter la notice de votre materiel : BLOCKED")
+                Return False
+
+            Case "+CPIN: SIM PIN"
+
+                If _PinCode <> "" Then
+                    sIncomming = ""
+                    Do Until (Left(sIncomming, 2) = "OK" Or Left(sIncomming, 11) = "+CME ERROR:" Or Left(sIncomming, 5) = "ERROR")
+                        ATport.WriteLine("AT+CPIN=" & _PinCode & vbCrLf) ' vbcrlf
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM Mode", "    -> AT+CPIN=" & _PinCode)
+                        Thread.Sleep(50)
+                        sIncomming = ATport.ReadLine()
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM Mode", "    -> " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
+                    Loop
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> AT+CPIN=" & _PinCode & " - " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
+                    IsSimpinOk()
+                Else
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> Votre modem indique qu'il est necessaire d'entrée le code PIN de votre carte SIM. Merci de remplir le parametre Code PIN du Driver")
+
+                End If
+
+            Case "+CPIN: READY"
+
+                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> CPIN READY")
+                Return True
+            Case Else
+
+
+        End Select
+        Return 0
+    End Function
 
 
 #End Region
 
 
 End Class
-
