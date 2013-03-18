@@ -2245,7 +2245,8 @@ Class Window1
                                     Mouse.OverrideCursor = Nothing
                                 Else
                                     ' TODO: transférer le fichier sur le serveur puis lancer la commande
-                                    ' Upload(openFileDialog1.FileName)
+                                    Dim fileInfo = New FileInfo(openFileDialog1.FileName)
+                                    Upload(IdSrv, openFileDialog1.FileName, "Histo\\" & fileInfo.Name)
                                     MessageBox.Show("L'importation n'est possible que si la console d'administration est lancée sur le serveur!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
                                     Exit Try
                                 End If
