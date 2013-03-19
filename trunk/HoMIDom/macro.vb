@@ -107,7 +107,7 @@ Namespace HoMIDom
 
                 For i As Integer = 0 To _ListActions.Count - 1
                     'If _ListActions.Item(i)._Action.TypeAction = Action.TypeAction.ActionStop Then
-                    If _ListActions.Item(i).TypeAction = Action.TypeAction.ActionStop Then
+                    If _ListActions.Item(i).TypeAction <> Action.TypeAction.ActionStop Then
                         Dim _action As New ThreadAction(_Server, _ListActions.Item(i))
                         Dim y As New Thread(AddressOf _action.Execute)
                         y.Name = "Traitement du script"
