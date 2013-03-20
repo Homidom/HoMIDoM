@@ -54,6 +54,7 @@ Class Window1
     Dim _ImageBackGroundDefault As String
     Dim _ListMnu As New List(Of uCtrlImgMnu)
     Dim _Design As Boolean = False
+    Dim _FullScreen As Boolean = True
     Dim mybuttonstyle As Style
     Public _CurrentIdZone As String
 #End Region
@@ -67,6 +68,16 @@ Class Window1
         Set(ByVal value As Boolean)
             _ShowSoleil = value
             Affiche("Soleil", value)
+        End Set
+    End Property
+
+    Public Property FullScreen As Boolean
+        Get
+            Return _FullScreen
+        End Get
+        Set(ByVal value As Boolean)
+            _FullScreen = value
+            Affiche("FullScreen", value)
         End Set
     End Property
 
@@ -96,7 +107,7 @@ Class Window1
                     bmpImage.EndInit()
                     If bmpImage.CanFreeze Then bmpImage.Freeze()
                     ImgBackground.Source = bmpImage
-                    bmpImage =Nothing 
+                    bmpImage = Nothing
                 Else
                     ImgBackground.Source = Nothing
                     _ImageBackGroundDefault = ""
@@ -389,6 +400,22 @@ Class Window1
                                     ShowTemperature = list.Item(0).Attributes.Item(j).Value
                                 Case "imgbackground"
                                     ImageBackGround = list.Item(0).Attributes.Item(j).Value
+                                Case "fullscreen"
+                                    If list.Item(0).Attributes.Item(j).Value = False Then
+                                        Me.FullScreen = False
+                                        Me.WindowState = Windows.WindowState.Normal
+                                    Else
+                                        Me.FullScreen = True
+                                        Me.WindowState = Windows.WindowState.Maximized
+                                    End If
+                                Case "left"
+                                    Me.Left = list.Item(0).Attributes.Item(j).Value
+                                Case "top"
+                                    Me.Top = list.Item(0).Attributes.Item(j).Value
+                                Case "width"
+                                    Me.Width = list.Item(0).Attributes.Item(j).Value
+                                Case "height"
+                                    Me.Height = list.Item(0).Attributes.Item(j).Value
                                 Case Else
                                     Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                             End Select
@@ -723,6 +750,21 @@ Class Window1
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("imgbackground")
             writer.WriteValue(ImageBackGround)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("fullscreen")
+            writer.WriteValue(FullScreen)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("left")
+            writer.WriteValue(Me.Left)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("top")
+            writer.WriteValue(Me.Top)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("width")
+            writer.WriteValue(Me.Width)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("height")
+            writer.WriteValue(Me.Height)
             writer.WriteEndAttribute()
             writer.WriteEndElement()
 
@@ -2101,6 +2143,11 @@ Class Window1
                         imgStackPnl.Children.Add(ListMnu.Item(i))
                     End If
                 Next
+                If x.ChkFullScreen.IsChecked = False Then
+                    Me.WindowState = Windows.WindowState.Normal
+                Else
+                    Me.WindowState = Windows.WindowState.Maximized
+                End If
                 x.Close()
             Else
                 x.Close()
@@ -2145,4 +2192,14 @@ Class Window1
     End Sub
 
 
+    Private Sub StkTop_MouseLeftButtonDown_1(sender As Object, e As MouseButtonEventArgs)
+
+    End Sub
+
+    Private Sub StkTop_MouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs) Handles StkTop.MouseLeftButtonDown
+        Try
+            DragMove()
+        Catch ex As Exception
+        End Try
+    End Sub
 End Class
