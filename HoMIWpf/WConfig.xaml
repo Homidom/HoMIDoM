@@ -91,6 +91,7 @@
                             <TextBox Name="TxtImgBack" Width="200" />
                             <Button Height="25" Width="25 "  Name="BtnFileImgBack" Content="..." />
                         </StackPanel>
+                        <CheckBox Name="ChkFullScreen" Content="Plein écran" Margin=" 2"/>
                     </StackPanel>
                 </GroupBox >
             </TabItem>

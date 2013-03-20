@@ -22,24 +22,17 @@
     
     <Grid>
     <DockPanel Background="Black">
-            <Rectangle Width="50" DockPanel.Dock="Left" />
+            <Rectangle Width="0" DockPanel.Dock="Left" />
             <StackPanel Height="30" DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right">
 
-                <Button Height="23" HorizontalAlignment="Right" Margin="3" Name="BtnQuit"  Width="23"  VerticalAlignment="Bottom" Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton}" >
-                    <Image Source="/HoMIWpF;component/Images/btnQuitter_32.png" />
-                    </Button> 
             </StackPanel> 
             <Rectangle Height="130" DockPanel.Dock="Bottom"/>
-            <Rectangle Width="50" DockPanel.Dock="Right"/>
-            <Image Stretch="Fill" Name="ImgBackground" />
+            <Image Stretch="Fill" Name="ImgBackground" Margin="0,-30,0,-130" />
     </DockPanel>
-        <StackPanel VerticalAlignment="Bottom">
-            <Rectangle Height="90" OpacityMask="Black" Fill="Black" Opacity="0.5" />
-        </StackPanel>
-            <DockPanel >
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Height="25" Name="StkTop">
+        <DockPanel >
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Height="24" Name="StkTop" Margin="0,0,1,0" Background="#66000000" MouseLeftButtonDown="StkTop_MouseLeftButtonDown">
                 <Menu >
-                    <MenuItem Header="Homidom" Name="MenuItem1" Opacity="50">
+                    <MenuItem Header="Homidom" Name="MenuItem1" Width="90" HorizontalAlignment="Left" Background="White">
                         <MenuItem.Icon>
                             <Image Source="/HoMIWpF;component/icone.ico" />
                         </MenuItem.Icon>
@@ -99,30 +92,24 @@
 
                 </Menu>
                 <Label Margin="1" Name="LblTime" FontSize="10" Foreground="White" FlowDirection="RightToLeft">#####</Label>
-                <StackPanel Orientation="Horizontal" >
-                    <!--<CheckBox  Name="Chk1" Content="Déplacer Widget" Foreground="White" Visibility="Collapsed"  />
-                    <CheckBox  Name="Chk2" Content="Editer Widget" Foreground="White"  Visibility="Collapsed"/>-->
-                </StackPanel>
-                <Rectangle Width="100" />
+                <Rectangle Width="100" Margin="0,-1,0,1" />
                 <Image Margin="1" Name="ImageLeve" Stretch="Fill" Tag="Soleil" HorizontalAlignment="Right" Width="20"  Height="20" Source="/HoMIWpF;component/Images/01.png" />
                 <Label Margin="1" Name="LblLeve" HorizontalAlignment="Right" Tag="Soleil" Foreground="White" FontSize="10">?</Label>
                 <Image HorizontalAlignment="Left" Margin="1" Name="ImageCouche" Stretch="Fill" Tag="Soleil" Width="20"  Height="20" Source="/HoMIWpF;component/Images/36.png" />
                 <Label Foreground="White" HorizontalAlignment="Left" Margin="1" Name="LblCouche" Tag="Soleil" FontSize="10">?</Label>
-                <Rectangle Width="100" />
-        </StackPanel>
-        <StackPanel DockPanel.Dock="Bottom" >
-            <local:AniScrollViewer  x:Name="ScrollViewer1" Margin="2" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" BorderBrush="DarkGray">
+            </StackPanel>
+            <StackPanel DockPanel.Dock="Bottom" >
+            <local:AniScrollViewer  x:Name="ScrollViewer1" Margin="2" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" BorderBrush="DarkGray" Background="#99000000">
             </local:AniScrollViewer>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <my:keyboard />
+                    <my:keyboard Foreground="{x:Null}" />
                 </StackPanel>
             </StackPanel>    
-        <StackPanel Name="StkLeft" MinWidth="10"/>
-        <StackPanel Name="StkRight" DockPanel.Dock="Right" MinWidth="10" />
-            <Canvas Margin="1" Name="Canvas1" ClipToBounds="True"
-            SnapsToDevicePixels="True"></Canvas>
-            
+            <Canvas Margin="1" Name="Canvas1" ClipToBounds="True" SnapsToDevicePixels="True"/>
         </DockPanel>
-        </Grid>
+        <Button DockPanel.Dock="right" Height="23" Margin="0,0,3,0" x:Name="BtnQuit"  Width="23"  VerticalAlignment="Top"  Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" >
+            <Image Source="/HoMIWpF;component/Images/btnQuitter_32.png" />
+        </Button>
+    </Grid> 
     </Window>
 
