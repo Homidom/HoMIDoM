@@ -82,6 +82,28 @@
             </StackPanel>
         </StackPanel>
         <TabControl>
+            <TabItem Header="Serveur" >
+                <GroupBox Header="Serveur" Margin="2">
+                    <StackPanel >
+                        <StackPanel Orientation="Horizontal" >
+                            <Label Content="IP:" MinWidth=" 35"/>
+                            <TextBox Name="TxtIP" Width="191" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" >
+                            <Label Content="Port:" MinWidth=" 35" />
+                            <TextBox Name="TxtPort" Width="191" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" >
+                            <Label Content="ID:" MinWidth=" 35" />
+                            <TextBox Name="TxtID" Width="191" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" ></StackPanel>
+                        <StackPanel Orientation="Horizontal" ></StackPanel>
+                        <StackPanel Orientation="Horizontal" ></StackPanel>
+                    </StackPanel>
+                </GroupBox >
+
+            </TabItem>
             <TabItem Header="Affichage" >
                 <GroupBox Header="Affichage" Margin="2" >
                     <StackPanel >
@@ -110,28 +132,6 @@
                         </StackPanel>
                     </StackPanel>
                 </GroupBox >
-            </TabItem>
-            <TabItem Header="Serveur" >
-                <GroupBox Header="Serveur" Margin="2">
-                    <StackPanel >
-                        <StackPanel Orientation="Horizontal" >
-                            <Label Content="IP:" MinWidth=" 35"/>
-                            <TextBox Name="TxtIP" Width="191" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" >
-                            <Label Content="Port:" MinWidth=" 35" />
-                            <TextBox Name="TxtPort" Width="191" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" >
-                            <Label Content="ID:" MinWidth=" 35" />
-                            <TextBox Name="TxtID" Width="191" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" ></StackPanel>
-                        <StackPanel Orientation="Horizontal" ></StackPanel>
-                        <StackPanel Orientation="Horizontal" ></StackPanel>
-                    </StackPanel>
-                </GroupBox >
-
             </TabItem>
             <TabItem Header="Menu">
                 <StackPanel Orientation="Horizontal">

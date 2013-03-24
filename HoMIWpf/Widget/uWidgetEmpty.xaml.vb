@@ -1818,9 +1818,75 @@ Public Class uWidgetEmpty
             Else
                 GetOnOffPicture = _file
             End If
+
         Catch ex As Exception
             MessageBox.Show("Erreur GetOnOffPicture: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             Return filename
+        End Try
+    End Function
+
+    Private Function GetSmartPicture(ByVal Filename As String, ByVal Type As String, ByVal Value As Single) As String
+        Try
+            ' On traite les images standard pour leur affecter une image reflétant l'état du device
+            ' Les images standard sont définies selon le principe typededevice-default.png
+            ' Si l'image n'est pas standard, on applique GetOnOffPicture
+            ' 
+            Filename = Filename.ToLower
+
+            If Filename.EndsWith("-default.png") = True Then
+                Select Case Type.ToUpper
+                    Case "APPAREIL"
+                    Case "AUDIO"
+                    Case "BAROMETRE"
+                    Case "BATTERIE"
+                    Case "COMPTEUR"
+                    Case "CONTACT"
+                    Case "DETECTEUR"
+                    Case "DIRECTIONVENT"
+                    Case "ENERGIEINSTANTANEE"
+                    Case "ENERGIETOTALE"
+                    Case "FREEBOX"
+                    Case "GENERIQUEBOOLEEN"
+                    Case "GENERIQUESTRING"
+                    Case "GENERIQUEVALUE"
+                    Case "HUMIDITE"
+                    Case "LAMPE"
+                        If Value > 0 Then
+                            GetSmartPicture = Filename.Replace("lampe-default.png", "lampe_on.png")
+                        Else
+                            GetSmartPicture = Filename.Replace("lampe-default.png", "lampe_off.png")
+                        End If
+                    Case "METEO"
+                    Case "MULTIMEDIA"
+                    Case "PLUIECOURANT"
+                    Case "PLUIETOTAL"
+                    Case "SWITCH"
+                    Case "TELECOMMANDE"
+                    Case "TEMPERATURE"
+                    Case "TEMPERATURECONSIGNE"
+                    Case "UV"
+                    Case "VITESSEVENT"
+                    Case "VOLET"
+                        If Value > 80 Then
+                            GetSmartPicture = Filename.Replace("volet-default.png", "volet_100.png")
+                        ElseIf Value > 60 Then
+                            GetSmartPicture = Filename.Replace("volet-default.png", "volet_75.png")
+                        ElseIf Value > 40 Then
+                            GetSmartPicture = Filename.Replace("volet-default.png", "volet_50.png")
+                        ElseIf Value > 20 Then
+                            GetSmartPicture = Filename.Replace("volet-default.png", "volet_25.png")
+                        Else
+                            GetSmartPicture = Filename.Replace("volet-default.png", "volet_0.png")
+                        End If
+                    Case Else
+                End Select
+            Else
+                GetSmartPicture = GetOnOffPicture(Filename, Value)
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show("Erreur GetOnOffPicture: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            Return Filename
         End Try
     End Function
 

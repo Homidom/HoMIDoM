@@ -42,7 +42,7 @@ Class Window1
     Dim _Serveur As String = ""
     Dim _Login As String = ""
     Dim _Password As String = ""
-    Dim _PortSOAP As String = "8000"
+    Dim _PortSOAP As String = "7999"
     Dim _IP As String = "localhost"
     'XML
     Dim myxml As clsXML
@@ -257,30 +257,15 @@ Class Window1
             'ConnectToHomidom()
 
             If IsConnect = True Then
-                Dim cntNewZone As Integer = 0
-                For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
-                    Dim x As Zone = myService.GetAllZones(IdSrv).Item(i)
-                    If ListMnu.Count = 0 Then
-                        NewBtnMnu(x.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , x.ID)
-                        cntNewZone += 1
-                    Else
-                        Dim flagexist As Boolean = False
-                        For j As Integer = 0 To ListMnu.Count - 1
-                            If ListMnu.Item(j).IDElement = x.ID Then
-                                flagexist = True
-                            End If
-                        Next
-                        If flagexist = False Then
-                            NewBtnMnu(x.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , x.ID, True)
-                            cntNewZone += 1
-                        End If
-                    End If
-                Next
-                If cntNewZone > 0 Then
-                    MessageBox.Show(cntNewZone & " nouvelle(s) zone(s) ajoutée(s)", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
-                End If
+                LoadZones()
             Else
-                MessageBox.Show("Pas de connexion au serveur", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
+                MessageBox.Show("Pas de connexion au serveur. Veuillez entrer les informations de connexion dans l'onglet serveur de la fenêtre de configuration.", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
+                _ImageBackGroundDefault = _MonRepertoire & "\Images\Fond-logo.png"
+                Me.Show()
+                MnuConfig_Click(Me, Nothing)
+                SaveConfig(_MonRepertoireAppData & "\Config\HoMIWpF.xml")
+                Log(TypeLog.INFO, TypeSource.CLIENT, "LOADCONFIG", "Message: " & LoadConfig(_MonRepertoireAppData & "\Config\"))
+                LoadZones()
             End If
 
             'Mise en forme du scrollviewer
@@ -318,8 +303,12 @@ Class Window1
         Try
             Dim _file As String = Fichier & "HoMIWpF"
             If File.Exists(_file & ".bak") = True Then File.Delete(_file & ".bak")
-            File.Copy(_file & ".xml", Mid(_file & ".xml", 1, Len(_file & ".xml") - 4) & ".bak")
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Création du backup (.bak) du fichier de config avant chargement")
+            If File.Exists(_file & ".xml") = True Then
+                File.Copy(_file & ".xml", Mid(_file & ".xml", 1, Len(_file & ".xml") - 4) & ".bak")
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Création du backup (.bak) du fichier de config avant chargement")
+            Else
+                ' Le fichier de config est inexistant. Premier lancement de WPF.
+            End If
         Catch ex As Exception
             MessageBox.Show("Erreur lors du lancement de l'application: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -653,7 +642,8 @@ Class Window1
                             End If
                         Next
                     Else
-                        MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
+                        'MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Il manque des paramètres dans le fichier de configuration du client WPF")
                     End If
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Eléments chargés")
                     '**************
@@ -1405,6 +1395,32 @@ Class Window1
         End Try
     End Sub
 
+    Private Sub LoadZones()
+
+        Dim cntNewZone As Integer = 0
+        For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
+            Dim x As Zone = myService.GetAllZones(IdSrv).Item(i)
+            If ListMnu.Count = 0 Then
+                NewBtnMnu(x.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , x.ID)
+                cntNewZone += 1
+            Else
+                Dim flagexist As Boolean = False
+                For j As Integer = 0 To ListMnu.Count - 1
+                    If ListMnu.Item(j).IDElement = x.ID Then
+                        flagexist = True
+                    End If
+                Next
+                If flagexist = False Then
+                    NewBtnMnu(x.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , x.ID, True)
+                    cntNewZone += 1
+                End If
+            End If
+        Next
+        If cntNewZone > 0 Then
+            MessageBox.Show(cntNewZone & " nouvelle(s) zone(s) ajoutée(s)", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
+        End If
+
+    End Sub
     Public Sub ShowZone(ByVal IdZone As String)
         Try
             'Gestion de l'erreur si le serveur n'est pas connecté
@@ -1424,7 +1440,11 @@ Class Window1
             _CurrentIdZone = IdZone
             _zone = myService.ReturnZoneByID(IdSrv, IdZone)
             ImgBackground.Source = Nothing
-            ImgBackground.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Image))
+            If _zone.Image.Contains("Zone_Image.png") = True Then
+                ImageBackGround = _MonRepertoire & "\Images\Fond-defaut.png"
+            Else
+                ImgBackground.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Image))
+            End If
 
             'Desgin
             Chk1.Visibility = Windows.Visibility.Visible
@@ -1525,7 +1545,8 @@ Class Window1
                         elmt.ZoneId = IdZone
                         elmt.IsEmpty = False
                         elmt.Type = uWidgetEmpty.TypeOfWidget.Device
-
+                        elmt.ColorBackGround = New SolidColorBrush(Color.FromArgb(127, 80, 80, 80))
+                        elmt.TailleStatus = 20
                         ' y = elmt
                         elmt.IsHitTestVisible = True
                         x.Content = elmt
@@ -1805,6 +1826,11 @@ Class Window1
 
     Private Sub NewWidgetEmpty_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetEmpty.Click
         Try
+            ' Remettre à zéro les modes édition + déplacement
+            Chk1.IsChecked = False
+            Chk2.IsChecked = False
+            Deplacement_Click(Me, e)
+
             'Ajouter un nouveau Control
             Dim x As New ContentControl
             x.Width = 100
@@ -1815,6 +1841,7 @@ Class Window1
 
             'Ajoute l'élément dans la liste
             Dim elmt As New uWidgetEmpty
+            elmt.Show = True
             elmt.Uid = x.Uid
             elmt.ZoneId = _CurrentIdZone
             elmt.Width = 100
@@ -1826,6 +1853,9 @@ Class Window1
             elmt.Type = uWidgetEmpty.TypeOfWidget.Empty
             elmt.ShowStatus = False
             elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
+            elmt.Visibility = Windows.Visibility.Visible
+            elmt.ColorBackGround = New SolidColorBrush(Color.FromArgb(127, 80, 80, 80))
+            elmt.TailleStatus = 20
             _ListElement.Add(elmt)
 
             elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
@@ -1833,6 +1863,7 @@ Class Window1
             Canvas1.Children.Add(x)
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
+
         Catch ex As Exception
             MessageBox.Show("Erreur NewWidgetEmpty: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1840,6 +1871,11 @@ Class Window1
 
     Private Sub NewWidgetWeb_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetWeb.Click
         Try
+            ' Remettre à zéro les modes édition + déplacement
+            Chk1.IsChecked = False
+            Chk2.IsChecked = False
+            Deplacement_Click(Me, e)
+
             'Ajouter un nouveau Control
             Dim x As New ContentControl
             x.Width = 100
@@ -1850,6 +1886,7 @@ Class Window1
 
             'Ajoute l'élément dans la liste
             Dim elmt As New uWidgetEmpty
+            elmt.Show = True
             elmt.Uid = x.Uid
             elmt.ZoneId = _CurrentIdZone
             elmt.Width = 100
@@ -1859,6 +1896,7 @@ Class Window1
             elmt.Y = 300
             elmt.IsEmpty = True
             elmt.Type = uWidgetEmpty.TypeOfWidget.Web
+            elmt.ColorBackGround = New SolidColorBrush(Color.FromArgb(255, 0, 0, 0))
             elmt.ShowStatus = False
             elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
             _ListElement.Add(elmt)
@@ -1875,6 +1913,11 @@ Class Window1
 
     Private Sub NewWidgetRss_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetRss.Click
         Try
+            ' Remettre à zéro les modes édition + déplacement
+            Chk1.IsChecked = False
+            Chk2.IsChecked = False
+            Deplacement_Click(Me, e)
+
             'Ajouter un nouveau Control
             Dim x As New ContentControl
             x.Width = 100
@@ -1885,6 +1928,7 @@ Class Window1
 
             'Ajoute l'élément dans la liste
             Dim elmt As New uWidgetEmpty
+            elmt.Show = True
             elmt.Uid = x.Uid
             elmt.ZoneId = _CurrentIdZone
             elmt.Width = 100
@@ -1894,6 +1938,7 @@ Class Window1
             elmt.Y = 300
             elmt.IsEmpty = True
             elmt.Type = uWidgetEmpty.TypeOfWidget.Rss
+            elmt.ColorBackGround = New SolidColorBrush(Color.FromArgb(255, 0, 0, 0))
             elmt.ShowStatus = False
             elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
             _ListElement.Add(elmt)
@@ -1903,6 +1948,7 @@ Class Window1
             Canvas1.Children.Add(x)
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
+
         Catch ex As Exception
             MessageBox.Show("Erreur NewWidgetRss: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1910,6 +1956,11 @@ Class Window1
 
     Private Sub NewWidgetMeteo_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetMeteo.Click
         Try
+            ' Remettre à zéro les modes édition + déplacement
+            Chk1.IsChecked = False
+            Chk2.IsChecked = False
+            Deplacement_Click(Me, e)
+
             'Ajouter un nouveau Control
             Dim x As New ContentControl
             x.Width = 202
@@ -1920,6 +1971,7 @@ Class Window1
 
             'Ajoute l'élément dans la liste
             Dim elmt As New uWidgetEmpty
+            elmt.Show = True
             elmt.Uid = x.Uid
             elmt.ZoneId = _CurrentIdZone
             elmt.Width = 202
@@ -1931,6 +1983,8 @@ Class Window1
             elmt.Type = uWidgetEmpty.TypeOfWidget.Meteo
             elmt.ShowStatus = False
             elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
+            elmt.Visibility = Windows.Visibility.Visible
+            elmt.ColorBackGround = New SolidColorBrush(Color.FromArgb(255, 0, 0, 0))
             _ListElement.Add(elmt)
 
             elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
@@ -1938,6 +1992,7 @@ Class Window1
             Canvas1.Children.Add(x)
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
+
         Catch ex As Exception
             MessageBox.Show("Erreur NewWidgetMeteo: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1945,6 +2000,11 @@ Class Window1
 
     Private Sub NewWidgetKeyPad_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetKeyPad.Click
         Try
+            ' Remettre à zéro les modes édition + déplacement
+            Chk1.IsChecked = False
+            Chk2.IsChecked = False
+            Deplacement_Click(Me, e)
+
             'Ajouter un nouveau Control
             Dim x As New ContentControl
             x.Width = 214
@@ -1955,6 +2015,7 @@ Class Window1
 
             'Ajoute l'élément dans la liste
             Dim elmt As New uWidgetEmpty
+            elmt.Show = True
             elmt.Uid = x.Uid
             elmt.ZoneId = _CurrentIdZone
             elmt.Width = 214
@@ -1966,6 +2027,8 @@ Class Window1
             elmt.Type = uWidgetEmpty.TypeOfWidget.KeyPad
             elmt.ShowStatus = False
             elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
+            elmt.ColorBackGround = New SolidColorBrush(Color.FromArgb(255, 0, 0, 0))
+            elmt.Visibility = Windows.Visibility.Visible
             _ListElement.Add(elmt)
 
             elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
@@ -1980,6 +2043,11 @@ Class Window1
 
     Private Sub NewWidgetLabel_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetLabel.Click
         Try
+            ' Remettre à zéro les modes édition + déplacement
+            Chk1.IsChecked = False
+            Chk2.IsChecked = False
+            Deplacement_Click(Me, e)
+
             'Ajouter un nouveau Control
             Dim x As New ContentControl
             x.Width = 100
@@ -1990,6 +2058,7 @@ Class Window1
 
             'Ajoute l'élément dans la liste
             Dim elmt As New uWidgetEmpty
+            elmt.Show = True
             elmt.Uid = x.Uid
             elmt.ZoneId = _CurrentIdZone
             elmt.Width = 100
@@ -1999,6 +2068,7 @@ Class Window1
             elmt.Y = 300
             elmt.IsEmpty = True
             elmt.Type = uWidgetEmpty.TypeOfWidget.Label
+            elmt.ColorBackGround = New SolidColorBrush(Color.FromArgb(127, 80, 80, 80))
             elmt.ShowStatus = False
             elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
             _ListElement.Add(elmt)
@@ -2016,6 +2086,11 @@ Class Window1
 
     Private Sub NewWidgetCamera_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetCamera.Click
         Try
+            ' Remettre à zéro les modes édition + déplacement
+            Chk1.IsChecked = False
+            Chk2.IsChecked = False
+            Deplacement_Click(Me, e)
+
             'Ajouter un nouveau Control
             Dim x As New ContentControl
             x.Width = 640
@@ -2026,6 +2101,7 @@ Class Window1
 
             'Ajoute l'élément dans la liste
             Dim elmt As New uWidgetEmpty
+            elmt.Show = True
             elmt.Uid = x.Uid
             elmt.ZoneId = _CurrentIdZone
             elmt.Width = 640
@@ -2037,6 +2113,7 @@ Class Window1
             elmt.Type = uWidgetEmpty.TypeOfWidget.Camera
             elmt.ShowStatus = False
             elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
+            elmt.ColorBackGround = New SolidColorBrush(Color.FromArgb(255, 0, 0, 0))
             _ListElement.Add(elmt)
 
             elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
@@ -2202,4 +2279,5 @@ Class Window1
         Catch ex As Exception
         End Try
     End Sub
+
 End Class
