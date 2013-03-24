@@ -754,6 +754,12 @@ Public Class WWidgetProperty
         For i As Integer = 0 To _ListElement.Count - 1
             If _ListElement.Item(i).Uid = Obj.Uid And _ListElement.Item(i).ZoneId = Obj.ZoneId Then
                 _ListElement.RemoveAt(i)
+                For j As Integer = 0 To frmMere.Canvas1.Children.Count - 1
+                    If frmMere.Canvas1.Children.Item(j).Uid = Obj.Uid Then
+                        frmMere.Canvas1.Children.RemoveAt(j)
+                        Exit For
+                    End If
+                Next
                 Exit For
             End If
         Next
@@ -1093,9 +1099,9 @@ Public Class WWidgetProperty
         R = CByte("&H" & ColorPicker1.SelectedColor.ToString.Substring(3, 2))
         G = CByte("&H" & ColorPicker1.SelectedColor.ToString.Substring(5, 2))
         B = CByte("&H" & ColorPicker1.SelectedColor.ToString.Substring(7, 2))
-        mycolor = System.Windows.Media.Color.FromRgb(R, G, B)
+        mycolor = System.Windows.Media.Color.FromArgb(Slider1.Value, R, G, B)
         Dim mybrush = New SolidColorBrush(mycolor)
-        mybrush.Opacity = Slider1.Value / 255
+        'mybrush.Opacity = Slider1.Value / 255
         lblColor.Background = mybrush
     End Sub
 
@@ -1109,9 +1115,9 @@ Public Class WWidgetProperty
         R = CByte("&H" & lblColor.Background.ToString.Substring(3, 2))
         G = CByte("&H" & lblColor.Background.ToString.Substring(5, 2))
         B = CByte("&H" & lblColor.Background.ToString.Substring(7, 2))
-        mycolor = System.Windows.Media.Color.FromRgb(R, G, B)
+        mycolor = System.Windows.Media.Color.FromArgb(Slider1.Value, R, G, B)
         Dim mybrush = New SolidColorBrush(mycolor)
-        mybrush.Opacity = Slider1.Value / 255
+        'mybrush.Opacity = Slider1.Value / 255
         lblColor.Background = mybrush
     End Sub
 End Class

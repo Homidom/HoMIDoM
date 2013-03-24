@@ -714,6 +714,10 @@
   <ItemGroup>
     <Resource Include="Images\Error.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\fond-defaut.png" />
+    <Resource Include="Images\fond-logo.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
