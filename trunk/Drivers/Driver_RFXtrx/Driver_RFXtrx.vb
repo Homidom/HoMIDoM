@@ -5181,16 +5181,23 @@ Imports System.Media
 
             'Recherche si un device affecté
             Dim listedevices As New ArrayList
-            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
-            If (listedevices.Count >= 1) Then
-                'on a trouvé un ou plusieurs composants avec cette adresse, on prend le premier
-                WriteLog("ERR: " & listedevices.Item(0).Name & " (" & adresse & ") : Battery Empty")
+            'on cherche un composant de type batterie avec la même adresse que le composant, si trouvé, on modifie sa valeur
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "BATTERIE", Me._ID, True)
+            If (listedevices.Count = 1) Then
+                listedevices.Item(0).Value = "Vide"
             Else
-                'device pas trouvé
-                WriteLog("ERR: Device non trouvé : " & adresse & ": Battery Empty")
+                'pas de composant Batterie trouvé avec la même adresse, on va loguer
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
+                If (listedevices.Count >= 1) Then
+                    'on a trouvé un ou plusieurs composants avec cette adresse, on prend le premier
+                    WriteLog("ERR: " & listedevices.Item(0).Name & " (" & adresse & ") : Battery Empty")
+                Else
+                    'device pas trouvé
+                    WriteLog("ERR: Device non trouvé : " & adresse & ": Battery Empty")
 
-                'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
+                    'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
 
+                End If
             End If
             listedevices = Nothing
         Catch ex As Exception
