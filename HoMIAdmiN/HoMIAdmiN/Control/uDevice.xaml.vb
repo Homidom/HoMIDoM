@@ -421,12 +421,55 @@ Partial Public Class uDevice
             If _Action = EAction.Nouveau Then
                 'Gestion si Device avec Value
                 If CbType.SelectedValue Is Nothing Then Exit Sub
-                If CbType.SelectedValue = "TEMPERATURE" Or CbType.Text = "COMPTEUR" Or CbType.Text = "HUMIDITE" Or CbType.Text = "TEMPERATURECONSIGNE" _
-                        Or CbType.Text = "ENERGIETOTALE" Or CbType.Text = "ENERGIEINSTANTANEE" Or CbType.Text = "PLUIETOTAL" _
-                        Or CbType.Text = "PLUIECOURANT" Or CbType.Text = "VITESSEVENT" Or CbType.Text = "UV" Or CbType.Text = "GENERIQUEVALUE" Then
+                If CbType.Text = "BAROMETRE" _
+                    Or CbType.Text = "COMPTEUR" _
+                    Or CbType.Text = "ENERGIEINSTANTANEE" _
+                    Or CbType.Text = "ENERGIETOTALE" _
+                    Or CbType.Text = "GENERIQUEVALUE" _
+                    Or CbType.Text = "HUMIDITE" _
+                    Or CbType.Text = "LAMPE" _
+                    Or CbType.Text = "PLUIECOURANT" _
+                    Or CbType.Text = "PLUIETOTAL" _
+                    Or CbType.Text = "TEMPERATURE" _
+                    Or CbType.Text = "TEMPERATURECONSIGNE" _
+                    Or CbType.Text = "VITESSEVENT" _
+                    Or CbType.Text = "UV" _
+                    Or CbType.Text = "VOLET" _
+                    Then
                     StkValueMINMAX.Visibility = Windows.Visibility.Visible
                     StkValueDefaultPrecision.Visibility = Windows.Visibility.Visible
                     StkValueCorrectionFormatage.Visibility = Windows.Visibility.Visible
+
+                    'gestion des champs valuemin/max/defaut suivant le type
+                    If CbType.Text = "HUMIDITE" Or CbType.Text = "LAMPE" Or CbType.Text = "VOLET" Then
+                        TxtValueMin.Text = "0"
+                        TxtValueMax.Text = "100"
+                        TxtValDef.Text = "0"
+                        TxtCorrection.Text = "0"
+                        TxtPrecision.Text = "0"
+                    ElseIf CbType.Text = "BAROMETRE" _
+                        Or CbType.Text = "COMPTEUR" _
+                        Or CbType.Text = "ENERGIEINSTANTANEE" _
+                        Or CbType.Text = "ENERGIETOTALE" _
+                        Or CbType.Text = "GENERIQUEVALUE" _
+                        Or CbType.Text = "PLUIECOURANT" _
+                        Or CbType.Text = "PLUIETOTAL" _
+                        Or CbType.Text = "VITESSEVENT" _
+                        Or CbType.Text = "UV" Then
+                        TxtValueMin.Text = "0"
+                        TxtValueMax.Text = "9999999"
+                        TxtValDef.Text = "0"
+                        TxtCorrection.Text = "0"
+                        TxtPrecision.Text = "0"
+                    ElseIf CbType.Text = "TEMPERATURE" _
+                        Or CbType.Text = "TEMPERATURECONSIGNE" _
+                        Then
+                        TxtValueMin.Text = "-99"
+                        TxtValueMax.Text = "9999"
+                        TxtValDef.Text = "0"
+                        TxtCorrection.Text = "0"
+                        TxtPrecision.Text = "0"
+                    End If
                 Else
                     StkValueMINMAX.Visibility = Windows.Visibility.Collapsed
                     StkValueDefaultPrecision.Visibility = Windows.Visibility.Collapsed
@@ -547,6 +590,26 @@ Partial Public Class uDevice
             TxtRefresh.Text = Replace(TxtRefresh.Text, ".", ",")
 
             'on check les valeurs renseignés
+            If IsNumeric(TxtPrecision.Text) = False Then
+                MessageBox.Show("Le champ Précision doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+            If IsNumeric(TxtCorrection.Text) = False Then
+                MessageBox.Show("Le champ Correction doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+            If IsNumeric(TxtValDef.Text) = False Then
+                MessageBox.Show("Le champ Valeur Defaut doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+            If IsNumeric(TxtValueMax.Text) = False Then
+                MessageBox.Show("Le champ Valeur Max doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+            If IsNumeric(TxtValueMin.Text) = False Then
+                MessageBox.Show("Le champ Valeur Min doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
             If String.IsNullOrEmpty(TxtNom.Text) = True Then
                 MessageBox.Show("Le nom du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
@@ -661,6 +724,42 @@ Partial Public Class uDevice
             TxtRefresh.Text = Replace(TxtRefresh.Text, ".", ",")
 
             'on check les valeurs renseignés
+            If CbType.Text = "BAROMETRE" _
+                Or CbType.Text = "COMPTEUR" _
+                Or CbType.Text = "ENERGIEINSTANTANEE" _
+                Or CbType.Text = "ENERGIETOTALE" _
+                Or CbType.Text = "GENERIQUEVALUE" _
+                Or CbType.Text = "HUMIDITE" _
+                Or CbType.Text = "LAMPE" _
+                Or CbType.Text = "PLUIECOURANT" _
+                Or CbType.Text = "PLUIETOTAL" _
+                Or CbType.Text = "TEMPERATURE" _
+                Or CbType.Text = "TEMPERATURECONSIGNE" _
+                Or CbType.Text = "VITESSEVENT" _
+                Or CbType.Text = "UV" _
+                Or CbType.Text = "VOLET" _
+                Then
+                If IsNumeric(TxtPrecision.Text) = False Then
+                    MessageBox.Show("Le champ Précision doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                End If
+                If IsNumeric(TxtCorrection.Text) = False Then
+                    MessageBox.Show("Le champ Correction doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                End If
+                If IsNumeric(TxtValDef.Text) = False Then
+                    MessageBox.Show("Le champ Valeur Defaut doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                End If
+                If IsNumeric(TxtValueMax.Text) = False Then
+                    MessageBox.Show("Le champ Valeur Max doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                End If
+                If IsNumeric(TxtValueMin.Text) = False Then
+                    MessageBox.Show("Le champ Valeur Min doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                End If
+            End If
             If String.IsNullOrEmpty(TxtNom.Text) = True Then
                 MessageBox.Show("Le nom du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub

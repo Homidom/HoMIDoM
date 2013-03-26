@@ -1724,17 +1724,20 @@ Namespace HoMIDom
                     writer.WriteEndAttribute()
 
                     '-- propriétés generique value --
-                    If _ListDevices.Item(i).Type = "TEMPERATURE" _
-                    Or _ListDevices.Item(i).Type = "HUMIDITE" _
-                    Or _ListDevices.Item(i).Type = "TEMPERATURECONSIGNE" _
-                    Or _ListDevices.Item(i).Type = "ENERGIETOTALE" _
+                    If _ListDevices.Item(i).Type = "BAROMETRE" _
+                    Or _ListDevices.Item(i).Type = "COMPTEUR" _
                     Or _ListDevices.Item(i).Type = "ENERGIEINSTANTANEE" _
-                    Or _ListDevices.Item(i).Type = "PLUIETOTAL" _
+                    Or _ListDevices.Item(i).Type = "ENERGIETOTALE" _
+                    Or _ListDevices.Item(i).Type = "GENERIQUEVALUE" _
+                    Or _ListDevices.Item(i).Type = "HUMIDITE" _
+                    Or _ListDevices.Item(i).Type = "LAMPE" _
                     Or _ListDevices.Item(i).Type = "PLUIECOURANT" _
+                    Or _ListDevices.Item(i).Type = "PLUIETOTAL" _
+                    Or _ListDevices.Item(i).Type = "TEMPERATURE" _
+                    Or _ListDevices.Item(i).Type = "TEMPERATURECONSIGNE" _
                     Or _ListDevices.Item(i).Type = "VITESSEVENT" _
                     Or _ListDevices.Item(i).Type = "UV" _
-                    Or _ListDevices.Item(i).Type = "COMPTEUR" _
-                    Or _ListDevices.Item(i).Type = "GENERIQUEVALUE" _
+                    Or _ListDevices.Item(i).Type = "VOLET" _
                     Then
                         writer.WriteStartAttribute("valuemin")
                         writer.WriteValue(_ListDevices.Item(i).valuemin)
@@ -6241,7 +6244,7 @@ Namespace HoMIDom
                     End With
 
                     Select Case UCase(type)
-                        Case "GENERIQUEVALUE", "COMPTEUR", "BAROMETRE", "LAMPE", "UV", "VITESSEVENT", "PLUIECOURANT", "PLUIETOTAL", "ENERGIEINSTANTANEE", "ENERGIETOTALE", "TEMPERATURECONSIGNE", "HUMIDITE", "TEMPERATURE"
+                        Case "BAROMETRE", "COMPTEUR", "ENERGIEINSTANTANEE", "ENERGIETOTALE", "GENERIQUEVALUE", "HUMIDITE", "LAMPE", "PLUIECOURANT", "PLUIETOTAL", "TEMPERATURE", "TEMPERATURECONSIGNE", "VITESSEVENT", "UV", "VOLET"
                             With MyNewObj
                                 .Correction = correction
                                 .Formatage = formatage
@@ -6287,7 +6290,20 @@ Namespace HoMIDom
                             _ListDevices.Item(i).AllValue = AllValue
 
                             'si c'est un device de type double ou integer
-                            If _ListDevices.Item(i).type = "VITESSEVENT" Or _ListDevices.Item(i).type = "UV" Or _ListDevices.Item(i).type = "TEMPERATURECONSIGNE" Or _ListDevices.Item(i).type = "TEMPERATURE" Or _ListDevices.Item(i).type = "PLUIETOTAL" Or _ListDevices.Item(i).type = "PLUIECOURANT" Or _ListDevices.Item(i).type = "LAMPE" Or _ListDevices.Item(i).type = "HUMIDITE" Or _ListDevices.Item(i).type = "GENERIQUEVALUE" Or _ListDevices.Item(i).type = "ENERGIETOTALE" Or _ListDevices.Item(i).type = "ENERGIEINSTANTANEE" Or _ListDevices.Item(i).type = "COMPTEUR" Or _ListDevices.Item(i).type = "BAROMETRE" Then
+                            If _ListDevices.Item(i).type = "BAROMETRE" _
+                                Or _ListDevices.Item(i).type = "COMPTEUR" _
+                                Or _ListDevices.Item(i).type = "ENERGIEINSTANTANEE" _
+                                Or _ListDevices.Item(i).type = "ENERGIETOTALE" _
+                                Or _ListDevices.Item(i).Type = "GENERIQUEVALUE" _
+                                Or _ListDevices.Item(i).Type = "HUMIDITE" _
+                                Or _ListDevices.Item(i).Type = "LAMPE" _
+                                Or _ListDevices.Item(i).Type = "PLUIECOURANT" _
+                                Or _ListDevices.Item(i).Type = "PLUIETOTAL" _
+                                Or _ListDevices.Item(i).Type = "TEMPERATURE" _
+                                Or _ListDevices.Item(i).Type = "TEMPERATURECONSIGNE" _
+                                Or _ListDevices.Item(i).Type = "VITESSEVENT" _
+                                Or _ListDevices.Item(i).Type = "UV" _
+                                Or _ListDevices.Item(i).Type = "VOLET" Then
                                 _ListDevices.Item(i).Correction = correction
                                 _ListDevices.Item(i).Formatage = formatage
                                 _ListDevices.Item(i).Precision = precision
@@ -6499,20 +6515,21 @@ Namespace HoMIDom
                                 a = Nothing
                             Next
                         End If
-
+                       
                         If retour.Type = Device.ListeDevices.BAROMETRE _
                                         Or retour.Type = Device.ListeDevices.COMPTEUR _
                                         Or retour.Type = Device.ListeDevices.ENERGIEINSTANTANEE _
                                         Or retour.Type = Device.ListeDevices.ENERGIETOTALE _
                                         Or retour.Type = Device.ListeDevices.GENERIQUEVALUE _
                                         Or retour.Type = Device.ListeDevices.HUMIDITE _
+                                        Or retour.Type = Device.ListeDevices.LAMPE _
                                         Or retour.Type = Device.ListeDevices.PLUIECOURANT _
                                         Or retour.Type = Device.ListeDevices.PLUIETOTAL _
                                         Or retour.Type = Device.ListeDevices.TEMPERATURE _
                                         Or retour.Type = Device.ListeDevices.TEMPERATURECONSIGNE _
                                         Or retour.Type = Device.ListeDevices.VITESSEVENT _
                                         Or retour.Type = Device.ListeDevices.UV _
-                                        Or retour.Type = Device.ListeDevices.VITESSEVENT _
+                                        Or retour.Type = Device.ListeDevices.VOLET _
                                         Then
                             retour.Correction = _ListDevices.Item(i).correction
                             retour.Precision = _ListDevices.Item(i).precision

@@ -39,6 +39,7 @@ Module Service
             Console.BackgroundColor = ConsoleColor.White 'Couleur du fond
             Console.Clear()  'Applique la couleur du fond
             Console.ForegroundColor = ConsoleColor.Black 'Couleur du texte
+            Console.Title = "HoMIDomService"
 
             Console.WriteLine("******************************")
             Console.WriteLine("**** DEMARRAGE DU SERVEUR ****")
