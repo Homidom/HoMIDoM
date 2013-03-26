@@ -476,6 +476,15 @@ Partial Public Class uDevice
                     StkValueCorrectionFormatage.Visibility = Windows.Visibility.Collapsed
                 End If
 
+                'Gestion AllValue et LastEtat par défaut
+                If CbType.Text = "BATTERIE" Or CbType.Text = "FREEBOX" Or CbType.Text = "GENERIQUESTRING" Or CbType.Text = "MULTIMEDIA" Or CbType.Text = "SWITCH" Or CbType.Text = "TELECOMMANDE" Then
+                    ChKLastEtat.IsChecked = False
+                    ChKAllValue.IsChecked = True
+                Else
+                    ChKLastEtat.IsChecked = False
+                    ChKAllValue.IsChecked = False
+                End If
+
                 If CbType.SelectedValue = "MULTIMEDIA" Then
                     StkModel.Visibility = Windows.Visibility.Collapsed
                 Else
