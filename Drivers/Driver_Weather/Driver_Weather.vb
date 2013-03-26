@@ -459,6 +459,12 @@ Imports System.Threading
 
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.METEO)
+            _DeviceSupport.Add(ListeDevices.BAROMETRE)
+            _DeviceSupport.Add(ListeDevices.DIRECTIONVENT)
+            _DeviceSupport.Add(ListeDevices.HUMIDITE)
+            _DeviceSupport.Add(ListeDevices.UV)
+            _DeviceSupport.Add(ListeDevices.VITESSEVENT)
+            _DeviceSupport.Add(ListeDevices.TEMPERATURE)
 
             'Parametres avancés
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
@@ -500,6 +506,12 @@ Imports System.Threading
 
             Dim doc As New XmlDocument
             Dim nodes As XmlNodeList
+            Dim _StrBar As String = ""
+            Dim _StrDirVent As String = ""
+            Dim _StrHum As String = ""
+            Dim _StrUv As String = ""
+            Dim _StrVitVent As String = ""
+            Dim _StrTemp As String = ""
 
             ' Create a new XmlDocument   
             doc = New XmlDocument()
@@ -515,21 +527,42 @@ Imports System.Threading
                 If node.HasChildNodes = True Then
                     For Each _child As XmlNode In node
                         Select Case _child.Name
-                            Case "tmp" : If IsNumeric(_child.FirstChild.Value) Then _Obj.TemperatureActuel = _child.FirstChild.Value
+                            Case "tmp" : If IsNumeric(_child.FirstChild.Value) Then
+                                    _Obj.TemperatureActuel = _child.FirstChild.Value
+                                    _StrTemp = _child.FirstChild.Value
+                                End If
                             Case "t" : _Obj.ConditionActuel = Traduire(_child.FirstChild.Value)
                             Case "icon" : _Obj.IconActuel = _child.FirstChild.Value
-                            Case "hmid" : If IsNumeric(_child.FirstChild.Value) Then _Obj.HumiditeActuel = _child.FirstChild.Value
-                            Case "s" : _Obj.VentActuel = _child.FirstChild.Value
+                            Case "hmid" : If IsNumeric(_child.FirstChild.Value) Then
+                                    _Obj.HumiditeActuel = _child.FirstChild.Value
+                                    _StrHum = _child.FirstChild.Value
+                                End If
+                            Case "i"
+                                _StrUv = _child.FirstChild.Value
                         End Select
                         If _child.HasChildNodes = True Then
                             For Each _child2 As XmlNode In _child
                                 ' If _child2.Name.StartsWith("#text") = False Then Console.WriteLine(_child2.Name & ":" & _child2.InnerText)
                                 Select Case _child2.Name
-                                    Case "tmp" : If IsNumeric(_child.FirstChild.Value) Then _Obj.TemperatureActuel = _child2.InnerText
-                                    Case "t" 'objet.ConditionActuel = Traduire(_child2.InnerText)
-                                    Case "icon" 'objet.IconActuel = _child2.InnerText
-                                    Case "hmid" : If IsNumeric(_child.FirstChild.Value) Then _Obj.HumiditeActuel = _child2.InnerText
-                                    Case "s" : _Obj.VentActuel = _child2.InnerText
+                                    Case "tmp" : If IsNumeric(_child.FirstChild.Value) Then
+                                            _Obj.TemperatureActuel = _child2.InnerText
+                                            _StrTemp = _child2.InnerText
+                                        End If
+                                    Case "hmid" : If IsNumeric(_child2.FirstChild.Value) Then
+                                            _Obj.HumiditeActuel = _child2.InnerText
+                                            _StrHum = _child2.InnerText
+                                        End If
+                                    Case "s"
+                                        If _child.Name = "wind" Then
+                                            _Obj.VentActuel = _child2.InnerText
+                                            _StrVitVent = _child2.InnerText
+                                        End If
+                                    Case "t"
+                                        If _child.Name = "wind" Then _StrDirVent = _child2.InnerText
+                                    Case "r"
+                                        If _child.Name = "bar" Then _StrBar = _child.FirstChild.Value
+                                    Case "i"
+                                        If _child.Name = "uv" Then _StrUv = _child2.InnerText
                                 End Select
                             Next
                         End If
@@ -623,6 +656,40 @@ Imports System.Threading
                 End If
             Next
 
+
+            Dim listedevices As New ArrayList
+            Dim i As Integer = 0
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, _Obj.Adresse1, "HUMIDITE", Me._ID, True)
+            For i = 0 To listedevices.Count - 1
+                listedevices.Item(i).Value = _StrHum
+            Next
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, _Obj.Adresse1, "BAROMETRE", Me._ID, True)
+            For i = 0 To listedevices.Count - 1
+                listedevices.Item(i).Value = _StrBar
+            Next
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, _Obj.Adresse1, "DIRECTIONVENT", Me._ID, True)
+            For i = 0 To listedevices.Count - 1
+                listedevices.Item(i).Value = _StrDirVent
+            Next
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, _Obj.Adresse1, "UV", Me._ID, True)
+            For i = 0 To listedevices.Count - 1
+                listedevices.Item(i).Value = _StrUv
+            Next
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, _Obj.Adresse1, "VITESSEVENT", Me._ID, True)
+            For i = 0 To listedevices.Count - 1
+                listedevices.Item(i).Value = _StrVitVent
+            Next
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, _Obj.Adresse1, "TEMPERATURE", Me._ID, True)
+            For i = 0 To listedevices.Count - 1
+                listedevices.Item(i).Value = _StrTemp
+            Next
+
+            _StrBar = ""
+            _StrDirVent = ""
+            _StrHum = ""
+            _StrUv = ""
+            _StrVitVent = ""
+            _StrTemp = ""
             doc = Nothing
             nodes = Nothing
             response = Nothing
