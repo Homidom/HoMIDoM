@@ -994,10 +994,10 @@ Namespace HoMIDom
                                         Or _Dev.Type = "UV" _
                                         Or _Dev.Type = "VOLET" _
                                         Then
-                                            If (Not list.Item(j).Attributes.GetNamedItem("valuemin") Is Nothing) Then .ValueMin = list.Item(j).Attributes.GetNamedItem("valuemin").Value
-                                            If (Not list.Item(j).Attributes.GetNamedItem("valuemax") Is Nothing) Then .ValueMax = list.Item(j).Attributes.GetNamedItem("valuemax").Value
-                                            If (Not list.Item(j).Attributes.GetNamedItem("valuedef") Is Nothing) Then .ValueDef = list.Item(j).Attributes.GetNamedItem("valuedef").Value
-                                            If (Not list.Item(j).Attributes.GetNamedItem("precision") Is Nothing) Then .Precision = list.Item(j).Attributes.GetNamedItem("precision").Value
+                                            If (Not list.Item(j).Attributes.GetNamedItem("valuemin") Is Nothing) Then .ValueMin = Replace(list.Item(j).Attributes.GetNamedItem("valuemin").Value, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                            If (Not list.Item(j).Attributes.GetNamedItem("valuemax") Is Nothing) Then .ValueMax = Replace(list.Item(j).Attributes.GetNamedItem("valuemax").Value, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                            If (Not list.Item(j).Attributes.GetNamedItem("valuedef") Is Nothing) Then .ValueDef = Replace(list.Item(j).Attributes.GetNamedItem("valuedef").Value, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                            If (Not list.Item(j).Attributes.GetNamedItem("precision") Is Nothing) Then .Precision = Replace(list.Item(j).Attributes.GetNamedItem("precision").Value, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                                             If (Not list.Item(j).Attributes.GetNamedItem("correction") Is Nothing) Then .Correction = list.Item(j).Attributes.GetNamedItem("correction").Value
                                             If (Not list.Item(j).Attributes.GetNamedItem("formatage") Is Nothing) Then .Formatage = list.Item(j).Attributes.GetNamedItem("formatage").Value
                                         End If
