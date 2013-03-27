@@ -124,7 +124,11 @@
   <data name="ExempleVBS" xml:space="preserve">
     <value>'EXEMPLE *******************************************
 '***************************************************
-
+Imports System
+Imports System.IO
+Imports System.Windows.Forms
+Imports Microsoft.VisualBasic
+Imports Homidom                                                                  
 Namespace Dynam
  'Ne pas supprimer cette class
  Public Class DynamicCode

@@ -70,21 +70,18 @@ Namespace My.Resources
         '''<summary>
         '''  Recherche une chaîne localisée semblable à &apos;EXEMPLE *******************************************
         '''&apos;***************************************************
-        '''
+        '''Imports System
+        '''Imports System.IO
+        '''Imports System.Windows.Forms
+        '''Imports Microsoft.VisualBasic
+        '''Imports Homidom                                                                  
         '''Namespace Dynam
         ''' &apos;Ne pas supprimer cette class
         ''' Public Class DynamicCode
         '''   
         '''  &apos;Ne pas supprimer cette function 
         '''  Public Function ExecuteCode(paramarray prmParameters() as object) as object
-        '''   Dim objTest as new TestClass
-        '''   Dim strTest as String=objTest.Test
-        '''   Dim Serveur as Homidom.Homidom.server
-        '''
-        '''   Serveur=prmParameters(0)
-        '''   MessageBox.Show(strTest)
-        '''   MessageBox.Show(1*2*3)
-        '''   M [le reste de la chaîne a été tronqué]&quot;;.
+        '''   Dim objTest as new TestCl [le reste de la chaîne a été tronqué]&quot;;.
         '''</summary>
         Friend ReadOnly Property ExempleVBS() As String
             Get
