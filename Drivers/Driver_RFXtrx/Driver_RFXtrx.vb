@@ -2813,7 +2813,7 @@ Imports System.Media
             End Select
             WriteRetour(adresse, "", valeur)
             If recbuf(SECURITY1.subtype) <> SECURITY1.sTypeKD101 Then    'KD101 does not support battery low indication
-                If (recbuf(SECURITY1.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+                If (recbuf(SECURITY1.battery_level) And &HF) = 0 Then WriteBattery(adresse, "vide") Else WriteBattery(adresse, "OK")
             End If
             If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(SECURITY1.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
@@ -3426,7 +3426,7 @@ Imports System.Media
                 valeur = (-(Math.Round(((recbuf(TEMP.temperatureh) And &H7F) * 256 + recbuf(TEMP.temperaturel)) / 10, 2))).ToString
             End If
             WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
-            If (recbuf(TEMP.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+            If (recbuf(TEMP.battery_level) And &HF) = 0 Then WriteBattery(adresse, "vide") Else WriteBattery(adresse, "OK")
             If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(TEMP.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Temp Exception : " & ex.Message)
@@ -3459,7 +3459,7 @@ Imports System.Media
             adresse = (recbuf(HUM.id1) * 256 + recbuf(HUM.id2)).ToString
             valeur = recbuf(HUM.humidity).ToString
             WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
-            If (recbuf(HUM.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+            If (recbuf(HUM.battery_level) And &HF) = 0 Then WriteBattery(adresse, "vide") Else WriteBattery(adresse, "OK")
             If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(HUM.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Hum Exception : " & ex.Message)
@@ -3532,9 +3532,14 @@ Imports System.Media
             valeur = recbuf(TEMP_HUM.humidity).ToString
             WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
             If recbuf(TEMP_HUM.subtype) = TEMP_HUM.sTypeTH6 Then
-                If recbuf(TEMP_HUM.battery_level) = 0 Then WriteBattery(adresse) 'battery low < 10% (1=20% 2=30%....9=100%)
+                'battery low < 10% (0=10% 1=20% 2=30%....9=100%)
+                If recbuf(TEMP_HUM.battery_level) = 0 Then
+                    WriteBattery(adresse, "vide")
+                Else
+                    WriteBattery(adresse, ((recbuf(TEMP_HUM.battery_level) + 1) * 10) & "%")
+                End If
             Else
-                If (recbuf(TEMP_HUM.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+                If (recbuf(TEMP_HUM.battery_level) And &HF) = 0 Then WriteBattery(adresse, "vide") Else WriteBattery(adresse, "OK")
             End If
             If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(TEMP_HUM.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
@@ -3599,7 +3604,7 @@ Imports System.Media
             '        WriteMessage("Forecast      = Rain")
             'End Select
 
-            If (recbuf(TEMP_HUM_BARO.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+            If (recbuf(TEMP_HUM_BARO.battery_level) And &HF) = 0 Then WriteBattery(adresse, "vide") Else WriteBattery(adresse, "OK")
             If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(TEMP_HUM_BARO.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_TempHumBaro Exception : " & ex.Message)
@@ -3654,7 +3659,7 @@ Imports System.Media
             WriteRetour(adresse, ListeDevices.PLUIETOTAL.ToString, valeur)
 
             If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(RAIN.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
-            If (recbuf(RAIN.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+            If (recbuf(RAIN.battery_level) And &HF) = 0 Then WriteBattery(adresse, "vide") Else WriteBattery(adresse, "OK")
         Catch ex As Exception
             WriteLog("ERR: decode_Rain Exception : " & ex.Message)
         End Try
@@ -3708,9 +3713,14 @@ Imports System.Media
             End If
 
             If recbuf(WIND.subtype) = WIND.sTypeWIND3 Then
-                If recbuf(WIND.battery_level) = 0 Then WriteBattery(adresse) 'battery low < 10% (1=20% 2=30%....9=100%)
+                'battery low < 10% (0=10% 1=20% 2=30%....9=100%)
+                If recbuf(WIND.battery_level) = 0 Then
+                    WriteBattery(adresse, "vide")
+                Else
+                    WriteBattery(adresse, ((recbuf(WIND.battery_level) + 1) * 10) & "%")
+                End If
             Else
-                If (recbuf(WIND.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+                If (recbuf(WIND.battery_level) And &HF) = 0 Then WriteBattery(adresse, "vide") Else WriteBattery(adresse, "OK")
             End If
             If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(WIND.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
@@ -3758,7 +3768,7 @@ Imports System.Media
             '    WriteMessage("Description = Dangerous")
             'End If
 
-            If (recbuf(UV.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+            If (recbuf(UV.battery_level) And &HF) = 0 Then WriteBattery(adresse, "vide") Else WriteBattery(adresse, "OK")
             If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(UV.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_UV Exception : " & ex.Message)
@@ -3779,7 +3789,7 @@ Imports System.Media
             valeur = recbuf(DT.yy).ToString + "/" & recbuf(DT.mm).ToString & "/" & recbuf(DT.dd).ToString + " " + recbuf(DT.hr).ToString + ":" & recbuf(DT.min).ToString & ":" & recbuf(DT.sec).ToString
             WriteRetour(adresse, "", valeur)
 
-            If (recbuf(DT.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+            If (recbuf(DT.battery_level) And &HF) = 0 Then WriteBattery(adresse, "vide") Else WriteBattery(adresse, "OK")
             If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(UV.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_DateTime Exception : " & ex.Message)
@@ -3806,7 +3816,7 @@ Imports System.Media
             valeur = ((recbuf(CURRENT.ch3l) * 256 + recbuf(CURRENT.ch3l)) / 10).ToString 'ampere channel 3
             WriteRetour(adresse & "-3", "", valeur)
 
-            If (recbuf(CURRENT.battery_level) And &HF) = 0 Then WriteBattery(adresse & "-1") 'battery low
+            If (recbuf(CURRENT.battery_level) And &HF) = 0 Then WriteBattery(adresse, "vide") Else WriteBattery(adresse, "OK")
             If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(CURRENT.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Current Exception : " & ex.Message)
@@ -3833,7 +3843,7 @@ Imports System.Media
             'WriteMessage("total usage   = " & Math.Round(usage, 1).ToString & " Wh")
             WriteRetour(adresse, ListeDevices.ENERGIETOTALE.ToString, valeur)
 
-            If (recbuf(ENERGY.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+            If (recbuf(ENERGY.battery_level) And &HF) = 0 Then WriteBattery(adresse, "vide") Else WriteBattery(adresse, "OK")
             If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(ENERGY.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Energy Exception : " & ex.Message)
@@ -3863,7 +3873,7 @@ Imports System.Media
             valeur = Math.Round(((CDbl(recbuf(CURRENT_ENERGY.total1)) * &H10000000000 + CDbl(recbuf(CURRENT_ENERGY.total2)) * &H100000000 + CDbl(recbuf(CURRENT_ENERGY.total3)) * &H1000000 + recbuf(CURRENT_ENERGY.total4) * &H10000 + recbuf(CURRENT_ENERGY.total5) * &H100 + recbuf(CURRENT_ENERGY.total6)) / 223.666), 1).ToString 'Watt / h
             WriteRetour(adresse, ListeDevices.ENERGIETOTALE.ToString, valeur)
 
-            If (recbuf(CURRENT_ENERGY.battery_level) And &HF) = 0 Then WriteBattery(adresse) 'battery low
+            If (recbuf(CURRENT_ENERGY.battery_level) And &HF) = 0 Then WriteBattery(adresse, "vide") Else WriteBattery(adresse, "OK")
             If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(CURRENT_ENERGY.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
         Catch ex As Exception
             WriteLog("ERR: decode_Current_Energy Exception : " & ex.Message)
@@ -5167,14 +5177,14 @@ Imports System.Media
         End Try
     End Sub
 
-    Private Sub WriteBattery(ByVal adresse As String)
+    Private Sub WriteBattery(ByVal adresse As String, ByVal valeur As String)
         Try
             'Forcer le . 
             'Thread.CurrentThread.CurrentCulture = New CultureInfo("en-US")
             'My.Application.ChangeCulture("en-US")
 
             'log tous les paquets en mode debug
-            If _DEBUG Then WriteLog("DBG: WriteBattery : receive from " & adresse)
+            If _DEBUG And valeur = "vide" Then WriteLog("DBG: WriteBattery : receive from " & adresse)
 
             If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
             If DateTime.Now < DateAdd(DateInterval.Second, 10, dateheurelancement) Then Exit Sub 'on ne traite rien pendant les 10 premieres secondes
@@ -5184,19 +5194,22 @@ Imports System.Media
             'on cherche un composant de type batterie avec la même adresse que le composant, si trouvé, on modifie sa valeur
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "BATTERIE", Me._ID, True)
             If (listedevices.Count = 1) Then
-                listedevices.Item(0).Value = "Vide"
+                'listedevices.Item(0).Value = "Vide"
+                listedevices.Item(0).Value = valeur
             Else
-                'pas de composant Batterie trouvé avec la même adresse, on va loguer
-                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
-                If (listedevices.Count >= 1) Then
-                    'on a trouvé un ou plusieurs composants avec cette adresse, on prend le premier
-                    WriteLog("ERR: " & listedevices.Item(0).Name & " (" & adresse & ") : Battery Empty")
-                Else
-                    'device pas trouvé
-                    WriteLog("ERR: Device non trouvé : " & adresse & ": Battery Empty")
+                'pas de composant Batterie trouvé avec la même adresse, on va loguer si batterie vide
+                If valeur = "vide" Then
+                    listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
+                    If (listedevices.Count >= 1) Then
+                        'on a trouvé un ou plusieurs composants avec cette adresse, on prend le premier
+                        WriteLog("ERR: " & listedevices.Item(0).Name & " (" & adresse & ") : Battery Empty")
+                    Else
+                        'device pas trouvé
+                        WriteLog("ERR: Device non trouvé : " & adresse & ": Battery Empty")
 
-                    'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
+                        'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
 
+                    End If
                 End If
             End If
             listedevices = Nothing
