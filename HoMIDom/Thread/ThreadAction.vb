@@ -535,46 +535,6 @@ Namespace HoMIDom
             End Try
         End Sub
 
-        Public Function DecodeCommand(ByVal Command As String) As String
-            Try
-                Dim startcmd As Integer = InStr(1, Command, "<")
-                Dim endcmd As Integer = InStr(1, Command, ">")
-                Dim retour As String = Command
-                Dim newcmd As String = Command
-
-                Do While startcmd > 0 And endcmd > 0
-                    Dim _device As String = Mid(newcmd, startcmd + 1, endcmd - startcmd - 1)
-                    Dim Tabl() As String = _device.Split(".")
-
-                    If Tabl.Length = 1 Then
-                        Dim x As Object = _Server.ReturnRealDeviceByName(Tabl(0))
-                        If x IsNot Nothing Then
-                            _device = x.Value
-                        Else
-                            _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "DecodeCommand", "Device: " & Tabl(0) & " non trouvé")
-                        End If
-                    ElseIf Tabl.Length = 2 Then
-                        Dim x As Object = _Server.ReturnRealDeviceByName(Tabl(0))
-                        If x IsNot Nothing Then
-                            Dim value As Object = CallByName(x, Tabl(1), CallType.Get)
-                            _device = value
-                        End If
-                    End If
-
-                    Dim start As String = Mid(newcmd, 1, startcmd - 1)
-                    Dim fin As String = Mid(newcmd, endcmd + 1, newcmd.Length - endcmd)
-                    newcmd = start & _device & fin
-                    retour = newcmd
-                    startcmd = InStr(1, newcmd, "<")
-                    endcmd = InStr(1, newcmd, ">")
-                Loop
-
-                Return retour
-            Catch ex As Exception
-                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "DecodeCommand", "Error:" & ex.ToString)
-                Return Command
-            End Try
-        End Function
 
     End Class
 End Namespace
