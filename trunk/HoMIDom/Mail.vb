@@ -49,7 +49,7 @@ Namespace HoMIDom
                             .From = New MailAddress(_De)
                             .To.Add(_adresse)
                             .Subject = _sujet
-                            .Body = _texte
+                            .Body = DecodeCommand(_texte)
                         End With
                     Catch ex As Exception
                         _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "SendMail", "Erreur lors de l'envoi du mail: " & ex.Message)
