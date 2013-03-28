@@ -8,7 +8,6 @@ Imports System.IO
 
 Public Class uCamera
     Dim _URL As String = ""
-    Dim _Refresh As Integer = 0
     Dim _ListButton As New List(Of uHttp.ButtonHttp)
     Private _mjpeg As MjpegDecoder
 
@@ -19,12 +18,21 @@ Public Class uCamera
         Set(ByVal value As String)
             Try
                 _URL = value
-                If String.IsNullOrEmpty(_URL) = False And UrlIsValid(_URL) Then
-                    _mjpeg.ParseStream(New Uri(_URL))
+                If String.IsNullOrEmpty(_URL) = False Then 'UrlIsValid(_URL) = False Then
+                    If My.Computer.Network.Ping(_URL) = True Then
+                        lbl.Visibility = Windows.Visibility.Collapsed
+                        lbl.Content = ""
+                        _mjpeg.ParseStream(New Uri(_URL))
+                    Else
+                        lbl.Content = "Ping de la caméra fail " & _URL & " est erronée !!"
+                        lbl.Visibility = Windows.Visibility.Visible
+                    End If
+                Else
+                    lbl.Content = "L'URL de la caméra doit être renseignée !!"
+                    lbl.Visibility = Windows.Visibility.Visible
                 End If
-
             Catch ex As Exception
-                MessageBox.Show("Erreur uCamera.URL: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                MessageBox.Show("Erreur uCamera.URL: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             End Try
         End Set
     End Property
@@ -36,21 +44,26 @@ Public Class uCamera
         Set(ByVal value As List(Of uHttp.ButtonHttp))
             _ListButton = value
 
-            If _ListButton IsNot Nothing Then
-                StkButton.Children.Clear()
-                For Each _button As uHttp.ButtonHttp In _ListButton
-                    Dim x As New uHttp.ButtonHttp
-                    x.Foreground = Brushes.White
-                    x.Margin = New Thickness(5)
-                    x.Height = _button.Height
-                    x.Width = _button.Width
-                    x.Content = _button.Content
-                    x.URL = _button.URL
-                    x.SetResourceReference(Control.TemplateProperty, "GlassButton")
-                    AddHandler x.Click, AddressOf Button_Click
-                    StkButton.Children.Add(x)
-                Next
-            End If
+            Try
+
+                If _ListButton IsNot Nothing Then
+                    StkButton.Children.Clear()
+                    For Each _button As uHttp.ButtonHttp In _ListButton
+                        Dim x As New uHttp.ButtonHttp
+                        x.Foreground = Brushes.White
+                        x.Margin = New Thickness(5)
+                        x.Height = _button.Height
+                        x.Width = _button.Width
+                        x.Content = _button.Content
+                        x.URL = _button.URL
+                        x.SetResourceReference(Control.TemplateProperty, "GlassButton")
+                        AddHandler x.Click, AddressOf Button_Click
+                        StkButton.Children.Add(x)
+                    Next
+                End If
+            Catch ex As Exception
+                MessageBox.Show("Erreur uCamera.ListButton.set: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            End Try
         End Set
     End Property
 
@@ -83,21 +96,32 @@ Public Class uCamera
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
 
-        ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        _mjpeg = New MjpegDecoder
-        AddHandler _mjpeg.FrameReady, AddressOf mjpeg_FrameReady
+        Try
+            ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
+            _mjpeg = New MjpegDecoder
+            AddHandler _mjpeg.FrameReady, AddressOf mjpeg_FrameReady
+
+        Catch ex As Exception
+            MessageBox.Show("Erreur uCamera.New: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub uCamera_SizeChanged(ByVal sender As Object, ByVal e As System.Windows.SizeChangedEventArgs) Handles Me.SizeChanged
-        Dim _size As Size = e.NewSize
-        Dim y As Double = _size.Height
+        Try
 
-        If _ListButton.Count > 0 Then
-            y = y - StkButton.ActualHeight - 30
-        End If
+            Dim _size As Size = e.NewSize
+            Dim y As Double = _size.Height
 
-        image.Width = _size.Width
-        image.Height = y
+            If _ListButton.Count > 0 Then
+                y = y - StkButton.ActualHeight - 30
+            End If
+
+            image.Width = _size.Width
+            image.Height = y
+
+        Catch ex As Exception
+            MessageBox.Show("Erreur uCamera.uCamera_SizeChanged: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Protected Overrides Sub Finalize()
