@@ -230,10 +230,10 @@ Class Window1
             mybuttonstyle = mystyles("DesignerItemStyle")
 
             'si le repertoire appdata n'existe pas on le crée et copie la config depuis le repertoire d'installation
-            If Not System.IO.Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) & "\HoMIWpF") Then
-                System.IO.Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) & "\HoMIWpF")
+            If Not System.IO.Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData) & "\HoMIWpF") Then
+                System.IO.Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData) & "\HoMIWpF")
             End If
-            _MonRepertoireAppData = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) & "\HoMIWpF"
+            _MonRepertoireAppData = System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData) & "\HoMIWpF"
             If Not System.IO.Directory.Exists(_MonRepertoireAppData & "\Config") Then
                 System.IO.Directory.CreateDirectory(_MonRepertoireAppData & "\Config")
                 Dim oSource As DirectoryInfo = New DirectoryInfo(_MonRepertoire & "\Config")

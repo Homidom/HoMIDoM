@@ -770,6 +770,8 @@ Namespace HoMIDom
                                                 x.Type = list.Item(i).Attributes.Item(j).Value
                                             Case "ignore"
                                                 x.Ignore = list.Item(i).Attributes.Item(j).Value
+                                            Case "value"
+                                                x.Value = list.Item(i).Attributes.Item(j).Value
                                             Case "datetetect"
                                                 x.DateTetect = list.Item(i).Attributes.Item(j).Value
                                             Case Else
@@ -1872,6 +1874,9 @@ Namespace HoMIDom
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("ignore")
                     writer.WriteValue(_ListNewDevices.Item(i).Ignore)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("value")
+                    writer.WriteValue(_ListNewDevices.Item(i).Value)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("datetetect")
                     writer.WriteValue(_ListNewDevices.Item(i).DateTetect)
@@ -3134,8 +3139,17 @@ Namespace HoMIDom
 
                         ' on ouvre la page web de remerciement
                         Process.Start("http://www.homidom.com/miseajour_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html")
+                        'Dim startInfo As ProcessStartInfo = New ProcessStartInfo()
+                        'startInfo.UseShellExecute = False
+                        'startInfo.FileName = "http://www.homidom.com/miseajour_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html"
+                        'Try
+                        '    Process.Start(startInfo)
+                        'Catch ex As Exception
+                        '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start OpenWebPage", "Exception : " & ex.Message)
+                        'End Try
 
                         'Gestion clé enregistrement
+
                     End If
 
                 End If

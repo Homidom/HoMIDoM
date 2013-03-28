@@ -22,7 +22,7 @@ Class Window1
     Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
     Dim FlagStart As Boolean = False
     Dim MyRep As String = System.Environment.CurrentDirectory
-    Dim MyRepAppData As String = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) & "\HoMIAdmiN"
+    Dim MyRepAppData As String = System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData) & "\HoMIAdmiN"
 
     Dim WMainMenu As Double = 0
     Dim HMainMenu As Double = 0
@@ -70,10 +70,10 @@ Class Window1
             dt.Start()
 
             'si le repertoire appdata n'existe pas on le crée et copie la config depuis le repertoire courant
-            If Not System.IO.Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) & "\HoMIAdmiN") Then
-                System.IO.Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) & "\HoMIAdmiN")
+            If Not System.IO.Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData) & "\HoMIAdmiN") Then
+                System.IO.Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData) & "\HoMIAdmiN")
             End If
-            MyRepAppData = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) & "\HoMIAdmiN"
+            MyRepAppData = System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData) & "\HoMIAdmiN"
             'Myfile = MyRep & "\Config\HoMIAdmiN.xml"
             Myfile = MyRepAppData & "\HoMIAdmiN.xml"
             If Not System.IO.File.Exists(Myfile) Then
