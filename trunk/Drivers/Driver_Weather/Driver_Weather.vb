@@ -337,9 +337,14 @@ Imports System.Threading
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
             If _Enable = False Then Exit Sub
-            _Obj = Objet
-            Dim y As New Thread(AddressOf MAJ)
-            y.Start()
+            If Objet.type = "METEO" Then
+                _Obj = Objet
+                Dim y As New Thread(AddressOf MAJ)
+                y.Start()
+            Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Seul les composants de type meteo peuvent etre mis à jour. Les composants dépendants sont mis à jour automatiquement en même temps que la météo.")
+            End If
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", ex.Message)
         End Try
