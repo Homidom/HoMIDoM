@@ -537,37 +537,30 @@ Imports System.Threading
                                     _Obj.HumiditeActuel = _child.FirstChild.Value
                                     _StrHum = _child.FirstChild.Value
                                 End If
-                            Case "i"
-                                _StrUv = _child.FirstChild.Value
+                                'Case "i" : _StrUv = _child.FirstChild.Value
+                            Case "bar"
+                                For Each _child2 As XmlNode In _child
+                                    Select Case _child2.Name
+                                        Case "r" : _StrBar = _child2.FirstChild.Value
+                                    End Select
+                                Next
+                            Case "wind"
+                                For Each _child2 As XmlNode In _child
+                                    Select Case _child2.Name
+                                        Case "s"
+                                            _Obj.VentActuel = _child2.FirstChild.Value
+                                            _StrVitVent = _child2.FirstChild.Value
+                                        Case "t" : _StrDirVent = _child2.FirstChild.Value
+                                    End Select
+                                Next
+                            Case "uv"
+                                For Each _child2 As XmlNode In _child
+                                    Select Case _child2.Name
+                                        Case "i" : _StrUv = _child2.InnerText
+                                    End Select
+                                Next
                         End Select
-                        If _child.HasChildNodes = True Then
-                            For Each _child2 As XmlNode In _child
-                                ' If _child2.Name.StartsWith("#text") = False Then Console.WriteLine(_child2.Name & ":" & _child2.InnerText)
-                                Select Case _child2.Name
-                                    Case "tmp" : If IsNumeric(_child.FirstChild.Value) Then
-                                            _Obj.TemperatureActuel = _child2.InnerText
-                                            _StrTemp = _child2.InnerText
-                                        End If
-                                    Case "hmid" : If IsNumeric(_child2.FirstChild.Value) Then
-                                            _Obj.HumiditeActuel = _child2.InnerText
-                                            _StrHum = _child2.InnerText
-                                        End If
-                                    Case "s"
-                                        If _child.Name = "wind" Then
-                                            _Obj.VentActuel = _child2.InnerText
-                                            _StrVitVent = _child2.InnerText
-                                        End If
-                                    Case "t"
-                                        If _child.Name = "wind" Then _StrDirVent = _child2.InnerText
-                                    Case "r"
-                                        If _child.Name = "bar" Then _StrBar = _child.FirstChild.Value
-                                    Case "i"
-                                        If _child.Name = "uv" Then _StrUv = _child2.InnerText
-                                End Select
-                            Next
-                        End If
                     Next
-
                 End If
             Next
 
