@@ -37,18 +37,26 @@ Namespace HoMIDom
                         Dim y As New HoMIDom.DeviceAction
 
                         If x.Method.StartsWith("{") And x.Method.EndsWith("}") Then
+
                             'c'est une commande avancée
                             Dim _cmdav As String = Mid(x.Method, 2, x.Method.Length - 2)
                             y.Nom = "ExecuteCommand"
+                            _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "Execute", "commande avancée: " & y.Nom)
 
                             Dim param As New DeviceAction.Parametre
                             param.Value = _cmdav
                             y.Parametres.Add(param)
+                            _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "Execute", "param0: " & _cmdav)
 
-                            If x.Parametres.Count > 1 Then
-                                Dim param1 As New DeviceAction.Parametre
-                                param1.Value = x.Parametres.Item(0)
-                                y.Parametres.Add(param1)
+                            If x.Parametres.Count > 0 Then
+                                For idx As Integer = 0 To x.Parametres.Count - 1
+                                    Dim param1 As New DeviceAction.Parametre
+                                    If x.Parametres.Item(idx) IsNot Nothing Then
+                                        param1.Value = x.Parametres.Item(idx)
+                                        _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "Execute", "param" & idx + 1 & ": " & param1.Value)
+                                        y.Parametres.Add(param1)
+                                    End If
+                                Next
                             End If
                         Else
                             'C'est une commande standard

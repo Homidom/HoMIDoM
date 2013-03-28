@@ -33,6 +33,7 @@ Public Class WActionParametrage
                         obj.Parametres.Clear()
 
                         If String.IsNullOrEmpty(TxtValue.Text) = False Then obj.Parametres.Add(TxtValue.Text)
+
                         _ObjAction = obj
 
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionMacro
