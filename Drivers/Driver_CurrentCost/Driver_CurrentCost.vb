@@ -623,7 +623,7 @@ Public Class Driver_CurrentCost
                 'si autodiscover = true ou modedecouverte du serveur actif alors on crée le composant sinon on logue
                 If _AutoDiscover Or _Server.GetModeDecouverte Then
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Process", "Device non trouvé, AutoCreation du composant : " & type & " " & adresse & ":" & valeur)
-                    _Server.AddDetectNewDevice(adresse, _ID, type, "")
+                    _Server.AddDetectNewDevice(adresse, _ID, type, "", valeur)
                 Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Process", "Device non trouvé : " & type & " " & adresse & ":" & valeur)
                 End If

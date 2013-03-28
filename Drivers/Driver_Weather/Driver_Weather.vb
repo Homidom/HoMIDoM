@@ -659,27 +659,27 @@ Imports System.Threading
             Dim i As Integer = 0
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, _Obj.Adresse1, "HUMIDITE", Me._ID, True)
             For i = 0 To listedevices.Count - 1
-                listedevices.Item(i).Value = _StrHum
+                listedevices.Item(i).Value = Replace(_StrHum, ".", ",")
             Next
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, _Obj.Adresse1, "BAROMETRE", Me._ID, True)
             For i = 0 To listedevices.Count - 1
-                listedevices.Item(i).Value = _StrBar
+                listedevices.Item(i).Value = Replace(_StrBar, ".", ",")
             Next
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, _Obj.Adresse1, "DIRECTIONVENT", Me._ID, True)
             For i = 0 To listedevices.Count - 1
-                listedevices.Item(i).Value = _StrDirVent
+                listedevices.Item(i).Value = Replace(_StrDirVent, ".", ",")
             Next
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, _Obj.Adresse1, "UV", Me._ID, True)
             For i = 0 To listedevices.Count - 1
-                listedevices.Item(i).Value = _StrUv
+                listedevices.Item(i).Value = Replace(_StrUv, ".", ",")
             Next
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, _Obj.Adresse1, "VITESSEVENT", Me._ID, True)
             For i = 0 To listedevices.Count - 1
-                listedevices.Item(i).Value = _StrVitVent
+                listedevices.Item(i).Value = Replace(_StrVitVent, ".", ",")
             Next
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, _Obj.Adresse1, "TEMPERATURE", Me._ID, True)
             For i = 0 To listedevices.Count - 1
-                listedevices.Item(i).Value = _StrTemp
+                listedevices.Item(i).Value = Replace(_StrTemp, ".", ",")
             Next
 
             _StrBar = ""
