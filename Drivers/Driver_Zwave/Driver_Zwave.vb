@@ -1362,8 +1362,8 @@ Public Class Driver_ZWave
                                     End Select
                                     ValeurRecue = myValue.ToString
                                 Else
-                                    LocalDevice.value = ValeurRecue
                                 End If
+                                LocalDevice.value = ValeurRecue
 
                                 'gestion de l'information de Batterie
                                 If TempLabel = "Battery Level" Then
