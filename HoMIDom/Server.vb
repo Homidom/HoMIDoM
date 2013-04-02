@@ -1940,7 +1940,7 @@ Namespace HoMIDom
                             writer.WriteValue(ListActions.Item(j).Sujet)
                             writer.WriteEndAttribute()
                             writer.WriteStartAttribute("message")
-                            writer.WriteValue(ListActions.Item(j).Sujet)
+                            writer.WriteValue(ListActions.Item(j).Message)
                             writer.WriteEndAttribute()
                         Case Action.TypeAction.ActionSpeech
                             writer.WriteStartAttribute("message")
