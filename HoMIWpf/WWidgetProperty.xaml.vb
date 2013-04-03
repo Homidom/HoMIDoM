@@ -16,175 +16,188 @@ Public Class WWidgetProperty
         Set(ByVal value As uWidgetEmpty)
             Obj = value
 
-            ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-            ChkShowStatus.IsChecked = Obj.ShowStatus
-            ChkShowEtiq.IsChecked = Obj.ShowEtiquette
-            ChkEditValue.IsChecked = Obj.CanEditValue
-            ChkPicture.IsChecked = Obj.ShowPicture
-            TxtEtiq.Text = Obj.Etiquette
-            TxtSizeEtiq.Text = Obj.TailleEtiquette
-            TxtX.Text = Obj.X
-            TxtY.Text = Obj.Y
-            TxtWidth.Text = Obj.Width
-            TxtHeight.Text = Obj.Height
-            TxtRotation.Text = Obj.Rotation
-            TxtDefStatus.Text = Obj.DefautLabelStatus
-            TxtTailleStatus.Text = Obj.TailleStatus
-            lblColor.Background = Obj.ColorBackGround
-            lblColorStatus.Background = Obj.ColorStatus
-            lblColorEtiquette.Background = Obj.ColorEtiquette
-            ColorPicker1.SelectedColor = Obj.ColorBackGround
-            ColorPicker2.SelectedColor = Obj.ColorStatus
-            ColorPicker3.SelectedColor = Obj.ColorEtiquette
-            Slider1.Value = CDec("&H" & Obj.ColorBackGround.ToString.Substring(1, 2))
-            ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(Obj.Picture))
-            ImgPicture.Tag = Obj.Picture
-            TxtURL.Text = Obj.URL
-            TxtURLRss.Text = Obj.UrlRss
-            TxtRefresh.Text = Obj.HttpRefresh
-            ChKShowPassWord.IsChecked = Obj.ShowPassWord
-            ChKShowClavier.IsChecked = Obj.ShowClavier
-            ChKClearAfterEnter.IsChecked = Obj.ClearAfterEnter
-            _listhttpbtn = Obj.ListHttpButton
+            Try
+                ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
+                ChkShowStatus.IsChecked = Obj.ShowStatus
+                ChkShowEtiq.IsChecked = Obj.ShowEtiquette
+                ChkEditValue.IsChecked = Obj.CanEditValue
+                ChkPicture.IsChecked = Obj.ShowPicture
+                TxtEtiq.Text = Obj.Etiquette
+                TxtSizeEtiq.Text = Obj.TailleEtiquette
+                TxtX.Text = Obj.X
+                TxtY.Text = Obj.Y
+                TxtWidth.Text = Obj.Width
+                TxtHeight.Text = Obj.Height
+                TxtRotation.Text = Obj.Rotation
+                TxtDefStatus.Text = Obj.DefautLabelStatus
+                TxtTailleStatus.Text = Obj.TailleStatus
+                lblColor.Background = Obj.ColorBackGround
+                lblColorStatus.Background = Obj.ColorStatus
+                lblColorEtiquette.Background = Obj.ColorEtiquette
+                ColorPicker1.SelectedColor = Obj.ColorBackGround
+                ColorPicker2.SelectedColor = Obj.ColorStatus
+                ColorPicker3.SelectedColor = Obj.ColorEtiquette
+                Slider1.Value = CDec("&H" & Obj.ColorBackGround.ToString.Substring(1, 2))
+                ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(Obj.Picture))
+                ImgPicture.Tag = Obj.Picture
+                TxtURL.Text = Obj.URL
+                TxtURLRss.Text = Obj.UrlRss
+                TxtRefresh.Text = Obj.HttpRefresh
+                ChKShowPassWord.IsChecked = Obj.ShowPassWord
+                ChKShowClavier.IsChecked = Obj.ShowClavier
+                ChKClearAfterEnter.IsChecked = Obj.ClearAfterEnter
+                _listhttpbtn = Obj.ListHttpButton
 
-            If Obj.IsEmpty = False Then
-                BtnEditAction.Visibility = Windows.Visibility.Collapsed
-                BtnEditVisu.Visibility = Windows.Visibility.Collapsed
-                BtnDelete.Visibility = Windows.Visibility.Collapsed
-                ImgPicture.IsEnabled = False
-                BtnInitPict.Visibility = Windows.Visibility.Collapsed
-                TxtEtiq.IsReadOnly = True
-            Else
-                Select Case Obj.Type
-                    Case uWidgetEmpty.TypeOfWidget.Empty
-                        BtnEditAction.Visibility = Windows.Visibility.Visible
-                        BtnEditVisu.Visibility = Windows.Visibility.Visible
-                        BtnDelete.Visibility = Windows.Visibility.Visible
+                If Obj.IsEmpty = False Then
+                    BtnEditAction.Visibility = Windows.Visibility.Collapsed
+                    BtnEditVisu.Visibility = Windows.Visibility.Collapsed
+                    BtnDelete.Visibility = Windows.Visibility.Collapsed
+                    ImgPicture.IsEnabled = False
+                    BtnInitPict.Visibility = Windows.Visibility.Collapsed
+                    TxtEtiq.IsReadOnly = True
+                Else
+                    Select Case Obj.Type
+                        Case uWidgetEmpty.TypeOfWidget.Empty
+                            BtnEditAction.Visibility = Windows.Visibility.Visible
+                            BtnEditVisu.Visibility = Windows.Visibility.Visible
+                            BtnDelete.Visibility = Windows.Visibility.Visible
 
-                        Refresh_LstObjetVisu()
+                            Refresh_LstObjetVisu()
 
-                        For Each obj As TemplateDevice In myService.GetAllDevices(IdSrv)
-                            Dim lbl1 As New ComboBoxItem
-                            Dim lbl2 As New ComboBoxItem
-                            lbl1.Content = obj.Name & " [Device]"
-                            lbl1.Tag = "DEVICE"
-                            lbl1.Uid = obj.ID
-                            lbl2.Content = obj.Name & " [Device]"
-                            lbl2.Tag = "DEVICE"
-                            lbl2.Uid = obj.ID
-                            CbObjet.Items.Add(lbl1)
-                            CbObjetVisu.Items.Add(lbl2)
-                            lbl1 = Nothing
-                            lbl2 = Nothing
-                        Next
-                        For Each obj As Macro In myService.GetAllMacros(IdSrv)
-                            Dim lbl1 As New ComboBoxItem
-                            Dim lbl2 As New ComboBoxItem
-                            lbl1.Content = obj.Nom & " [Macro]"
-                            lbl1.Tag = "MACRO"
-                            lbl1.Uid = obj.ID
-                            lbl2.Content = obj.Nom & " [Macro]"
-                            lbl2.Tag = "MACRO"
-                            lbl2.Uid = obj.ID
-                            CbObjet.Items.Add(lbl1)
-                            CbObjetVisu.Items.Add(lbl2)
-                            lbl1 = Nothing
-                            lbl2 = Nothing
-                        Next
-                        For Each obj As Zone In myService.GetAllZones(IdSrv)
-                            Dim lbl1 As New ComboBoxItem
-                            Dim lbl2 As New ComboBoxItem
-                            lbl1.Content = obj.Name & " [Zone]"
-                            lbl1.Tag = "ZONE"
-                            lbl1.Uid = obj.ID
-                            lbl2.Content = obj.Name & " [Zone]"
-                            lbl2.Tag = "ZONE"
-                            lbl2.Uid = obj.ID
-                            CbObjet.Items.Add(lbl1)
-                            CbObjetVisu.Items.Add(lbl2)
-                            lbl1 = Nothing
-                            lbl2 = Nothing
-                        Next
-                    Case uWidgetEmpty.TypeOfWidget.Web Or uWidgetEmpty.TypeOfWidget.Camera
-                        StkPicture.Visibility = Visibility.Collapsed
-                        StkStatus.Visibility = Visibility.Collapsed
-                        BtnEditAction.Visibility = Windows.Visibility.Collapsed
-                        BtnEditVisu.Visibility = Windows.Visibility.Collapsed
-                        BtnDelete.Visibility = Windows.Visibility.Visible
-                        GrpPropertyHttp.Visibility = Windows.Visibility.Visible
-                        Refresh_LstHttpBtn()
-                    Case uWidgetEmpty.TypeOfWidget.Rss
-                        StkPicture.Visibility = Visibility.Collapsed
-                        StkStatus.Visibility = Visibility.Collapsed
-                        StkRss.Visibility = Windows.Visibility.Visible
-                        BtnEditAction.Visibility = Windows.Visibility.Collapsed
-                        BtnEditVisu.Visibility = Windows.Visibility.Collapsed
-                        BtnDelete.Visibility = Windows.Visibility.Visible
-                    Case uWidgetEmpty.TypeOfWidget.Meteo
-                        StkPicture.Visibility = Visibility.Collapsed
-                        StkStatus.Visibility = Visibility.Collapsed
-                        StkRss.Visibility = Windows.Visibility.Collapsed
-                        StkMeteo.Visibility = Windows.Visibility.Visible
-                        BtnEditAction.Visibility = Windows.Visibility.Collapsed
-                        BtnEditVisu.Visibility = Windows.Visibility.Collapsed
-                        BtnDelete.Visibility = Windows.Visibility.Visible
-
-                        If IsConnect Then
-                            CbVilleMeteo.Items.Clear()
-                            Dim idx As Integer = -1
-                            For Each _devmeteo As TemplateDevice In myService.GetAllDevices(IdSrv)
-                                If _devmeteo.Type = Device.ListeDevices.METEO Then
-                                    Dim x As New ComboBoxItem
-                                    x.Content = _devmeteo.Name
-                                    x.Tag = _devmeteo.ID
-                                    CbVilleMeteo.Items.Add(x)
-
-                                    If _devmeteo.ID = Obj.IDMeteo Then idx = CbVilleMeteo.Items.Count - 1
-                                End If
+                            For Each obj As TemplateDevice In myService.GetAllDevices(IdSrv)
+                                Dim lbl1 As New ComboBoxItem
+                                Dim lbl2 As New ComboBoxItem
+                                lbl1.Content = obj.Name & " [Device]"
+                                lbl1.Tag = "DEVICE"
+                                lbl1.Uid = obj.ID
+                                lbl2.Content = obj.Name & " [Device]"
+                                lbl2.Tag = "DEVICE"
+                                lbl2.Uid = obj.ID
+                                CbObjet.Items.Add(lbl1)
+                                CbObjetVisu.Items.Add(lbl2)
+                                lbl1 = Nothing
+                                lbl2 = Nothing
                             Next
-
-                            CbVilleMeteo.SelectedIndex = idx
-                        End If
-                    Case uWidgetEmpty.TypeOfWidget.KeyPad
-                        StkPicture.Visibility = Visibility.Collapsed
-                        StkStatus.Visibility = Visibility.Collapsed
-                        StkRss.Visibility = Windows.Visibility.Collapsed
-                        StkMeteo.Visibility = Windows.Visibility.Collapsed
-                        StkKeyPad.Visibility = Windows.Visibility.Visible
-                        BtnEditAction.Visibility = Windows.Visibility.Collapsed
-                        BtnEditVisu.Visibility = Windows.Visibility.Collapsed
-                        BtnDelete.Visibility = Windows.Visibility.Visible
-                        GrpPropertyKeyPad.Visibility = Windows.Visibility.Visible
-
-                        If IsConnect Then
-                            CbDeviceKeyPad.Items.Clear()
-                            Dim idx As Integer = -1
-                            For Each _devk As TemplateDevice In myService.GetAllDevices(IdSrv)
-                                If _devk.Type = Device.ListeDevices.GENERIQUEVALUE Then
-                                    Dim x As New ComboBoxItem
-                                    x.Content = _devk.Name
-                                    x.Tag = _devk.ID
-                                    CbDeviceKeyPad.Items.Add(x)
-
-                                    If _devk.ID = Obj.IDKeyPad Then idx = CbDeviceKeyPad.Items.Count - 1
-                                End If
+                            For Each obj As Macro In myService.GetAllMacros(IdSrv)
+                                Dim lbl1 As New ComboBoxItem
+                                Dim lbl2 As New ComboBoxItem
+                                lbl1.Content = obj.Nom & " [Macro]"
+                                lbl1.Tag = "MACRO"
+                                lbl1.Uid = obj.ID
+                                lbl2.Content = obj.Nom & " [Macro]"
+                                lbl2.Tag = "MACRO"
+                                lbl2.Uid = obj.ID
+                                CbObjet.Items.Add(lbl1)
+                                CbObjetVisu.Items.Add(lbl2)
+                                lbl1 = Nothing
+                                lbl2 = Nothing
                             Next
+                            For Each obj As Zone In myService.GetAllZones(IdSrv)
+                                Dim lbl1 As New ComboBoxItem
+                                Dim lbl2 As New ComboBoxItem
+                                lbl1.Content = obj.Name & " [Zone]"
+                                lbl1.Tag = "ZONE"
+                                lbl1.Uid = obj.ID
+                                lbl2.Content = obj.Name & " [Zone]"
+                                lbl2.Tag = "ZONE"
+                                lbl2.Uid = obj.ID
+                                CbObjet.Items.Add(lbl1)
+                                CbObjetVisu.Items.Add(lbl2)
+                                lbl1 = Nothing
+                                lbl2 = Nothing
+                            Next
+                        Case uWidgetEmpty.TypeOfWidget.Web
+                            StkPicture.Visibility = Visibility.Collapsed
+                            StkStatus.Visibility = Visibility.Collapsed
+                            BtnEditAction.Visibility = Windows.Visibility.Collapsed
+                            BtnEditVisu.Visibility = Windows.Visibility.Collapsed
+                            BtnDelete.Visibility = Windows.Visibility.Visible
+                            GrpPropertyHttp.Visibility = Windows.Visibility.Visible
+                            Refresh_LstHttpBtn()
+                        Case uWidgetEmpty.TypeOfWidget.Camera
+                            StkPicture.Visibility = Visibility.Collapsed
+                            StkStatus.Visibility = Visibility.Collapsed
+                            BtnEditAction.Visibility = Windows.Visibility.Collapsed
+                            BtnEditVisu.Visibility = Windows.Visibility.Collapsed
+                            BtnDelete.Visibility = Windows.Visibility.Visible
+                            GrpPropertyHttp.Visibility = Windows.Visibility.Visible
+                            Refresh_LstHttpBtn()
 
-                            CbDeviceKeyPad.SelectedIndex = idx
+                        Case uWidgetEmpty.TypeOfWidget.Rss
+                            StkPicture.Visibility = Visibility.Collapsed
+                            StkStatus.Visibility = Visibility.Collapsed
+                            StkRss.Visibility = Windows.Visibility.Visible
+                            BtnEditAction.Visibility = Windows.Visibility.Collapsed
+                            BtnEditVisu.Visibility = Windows.Visibility.Collapsed
+                            BtnDelete.Visibility = Windows.Visibility.Visible
+                        Case uWidgetEmpty.TypeOfWidget.Meteo
+                            StkPicture.Visibility = Visibility.Collapsed
+                            StkStatus.Visibility = Visibility.Collapsed
+                            StkRss.Visibility = Windows.Visibility.Collapsed
+                            StkMeteo.Visibility = Windows.Visibility.Visible
+                            BtnEditAction.Visibility = Windows.Visibility.Collapsed
+                            BtnEditVisu.Visibility = Windows.Visibility.Collapsed
+                            BtnDelete.Visibility = Windows.Visibility.Visible
 
-                        End If
-                    Case uWidgetEmpty.TypeOfWidget.Label
-                        StkPicture.Visibility = Visibility.Collapsed
-                        StkStatus.Visibility = Visibility.Collapsed
-                        ChkShowStatus.Visibility = Visibility.Collapsed
-                        ChkShowEtiq.Visibility = Visibility.Collapsed
-                        BtnEditAction.Visibility = Windows.Visibility.Collapsed
-                        ChkEditValue.Visibility = Windows.Visibility.Collapsed
-                        BtnEditVisu.Visibility = Windows.Visibility.Collapsed
-                        BtnDelete.Visibility = Windows.Visibility.Visible
-                End Select
+                            If IsConnect Then
+                                CbVilleMeteo.Items.Clear()
+                                Dim idx As Integer = -1
+                                For Each _devmeteo As TemplateDevice In myService.GetAllDevices(IdSrv)
+                                    If _devmeteo.Type = Device.ListeDevices.METEO Then
+                                        Dim x As New ComboBoxItem
+                                        x.Content = _devmeteo.Name
+                                        x.Tag = _devmeteo.ID
+                                        CbVilleMeteo.Items.Add(x)
 
-            End If
+                                        If _devmeteo.ID = Obj.IDMeteo Then idx = CbVilleMeteo.Items.Count - 1
+                                    End If
+                                Next
+
+                                CbVilleMeteo.SelectedIndex = idx
+                            End If
+                        Case uWidgetEmpty.TypeOfWidget.KeyPad
+                            StkPicture.Visibility = Visibility.Collapsed
+                            StkStatus.Visibility = Visibility.Collapsed
+                            StkRss.Visibility = Windows.Visibility.Collapsed
+                            StkMeteo.Visibility = Windows.Visibility.Collapsed
+                            StkKeyPad.Visibility = Windows.Visibility.Visible
+                            BtnEditAction.Visibility = Windows.Visibility.Collapsed
+                            BtnEditVisu.Visibility = Windows.Visibility.Collapsed
+                            BtnDelete.Visibility = Windows.Visibility.Visible
+                            GrpPropertyKeyPad.Visibility = Windows.Visibility.Visible
+
+                            If IsConnect Then
+                                CbDeviceKeyPad.Items.Clear()
+                                Dim idx As Integer = -1
+                                For Each _devk As TemplateDevice In myService.GetAllDevices(IdSrv)
+                                    If _devk.Type = Device.ListeDevices.GENERIQUEVALUE Then
+                                        Dim x As New ComboBoxItem
+                                        x.Content = _devk.Name
+                                        x.Tag = _devk.ID
+                                        CbDeviceKeyPad.Items.Add(x)
+
+                                        If _devk.ID = Obj.IDKeyPad Then idx = CbDeviceKeyPad.Items.Count - 1
+                                    End If
+                                Next
+
+                                CbDeviceKeyPad.SelectedIndex = idx
+
+                            End If
+                        Case uWidgetEmpty.TypeOfWidget.Label
+                            StkPicture.Visibility = Visibility.Collapsed
+                            StkStatus.Visibility = Visibility.Collapsed
+                            ChkShowStatus.Visibility = Visibility.Collapsed
+                            ChkShowEtiq.Visibility = Visibility.Collapsed
+                            BtnEditAction.Visibility = Windows.Visibility.Collapsed
+                            ChkEditValue.Visibility = Windows.Visibility.Collapsed
+                            BtnEditVisu.Visibility = Windows.Visibility.Collapsed
+                            BtnDelete.Visibility = Windows.Visibility.Visible
+                    End Select
+
+                End If
+            Catch ex As Exception
+                MessageBox.Show("Erreur Set Objet: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
         End Set
     End Property
 
