@@ -6,7 +6,7 @@ Imports System.Net
 Public Class uHttp
     Dim _URL As String = ""
     Dim _Refresh As Integer = 0
-    Dim dt As DispatcherTimer = New DispatcherTimer()
+    Dim dt As DispatcherTimer
     Dim _ListButton As New List(Of ButtonHttp)
 
     Public Property URL As String
@@ -16,11 +16,12 @@ Public Class uHttp
         Set(ByVal value As String)
             Try
                 _URL = value
-                If _URL.ToLower().StartsWith("www.") Then _URL = "http://" & _URL
-                If My.Computer.Network.IsAvailable = True And String.IsNullOrEmpty(_URL) = False Then
-                    WebBrowser1.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() WebBrowser1.Navigate(New Uri(_URL)), ThreadStart))
+                If String.IsNullOrEmpty(_URL) = False Then
+                    If _URL.ToLower().StartsWith("www.") Then _URL = "http://" & _URL
+                    If My.Computer.Network.IsAvailable = True And String.IsNullOrEmpty(_URL) = False Then
+                        WebBrowser1.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() WebBrowser1.Navigate(New Uri(_URL)), ThreadStart))
+                    End If
                 End If
-
             Catch ex As Exception
                 MessageBox.Show("Erreur uHttp.URL: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             End Try
@@ -33,11 +34,23 @@ Public Class uHttp
         End Get
         Set(ByVal value As Integer)
             _Refresh = value
-            If 0 < _Refresh < 3600 Then
-                dt.Stop()
-                dt.Interval = New TimeSpan(0, 0, _Refresh)
-                dt.Start()
-            End If
+            Try
+                If value > 0 And value < 3600 Then
+                    AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
+                    dt.IsEnabled = True
+                    dt.Stop()
+                    dt.Interval = New TimeSpan(0, 0, _Refresh)
+                    dt.Start()
+                Else
+                    If dt.IsEnabled = True Then
+                        dt.IsEnabled = False
+                        dt.Stop()
+                        RemoveHandler dt.Tick, AddressOf dispatcherTimer_Tick
+                    End If
+                End If
+            Catch ex As Exception
+                MessageBox.Show("Erreur uHttp.Refresh.set: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            End Try
         End Set
     End Property
 
@@ -46,24 +59,28 @@ Public Class uHttp
             Return _ListButton
         End Get
         Set(ByVal value As List(Of ButtonHttp))
-            _ListButton = value
+            Try
+                _ListButton = value
 
-            If _ListButton IsNot Nothing Then
-                StkButton.Children.Clear()
-                For Each _button As ButtonHttp In _ListButton
-                    Dim x As New ButtonHttp
-                    x.Foreground = Brushes.White
-                    x.Margin = New Thickness(5)
-                    x.Height = _button.Height
-                    x.Width = _button.Width
-                    x.Content = _button.Content
-                    'x.IconImageUri = _button.IconImageUri
-                    x.URL = _button.URL
-                    x.SetResourceReference(Control.TemplateProperty, "GlassButton")
-                    AddHandler x.Click, AddressOf Button_Click
-                    StkButton.Children.Add(x)
-                Next
-            End If
+                If _ListButton IsNot Nothing Then
+                    StkButton.Children.Clear()
+                    For Each _button As ButtonHttp In _ListButton
+                        Dim x As New ButtonHttp
+                        x.Foreground = Brushes.White
+                        x.Margin = New Thickness(5)
+                        x.Height = _button.Height
+                        x.Width = _button.Width
+                        x.Content = _button.Content
+                        'x.IconImageUri = _button.IconImageUri
+                        x.URL = _button.URL
+                        x.SetResourceReference(Control.TemplateProperty, "GlassButton")
+                        AddHandler x.Click, AddressOf Button_Click
+                        StkButton.Children.Add(x)
+                    Next
+                End If
+            Catch ex As Exception
+                MessageBox.Show("Erreur uHttp.ListButton.set: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            End Try
         End Set
     End Property
 
@@ -120,7 +137,7 @@ Public Class uHttp
 
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
         Try
-            WebBrowser1.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() WebBrowser1.Refresh(), ThreadStart))
+            If WebBrowser1.Document IsNot Nothing Then WebBrowser1.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() WebBrowser1.Refresh(), ThreadStart))
         Catch ex As Exception
             MessageBox.Show("Erreur uHttp.dispatcherTimer_Tick: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -133,7 +150,8 @@ Public Class uHttp
         InitializeComponent()
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
+        dt = New DispatcherTimer()
+        dt.IsEnabled = False
     End Sub
 
     Public Class ButtonHttp
@@ -156,14 +174,19 @@ Public Class uHttp
     End Class
 
     Private Sub uHttp_SizeChanged(ByVal sender As Object, ByVal e As System.Windows.SizeChangedEventArgs) Handles Me.SizeChanged
-        Dim _size As Size = e.NewSize
-        Dim y As Double = _size.Height
+        Try
+            Dim _size As Size = e.NewSize
+            Dim y As Double = _size.Height
 
-        If _ListButton.Count > 0 Then
-            y = y - StkButton.ActualHeight - 30
-        End If
+            If _ListButton.Count > 0 Then
+                y = y - StkButton.ActualHeight - 30
+            End If
 
-        WebBrowser1.Height = y
+            WebBrowser1.Height = y
+        Catch ex As Exception
+            MessageBox.Show("Erreur uHttp.uHttp_SizeChanged: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+
     End Sub
 
     Protected Overrides Sub Finalize()
