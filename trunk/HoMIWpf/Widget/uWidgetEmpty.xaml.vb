@@ -74,6 +74,9 @@ Public Class uWidgetEmpty
 
     'Variables Widget KeyPad
     Dim _IDKeyPad As String = ""
+    Dim _ShowPassWord As Boolean = True
+    Dim _ClearAfterEnter As Boolean = False
+    Dim _ShowClavier As Boolean = True
     Dim _KeyPad As uKeyPad = Nothing
 
     'Event
@@ -740,6 +743,42 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As String)
             _IDKeyPad = value
+        End Set
+    End Property
+
+    Public Property ShowPassWord As Boolean
+        Get
+            Return _ShowPassWord
+        End Get
+        Set(ByVal value As Boolean)
+            _ShowPassWord = value
+            If _KeyPad IsNot Nothing Then
+                _KeyPad.ShowPassWord = value
+            End If
+        End Set
+    End Property
+
+    Public Property ClearAfterEnter As Boolean
+        Get
+            Return _ClearAfterEnter
+        End Get
+        Set(ByVal value As Boolean)
+            _ClearAfterEnter = value
+            If _KeyPad IsNot Nothing Then
+                _KeyPad.ClearAfterEnter = value
+            End If
+        End Set
+    End Property
+
+    Public Property ShowClavier As Boolean
+        Get
+            Return _ShowClavier
+        End Get
+        Set(ByVal value As Boolean)
+            _ShowClavier = value
+            If _KeyPad IsNot Nothing Then
+                _KeyPad.ShowClavier = value
+            End If
         End Set
     End Property
 #End Region

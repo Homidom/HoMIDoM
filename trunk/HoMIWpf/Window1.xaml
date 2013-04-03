@@ -32,7 +32,7 @@
         <DockPanel >
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Height="24" Name="StkTop" Margin="0,0,1,0" Background="#66000000" MouseLeftButtonDown="StkTop_MouseLeftButtonDown">
                 <Menu >
-                    <MenuItem Header="Homidom" Name="MenuItem1" Width="90" HorizontalAlignment="Left" Background="White">
+                    <MenuItem Header="Homidom" Name="MenuItem1" Width="105" HorizontalAlignment="Left" Background="White">
                         <MenuItem.Icon>
                             <Image Source="/HoMIWpF;component/icone.ico" />
                         </MenuItem.Icon>
@@ -107,7 +107,7 @@
             </StackPanel>    
             <Canvas Margin="1" Name="Canvas1" ClipToBounds="True" SnapsToDevicePixels="True"/>
         </DockPanel>
-        <Button DockPanel.Dock="right" Height="23" Margin="0,0,3,0" x:Name="BtnQuit"  Width="23"  VerticalAlignment="Top"  Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" >
+        <Button DockPanel.Dock="right" Height="23" Margin="2,2,5,2" x:Name="BtnQuit"  Width="23"  VerticalAlignment="Top"  Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" >
             <Image Source="/HoMIWpF;component/Images/btnQuitter_32.png" />
         </Button>
     </Grid> 

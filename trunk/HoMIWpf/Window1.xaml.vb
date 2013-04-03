@@ -246,15 +246,13 @@ Class Window1
                 System.IO.Directory.CreateDirectory(_MonRepertoireAppData & "\Logs")
             End If
 
-            'Chargement des paramètres
+            'Chargement des paramètres et connexion au serveur si ok
             Log(TypeLog.INFO, TypeSource.CLIENT, "LOADCONFIG", "Message: " & LoadConfig(_MonRepertoireAppData & "\Config\"))
 
             ' Create StackPanel and set child elements to horizontal orientation
             imgStackPnl.HorizontalAlignment = HorizontalAlignment.Center
             imgStackPnl.VerticalAlignment = VerticalAlignment.Center
             imgStackPnl.Orientation = Orientation.Horizontal
-
-            'ConnectToHomidom()
 
             If IsConnect = True Then
                 LoadZones()
@@ -353,6 +351,13 @@ Class Window1
                     'ON peut se connecter
                     'Connexion à Homidom
                     ConnectToHomidom()
+
+                    Dim _srv As New ClServer
+                    _srv.Adresse = _IP
+                    _srv.Defaut = True
+                    _srv.Nom = "Defaut"
+                    _srv.Port = _PortSOAP
+                    _ListServer.Add(_srv)
 
                     '******************************************
                     'on va chercher les paramètres tactile
@@ -537,11 +542,13 @@ Class Window1
                                     Case "tailleetiquette"
                                         x.TailleEtiquette = list.Item(j).Attributes.Item(k).Value
                                     Case "colorbackground"
-                                        Dim a As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 2, 2))
-                                        Dim R As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 4, 2))
-                                        Dim G As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 6, 2))
-                                        Dim B As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 8, 2))
-                                        x.ColorBackGround = New SolidColorBrush(Color.FromArgb(a, R, G, B))
+                                        If list.Item(j).Attributes.Item(k).Value <> "" Then
+                                            Dim a As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 2, 2))
+                                            Dim R As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 4, 2))
+                                            Dim G As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 6, 2))
+                                            Dim B As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 8, 2))
+                                            x.ColorBackGround = New SolidColorBrush(Color.FromArgb(a, R, G, B))
+                                        End If
                                     Case "colorstatus"
                                         Dim a As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 2, 2))
                                         Dim R As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 4, 2))
@@ -562,6 +569,12 @@ Class Window1
                                         x.IDMeteo = list.Item(j).Attributes.Item(k).Value
                                     Case "idkeypad"
                                         x.IDKeyPad = list.Item(j).Attributes.Item(k).Value
+                                    Case "showpassword"
+                                        x.ShowPassWord = list.Item(j).Attributes.Item(k).Value
+                                    Case "clearafterenter"
+                                        x.ClearAfterEnter = list.Item(j).Attributes.Item(k).Value
+                                    Case "showclavier"
+                                        x.ShowClavier = list.Item(j).Attributes.Item(k).Value
                                     Case "httprefresh"
                                         x.HttpRefresh = list.Item(j).Attributes.Item(k).Value
                                 End Select
@@ -880,9 +893,20 @@ Class Window1
                 writer.WriteStartAttribute("idmeteo")
                 writer.WriteValue(_ListElement.Item(i).IDMeteo)
                 writer.WriteEndAttribute()
-                writer.WriteStartAttribute("idkeypad")
-                writer.WriteValue(_ListElement.Item(i).IDKeyPad)
-                writer.WriteEndAttribute()
+                If _ListElement.Item(i).Type = uWidgetEmpty.TypeOfWidget.KeyPad Then
+                    writer.WriteStartAttribute("idkeypad")
+                    writer.WriteValue(_ListElement.Item(i).IDKeyPad)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("showpassword")
+                    writer.WriteValue(_ListElement.Item(i).ShowPassWord)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("clearafterenter")
+                    writer.WriteValue(_ListElement.Item(i).ShowPassWord)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("showclavier")
+                    writer.WriteValue(_ListElement.Item(i).ShowPassWord)
+                    writer.WriteEndAttribute()
+                End If
                 writer.WriteStartAttribute("httprefresh")
                 writer.WriteValue(_ListElement.Item(i).HttpRefresh)
                 writer.WriteEndAttribute()
@@ -1618,6 +1642,9 @@ Class Window1
                     y.ListHttpButton = _ListElement.Item(i).ListHttpButton
                     y.IDMeteo = _ListElement.Item(i).IDMeteo
                     y.IDKeyPad = _ListElement.Item(i).IDKeyPad
+                    y.ShowPassWord = _ListElement.Item(i).ShowPassWord
+                    y.ClearAfterEnter = _ListElement.Item(i).ClearAfterEnter
+                    y.ShowClavier = _ListElement.Item(i).ShowClavier
                     AddHandler y.ShowZone, AddressOf ElementShowZone
                     x.Content = y
                     Canvas1.Children.Add(x)
