@@ -42,6 +42,9 @@ Public Class WWidgetProperty
             TxtURL.Text = Obj.URL
             TxtURLRss.Text = Obj.UrlRss
             TxtRefresh.Text = Obj.HttpRefresh
+            ChKShowPassWord.IsChecked = Obj.ShowPassWord
+            ChKShowClavier.IsChecked = Obj.ShowClavier
+            ChKClearAfterEnter.IsChecked = Obj.ClearAfterEnter
             _listhttpbtn = Obj.ListHttpButton
 
             If Obj.IsEmpty = False Then
@@ -151,6 +154,7 @@ Public Class WWidgetProperty
                         BtnEditAction.Visibility = Windows.Visibility.Collapsed
                         BtnEditVisu.Visibility = Windows.Visibility.Collapsed
                         BtnDelete.Visibility = Windows.Visibility.Visible
+                        GrpPropertyKeyPad.Visibility = Windows.Visibility.Visible
 
                         If IsConnect Then
                             CbDeviceKeyPad.Items.Clear()
@@ -207,6 +211,9 @@ Public Class WWidgetProperty
             Obj.Picture = ImgPicture.Tag
             Obj.ListHttpButton = _listhttpbtn
             Obj.HttpRefresh = TxtRefresh.Text
+            Obj.ShowPassWord = ChKShowPassWord.IsChecked
+            Obj.ShowClavier = ChKShowClavier.IsChecked
+            Obj.ClearAfterEnter = ChKClearAfterEnter.IsChecked
 
             Try
                 Obj.TailleStatus = TxtTailleStatus.Text
@@ -1120,4 +1127,10 @@ Public Class WWidgetProperty
         'mybrush.Opacity = Slider1.Value / 255
         lblColor.Background = mybrush
     End Sub
+
+#Region "KeyPad"
+    Private Sub BtnClosePropertyKeypad_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClosePropertyKeypad.Click
+        GrpPropertyKeyPad.Visibility = Windows.Visibility.Collapsed
+    End Sub
+#End Region
 End Class

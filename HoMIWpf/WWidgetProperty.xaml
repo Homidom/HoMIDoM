@@ -256,6 +256,20 @@
                         
                     </StackPanel>
                 </GroupBox>
+                <GroupBox Name="GrpPropertyKeyPad" Visibility="Collapsed" Width="300" Margin="2" >
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal" >
+                            <Label Foreground="White" FontWeight="Bold">Propriétés KeyPad</Label>
+                            <Button Name="BtnClosePropertyKeypad" Width="25" Template="{DynamicResource GlassButton}" Foreground="White">X</Button>
+                        </StackPanel>
+
+                    </GroupBox.Header>
+                    <StackPanel >
+                        <CheckBox Name="ChKShowPassWord" Content="Afficher la valeur" Foreground=" White" IsChecked=" True"/>
+                        <CheckBox Name="ChKShowClavier" Content="Afficher le clavier" Foreground=" White" IsChecked=" True"/>
+                        <CheckBox Name="ChKClearAfterEnter" Content="Effacer la valeur après validation" Foreground=" White" IsChecked=" False"/>
+                    </StackPanel>
+                </GroupBox>
 
 
             </StackPanel>
