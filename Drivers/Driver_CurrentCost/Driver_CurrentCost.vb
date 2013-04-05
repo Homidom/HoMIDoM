@@ -608,15 +608,16 @@ Public Class Driver_CurrentCost
     ''' <remarks></remarks>
     Private Sub traitement(ByVal type As String, ByVal adresse As String, ByVal valeur As Object)
         Try
+            'correction valeur
+            valeur = Replace(valeur, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+
             'Recherche si un device affecté
             Dim listedevices As New ArrayList
 
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
             'un device trouvé on maj la value
             If (listedevices.Count = 1) Then
-                'correction valeur pour correspondre au type de value
                 listedevices.Item(0).Value = valeur
-
             ElseIf (listedevices.Count > 1) Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Process", "Plusieurs devices correspondent à : " & adresse)
             Else
