@@ -2,31 +2,31 @@
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 
-' Auteur : xxx
-' Date : 01/01/2011
+' Auteur : HoMIDoM
+' Date : 05/04/2013
 
-''' <summary>Class Driver_Virtuel, xxx</summary>
+''' <summary>Class Driver_KNX</summary>
 ''' <remarks></remarks>
-<Serializable()> Public Class Driver_Virtuel
+<Serializable()> Public Class Driver_KNX
     Implements HoMIDom.HoMIDom.IDriver
 
 #Region "Variables génériques"
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
-    Dim _ID As String = "DE96B466-2540-11E0-A321-65D7DFD72085" 'ne pas modifier car utilisé dans le code du serveur
-    Dim _Nom As String = "Virtuel" 'Nom du driver à afficher
+    Dim _ID As String = "80964F08-9E3C-11E2-8A55-A64B6188709B" 'ne pas modifier car utilisé dans le code du serveur
+    Dim _Nom As String = "KNX" 'Nom du driver à afficher
     Dim _Enable As Boolean = False 'Activer/Désactiver le driver
-    Dim _Description As String = "Driver Virtuel" 'Description du driver
+    Dim _Description As String = "Driver pour Skype : SMS, Call..." 'Description du driver
     Dim _StartAuto As Boolean = False 'True si le driver doit démarrer automatiquement
-    Dim _Protocol As String = "Virtuel" 'Protocole utilisé par le driver, exemple: RS232
+    Dim _Protocol As String = "USB-IP" 'Protocole utilisé par le driver, exemple: RS232
     Dim _IsConnect As Boolean = False 'True si le driver est connecté et sans erreur
-    Dim _IP_TCP As String = "@" 'Adresse IP TCP à utiliser, "@" si non applicable pour le cacher côté client
-    Dim _Port_TCP As String = "@" 'Port TCP à utiliser, "@" si non applicable pour le cacher côté client
+    Dim _IP_TCP As String = "" 'Adresse IP TCP à utiliser, "@" si non applicable pour le cacher côté client
+    Dim _Port_TCP As String = "" 'Port TCP à utiliser, "@" si non applicable pour le cacher côté client
     Dim _IP_UDP As String = "@" 'Adresse IP UDP à utiliser, , "@" si non applicable pour le cacher côté client
     Dim _Port_UDP As String = "@" 'Port UDP à utiliser, , "@" si non applicable pour le cacher côté client
-    Dim _Com As String = "@" 'Port COM à utiliser, , "@" si non applicable pour le cacher côté client
+    Dim _Com As String = "" 'Port COM à utiliser, , "@" si non applicable pour le cacher côté client
     Dim _Refresh As Integer = 0 'Valeur à laquelle le driver doit rafraichir les valeurs des devices (ex: toutes les 200ms aller lire les devices)
-    Dim _Modele As String = "Virtuel" 'Modèle du driver/interface
+    Dim _Modele As String = "KNX" 'Modèle du driver/interface
     Dim _Version As String = My.Application.Info.Version.ToString 'Version du driver
     Dim _OsPlatform As String = "3264" 'Plateforme compatible 32 64 ou 3264
     Dim _Picture As String = "" 'Image du driver (non utilisé actuellement)
@@ -42,7 +42,7 @@ Imports HoMIDom.HoMIDom.Device
     Dim _AutoDiscover As Boolean = False
 
     'param avancé
-    'Dim _DEBUG As Boolean = False
+    Dim _DEBUG As Boolean = False
 #End Region
 
 #Region "Variables Internes"
@@ -436,7 +436,7 @@ Imports HoMIDom.HoMIDom.Device
         Try
             'récupération des paramétres avancés
             Try
-                '_DEBUG = _Parametres.Item(0).Valeur
+                _DEBUG = _Parametres.Item(0).Valeur
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
             End Try
@@ -542,8 +542,8 @@ Imports HoMIDom.HoMIDom.Device
         Try
             Dim x As New DeviceCommande
             x.NameCommand = Nom
-            x.DescriptionCommand = description
-            x.CountParam = nbparam
+            x.DescriptionCommand = Description
+            x.CountParam = NbParam
             _DeviceCommandPlus.Add(x)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
@@ -610,21 +610,14 @@ Imports HoMIDom.HoMIDom.Device
             _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
 
             'liste des devices compatibles
-            _DeviceSupport.Add(ListeDevices.FREEBOX)
+            _DeviceSupport.Add(ListeDevices.APPAREIL)
+            _DeviceSupport.Add(ListeDevices.DETECTEUR)
             _DeviceSupport.Add(ListeDevices.LAMPE)
             _DeviceSupport.Add(ListeDevices.SWITCH)
-            _DeviceSupport.Add(ListeDevices.APPAREIL)
-            _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
-            _DeviceSupport.Add(ListeDevices.GENERIQUESTRING)
-            _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE)
-            _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE)
-            _DeviceSupport.Add(ListeDevices.TEMPERATURE)
-            _DeviceSupport.Add(ListeDevices.VITESSEVENT)
-
+            _DeviceSupport.Add(ListeDevices.VOLET)
 
             'Parametres avancés
-            'add_paramavance("nom", "Description", valeupardefaut)
-            'Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
+            Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)

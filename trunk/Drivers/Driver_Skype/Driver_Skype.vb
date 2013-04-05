@@ -41,6 +41,8 @@ Imports HoMIDom.HoMIDom.Device
     Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande) 'Liste des commandes avancées du driver
     Dim _AutoDiscover As Boolean = False
 
+    'param avancé
+    Dim _DEBUG As Boolean = False
 #End Region
 
 #Region "Variables Internes"
@@ -434,7 +436,7 @@ Imports HoMIDom.HoMIDom.Device
         Try
             'récupération des paramétres avancés
             Try
-
+                _DEBUG = _Parametres.Item(0).Valeur
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
             End Try
@@ -610,9 +612,8 @@ Imports HoMIDom.HoMIDom.Device
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.GENERIQUESTRING)
 
-
             'Parametres avancés
-            'add_paramavance("nom", "Description", valeupardefaut)
+            Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
@@ -626,7 +627,8 @@ Imports HoMIDom.HoMIDom.Device
             Add_LibelleDevice("ADRESSE2", "@", "")
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "@", "")
-            Add_LibelleDevice("REFRESH", "@", "")
+            'Add_LibelleDevice("MODELE", "Modele", "Nom du modele de composant : xxx/yyy/zzz", "xxx|yyy|zzz")
+            Add_LibelleDevice("REFRESH", "Refresh", "")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
         Catch ex As Exception
