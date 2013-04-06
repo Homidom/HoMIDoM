@@ -9,7 +9,8 @@ Imports VB = Microsoft.VisualBasic
 Public Class Driver_Teleinfo
 
     ' Auteur : Laurent
-    ' Date : 11/01/2012
+    ' Date : 11/01/2012  Creation du driver
+    ' Date : 06/04/203   Ajout de la gestion des MultiCompteurs
 
     ''' <summary>Class Driver_Teleinfo, permet de communiquer avec le module USB de A DAUGUET</summary>
     ''' <remarks>Nécessite l'installation des pilotes fournis sur le site </remarks>
@@ -50,29 +51,175 @@ Public Class Driver_Teleinfo
 		'Ajoutés dans les ppt avancés dans New()
 
         Dim _DEBUG As Boolean = False
+        Dim _SecondPort As String = ""
 
 		#End Region
 
 #Region "Variables Internes"
-        ' Variables de gestion du port COM
-        Private WithEvents port As New System.IO.Ports.SerialPort
-        Private port_name As String = ""
-        Private BufferIn(8192) As Byte
-        Private DebutTrame As Boolean = False
 
-        Private bytecnt As Integer = 0
-        Private messcnt As Integer = 0
-        <NonSerialized()> Dim TimerSecond As New Timers.Timer 'Timer à la seconde
-        Private recbuf(300), recbytes, recbits As Byte
-        Private InfoTrame() As String
+        ' Definition de tous les labels Teleinfo possibles 
+        Public Enum Labels As SByte
+            Unknow = -1
+            ADCO = 0
+            OPTARIF
+            ISOUSC
+            HCHC
+            HCHP
+            BASE
+            PTEC
+            PEJP
+            IMAX
+            PAPP
+            HHPHC
+            IINST
+            MOTDETAT
+            IINST1
+            IINST2
+            IINST3
+            IMAX1
+            IMAX2
+            IMAX3
+            PMAX
+            PPOT
+        End Enum
 
-        Private mess As Boolean = False
-        Private trame As Boolean = False
+        Dim TabLabels([Enum].GetValues(GetType(Labels)).Length) As String
 
-        Dim ADCO, OPTARIF, ISOUSC, HCHC, HCHP,
-         BASE, PTEC, PEJP, IMAX, PAPP, HHPHC, IINST, MOTDETAT, IINST1, IINST2, IINST3, IMAX1, IMAX2, IMAX3, PMAX, PPOT As String
-        Dim ADIR1, ADIR2, ADIR3, ADPS, BBRHCJB, BBRHCJR, BBRHCJW, BBRHPJB, BBRHPJR, BBRHPJW, DEMAIN, EJPHN, EJPHPM As String
+        ' Definition d'une Classe Compteur TeleInfo 
+        <Serializable()> Public Class TeleInfo
+            Private m_port_name As String
+            Private m_DebutTrame As Boolean = False
+            Private m_bytecnt As Integer = 0
+            Private m_messcnt As Integer = 0
 
+            Private m_InfoTrame As New List(Of String)
+            Private m_recbuf As New List(Of Byte)
+
+            Private m_mess As Boolean = False
+            Private m_trame As Boolean = False
+            Private m_IsConnectPort As Boolean = False
+            Private WithEvents m_SerialPort As New System.IO.Ports.SerialPort
+            Dim m_TabLabels As New List(Of String)
+
+            '  ([Enum].GetValues(GetType(Labels)).Length))  
+
+            Public Property port_name() As String
+                Get
+                    Return m_port_name
+                End Get
+                Set(ByVal value As String)
+                    m_port_name = value
+                End Set
+            End Property
+
+            Public Property DebutTrame() As Boolean
+                Get
+                    Return m_DebutTrame
+                End Get
+                Set(ByVal value As Boolean)
+                    m_DebutTrame = value
+                End Set
+            End Property
+
+            Public Property bytecnt() As Integer
+                Get
+                    Return m_bytecnt
+                End Get
+                Set(ByVal value As Integer)
+                    m_bytecnt = value
+                End Set
+            End Property
+
+            Public Property messcnt() As Integer
+                Get
+                    Return m_messcnt
+                End Get
+                Set(ByVal value As Integer)
+                    m_messcnt = value
+                End Set
+
+            End Property
+
+            Public Property recbuf As List(Of Byte)
+                Get
+                    Return m_recbuf
+                End Get
+                Set(ByVal value As List(Of Byte))
+                    m_recbuf = value
+                End Set
+            End Property
+
+            Public Property mess() As Boolean
+                Get
+                    Return m_mess
+                End Get
+                Set(ByVal value As Boolean)
+                    m_mess = value
+                End Set
+            End Property
+
+            Public Property InfoTrame As List(Of String)
+                Get
+                    Return m_InfoTrame
+                End Get
+                Set(ByVal value As List(Of String))
+                    m_InfoTrame = value
+                End Set
+            End Property
+
+            Public Property trame() As Boolean
+                Get
+                    Return m_trame
+                End Get
+                Set(ByVal value As Boolean)
+                    m_trame = value
+                End Set
+            End Property
+
+            Public Property IsConnectPort() As Boolean
+                Get
+                    Return m_IsConnectPort
+                End Get
+                Set(ByVal value As Boolean)
+                    m_IsConnectPort = value
+                End Set
+            End Property
+
+            Public Property SerialPort() As System.IO.Ports.SerialPort
+                Get
+                    Return m_SerialPort
+                End Get
+                Set(ByVal value As System.IO.Ports.SerialPort)
+                    m_SerialPort = value
+                End Set
+
+            End Property
+
+            Public Property TabLabels As List(Of String)
+                Get
+                    Return m_TabLabels
+                End Get
+                Set(ByVal value As List(Of String))
+                    m_TabLabels = value
+                End Set
+            End Property
+            Sub New()
+                For Cpt = 0 To ([Enum].GetValues(GetType(Labels)).Length)
+                    TabLabels.Add("")
+                Next
+
+
+              
+            End Sub
+
+        End Class
+
+        Dim TabCompteur(0) As TeleInfo
+
+
+        'Dim ADCO, OPTARIF, ISOUSC, HCHC, HCHP,
+        '  BASE, PTEC, PEJP, IMAX, PAPP, HHPHC, IINST, MOTDETAT, IINST1, IINST2, IINST3, IMAX1, IMAX2, IMAX3, PMAX, PPOT As String
+        ' Dim ADIR1, ADIR2, ADIR3, ADPS, BBRHCJB, BBRHCJR, BBRHCJW, BBRHPJB, BBRHPJR, BBRHPJW, DEMAIN, EJPHN, EJPHPM As String
 
 
 
@@ -277,7 +424,6 @@ Public Class Driver_Teleinfo
                     If Command = "" Then
                         Return False
                     Else
-                        'Write(deviceobject, Command, Param(0), Param(1))
                         Select Case UCase(Command)
                             Case ""
                             Case Else
@@ -316,52 +462,90 @@ Public Class Driver_Teleinfo
         ''' <remarks></remarks>
         Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
             Dim retour As String = ""
+            Dim retour2 As String = ""
 
             'récupération des paramétres avancés
             Try
                 _DEBUG = _Parametres.Item(0).Valeur
+                _SecondPort = _Parametres.Item(1).Valeur
 
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
             End Try
 
+            Dim TempCompteur As New TeleInfo
+            Dim TempCompteur2 As New TeleInfo
+
             'ouverture du port suivant le Port Com
             Try
                 If _Com <> "" Then
-                    retour = ouvrir(_Com)
+                    TempCompteur.port_name = _Com
+                    TabCompteur(0) = TempCompteur
+                    retour = ouvrir(TabCompteur(0))
                 Else
                     retour = "ERR: Port Com non défini. Impossible d'ouvrir le port !"
                 End If
-                'traitement du message de retour
-                If STRGS.Left(retour, 4) = "ERR:" Then
-                    _IsConnect = False
+                'ouverture du port si un Second port est defini
+                If _SecondPort.ToLower <> "nothing" Then
+                    TempCompteur2.port_name = _SecondPort
+                    ReDim Preserve TabCompteur(TabCompteur.Count)
+                    TabCompteur(1) = TempCompteur2
+                    retour2 = ouvrir(TabCompteur(1))
+                End If
+
+                'traitement des messages de retour
+                If (STRGS.Left(retour, 4) = "ERR:") Or (STRGS.Left(retour2, 4) = "ERR:") Then
+                    If (STRGS.Left(retour, 4) = "ERR:") Then
+                        TabCompteur(0).IsConnectPort = False
+                        _IsConnect = False
+                    End If
                     retour = STRGS.Right(retour, retour.Length - 5)
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo", "Driver non démarré : " & retour)
+
+                    If _SecondPort.ToLower <> "nothing" Then
+                        TabCompteur(1).IsConnectPort = False
+                        retour2 = STRGS.Right(retour, retour.Length - 5)
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo", "Driver non démarré : " & retour2)
+                    End If
                 Else
                     _IsConnect = True
+                    TabCompteur(0).IsConnectPort = True
                     _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo", retour)
+                    If _SecondPort.ToLower <> "nothing" Then
+                        TabCompteur(1).IsConnectPort = True
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo", retour2)
+                    End If
+
                 End If
             Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Teleinfo Start", ex.Message)
                 _IsConnect = False
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Teleinfo Start", ex.Message)
+                TabCompteur(0).IsConnectPort = False
+                If _SecondPort.ToLower <> "nothing" Then TabCompteur(1).IsConnectPort = False
             End Try
-
-
 
         End Sub
 
         ''' <summary>Arrêter le du driver</summary>
         ''' <remarks></remarks>
         Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
-                Dim retour As String
+            Dim retour As String
 
-                Try
-                If _IsConnect Then
-                    retour = fermer()
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo Stop", retour)
-                Else
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo Stop", "Port " & _Com & " est déjà fermé")
-                End If
+            ' Recherche de tous les ports ouverts
+            Try
+                Dim index As Byte = 0
+                For Each TeleInfoCpt In TabCompteur
+                    If TeleInfoCpt.IsConnectPort Then
+                        retour = fermer(TeleInfoCpt)
+                        Array.Clear(TabCompteur, index, 1)
+                        index += 1
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo Stop", retour)
+                    Else
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo Stop", "Port " & _Com & " est déjà fermé")
+                    End If
+                Next
+                ' Effacement du tableau des compteurs
+                Array.Resize(TabCompteur, 1)
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Teleinfo Stop", ex.Message)
             End Try
@@ -386,15 +570,15 @@ Public Class Driver_Teleinfo
                 If Objet IsNot Nothing Then
                     Select Case Objet.Type
                         Case "ENERGIETOTALE", "ENERGIEINSTANTANEE"
-                            Dim retour As Double = Val(Sauve_temp_teleinfo(LTrim(Objet.Adresse1)))
+                            Dim retour As Double = Val(Sauve_temp_teleinfo(LTrim(Objet.Adresse1), Objet.Adresse2))
                             If retour <> 9999 Then Objet.Value = retour
 
                         Case "GENERIQUESTRING"
-                            Dim retour As String = Sauve_temp_teleinfo(LTrim(Objet.Adresse1))
+                            Dim retour As String = Sauve_temp_teleinfo(LTrim(Objet.Adresse1), Objet.Adresse2)
                             Objet.Value = retour
 
                         Case "GENERIQUEVALUE"
-                            Dim retour As Double = Val(Sauve_temp_teleinfo(LTrim(Objet.Adresse1)))
+                            Dim retour As Double = Val(Sauve_temp_teleinfo(LTrim(Objet.Adresse1), Objet.Adresse2))
                             Objet.Value = retour
 
                         Case Else
@@ -403,7 +587,6 @@ Public Class Driver_Teleinfo
                     End Select
 
                 End If
-
 
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Teleinfo Read", ex.Message)
@@ -455,8 +638,8 @@ Public Class Driver_Teleinfo
             Try
                 Dim x As New DeviceCommande
                 x.NameCommand = Nom
-                x.DescriptionCommand = description
-                x.CountParam = nbparam
+                x.DescriptionCommand = Description
+                x.CountParam = NbParam
                 _DeviceCommandPlus.Add(x)
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
@@ -522,7 +705,7 @@ Public Class Driver_Teleinfo
             Try
                 _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
 
-                ''liste des devices compatibles
+                ' liste des devices compatibles
                 _DeviceSupport.Add(ListeDevices.ENERGIEINSTANTANEE.ToString)
                 _DeviceSupport.Add(ListeDevices.ENERGIETOTALE.ToString)
                 _DeviceSupport.Add(ListeDevices.GENERIQUESTRING.ToString)
@@ -530,13 +713,12 @@ Public Class Driver_Teleinfo
 
                 'Paramétres avancés
                 Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
+                Add_ParamAvance("SecondPort", "Second Teleinfo Port Com (COM2,COM3,COM4...)", False)
 
                 Add_LibelleDevice("ADRESSE1", "Adresse", "")
-                Add_LibelleDevice("ADRESSE2", "@", "")
+                Add_LibelleDevice("ADRESSE2", "Adresse Second TeleInfo", "La valeur peut etre COM1, COM2, COM3... ou nothing", "nothing")
                 Add_LibelleDevice("SOLO", "@", "")
                 Add_LibelleDevice("MODELE", "@", "")
-                'Add_LibelleDevice("REFRESH", "Refresh (sec)", "Valeur de rafraîchissement de la mesure en secondes")
-                'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Teleinfo New", ex.Message)
             End Try
@@ -552,28 +734,28 @@ Public Class Driver_Teleinfo
 
 #Region "Fonctions internes"
         ''' <summary>Ouvrir le port Teleinfo</summary>
-        ''' <param name="numero">Nom/Numero du port COM: COM2</param>
+        ''' <param name="CptPort">Controleur du port COM:</param>
         ''' <remarks></remarks>
-        Private Function ouvrir(ByVal numero As String) As String
+        Private Function ouvrir(ByVal CptPort As TeleInfo) As String
             Try
                 'ouverture du port
-                If Not _IsConnect Then
-                    port_name = numero
-                    port.PortName = numero 'nom du port : COM1,COM2, COM3...
-                    port.BaudRate = 1200 'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
-                    port.Parity = IO.Ports.Parity.Even ' parité paire
-                    port.StopBits = IO.Ports.StopBits.One 'un bit d'arrêt par octet
-                    port.DataBits = 7 'nombre de bit par octet
+                If Not CptPort.IsConnectPort Then
+                    CptPort.SerialPort.PortName = CptPort.port_name 'nom du port : COM1,COM2, COM3...
+                    CptPort.SerialPort.BaudRate = 1200 'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
+                    CptPort.SerialPort.Parity = IO.Ports.Parity.Even ' parité paire
+                    CptPort.SerialPort.StopBits = IO.Ports.StopBits.One 'un bit d'arrêt par octet
+                    CptPort.SerialPort.DataBits = 7 'nombre de bit par octet
                     'port.Handshake = Handshake.None
-                    port.ReadTimeout = 3000
-                    port.WriteTimeout = 5000
-                    port.RtsEnable = True  'ligne Rts désactivé
-                    port.DtrEnable = True  'ligne Dtr désactivé
-                    port.Open()
-                    AddHandler port.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
-                    Return ("Port " & port_name & " ouvert")
+                    CptPort.SerialPort.ReadTimeout = 3000
+                    CptPort.SerialPort.WriteTimeout = 5000
+                    CptPort.SerialPort.RtsEnable = True  'ligne Rts désactivé
+                    CptPort.SerialPort.DtrEnable = True  'ligne Dtr désactivé
+                    CptPort.SerialPort.Open()
+                    AddHandler CptPort.SerialPort.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
+
+                    Return ("Port " & CptPort.port_name & " ouvert")
                 Else
-                    Return ("Port " & port_name & " dejà ouvert")
+                    Return ("Port " & CptPort.port_name & " dejà ouvert")
                 End If
             Catch ex As Exception
                 Return ("ERR: " & ex.Message)
@@ -582,34 +764,35 @@ Public Class Driver_Teleinfo
 
         ''' <summary>Fermer le port TeleInfo</summary>
         ''' <remarks></remarks>
-        Private Function fermer() As String
-            Dim limite As UShort
+        Private Function fermer(ByVal CptPort As TeleInfo) As String
             Try
-                If _IsConnect Then
-                    RemoveHandler port.DataReceived, AddressOf DataReceived
+                If CptPort.IsConnectPort Then
+                    RemoveHandler CptPort.SerialPort.DataReceived, AddressOf DataReceived
 
-                    If (Not (port Is Nothing)) Then ' The COM port exists.
-                        If port.IsOpen Then
-                            port.DiscardInBuffer()
-                            limite = 0
-                            Do While (port.BytesToRead > 0 And limite < 300) ' Wait for the receipt buffer to empty.
-                                limite = limite + 1
-                            Loop
-                            port.Close()
-                            port.Dispose()
+                    If (Not (CptPort.SerialPort Is Nothing)) Then ' The COM port exists.
+                        If CptPort.SerialPort.IsOpen Then
+                            CptPort.SerialPort.DiscardInBuffer()
+                            'limite = 0
+                            'Do While (CptPort.SerialPort.BytesToRead > 0 And limite < 300) ' Wait for the receipt buffer to empty.
+                            'limite = limite + 1
+                            ' Loop
+                            CptPort.SerialPort.Close()
+                            CptPort.SerialPort.Dispose()
+                            CptPort.IsConnectPort = False
+
                             _IsConnect = False
-                            Return ("Port " & port_name & " fermé")
+                            Return ("Port " & CptPort.port_name & " fermé")
                         Else
-                            Return ("Port " & port_name & "  est déjà fermé")
+                            Return ("Port " & CptPort.port_name & "  est déjà fermé")
                         End If
                     Else
-                        Return ("Port " & port_name & " n'existe pas")
+                        Return ("Port " & CptPort.port_name & " n'existe pas")
                     End If
                 Else
-                    Return ("Port " & port_name & "  est déjà fermé (port_ouvert=false)")
+                    Return ("Port " & CptPort.port_name & "  est déjà fermé (port_ouvert=false)")
                 End If
             Catch ex As UnauthorizedAccessException
-                Return ("ERR: Port " & port_name & " IGNORE")
+                Return ("ERR: Port " & CptPort.port_name & " IGNORE")
                 ' The port may have been removed. Ignore.
             End Try
             Return True
@@ -619,186 +802,163 @@ Public Class Driver_Teleinfo
         ''' <remarks></remarks>
         Private Sub DataReceived(ByVal sender As Object, ByVal e As SerialDataReceivedEventArgs)
             Try
+
+                Dim BufferIn(8192) As Byte
                 Dim count As Integer = 0
-                count = port.BytesToRead
-                If _IsConnect And count > 0 Then
-                    port.Read(BufferIn, 0, count)
-                    For i As Integer = 0 To count - 1
-                        ProcessReceivedChar(BufferIn(i))
+
+                ' Recherche du port du compteur Teleinfo
+                Dim sp As New SerialPort
+                Dim CptPort As New TeleInfo
+                Try
+                    sp = CType(sender, SerialPort)
+                    For Each TeleInfoCpt In TabCompteur
+                        If TeleInfoCpt.port_name = sp.PortName Then
+                            CptPort = TeleInfoCpt
+                        End If
                     Next
+
+                Catch ex As Exception
+                    Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " DataReceived : Erreur recherche CptPort ", "Exception : " & ex.Message)
+                End Try
+
+                ' Si le port est connecté - Reception des caracteres contenus dans le Buffer
+                If CptPort.IsConnectPort Then
+                    count = CptPort.SerialPort.BytesToRead
+                    Try
+                        If count Then
+                            CptPort.SerialPort.Read(BufferIn, 0, count)
+                            For i As Integer = 0 To count - 1
+                                ProcessReceivedChar(CptPort, BufferIn(i))
+                            Next
+                        Else
+                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " DataReceived", "Pas de donnée recue")
+                        End If
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " DataReceived ", "Exception : " & ex.Message)
+                    End Try
                 End If
+
+
+
             Catch Ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Datareceived", "Exception : " & Ex.Message)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Datareceived", "Exception : " & Ex.Message)
             End Try
         End Sub
 
         ''' <summary>Rassemble un message complet pour ensuite l'envoyer à displaymess</summary>
         ''' <param name="temp">Byte recu</param>
         ''' <remarks></remarks>
-        Private Sub ProcessReceivedChar(ByVal temp As Byte)
-            Try             
+        Private Sub ProcessReceivedChar(ByVal PortCom As TeleInfo, ByVal temp As Byte)
+            Dim TeleInfo_adresse As String = ""
+            Dim data1 As String = ""
+            Dim InfoRec As String = ""
+
+            Dim charSeparators() As Char = {" "c}
+            Dim result() As String
+
+            Try
                 If (temp = 2) Then ' Debut de trame recu 
-                    DebutTrame = True
-                    bytecnt = 0
-                    messcnt = 0
-                    mess = False
-                    trame = False
-                ElseIf (DebutTrame And temp = 3) Then 'Fin de trame recue
-                    trame = True
-                ElseIf (DebutTrame And temp = 10) Then ' debut d'info recu
-                    mess = False
-                    bytecnt = 0
-                ElseIf (DebutTrame And temp = 13) Then ' Fin d'info rec
-                    mess = True
+                    PortCom.DebutTrame = True
+                    PortCom.bytecnt = 0
+                    PortCom.messcnt = 0
+                    PortCom.mess = False
+                    PortCom.trame = False
+                ElseIf (PortCom.DebutTrame And temp = 3) Then 'Fin de trame recue
+                    PortCom.trame = True
+                ElseIf (PortCom.DebutTrame And temp = 10) Then ' debut d'info recu
+                    PortCom.mess = False
+                    PortCom.bytecnt = 0
+                ElseIf (PortCom.DebutTrame And temp = 13) Then ' Fin d'info rec
+
+                    PortCom.mess = True
                 Else 'Recuperation de l'info
-                    recbuf(bytecnt) = temp
-                    bytecnt += 1
+                    PortCom.recbuf.Add(temp)
+                    PortCom.bytecnt += 1
                 End If
             Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Teleinfo  ProcessReceivedChar", ex.Message)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ProcessReceivedChar", ex.Message)
             End Try
 
             Try
-                If trame Then
-                    Process(InfoTrame)
-                ElseIf mess Then ' Un message est recu ==> on le stocke
-                    Dim xxx As String = ""
-                    For i As Integer = 0 To bytecnt - 1
-                        xxx = xxx & (ChrW(recbuf(i)))
+                If PortCom.trame Then
+                    For Each InfoRec In PortCom.InfoTrame
+                        Try
+                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Traitement Trame ", "ligne recue : " & InfoRec)
+                            result = InfoRec.Split(charSeparators, StringSplitOptions.RemoveEmptyEntries)
+
+                            If result.Count > 1 Then
+                                TeleInfo_adresse = result(0)
+                                data1 = result(1)
+                                If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Traitement Trame : Extract data", "Result : " & TeleInfo_adresse & ": " & data1)
+                            Else
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Traitement Trame", " Get data Error trame incorrecte")
+                            End If
+                        Catch ex As Exception
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Traitement Trame ", TeleInfo_adresse & " avec la valeur : " & data1 & "Exception :  " & ex.Message)
+                        End Try
+
+                        Try
+                            ' Recherche de l'index du champs
+                            Dim Etiquette As Labels
+                            [Enum].TryParse(Of Labels)(LTrim(UCase(TeleInfo_adresse)), Etiquette)
+
+                            If Not [Enum].IsDefined(GetType(Labels), Etiquette) Then
+                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Traitement Label ", "Parametre non reconnu adresse : " & TeleInfo_adresse)
+                            Else
+                                Dim Index As Int16 = CType(Etiquette, Labels)
+                                PortCom.TabLabels(Index) = data1
+                                If _DEBUG Then Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Traitement Label ", "Traitement de l'adresse " & Etiquette.ToString & " avec l'index : " & Index)
+                            End If
+
+
+                        Catch ex As Exception
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Traitement Label  : ", "Exception : " & ex.Message)
+                        End Try
                     Next
-                    ReDim Preserve InfoTrame(messcnt)
-                    InfoTrame(messcnt) = xxx.ToString
-                    If _DEBUG Then
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Teleinfo ProcessReceivedChar - Information recue", xxx.ToString)
-                    End If
-                    messcnt += 1
+                    PortCom.InfoTrame.Clear()
+
+                ElseIf PortCom.mess Then ' Un message est recu ==> on le stocke
+                    Dim xxx  As String = ""
+                    For i As Integer = 0 To PortCom.bytecnt - 1
+                        xxx = xxx & (ChrW(PortCom.recbuf(i)))
+                    Next
+                    PortCom.recbuf.Clear()
+                    PortCom.InfoTrame.Add(xxx.ToString)
+
+                    If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Traitement Message - Information recue", xxx.ToString)
+                    PortCom.messcnt += 1
                 End If
             Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Teleinfo ProcessReceivedChar - Traite Message", ex.Message)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Traitement Label - Traite Message", ex.Message)
             End Try
         End Sub
 
-        ''' <summary>Recomponse les messages reçu</summary>
-        ''' <remarks></remarks>
-        Private Sub Process(ByRef combuffer() As String)
-            Try
-                Dim TeleInfo_adresse As String = ""
-                Dim data1 As String = ""
-                Dim InfoRec As String = ""
-
-                Dim charSeparators() As Char = {" "c}
-                Dim result() As String
-
-                For Each InfoRec In combuffer
-                    Try
-                        ' _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "TeleInfo Process", "ligne recue : " & InfoRec)
-                        result = InfoRec.Split(charSeparators, StringSplitOptions.RemoveEmptyEntries)
-
-                        If result.Count > 1 Then
-                            TeleInfo_adresse = result(0)
-                            data1 = result(1)
-                            ' _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo Process : Get data", "Result : " & TeleInfo_adresse & ": " & data1)
-                        Else
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo Process", " Get data Error trame incorrecte")
-                        End If
-                    Catch ex As Exception
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Process : Get data", TeleInfo_adresse & " avec la valeur : " & data1 & "Exception :  " & ex.Message)
-                    End Try
-
-                    Try
-                        ' Console.WriteLine("Test:#" & LTrim(UCase(TeleInfo_adresse)) & "#")
-                        Select Case (LTrim(UCase(TeleInfo_adresse)))
-                            Case "ADCO" : ADCO = data1
-                            Case "OPTARIF" : OPTARIF = data1
-                            Case "ISOUSC" : ISOUSC = data1
-                            Case "HCHC" : HCHC = data1
-                            Case "HCHP" : HCHP = data1
-                            Case "BASE" : BASE = data1
-                            Case "PTEC" : PTEC = data1
-                            Case "PEJP" : PEJP = data1
-                            Case "IMAX" : IMAX = data1
-                            Case "PAPP" : PAPP = data1
-                            Case "HHPHC" : HHPHC = data1
-                            Case "IINST" : IINST = data1
-                            Case "MOTDETAT" : MOTDETAT = data1
-                                ' Pour compteur linky triphasé
-                            Case "IINST1" : IINST1 = data1
-                            Case "IINST2" : IINST2 = data1
-                            Case "IINST3" : IINST3 = data1
-                            Case "IMAX1" : IMAX1 = data1
-                            Case "IMAX2" : IMAX2 = data1
-                            Case "IMAX3" : IMAX3 = data1
-                            Case "PMAX" : PMAX = data1
-                            Case "PPOT" : PPOT = data1
-                            Case "ADIR1" : ADIR1 = data1
-                            Case "ADIR2" : ADIR2 = data1
-                            Case "ADIR3" : ADIR3 = data1
-                            Case "ADPS" : ADPS = data1
-                            Case "BBRHCJB" : BBRHCJB = data1
-                            Case "BBRHCJR" : BBRHCJR = data1
-                            Case "BBRHCJW" : BBRHCJW = data1
-                            Case "BBRHPJB" : BBRHPJB = data1
-                            Case "BBRHPJR" : BBRHPJR = data1
-                            Case "BBRHPJW" : BBRHPJW = data1
-                            Case "DEMAIN" : DEMAIN = data1
-                            Case "EJPHN" : EJPHN = data1
-                            Case "EJPHPM" : EJPHPM = data1
-                            Case Else
-                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Process : Case Teleinfo_adresse ", "Parametre non reconnu adresse : " & TeleInfo_adresse)
-                        End Select
-                    Catch ex As Exception
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Process : Traitement Exception ", "Exception : " & ex.Message)
-                    End Try
-                Next
-            Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Process : General", "Exception :  " & ex.Message)
-            End Try
-        End Sub
-
-        Private Function Sauve_temp_teleinfo(ByVal adresse As String) As String
+        Private Function Sauve_temp_teleinfo(ByVal adresse As String, Optional ByVal Adresse2 As String = Nothing) As String
             Dim retour As String = ""
+            Dim CptPort As New TeleInfo
+
             Try
-                Select Case LTrim(UCase(adresse))
-                    Case "ADCO" : retour = ADCO
-                    Case "OPTARIF" : retour = OPTARIF
-                    Case "ISOUSC" : retour = ISOUSC
-                    Case "HCHC" : retour = Val(HCHC)
-                    Case "HCHP" : retour = HCHP
-                    Case "BASE" : retour = BASE
-                    Case "PEJP" : retour = PEJP
-                    Case "PTEC" : retour = PTEC
-                    Case "IINST" : retour = IINST
-                    Case "IMAX" : retour = IMAX
-                    Case "PAPP" : retour = PAPP
-                    Case "HHPHC" : retour = HHPHC
-                    Case "IINST" : retour = IINST
-                    Case "MOTDETAT" : retour = MOTDETAT
-                        ' compteur linky triphasé
-                    Case "IINST1" : retour = IINST1
-                    Case "IINST2" : retour = IINST2
-                    Case "IINST3" : retour = IINST3
-                    Case "IMAX1" : retour = IMAX1
-                    Case "IMAX2" : retour = IMAX2
-                    Case "IMAX3" : retour = IMAX3
-                    Case "PMAX" : retour = PMAX
-                    Case "PPOT" : retour = PPOT
-                    Case "ADIR1" : retour = ADIR1
-                    Case "ADIR2" : retour = ADIR2
-                    Case "ADIR3" : retour = ADIR3
-                    Case "ADPS" : retour = ADPS
-                    Case "BBRHCJB" : retour = BBRHCJB
-                    Case "BBRHCJR" : retour = BBRHCJR
-                    Case "BBRHCJW" : retour = BBRHCJW
-                    Case "BBRHPJB" : retour = BBRHPJB
-                    Case "BBRHPJR" : retour = BBRHPJR
-                    Case "BBRHPJW" : retour = BBRHPJW
-                    Case "DEMAIN" : retour = DEMAIN
-                    Case "EJPHN" : retour = EJPHN
-                    Case "EJPHPM" : retour = EJPHPM
-                    Case Else
-                        retour = "-1"
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Sauve_temp_teleinfo : Case Teleinfo_adresse ", "Parametre non reconnu adresse : " & adresse)
-                End Select
+                If Adresse2.ToLower = "nothing" Then
+                    Adresse2 = _Com
+                End If
+
+                For Each TeleInfoCpt In TabCompteur
+                    If TeleInfoCpt.port_name = Adresse2 Then
+                        CptPort = TeleInfoCpt
+                    End If
+                Next
+
+                ' Recherche de l'index du champs
+                Dim Etiquette As Labels
+                If Not [Enum].TryParse(Of Labels)(LTrim(UCase(adresse)), Etiquette) Then
+                    retour = ""
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Sauve_temp_teleinfo : Case Teleinfo_adresse ", "Parametre non reconnu adresse : " & adresse)
+                Else
+                    Dim Index As Int16 = CType(Etiquette, Labels)
+                    retour = CptPort.TabLabels(Index)
+                    Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo Sauve_temp_teleinfo ", "Traitement de l'adresse " & Etiquette.ToString & " avec l'index : " & Index)
+                End If
+
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Process : Traitement Exception ", "Exception : " & ex.Message)
             End Try
