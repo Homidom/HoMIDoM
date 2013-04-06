@@ -84,22 +84,19 @@ Driver_teleinfo
 </member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.TimerTick(System.Object,System.Timers.ElapsedEventArgs)">
 	<summary>Si refresh &gt;0 gestion du timer</summary>
 	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
-</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.ouvrir(System.String)">
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.ouvrir(Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.TeleInfo)">
 	<summary>Ouvrir le port Teleinfo</summary>
-	<param name="numero">Nom/Numero du port COM: COM2</param>
+	<param name="CptPort">Controleur du port COM:</param>
 	<remarks></remarks>
-</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.fermer">
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.fermer(Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.TeleInfo)">
 	<summary>Fermer le port TeleInfo</summary>
 	<remarks></remarks>
 </member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.DataReceived(System.Object,System.IO.Ports.SerialDataReceivedEventArgs)">
 	<summary>Fonction lancée sur reception de données sur le port COM</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.ProcessReceivedChar(System.Byte)">
+</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.ProcessReceivedChar(Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.TeleInfo,System.Byte)">
 	<summary>Rassemble un message complet pour ensuite l'envoyer à displaymess</summary>
 	<param name="temp">Byte recu</param>
-	<remarks></remarks>
-</member><member name="M:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo.Process(System.String[]@)">
-	<summary>Recomponse les messages reçu</summary>
 	<remarks></remarks>
 </member><member name="T:Driver_teleinfo.Driver_Teleinfo.Driver_Teleinfo">
 	<summary>Class Driver_Teleinfo, permet de communiquer avec le module USB de A DAUGUET</summary>
