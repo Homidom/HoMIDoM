@@ -603,10 +603,10 @@ Partial Public Class uDevice
                 MessageBox.Show("Le champ Précision doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
-            If IsNumeric(TxtCorrection.Text) = False Then
-                MessageBox.Show("Le champ Correction doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                Exit Sub
-            End If
+            'If IsNumeric(TxtCorrection.Text) = False Then
+            'MessageBox.Show("Le champ Correction doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            '  Exit Sub
+            ' End If
             If IsNumeric(TxtValDef.Text) = False Then
                 MessageBox.Show("Le champ Valeur Defaut doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
