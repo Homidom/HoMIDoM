@@ -207,21 +207,12 @@ Public Class Driver_Teleinfo
                 For Cpt = 0 To ([Enum].GetValues(GetType(Labels)).Length)
                     TabLabels.Add("")
                 Next
-
-
-              
             End Sub
 
         End Class
 
+        ' Tableau contenant les differents compteurs 
         Dim TabCompteur(0) As TeleInfo
-
-
-        'Dim ADCO, OPTARIF, ISOUSC, HCHC, HCHP,
-        '  BASE, PTEC, PEJP, IMAX, PAPP, HHPHC, IINST, MOTDETAT, IINST1, IINST2, IINST3, IMAX1, IMAX2, IMAX3, PMAX, PPOT As String
-        ' Dim ADIR1, ADIR2, ADIR3, ADPS, BBRHCJB, BBRHCJR, BBRHCJW, BBRHPJB, BBRHPJR, BBRHPJW, DEMAIN, EJPHN, EJPHPM As String
-
-
 
 #End Region
 
@@ -443,14 +434,14 @@ Public Class Driver_Teleinfo
         ''' Permet de vérifier si un champ est valide
         ''' </summary>
         ''' <param name="Champ"></param>
+        ''' 
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function VerifChamp(ByVal Champ As String, ByVal Value As Object) As String Implements HoMIDom.HoMIDom.IDriver.VerifChamp
             Try
                 Dim retour As String = "0"
                 Select Case UCase(Champ)
-
-
+                  
                 End Select
                 Return retour
             Catch ex As Exception
@@ -479,7 +470,7 @@ Public Class Driver_Teleinfo
             'ouverture du port suivant le Port Com
             Try
                 If _Com <> "" Then
-                    TempCompteur.port_name = _Com
+                    TempCompteur.port_name = _Com.ToUpper
                     TabCompteur(0) = TempCompteur
                     retour = ouvrir(TabCompteur(0))
                 Else
@@ -487,10 +478,16 @@ Public Class Driver_Teleinfo
                 End If
                 'ouverture du port si un Second port est defini
                 If _SecondPort.ToLower <> "nothing" Then
-                    TempCompteur2.port_name = _SecondPort
-                    ReDim Preserve TabCompteur(TabCompteur.Count)
-                    TabCompteur(1) = TempCompteur2
-                    retour2 = ouvrir(TabCompteur(1))
+                    If _SecondPort.ToUpper = _Com.ToUpper Then
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le second Port " & _SecondPort.ToUpper & " ne doit pas etre identique avec le port Principal.")
+                        _SecondPort = "nothing"
+                    Else
+                        TempCompteur2.port_name = _SecondPort.ToUpper
+                        ReDim Preserve TabCompteur(TabCompteur.Count)
+                        TabCompteur(1) = TempCompteur2
+                        retour2 = ouvrir(TabCompteur(1))
+                    End If
+
                 End If
 
                 'traitement des messages de retour
@@ -739,7 +736,17 @@ Public Class Driver_Teleinfo
         Private Function ouvrir(ByVal CptPort As TeleInfo) As String
             Try
                 'ouverture du port
-                If Not CptPort.IsConnectPort Then
+                If Not CptPort.IsConnectPort And Not (CptPort.SerialPort.IsOpen()) Then
+                    ' Test d'ouveture du port Com du controleur 
+                    CptPort.SerialPort.Open()
+                    ' Le port existe ==> le controleur est present
+                    If CptPort.SerialPort.IsOpen() Then
+                        CptPort.SerialPort.Close()
+                    Else
+                        Return ("Port " & CptPort.port_name & " impossible à ouvrir")
+                        Exit Function
+                    End If
+
                     CptPort.SerialPort.PortName = CptPort.port_name 'nom du port : COM1,COM2, COM3...
                     CptPort.SerialPort.BaudRate = 1200 'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
                     CptPort.SerialPort.Parity = IO.Ports.Parity.Even ' parité paire
@@ -772,10 +779,6 @@ Public Class Driver_Teleinfo
                     If (Not (CptPort.SerialPort Is Nothing)) Then ' The COM port exists.
                         If CptPort.SerialPort.IsOpen Then
                             CptPort.SerialPort.DiscardInBuffer()
-                            'limite = 0
-                            'Do While (CptPort.SerialPort.BytesToRead > 0 And limite < 300) ' Wait for the receipt buffer to empty.
-                            'limite = limite + 1
-                            ' Loop
                             CptPort.SerialPort.Close()
                             CptPort.SerialPort.Dispose()
                             CptPort.IsConnectPort = False
@@ -857,6 +860,11 @@ Public Class Driver_Teleinfo
             Dim result() As String
 
             Try
+                ' Analyse de chaque caractere pour detecter 
+                '           Le debut d'une trame
+                '           Le debut d'un message
+                '           La fin   d'un message
+                '           La fin   d'une trame 
                 If (temp = 2) Then ' Debut de trame recu 
                     PortCom.DebutTrame = True
                     PortCom.bytecnt = 0
@@ -865,11 +873,11 @@ Public Class Driver_Teleinfo
                     PortCom.trame = False
                 ElseIf (PortCom.DebutTrame And temp = 3) Then 'Fin de trame recue
                     PortCom.trame = True
+
                 ElseIf (PortCom.DebutTrame And temp = 10) Then ' debut d'info recu
                     PortCom.mess = False
                     PortCom.bytecnt = 0
                 ElseIf (PortCom.DebutTrame And temp = 13) Then ' Fin d'info rec
-
                     PortCom.mess = True
                 Else 'Recuperation de l'info
                     PortCom.recbuf.Add(temp)
@@ -880,10 +888,12 @@ Public Class Driver_Teleinfo
             End Try
 
             Try
+                ' Une trame complete a été recue 
                 If PortCom.trame Then
-                    For Each InfoRec In PortCom.InfoTrame
+                    For Each InfoRec In PortCom.InfoTrame   ' Traitement de chaque message
                         Try
                             If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Traitement Trame ", "ligne recue : " & InfoRec)
+                            ' Separation des infos de la ligne 
                             result = InfoRec.Split(charSeparators, StringSplitOptions.RemoveEmptyEntries)
 
                             If result.Count > 1 Then
@@ -918,7 +928,7 @@ Public Class Driver_Teleinfo
                     PortCom.InfoTrame.Clear()
 
                 ElseIf PortCom.mess Then ' Un message est recu ==> on le stocke
-                    Dim xxx  As String = ""
+                    Dim xxx As String = ""
                     For i As Integer = 0 To PortCom.bytecnt - 1
                         xxx = xxx & (ChrW(PortCom.recbuf(i)))
                     Next
@@ -938,7 +948,7 @@ Public Class Driver_Teleinfo
             Dim CptPort As New TeleInfo
 
             Try
-                If Adresse2.ToLower = "nothing" Then
+                If Adresse2.ToLower = "nothing" Or Adresse2 = "" Then
                     Adresse2 = _Com
                 End If
 
