@@ -8,11 +8,11 @@ Imports System.Runtime.InteropServices
 
 ' Passez en revue les valeurs des attributs de l'assembly
 
-<Assembly: AssemblyTitle("Driver_Skype")> 
+<Assembly: AssemblyTitle("Driver_KNX")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("European Commission")> 
-<Assembly: AssemblyProduct("Driver_Skype")> 
-<Assembly: AssemblyCopyright("Copyright © European Commission 2013")> 
+<Assembly: AssemblyProduct("Driver_KNX")> 
+<Assembly: AssemblyCopyright("Copyright © HoMIDoM 2013")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
