@@ -2653,7 +2653,56 @@ Imports System.Globalization
                 'Checksum12() 
                 WriteRetour(adresse, ListeDevices.ENERGIETOTALE.ToString, valeur) 'total en kWh
                 WriteRetour(adresse, ListeDevices.ENERGIEINSTANTANEE.ToString, CSng((recbuf(5) And &HF) * 65536) + CSng(recbuf(4) * 256) + CSng(recbuf(3))) 'now en Watt
+                'ElseIf (recbuf(0) = &H1A Or recbuf(0) = &H2A Or recbuf(0) = &H3A Or recbuf(0) = &H62) And recbits = 108 Then
+                '    '------------- OWL CM119-180i ---------------
+                '    oregon = True
+                '    adresse = CStr(CInt(recbuf(3) And &HF) << 12) + (CInt(recbuf(2)) << 4) + ((recbuf(0) And &H30) >> 4)
+                '    'If recbuf(0) = &H62 Then
+                '    '    WriteMessage("  ELEC3[" & CStr(intAddr) & "] OWL CM180", False)
+                '    'Else
+                '    '    WriteMessage("  ELEC2[" & CStr(intAddr) & "] OWL CM119", False)
+                '    'End If
+
+                '    'recuperation du canal
+                '    Select Case (recbuf(0) And &HF0)
+                '        Case &H10 : adresse = adresse & "-1"
+                '        Case &H20 : adresse = adresse & "-2"
+                '        Case &H30 : adresse = adresse & "-3"
+                '        Case Else : adresse = adresse & "-" & CStr(Hex(recbuf(0) >> 4 And &HF))
+                '    End Select
+
+                '    'WriteMessage(" counter:" & CSng(recbuf(1) And &HF), False)
+
+                '    'ct1 = CSng((recbuf(5) And &HF) * 65536) + CSng(recbuf(4) * 256) + CSng(recbuf(3) And &HF0)
+                '    'WriteMessage(" Now:" & CStr(Round(ct1 / 994, 3)) & "kW", False)
+                '    'WriteRetour(adresse, ListeDevices.ENERGIEINSTANTANEE.ToString, CSng((recbuf(5) And &HF) * 65536) + CSng(recbuf(4) * 256) + CSng(recbuf(3))) 'now en Watt
+
+                '    Dim valeurint As Long
+                '    valeurint = CLng(recbuf(10)) << 36
+                '    valeurint += (CLng(recbuf(9)) << 28)
+                '    valeurint += (CLng(recbuf(8)) << 20)
+                '    valeurint += (CLng(recbuf(7)) << 12)
+                '    valeurint += (CLng(recbuf(6)) << 4)
+                '    valeurint += (CLng(recbuf(5) >> 4) And &HF)
+                '    valeurint = valeurint / 223666
+                '    'WriteMessage(" Total:" & Strings.Format(ct4, "0.0000") & "kWh", False)
+                '    WriteRetour(adresse, ListeDevices.ENERGIETOTALE.ToString, valeurint) 'total en kWh
+
+                '    If (recbuf(1) And &H10) = 0 Then
+                '        WriteRetour(adresse, ListeDevices.BATTERIE.ToString, "OK")
+                '    Else
+                '        WriteRetour(adresse, ListeDevices.BATTERIE.ToString, "EMPTY")
+                '        WriteBattery(adresse)
+                '    End If
+
+                '    'If recbuf(0) = &H62 Then
+                '    '    checksum12a()
+                '    'Else
+                '    '    checksum12()
+                '    'End If
+
             End If
+
             Return oregon
         Catch ex As Exception
             WriteLog("ERR: RFXCOM processoregon : " & ex.Message)
@@ -2977,6 +3026,48 @@ Imports System.Globalization
             End If
         Catch ex As Exception
             WriteLog("ERR: RFXCOM checksum11 : " & ex.Message)
+        End Try
+    End Sub
+
+    Private Function chksum12() As Byte
+        Try
+            Dim cs As Byte
+            cs = cs8()
+            cs += (recbuf(8) >> 4 And &HF) + (recbuf(8) And &HF)
+            cs += (recbuf(9) >> 4 And &HF) + (recbuf(9) And &HF)
+            cs += (recbuf(10) >> 4 And &HF) + (recbuf(10) And &HF)
+            cs += (recbuf(11) And &HF)
+            Return cs
+        Catch ex As Exception
+            WriteLog("ERR: RFXCOM chksum12 : " & ex.Message)
+            Return "ERR: " & ex.Message
+        End Try
+    End Function
+
+    Private Sub checksum12()
+        Try
+            Dim cs As Short
+            cs = chksum12()
+            cs -= (recbuf(0) >> 4 And &HF)
+            cs = (cs - ((recbuf(12) And &HF) << 4) - (recbuf(11) >> 4 And &HF)) And &HFF
+            If cs <> 0 Then
+                'WriteMessage(" Checksum Error", False)
+            End If
+        Catch ex As Exception
+            WriteLog("ERR: RFXCOM checksum12 : " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub checksum12a()
+        Try
+            Dim cs As Short
+            cs = chksum12()
+            cs = (cs - ((recbuf(12) And &HF) << 4) - (recbuf(11) >> 4 And &HF)) And &HFF
+            If cs <> 0 Then
+                'WriteMessage(" Checksum Error", False)
+            End If
+        Catch ex As Exception
+            WriteLog("ERR: RFXCOM checksum12a : " & ex.Message)
         End Try
     End Sub
 

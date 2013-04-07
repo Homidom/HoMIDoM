@@ -596,7 +596,19 @@ Partial Public Class uDevice
             Next
 
             'on corrige certains valeurs
-            TxtRefresh.Text = Replace(TxtRefresh.Text, ".", ",")
+            'TxtRefresh.Text = Replace(TxtRefresh.Text, ".", ",")
+            TxtRefresh.Text = Replace(TxtRefresh.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtRefresh.Text = Replace(TxtRefresh.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtPrecision.Text = Replace(TxtCorrection.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtPrecision.Text = Replace(TxtCorrection.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtCorrection.Text = Replace(TxtCorrection.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtCorrection.Text = Replace(TxtCorrection.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtValDef.Text = Replace(TxtValDef.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtValDef.Text = Replace(TxtValDef.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtValueMax.Text = Replace(TxtValDef.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtValueMax.Text = Replace(TxtValDef.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtValueMin.Text = Replace(TxtValDef.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtValueMin.Text = Replace(TxtValDef.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
 
             'on check les valeurs renseignés
             If IsNumeric(TxtPrecision.Text) = False Then
@@ -730,7 +742,19 @@ Partial Public Class uDevice
             Next
 
             'on corrige certains valeurs
-            TxtRefresh.Text = Replace(TxtRefresh.Text, ".", ",")
+            'TxtRefresh.Text = Replace(TxtRefresh.Text, ".", ",")
+            TxtRefresh.Text = Replace(TxtRefresh.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtRefresh.Text = Replace(TxtRefresh.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtPrecision.Text = Replace(TxtCorrection.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtPrecision.Text = Replace(TxtCorrection.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtCorrection.Text = Replace(TxtCorrection.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtCorrection.Text = Replace(TxtCorrection.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtValDef.Text = Replace(TxtValDef.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtValDef.Text = Replace(TxtValDef.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtValueMax.Text = Replace(TxtValDef.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtValueMax.Text = Replace(TxtValDef.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtValueMin.Text = Replace(TxtValDef.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtValueMin.Text = Replace(TxtValDef.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
 
             'on check les valeurs renseignés
             If CbType.Text = "BAROMETRE" _
@@ -752,10 +776,10 @@ Partial Public Class uDevice
                     MessageBox.Show("Le champ Précision doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                     Exit Sub
                 End If
-                If IsNumeric(TxtCorrection.Text) = False Then
-                    MessageBox.Show("Le champ Correction doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                    Exit Sub
-                End If
+                'If IsNumeric(TxtCorrection.Text) = False Then
+                '    MessageBox.Show("Le champ Correction doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                '    Exit Sub
+                'End If
                 If IsNumeric(TxtValDef.Text) = False Then
                     MessageBox.Show("Le champ Valeur Defaut doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                     Exit Sub
