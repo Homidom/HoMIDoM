@@ -57,6 +57,8 @@ Class Window1
     Dim _FullScreen As Boolean = True
     Dim mybuttonstyle As Style
     Public _CurrentIdZone As String
+    Dim RandomNumber As New Random
+
 #End Region
 
 #Region "Property"
@@ -1874,8 +1876,8 @@ Class Window1
             elmt.Width = 100
             elmt.Height = 100
             elmt.Rotation = 0
-            elmt.X = 300
-            elmt.Y = 300
+            elmt.X = 100 + RandomNumber.Next(0, 200)
+            elmt.Y = 100 + RandomNumber.Next(0, 200)
             elmt.IsEmpty = True
             elmt.Type = uWidgetEmpty.TypeOfWidget.Empty
             elmt.ShowStatus = False
@@ -1888,8 +1890,8 @@ Class Window1
             elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
             x.Content = elmt
             Canvas1.Children.Add(x)
-            Canvas.SetLeft(x, 300)
-            Canvas.SetTop(x, 300)
+            Canvas.SetLeft(x, elmt.X)
+            Canvas.SetTop(x, elmt.Y)
 
         Catch ex As Exception
             MessageBox.Show("Erreur NewWidgetEmpty: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
