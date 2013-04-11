@@ -53,7 +53,7 @@ Public Class WWidgetProperty
                     BtnEditVisu.Visibility = Windows.Visibility.Collapsed
                     BtnDelete.Visibility = Windows.Visibility.Collapsed
                     ImgPicture.IsEnabled = False
-                    BtnInitPict.Visibility = Windows.Visibility.Collapsed
+                    BtnInitPict.Visibility = Windows.Visibility.Visible
                     TxtEtiq.IsReadOnly = True
                 Else
                     Select Case Obj.Type
@@ -810,19 +810,35 @@ Public Class WWidgetProperty
     Private Sub BtnInitPict_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnInitPict.Click
         If IsNothing(ImgPicture.Source) Then
             Try
-                Dim frm As New WindowImg
-                frm.ShowDialog()
-                If frm.DialogResult.HasValue And frm.DialogResult.Value Then
-                    Dim retour As String = frm.FileName
-                    If retour <> "" Then
-                        ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
-                        ImgPicture.Tag = retour
-                    End If
-                    frm.Close()
-                Else
-                    frm.Close()
+                ' Ancien système: une boîte de dialogue contenant les images du serveur est affichée.
+                'Dim frm As New WindowImg
+                'frm.ShowDialog()
+                'If frm.DialogResult.HasValue And frm.DialogResult.Value Then
+                '    Dim retour As String = frm.FileName
+                '    If retour <> "" Then
+                '        ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
+                '        ImgPicture.Tag = retour
+                '    End If
+                '    frm.Close()
+                'Else
+                '    frm.Close()
+                'End If
+                'frm = Nothing
+
+                ' Nouveau système: l'utilisateur ouvre une image située sur l'ordinateur client
+                Dim openFileDialog1 As New Microsoft.Win32.OpenFileDialog()
+                openFileDialog1.Filter = "Fichiers images|*.png|*.jpg|*.gif"
+                openFileDialog1.FilterIndex = 2
+                openFileDialog1.RestoreDirectory = True
+                Dim DlgResult As Forms.DialogResult
+                DlgResult = openFileDialog1.ShowDialog()
+                If DlgResult = Forms.DialogResult.OK Or DlgResult = -1 Then
+                    ' Le fichier est apparemment ok.
+                    ' On regarde si l'admin est connecté en local, auquel cas
+                    ' pas besoin d'uploader le fichier sur le serveur
+                    ImgPicture.Source = New BitmapImage(New Uri(openFileDialog1.FileName))
+                    ImgPicture.Tag = openFileDialog1.FileName
                 End If
-                frm = Nothing
             Catch ex As Exception
                 MessageBox.Show("Erreur BtnInitPict_Click: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
             End Try

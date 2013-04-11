@@ -239,7 +239,7 @@ Public Class uWidgetEmpty
                         _CurrentValue = _dev.Value
 
                         If IsNumeric(_dev.Value) = True Or IsBoolean(_dev.Value) = True Then
-                            Picture = GetOnOffPicture(_dev.Picture, CSng(_dev.Value))
+                            Picture = GetStatusPicture(_dev.Picture, _dev.Value)
                         End If
                     End If
                 ElseIf _macro IsNot Nothing Then
@@ -493,7 +493,8 @@ Public Class uWidgetEmpty
                 If _Show = True Then
                     If Image.Tag <> _Picture Then
                         Image.Tag = _Picture
-                        Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_Picture))
+                        'Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_Picture))
+                        LoadPicture()
                     End If
                 End If
             Catch ex As Exception
@@ -879,7 +880,7 @@ Public Class uWidgetEmpty
                     End If
                     If Image.Tag <> _dev.Picture And _IsEmpty = False Then
                         Image.Tag = _dev.Picture
-                        Image.Source = ConvertArrayToImage(myService.GetByteFromImage(GetOnOffPicture(_dev.Picture, CSng(_dev.Value))))
+                        LoadPicture()
                     End If
 
                     Dim _ShowValue As Boolean = True
@@ -946,7 +947,7 @@ Public Class uWidgetEmpty
                             _CurrentValue = _dev.Value
 
                             If IsNumeric(_dev.Value) = True Or IsBoolean(_dev.Value) = True Then
-                                Picture = GetOnOffPicture(_dev.Picture, CSng(_dev.Value))
+                                Picture = GetStatusPicture(_dev.Picture, _dev.Value)
                             End If
 
                             If _IsVariation Then
@@ -1842,91 +1843,163 @@ Public Class uWidgetEmpty
 
     End Sub
 
-    Private Function GetOnOffPicture(ByVal filename As String, ByVal value As Single) As String
+    Private Function GetStatusPicture(ByVal Filename As String, ByVal Value As Object) As String
         Try
-            ' On recherche s'il existe des images de type double état (ON/OFF) et si oui:
-            ' - affiche l 'image xxxx_on.jpg si la valeur numérique est différent de zéro (ou False)
-            ' - affiche l 'image xxxx_off.jpg si la valeur numérique est de zéro (ou False)
-            Dim _file As String = filename.ToLower
-            If _file.Contains("_on") = True Or _file.Contains("_off") = True Then
-                If value = 0 Then
-                    GetOnOffPicture = _file.Replace("_on", "_off")
-                Else
-                    GetOnOffPicture = _file.Replace("_off", "_on")
-                End If
-            Else
-                GetOnOffPicture = _file
-            End If
-
-        Catch ex As Exception
-            MessageBox.Show("Erreur GetOnOffPicture: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-            Return filename
-        End Try
-    End Function
-
-    Private Function GetSmartPicture(ByVal Filename As String, ByVal Type As String, ByVal Value As Single) As String
-        Try
-            ' On traite les images standard pour leur affecter une image reflétant l'état du device
-            ' Les images standard sont définies selon le principe typededevice-default.png
-            ' Si l'image n'est pas standard, on applique GetOnOffPicture
-            ' 
-            Filename = Filename.ToLower
-
-            If Filename.EndsWith("-default.png") = True Then
-                Select Case Type.ToUpper
-                    Case "APPAREIL"
-                    Case "AUDIO"
-                    Case "BAROMETRE"
-                    Case "BATTERIE"
-                    Case "COMPTEUR"
-                    Case "CONTACT"
-                    Case "DETECTEUR"
-                    Case "DIRECTIONVENT"
-                    Case "ENERGIEINSTANTANEE"
-                    Case "ENERGIETOTALE"
-                    Case "FREEBOX"
-                    Case "GENERIQUEBOOLEEN"
-                    Case "GENERIQUESTRING"
-                    Case "GENERIQUEVALUE"
-                    Case "HUMIDITE"
-                    Case "LAMPE"
-                        If Value > 0 Then
-                            GetSmartPicture = Filename.Replace("lampe-default.png", "lampe_on.png")
+            Dim _file As String = Filename.ToLower
+            If _file.EndsWith("-defaut.png") = True Then
+                ' Lorsque l'utilisateur n'a pas modifié l'image par défaut automatiquement
+                ' générée sur le serveur à la création du device, on sélectionne l'image à afficher
+                ' sur le widget client en sélectionnant une image reflétant la valeur ou l'état du device
+                Select Case _dev.Type
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL
+                        If Value = "True" Then
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\appareil-on.png"
                         Else
-                            GetSmartPicture = Filename.Replace("lampe-default.png", "lampe_off.png")
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\appareil-off.png"
                         End If
-                    Case "METEO"
-                    Case "MULTIMEDIA"
-                    Case "PLUIECOURANT"
-                    Case "PLUIETOTAL"
-                    Case "SWITCH"
-                    Case "TELECOMMANDE"
-                    Case "TEMPERATURE"
-                    Case "TEMPERATURECONSIGNE"
-                    Case "UV"
-                    Case "VITESSEVENT"
-                    Case "VOLET"
-                        If Value > 80 Then
-                            GetSmartPicture = Filename.Replace("volet-default.png", "volet_100.png")
-                        ElseIf Value > 60 Then
-                            GetSmartPicture = Filename.Replace("volet-default.png", "volet_75.png")
-                        ElseIf Value > 40 Then
-                            GetSmartPicture = Filename.Replace("volet-default.png", "volet_50.png")
-                        ElseIf Value > 20 Then
-                            GetSmartPicture = Filename.Replace("volet-default.png", "volet_25.png")
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.AUDIO
+                        GetStatusPicture = _MonRepertoire & "\Images\Devices\audio-defaut.png"
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.BAROMETRE
+                        GetStatusPicture = _MonRepertoire & "\Images\Devices\barometre-defaut.png"
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.BATTERIE
+                        If CSng(Value) > 80 Then
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-100.png"
+                        ElseIf CSng(Value) > 60 Then
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-75.png"
+                        ElseIf CSng(Value) > 40 Then
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-50.png"
+                        ElseIf CSng(Value) > 20 Then
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-25.png"
                         Else
-                            GetSmartPicture = Filename.Replace("volet-default.png", "volet_0.png")
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-0.png"
+                        End If
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.COMPTEUR
+                        GetStatusPicture = _MonRepertoire & "\Images\Devices\compteur-defaut.png"
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.CONTACT
+                        If Value = "True" Then
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\contact-on.png"
+                        Else
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\contact-off.png"
+                        End If
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.DETECTEUR
+                        If Value = "True" Then
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\detecteur-on.png"
+                        Else
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\detecteur-off.png"
+                        End If
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.DIRECTIONVENT
+                        GetStatusPicture = _MonRepertoire & "\Images\Devices\directionvent-defaut.png"
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.ENERGIEINSTANTANEE
+                        GetStatusPicture = _MonRepertoire & "\Images\Devices\energieinstantanee-defaut.png"
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.ENERGIETOTALE
+                        GetStatusPicture = _MonRepertoire & "\Images\Devices\energietotale-defaut.png"
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.FREEBOX
+                        GetStatusPicture = _MonRepertoire & "\Images\Devices\freebox-defaut.png"
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEBOOLEEN
+                        If Value = "True" <> 0 Then
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\generiquebooleen-on.png"
+                        Else
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\generiquebooleen-off.png"
+                        End If
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUESTRING
+                        GetStatusPicture = _MonRepertoire & "\Images\Devices\generiquestring-defaut.png"
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE
+                        GetStatusPicture = _MonRepertoire & "\Images\Devices\generiquevalue-defaut.png"
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE
+                        GetStatusPicture = _MonRepertoire & "\Images\Devices\humidite-defaut.png"
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.LAMPE
+                        If CSng(Value) > 80 Then
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\lampe-100.png"
+                        ElseIf Value > 60 Then
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\lampe-75.png"
+                        ElseIf Value > 40 Then
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\lampe-50.png"
+                        ElseIf Value > 20 Then
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\lampe-25.png"
+                        Else
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\lampe-0.png"
+                        End If
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.METEO
+                        GetStatusPicture = _MonRepertoire & "\Images\Devices\meteo-defaut.png"
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA
+                        GetStatusPicture = _MonRepertoire & "\Images\Devices\multimedia-defaut.png"
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.PLUIECOURANT
+                        GetStatusPicture = _MonRepertoire & "\Images\Devices\pluiecourant-defaut.png"
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.PLUIETOTAL
+                        GetStatusPicture = _MonRepertoire & "\Images\Devices\pluietotal-defaut.png"
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.SWITCH
+                        If Value = "True" Then
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\switch-on.png"
+                        Else
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\switch-off.png"
+                        End If
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.TELECOMMANDE
+                        GetStatusPicture = _MonRepertoire & "\Images\Devices\telecommande-defaut.png"
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE
+                        GetStatusPicture = _MonRepertoire & "\Images\Devices\temperature-defaut.png"
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE
+                        GetStatusPicture = _MonRepertoire & "\Images\Devices\temperatureconsigne-defaut.png"
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.UV
+                        GetStatusPicture = _MonRepertoire & "\Images\Devices\uv-defaut.png"
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.VITESSEVENT
+                        GetStatusPicture = _MonRepertoire & "\Images\Devices\vitessevent-defaut.png"
+                    Case HoMIDom.HoMIDom.Device.ListeDevices.VOLET
+                        If CSng(Value) > 80 Then
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\volet-100.png"
+                        ElseIf CSng(Value) > 60 Then
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\volet-75.png"
+                        ElseIf CSng(Value) > 40 Then
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\volet-50.png"
+                        ElseIf CSng(Value) > 20 Then
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\volet-25.png"
+                        Else
+                            GetStatusPicture = _MonRepertoire & "\Images\Devices\volet-0.png"
                         End If
                     Case Else
                 End Select
-            Else
-                GetSmartPicture = GetOnOffPicture(Filename, Value)
-            End If
+            ElseIf _dev.Name = "HOMI_Jour" Then
+                If Value = "True" <> 0 Then
+                    GetStatusPicture = _MonRepertoire & "\Images\Devices\jour-jour.png"
+                Else
+                    GetStatusPicture = _MonRepertoire & "\Images\Devices\jour-nuit.png"
+                End If
+            ElseIf _file.Contains("_on") = True Or _file.Contains("_off") = True Then
+                ' On recherche s'il existe des images de type double état (ON/OFF) et si oui:
+                ' - affiche l 'image xxxx_on.jpg si la valeur numérique est différent de zéro (ou False)
+                ' - affiche l 'image xxxx_off.jpg si la valeur numérique est de zéro (ou False)
+                If CSng(Value) = 0 Then
+                    GetStatusPicture = _file.Replace("_on", "_off")
+                Else
+                    GetStatusPicture = _file.Replace("_off", "_on")
+                End If
+                Else
+                    ' Lorsqu'il y a une autre image, on la charge simplement
+                    GetStatusPicture = _file
+                End If
 
         Catch ex As Exception
-            MessageBox.Show("Erreur GetOnOffPicture: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            MessageBox.Show("Erreur GetStatusPicture: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             Return Filename
         End Try
     End Function
+
+    Private Sub LoadPicture()
+
+        Try
+            Dim DisplayPictureFileName As String
+            DisplayPictureFileName = GetStatusPicture(_dev.Picture, _dev.Value)
+            If IO.File.Exists(DisplayPictureFileName) Then
+                ' L'image existe en local
+                Image.Source = New BitmapImage(New Uri(DisplayPictureFileName))
+            Else
+                ' L'image n'a pas été trouvée en local, on la reprend du serveur
+                Image.Source = ConvertArrayToImage(myService.GetByteFromImage(DisplayPictureFileName))
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show("Erreur LoadPicture: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+
+    End Sub
 
 End Class
