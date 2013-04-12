@@ -51,6 +51,15 @@
       <HintPath>..\..\DEBUG\HoMIDom.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="KNXConnector">
+      <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\KNXConnector.dll</HintPath>
+    </Reference>
+    <Reference Include="KNXConnector.EIBD">
+      <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\KNXConnector.EIBD.dll</HintPath>
+    </Reference>
+    <Reference Include="KNXObjects">
+      <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\KNXObjects.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -104,6 +113,10 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ChangeLog.txt" />
+    <Content Include="ReadMe.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
