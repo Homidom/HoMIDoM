@@ -1,6 +1,7 @@
 ﻿Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
+Imports KNXConnector.EIBD
 
 ' Auteur : HoMIDoM
 ' Date : 05/04/2013
@@ -14,17 +15,17 @@ Imports HoMIDom.HoMIDom.Device
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "80964F08-9E3C-11E2-8A55-A64B6188709B" 'ne pas modifier car utilisé dans le code du serveur
-    Dim _Nom As String = "KNX" 'Nom du driver à afficher
+    Dim _Nom As String = "KNX/EIBD" 'Nom du driver à afficher
     Dim _Enable As Boolean = False 'Activer/Désactiver le driver
-    Dim _Description As String = "Driver pour Skype : SMS, Call..." 'Description du driver
+    Dim _Description As String = "Driver KNX over EIBD" 'Description du driver
     Dim _StartAuto As Boolean = False 'True si le driver doit démarrer automatiquement
-    Dim _Protocol As String = "USB-IP" 'Protocole utilisé par le driver, exemple: RS232
+    Dim _Protocol As String = "ETHERNET" 'Protocole utilisé par le driver, exemple: RS232
     Dim _IsConnect As Boolean = False 'True si le driver est connecté et sans erreur
     Dim _IP_TCP As String = "" 'Adresse IP TCP à utiliser, "@" si non applicable pour le cacher côté client
     Dim _Port_TCP As String = "" 'Port TCP à utiliser, "@" si non applicable pour le cacher côté client
     Dim _IP_UDP As String = "@" 'Adresse IP UDP à utiliser, , "@" si non applicable pour le cacher côté client
     Dim _Port_UDP As String = "@" 'Port UDP à utiliser, , "@" si non applicable pour le cacher côté client
-    Dim _Com As String = "" 'Port COM à utiliser, , "@" si non applicable pour le cacher côté client
+    Dim _Com As String = "@" 'Port COM à utiliser, , "@" si non applicable pour le cacher côté client
     Dim _Refresh As Integer = 0 'Valeur à laquelle le driver doit rafraichir les valeurs des devices (ex: toutes les 200ms aller lire les devices)
     Dim _Modele As String = "KNX" 'Modèle du driver/interface
     Dim _Version As String = My.Application.Info.Version.ToString 'Version du driver
@@ -47,6 +48,7 @@ Imports HoMIDom.HoMIDom.Device
 
 #Region "Variables Internes"
     'Insérer ici les variables internes propres au driver et non communes
+    Dim m_Controller As ObjectController
 
 #End Region
 
@@ -441,8 +443,25 @@ Imports HoMIDom.HoMIDom.Device
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
             End Try
 
+            ' chargement du fichier de configuration des objets knx
+            Dim settingsReader As KNXConnector.Settings.SettingsReader
+            settingsReader = New KNXConnector.Settings.SettingsReader()
+            settingsReader.ConfigFilePath = New Uri(System.IO.Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location) & "\\KNX\\conf.xml").ToString()
+            ' initialisation du controleur
+            m_Controller = New ObjectController()
+            m_Controller.HostName = IIf(String.IsNullOrEmpty(_IP_TCP), "localhost", _IP_TCP)
+            m_Controller.Port = 6720
+            If (Not String.IsNullOrEmpty(_Port_TCP)) Then
+                Dim _port As Integer
+                If Integer.TryParse(_Port_TCP, _port) Then
+                    m_Controller.Port = _port
+                End If
+            End If
+            'démarrage du controleur
+            m_Controller.Start(settingsReader.GetAllObjects())
+
             _IsConnect = True
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Driver " & Me.Nom & " démarré")
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & ":Start", String.Format(": OK. Connecté à {0}:{1}", m_Controller.HostName, m_Controller.Port))
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", ex.Message)
         End Try
@@ -452,6 +471,13 @@ Imports HoMIDom.HoMIDom.Device
     ''' <remarks></remarks>
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Try
+            If (Not IsNothing(m_Controller)) Then
+
+                If (m_Controller.IsRunning) Then
+                    m_Controller.Stop()
+                End If
+            End If
+
             _IsConnect = False
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Stop", "Driver " & Me.Nom & " arrêté")
         Catch ex As Exception
@@ -472,6 +498,22 @@ Imports HoMIDom.HoMIDom.Device
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
             If _Enable = False Then Exit Sub
+
+            If _IsConnect = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: Impossible de traiter la commande car le driver n'est pas connecté à la carte")
+                Exit Sub
+            End If
+
+            'récupération de l'objet KNX
+            Dim obj As KNXObjects.ObjectBase
+            obj = m_Controller.GetKNXObject(Objet.adresse1)
+
+            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & ":Read", String.Format("GetKNXObject: GA={0},Value={1}", obj.GroupAddress.ToString(), obj.ToString()))
+
+
+
+
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", ex.Message)
         End Try
@@ -485,27 +527,20 @@ Imports HoMIDom.HoMIDom.Device
     ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
-            If _Enable = False Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
-                Exit Sub
-            End If
+            If _Enable = False Then Throw New Exception("Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
+            If _IsConnect = False Then Throw New Exception("Erreur: Impossible de traiter la commande car le driver n'est pas connecté à la carte")
+            'Execution de la commande
+            Select Case UCase(Command)
+                Case "ON"
+                    m_Controller.SendKNXValue(Objet.adresse1, 1)
+                    Objet.Value = 100
+                Case "OFF"
+                    m_Controller.SendKNXValue(Objet.adresse1, 0)
+                    Objet.Value = 0
+            End Select
 
-            If _IsConnect = False Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: Impossible de traiter la commande car le driver n'est pas connecté à la carte")
-                Exit Sub
-            End If
+            'Modification du device
 
-            If UCase(Command) = "ON" Then
-                Objet.Value = 100
-            End If
-            If UCase(Command) = "OFF" Then
-                Objet.Value = 0
-            End If
-            If UCase(Command) = "DIM" Then
-                If Parametre1 IsNot Nothing Then
-                    Objet.Value = Parametre1
-                End If
-            End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", ex.Message)
         End Try
@@ -610,11 +645,8 @@ Imports HoMIDom.HoMIDom.Device
             _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
 
             'liste des devices compatibles
-            _DeviceSupport.Add(ListeDevices.APPAREIL)
-            _DeviceSupport.Add(ListeDevices.DETECTEUR)
-            _DeviceSupport.Add(ListeDevices.LAMPE)
+            '_DeviceSupport.Add(ListeDevices.LAMPE)
             _DeviceSupport.Add(ListeDevices.SWITCH)
-            _DeviceSupport.Add(ListeDevices.VOLET)
 
             'Parametres avancés
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
@@ -627,13 +659,11 @@ Imports HoMIDom.HoMIDom.Device
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            Add_LibelleDevice("ADRESSE1", "Adresse", "")
+            Add_LibelleDevice("ADRESSE1", "ID KNX", "ID de l'objet KNX spécifié dans le fichier de configuration.")
             Add_LibelleDevice("ADRESSE2", "@", "")
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "@", "")
-            'Add_LibelleDevice("MODELE", "Modele", "Nom du modele de composant : xxx/yyy/zzz", "xxx|yyy|zzz")
             Add_LibelleDevice("REFRESH", "@", "")
-            'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " New", ex.Message)

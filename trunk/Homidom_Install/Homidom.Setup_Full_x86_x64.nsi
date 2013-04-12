@@ -389,7 +389,7 @@ SectionGroup "Drivers" DRIVERS_GRP
   Section "KNX/EIBD" DRIVER_KNX
     CreateDirectory "$INSTDIR\Drivers\KNX"
     SetOutPath "$INSTDIR\Drivers"
-    ;File "..\RELEASE\Drivers\Driver_KNX.dll"
+    File "..\RELEASE\Drivers\Driver_KNX.dll"
   SectionEnd
   
   Section "Mirror" DRIVER_MIRROR
