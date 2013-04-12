@@ -364,7 +364,7 @@ Imports ZibaseDll
             Else
                 retour = CStr(sei.dwValue)
             End If
-            WriteRetour(Objet.adresse, Objet.type.ToString, retour) 'Modification du device
+            WriteRetour(Objet.Adresse1, Objet.type.ToString, retour) 'Modification du device
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Zibase Read", ex.Message)
