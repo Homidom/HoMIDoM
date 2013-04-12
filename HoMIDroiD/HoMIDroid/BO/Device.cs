@@ -24,7 +24,6 @@ namespace HoMIDroid.BO
 
         public event EventHandler ValueChanged;
 
-        public string           Name            { get; set; }
         public string           ImageKey        { get; set; }
         public DeviceType       DeviceType      { get; set; }
         public DeviceCategory   DeviceCategory  { get; set; }

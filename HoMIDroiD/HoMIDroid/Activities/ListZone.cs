@@ -15,7 +15,7 @@ using HoMIDroid.BO;
 
 namespace HoMIDroid.Activities
 {
-    [Activity(Label = "HoMIDroid - Zones")]
+    [Activity(Label = "HoMIDroid - Zones", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation)]
     public class ListZone : ListActivity
     {
         protected override void OnCreate(Bundle bundle)

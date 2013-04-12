@@ -14,7 +14,7 @@ using HoMIDroid.BO;
 
 namespace HoMIDroid.Activities
 {
-    [Activity(Label = "HoMIDroid - View device")]
+    [Activity(Label = "HoMIDroid - View device", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation)]
     public class DeviceOnOff : Activity
     {
         public const string PARAMS_ID = "id";

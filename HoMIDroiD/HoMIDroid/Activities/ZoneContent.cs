@@ -12,18 +12,18 @@ using Android.Widget;
 using HoMIDroid.Server;
 using HoMIDroid.Adapters;
 using HoMIDroid.BO;
+using HoMIDroid.Helpers;
 
 namespace HoMIDroid.Activities
 {
-    [Activity(Label = "HoMIDroid - Zone")]
-    class ZoneContent : ExpandableListActivity
+    [Activity(Label = "HoMIDroid - Zone", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation)]
+    public class ZoneContent : ExpandableListActivity
     {
         public const string PARAMS_ID = "id";
 
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
-
 
             var server = TinyIoC.TinyIoCContainer.Current.Resolve<IHmdServer>();
 
@@ -34,24 +34,37 @@ namespace HoMIDroid.Activities
                 zone = server.GetZone(zoneId);
 
             this.ExpandableListView.Clickable = true;
-            //this.ExpandableListView.ChildClick = new ExpandableListView.ChildClickHandler(this.childClick);
-            this.ExpandableListView.ChildClick += new EventHandler<Android.Widget.ExpandableListView.ChildClickEventArgs>(ExpandableListView_ChildClick);
+            this.ExpandableListView.ChildClick += (sender, e) => { this.childClick(e.GroupPosition, e.ChildPosition); };
 
             if (zone != null)
                 this.SetListAdapter(new ZoneContentExpandableGroupAdapter(this, zone));
         }
 
-        void ExpandableListView_ChildClick(object sender, ExpandableListView.ChildClickEventArgs e)
-        {
-            this.childClick(e.Parent, e.ClickedView, e.GroupPosition, e.ChildPosition, e.Id);
-        }
-
-        private bool childClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
+        private bool childClick(int groupPosition, int childPosition)
         {
             var item = this.ExpandableListAdapter.GetChild(groupPosition, childPosition) as BaseObject;
             if (item != null)
-                return item.GetController(this).Click();
+            {
+                if (item.ConfirmClick)
+                {
+                    this.askForConfirmation(item, (obj) => { obj.GetController(this).Click(); });
+                    return false;
+                }
+                else
+                {
+                    return item.GetController(this).Click();
+                }
+            }
             return false;
+        }
+
+        private void askForConfirmation(BaseObject item, Action<BaseObject> onAccept)
+        {
+            DialogHelper.ShowConfirmationDialog(
+                "Veuillez confirmer",
+                string.Format("Êtes-vous sûr de vouloir lancer la macro '{0}' ?", item.Name),
+                item, this, onAccept
+            );
         }
     }
 }

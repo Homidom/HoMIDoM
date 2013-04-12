@@ -20,7 +20,8 @@ namespace HoMIDroid.Server
     {
         #region Declarations
         List<Device> listDevices;
-        List<Zone> listZones; 
+        List<Zone> listZones;
+        List<Macro> listMacros; 
         #endregion
 
         #region CTor
@@ -28,6 +29,7 @@ namespace HoMIDroid.Server
         {
             this.listDevices = this.createDevice();
             this.listZones = this.createZones();
+            this.listMacros = this.createMacros();
         } 
         #endregion
 
@@ -54,6 +56,11 @@ namespace HoMIDroid.Server
         public override List<Zone> GetZones()
         {
             return this.listZones;
+        }
+
+        public override List<Macro> GetMacros()
+        {
+            return this.listMacros;
         }
 
         public override Zone GetZone(string id)
@@ -101,7 +108,9 @@ namespace HoMIDroid.Server
                 },
                 Macros = new List<Macro>() 
                 { 
-                    new Macro() { Name = "Ma macro" }
+                    new Macro() { Name = "Ma macro 1.1" },
+                    new Macro() { Name = "Ma macro 1.2" },
+                    new Macro() { Name = "Ma macro 1.3" }
                 }
             });
 
@@ -239,7 +248,18 @@ namespace HoMIDroid.Server
             });
 
             return list;
-        } 
+        }
+
+        private List<Macro> createMacros()
+        {
+            return new List<Macro>() 
+            { 
+                new Macro() { Name = "Ma macro #1" },
+                new Macro() { Name = "Ma macro #2" },
+                new Macro() { Name = "Ma macro #3" }
+            };
+        }
         #endregion
+
     }
 }

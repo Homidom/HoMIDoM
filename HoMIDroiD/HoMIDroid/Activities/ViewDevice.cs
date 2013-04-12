@@ -15,7 +15,7 @@ using TinyIoC;
 
 namespace HoMIDroid
 {
-    [Activity(Label = "HoMIDroid - Device Info")]
+    [Activity(Label = "HoMIDroid - Device Info", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation)]
     public class ListDevice2 : ListActivity
     {
         private ProgressDialog progressDialog = null;

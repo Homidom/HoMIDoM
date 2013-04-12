@@ -1,37 +1,78 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-using Android.App;
 using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using HoMIDroid.Controllers;
+using Android.Widget;
+using Android.App;
 
 namespace HoMIDroid.BO
 {
     public class Macro : BaseObject, INamedObject
     {
         /// <summary>
-        /// Gets or sets the name.
+        /// Gets the internal unique identifier of this zone
         /// </summary>
         /// <value>
-        /// The name.
+        /// The id.
         /// </value>
-        public string Name { get; set; }
+        public string Id { get; private set; }
 
+        /// <summary>
+        /// Gets or sets the zone reference.
+        /// </summary>
+        /// <value>
+        /// The reference.
+        /// </value>
+        public string Reference { get; set; }
 
-        public override Controllers.BaseController GetController(Context context)
+        /// <summary>
+        /// Get if a click on this item must be confirmed by the user
+        /// </summary>
+        public override bool ConfirmClick
         {
-            return new NamedController<Macro>(context, this);
+            get
+            {
+                return true;
+            }
         }
 
-        public void Execute()
+        
+        public Macro()
+            : this(Guid.NewGuid().ToString())
         {
+        }
+        public Macro(string id)
+        {
+            this.Id = id;
+        }
 
+        /// <summary>
+        /// Retrieve the controller that will handle any action on this item
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public override Controllers.BaseController GetController(Context context)
+        {
+            return new MacroController(context, this);
+        }
+
+
+        public bool Execute()
+        {
+            var app = TinyIoC.TinyIoCContainer.Current.Resolve<Application>();
+            var server = TinyIoC.TinyIoCContainer.Current.Resolve<HoMIDroid.Server.IHmdServer>();
+            if (server.ExecuteMacro(this))
+            {
+                Toast.MakeText(app, string.Format("Macro '{0}' executée.", this.Name), ToastLength.Short).Show();
+                return true;
+            }
+            else
+            {
+                Toast.MakeText(app, string.Format("Impossible d'executer la macro '{0}'.", this.Name), ToastLength.Short).Show();
+                return false;
+            }
         }
     }
 }

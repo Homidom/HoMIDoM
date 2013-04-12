@@ -62,11 +62,13 @@
     <Compile Include="Activities\ConnectionManager.cs" />
     <Compile Include="Activities\DeviceDim.cs" />
     <Compile Include="Activities\DeviceOnOff.cs" />
+    <Compile Include="Activities\ListMacro.cs" />
     <Compile Include="Activities\Login.cs" />
     <Compile Include="Activities\ViewDevice.cs" />
     <Compile Include="Activities\ListGroupDevice.cs" />
     <Compile Include="Activities\ZoneContent.cs" />
     <Compile Include="Adapters\BaseExpandableGroupAdapter.cs" />
+    <Compile Include="Adapters\MacroAdapter.cs" />
     <Compile Include="Adapters\ZoneAdapter.cs" />
     <Compile Include="Adapters\ZoneContentExpandableGroupAdapter.cs" />
     <Compile Include="Adapters\DeviceExpandableGroupAdapter.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="BO\Settings.cs" />
     <Compile Include="Controllers\MacroController.cs" />
     <Compile Include="Controllers\ZoneController.cs" />
+    <Compile Include="Helpers\DialogHelper.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Adapters\DeviceAdapter.cs" />
     <Compile Include="Activities\ListDevice.cs" />
@@ -133,6 +136,9 @@
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\HmdService\Macro.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\HmdService\NewDevice.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\HmdService\Reference.map">
@@ -201,6 +207,7 @@
     <AndroidResource Include="Resources\Drawable\composant.png" />
     <AndroidResource Include="Resources\Drawable\zone.png" />
     <AndroidResource Include="Resources\Values\style.xml" />
+    <AndroidResource Include="Resources\Drawable\macro.png" />
     <None Include="Web References\HmdService\service.disco" />
   </ItemGroup>
   <ItemGroup>

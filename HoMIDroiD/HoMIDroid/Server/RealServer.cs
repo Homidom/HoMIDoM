@@ -94,6 +94,21 @@ namespace HoMIDroid.Server
             return list;
         }
 
+        public override List<BO.Macro> GetMacros()
+        {
+            var macros = this.Server.GetAllMacros(this.ServerID);
+            if (macros == null)
+                return new List<BO.Macro>();
+
+            var list = new List<BO.Macro>(macros.Length);
+            foreach (var m in macros)
+            {
+                list.Add(this.getMacro(m));
+            }
+
+            return list;
+        }
+
         public override BO.Zone GetZone(string id)
         {
             var zone = this.GetZones().FirstOrDefault(z => z.Id == id);
@@ -142,7 +157,7 @@ namespace HoMIDroid.Server
             }
         }
 
-        public virtual bool RefreshDevice(BO.Device device)
+        public override bool RefreshDevice(BO.Device device)
         {
             var refreshed = this.getDevice(this.Server.ReturnDeviceByID(device.Id, this.ServerID));
 
@@ -217,14 +232,22 @@ namespace HoMIDroid.Server
                 Reference = z._Id
             };
 
-            if (z._ListElement != null && z._ListElement.Length > 0)
-            {
-                foreach (var zElem in z._ListElement)
-                {
-                    
-                }
-            }
+            //if (z._ListElement != null && z._ListElement.Length > 0)
+            //{
+            //    foreach (var zElem in z._ListElement)
+            //    {
+            //        
+            //    }
+            //}
             return zone;
+        }
+        private BO.Macro getMacro(HmdService.Macro m)
+        {
+            return new BO.Macro()
+            {
+                Name = m._Nom,
+                Reference = m._ID
+            };
         }
         private List<BO.DeviceAction> getAction(HmdService.DeviceAction action)
         {
@@ -392,5 +415,6 @@ namespace HoMIDroid.Server
             return null;
         }
         #endregion
+
     }
 }

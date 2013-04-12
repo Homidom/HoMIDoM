@@ -63,6 +63,11 @@ namespace HoMIDroid.Server
             return this.Server.GetZones();
         }
 
+        public List<BO.Macro> GetMacros()
+        {
+            return this.Server.GetMacros();
+        }
+
         public BO.Zone GetZone(string id)
         {
             return this.Server.GetZone(id);
@@ -92,5 +97,7 @@ namespace HoMIDroid.Server
         {
             return this.Server.RefreshDevice(device);
         }
+
+
     }
 }
