@@ -83,6 +83,8 @@ Public Class Driver_Teleinfo
             PPOT
         End Enum
 
+        Dim TabCom As String() = {"COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "NOTHING"}
+
         Dim TabLabels([Enum].GetValues(GetType(Labels)).Length) As String
 
         ' Definition d'une Classe Compteur TeleInfo 
@@ -458,7 +460,15 @@ Public Class Driver_Teleinfo
             'récupération des paramétres avancés
             Try
                 _DEBUG = _Parametres.Item(0).Valeur
-                _SecondPort = _Parametres.Item(1).Valeur
+                _SecondPort = _Parametres.Item(1).Valeur.ToString.ToUpper
+                
+
+                If TabCom.Contains(_SecondPort) Then
+                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start ", "Valeur de SecondPort valide  : " & _SecondPort.ToUpper)
+                Else
+                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start ", "Valeur de SecondPort invalide  : " & _SecondPort.ToUpper & vbCrLf & "Valeur positionnée à NOTHING")
+                    _SecondPort = "NOTHING"
+                End If
 
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
@@ -710,7 +720,7 @@ Public Class Driver_Teleinfo
 
                 'Paramétres avancés
                 Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
-                Add_ParamAvance("SecondPort", "Second Teleinfo Port Com (COM2,COM3,COM4...)", False)
+                Add_ParamAvance("SecondPort", "Second Teleinfo Port Com (COM2,COM3,COM4...nothing)", "nothing")
 
                 Add_LibelleDevice("ADRESSE1", "Adresse", "")
                 Add_LibelleDevice("ADRESSE2", "Adresse Second TeleInfo", "La valeur peut etre COM1, COM2, COM3... ou nothing", "nothing")
