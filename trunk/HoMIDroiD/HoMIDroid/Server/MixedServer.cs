@@ -80,7 +80,7 @@ namespace HoMIDroid.Server
 
         public bool ExecuteMacro(BO.Macro macro)
         {
-            return true;
+            return this.Server.ExecuteMacro(macro);
         }
 
         public void Clear()
