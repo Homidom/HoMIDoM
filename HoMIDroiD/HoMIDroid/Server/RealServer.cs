@@ -144,9 +144,9 @@ namespace HoMIDroid.Server
         {
             try
             {
-                Android.Util.Log.Error("HoMIDroid.Server.RealServer", string.Format("Executing macro '{0}'", macro.Name));
+                Android.Util.Log.Info("HoMIDroid.Server.RealServer", string.Format("Executing macro '{0}'", macro.Name));
 
-                //this.Server.RunMacro(this.ServerID, macro.Id);
+                this.Server.RunMacro(this.ServerID, macro.Id);
 
                 return true;
             }
