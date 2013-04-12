@@ -387,11 +387,21 @@ Imports ZibaseDll
             End If
             If _DEBUG Then WriteLog("DBG: WRITE Device " & Objet.Name & " <-- " & Command)
 
-            If IsNothing(Parametre1) Or Str(Parametre1) = "" Then retour = Ecrirecommand(Objet.adresse1, Objet.modele, Objet.adresse2, Command, 0) Else retour = Ecrirecommand(Objet.adresse1, Objet.modele, Objet.adresse2, Command, Parametre1)
+            'If IsNothing(Parametre1) Or Str(Parametre1) = "" Then retour = Ecrirecommand(Objet.adresse1, Objet.modele, Objet.adresse2, Command, 0) Else retour = Ecrirecommand(Objet.adresse1, Objet.modele, Objet.adresse2, Command, Parametre1)
+            If IsNothing(Parametre1) Then
+                retour = Ecrirecommand(Objet.adresse1, Objet.modele, Objet.adresse2, Command, 0)
+            Else
+                If IsNumeric(Parametre1) Then
+                    retour = Ecrirecommand(Objet.adresse1, Objet.modele, Objet.adresse2, Command, Parametre1)
+                Else
+                    WriteLog("ERR: WRITE Le parametre " & CStr(Parametre1) & " n'est pas un entier")
+                End If
+            End If
+
             If STRGS.InStr(retour, "ERR:") > 0 Then
                 WriteLog(retour)
             Else
-                WriteRetour(Objet.adresse, Objet.type.ToString, retour) 'Modification du device
+                WriteRetour(Objet.Adresse1, Objet.type.ToString, retour) 'Modification du device
             End If
 
 
