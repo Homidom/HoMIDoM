@@ -102,7 +102,7 @@ Function nsDialogsPage
 		Abort
 	${EndIf}
 
-        StrCpy $optInstallAsService "1"
+        StrCpy $optInstallAsService "0"
         StrCpy $optCreateStartMenuShortcuts "1"
         StrCpy $optStartService "1"
 
@@ -494,6 +494,7 @@ SectionGroupEnd
 
 Section "" HoMIDoM_SHORTCUTS
 
+  SetOutPath "$INSTDIR"
   CreateDirectory $SMPROGRAMS\${PRODUCT_NAME}
   CreateShortCut $SMPROGRAMS\${PRODUCT_NAME}\HoMIAdmin.lnk $INSTDIR\HoMIAdmin.exe
 
@@ -644,10 +645,22 @@ Function InstallAndStartHomidomService
 
 startWindowsService:
 
+  ; Démarrage & Redémarrage su service le temps de trouver pourquoi le Serveur ne démarre
+  ; pas correctement s'il detecte un mise à jour (affichage de la la page web)
+
   Banner::show /NOUNLOAD "Démarrage du service..."
   ExecCmd::exec /TIMEOUT=5000 '"$PLUGINSDIR\hitb.exe -sts"' ""
   Pop $0 ; return value - process exit code or error or STILL_ACTIVE (0x103).
   DetailPrint "Démarrage du service : $0"
+
+  ExecCmd::exec /TIMEOUT=5000 '"$PLUGINSDIR\hitb.exe -sps"' ""
+  Pop $0 ; return value - process exit code or error or STILL_ACTIVE (0x103).
+
+  ExecCmd::exec /TIMEOUT=5000 '"$PLUGINSDIR\hitb.exe -sts"' ""
+  Pop $0 ; return value - process exit code or error or STILL_ACTIVE (0x103).
+  DetailPrint "Redémarrage du service : $0"
+
+  
   Banner::destroy
   
 exit_InstallAndStartHomidomService:
