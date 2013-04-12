@@ -15,7 +15,7 @@ using HoMIDroid.BO;
 
 namespace HoMIDroid.Activities
 {
-    [Activity(Label = "HoMIDroid - Devices")]
+    [Activity(Label = "HoMIDroid - Devices", ConfigurationChanges=Android.Content.PM.ConfigChanges.Orientation)]
     public class ListGroupDevice : ExpandableListActivity
     {
         protected override void OnCreate(Bundle bundle)
@@ -23,10 +23,10 @@ namespace HoMIDroid.Activities
             base.OnCreate(bundle);
 
             this.ExpandableListView.Clickable = true;
-            this.ExpandableListView.ChildClick += new EventHandler<Android.Widget.ExpandableListView.ChildClickEventArgs>(ExpandableListView_ChildClick);
+            this.ExpandableListView.ChildClick += (sender, e) => { this.childClick(e.Parent, e.ClickedView, e.GroupPosition, e.ChildPosition, e.Id); };
             
             var app = TinyIoC.TinyIoCContainer.Current.Resolve<HmdApp>();
-            app.RefreshData += new EventHandler<EventArgs>(app_RefreshData);
+            app.RefreshData += app_RefreshData;
 
             this.refresh();
         }
@@ -36,19 +36,14 @@ namespace HoMIDroid.Activities
             base.OnDestroy();
 
             var app = TinyIoC.TinyIoCContainer.Current.Resolve<HmdApp>();
-            app.RefreshData -= new EventHandler<EventArgs>(app_RefreshData);
+            app.RefreshData -= app_RefreshData;
         }
 
-        void app_RefreshData(object sender, EventArgs e)
+        private void app_RefreshData(object sender, EventArgs e)
         {
             this.refresh();
         }
-
-        void ExpandableListView_ChildClick(object sender, ExpandableListView.ChildClickEventArgs e)
-        {
-            this.childClick(e.Parent, e.ClickedView, e.GroupPosition, e.ChildPosition, e.Id);
-        }
-
+        
         private void refresh()
         {
             var server = TinyIoC.TinyIoCContainer.Current.Resolve<IHmdServer>();

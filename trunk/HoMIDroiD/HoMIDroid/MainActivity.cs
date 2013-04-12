@@ -10,14 +10,12 @@ using HoMIDroid.Activities;
 
 namespace HoMIDroid
 {
-    [Activity(Label = "HoMIDroid")]
+    [Activity(Label = "HoMIDroid", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation)]
     public class MainActivity : TabActivity
     {
         public const string TAB_ZONE = "zone";
         public const string TAB_DEVICE = "device";
-
-        TabHost.TabSpec zoneSpec;
-        TabHost.TabSpec deviceSpec;
+        public const string TAB_MACRO = "macro";
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -64,6 +62,12 @@ namespace HoMIDroid
             intent = new Android.Content.Intent().SetClass(this, typeof(ListGroupDevice));
             spec = this.TabHost.NewTabSpec(TAB_DEVICE)
                 .SetIndicator("Composants", Resources.GetDrawable(Resource.Drawable.composant))
+                .SetContent(intent);
+            this.TabHost.AddTab(spec);
+
+            intent = new Android.Content.Intent().SetClass(this, typeof(ListMacro));
+            spec = this.TabHost.NewTabSpec(TAB_MACRO)
+                .SetIndicator("Macros", Resources.GetDrawable(Resource.Drawable.macro))
                 .SetContent(intent);
             this.TabHost.AddTab(spec);
         }

@@ -26,6 +26,8 @@ namespace HoMIDroid.Server
 
         public abstract List<Zone> GetZones();
 
+        public abstract List<Macro> GetMacros();
+
         public abstract Zone GetZone(string id);
 
         public abstract bool ExecuteAction(Device device, DeviceAction action);

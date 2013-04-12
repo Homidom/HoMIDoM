@@ -10,6 +10,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using HoMIDroid.BO;
+using HoMIDroid.Server;
 
 namespace HoMIDroid.Controllers
 {
@@ -25,7 +26,7 @@ namespace HoMIDroid.Controllers
 
         public override bool Click()
         {
-            return base.Click();
+            return this.Macro.Execute();
         }
     }
 }

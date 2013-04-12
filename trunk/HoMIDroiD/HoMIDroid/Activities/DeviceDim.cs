@@ -15,7 +15,7 @@ using HoMIDroid.Server;
 
 namespace HoMIDroid.Activities
 {
-    [Activity(Label = "HoMIDroid - View DIM Device")]
+    [Activity(Label = "HoMIDroid - View DIM Device", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation)]
     public class DeviceDim : Activity
     {
         public const string PARAMS_ID = "id";

@@ -22,6 +22,7 @@ namespace HoMIDroid.Server
         List<Device> GetDevicesInZone(Zone zone);
         List<Group<Device>> GetDevicesByCategory();
         List<Zone> GetZones();
+        List<Macro> GetMacros();
         Zone GetZone(string id);
         bool ExecuteAction(Device device, DeviceAction action);
         bool ExecuteMacro(Macro macro);

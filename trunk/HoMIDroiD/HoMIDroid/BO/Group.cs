@@ -16,11 +16,6 @@ namespace HoMIDroid.BO
     public class Group<T> : BaseObject, INamedObject where T: BaseObject
     {
         /// <summary>
-        /// Gets the group name
-        /// </summary>
-        public string Name { get; private set; }
-
-        /// <summary>
         /// Gets the group description
         /// </summary>
         public string Description { get; private set; }

@@ -45,14 +45,14 @@ namespace HoMIDroid.Server
             return this.zones;
         }
 
-        public void Refresh()
+        public override void Refresh()
         {
             this.Clear();
             this.GetDevices();
             this.GetZones();
         }
 
-        public void Clear()
+        public override void Clear()
         {
             this.devices = null;
             this.zones = null;
