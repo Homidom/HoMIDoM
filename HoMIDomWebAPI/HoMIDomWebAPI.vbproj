@@ -115,6 +115,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseHoMIdomController.vb" />
+    <Compile Include="DriverController.vb" />
     <Compile Include="HoMIDomAPI.vb" />
     <Compile Include="DeviceController.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -132,6 +133,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="UserController.vb" />
+    <Compile Include="ZoneController.vb" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
