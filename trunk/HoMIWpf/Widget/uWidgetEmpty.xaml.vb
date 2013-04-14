@@ -1987,15 +1987,16 @@ Public Class uWidgetEmpty
 
         Try
             Dim DisplayPictureFileName As String
-            DisplayPictureFileName = GetStatusPicture(_dev.Picture, _dev.Value)
-            If IO.File.Exists(DisplayPictureFileName) Then
-                ' L'image existe en local
-                Image.Source = New BitmapImage(New Uri(DisplayPictureFileName))
-            Else
-                ' L'image n'a pas été trouvée en local, on la reprend du serveur
-                Image.Source = ConvertArrayToImage(myService.GetByteFromImage(DisplayPictureFileName))
+            If _dev IsNot Nothing Then
+                DisplayPictureFileName = GetStatusPicture(_dev.Picture, _dev.Value)
+                If IO.File.Exists(DisplayPictureFileName) Then
+                    ' L'image existe en local
+                    Image.Source = New BitmapImage(New Uri(DisplayPictureFileName))
+                Else
+                    ' L'image n'a pas été trouvée en local, on la reprend du serveur
+                    Image.Source = ConvertArrayToImage(myService.GetByteFromImage(DisplayPictureFileName))
+                End If
             End If
-
         Catch ex As Exception
             MessageBox.Show("Erreur LoadPicture: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
