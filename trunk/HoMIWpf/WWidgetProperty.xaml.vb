@@ -38,8 +38,6 @@ Public Class WWidgetProperty
                 ColorPicker2.SelectedColor = Obj.ColorStatus
                 ColorPicker3.SelectedColor = Obj.ColorEtiquette
                 Slider1.Value = CDec("&H" & Obj.ColorBackGround.ToString.Substring(1, 2))
-                ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(Obj.Picture))
-                ImgPicture.Tag = Obj.Picture
                 TxtURL.Text = Obj.URL
                 TxtURLRss.Text = Obj.UrlRss
                 TxtRefresh.Text = Obj.HttpRefresh
@@ -47,6 +45,12 @@ Public Class WWidgetProperty
                 ChKShowClavier.IsChecked = Obj.ShowClavier
                 ChKClearAfterEnter.IsChecked = Obj.ClearAfterEnter
                 _listhttpbtn = Obj.ListHttpButton
+                If IO.File.Exists(Obj.Picture) Then
+                    ImgPicture.Source = New BitmapImage(New Uri(Obj.Picture))
+                Else
+                    ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(Obj.Picture))
+                End If
+                ImgPicture.Tag = Obj.Picture
 
                 If Obj.IsEmpty = False Then
                     BtnEditAction.Visibility = Windows.Visibility.Collapsed
@@ -808,44 +812,54 @@ Public Class WWidgetProperty
     End Sub
 
     Private Sub BtnInitPict_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnInitPict.Click
-        If IsNothing(ImgPicture.Source) Then
-            Try
-                ' Ancien système: une boîte de dialogue contenant les images du serveur est affichée.
-                'Dim frm As New WindowImg
-                'frm.ShowDialog()
-                'If frm.DialogResult.HasValue And frm.DialogResult.Value Then
-                '    Dim retour As String = frm.FileName
-                '    If retour <> "" Then
-                '        ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
-                '        ImgPicture.Tag = retour
-                '    End If
-                '    frm.Close()
-                'Else
-                '    frm.Close()
-                'End If
-                'frm = Nothing
 
-                ' Nouveau système: l'utilisateur ouvre une image située sur l'ordinateur client
-                Dim openFileDialog1 As New Microsoft.Win32.OpenFileDialog()
-                openFileDialog1.Filter = "Fichiers images|*.png|*.jpg|*.gif"
-                openFileDialog1.FilterIndex = 2
-                openFileDialog1.RestoreDirectory = True
-                Dim DlgResult As Forms.DialogResult
-                DlgResult = openFileDialog1.ShowDialog()
-                If DlgResult = Forms.DialogResult.OK Or DlgResult = -1 Then
-                    ' Le fichier est apparemment ok.
-                    ' On regarde si l'admin est connecté en local, auquel cas
-                    ' pas besoin d'uploader le fichier sur le serveur
-                    ImgPicture.Source = New BitmapImage(New Uri(openFileDialog1.FileName))
-                    ImgPicture.Tag = openFileDialog1.FileName
+        ImgPicture.Source = Nothing
+        ImgPicture.Tag = "-defaut.png"
+
+    End Sub
+
+    Private Sub BtnInitPictLocal_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnInitPict_Local.Click
+
+        Try
+            ' l'utilisateur ouvre une image située sur l'ordinateur client
+            Dim openFileDialog1 As New Microsoft.Win32.OpenFileDialog()
+            openFileDialog1.Filter = "Fichiers image (*.PNG;*.JPG;*.GIF)|*.PNG;*.JPG;*.GIF|All files (*.*)|*.*"
+            openFileDialog1.FilterIndex = 1
+            openFileDialog1.RestoreDirectory = True
+            Dim DlgResult As Forms.DialogResult
+            DlgResult = openFileDialog1.ShowDialog()
+            If DlgResult = Forms.DialogResult.OK Or DlgResult = -1 Then
+                ImgPicture.Source = New BitmapImage(New Uri(openFileDialog1.FileName))
+                ImgPicture.Tag = openFileDialog1.FileName
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur BtnInitPictLocal_Click: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+
+    End Sub
+
+    Private Sub BtnInitPictServeur_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnInitPict_Serveur.Click
+
+        Try
+            ' Image téléchargée depuis le serveur: une boîte de dialogue contenant les images du serveur est affichée.
+            Dim frm As New WindowImg
+            frm.ShowDialog()
+            If frm.DialogResult.HasValue And frm.DialogResult.Value Then
+                Dim retour As String = frm.FileName
+                If retour <> "" Then
+                    ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
+                    ImgPicture.Tag = retour
                 End If
-            Catch ex As Exception
-                MessageBox.Show("Erreur BtnInitPict_Click: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
-            End Try
-        Else
-            ImgPicture.Source = Nothing
-            ImgPicture.Tag = ""
-        End If
+                frm.Close()
+            Else
+                frm.Close()
+            End If
+            frm = Nothing
+
+        Catch ex As Exception
+            MessageBox.Show("Erreur BtnInitPictServeur_Click: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+
     End Sub
 
 #Region "Http"

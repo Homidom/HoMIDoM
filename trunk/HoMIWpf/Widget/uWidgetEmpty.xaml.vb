@@ -237,10 +237,7 @@ Public Class uWidgetEmpty
                     If _ShowValue Then
                         LblStatus.Content = _dev.Value & _dev.Unit
                         _CurrentValue = _dev.Value
-
-                        If IsNumeric(_dev.Value) = True Or IsBoolean(_dev.Value) = True Then
-                            Picture = GetStatusPicture(_dev.Picture, _dev.Value)
-                        End If
+                        LoadPicture()
                     End If
                 ElseIf _macro IsNot Nothing Then
                     Etiquette = _macro.Nom
@@ -878,10 +875,10 @@ Public Class uWidgetEmpty
                     If ShowEtiquette And _dev.Name <> _Etiquette And _IsEmpty = False Then
                         Etiquette = _dev.Name
                     End If
-                    If Image.Tag <> _dev.Picture And _IsEmpty = False Then
-                        Image.Tag = _dev.Picture
-                        LoadPicture()
-                    End If
+                    'If Image.Tag <> _dev.Picture And _IsEmpty = False Then
+                    '    Image.Tag = _dev.Picture
+                    '    LoadPicture()
+                    'End If
 
                     Dim _ShowValue As Boolean = True
                     Dim _IsVariation As Boolean = False
@@ -945,10 +942,7 @@ Public Class uWidgetEmpty
                         If _CurrentValue <> _dev.Value Then
                             LblStatus.Content = _dev.Value & _dev.Unit
                             _CurrentValue = _dev.Value
-
-                            If IsNumeric(_dev.Value) = True Or IsBoolean(_dev.Value) = True Then
-                                Picture = GetStatusPicture(_dev.Picture, _dev.Value)
-                            End If
+                            LoadPicture()
 
                             If _IsVariation Then
                                 If StkPopup.Children.Count = 2 Then
@@ -1846,7 +1840,7 @@ Public Class uWidgetEmpty
     Private Function GetStatusPicture(ByVal Filename As String, ByVal Value As Object) As String
         Try
             Dim _file As String = Filename.ToLower
-            If _file.EndsWith("-defaut.png") = True Then
+            If _file.EndsWith("-defaut.png") = True Or _file.Contains("composant_") = True Then
                 ' Lorsque l'utilisateur n'a pas modifié l'image par défaut automatiquement
                 ' générée sur le serveur à la création du device, on sélectionne l'image à afficher
                 ' sur le widget client en sélectionnant une image reflétant la valeur ou l'état du device
@@ -1957,12 +1951,6 @@ Public Class uWidgetEmpty
                         End If
                     Case Else
                 End Select
-            ElseIf _dev.Name = "HOMI_Jour" Then
-                If Value = "True" <> 0 Then
-                    GetStatusPicture = _MonRepertoire & "\Images\Devices\jour-jour.png"
-                Else
-                    GetStatusPicture = _MonRepertoire & "\Images\Devices\jour-nuit.png"
-                End If
             ElseIf _file.Contains("_on") = True Or _file.Contains("_off") = True Then
                 ' On recherche s'il existe des images de type double état (ON/OFF) et si oui:
                 ' - affiche l 'image xxxx_on.jpg si la valeur numérique est différent de zéro (ou False)
@@ -1972,10 +1960,18 @@ Public Class uWidgetEmpty
                 Else
                     GetStatusPicture = _file.Replace("_off", "_on")
                 End If
+            Else
+                ' Lorsqu'il y a une autre image, on la charge simplement
+                GetStatusPicture = _file
+            End If
+
+            If _dev.Name = "HOMI_Jour" Then
+                If Value = "True" <> 0 Then
+                    GetStatusPicture = _MonRepertoire & "\Images\Devices\jour-jour.png"
                 Else
-                    ' Lorsqu'il y a une autre image, on la charge simplement
-                    GetStatusPicture = _file
+                    GetStatusPicture = _MonRepertoire & "\Images\Devices\jour-nuit.png"
                 End If
+            End If
 
         Catch ex As Exception
             MessageBox.Show("Erreur GetStatusPicture: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -1988,7 +1984,7 @@ Public Class uWidgetEmpty
         Try
             Dim DisplayPictureFileName As String
             If _dev IsNot Nothing Then
-                DisplayPictureFileName = GetStatusPicture(_dev.Picture, _dev.Value)
+                DisplayPictureFileName = GetStatusPicture(Me.Picture, _dev.Value)
                 If IO.File.Exists(DisplayPictureFileName) Then
                     ' L'image existe en local
                     Image.Source = New BitmapImage(New Uri(DisplayPictureFileName))
