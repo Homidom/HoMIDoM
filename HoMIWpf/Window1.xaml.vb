@@ -1481,7 +1481,7 @@ Class Window1
             _CurrentIdZone = IdZone
             _zone = myService.ReturnZoneByID(IdSrv, IdZone)
             ImgBackground.Source = Nothing
-            If _zone.Image.Contains("Zone_Image.png") = True Then
+            If _zone.Image.Contains("Zone_Image.png") = True Or _zone.Image.EndsWith("defaut.jpg") = True Then
                 ImageBackGround = _MonRepertoire & "\Images\Fond-defaut.png"
             Else
                 ImgBackground.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Image))
