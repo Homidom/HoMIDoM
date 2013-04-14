@@ -214,6 +214,8 @@ Class Window1
                     Exit For
                 End If
             Next
+
+            ImageBackGround = _ImageBackGroundDefault
         Catch ex As Exception
             MessageBox.Show("Erreur UnloadControl: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1367,7 +1369,7 @@ Class Window1
 
             y = Nothing
             Me.UpdateLayout()
-            Me.Cursor = Cursors.Arrow
+            Me.Cursor = Nothing
         Catch ex As Exception
             MessageBox.Show("Erreur IconMnuDoubleClick: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             Log(TypeLog.INFO, TypeSource.CLIENT, "IconMnuDoubleClick", "Erreur: " & ex.Message)
@@ -1376,7 +1378,20 @@ Class Window1
 
     'Element demande afficher zone
     Private Sub ElementShowZone(ByVal Zoneid As String)
-        ShowZone(Zoneid)
+        Try
+            Canvas1.Children.Clear()
+
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
+
+            Me.UpdateLayout()
+
+            ShowZone(Zoneid)
+        Catch ex As Exception
+            MessageBox.Show("Erreur ElementShowZone: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            Log(TypeLog.INFO, TypeSource.CLIENT, "ElementShowZone", "Erreur: " & ex.Message)
+        End Try
     End Sub
 
     Protected Overrides Sub Finalize()
@@ -1575,6 +1590,7 @@ Class Window1
                         elmt.TailleStatus = 20
                         ' y = elmt
                         elmt.IsHitTestVisible = True
+                        AddHandler elmt.ShowZone, AddressOf ElementShowZone
                         x.Content = elmt
                         _ListElement.Add(elmt)
 
@@ -2235,6 +2251,8 @@ Class Window1
 
     Private Sub MnuConfig_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuConfig.Click
         Try
+            Canvas1.Children.Clear()
+            Me.UpdateLayout()
             ImageBackGround = _ImageBackGroundDefault
             Dim x As New WConfig(Me)
             x.Owner = Me
