@@ -31,6 +31,8 @@ Public Class uWidgetEmpty
     Dim _X As Double = 0
     Dim _Y As Double = 0
     Dim _Rotation As Double = 0
+    Dim _RotationX As Double = 0
+    Dim _RotationY As Double = 0
     Dim _ModeEdition As Boolean '=True si on est en mode edition
     Dim _ShowPicture As Boolean = True
     Dim _Picture As String = ""
@@ -465,6 +467,42 @@ Public Class uWidgetEmpty
                 Dim x As ContentControl = Me.Parent
                 Dim Trg As New TransformGroup
                 Dim Rot As New RotateTransform(value)
+                Trg.Children.Add(Rot)
+                x.RenderTransform = Trg
+            End If
+        End Set
+    End Property
+
+    Public Property RotationX As Double
+        Get
+            Return _RotationX
+        End Get
+        Set(ByVal value As Double)
+            _RotationX = value
+            If _Show = False Then Exit Property
+
+            If Me.Parent IsNot Nothing Then
+                Dim x As ContentControl = Me.Parent
+                Dim Trg As New TransformGroup
+                Dim Rot As New SkewTransform(_RotationX, _RotationY)
+                Trg.Children.Add(Rot)
+                x.RenderTransform = Trg
+            End If
+        End Set
+    End Property
+
+    Public Property RotationY As Double
+        Get
+            Return _RotationY
+        End Get
+        Set(ByVal value As Double)
+            _RotationY = value
+            If _Show = False Then Exit Property
+
+            If Me.Parent IsNot Nothing Then
+                Dim x As ContentControl = Me.Parent
+                Dim Trg As New TransformGroup
+                Dim Rot As New SkewTransform(_RotationX, _RotationY)
                 Trg.Children.Add(Rot)
                 x.RenderTransform = Trg
             End If
