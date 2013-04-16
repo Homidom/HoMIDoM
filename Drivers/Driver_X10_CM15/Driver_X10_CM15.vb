@@ -402,13 +402,19 @@ Public Class Driver_X10_CM15
 
             If Commande = "ON" Then
                 ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " on")
+                Objet.Value = 100
             End If
             If Commande = "OFF" Then
                 ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " off")
+                Objet.Value = 0
             End If
             If Commande = "DIM" Then
-                ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " dim " & Parametre1)
+                If Parametre1 IsNot Nothing Then
+                    ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " dim " & Parametre1)
+                    Objet.Value = Parametre1
+                End If
             End If
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: " & ex.ToString)
         End Try
