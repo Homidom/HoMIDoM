@@ -523,7 +523,11 @@ Namespace HoMIDom
                                             _CycleSave = list.Item(0).Attributes.Item(j).Value
                                         Case "voice"
                                             _Voice = list.Item(0).Attributes.Item(j).Value
-                                            If String.IsNullOrEmpty(_Voice) = True Then _Voice = GetFirstVoice()
+                                            If String.IsNullOrEmpty(_Voice) = True Then
+                                                If String.IsNullOrEmpty(GetFirstVoice) = False Then
+                                                    _Voice = GetFirstVoice()
+                                                End If
+                                            End If
                                         Case "saverealtime"
                                             _SaveRealTime = list.Item(0).Attributes.Item(j).Value
                                         Case "devise"
@@ -3707,17 +3711,20 @@ Namespace HoMIDom
         ''' </summary>
         ''' <returns>A string array of all the voices installed</returns>
         ''' <remarks>Make sure you have the System.Speech namespace reference added to your project</remarks>
-        Function ReturnAllSpeechSynthesisVoices() As String()
+        Function ReturnAllSpeechSynthesisVoices() As List(Of String)
             Try
                 Dim oSpeech As New System.Speech.Synthesis.SpeechSynthesizer()
                 Dim installedVoices As System.Collections.ObjectModel. _
                                         ReadOnlyCollection(Of System.Speech.Synthesis.InstalledVoice) _
                                         = oSpeech.GetInstalledVoices
+                Dim names As New List(Of String)
 
-                Dim names(installedVoices.Count - 1) As String
-                For i As Integer = 0 To installedVoices.Count - 1
-                    names(i) = installedVoices(i).VoiceInfo.Name
-                Next
+                If installedVoices IsNot Nothing Then
+                    ' Dim names(installedVoices.Count - 1) As String
+                    For i As Integer = 0 To installedVoices.Count - 1
+                        names.Add(installedVoices(i).VoiceInfo.Name)   'names(i) = installedVoices(i).VoiceInfo.Name
+                    Next
+                End If
 
                 Return names
             Catch ex As Exception
@@ -3734,10 +3741,11 @@ Namespace HoMIDom
         Private Function GetFirstVoice() As String
             Try
 
-                Dim strAllVoices() As String = ReturnAllSpeechSynthesisVoices()
+                Dim strAllVoices As New List(Of String)
+                strAllVoices = ReturnAllSpeechSynthesisVoices()
                 Dim retour As String = ""
 
-                If strAllVoices.Length > 0 Then
+                If strAllVoices.Count > 0 Then
                     retour = strAllVoices(0)
                 End If
 
@@ -3918,12 +3926,13 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Function GetAllVoice() As List(Of String) Implements IHoMIDom.GetAllVoice
             Try
-                Dim strAllVoices() As String = ReturnAllSpeechSynthesisVoices()
-                Dim list As New List(Of String)
-                For Each Str As String In strAllVoices
-                    list.Add(Str)
-                Next
-                Return list
+                Dim strAllVoices As New List(Of String)
+                strAllVoices = ReturnAllSpeechSynthesisVoices()
+                'Dim list As New List(Of String)
+                'For Each Str As String In strAllVoices
+                '    list.Add(Str)
+                'Next
+                Return strAllVoices
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllVoice", "Erreur : " & ex.Message)
                 Return Nothing
