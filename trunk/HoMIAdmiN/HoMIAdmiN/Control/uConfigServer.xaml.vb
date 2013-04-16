@@ -192,13 +192,6 @@ Partial Public Class uConfigServer
 
                 ChkModeDecouv.IsChecked = myService.GetModeDecouverte
 
-                Dim idx = -1
-                For i As Integer = 0 To myService.GetAllVoice.Count - 1
-                    CbVoice.Items.Add(myService.GetAllVoice.Item(i))
-                    If myService.GetAllVoice.Item(i) = myService.GetDefautVoice Then idx = i
-                Next
-                CbVoice.SelectedIndex = idx
-
                 Dim _list As List(Of Boolean) = myService.GetTypeLogEnable
                 ChkTyp0.IsChecked = _list.Item(0)
                 ChkTyp1.IsChecked = _list.Item(1)
@@ -212,6 +205,15 @@ Partial Public Class uConfigServer
                 ChkTyp9.IsChecked = _list.Item(9)
 
                 ChKSaveRealTime.IsChecked = My.Settings.SaveRealTime
+
+                Dim idx = -1
+                For i As Integer = 0 To myService.GetAllVoice.Count - 1
+                    CbVoice.Items.Add(myService.GetAllVoice.Item(i))
+                    If myService.GetAllVoice.Item(i) = myService.GetDefautVoice Then idx = i
+                Next
+                CbVoice.SelectedIndex = idx
+
+
             End If
 
         Catch ex As Exception
