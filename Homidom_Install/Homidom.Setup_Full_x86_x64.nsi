@@ -104,7 +104,7 @@ Function nsDialogsPage
 
         StrCpy $optInstallAsService "0"
         StrCpy $optCreateStartMenuShortcuts "1"
-        StrCpy $optStartService "1"
+        StrCpy $optStartService "0"
 
         ${NSD_CreateCheckbox} 0 10u 100% 10u "Installer HoMIDoM Server en tant que Service Windows"
 	Pop $chkInstallAsService_Handle
@@ -142,6 +142,7 @@ Var IsHomidomInstalled ;indique si HoMIDom est déja installé
 Var IsHomidomInstalledAsService ;indique si HoMIDoMService est installé en tant que service windows
 Var IsHomidomServiceRunning ;indique si le service HoMIDoMService est démarré
 Var IsHomidomAppRunning ;indique si une app Homidom est en cours d'execution (Admin,WPF, )
+Var HomidomInstalledVersion ;Numéro de version Homidom.dll
 
 ; **********************************************************************
 ; Initialisation
@@ -156,7 +157,7 @@ Function .onInit
   File /oname=$PLUGINSDIR\hitb.exe "tools\hitb-1.0\win32\hitb.exe"
     
   # affichage du Logo "splah"
-  advsplash::show 2000 0 0 0xFFFFFF $PLUGINSDIR\splash
+  advsplash::show 2000 600 400 -1 $PLUGINSDIR\splash
   Pop $0
 
   ; sélection de la langue
@@ -177,6 +178,8 @@ Function .onInit
   StrCpy $IsHomidomInstalled "0"
   IfFileExists "$INSTDIR\HoMIDom.dll" 0 homidomIsNotInstalled
     StrCpy $IsHomidomInstalled "1"
+    ;récupération de la version installée
+    ${GetFileVersion} "$INSTDIR\HoMIDom.dll" $HomidomInstalledVersion
 
 homidomIsNotInstalled:
 
@@ -211,7 +214,6 @@ Function .onInstSuccess
   WriteRegExpandStr HKLM "${PRODUCT_UNINSTALL_REGKEY}" "HelpLink" "http://www.homidom.com"
   WriteRegDWORD HKLM "${PRODUCT_UNINSTALL_REGKEY}" "EstimatedSize" "$0"
   WriteUninstaller "uninstall.exe"
-
 
   ; - Démarrage du serveur
   StrCmp "$optStartService" "0" skipStartService
@@ -251,7 +253,8 @@ Section "" HoMIDoM_STOPSVC
 noHomidomAppRunning:
   StrCmp "$IsHomidomServiceRunning" "1" 0 noHomidomSvcRunning
     MessageBox MB_ICONEXCLAMATION|MB_YESNO "Le serveur ${PRODUCT_NAME} est en cours d'execution. Voulez-vous l'arreter  ?" IDYES killHomidomNow IDNO 0
-
+    Abort
+    
 killHomidomNow:
   call KillAllHomidomServices
 
@@ -473,6 +476,7 @@ SectionGroup "Drivers" DRIVERS_GRP
     File "..\RELEASE\Drivers\Driver_Virtuel.dll"
   SectionEnd
   Section "Weather" DRIVER_Weather
+    SectionIn RO
     SetOutPath "$INSTDIR\Drivers"
     File "..\RELEASE\Drivers\Driver_Weather.dll"
   SectionEnd
@@ -501,8 +505,6 @@ Section "" HoMIDoM_SHORTCUTS
   ${If} "$optInstallAsService" == "0"
     CreateShortCut $SMPROGRAMS\${PRODUCT_NAME}\HoMIDoMService.lnk $INSTDIR\HoMIDoMService.exe
   ${EndIf}
-  
-  
 
 SectionEnd
 
