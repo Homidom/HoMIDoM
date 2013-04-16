@@ -529,6 +529,10 @@ Class Window1
                                         x.Height = list.Item(j).Attributes.Item(k).Value
                                     Case "angle"
                                         x.Rotation = list.Item(j).Attributes.Item(k).Value
+                                    Case "anglex"
+                                        x.RotationX = list.Item(j).Attributes.Item(k).Value
+                                    Case "angley"
+                                        x.RotationY = list.Item(j).Attributes.Item(k).Value
                                     Case "showetiquette"
                                         x.ShowEtiquette = list.Item(j).Attributes.Item(k).Value
                                     Case "showstatus"
@@ -853,6 +857,12 @@ Class Window1
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("angle")
                 writer.WriteValue(_ListElement.Item(i).Rotation)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("anglex")
+                writer.WriteValue(_ListElement.Item(i).RotationX)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("angley")
+                writer.WriteValue(_ListElement.Item(i).RotationY)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("showetiquette")
                 writer.WriteValue(_ListElement.Item(i).ShowEtiquette)
@@ -1506,8 +1516,10 @@ Class Window1
                             Dim x As New ContentControl
                             Dim Trg As New TransformGroup
                             Dim Rot As New RotateTransform(_ListElement.Item(j).Rotation)
+                            Dim RotXY As New SkewTransform(_ListElement.Item(j).RotationX, _ListElement.Item(j).RotationY)
 
                             Trg.Children.Add(Rot)
+                            Trg.Children.Add(RotXY)
                             x.Width = _ListElement.Item(j).Width
                             x.Height = _ListElement.Item(j).Height
                             x.RenderTransform = Trg
@@ -1528,6 +1540,8 @@ Class Window1
                             y.X = _ListElement.Item(j).X
                             y.Y = _ListElement.Item(j).Y
                             y.Rotation = _ListElement.Item(j).Rotation
+                            y.RotationX = _ListElement.Item(j).RotationX
+                            y.RotationY = _ListElement.Item(j).RotationY
                             y.IsEmpty = _ListElement.Item(j).IsEmpty
                             y.ShowEtiquette = _ListElement.Item(j).ShowEtiquette
                             y.ShowStatus = _ListElement.Item(j).ShowStatus
@@ -1588,7 +1602,6 @@ Class Window1
                         elmt.Type = uWidgetEmpty.TypeOfWidget.Device
                         elmt.ColorBackGround = New SolidColorBrush(Color.FromArgb(127, 80, 80, 80))
                         elmt.TailleStatus = 20
-                        ' y = elmt
                         elmt.IsHitTestVisible = True
                         AddHandler elmt.ShowZone, AddressOf ElementShowZone
                         x.Content = elmt
@@ -1632,6 +1645,8 @@ Class Window1
                     y.X = _ListElement.Item(i).X
                     y.Y = _ListElement.Item(i).Y
                     y.Rotation = _ListElement.Item(i).Rotation
+                    y.RotationX = _ListElement.Item(i).RotationX
+                    y.RotationY = _ListElement.Item(i).RotationY
                     y.IsEmpty = _ListElement.Item(i).IsEmpty
                     y.Type = _ListElement.Item(i).Type
                     y.CanEditValue = _ListElement.Item(i).CanEditValue
@@ -1716,19 +1731,29 @@ Class Window1
                             _ListElement.Item(j).Height = child.Height
 
                             If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
-                                Dim gt As TransformGroup = child.RenderTransform '.GetValue(RotateTransform.AngleProperty)
+                                Dim gt As TransformGroup = child.RenderTransform
                                 For k = 0 To gt.Children.Count - 1
                                     If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
                                         Dim rt As RotateTransform = gt.Children.Item(k)
                                         If rt IsNot Nothing Then
                                             _ListElement.Item(j).Rotation = rt.Angle
                                         End If
-                                        Exit For
+                                    End If
+                                    If InStr(LCase(gt.Children.Item(k).GetType.ToString), "skewtransform") > 0 Then
+                                        Dim rt As SkewTransform = gt.Children.Item(k)
+                                        If rt IsNot Nothing Then
+                                            _ListElement.Item(j).RotationX = rt.AngleX
+                                            _ListElement.Item(j).RotationY = rt.AngleY
+                                        End If
                                     End If
                                 Next
                             End If
                             If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
                                 _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                            End If
+                            If InStr(child.RenderTransform.GetType.ToString, "SkewTransform") > 0 Then
+                                _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleXProperty)
+                                _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleYProperty)
                             End If
                         End If
                     Next
@@ -1792,12 +1817,22 @@ Class Window1
                                         If rt IsNot Nothing Then
                                             _ListElement.Item(j).Rotation = rt.Angle
                                         End If
-                                        Exit For
+                                    End If
+                                    If InStr(LCase(gt.Children.Item(k).GetType.ToString), "skewtransform") > 0 Then
+                                        Dim rt As SkewTransform = gt.Children.Item(k)
+                                        If rt IsNot Nothing Then
+                                            _ListElement.Item(j).RotationX = rt.AngleX
+                                            _ListElement.Item(j).RotationY = rt.AngleY
+                                        End If
                                     End If
                                 Next
                             End If
                             If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
                                 _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                            End If
+                            If InStr(child.RenderTransform.GetType.ToString, "SkewTransform") > 0 Then
+                                _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleXProperty)
+                                _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleYProperty)
                             End If
                         End If
                     Next
@@ -1851,12 +1886,22 @@ Class Window1
                                     If rt IsNot Nothing Then
                                         _ListElement.Item(j).Rotation = rt.Angle 'child.RenderTransform.GetValue(RotateTransform.AngleProperty)
                                     End If
-                                    Exit For
+                                End If
+                                If InStr(LCase(gt.Children.Item(k).GetType.ToString), "skewtransform") > 0 Then
+                                    Dim rt As SkewTransform = gt.Children.Item(k)
+                                    If rt IsNot Nothing Then
+                                        _ListElement.Item(j).RotationX = rt.AngleX
+                                        _ListElement.Item(j).RotationY = rt.AngleY
+                                    End If
                                 End If
                             Next
                         End If
                         If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
                             _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                        End If
+                        If InStr(child.RenderTransform.GetType.ToString, "SkewTransform") > 0 Then
+                            _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleXProperty)
+                            _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleYProperty)
                         End If
                     End If
                 Next

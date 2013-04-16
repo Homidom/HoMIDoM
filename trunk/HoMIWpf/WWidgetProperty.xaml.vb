@@ -29,6 +29,8 @@ Public Class WWidgetProperty
                 TxtWidth.Text = Obj.Width
                 TxtHeight.Text = Obj.Height
                 TxtRotation.Text = Obj.Rotation
+                TxtRotationX.Text = Obj.RotationX
+                TxtRotationY.Text = Obj.RotationY
                 TxtDefStatus.Text = Obj.DefautLabelStatus
                 TxtTailleStatus.Text = Obj.TailleStatus
                 lblColor.Background = Obj.ColorBackGround
@@ -224,6 +226,8 @@ Public Class WWidgetProperty
             Obj.Width = TxtWidth.Text
             Obj.Height = TxtHeight.Text
             Obj.Rotation = TxtRotation.Text
+            Obj.RotationX = TxtRotationX.Text
+            Obj.RotationY = TxtRotationY.Text
             Obj.DefautLabelStatus = TxtDefStatus.Text
             Obj.Picture = ImgPicture.Tag
             Obj.ListHttpButton = _listhttpbtn
@@ -665,6 +669,7 @@ Public Class WWidgetProperty
             TxtValueVisu.Visibility = Windows.Visibility.Visible
             LblPicture.Visibility = Windows.Visibility.Visible
             ImgVisu.Visibility = Windows.Visibility.Visible
+            BtnImgVisu.Visibility = Windows.Visibility.Visible
         End If
     End Sub
 
@@ -678,6 +683,7 @@ Public Class WWidgetProperty
         TxtValueVisu.Visibility = Windows.Visibility.Visible
         LblPicture.Visibility = Windows.Visibility.Visible
         ImgVisu.Visibility = Windows.Visibility.Visible
+        BtnImgVisu.Visibility = Windows.Visibility.Visible
         _FlagNewVisu = True
     End Sub
 
@@ -732,6 +738,7 @@ Public Class WWidgetProperty
         LblVisuValue.Visibility = Windows.Visibility.Collapsed
         LblPicture.Visibility = Windows.Visibility.Collapsed
         ImgVisu.Visibility = Windows.Visibility.Collapsed
+        BtnImgVisu.Visibility = Windows.Visibility.Collapsed
     End Sub
 
     Private Sub ImgVisu_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgVisu.MouseDown, BorderVisu.MouseDown
