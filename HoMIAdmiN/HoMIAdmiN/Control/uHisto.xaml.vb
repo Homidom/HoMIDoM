@@ -26,8 +26,7 @@ Public Class uHisto
             DateFinSelect.Text = Now.Date.AddDays(1).ToString
 
             _Devices = Devices
-            '_with = withcontainer - 20
-            Update_Graphe()
+
 
         Catch ex As Exception
             MessageBox.Show("Erreur lors de la création de la fenêtre des relevés: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -386,6 +385,10 @@ Public Class uHisto
         Catch ex As Exception
             MessageBox.Show("Erreur uHisto CbBackColor_SelectionChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
+    End Sub
+
+    Private Sub uHisto_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
+        Update_Graphe()
     End Sub
 
     Private Sub uHisto_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
