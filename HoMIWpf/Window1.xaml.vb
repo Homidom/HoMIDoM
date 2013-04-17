@@ -89,7 +89,6 @@ Class Window1
         End Get
         Set(ByVal value As Boolean)
             _ShowTemperature = value
-            ' Affiche("Temperature", value)
         End Set
     End Property
 
@@ -1305,13 +1304,10 @@ Class Window1
     'Affiche la date et heure, heures levé et couché du soleil
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
         Try
-            Me.UpdateLayout()
-
             If IsConnect Then
-                Dim mytime As String = myService.GetTime
-                LblTime.Content = Now.ToLongDateString & " " & mytime & " "
+                LblTime.Content = Now.ToLongDateString & " " & myService.GetTime
 
-                If ShowSoleil = True Then
+                If ShowSoleil = True And ((LblLeve.Content <> "?" And LblCouche.Content <> "?") Or Now.Second = 0) Then
                     Dim mydate As Date
                     mydate = myService.GetHeureLeverSoleil
                     LblLeve.Content = mydate.ToShortTimeString
@@ -1328,6 +1324,8 @@ Class Window1
             End If
             Log(TypeLog.INFO, TypeSource.CLIENT, "DispatcherTimer", "DispatcherTimer: " & ex.Message)
             LblTime.Content = Now.ToLongDateString & " " & Now.ToShortTimeString
+            LblLeve.Content = "?"
+            LblCouche.Content = "?"
             MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
@@ -1336,7 +1334,6 @@ Class Window1
     Private Sub IconMnuDoubleClick(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
         Try
             Me.Cursor = Cursors.Wait
-            ' If Canvas1.Children.Count > 0 And sender.Type <> uCtrlImgMnu.TypeOfMnu.LecteurMedia Then
             Canvas1.Children.Clear()
 
             GC.Collect()
@@ -1344,8 +1341,6 @@ Class Window1
             GC.Collect()
 
             Me.UpdateLayout()
-
-            '  End If
 
             Chk1.Visibility = Windows.Visibility.Collapsed
             Chk2.Visibility = Windows.Visibility.Collapsed
@@ -1434,43 +1429,35 @@ Class Window1
         End If
     End Sub
 
-    'Bouton Quitter
-    Private Sub BtnQuit_Click_1(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnQuit.Click
-        Try
-            SaveConfig(_MonRepertoireAppData & "\config\HoMIWpF.xml")
-            Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermture de l'application")
-            End
-        Catch ex As Exception
-            MessageBox.Show("Erreur BtnQuit_Click_1: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-            End
-        End Try
-    End Sub
-
     Private Sub LoadZones()
+        Try
 
-        Dim cntNewZone As Integer = 0
-        For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
-            Dim x As Zone = myService.GetAllZones(IdSrv).Item(i)
-            If ListMnu.Count = 0 Then
-                NewBtnMnu(x.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , x.ID)
-                cntNewZone += 1
-            Else
-                Dim flagexist As Boolean = False
-                For j As Integer = 0 To ListMnu.Count - 1
-                    If ListMnu.Item(j).IDElement = x.ID Then
-                        flagexist = True
-                    End If
-                Next
-                If flagexist = False Then
-                    NewBtnMnu(x.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , x.ID, True)
+            Dim cntNewZone As Integer = 0
+            For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
+                Dim x As Zone = myService.GetAllZones(IdSrv).Item(i)
+                If ListMnu.Count = 0 Then
+                    NewBtnMnu(x.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , x.ID)
                     cntNewZone += 1
+                Else
+                    Dim flagexist As Boolean = False
+                    For j As Integer = 0 To ListMnu.Count - 1
+                        If ListMnu.Item(j).IDElement = x.ID Then
+                            flagexist = True
+                            Exit For
+                        End If
+                    Next
+                    If flagexist = False Then
+                        NewBtnMnu(x.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , x.ID, True)
+                        cntNewZone += 1
+                    End If
                 End If
+            Next
+            If cntNewZone > 0 Then
+                MessageBox.Show(cntNewZone & " nouvelle(s) zone(s) ajoutée(s)", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
             End If
-        Next
-        If cntNewZone > 0 Then
-            MessageBox.Show(cntNewZone & " nouvelle(s) zone(s) ajoutée(s)", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
-        End If
-
+        Catch ex As Exception
+            MessageBox.Show("Erreur LoadZones: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
     Public Sub ShowZone(ByVal IdZone As String)
         Try
@@ -1490,6 +1477,7 @@ Class Window1
             'Init des variables communes
             _CurrentIdZone = IdZone
             _zone = myService.ReturnZoneByID(IdSrv, IdZone)
+
             ImgBackground.Source = Nothing
             If _zone.Image.Contains("Zone_Image.png") = True Or _zone.Image.EndsWith("defaut.jpg") = True Then
                 ImageBackGround = _MonRepertoire & "\Images\Fond-defaut.png"
@@ -2169,6 +2157,8 @@ Class Window1
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
             Canvas.SetZIndex(x, 0)
+
+            elmt = Nothing
         Catch ex As Exception
             MessageBox.Show("Erreur NewWidgetLabel_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -2361,10 +2351,6 @@ Class Window1
     End Sub
 
 
-    Private Sub StkTop_MouseLeftButtonDown_1(sender As Object, e As MouseButtonEventArgs)
-
-    End Sub
-
     Private Sub StkTop_MouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs) Handles StkTop.MouseLeftButtonDown
         Try
             DragMove()
@@ -2372,4 +2358,31 @@ Class Window1
         End Try
     End Sub
 
+#Region "Quitter"
+    'Bouton Quitter
+    Private Sub BtnQuit_Click_1(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnQuit.Click
+        Quitter()
+    End Sub
+
+    ''' <summary>
+    ''' Menu quitter
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub MnuQuitter_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuQuitter.Click
+        Quitter()
+    End Sub
+
+    Private Sub Quitter()
+        Try
+            SaveConfig(_MonRepertoireAppData & "\config\HoMIWpF.xml")
+            Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermture de l'application")
+            End
+        Catch ex As Exception
+            MessageBox.Show("Erreur Quitter: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            End
+        End Try
+    End Sub
+#End Region
 End Class
