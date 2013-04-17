@@ -14,11 +14,4 @@ Public Class UserController
         Return HoMIDomAPI.CurrentServer.ReturnUserByUsername(Me.ServerKey, id)
     End Function
 
-
-    <HttpGet()>
-    Public Function ExecuteCommand(id As String, command As String) As Boolean
-        HoMIDomAPI.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, id, New DeviceAction() With {.Nom = command})
-        Return True
-    End Function
-
 End Class

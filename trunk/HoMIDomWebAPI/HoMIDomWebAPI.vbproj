@@ -118,6 +118,7 @@
     <Compile Include="DriverController.vb" />
     <Compile Include="HoMIDomAPI.vb" />
     <Compile Include="DeviceController.vb" />
+    <Compile Include="MacroController.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -133,6 +134,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="TriggerController.vb" />
     <Compile Include="UserController.vb" />
     <Compile Include="ZoneController.vb" />
   </ItemGroup>
