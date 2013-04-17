@@ -88,6 +88,11 @@
                                 <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Error.png" />
                             </MenuItem.Icon>
                         </MenuItem>
+                        <MenuItem Name="MnuQuitter" Header="Quitter" FontSize="10">
+                            <MenuItem.Icon>
+                                <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/btnQuitter_32.png" />
+                            </MenuItem.Icon>
+                        </MenuItem>
                     </MenuItem>
 
                 </Menu>
