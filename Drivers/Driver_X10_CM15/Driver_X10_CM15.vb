@@ -536,43 +536,44 @@ Public Class Driver_X10_CM15
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_idsrv, vParm1, "", Me._ID, True)
                 'un device trouvé on maj la value
-                If (listedevices.Count = 1) Then
-                    'correction valeur pour correspondre au type de value
-                    If TypeOf listedevices.Item(0).Value Is Integer Then
-                        If String.IsNullOrEmpty(vParm2) = False Then
-                            If UCase(vParm2) = "ON" Then
-                                listedevices.Item(0).Value = 100
-                            ElseIf UCase(vParm2) = "OFF" Then
-                                listedevices.Item(0).Value = 0
-                            ElseIf UCase(vParm2) = "DIM" And IsNumeric(vParm3) Then
-                                listedevices.Item(0).Value += vParm3
-                            ElseIf UCase(vParm2) = "BRIGHT" And IsNumeric(vParm3) Then
-                                listedevices.Item(0).Value -= vParm3
+                If listedevices IsNot Nothing Then
+                    If (listedevices.Count = 1) Then
+                        'correction valeur pour correspondre au type de value
+                        If TypeOf listedevices.Item(0).Value Is Integer Then
+                            If String.IsNullOrEmpty(vParm2) = False Then
+                                If UCase(vParm2) = "ON" Then
+                                    listedevices.Item(0).Value = 100
+                                ElseIf UCase(vParm2) = "OFF" Then
+                                    listedevices.Item(0).Value = 0
+                                ElseIf UCase(vParm2) = "DIM" And IsNumeric(vParm3) Then
+                                    listedevices.Item(0).Value += vParm3
+                                ElseIf UCase(vParm2) = "BRIGHT" And IsNumeric(vParm3) Then
+                                    listedevices.Item(0).Value -= vParm3
+                                End If
+                            End If
+                        ElseIf TypeOf listedevices.Item(0).Value Is Boolean Then
+                            If String.IsNullOrEmpty(vParm2) = False Then
+                                If UCase(vParm2) = "ON" Then
+                                    listedevices.Item(0).Value = True
+                                ElseIf UCase(vParm2) = "OFF" Then
+                                    listedevices.Item(0).Value = False
+                                Else
+                                    listedevices.Item(0).Value = True
+                                End If
                             End If
                         End If
-                    ElseIf TypeOf listedevices.Item(0).Value Is Boolean Then
-                        If String.IsNullOrEmpty(vParm2) = False Then
-                            If UCase(vParm2) = "ON" Then
-                                listedevices.Item(0).Value = True
-                            ElseIf UCase(vParm2) = "OFF" Then
-                                listedevices.Item(0).Value = False
-                            Else
-                                listedevices.Item(0).Value = True
-                            End If
-                        End If
-                        End If
-                ElseIf (listedevices.Count > 1) Then
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " RecvAction", "Aucun ou Plusieurs devices correspondent à : " & vParm2 & ":" & vParm3)
-                Else
-                    'si autodiscover = true ou modedecouverte du serveur actif alors on crée le composant sinon on logue
-                    If _AutoDiscover Or _Server.GetModeDecouverte Then
-                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 traitement", "Device non trouvé, AutoCreation du composant : " & vParm1 & ":" & vParm2)
-                        _Server.AddDetectNewDevice(vParm1, _ID, "", "")
+                    ElseIf (listedevices.Count > 1) Then
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " RecvAction", "Aucun ou Plusieurs devices correspondent à : " & vParm2 & ":" & vParm3)
                     Else
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 traitement", "Device non trouvé : " & vParm1 & ":" & vParm2)
+                        'si autodiscover = true ou modedecouverte du serveur actif alors on crée le composant sinon on logue
+                        If _AutoDiscover Or _Server.GetModeDecouverte Then
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "X10 traitement", "Device non trouvé, AutoCreation du composant : " & vParm1 & ":" & vParm2)
+                            _Server.AddDetectNewDevice(vParm1, _ID, "", "")
+                        Else
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "X10 traitement", "Device non trouvé : " & vParm1 & ":" & vParm2)
+                        End If
                     End If
                 End If
-
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " RecvAction", "Erreur : " & ex.ToString)
             End Try
