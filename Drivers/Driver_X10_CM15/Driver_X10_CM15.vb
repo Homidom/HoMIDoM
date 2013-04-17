@@ -530,7 +530,7 @@ Public Class Driver_X10_CM15
 
         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " RecvAction", "RecvAction: " & bszRecv & " " & vParm1 & " " & vParm2 & " " & vParm3 & " " & vParm4 & " " & vParm5)
 
-        If vParm1 <> "" Then
+        If String.IsNullOrEmpty(vParm1) = False Then
             Try
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
@@ -539,24 +539,28 @@ Public Class Driver_X10_CM15
                 If (listedevices.Count = 1) Then
                     'correction valeur pour correspondre au type de value
                     If TypeOf listedevices.Item(0).Value Is Integer Then
-                        If UCase(vParm2) = "ON" Then
-                            listedevices.Item(0).Value = 100
-                        ElseIf UCase(vParm2) = "OFF" Then
-                            listedevices.Item(0).Value = 0
-                        ElseIf UCase(vParm2) = "DIM" And IsNumeric(vParm3) Then
-                            listedevices.Item(0).Value += vParm3
-                        ElseIf UCase(vParm2) = "BRIGHT" And IsNumeric(vParm3) Then
-                            listedevices.Item(0).Value -= vParm3
+                        If String.IsNullOrEmpty(vParm2) = False Then
+                            If UCase(vParm2) = "ON" Then
+                                listedevices.Item(0).Value = 100
+                            ElseIf UCase(vParm2) = "OFF" Then
+                                listedevices.Item(0).Value = 0
+                            ElseIf UCase(vParm2) = "DIM" And IsNumeric(vParm3) Then
+                                listedevices.Item(0).Value += vParm3
+                            ElseIf UCase(vParm2) = "BRIGHT" And IsNumeric(vParm3) Then
+                                listedevices.Item(0).Value -= vParm3
+                            End If
                         End If
                     ElseIf TypeOf listedevices.Item(0).Value Is Boolean Then
-                        If UCase(vParm2) = "ON" Then
-                            listedevices.Item(0).Value = True
-                        ElseIf UCase(vParm2) = "OFF" Then
-                            listedevices.Item(0).Value = False
-                        Else
-                            listedevices.Item(0).Value = True
+                        If String.IsNullOrEmpty(vParm2) = False Then
+                            If UCase(vParm2) = "ON" Then
+                                listedevices.Item(0).Value = True
+                            ElseIf UCase(vParm2) = "OFF" Then
+                                listedevices.Item(0).Value = False
+                            Else
+                                listedevices.Item(0).Value = True
+                            End If
                         End If
-                    End If
+                        End If
                 ElseIf (listedevices.Count > 1) Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " RecvAction", "Aucun ou Plusieurs devices correspondent à : " & vParm2 & ":" & vParm3)
                 Else
