@@ -748,16 +748,16 @@ Public Class Driver_Teleinfo
                 'ouverture du port
                 If Not CptPort.IsConnectPort And Not (CptPort.SerialPort.IsOpen()) Then
                     ' Test d'ouveture du port Com du controleur 
+                    CptPort.SerialPort.PortName = CptPort.port_name 'nom du port : COM1,COM2, COM3...   
                     CptPort.SerialPort.Open()
                     ' Le port existe ==> le controleur est present
                     If CptPort.SerialPort.IsOpen() Then
                         CptPort.SerialPort.Close()
                     Else
-                        Return ("Port " & CptPort.port_name & " impossible à ouvrir")
+                        Return ("ERR: Port " & CptPort.port_name & " impossible à ouvrir")
                         Exit Function
                     End If
 
-                    CptPort.SerialPort.PortName = CptPort.port_name 'nom du port : COM1,COM2, COM3...
                     CptPort.SerialPort.BaudRate = 1200 'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
                     CptPort.SerialPort.Parity = IO.Ports.Parity.Even ' parité paire
                     CptPort.SerialPort.StopBits = IO.Ports.StopBits.One 'un bit d'arrêt par octet
