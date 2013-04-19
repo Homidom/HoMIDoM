@@ -52,6 +52,7 @@ Public Class Driver_Teleinfo
 
         Dim _DEBUG As Boolean = False
         Dim _SecondPort As String = ""
+        Dim _BaudRate As Integer = 1200
 
 		#End Region
 
@@ -461,7 +462,7 @@ Public Class Driver_Teleinfo
             Try
                 _DEBUG = _Parametres.Item(0).Valeur
                 _SecondPort = _Parametres.Item(1).Valeur.ToString.ToUpper
-                
+                _BaudRate = _Parametres.Item(2).Valeur.ToString.ToUpper
 
                 If TabCom.Contains(_SecondPort) Then
                     If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start ", "Valeur de SecondPort valide  : " & _SecondPort.ToUpper)
@@ -721,6 +722,7 @@ Public Class Driver_Teleinfo
                 'Paramétres avancés
                 Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
                 Add_ParamAvance("SecondPort", "Second Teleinfo Port Com (COM2,COM3,COM4...nothing)", "nothing")
+                Add_ParamAvance("BaudRate", "Vitesse de transfert à utiliser ", 0)
 
                 Add_LibelleDevice("ADRESSE1", "Adresse", "")
                 Add_LibelleDevice("ADRESSE2", "Adresse Second TeleInfo", "La valeur peut etre COM1, COM2, COM3... ou nothing", "nothing")
@@ -757,8 +759,10 @@ Public Class Driver_Teleinfo
                         Return ("ERR: Port " & CptPort.port_name & " impossible à ouvrir")
                         Exit Function
                     End If
-
-                    CptPort.SerialPort.BaudRate = 1200 'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
+                    If Not (IsNumeric(_BaudRate)) Then
+                        _BaudRate = 1200
+                    End If
+                    CptPort.SerialPort.BaudRate = _BaudRate  'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
                     CptPort.SerialPort.Parity = IO.Ports.Parity.Even ' parité paire
                     CptPort.SerialPort.StopBits = IO.Ports.StopBits.One 'un bit d'arrêt par octet
                     CptPort.SerialPort.DataBits = 7 'nombre de bit par octet
