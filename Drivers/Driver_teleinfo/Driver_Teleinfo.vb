@@ -83,6 +83,19 @@ Public Class Driver_Teleinfo
             IMAX3
             PMAX
             PPOT
+            ADIR1
+            ADIR2
+            ADIR3
+            ADPS
+            BBRHCJB
+            BBRHCJR
+            BBRHCJW
+            BBRHPJB
+            BBRHPJR
+            BBRHPJW
+            DEMAIN
+            EJPHN
+            EJPHPM
         End Enum
 
         Dim TabCom As String() = {"COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "NOTHING"}
