@@ -20,10 +20,11 @@ Public Class Driver_Teleinfo
 #Region "Variables génériques"
         '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
         'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
+
         Dim _ID As String = "3BB1F870-3A41-11E1-B86C-0800200C9A66"
         Dim _Nom As String = "Teleinfo"
         Dim _Enable As Boolean = False
-        Dim _Description As String = "Adaptateur USB DAUGUET"
+        Dim _Description As String = "Adaptateur TELEINFO ERDF"
         Dim _StartAuto As Boolean = False
         Dim _Protocol As String = "COM"
         Dim _IsConnect As Boolean = False
@@ -33,7 +34,7 @@ Public Class Driver_Teleinfo
         Dim _Port_UDP As String = "@"
         Dim _Com As String = "COM1"
         Dim _Refresh As Integer = 0
-        Dim _Modele As String = "@"
+        Dim _Modele As String = "A_DAUGUET"
         Dim _Version As String = My.Application.Info.Version.ToString
         Dim _OsPlatform As String = "3264"
         Dim _Picture As String = "compteur-monophase.png"
@@ -462,7 +463,6 @@ Public Class Driver_Teleinfo
             Try
                 _DEBUG = _Parametres.Item(0).Valeur
                 _SecondPort = _Parametres.Item(1).Valeur.ToString.ToUpper
-                _BaudRate = _Parametres.Item(2).Valeur.ToString.ToUpper
 
                 If TabCom.Contains(_SecondPort) Then
                     If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start ", "Valeur de SecondPort valide  : " & _SecondPort.ToUpper)
@@ -722,12 +722,11 @@ Public Class Driver_Teleinfo
                 'Paramétres avancés
                 Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
                 Add_ParamAvance("SecondPort", "Second Teleinfo Port Com (COM2,COM3,COM4...nothing)", "nothing")
-                Add_ParamAvance("BaudRate", "Vitesse de transfert à utiliser ", 0)
 
                 Add_LibelleDevice("ADRESSE1", "Adresse", "")
                 Add_LibelleDevice("ADRESSE2", "Adresse Second TeleInfo", "La valeur peut etre COM1, COM2, COM3... ou nothing", "nothing")
                 Add_LibelleDevice("SOLO", "@", "")
-                Add_LibelleDevice("MODELE", "@", "")
+
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Teleinfo New", ex.Message)
             End Try
@@ -759,14 +758,29 @@ Public Class Driver_Teleinfo
                         Return ("ERR: Port " & CptPort.port_name & " impossible à ouvrir")
                         Exit Function
                     End If
-                    If Not (IsNumeric(_BaudRate)) Then
-                        _BaudRate = 1200
-                    End If
-                    CptPort.SerialPort.BaudRate = _BaudRate  'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
-                    CptPort.SerialPort.Parity = IO.Ports.Parity.Even ' parité paire
-                    CptPort.SerialPort.StopBits = IO.Ports.StopBits.One 'un bit d'arrêt par octet
-                    CptPort.SerialPort.DataBits = 7 'nombre de bit par octet
-                    'port.Handshake = Handshake.None
+
+                    Select Case _Modele.ToUpper
+                        Case "A_DAUGUET"
+                            CptPort.SerialPort.BaudRate = 1200  'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
+                            CptPort.SerialPort.Parity = IO.Ports.Parity.Even ' parité paire
+                            CptPort.SerialPort.StopBits = IO.Ports.StopBits.One 'un bit d'arrêt par octet
+                            CptPort.SerialPort.DataBits = 7 'nombre de bit par octet
+
+                        Case "TELEINFOSTICK_V2"
+                            CptPort.SerialPort.BaudRate = 9600  'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
+                            CptPort.SerialPort.Parity = IO.Ports.Parity.None ' parité paire
+                            CptPort.SerialPort.StopBits = IO.Ports.StopBits.One 'un bit d'arrêt par octet
+                            CptPort.SerialPort.DataBits = 8 'nombre de bit par octet
+
+
+                        Case Else
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Ouvrir", "Le modèle " & _Modele & " n'est pas conforme : Utilisation des parametres A_DAUGUET ")
+                            CptPort.SerialPort.BaudRate = 1200  'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
+                            CptPort.SerialPort.Parity = IO.Ports.Parity.Even ' parité paire
+                            CptPort.SerialPort.StopBits = IO.Ports.StopBits.One 'un bit d'arrêt par octet
+                            CptPort.SerialPort.DataBits = 7 'nombre de bit par octet                  
+                    End Select
+
                     CptPort.SerialPort.ReadTimeout = 3000
                     CptPort.SerialPort.WriteTimeout = 5000
                     CptPort.SerialPort.RtsEnable = True  'ligne Rts désactivé
