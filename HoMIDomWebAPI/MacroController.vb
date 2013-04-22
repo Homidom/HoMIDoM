@@ -14,4 +14,9 @@ Public Class MacroController
         Return HoMIDomAPI.CurrentServer.ReturnMacroById(Me.ServerKey, id)
     End Function
 
+    <HttpGet()>
+    Public Function ExecuteCommand(id As String, command As String) As Boolean
+        HoMIDomAPI.CurrentServer.RunMacro(Me.ServerKey, id)
+        Return True
+    End Function
 End Class

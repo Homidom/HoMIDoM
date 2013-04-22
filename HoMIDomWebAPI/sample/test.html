@@ -9,23 +9,45 @@
 	</head>
 	<body>
 		Devices:
-		
+		<div id="devices"></div>
+		<hr/>
+		Zones:
+		<div id="zones"></div>
+		<hr/>
+		Macros:
+		<div id="macros"></div>
+		<hr/>
+
 		
 		<script type="text/javascript">
 			$(document).ready(function () {
 				$.jsonp({
 					url: 'http://localhost:7999/api/123456789/device/',
 					callbackParameter: "callback",
-					success: onSuccess,
+					success: loadDevices,
 					error: onError
 				})
+				$.jsonp({
+					url: 'http://localhost:7999/api/123456789/zone/',
+					callbackParameter: "callback",
+					success: loadZones,
+					error: onError
+				})
+				$.jsonp({
+					url: 'http://localhost:7999/api/123456789/macro/',
+					callbackParameter: "callback",
+					success: loadMacros,
+					error: onError
+				})
+
+
 			});
 			
 			function onError(jqXHR, textStatus, errorThrown ) {
 				alert('erreur:' + textStatus);
 			}
 			
-			function onSuccess(data) {
+			function loadDevices(data) {
 				var items = [];
 				$.each(data, function(index, device) {
 					items.push('<li id="' + device._ID + '">' + device._Name);
@@ -42,18 +64,54 @@
 				$('<ul/>', {
 					'class': 'my-new-list',
 					html: items.join('')
-				}).appendTo('body');
+				}).appendTo('#devices');
 			}
+			
+			function loadZones(data) {
+				var items = [];
+				$.each(data, function(index, zone) {
+					items.push('<li id="' + zone._Id + '">' + zone._Name + '</li>');
+				});
+				$('<ul/>', {
+					'class': 'my-new-list',
+					html: items.join('')
+				}).appendTo('#zones');
+			}
+			
+			function loadMacros(data) {
+				var items = [];
+				$.each(data, function(index, macro) {
+					items.push('<li id="' + macro._ID + '">' + macro._Nom + '&nbsp; <a href="#" onClick="executeMacro(\''+macro._ID+'\')">Lancer</a></li>');
+				});
+				$('<ul/>', {
+					'class': 'my-new-list',
+					html: items.join('')
+				}).appendTo('#macros');
+			}
+
+
 			
 			function execute(deviceId, command) {
 				$.jsonp({
 					url: 'http://localhost:7999/api/123456789/command/device/'+deviceId+'/'+command,
-					type: 'POST',
+					type: 'GET',
 					callbackParameter: "callback",
 					success: onExecuteSuccess,
 					error: onError
 				})
 			}
+			
+			
+			function executeMacro(macroId) {
+				$.jsonp({
+					url: 'http://localhost:7999/api/123456789/command/macro/'+macroId+'/EXEC',
+					type: 'GET',
+					callbackParameter: "callback",
+					success: onExecuteSuccess,
+					error: onError
+				})
+			}
+
 			
 			function onExecuteSuccess() {
 				alert('Commande executée');
