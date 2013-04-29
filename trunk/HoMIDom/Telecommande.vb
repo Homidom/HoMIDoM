@@ -11,12 +11,45 @@ Namespace HoMIDom
         Public Shared TemplateAUDIO() As String = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Power""VolumeUp", "VolumeDown", "Mute", "Play", "Pause", "Stop", "Avance", "Recul"}
 
         Public Class Template
+            Dim _ID As String = ""
+            Dim _Name As String = ""
             Dim _Fabricant As String = ""
             Dim _Modele As String = ""
             Dim _Driver As String = ""
             Dim _File As String = ""
+            Dim _Type As Integer = 0 '0:http 1:ir 2:rs232
             Dim _Colonne As Integer = 4
             Dim _Ligne As Integer = 8
+            Dim _TrameInit As String 'trame d'initialisation
+            Dim _CharEndReceive 'caractère de fin d'une trame reçue
+            Dim _IP As String 'adresse IP
+            Dim _Port As Integer 'Port IP
+            Dim _Cmd As New List(Of Commandes)
+            Dim _Var As New List(Of TemplateVar)
+
+            Public Property ID As String
+                Get
+                    Return _ID
+                End Get
+                Set(ByVal value As String)
+                    _ID = value
+                End Set
+            End Property
+
+            ''' <summary>
+            ''' Nom du template
+            ''' </summary>
+            ''' <value></value>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Property Name As String
+                Get
+                    Return _Name
+                End Get
+                Set(ByVal value As String)
+                    _Name = value
+                End Set
+            End Property
 
             ''' <summary>
             ''' Définit ou retourne le fabricant de l'équipement
@@ -107,6 +140,257 @@ Namespace HoMIDom
                     _Colonne = value
                 End Set
             End Property
+
+            ''' <summary>
+            ''' Type de driver 0=http 1=IR 2=RS232, par défaut 0
+            ''' </summary>
+            ''' <value></value>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Property Type As Integer
+                Get
+                    Return _Type
+                End Get
+                Set(ByVal value As Integer)
+                    Dim val As Integer = value
+                    If val < 0 Then val = 0
+                    If val > 2 Then val = 2
+                    _Type = val
+                End Set
+            End Property
+
+            ''' <summary>
+            ''' Trame d'initialisation à envoyer avant tout envoi de commande
+            ''' </summary>
+            ''' <value></value>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Property TrameInit As String
+                Get
+                    Return _TrameInit
+                End Get
+                Set(ByVal value As String)
+                    _TrameInit = value
+                End Set
+            End Property
+
+            ''' <summary>
+            ''' Caractère(s) séparateur(s) entre chaque trame pour les différencier
+            ''' </summary>
+            ''' <value></value>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Property CharEndReceive As String
+                Get
+                    Return _CharEndReceive
+                End Get
+                Set(ByVal value As String)
+                    _CharEndReceive = value
+                End Set
+            End Property
+
+            ''' <summary>
+            ''' Liste des commandes associées au template
+            ''' </summary>
+            ''' <value></value>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Property Commandes As List(Of Commandes)
+                Get
+                    Return _Cmd
+                End Get
+                Set(ByVal value As List(Of Commandes))
+                    _Cmd = value
+                End Set
+            End Property
+
+            ''' <summary>
+            ''' Liste des variables associées au template
+            ''' </summary>
+            ''' <value></value>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Property Variables As List(Of TemplateVar)
+                Get
+                    Return _Var
+                End Get
+                Set(ByVal value As List(Of TemplateVar))
+                    _Var = value
+                End Set
+            End Property
+
+            ''' <summary>
+            ''' Adresse IP du template
+            ''' </summary>
+            ''' <value></value>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Property IP As String
+                Get
+                    Return _IP
+                End Get
+                Set(ByVal value As String)
+                    _IP = value
+
+                    If String.IsNullOrEmpty(_IP) = False Then
+                        For Each var In _Var
+                            If var.Name.ToLower = "ip" Then
+                                If String.IsNullOrEmpty(_Port) Then
+                                    var.Value = _IP
+                                    Exit For
+                                Else
+                                    var.Value = _IP & ":" & _Port
+                                    Exit For
+                                End If
+                            End If
+                        Next
+                    End If
+                End Set
+            End Property
+
+            ''' <summary>
+            ''' Port IP du template
+            ''' </summary>
+            ''' <value></value>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Property Port As Integer
+                Get
+                    Return _Port
+                End Get
+                Set(ByVal value As Integer)
+                    _Port = value
+                    IP = _IP
+                End Set
+            End Property
+
+            Public Sub New()
+                'Création des variables par défaut
+                'variable "command", si on lui passe le nom d'une commande ça l'exécute
+                Dim x As New TemplateVar
+                x.Name = "command"
+                x.Type = TypeOfVar.String
+                _Var.Add(x)
+
+                'variable "ip" qui contient l'adresse ip du template
+                Dim y As New TemplateVar
+                y.Name = "ip"
+                y.Type = TypeOfVar.String
+                _Var.Add(y)
+            End Sub
+
+            ''' <summary>
+            ''' Démarrer le template
+            ''' </summary>
+            ''' <param name="idsrv"></param>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Function Start(ByVal idsrv As String) As String
+                Try
+                    'on verifie l'id du serveur pour la sécurité
+                    If idsrv <> _IdSrv Then
+                        Return "99"
+                        Exit Function
+                    End If
+
+                    'On effectue l'init suivant 
+                    Select Case _Type
+                        Case 0 'Template de type http
+                            'créer la connexion http
+
+                            'si trame d'initialisation l'envoyer
+                            If String.IsNullOrEmpty(_TrameInit) = False Then
+
+                            End If
+
+                        Case 1 'Template de type IR
+                            'créer la connexion IR
+
+                            'si trame d'initialisation l'envoyer
+                            If String.IsNullOrEmpty(_TrameInit) = False Then
+
+                            End If
+                        Case 2 'Template de type rs232
+                            'créer la connexion rs232
+
+                            'si trame d'initialisation l'envoyer
+                            If String.IsNullOrEmpty(_TrameInit) = False Then
+
+                            End If
+                    End Select
+
+                    Return "0"
+                Catch ex As Exception
+                    Return ex.ToString
+                End Try
+            End Function
+
+            ''' <summary>
+            ''' Execute une commande suivant son nom
+            ''' </summary>
+            ''' <param name="idsrv"></param>
+            ''' <param name="Name"></param>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Function ExecuteCommand(ByVal idsrv As String, ByVal Name As String) As String
+                Try
+                    'on verifie l'id du serveur pour la sécurité
+                    If idsrv <> _IdSrv Then
+                        Return "99"
+                        Exit Function
+                    End If
+
+                    For Each cmd In _Cmd
+                        If cmd.Name.ToLower = Name.ToLower Then 'on a trouvé la commande
+                            Dim code As String = cmd.Code.ToLower
+
+                            'on remplace les variables mis en accolades par leur valeur
+                            For Each var In _var
+                                If var.Type = TypeOfVar.String Or var.Type = TypeOfVar.Double Then
+                                    Dim _var As String = "{" & var.Name & "}"
+                                    If code.Contains(_var) Then
+                                        code = code.Replace(_var, var.Value)
+                                    End If
+                                End If
+                            Next
+
+                            'Executer la commande...
+                        End If
+                    Next
+
+                    Return "0"
+                Catch ex As Exception
+                    Return ex.ToString
+                End Try
+            End Function
+
+            ''' <summary>
+            ''' Permet de définir la valeur d'une variable associée au template
+            ''' </summary>
+            ''' <param name="idsrv"></param>
+            ''' <param name="namevar"></param>
+            ''' <param name="Value"></param>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Function SetVariable(ByVal idsrv As String, ByVal namevar As String, ByVal Value As Object) As String
+                Try
+                    'on verifie l'id du serveur pour la sécurité
+                    If idsrv <> _IdSrv Then
+                        Return "99"
+                        Exit Function
+                    End If
+
+                    For Each var In _Var
+                        If var.Name.ToLower = namevar.ToLower Then
+                            var.Value = Value
+                            Exit For
+                        End If
+                    Next
+                    Return "0"
+                Catch ex As Exception
+                    Return ex.ToString
+                End Try
+            End Function
         End Class
 
         ''' <summary>
@@ -124,6 +408,7 @@ Namespace HoMIDom
         Public Class Commandes
             Dim _Name As String
             Dim _Code As String
+            Dim _IsScript As Boolean = False 'si false c'est une commande à envoyer si false c'est un script à exécuter
             Dim _Repeat As Integer = 0
             Dim _Picture As String
             Dim _Row As Integer = -1
@@ -144,6 +429,15 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _Code = value
+                End Set
+            End Property
+
+            Property IsScript As Boolean
+                Get
+                    Return _IsScript
+                End Get
+                Set(ByVal value As Boolean)
+                    _IsScript = value
                 End Set
             End Property
 
@@ -180,6 +474,88 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As Integer)
                     _Column = value
+                End Set
+            End Property
+
+        End Class
+
+        Public Enum TypeOfVar
+            [String] = 0
+            [Double] = 1
+            [Tableau] = 2
+        End Enum
+
+        ''' <summary>
+        ''' Variable associées à un template pour y stocker des donnnées reçues
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Class TemplateVar
+            Dim _Name As String = ""
+            Dim _Type As TypeOfVar = TypeOfVar.String
+            Dim _ValString As String = ""
+            Dim _ValDouble As Double = 0
+            Dim _ValTableau As New ArrayList
+
+            ''' <summary>
+            ''' Nom de la variable
+            ''' </summary>
+            ''' <value></value>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Property Name As String
+                Get
+                    Return _Name
+                End Get
+                Set(ByVal value As String)
+                    _Name = value
+                End Set
+            End Property
+
+            ''' <summary>
+            ''' Type de la variable
+            ''' </summary>
+            ''' <value></value>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Property Type As TypeOfVar
+                Get
+                    Return _Type
+                End Get
+                Set(ByVal value As TypeOfVar)
+                    _Type = value
+                End Set
+            End Property
+
+            ''' <summary>
+            ''' Valeur associée à la variable
+            ''' </summary>
+            ''' <value></value>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Property Value As Object
+                Get
+                    Select Case _Type
+                        Case TypeOfVar.String
+                            Return _ValString
+                        Case TypeOfVar.Double
+                            Return _ValDouble
+                        Case TypeOfVar.Tableau
+                            Return _ValTableau
+                        Case Else
+                            Return _ValString
+                    End Select
+                End Get
+                Set(ByVal value As Object)
+                    Select Case _Type
+                        Case TypeOfVar.String
+                            _ValString = value
+                        Case TypeOfVar.Double
+                            _ValDouble = value
+                        Case TypeOfVar.Tableau
+                            _ValTableau = value
+                        Case Else
+                            _ValString = value
+                    End Select
                 End Set
             End Property
         End Class

@@ -79,8 +79,8 @@ Namespace HoMIDom
         <NonSerialized()> Shared _SaveRealTime As Boolean = True 'True si on enregistre en temps réel
         <NonSerialized()> Shared _Devise As String = "€"
         <NonSerialized()> Shared _GererEnergie As Boolean = False
-        <NonSerialized()> Shared _TarifJour As Integer = "0"
-        <NonSerialized()> Shared _TarifNuit As Integer = "0"
+        <NonSerialized()> Shared _TarifJour As Double = 0
+        <NonSerialized()> Shared _TarifNuit As Double = 0
         <NonSerialized()> Shared _EnableSrvWeb As Boolean = False
         <NonSerialized()> Shared _PortSrvWeb As Integer = 8080
         <NonSerialized()> Shared _SrvWeb As ServeurWeb = Nothing
@@ -8634,7 +8634,7 @@ Namespace HoMIDom
         ''' Set Tarif jour
         ''' </summary>
         ''' <remarks></remarks>
-        Public Sub SetTarifJour(ByVal Value As Integer) Implements IHoMIDom.SetTarifJour
+        Public Sub SetTarifJour(ByVal Value As Double) Implements IHoMIDom.SetTarifJour
             Try
                 _TarifJour = Value
             Catch ex As Exception
@@ -8647,7 +8647,7 @@ Namespace HoMIDom
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function GetTarifJour() As Integer Implements IHoMIDom.GetTarifJour
+        Public Function GetTarifJour() As Double Implements IHoMIDom.GetTarifJour
             Try
                 Return _TarifJour
             Catch ex As Exception
@@ -8660,7 +8660,7 @@ Namespace HoMIDom
         ''' Set Tarif nuit
         ''' </summary>
         ''' <remarks></remarks>
-        Public Sub SetTarifNuit(ByVal Value As Integer) Implements IHoMIDom.SetTarifNuit
+        Public Sub SetTarifNuit(ByVal Value As Double) Implements IHoMIDom.SetTarifNuit
             Try
                 _TarifNuit = Value
             Catch ex As Exception
@@ -8673,7 +8673,7 @@ Namespace HoMIDom
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function GetTarifNuit() As Integer Implements IHoMIDom.GetTarifNuit
+        Public Function GetTarifNuit() As Double Implements IHoMIDom.GetTarifNuit
             Try
                 Return _TarifNuit
             Catch ex As Exception

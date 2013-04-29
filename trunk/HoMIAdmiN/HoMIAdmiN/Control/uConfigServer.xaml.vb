@@ -344,17 +344,25 @@ Partial Public Class uConfigServer
     End Sub
 
     Private Sub TxtTarifJour_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtTarifJour.TextChanged
-        If IsNumeric(TxtTarifJour.Text) = False Then
-            MessageBox.Show("Veuillez saisir une valeur numérique pour le tarif de jour", MessageBoxButton.OK, MessageBoxImage.Error)
-            TxtTarifJour.Undo()
-        End If
+        Try
+            If IsNumeric(TxtTarifJour.Text) = False Then
+                MessageBox.Show("Veuillez saisir une valeur numérique pour le tarif de jour et avec virgule si besoin", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                TxtTarifJour.Text = "0"
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub TxtTarifJour_TextChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub TxtTarifNuit_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtTarifNuit.TextChanged
-        If IsNumeric(TxtTarifNuit.Text) = False Then
-            MessageBox.Show("Veuillez saisir une valeur numérique pour le tarif de jour", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-            TxtTarifNuit.Undo()
-        End If
+        Try
+            If IsNumeric(TxtTarifNuit.Text) = False Then
+                MessageBox.Show("Veuillez saisir une valeur numérique pour le tarif de jour et avec virgule si besoin", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                TxtTarifNuit.Text = "0"
+            End If
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub TxtTarifNuit_TextChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub TxtPortSrvWeb_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtPortSrvWeb.TextChanged
