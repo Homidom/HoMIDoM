@@ -2009,7 +2009,7 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SetTarifJour(System.Int32)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SetTarifJour(System.Double)">
 	<summary>
  Set Tarif jour
  </summary>
@@ -2020,7 +2020,7 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SetTarifNuit(System.Int32)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SetTarifNuit(System.Double)">
 	<summary>
  Set Tarif nuit
  </summary>
@@ -3529,6 +3529,13 @@ HoMIDom
 </member><member name="T:HoMIDom.HoMIDom.Device">
 	<summary>Class Device, définie tous différents types de devices</summary>
 	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Name">
+	<summary>
+ Nom du template
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Fabricant">
 	<summary>
  Définit ou retourne le fabricant de l'équipement
@@ -3571,9 +3578,108 @@ HoMIDom
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Type">
+	<summary>
+ Type de driver 0=http 1=IR 2=RS232, par défaut 0
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.TrameInit">
+	<summary>
+ Trame d'initialisation à envoyer avant tout envoi de commande
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.CharEndReceive">
+	<summary>
+ Caractère(s) séparateur(s) entre chaque trame pour les différencier
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Commandes">
+	<summary>
+ Liste des commandes associées au template
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Variables">
+	<summary>
+ Liste des variables associées au template
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.IP">
+	<summary>
+ Adresse IP du template
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Port">
+	<summary>
+ Port IP du template
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Telecommande.Template.Start(System.String)">
+	<summary>
+ Démarrer le template
+ </summary>
+	<param name="idsrv"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Telecommande.Template.ExecuteCommand(System.String,System.String)">
+	<summary>
+ Execute une commande suivant son nom
+ </summary>
+	<param name="idsrv"></param>
+	<param name="Name"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Telecommande.Template.SetVariable(System.String,System.String,System.Object)">
+	<summary>
+ Permet de définir la valeur d'une variable associée au template
+ </summary>
+	<param name="idsrv"></param>
+	<param name="namevar"></param>
+	<param name="Value"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Telecommande.TypeEquipement">
 	<summary>
  Type d'équipement par défaut, pour définir ensuite les commandes de bases
+ </summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.TemplateVar.Name">
+	<summary>
+ Nom de la variable
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.TemplateVar.Type">
+	<summary>
+ Type de la variable
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.TemplateVar.Value">
+	<summary>
+ Valeur associée à la variable
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Telecommande.TemplateVar">
+	<summary>
+ Variable associées à un template pour y stocker des donnnées reçues
  </summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Telecommande">

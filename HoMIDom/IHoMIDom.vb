@@ -1170,10 +1170,10 @@ Namespace HoMIDom
 #Region "Energie"
         <OperationContract()> Sub SetGererEnergie(ByVal Value As Boolean)
         <OperationContract()> Function GetGererEnergie() As Boolean
-        <OperationContract()> Sub SetTarifJour(ByVal Value As Integer)
-        <OperationContract()> Function GetTarifJour() As Integer
-        <OperationContract()> Sub SetTarifNuit(ByVal Value As Integer)
-        <OperationContract()> Function GetTarifNuit() As Integer
+        <OperationContract()> Sub SetTarifJour(ByVal Value As Double)
+        <OperationContract()> Function GetTarifJour() As Double
+        <OperationContract()> Sub SetTarifNuit(ByVal Value As Double)
+        <OperationContract()> Function GetTarifNuit() As Double
 #End Region
 
 #Region "Decouverte"
