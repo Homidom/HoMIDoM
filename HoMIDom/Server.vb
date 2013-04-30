@@ -499,6 +499,10 @@ Namespace HoMIDom
                                             _SMTPPort = list.Item(0).Attributes.Item(j).Value
                                         Case "smtpssl"
                                             _SMTPSSL = list.Item(0).Attributes.Item(j).Value
+                                        Case "logmaxfilesize"
+                                            _MaxFileSize = list.Item(0).Attributes.Item(j).Value
+                                        Case "logmaxmonthlog"
+                                            _MaxMonthLog = list.Item(0).Attributes.Item(j).Value
                                         Case "log0"
                                             _TypeLogEnable(0) = list.Item(0).Attributes.Item(j).Value
                                         Case "log1"
@@ -1427,6 +1431,12 @@ Namespace HoMIDom
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("smtpssl")
                 writer.WriteValue(_SMTPSSL)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("logmaxfilesize")
+                writer.WriteValue(_MaxFileSize)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("logmaxmonthlog")
+                writer.WriteValue(_MaxMonthLog)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("log0")
                 writer.WriteValue(_TypeLogEnable(0))
