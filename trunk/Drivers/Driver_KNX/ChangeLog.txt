@@ -1,3 +1,11 @@
-﻿2013-04-06
-----------
+﻿2013-04-06 - version 1.0.0
+--------------------------
 * Création initiale du Driver
+
+2013-05-02 - version 1.0.1
+--------------------------
+* Ajout Moniteur de Bus KNX asynchrone
+* Ajout du paramètre avancé "BUSMONITOR" : True|False
+* Amélioration gestion des log
+* Ajout fonction de mise à jour de la valeur des composants (UpdateDeviceValue)
+
