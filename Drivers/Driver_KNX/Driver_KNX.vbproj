@@ -78,7 +78,10 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConfigReader.vb" />
     <Compile Include="Driver_KNX.vb" />
+    <Compile Include="HMDObject.vb" />
+    <Compile Include="KNXLogMessage.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

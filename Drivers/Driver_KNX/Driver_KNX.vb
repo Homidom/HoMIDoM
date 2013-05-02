@@ -2,6 +2,12 @@
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 Imports KNXConnector.EIBD
+Imports System.ComponentModel
+Imports System.Text.RegularExpressions
+Imports System.IO
+Imports System.Reflection
+Imports System.Threading
+Imports System.Threading.Tasks
 
 ' Auteur : HoMIDoM
 ' Date : 05/04/2013
@@ -44,11 +50,24 @@ Imports KNXConnector.EIBD
 
     'param avancé
     Dim _DEBUG As Boolean = False
+    Dim _BUSMONITOR As Boolean = False
+
 #End Region
 
 #Region "Variables Internes"
-    'Insérer ici les variables internes propres au driver et non communes
+
+    ' Controlleur d'objets KNX (KNXFramework)
     Dim m_Controller As ObjectController
+
+    ' BackgroundWorker pour le moniteur de bus
+    ' How to: Use a Background Worker => http://msdn.microsoft.com/en-us/library/cc221403(v=vs.95).aspx
+    Dim bw As BackgroundWorker
+    Dim eibc As tuwien.auto.eibclient.EIBConnection
+
+
+    'accès au fichier de configuration local
+    Dim configReader As ConfigReader
+    Dim knxSettingsReader As KNXConnector.Settings.SettingsReader
 
 #End Region
 
@@ -407,7 +426,7 @@ Imports KNXConnector.EIBD
                 Return False
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "exception : " & ex.Message)
+            Me.LogError(MethodInfo.GetCurrentMethod(), ex)
             Return False
         End Try
     End Function
@@ -432,22 +451,37 @@ Imports KNXConnector.EIBD
         End Try
     End Function
 
-    ''' <summary>Démarrer le driver</summary>
+    ''' <summary>Permet de démarrer le driver</summary>
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
-            'récupération des paramétres avancés
+
+            'Récupération des paramétres avancés
             Try
                 _DEBUG = _Parametres.Item(0).Valeur
+                _BUSMONITOR = _Parametres.Item(1).Valeur
             Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+                Me.LogError(MethodInfo.GetCurrentMethod(), "Erreur dans les paramétres avancés. Utilisation des valeur par défaut" & ex.Message)
             End Try
 
-            ' chargement du fichier de configuration des objets knx
-            Dim settingsReader As KNXConnector.Settings.SettingsReader
-            settingsReader = New KNXConnector.Settings.SettingsReader()
-            settingsReader.ConfigFilePath = New Uri(System.IO.Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location) & "\\KNX\\conf.xml").ToString()
-            ' initialisation du controleur
+            ' *** Debugger.Launch()
+
+            'Vérification de la présence des fichiers de configuration (obligatoire)
+            Dim knxConfigFileName As String = System.IO.Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location) & "\\KNX\\knxobjects.xml"
+            If Not File.Exists(knxConfigFileName) Then Throw New Exception(String.Format("Fichier de configuration KNX introuvable ! ({0})", knxConfigFileName))
+
+            Dim configFileName As String = System.IO.Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location) & "\\KNX\\config.xml"
+            If Not File.Exists(configFileName) Then Throw New Exception(String.Format("Fichier de configuration du driver introuvable ! ({0})", configFileName))
+
+            'Chargement du fichier de configuration des objets KNX
+            knxSettingsReader = New KNXConnector.Settings.SettingsReader()
+            knxSettingsReader.ConfigFilePath = New Uri(knxConfigFileName).ToString()
+
+            'Chargement du fichier de configuration des objets "Homidom"
+            configReader = New ConfigReader()
+            configReader.ConfigFilePath = configFileName
+
+            'Initialisation du controleur KNX
             m_Controller = New ObjectController()
             m_Controller.HostName = IIf(String.IsNullOrEmpty(_IP_TCP), "localhost", _IP_TCP)
             m_Controller.Port = 6720
@@ -457,31 +491,37 @@ Imports KNXConnector.EIBD
                     m_Controller.Port = _port
                 End If
             End If
-            'démarrage du controleur
-            m_Controller.Start(settingsReader.GetAllObjects())
 
+            'Démarrage du controleur / Connexion au daemon EIBD
+            m_Controller.Start(knxSettingsReader.GetAllObjects())
             _IsConnect = True
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & ":Start", String.Format(": OK. Connecté à {0}:{1}", m_Controller.HostName, m_Controller.Port))
+            Me.LogMessage(MethodInfo.GetCurrentMethod(), "Connecté à {0}:{1}", m_Controller.HostName, m_Controller.Port)
+
+            'Démarrage du moniteur de bus (optionnel)
+            If _BUSMONITOR Then Me.StartMonitor(m_Controller.HostName, m_Controller.Port)
+
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", ex.Message)
+            Me.LogError(MethodInfo.GetCurrentMethod(), ex)
         End Try
     End Sub
 
-    ''' <summary>Arrêter le du driver</summary>
+    ''' <summary>Permet d'arrêter le driver</summary>
     ''' <remarks></remarks>
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Try
             If (Not IsNothing(m_Controller)) Then
-
                 If (m_Controller.IsRunning) Then
                     m_Controller.Stop()
                 End If
             End If
 
+            Me.StopMonitor()
+
             _IsConnect = False
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Stop", "Driver " & Me.Nom & " arrêté")
+            Me.LogMessage(MethodInfo.GetCurrentMethod(), "Driver arrêté.")
+
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Stop", ex.Message)
+            Me.LogError(MethodInfo.GetCurrentMethod(), ex)
         End Try
     End Sub
 
@@ -497,52 +537,63 @@ Imports KNXConnector.EIBD
     ''' <remarks>Le device demande au driver d'aller le lire suivant son adresse</remarks>
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
-            If _Enable = False Then Exit Sub
+            If Not BasicChecks() Then Exit Sub
 
-            If _IsConnect = False Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: Impossible de traiter la commande car le driver n'est pas connecté à la carte")
-                Exit Sub
-            End If
+            'récupération de l'objet HMD
+            Dim hmdObj As HMDObject
+            hmdObj = configReader.HMDObjects.Where(Function(t) t.Id.ToUpper() = Objet.adresse1.ToString().ToUpper()).FirstOrDefault()
+            If hmdObj Is Nothing Then Throw New Exception(String.Format("L'objet '{0}' est introuvable !", Objet.adresse1))
+            If hmdObj.ReadObjects.Count = 0 Then Throw New Exception(String.Format("L'objet '{0}' ne dispose pas d'objet KNX 'write' !", Objet.adresse1))
 
-            'récupération de l'objet KNX
+            'récupération de l'objet KNX pour lecture de la valeur
             Dim obj As KNXObjects.ObjectBase
-            obj = m_Controller.GetKNXObject(Objet.adresse1)
+            obj = m_Controller.GetKNXObject(hmdObj.ReadObjects.First())
+            If _DEBUG Then LogDebug(MethodInfo.GetCurrentMethod(), "GetKNXObject: GA={0},Value={1}", obj.GroupAddress.ToString(), obj.ToString())
 
-            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & ":Read", String.Format("GetKNXObject: GA={0},Value={1}", obj.GroupAddress.ToString(), obj.ToString()))
-
-
+            'Mise à jour de la valeur
+            'UpdateDeviceValue(Objet.adresse1, Objet.type.ToString, Objet.Value)
 
 
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", ex.Message)
+            Me.LogError(MethodInfo.GetCurrentMethod(), ex)
         End Try
     End Sub
 
-    ''' <summary>Commander un device</summary>
-    ''' <param name="Objet">Objet représetant le device à commander</param>
+    ''' <summary>Commander un composant (device)</summary>
+    ''' <param name="Objet">Objet représetant le composant à commander</param>
     ''' <param name="Command">La commande à passer</param>
-    ''' <param name="Parametre1">parametre 1 de la commande, optionnel</param>
-    ''' <param name="Parametre2">parametre 2 de la commande, optionnel</param>
+    ''' <param name="Parametre1">parametre 1 de la commande (optionnel)</param>
+    ''' <param name="Parametre2">parametre 2 de la commande (optionnel)</param>
     ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
-            If _Enable = False Then Throw New Exception("Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
-            If _IsConnect = False Then Throw New Exception("Erreur: Impossible de traiter la commande car le driver n'est pas connecté à la carte")
-            'Execution de la commande
+            If Not BasicChecks() Then Exit Sub
+
+            'récupération de l'objet HMD
+            Dim hmdObj As HMDObject
+            hmdObj = configReader.HMDObjects.Where(Function(t) t.Id.ToUpper() = Objet.adresse1.ToString().ToUpper()).FirstOrDefault()
+
+            If hmdObj Is Nothing Then Throw New Exception(String.Format("L'objet '{0}' est introuvable !", Objet.adresse1))
+            If hmdObj.WriteObjects.Count = 0 Then Throw New Exception(String.Format("L'objet '{0}' ne dispose pas d'objet KNX 'write' !", Objet.adresse1))
+
+
+            'Execution de la commande : Envoi de la commande au bus KNX
             Select Case UCase(Command)
                 Case "ON"
-                    m_Controller.SendKNXValue(Objet.adresse1, 1)
+                    m_Controller.SendKNXValue(hmdObj.WriteObjects.First(), 1)
                     Objet.Value = 100
                 Case "OFF"
-                    m_Controller.SendKNXValue(Objet.adresse1, 0)
+                    m_Controller.SendKNXValue(hmdObj.WriteObjects.First(), 0)
                     Objet.Value = 0
             End Select
 
-            'Modification du device
+            'Mise à jour de la valeur du composant (notification) *** déja mis à jour automatiquement par le serveur 
+            'UpdateDeviceValue(Objet.adresse1, Objet.type.ToString, Objet.Value)
+
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", ex.Message)
+            Me.LogError(MethodInfo.GetCurrentMethod(), ex)
         End Try
     End Sub
 
@@ -553,7 +604,7 @@ Imports KNXConnector.EIBD
         Try
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " DeleteDevice", ex.Message)
+            Me.LogError(MethodInfo.GetCurrentMethod(), ex)
         End Try
     End Sub
 
@@ -564,7 +615,7 @@ Imports KNXConnector.EIBD
         Try
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " NewDevice", ex.Message)
+            Me.LogError(MethodInfo.GetCurrentMethod(), ex)
         End Try
     End Sub
 
@@ -581,7 +632,7 @@ Imports KNXConnector.EIBD
             x.CountParam = NbParam
             _DeviceCommandPlus.Add(x)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+            Me.LogError(MethodInfo.GetCurrentMethod(), ex)
         End Try
     End Sub
 
@@ -599,7 +650,7 @@ Imports KNXConnector.EIBD
             y0.Parametre = Parametre
             _LabelsDriver.Add(y0)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+            Me.LogError(MethodInfo.GetCurrentMethod(), ex)
         End Try
     End Sub
 
@@ -617,7 +668,7 @@ Imports KNXConnector.EIBD
             ld0.Parametre = Parametre
             _LabelsDevice.Add(ld0)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+            Me.LogError(MethodInfo.GetCurrentMethod(), ex)
         End Try
     End Sub
 
@@ -634,7 +685,7 @@ Imports KNXConnector.EIBD
             x.Valeur = valeur
             _Parametres.Add(x)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+            Me.LogError(MethodInfo.GetCurrentMethod(), ex)
         End Try
     End Sub
 
@@ -650,6 +701,7 @@ Imports KNXConnector.EIBD
 
             'Parametres avancés
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
+            Add_ParamAvance("BusMonitor", "Activer le moniteur de bus KNX (True/False)", True)
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
@@ -659,14 +711,16 @@ Imports KNXConnector.EIBD
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            Add_LibelleDevice("ADRESSE1", "ID KNX", "ID de l'objet KNX spécifié dans le fichier de configuration.")
+            Add_LibelleDevice("ADRESSE1", "Object ID", "ID de l'objet spécifié dans le fichier de configuration.")
             Add_LibelleDevice("ADRESSE2", "@", "")
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "@", "")
             Add_LibelleDevice("REFRESH", "@", "")
 
+
+
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " New", ex.Message)
+            Me.LogError(MethodInfo.GetCurrentMethod(), ex)
         End Try
     End Sub
 
@@ -676,11 +730,270 @@ Imports KNXConnector.EIBD
 
     End Sub
 
+
 #End Region
 
 #Region "Fonctions internes"
-    'Insérer ci-dessous les fonctions propres au driver et nom communes (ex: start)
+
+    ''' <summary>
+    ''' Permet de mettre à jour la valeur d'un composant
+    ''' </summary>
+    ''' <param name="adresse">ID du composant KNX</param>
+    ''' <param name="type"></param>
+    ''' <param name="valeur"></param>
+    ''' <remarks></remarks>
+    Private Sub UpdateDeviceValue(ByVal adresse As String, ByVal type As String, ByVal valeur As String)
+        Try
+            If Not BasicChecks() Then Exit Sub
+
+            'Recherche du composant concerné
+            Dim _devices As New ArrayList
+            _devices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
+            'Vérifications
+            If _devices.Count = 0 Then Throw New Exception(String.Format("Le composant correspondant à l'adresse '{0}' est introuvable !", adresse))
+            If _devices.Count > 1 Then Throw New Exception(String.Format("Plusieurs composant correspondant à l'adresse '{0}' !", adresse))
+
+            If valeur = "ON" Then
+                If TypeOf _devices.Item(0).Value Is Boolean Then
+                    If _devices.Item(0).Value = True Then Exit Sub
+                    _devices.Item(0).Value = True
+                ElseIf TypeOf _devices.Item(0).Value Is Long Then
+                    If _devices.Item(0).Value = 100 Then Exit Sub
+                    _devices.Item(0).Value = 100
+                Else
+                    If _devices.Item(0).Value = "ON" Then Exit Sub
+                    _devices.Item(0).Value = "ON"
+                End If
+            ElseIf valeur = "OFF" Then
+                If TypeOf _devices.Item(0).Value Is Boolean Then
+                    If _devices.Item(0).Value = False Then Exit Sub
+                    _devices.Item(0).Value = False
+                ElseIf TypeOf _devices.Item(0).Value Is Long Then
+                    If _devices.Item(0).Value = 0 Then Exit Sub
+                    _devices.Item(0).Value = 0
+                Else
+                    If _devices.Item(0).Value = "OFF" Then Exit Sub
+                    _devices.Item(0).Value = "OFF"
+                End If
+            Else
+                _devices.Item(0).Value = valeur
+            End If
+
+
+        Catch ex As Exception
+            Me.LogError(MethodInfo.GetCurrentMethod(), ex)
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Vérifications de base : 
+    ''' * Le driver doit être activé
+    ''' * Le driver doit être connecté au daemon EIBD
+    ''' </summary>
+    ''' <returns>True | False</returns>
+    ''' <remarks></remarks>
+    Private Function BasicChecks() As Boolean
+        Try
+            If _Enable = False Then Throw New Exception("Impossible de traiter la commande car le driver n'est pas activé (Enable)")
+            If _IsConnect = False Then Throw New Exception("Impossible de traiter la commande car le driver n'est pas démarré.")
+            Return True
+        Catch ex As Exception
+            Me.LogError(MethodInfo.GetCurrentMethod(), ex)
+            Return False
+        End Try
+    End Function
 
 #End Region
 
+#Region "Moniteur de Bus KNX"
+
+    Private Sub StartMonitor(ByVal hostname As String, Optional ByVal port As Integer = 6720)
+        Try
+            If bw Is Nothing Then
+                ' Moniteur de bus KNX
+                bw = New BackgroundWorker()
+                bw.WorkerReportsProgress = True
+                bw.WorkerSupportsCancellation = True
+                AddHandler bw.DoWork, AddressOf StartBusMonitor
+                AddHandler bw.ProgressChanged, AddressOf BusMonitorEvent
+                AddHandler bw.RunWorkerCompleted, AddressOf BusMonitorStoped
+            End If
+
+            If Not bw.IsBusy = True Then
+                LogMessage(MethodInfo.GetCurrentMethod, "Démarrage du Moniteur de Bus - {0}", Thread.CurrentThread.ManagedThreadId)
+                bw.RunWorkerAsync(String.Format("{0}:{1}", hostname, port))
+            End If
+        Catch ex As Exception
+            Me.LogError(MethodInfo.GetCurrentMethod(), ex)
+        End Try
+    End Sub
+
+    Private Sub StopMonitor()
+
+        Try
+
+            If bw.WorkerSupportsCancellation = True Then
+                bw.CancelAsync()
+            End If
+            eibc.EIBClose()
+        Catch ex As Exception
+            Me.LogError(MethodInfo.GetCurrentMethod(), ex)
+        End Try
+    End Sub
+
+    Private Sub StartBusMonitor(ByVal sender As Object, ByVal e As DoWorkEventArgs)
+        Try
+            'Traitement des paramètres
+            Dim worker As BackgroundWorker = CType(sender, BackgroundWorker)
+
+
+
+            Dim _hostname As String = Regex.Split(e.Argument, ":")(0)
+            Dim _port As Integer = Convert.ToInt32(Regex.Split(e.Argument, ":")(1))
+            'Connection au serveur eibd
+            eibc = New tuwien.auto.eibclient.EIBConnection(_hostname, _port)
+            'Activation du moniteur de bus 
+            If eibc.EIBOpenVBusmonitorText() = -1 Then Throw New Exception("Impossible de démarrer le moniteur de bus KNX !")
+
+            LogMessage(MethodInfo.GetCurrentMethod, "Moniteur de Bus KNX démarré - {0}", Thread.CurrentThread.ManagedThreadId)
+            Do
+                If bw.CancellationPending = True Then
+                    e.Cancel = True
+                    Exit Do
+                Else
+                    Dim buf As tuwien.auto.eibclient.EIBBuffer = New tuwien.auto.eibclient.EIBBuffer()
+                    Dim len As Integer = eibc.EIBGetBusmonitorPacket(buf)
+                    If len = -1 Then
+                        Exit Do
+                    End If
+
+                    If Not IsNothing(buf.data) Then
+                        worker.ReportProgress(0, System.Text.Encoding.Default.GetString(buf.data))
+                    End If
+                End If
+            Loop
+
+            eibc.EIBClose()
+
+        Catch ex As Exception
+            If bw.CancellationPending Then
+                e.Cancel = True
+                Exit Sub
+            End If
+            Me.LogError(MethodInfo.GetCurrentMethod(), ex)
+        End Try
+    End Sub
+
+    Private Sub BusMonitorEvent(ByVal sender As Object, ByVal e As ProgressChangedEventArgs)
+        ParseBusMonitorMessage(Convert.ToString(e.UserState))
+    End Sub
+
+
+
+    Private Sub ParseBusMonitorMessage(ByVal message As String)
+
+        Try
+            If String.IsNullOrEmpty(message) Then Exit Sub
+            Dim knxMsg As KNXLogMessage = New KNXLogMessage()
+            knxMsg.Message = message
+
+            If _DEBUG Then LogDebug(MethodInfo.GetCurrentMethod(), message)
+
+            ' traitement des messages qui ne proviennent pas de l'interface IP (EIBD)
+            If knxMsg.From <> "0.0.0" Then
+
+                'récupération de l'objet KNX concerné
+                Dim knxObject As KNXObjects.ObjectBase = knxSettingsReader.GetAllObjects.Where(Function(t) t.GroupAddress.ToString() = knxMsg.To).FirstOrDefault()
+                If knxObject Is Nothing Then Throw New WarningException("Objet KNX introuvable !")
+
+                'récupération des objets HMD concernés
+                ' - objets HMD dont l'objet KNX fait partie de la liste des objets KNX 'Read'
+                Dim hmdObjects As List(Of HMDObject) = configReader.HMDObjects.Where(Function(t) t.ReadObjects.Any(Function(o) o = knxObject.ID)).ToList()
+                If hmdObjects.Count = 0 Then Throw New WarningException("Objet(s) HMD introuvable(s) ! [knxObject.ID=" + knxObject.ID + "]")
+
+                For Each hmdObject As HMDObject In hmdObjects
+
+                    'Dim encoding As New System.Text.UTF8Encoding()
+                    'hmdObject.Value = BitConverter.ToString(encoding.GetBytes(knxMsg.Value))
+
+                    Select Case hmdObject.Type.ToLower()
+                        Case "switch"
+                            'switch: on attend une valeur de type : 
+                            '* (small) 01 => ON
+                            '* (small) 00 => OFF
+
+                            Select Case knxMsg.Value
+                                Case "(small) 01"
+                                    hmdObject.Value = "ON"
+                                Case "(small) 00"
+                                    hmdObject.Value = "OFF"
+                            End Select
+
+                            LogMessage(MethodInfo.GetCurrentMethod(), "Id={0}, Type={1}, Value={2}", hmdObject.Id, hmdObject.Type.ToUpper(), knxMsg.Value + " | " + hmdObject.Value)
+                            UpdateDeviceValue(hmdObject.Id, hmdObject.Type.ToUpper(), hmdObject.Value)
+
+                        Case "dimmer"
+
+                        Case Else
+
+                    End Select
+
+
+                Next
+
+            End If
+
+
+
+
+        Catch wex As WarningException
+            If _DEBUG Then LogDebug(MethodInfo.GetCurrentMethod(), wex.Message)
+        Catch ex As Exception
+            LogError(MethodInfo.GetCurrentMethod(), ex.Message)
+        End Try
+
+    End Sub
+
+    Private Sub BusMonitorStoped(sender As Object, e As RunWorkerCompletedEventArgs)
+        LogMessage(MethodInfo.GetCurrentMethod, "Moniteur de Bus arrété.")
+    End Sub
+
+#End Region
+
+#Region "Custom Log Methods"
+
+    Private Sub LogMessage(ByVal method As System.Reflection.MethodBase, ByVal message As String)
+        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & ":" & method.Name, message)
+    End Sub
+    Private Sub LogMessage(ByVal method As System.Reflection.MethodBase, ByVal format As String, ByVal ParamArray args() As Object)
+        LogMessage(method, String.Format(format, args))
+    End Sub
+    Private Sub LogError(ByVal method As System.Reflection.MethodBase, ByVal message As String)
+        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & ":" & method.Name, message)
+    End Sub
+    Private Sub LogError(ByVal method As System.Reflection.MethodBase, ByVal ex As Exception)
+        LogError(method, "Erreur: " & ex.Message)
+    End Sub
+    Private Sub LogError(ByVal method As System.Reflection.MethodBase, ByVal format As String, ByVal ParamArray args() As Object)
+        LogError(method, String.Format(format, args))
+    End Sub
+
+    Private Sub LogDebug(ByVal method As System.Reflection.MethodBase, ByVal message As String)
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & ":" & method.Name, message)
+    End Sub
+    Private Sub LogDebug(ByVal method As System.Reflection.MethodBase, ByVal format As String, ByVal ParamArray args() As Object)
+        LogDebug(method, String.Format(format, args))
+    End Sub
+
+#End Region
+
+
+
 End Class
+
+
+
+
+
+
+
