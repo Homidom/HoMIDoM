@@ -589,7 +589,7 @@ Imports ZibaseDll
     Private Sub zba_NewSensorDetected(ByVal seInfo As ZibaseDll.ZiBase.SensorInfo) Handles zba.NewSensorDetected
         'si on detecte une nouveau device
         'WriteLog("DBG: " & seInfo.sID & "_" & seInfo.sType & " ----> " & seInfo.sValue)
-        traitement(seInfo.sID, seInfo.sType, seInfo.dwValue, seInfo.sValue)
+        'traitement(seInfo.sID, seInfo.sType, seInfo.dwValue, seInfo.sValue)
     End Sub
 
     'nouvelle zibase detecté -> Log
@@ -680,6 +680,9 @@ Imports ZibaseDll
                         zba.SendCommand(adresse, ZiBase.State.STATE_DIM, iDim, protocole, 1)
                         valeur = CStr(iDim)
                     End If
+                Case "OUVERTURE"
+                    zba.SendCommand(adresse, ZiBase.State.STATE_DIM, iDim, protocole, 1)
+                    valeur = CStr(iDim)
                 Case Else : Return ("ERR: ordre incorrect : " & ordre)
             End Select
 
@@ -728,7 +731,7 @@ Imports ZibaseDll
                 Case "uvl" : WriteRetour(adresse, ListeDevices.UV.ToString, valeur) 'Niveau d’UV
                 Case "tra" : WriteRetour(adresse, ListeDevices.PLUIETOTAL.ToString, valeur) 'Niveau de pluie total (Total Rain)
                 Case "cra" : WriteRetour(adresse, ListeDevices.PLUIECOURANT.ToString, valeur) 'Niveau de pluie courant (Currant Rain)
-                Case "Kw" : WriteRetour(adresse, ListeDevices.ENERGIEINSTANTANEE.ToString, valeur) 'Mesure d’énergie instantanée (CM119)
+                Case "kw" : WriteRetour(adresse, ListeDevices.ENERGIEINSTANTANEE.ToString, valeur) 'Mesure d’énergie instantanée (CM119)
                 Case "kwh" : WriteRetour(adresse, ListeDevices.ENERGIETOTALE.ToString, valeur) 'Mesure d’énergie totale (CM119)
                 Case "awi" : WriteRetour(adresse, ListeDevices.VITESSEVENT.ToString, valeur) ' Mesure de la vitesse du vent
                 Case "drt" : WriteRetour(adresse, ListeDevices.DIRECTIONVENT.ToString, valeur) 'Direction du vent
