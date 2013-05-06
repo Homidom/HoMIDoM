@@ -297,7 +297,7 @@ Public Class Driver_X10_CM15
                         retour = "l'adresse doit être assciée au House puis le Code qui doit être compris entre 1 et 16, ex: C3"
                     End If
                 Case "ADRESSE2"
-                    If Value = " " Or Value = "" Then
+                    If String.IsNullOrEmpty(Value) Then
                         retour = "Le type du module est obligatoire"
                     ElseIf IsNumeric(Value.ToString) = False Then
                         retour = "le type doit être numérique et doit être 0 (plc) ou 1 (RF)"
@@ -414,6 +414,21 @@ Public Class Driver_X10_CM15
                     Objet.Value = Parametre1
                 End If
             End If
+            If Commande = "BRIGHT" Then
+                If Parametre1 IsNot Nothing Then
+                    ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " bright " & Parametre1)
+                    Objet.Value = Parametre1
+                End If
+            End If
+            If Commande = "OUVERTURE" Then
+                If Parametre1 IsNot Nothing Then
+                    Dim _var As Double = Parametre1
+                    _var = _var * 0.25
+                    Dim _var2 As Byte = CByte(_var)
+                    ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " Extcode 01 " & Hex(_var2))
+                    Objet.Value = Parametre1
+                End If
+            End If
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: " & ex.ToString)
@@ -506,15 +521,13 @@ Public Class Driver_X10_CM15
         _DeviceSupport.Add(ListeDevices.CONTACT)
         _DeviceSupport.Add(ListeDevices.APPAREIL)
         _DeviceSupport.Add(ListeDevices.LAMPE)
+        _DeviceSupport.Add(ListeDevices.VOLET)
 
         'Libellé Device
         Add_LibelleDevice("ADRESSE1", "Adresse du module", "Adresse HouseCode du module (ex: C3)")
-        Add_LibelleDevice("ADRESSE2", "Type de module", "Type de module 0:sendplc (courant porteur), 1:sendrf (RF)")
+        Add_LibelleDevice("ADRESSE2", "Type de module (0-1)", "Type de module 0:sendplc (courant porteur), 1:sendrf (RF)")
         Add_LibelleDevice("SOLO", "@", "")
         Add_LibelleDevice("MODELE", "@", "")
-        'Add_LibelleDevice("REFRESH", "Refresh (sec)", "Valeur de rafraîchissement de la mesure en secondes")
-        'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
-
     End Sub
 #End Region
 
