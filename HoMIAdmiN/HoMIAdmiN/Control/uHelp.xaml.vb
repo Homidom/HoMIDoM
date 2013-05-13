@@ -40,7 +40,8 @@ Partial Public Class uHelp
             Else
                 listesversionsprogrammes.Text &= " Version de l'OS: " & My.Computer.Info.OSFullName.ToString & " 32 Bits" & vbCrLf
             End If
-            listesversionsprogrammes.Text &= " Répertoire utilisé: " & My.Application.Info.DirectoryPath.ToString & vbCrLf
+            listesversionsprogrammes.Text &= " Répertoire utilisé par l'Admin: " & My.Application.Info.DirectoryPath.ToString & vbCrLf
+            listesversionsprogrammes.Text &= " Répertoire utilisé par le serveur: " & myService.GetRepertoireOfServer & vbCrLf
 
             'affiche des infos sur la config
             listesdivers.Text = ""

@@ -93,8 +93,7 @@ Public Class uHisto
             Dim Chart2 As New System.Windows.Forms.DataVisualization.Charting.Chart()
             ' Add a chart area.
             Chart2.ChartAreas.Add("Default")
-            'Chart2.Width = 900
-            Chart2.Width = _with - 20
+            Chart2.Width = 925
             Chart2.Height = 500
 
             'AddHandler Chart2.MouseMove, AddressOf Chart2_MouseMove

@@ -14,6 +14,7 @@ Public Class uHisto
     Dim _MaxData As Integer = 1000
     Dim _CurrentChart As Chart = Nothing
     Dim _FirstGener As Boolean = False
+    Public _with As Integer = 600
 
     Public Sub New(ByVal Devices As List(Of Dictionary(Of String, String)))
 
@@ -58,6 +59,14 @@ Public Class uHisto
     Sub Update_Graphe()
         Try
             Cursor = Cursors.Wait
+
+            Test.Child = Nothing
+            Test.UpdateLayout()
+            Me.UpdateLayout()
+
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
 
             Dim Chart2 As New System.Windows.Forms.DataVisualization.Charting.Chart()
             ' Add a chart area.
@@ -195,7 +204,9 @@ Public Class uHisto
             Test.Child = Chart2
             _CurrentChart = Chart2
 
+            result = Nothing
             Me.Cursor = Nothing
+            Me.UpdateLayout()
         Catch ex As Exception
             Me.Cursor = Nothing
             MessageBox.Show("Erreur uHisto Update_Graphe: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)

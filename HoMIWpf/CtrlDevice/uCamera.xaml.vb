@@ -70,20 +70,18 @@ Public Class uCamera
     Private Sub Button_Click(ByVal sender As Object, ByVal e As RoutedEventArgs)
         Try
             Dim x As uHttp.ButtonHttp = sender
-            If My.Computer.Network.IsAvailable = True And String.IsNullOrEmpty(x.URL) = False Then
-                If UrlIsValid(x.URL) Then
-                    Dim reader As StreamReader = Nothing
-                    Dim str As String = ""
-                    Dim request As WebRequest = WebRequest.Create(URL)
-                    Dim response As WebResponse = request.GetResponse()
+            'If My.Computer.Network.IsAvailable = True And String.IsNullOrEmpty(x.URL) = False Then
+            If String.IsNullOrEmpty(x.URL) = False Then
+                Dim reader As StreamReader = Nothing
+                Dim str As String = ""
+                Dim request As WebRequest = WebRequest.Create(URL)
+                Dim response As WebResponse = request.GetResponse()
 
-                    reader = New StreamReader(response.GetResponseStream())
-                    str = reader.ReadToEnd
-                    reader.Close()
-
-                Else
-                    MessageBox.Show("Erreur l'url: " & x.URL & " n'est pas valide", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-                End If
+                reader = New StreamReader(response.GetResponseStream())
+                str = reader.ReadToEnd
+                reader.Close()
+            Else
+                MessageBox.Show("Erreur l'url: " & x.URL & " n'est pas valide", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             End If
         Catch ex As Exception
             MessageBox.Show("Erreur uCamera.Button_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
