@@ -263,37 +263,37 @@ Namespace HoMIDom
 
                                 Select Case x.Conditions.Item(i).Condition
                                     Case Action.TypeSigne.Egal
-                                        If compare = 0 Then 'DateDiff(DateInterval.Second, Now, a1) = 0 Then
+                                        If compare = 0 Then
                                             result = True
                                         Else
                                             result = False
                                         End If
                                     Case Action.TypeSigne.Different
-                                        If compare <> 0 Then 'DateDiff(DateInterval.Second, Now, a1) <> 0 Then
+                                        If compare <> 0 Then
                                             result = True
                                         Else
                                             result = False
                                         End If
                                     Case Action.TypeSigne.Inferieur
-                                        If compare < 0 Then 'DateDiff(DateInterval.Second, Now, a1) < 0 Then
+                                        If compare < 0 Then
                                             result = True
                                         Else
                                             result = False
                                         End If
                                     Case Action.TypeSigne.InferieurEgal
-                                        If compare <= 0 Then 'DateDiff(DateInterval.Second, Now, a1) <= 0 Then
+                                        If compare <= 0 Then
                                             result = True
                                         Else
                                             result = False
                                         End If
                                     Case Action.TypeSigne.Superieur
-                                        If compare > 0 Then 'DateDiff(DateInterval.Second, Now, a1) > 0 Then
+                                        If compare > 0 Then
                                             result = True
                                         Else
                                             result = False
                                         End If
                                     Case Action.TypeSigne.SuperieurEgal
-                                        If compare >= 0 Then 'DateDiff(DateInterval.Second, Now, a1) >= 0 Then
+                                        If compare >= 0 Then
                                             result = True
                                         Else
                                             result = False
@@ -426,39 +426,9 @@ Namespace HoMIDom
             End Try
         End Sub
 
-
-        'Public Sub Send_email(ByVal adresse As String, ByVal sujet As String, ByVal texte As String)
-        '    Try
-        '        If adresse <> "" And sujet <> "" And texte <> "" And _Server.GetSMTPServeur(_IdSrv) <> "" Then
-        '            'envoi de l'email à adresse avec sujet et texte via les smtp définis dans le serveur
-        '            Dim email As System.Net.Mail.MailMessage = New System.Net.Mail.MailMessage()
-        '            email.From = New MailAddress(_Server.GetSMTPMailServeur(_IdSrv))
-        '            email.To.Add(adresse)
-        '            email.Subject = sujet
-        '            email.Body = DecodeCommand(texte)
-        '            Dim mailSender As New System.Net.Mail.SmtpClient(_Server.GetSMTPServeur(_IdSrv))
-
-        '            If _Server.GetSMTPLogin(_IdSrv) <> "" Then
-        '                mailSender.Credentials = New Net.NetworkCredential(_Server.GetSMTPLogin(_IdSrv), _Server.GetSMTPPassword(_IdSrv))
-        '                '
-        '                'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate", "1")
-        '                'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername", mMailServerLogin)
-        '                'email.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendpassword", mMailServerPassword)
-        '            End If
-
-        '            mailSender.Send(email)
-
-        '            _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "SendMail", "Envoi du mail effectué, Adresse:" & adresse & " Sujet: " & sujet & " Message: " & texte)
-        '            email = Nothing
-        '            mailSender = Nothing
-        '        End If
-        '    Catch ex As Exception
-        '        _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "SendMail", "Erreur lors de l'envoi du mail: " & ex.Message)
-        '    End Try
-        'End Sub
-
         Private Sub Parler(ByVal Message As String)
             Dim texte As String = Message
+
             'remplace les balises par la valeur
             texte = texte.Replace("{time}", Now.ToShortTimeString)
             texte = texte.Replace("{date}", Now.ToLongDateString)
@@ -473,6 +443,7 @@ Namespace HoMIDom
                     '.SetOutputToWaveFile(File)
                     .SpeakAsync(texte)
                 End With
+
                 texte = Nothing
                 lamachineaparler = Nothing
             Catch ex As Exception
@@ -580,7 +551,6 @@ Namespace HoMIDom
                 Return retour
             Catch ex As Exception
                 retour = "Error:" & ex.ToString
-                '_Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "DecodeCommand", "Error:" & ex.ToString)
                 Return retour
             End Try
         End Function

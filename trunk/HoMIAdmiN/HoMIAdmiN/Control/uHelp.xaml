@@ -105,9 +105,11 @@
                                         </ScrollViewer>
                                     </Grid>
                                 </GroupBox>
-                                <GroupBox Header="Détail des Programmes" Height="370" Name="GroupBox2" Width="230" Foreground="white" Margin="3">
+                                <GroupBox Header="Détail des Programmes" Height="370" Name="GroupBox2" Width="280" Foreground="white" Margin="3">
                                     <Grid>
-                                        <TextBlock Name="listesversionsprogrammes" Text="Recherche en cours..." Foreground="white" IsManipulationEnabled="True" />
+                                            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                                <TextBlock Name="listesversionsprogrammes" Text="Recherche en cours..." Foreground="white" IsManipulationEnabled="True" />
+                                            </ScrollViewer> 
                                     </Grid>
                                 </GroupBox>
                                 <GroupBox Header="Divers" Height="370" Name="GroupBox3" Width="230" Foreground="white" Margin="3">

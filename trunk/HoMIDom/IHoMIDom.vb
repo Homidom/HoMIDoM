@@ -17,6 +17,13 @@ Namespace HoMIDom
 
 #Region "Serveur"
         ''' <summary>
+        ''' Retourne le répertoire courant du serveur
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetRepertoireOfServer() As String
+
+        ''' <summary>
         ''' Demande au serveur si on sauvegarde en temps réel
         ''' </summary>
         ''' <remarks></remarks>

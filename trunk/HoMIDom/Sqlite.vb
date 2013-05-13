@@ -199,7 +199,7 @@ Namespace HoMIDom
                                         row.Item(i) = SQLreader(i)
                                     Next
                                     resultattemp.Rows.Add(row)
-                                    j = j + 1
+                                    j += 1
                                 End While
                                 resultat = resultattemp
                                 resultattemp = Nothing
@@ -314,11 +314,7 @@ Namespace HoMIDom
         End Function
 
         Private Sub sqlite_UnhandledExceptionEvent(ByVal sender As Object, ByVal e As UnhandledExceptionEventArgs)
-            Try
-                _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SQLite UnhandledExceptionEvent", "Exception : " & e.ExceptionObject.ToString())
-            Catch ex As Exception
-
-            End Try
+            _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SQLite UnhandledExceptionEvent", "Exception : " & e.ExceptionObject.ToString())
         End Sub
 
     End Class

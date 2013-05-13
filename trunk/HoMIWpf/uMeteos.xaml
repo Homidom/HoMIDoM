@@ -3,7 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Width="711" Height="313"
              xmlns:local="clr-namespace:HoMIWpF.UAniScrollViewer">
     <Grid>
-            
             <local:AniScrollViewer x:Name="ScrollViewer1" Margin="0,0,0,-2" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" />
         
     </Grid>
