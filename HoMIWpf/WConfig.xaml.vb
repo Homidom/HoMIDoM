@@ -11,12 +11,10 @@ Public Class WConfig
         Frm.Friction = SliderFriction.Value
         Frm.ImageBackGround = TxtImgBack.Text
         Frm.SpeedTouch = SliderSpeed.Value
-        'Frm.EnableServiceTV = ChkServiceTV.IsChecked
         Frm.IP = TxtIP.Text
         Frm.PortSOAP = TxtPort.Text
         Frm.ListMnu = MyListMnu
         IdSrv = TxtID.Text
-        'RaiseEvent CloseControl(Me.Uid)
         DialogResult = True
     End Sub
 
@@ -38,7 +36,6 @@ Public Class WConfig
         TxtImgBack.Text = Frm.ImageBackGround
         SliderSpeed.Value = Frm.SpeedTouch
         LblSpeed.Content = Frm.SpeedTouch
-        'ChkServiceTV.IsChecked =F My.Settings.EnableServiceTV
         TxtIP.Text = Frm.IP
         TxtPort.Text = Frm.PortSOAP
         TxtID.Text = IdSrv
@@ -101,13 +98,14 @@ Public Class WConfig
                 StkProperty.Visibility = Windows.Visibility.Visible
                 StkImage.Visibility = Windows.Visibility.Visible
 
-                If TxtImage.Text <> "" Then
+                If String.IsNullOrEmpty(TxtImage.Text) = False Then
                     If File.Exists(TxtImage.Text) Then
                         Dim bmpImage As New BitmapImage()
                         bmpImage.BeginInit()
                         bmpImage.UriSource = New Uri(TxtImage.Text, UriKind.Absolute)
                         bmpImage.EndInit()
                         ImgMnu.Source = bmpImage
+                        bmpImage = Nothing
                     End If
                 End If
 

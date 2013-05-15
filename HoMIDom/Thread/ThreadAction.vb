@@ -361,7 +361,6 @@ Namespace HoMIDom
                             y.Start()
                             y = Nothing
 
-                            'Send_email(_user.eMail, x.Sujet, x.Message)
                         Else
                             _Server.Log(Server.TypeLog.MESSAGE, Server.TypeSource.SCRIPT, "ThreadAction Execute", "Le user Id:" & x.UserId & " n'a pas pu être trouvé, le mail ne pourra pas être donc envoyé")
                         End If

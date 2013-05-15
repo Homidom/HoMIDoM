@@ -311,18 +311,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\uModule.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="uModules.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="WConfig.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -407,7 +395,6 @@
   <ItemGroup>
     <Compile Include="AniScrollViewer.vb" />
     <Compile Include="Appointment.vb" />
-    <Compile Include="clsXML.vb" />
     <Compile Include="Fonctions.vb" />
     <Compile Include="My Project\AssemblyInfo.vb">
       <SubType>Code</SubType>
@@ -437,12 +424,6 @@
     </Compile>
     <Compile Include="uMeteos.xaml.vb">
       <DependentUpon>uMeteos.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\uModule.xaml.vb">
-      <DependentUpon>uModule.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="uModules.xaml.vb">
-      <DependentUpon>uModules.xaml</DependentUpon>
     </Compile>
     <Compile Include="Variables.vb" />
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -722,7 +703,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="False" />
+      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

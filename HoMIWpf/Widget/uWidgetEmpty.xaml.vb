@@ -108,7 +108,7 @@ Public Class uWidgetEmpty
             _Id = value
             If _Show = False Then Exit Property
 
-            If IsConnect = True And value <> "" Then
+            If IsConnect = True And String.IsNullOrEmpty(value) = False Then
                 _dev = myService.ReturnDeviceByID(IdSrv, _Id)
                 _macro = myService.ReturnMacroById(IdSrv, _Id)
                 _zone = myService.ReturnZoneByID(IdSrv, _Id)
@@ -327,6 +327,9 @@ Public Class uWidgetEmpty
                         StkTool.Visibility = Windows.Visibility.Visible
 
                         _METEO = New uWMeteo
+
+                        If _Show = False Then Exit Property
+
                         StkTool.Children.Add(_METEO)
                     Case TypeOfWidget.KeyPad
                         StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
@@ -334,6 +337,9 @@ Public Class uWidgetEmpty
 
                         _KeyPad = New uKeyPad
                         AddHandler _KeyPad.KeyPadOk, AddressOf KeyPadOK
+                        _KeyPad.Width = Double.NaN
+                        _KeyPad.Height = Double.NaN
+
                         StkTool.Children.Add(_KeyPad)
                     Case TypeOfWidget.Label
                         ColorBackGround = Brushes.Transparent
@@ -425,7 +431,6 @@ Public Class uWidgetEmpty
         End Set
     End Property
 
-
     Public Property X As Double
         Get
             Return _X
@@ -433,6 +438,7 @@ Public Class uWidgetEmpty
         Set(ByVal value As Double)
             _X = value
             If _Show = False Then Exit Property
+
             If Me.Parent IsNot Nothing Then
                 Dim x As ContentControl = Me.Parent
                 Canvas.SetLeft(x, value)
@@ -528,7 +534,6 @@ Public Class uWidgetEmpty
                 If _Show = True Then
                     If Image.Tag <> _Picture Then
                         Image.Tag = _Picture
-                        'Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_Picture))
                         LoadPicture()
                     End If
                 End If
@@ -620,6 +625,7 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As Integer)
             _Refresh = value
+
             If _Show = False Then
                 Exit Property
             Else
@@ -905,7 +911,7 @@ Public Class uWidgetEmpty
                     Next
                 End If
 
-                If _Id = "" Then Exit Sub
+                If String.IsNullOrEmpty(_Id) Then Exit Sub
 
                 _dev = myService.ReturnDeviceByID(IdSrv, _Id)
 
@@ -913,10 +919,6 @@ Public Class uWidgetEmpty
                     If ShowEtiquette And _dev.Name <> _Etiquette And _IsEmpty = False Then
                         Etiquette = _dev.Name
                     End If
-                    'If Image.Tag <> _dev.Picture And _IsEmpty = False Then
-                    '    Image.Tag = _dev.Picture
-                    '    LoadPicture()
-                    'End If
 
                     Dim _ShowValue As Boolean = True
                     Dim _IsVariation As Boolean = False
@@ -1030,7 +1032,29 @@ Public Class uWidgetEmpty
                 Case TypeOfWidget.Camera
                     _Camera.Width = Me.ActualWidth
                     _Camera.Height = Me.ActualHeight
+                Case TypeOfWidget.Meteo
+                    _METEO.Width = Double.NaN
+                    _METEO.Height = Double.NaN
+                    _METEO.UpdateLayout()
+
+                    Me.Width = Double.NaN
+                    Me.Height = Double.NaN
+                    Me.UpdateLayout()
+
+                    MyBase.Width = Me.ActualWidth
+                    MyBase.Height = Me.ActualHeight
+                    MyBase.UpdateLayout()
+
+                    If Me.Parent IsNot Nothing Then
+                        Dim x As ContentControl = Me.Parent
+                        x.Height = Me.ActualHeight
+                        x.Width = Me.ActualWidth
+                        x.UpdateLayout()
+                    End If
+
             End Select
+
+
         Catch ex As Exception
             MessageBox.Show("Erreur uWidgetEmpty_Loaded: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
@@ -1143,217 +1167,241 @@ Public Class uWidgetEmpty
 
 #Region "Gerer_Action_Gesture"
     Private Sub Traite_Action_OnClick()
-        If _Show = False Then Exit Sub
+        Try
+            If _Show = False Then Exit Sub
 
-        For Each _act As cWidget.Action In _Action_On_Click
-            Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
-            If _dev IsNot Nothing Then
-                Dim x As New HoMIDom.HoMIDom.DeviceAction
-                x.Nom = _act.Methode
-                If _act.Value.ToString <> "" Then
-                    Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
-                    param.Value = _act.Value
-                    x.Parametres.Add(param)
-                End If
-
-                _FlagBlock = True
-                myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
-                _FlagBlock = False
-
-            Else
-                Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
-                If _mac IsNot Nothing Then
+            For Each _act As cWidget.Action In _Action_On_Click
+                Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+                If _dev IsNot Nothing Then
                     Dim x As New HoMIDom.HoMIDom.DeviceAction
                     x.Nom = _act.Methode
+                    If String.IsNullOrEmpty(_act.Value.ToString) = False Then
+                        Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                        param.Value = _act.Value
+                        x.Parametres.Add(param)
+                    End If
 
                     _FlagBlock = True
                     myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
                     _FlagBlock = False
+
                 Else
-                    Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
-                    If _zon IsNot Nothing Then
-                        frmMere.ShowZone(_act.IdObject)
+                    Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
+                    If _mac IsNot Nothing Then
+                        Dim x As New HoMIDom.HoMIDom.DeviceAction
+                        x.Nom = _act.Methode
+
+                        _FlagBlock = True
+                        myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                        _FlagBlock = False
+                    Else
+                        Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
+                        If _zon IsNot Nothing Then
+                            frmMere.ShowZone(_act.IdObject)
+                        End If
                     End If
                 End If
-            End If
-        Next
+            Next
+        Catch ex As Exception
+            MessageBox.Show("Erreur Traite_Action_OnClick: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub Traite_Action_OnLongClick()
-        If _Show = False Then Exit Sub
+        Try
+            If _Show = False Then Exit Sub
 
-        For Each _act As cWidget.Action In _Action_On_LongClick
-            Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
-            If _dev IsNot Nothing Then
-                Dim x As New HoMIDom.HoMIDom.DeviceAction
-                x.Nom = _act.Methode
-                If _act.Value.ToString <> "" Then
-                    Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
-                    param.Value = _act.Value
-                    x.Parametres.Add(param)
-                End If
-
-                _FlagBlock = True
-                myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
-                _FlagBlock = False
-            Else
-                Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
-                If _mac IsNot Nothing Then
+            For Each _act As cWidget.Action In _Action_On_LongClick
+                Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+                If _dev IsNot Nothing Then
                     Dim x As New HoMIDom.HoMIDom.DeviceAction
                     x.Nom = _act.Methode
+                    If String.IsNullOrEmpty(_act.Value.ToString) = False Then
+                        Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                        param.Value = _act.Value
+                        x.Parametres.Add(param)
+                    End If
+
+                    _FlagBlock = True
                     myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                    _FlagBlock = False
                 Else
-                    Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
-                    If _zon IsNot Nothing Then
-                        frmMere.ShowZone(_act.IdObject)
+                    Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
+                    If _mac IsNot Nothing Then
+                        Dim x As New HoMIDom.HoMIDom.DeviceAction
+                        x.Nom = _act.Methode
+                        myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                    Else
+                        Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
+                        If _zon IsNot Nothing Then
+                            frmMere.ShowZone(_act.IdObject)
+                        End If
                     End If
                 End If
-            End If
-        Next
+            Next
+        Catch ex As Exception
+            MessageBox.Show("Erreur Traite_Action_OnLongClick: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub Traite_Action_HautBas()
-        If _Show = False Then Exit Sub
+        Try
+            If _Show = False Then Exit Sub
 
-        For Each _act As cWidget.Action In _Action_GestureHautBas
-            Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
-            If _dev IsNot Nothing Then
-                Dim x As New HoMIDom.HoMIDom.DeviceAction
-                x.Nom = _act.Methode
-                If _act.Value.ToString <> "" Then
-                    Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
-                    param.Value = _act.Value
-                    x.Parametres.Add(param)
-                End If
-
-                _FlagBlock = True
-                myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
-                _FlagBlock = False
-            Else
-                Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
-                If _mac IsNot Nothing Then
+            For Each _act As cWidget.Action In _Action_GestureHautBas
+                Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+                If _dev IsNot Nothing Then
                     Dim x As New HoMIDom.HoMIDom.DeviceAction
                     x.Nom = _act.Methode
+                    If String.IsNullOrEmpty(_act.Value.ToString) = False Then
+                        Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                        param.Value = _act.Value
+                        x.Parametres.Add(param)
+                    End If
 
                     _FlagBlock = True
                     myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
                     _FlagBlock = False
                 Else
-                    Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
-                    If _zon IsNot Nothing Then
-                        frmMere.ShowZone(_act.IdObject)
+                    Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
+                    If _mac IsNot Nothing Then
+                        Dim x As New HoMIDom.HoMIDom.DeviceAction
+                        x.Nom = _act.Methode
+
+                        _FlagBlock = True
+                        myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                        _FlagBlock = False
+                    Else
+                        Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
+                        If _zon IsNot Nothing Then
+                            frmMere.ShowZone(_act.IdObject)
+                        End If
                     End If
                 End If
-            End If
-        Next
+            Next
+        Catch ex As Exception
+            MessageBox.Show("Erreur Traite_Action_HautBas: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub Traite_Action_BasHaut()
-        If _Show = False Then Exit Sub
+        Try
+            If _Show = False Then Exit Sub
 
-        For Each _act As cWidget.Action In _Action_GestureBasHaut
-            Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
-            If _dev IsNot Nothing Then
-                Dim x As New HoMIDom.HoMIDom.DeviceAction
-                x.Nom = _act.Methode
-                If _act.Value.ToString <> "" Then
-                    Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
-                    param.Value = _act.Value
-                    x.Parametres.Add(param)
-                End If
-
-                _FlagBlock = True
-                myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
-                _FlagBlock = False
-            Else
-                Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
-                If _mac IsNot Nothing Then
+            For Each _act As cWidget.Action In _Action_GestureBasHaut
+                Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+                If _dev IsNot Nothing Then
                     Dim x As New HoMIDom.HoMIDom.DeviceAction
                     x.Nom = _act.Methode
+                    If String.IsNullOrEmpty(_act.Value.ToString) = False Then
+                        Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                        param.Value = _act.Value
+                        x.Parametres.Add(param)
+                    End If
 
                     _FlagBlock = True
                     myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
                     _FlagBlock = False
                 Else
-                    Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
-                    If _zon IsNot Nothing Then
-                        frmMere.ShowZone(_act.IdObject)
+                    Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
+                    If _mac IsNot Nothing Then
+                        Dim x As New HoMIDom.HoMIDom.DeviceAction
+                        x.Nom = _act.Methode
+
+                        _FlagBlock = True
+                        myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                        _FlagBlock = False
+                    Else
+                        Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
+                        If _zon IsNot Nothing Then
+                            frmMere.ShowZone(_act.IdObject)
+                        End If
                     End If
                 End If
-            End If
-        Next
+            Next
+        Catch ex As Exception
+            MessageBox.Show("Erreur Traite_Action_BasHaut: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub Traite_Action_GaucheDroite()
-        If _Show = False Then Exit Sub
+        Try
+            If _Show = False Then Exit Sub
 
-        For Each _act As cWidget.Action In _Action_GestureGaucheDroite
-            Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
-            If _dev IsNot Nothing Then
-                Dim x As New HoMIDom.HoMIDom.DeviceAction
-                x.Nom = _act.Methode
-                If _act.Value.ToString <> "" Then
-                    Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
-                    param.Value = _act.Value
-                    x.Parametres.Add(param)
-                End If
-
-                _FlagBlock = True
-                myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
-                _FlagBlock = False
-            Else
-                Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
-                If _mac IsNot Nothing Then
+            For Each _act As cWidget.Action In _Action_GestureGaucheDroite
+                Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+                If _dev IsNot Nothing Then
                     Dim x As New HoMIDom.HoMIDom.DeviceAction
                     x.Nom = _act.Methode
+                    If String.IsNullOrEmpty(_act.Value.ToString) = False Then
+                        Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                        param.Value = _act.Value
+                        x.Parametres.Add(param)
+                    End If
 
                     _FlagBlock = True
                     myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
                     _FlagBlock = False
                 Else
-                    Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
-                    If _zon IsNot Nothing Then
-                        frmMere.ShowZone(_act.IdObject)
+                    Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
+                    If _mac IsNot Nothing Then
+                        Dim x As New HoMIDom.HoMIDom.DeviceAction
+                        x.Nom = _act.Methode
+
+                        _FlagBlock = True
+                        myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                        _FlagBlock = False
+                    Else
+                        Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
+                        If _zon IsNot Nothing Then
+                            frmMere.ShowZone(_act.IdObject)
+                        End If
                     End If
                 End If
-            End If
-        Next
+            Next
+        Catch ex As Exception
+            MessageBox.Show("Erreur Traite_Action_GaucheDroite: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub Traite_Action_DroiteGauche()
-        If _Show = False Then Exit Sub
+        Try
+            If _Show = False Then Exit Sub
 
-        For Each _act As cWidget.Action In _Action_GestureDroiteGauche
-            Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
-            If _dev IsNot Nothing Then
-                Dim x As New HoMIDom.HoMIDom.DeviceAction
-                x.Nom = _act.Methode
-                If _act.Value.ToString <> "" Then
-                    Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
-                    param.Value = _act.Value
-                    x.Parametres.Add(param)
-                End If
-
-                _FlagBlock = True
-                myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
-                _FlagBlock = False
-            Else
-                Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
-                If _mac IsNot Nothing Then
+            For Each _act As cWidget.Action In _Action_GestureDroiteGauche
+                Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+                If _dev IsNot Nothing Then
                     Dim x As New HoMIDom.HoMIDom.DeviceAction
                     x.Nom = _act.Methode
+                    If String.IsNullOrEmpty(_act.Value.ToString) = False Then
+                        Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                        param.Value = _act.Value
+                        x.Parametres.Add(param)
+                    End If
 
                     _FlagBlock = True
                     myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
                     _FlagBlock = False
                 Else
-                    Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
-                    If _zon IsNot Nothing Then
-                        frmMere.ShowZone(_act.IdObject)
+                    Dim _mac As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, _act.IdObject)
+                    If _mac IsNot Nothing Then
+                        Dim x As New HoMIDom.HoMIDom.DeviceAction
+                        x.Nom = _act.Methode
+
+                        _FlagBlock = True
+                        myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                        _FlagBlock = False
+                    Else
+                        Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
+                        If _zon IsNot Nothing Then
+                            frmMere.ShowZone(_act.IdObject)
+                        End If
                     End If
                 End If
-            End If
-        Next
+            Next
+        Catch ex As Exception
+            MessageBox.Show("Erreur Traite_Action_DroiteGauche: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 #End Region
 
@@ -1492,7 +1540,7 @@ Public Class uWidgetEmpty
 
             _CurrentValue = Nothing
 
-            If _dev IsNot Nothing And Value <> "" Then
+            If _dev IsNot Nothing And String.IsNullOrEmpty(Value) = False Then
                 If _dev.Type = HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEBOOLEEN Then
                     Try
                         _value = Value
@@ -1722,16 +1770,12 @@ Public Class uWidgetEmpty
                                 Exit For
                             End If
                         Next
-
-                        x.Close()
-
                         ' <Horizon99> Suppression de la mise à jour immédiate: cela crée une sorte de "deuxième couche" de widgets.
                         ' S'il y a un problème de rafraîchissement on peut cliquer 
                         ' sur l 'icône de la zone pour faire un refresh manuel
                         'frmMere.ShowZone(frmMere._CurrentIdZone)
-                    Else
-                        x.Close()
                     End If
+                    x.Close()
 
                 Catch ex As Exception
                     MessageBox.Show("Erreur Stk1_MouseDown: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
@@ -1821,6 +1865,7 @@ Public Class uWidgetEmpty
             If ShowEtiquette And ShowPicture And Lbl.ActualHeight > 0 And Me.ActualHeight > 0 Then
                 Dim H As Double = Me.ActualHeight - Lbl.ActualHeight
                 If H > 0 Then Image.Height = H
+                H = 0
             End If
             If ShowEtiquette = False And ShowPicture And Me.ActualHeight > 0 Then
                 Image.Height = Me.ActualHeight
@@ -1850,7 +1895,7 @@ Public Class uWidgetEmpty
 
     Private Sub KeyPadOK(ByVal Value As Integer)
         If IsConnect Then
-            If _IDKeyPad <> "" Then
+            If String.IsNullOrEmpty(_IDKeyPad) = False Then
                 myService.ChangeValueOfDevice(IdSrv, _IDKeyPad, Value)
             End If
         End If

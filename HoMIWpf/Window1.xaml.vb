@@ -44,8 +44,9 @@ Class Window1
     Dim _Password As String = ""
     Dim _PortSOAP As String = "7999"
     Dim _IP As String = "localhost"
+
     'XML
-    Dim myxml As clsXML
+    Dim myxml As HoMIDom.HoMIDom.XML
     Dim list As XmlNodeList
 
     'User Graphic
@@ -98,7 +99,7 @@ Class Window1
         End Get
         Set(ByVal value As String)
             _ImageBackGroundDefault = value
-            If _ImageBackGroundDefault <> "" Then
+            If String.IsNullOrEmpty(_ImageBackGroundDefault) = False Then
                 If File.Exists(_ImageBackGroundDefault) Then
                     Dim bmpImage As New BitmapImage()
                     bmpImage.BeginInit()
@@ -549,7 +550,7 @@ Class Window1
                                     Case "tailleetiquette"
                                         x.TailleEtiquette = list.Item(j).Attributes.Item(k).Value
                                     Case "colorbackground"
-                                        If list.Item(j).Attributes.Item(k).Value <> "" Then
+                                        If String.IsNullOrEmpty(list.Item(j).Attributes.Item(k).Value) = False Then
                                             Dim a As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 2, 2))
                                             Dim R As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 4, 2))
                                             Dim G As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 6, 2))
@@ -1252,8 +1253,9 @@ Class Window1
                 Dim list As List(Of String) = myService.GetLastLogsError
                 If list.Count > 0 Then
                     Dim _tool As String = ""
+
                     For Each logerror As String In list
-                        If logerror <> "" And logerror <> " " Then
+                        If String.IsNullOrEmpty(logerror) = False Then
                             Dim mnu As New MenuItem
                             mnu.Header = logerror
                             mnu.FontSize = 10
@@ -1280,7 +1282,7 @@ Class Window1
             Dim ctrl As New uCtrlImgMnu
             ctrl.Type = type
             ctrl.Defaut = Defaut
-            ctrl.Id = HoMIDom.HoMIDom.Api.GenerateGUID
+            ctrl.Id = System.Guid.NewGuid.ToString()
             ctrl.Text = Label
             ctrl.Tag = Tag
             ctrl.Icon = Icon
@@ -1431,27 +1433,29 @@ Class Window1
 
     Private Sub LoadZones()
         Try
-
             Dim cntNewZone As Integer = 0
-            For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
-                Dim x As Zone = myService.GetAllZones(IdSrv).Item(i)
+
+            For Each _zon In myService.GetAllZones(IdSrv)
                 If ListMnu.Count = 0 Then
-                    NewBtnMnu(x.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , x.ID)
+                    NewBtnMnu(_zon.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , _zon.ID)
                     cntNewZone += 1
                 Else
                     Dim flagexist As Boolean = False
+                    'On vérifie si la zone est déjà créée
                     For j As Integer = 0 To ListMnu.Count - 1
-                        If ListMnu.Item(j).IDElement = x.ID Then
+                        If ListMnu.Item(j).IDElement = _zon.ID Then
                             flagexist = True
                             Exit For
                         End If
                     Next
+                    'si la zone n'existe pas on la crée
                     If flagexist = False Then
-                        NewBtnMnu(x.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , x.ID, True)
+                        NewBtnMnu(_zon.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , _zon.ID, True)
                         cntNewZone += 1
                     End If
                 End If
             Next
+
             If cntNewZone > 0 Then
                 MessageBox.Show(cntNewZone & " nouvelle(s) zone(s) ajoutée(s)", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
             End If
@@ -2325,7 +2329,7 @@ Class Window1
                 If list.Count > 0 Then
                     Dim _tool As String = ""
                     For Each logerror As String In list
-                        If logerror <> "" And logerror <> " " Then
+                        If String.IsNullOrEmpty(logerror) = False Then
                             Dim mnu As New MenuItem
                             mnu.Header = logerror
                             mnu.FontSize = 10
@@ -2365,7 +2369,7 @@ Class Window1
     End Sub
 
     ''' <summary>
-    ''' Menu quitter
+    ''' Menu Quitter
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>

@@ -30,11 +30,16 @@ Partial Public Class uMeteo
         Try
 
             If IsConnect = True Then
-                If _Id <> "" Then
+                If String.IsNullOrEmpty(_Id) = False Then
                     Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _Id)
                     Lbl.Content = _dev.Name
                     LblTemps.Content = _dev.ConditionActuel
-                    LblTemp.Content = _dev.TemperatureActuel & "°"
+                    If String.IsNullOrEmpty(_dev.TemperatureActuel) = False Then
+                        LblTemp.Content = _dev.TemperatureActuel & "°"
+                    Else
+                        LblTemp.Content = ""
+                    End If
+
                     LblHum.Content = "Humidité: " & _dev.HumiditeActuel
                     LblVent.Content = "Vent: " & _dev.VentActuel
                     Day0.Content = _dev.JourToday
