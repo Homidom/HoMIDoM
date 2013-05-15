@@ -1244,6 +1244,12 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetRepertoireOfServer">
+	<summary>
+ Retourne le répertoire courant du serveur
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.SetSaveRealTime(System.Boolean)">
 	<summary>
  Indique au serveur si on sauvegarde en temps réel
@@ -2108,6 +2114,12 @@ HoMIDom
 	<summary>
  Template de Classe de type Driver pour le service web
  </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetRepertoireOfServer">
+	<summary>
+ Retourne le répertoire courant du serveur
+ </summary>
+	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSaveRealTime">
 	<summary>

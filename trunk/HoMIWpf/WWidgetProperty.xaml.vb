@@ -746,7 +746,7 @@ Public Class WWidgetProperty
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 Dim retour As String = frm.FileName
-                If retour <> "" Then
+                If String.IsNullOrEmpty(retour) = False Then
                     ImgVisu.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
                     ImgVisu.Tag = retour
                 End If
@@ -766,7 +766,7 @@ Public Class WWidgetProperty
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 Dim retour As String = frm.FileName
-                If retour <> "" Then
+                If String.IsNullOrEmpty(retour) = False Then
                     ImgVisu.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
                     ImgVisu.Tag = retour
                 End If
@@ -803,7 +803,7 @@ Public Class WWidgetProperty
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 Dim retour As String = frm.FileName
-                If retour <> "" Then
+                If String.IsNullOrEmpty(retour) = False Then
                     ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
                     ImgPicture.Tag = retour
                 End If

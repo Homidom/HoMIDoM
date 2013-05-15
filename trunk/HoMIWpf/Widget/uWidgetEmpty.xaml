@@ -18,7 +18,7 @@
                 <StackPanel Name="StkEmptyetDevice" Orientation="Horizontal" >
                     <Image Name="Image" Stretch="Fill" VerticalAlignment="Stretch" Source="/HoMIWpF;component/Images/script-128.png" Width="40" Height="40" />
                     <StackPanel >
-                    <Label Name="LblStatus" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" FontSize="20" Foreground="LightGray"  >Status: ?</Label>
+                        <Label Name="LblStatus" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" FontSize="20" Foreground="LightGray"  >Status: ?</Label>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Name="StkTool" Visibility="Collapsed" />
