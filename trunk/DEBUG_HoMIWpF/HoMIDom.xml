@@ -635,9 +635,59 @@ HoMIDom
  Classe de transfert de fichier en streaming
  </summary>
 	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.RequestFileData.IdServ">
+	<summary>
+ Id du serveur
+ </summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.RequestFileData.Name">
+	<summary>
+ Nom et chemin du fichier a télécharger. P.ex: /Musique/xyz.mp3
+ </summary>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.RequestFileData">
 	<summary>
  Classe de demande de fichier
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.UploadFileData.IdServ">
+	<summary>
+ Id du serveur
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.UploadFileData.FilePath">
+	<summary>
+ Nom du fichier et chemin où il doit être stocké. P.ex: /Musique/xyz.mp3
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.UploadFileData.Length">
+	<summary>
+ Longueur du fichier en byte
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.UploadFileData.Overwrite">
+	<summary>
+ Spécifier si il faut écraser le fichier si celui-ci existe déjà
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.UploadFileData.Stream">
+	<summary>
+ Flux de donnée du fichier
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.UploadFileData">
+	<summary>
+ Classe d'envoi de fichier
+ </summary>
+	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.UploadFileDataResult.Success">
+	<summary>
+ Retourne si l'upload s'est correctement déroulé
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.UploadFileDataResult">
+	<summary>
+ Classe de retour d'information sur l'envoi du fichier
  </summary>
 	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Macro.ID">
@@ -1969,7 +2019,7 @@ HoMIDom
  Fixe (True/False) si le mode découverte des nouveaux devices doit être activé
  </summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.AddDetectNewDevice(System.String,System.String,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Server.AddDetectNewDevice(System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Ajoute un nouveau device dans la liste découverte
  </summary>
@@ -3024,7 +3074,7 @@ HoMIDom
  Fixe (True/False) si le mode découverte des nouveaux devices doit être activé
  </summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.AddDetectNewDevice(System.String,System.String,System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.AddDetectNewDevice(System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Ajoute un nouveau device dans la liste découverte
  </summary>
