@@ -8,7 +8,6 @@
     Public _MonRepertoire As String = System.Environment.CurrentDirectory
     Public _MonRepertoireAppData As String = System.Environment.CurrentDirectory
     Public _ListServer As New List(Of ClServer)
-    'Public MyRepAppData As String = ""
 
     'Ecriture dans le fichier log
     Public _Debug As Boolean

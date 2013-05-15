@@ -99,6 +99,7 @@ Partial Public Class uCtrlImgMnu
         End Set
     End Property
 
+
     Public Property SubMenu As List(Of String)
         Get
             Return _submnu
@@ -127,7 +128,7 @@ Partial Public Class uCtrlImgMnu
         End Get
         Set(ByVal value As String)
             _Idelement = value
-            If _type = TypeOfMnu.Zone And IsConnect = True And _Idelement <> "" Then
+            If _type = TypeOfMnu.Zone And IsConnect = True And String.IsNullOrEmpty(_Idelement) = False Then
                 Image.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.ReturnZoneByID(IdSrv, _Idelement).Icon))
             End If
         End Set

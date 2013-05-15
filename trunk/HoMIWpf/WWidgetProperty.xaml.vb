@@ -255,7 +255,6 @@ Public Class WWidgetProperty
             Obj.ColorEtiquette = ColorPicker3.SelectedColor
             Obj.URL = TxtURL.Text
             Obj.UrlRss = TxtURLRss.Text
-            'Obj.ListHttpButton = Objet.ListHttpButton
 
             If CbVilleMeteo.SelectedIndex >= 0 Then
                 Dim x As ComboBoxItem = CbVilleMeteo.Items(CbVilleMeteo.SelectedIndex)
@@ -819,14 +818,11 @@ Public Class WWidgetProperty
     End Sub
 
     Private Sub BtnInitPict_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnInitPict.Click
-
         ImgPicture.Source = Nothing
         ImgPicture.Tag = "-defaut.png"
-
     End Sub
 
     Private Sub BtnInitPictLocal_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnInitPict_Local.Click
-
         Try
             ' l'utilisateur ouvre une image située sur l'ordinateur client
             Dim openFileDialog1 As New Microsoft.Win32.OpenFileDialog()
@@ -846,14 +842,13 @@ Public Class WWidgetProperty
     End Sub
 
     Private Sub BtnInitPictServeur_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnInitPict_Serveur.Click
-
         Try
             ' Image téléchargée depuis le serveur: une boîte de dialogue contenant les images du serveur est affichée.
             Dim frm As New WindowImg
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 Dim retour As String = frm.FileName
-                If retour <> "" Then
+                If String.IsNullOrEmpty(retour) = False Then
                     ImgPicture.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
                     ImgPicture.Tag = retour
                 End If
@@ -936,7 +931,6 @@ Public Class WWidgetProperty
                     .URL = TxtHttpURL.Text
                     .Width = TxtHttpWidth.Text
                     .Height = TxtHttpHeight.Text
-                    'If String.IsNullOrEmpty(HttpIcon.Tag) = False Then .IconImageUri = HttpIcon.Tag
                 End With
                 HttpListBtn.Items.Add(x.Content)
                 _listhttpbtn.Add(x)
@@ -946,7 +940,6 @@ Public Class WWidgetProperty
                     _listhttpbtn.Item(HttpListBtn.SelectedIndex).URL = TxtHttpURL.Text
                     _listhttpbtn.Item(HttpListBtn.SelectedIndex).Width = TxtHttpWidth.Text
                     _listhttpbtn.Item(HttpListBtn.SelectedIndex).Height = TxtHttpHeight.Text
-                    ' _listhttpbtn.Item(HttpListBtn.SelectedIndex).IconImageUri = HttpIcon.Tag
                 End If
             End If
             HttpStkEditBtn.Visibility = Visibility.Collapsed
@@ -966,7 +959,6 @@ Public Class WWidgetProperty
                 TxtHttpURL.Text = _btn.URL
                 TxtHttpWidth.Text = _btn.Width
                 TxtHttpHeight.Text = _btn.Height
-                'HttpIcon.Tag = _btn.IconImageUri
             End If
         Catch ex As Exception
             MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -979,7 +971,7 @@ Public Class WWidgetProperty
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 Dim retour As String = frm.FileName
-                If retour <> "" Then
+                If String.IsNullOrEmpty(retour) = False Then
                     HttpIcon.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
                     HttpIcon.Tag = retour
                 End If
@@ -1146,8 +1138,6 @@ Public Class WWidgetProperty
     End Sub
 
     Private Sub ColorPicker1_SelectColorChange(ByVal sender As System.Windows.Media.Brush) Handles ColorPicker1.SelectColorChange
-
-        'lblColor.Background = ColorPicker1.SelectedColor
         ' L'utilisation de couleurs nommées (p.ex. colors.antiqueblue) rend impossible l'attribution de la transparence
         ' par affectation de la valeur alpha dans les valeurs ARGB.
         ' Chaque fois que l'utilisateur choisit une couleur nommée dans la liste, on la convertir en valeur ARGB
@@ -1158,7 +1148,6 @@ Public Class WWidgetProperty
         B = CByte("&H" & ColorPicker1.SelectedColor.ToString.Substring(7, 2))
         mycolor = System.Windows.Media.Color.FromArgb(Slider1.Value, R, G, B)
         Dim mybrush = New SolidColorBrush(mycolor)
-        'mybrush.Opacity = Slider1.Value / 255
         lblColor.Background = mybrush
     End Sub
 
@@ -1174,7 +1163,6 @@ Public Class WWidgetProperty
         B = CByte("&H" & lblColor.Background.ToString.Substring(7, 2))
         mycolor = System.Windows.Media.Color.FromArgb(Slider1.Value, R, G, B)
         Dim mybrush = New SolidColorBrush(mycolor)
-        'mybrush.Opacity = Slider1.Value / 255
         lblColor.Background = mybrush
     End Sub
 

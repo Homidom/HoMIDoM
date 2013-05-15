@@ -46,9 +46,9 @@ Public Class uTelecommande
 
                             cvs.Background = Brushes.Black
                             cvs.AllowDrop = True
-                            cvs.Tag = _obj.Commandes.Item(i2).Row & "|" & _obj.Commandes.Item(i2).Column 'ListButton(i).Row & "|" & ListButton(i).Column
-                            Grid.SetColumn(cvs, _obj.Commandes.Item(i2).Column) ' ListButton(i).Column)
-                            Grid.SetRow(cvs, _obj.Commandes.Item(i2).Row) 'ListButton(i).Row)
+                            cvs.Tag = _obj.Commandes.Item(i2).Row & "|" & _obj.Commandes.Item(i2).Column
+                            Grid.SetColumn(cvs, _obj.Commandes.Item(i2).Column)
+                            Grid.SetRow(cvs, _obj.Commandes.Item(i2).Row)
 
                             Dim img1 As New ImageButton
                             img1.Source = ConvertArrayToImage(myService.GetByteFromImage(_obj.Commandes.Item(i2).Picture))
@@ -90,8 +90,6 @@ Public Class uTelecommande
                 If grid_Telecommande.RowDefinitions.Count = 0 Then
                     grid_Telecommande.RowDefinitions.Clear()
                     grid_Telecommande.Height = 50
-                    'Initialisation de la hauteur du background
-                    'rectangle.Height = 70
                 End If
             End If
 
@@ -99,8 +97,6 @@ Public Class uTelecommande
                 If grid_Telecommande.ColumnDefinitions.Count = 0 Then
                     grid_Telecommande.ColumnDefinitions.Clear()
                     grid_Telecommande.Width = 50
-                    'Initialisation de la largeur du background
-                    'Me.rectangle.Width = 70
                 End If
             End If
 
