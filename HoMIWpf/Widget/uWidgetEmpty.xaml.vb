@@ -1,6 +1,7 @@
 ﻿Imports System.Windows.Threading
 Imports System.Reflection
 Imports System.Threading
+Imports WpfAnimatedGif
 
 Public Class uWidgetEmpty
     Public Enum TypeOfWidget
@@ -2063,17 +2064,18 @@ Public Class uWidgetEmpty
     End Function
 
     Private Sub LoadPicture()
-
         Try
             Dim DisplayPictureFileName As String
             If _dev IsNot Nothing Then
                 DisplayPictureFileName = GetStatusPicture(Me.Picture, _dev.Value)
                 If IO.File.Exists(DisplayPictureFileName) Then
                     ' L'image existe en local
-                    Image.Source = New BitmapImage(New Uri(DisplayPictureFileName))
+                    'Image.Source = New BitmapImage(New Uri(DisplayPictureFileName))
+                    ImageBehavior.SetAnimatedSource(Image, New BitmapImage(New Uri(DisplayPictureFileName)))
                 Else
                     ' L'image n'a pas été trouvée en local, on la reprend du serveur
-                    Image.Source = ConvertArrayToImage(myService.GetByteFromImage(DisplayPictureFileName))
+                    'Image.Source = ConvertArrayToImage(myService.GetByteFromImage(DisplayPictureFileName))
+                    ImageBehavior.SetAnimatedSource(Image, ConvertArrayToImage(myService.GetByteFromImage(DisplayPictureFileName)))
                 End If
             End If
         Catch ex As Exception
