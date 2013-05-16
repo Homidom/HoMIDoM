@@ -75,6 +75,7 @@ Namespace HoMIDom
         <NonSerialized()> Shared _Finish As Boolean  'Le serveur est prêt
         <NonSerialized()> Shared _Voice As String  'Voix par défaut
         <NonSerialized()> Private Shared _OsPlatForm As String  '32 ou 64 bits
+        <NonSerialized()> Private Shared _CodePays As Integer = 12
         Private Shared lock_logwrite As New Object
         <NonSerialized()> Shared _SaveRealTime As Boolean = True 'True si on enregistre en temps réel
         <NonSerialized()> Shared _Devise As String = "€"
@@ -331,6 +332,15 @@ Namespace HoMIDom
         '    End Try
         'End Function
 
+        Private Property CodePays As Integer
+            Get
+                Return _CodePays
+            End Get
+            Set(ByVal value As Integer)
+                _CodePays = value
+            End Set
+        End Property
+
         ''' <summary>
         ''' Vérifie si l'IDsrv est correct, retourne True si ok
         ''' </summary>
@@ -551,6 +561,8 @@ Namespace HoMIDom
                                         Case "modedecouverte"
                                             _ModeDecouverte = list.Item(0).Attributes.Item(j).Value
                                             If _ModeDecouverte Then Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " Mode découverte activé sur tous les drivers")
+                                        Case "codepays"
+                                            CodePays = list.Item(0).Attributes.Item(j).Value
                                         Case Else
                                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                                     End Select
@@ -1516,6 +1528,9 @@ Namespace HoMIDom
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("modedecouverte")
                 writer.WriteValue(_ModeDecouverte)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("codepays")
+                writer.WriteValue(CodePays)
                 writer.WriteEndAttribute()
                 writer.WriteEndElement()
 
@@ -3833,6 +3848,33 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub SetSaveRealTime(ByVal Value As Boolean) Implements IHoMIDom.SetSaveRealTime
             _SaveRealTime = Value
+        End Sub
+
+        ''' <summary>
+        ''' Retourne le code du pays du CultureInfo
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetCodePays() As Integer Implements IHoMIDom.GetCodePays
+            Try
+                Return CodePays
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetCodePays", "Erreur : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Fixe le code du pays suivant CultureInfo
+        ''' </summary>
+        ''' <param name="Code"></param>
+        ''' <remarks></remarks>
+        Public Sub SetCodePays(ByVal Code As Integer) Implements IHoMIDom.SetCodePays
+            Try
+                CodePays = Code
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetCodePays", "Erreur : " & ex.Message)
+            End Try
         End Sub
 
         ''' <summary>

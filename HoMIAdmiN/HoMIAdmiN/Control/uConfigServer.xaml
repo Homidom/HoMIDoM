@@ -39,6 +39,11 @@
                                         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="21" HorizontalAlignment="Left" Name="TxtSOAP" Width="150" ToolTip="Permet de modifier le port SOAP du serveur à son prochain démarrage" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" >
+                                        <Label Foreground="White" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Width="67">Pays:</Label>
+                                        <ComboBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Height="21" HorizontalAlignment="Left" Name="CbCodePays" Width="150" ToolTip="Permet de définir le pays du serveur" SelectedIndex="0" />
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal" >
                                         <Label HorizontalAlignment="Left" Name="Label1" Width="67" Foreground="White" VerticalAlignment="Top">Longitude:</Label>
                                         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtLong" Height="20" HorizontalAlignment="Left" Width="150" />
                                     </StackPanel>

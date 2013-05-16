@@ -1256,6 +1256,18 @@ HoMIDom
  </summary>
 	<param name="Value"></param>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetCodePays">
+	<summary>
+ Retourne le code du pays du CultureInfo
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetCodePays(System.Int32)">
+	<summary>
+ Fixe le code du pays suivant CultureInfo
+ </summary>
+	<param name="Code"></param>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetSaveRealTime">
 	<summary>
  Demande au serveur si on sauvegarde en temps réel
@@ -2114,6 +2126,18 @@ HoMIDom
 	<summary>
  Template de Classe de type Driver pour le service web
  </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetCodePays">
+	<summary>
+ Retourne le code du pays du CultureInfo
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetCodePays(System.Int32)">
+	<summary>
+ Fixe le code du pays suivant CultureInfo
+ </summary>
+	<param name="Code"></param>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetRepertoireOfServer">
 	<summary>
