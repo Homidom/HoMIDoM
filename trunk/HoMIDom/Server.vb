@@ -805,7 +805,9 @@ Namespace HoMIDom
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des composants :")
                             list = Nothing
                             list = myxml.SelectNodes("/homidom/devices/device")
+
                             Dim trvSoleil As Boolean = False
+                            Dim trvStartSrv As Boolean = False
 
                             If list.Count > 0 Then 'présence d'un composant
                                 For j As Integer = 0 To list.Count - 1
@@ -962,7 +964,6 @@ Namespace HoMIDom
                                         If (Not list.Item(j).Attributes.GetNamedItem("datecreated") Is Nothing) Then .DateCreated = list.Item(j).Attributes.GetNamedItem("datecreated").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("lastchange") Is Nothing) Then .LastChange = list.Item(j).Attributes.GetNamedItem("lastchange").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("lastchangeduree") Is Nothing) Then .LastChangeDuree = list.Item(j).Attributes.GetNamedItem("lastchangeduree").Value
-                                        'If (Not list.Item(j).Attributes.GetNamedItem("refresh") Is Nothing) Then .Refresh = Replace(list.Item(j).Attributes.GetNamedItem("refresh").Value, ".", ",")
                                         If (Not list.Item(j).Attributes.GetNamedItem("refresh") Is Nothing) Then .Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("modele") Is Nothing) Then .Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("allvalue") Is Nothing) Then .AllValue = list.Item(j).Attributes.GetNamedItem("allvalue").Value
@@ -1028,6 +1029,9 @@ Namespace HoMIDom
                                             If .ID = "soleil01" Then
                                                 trvSoleil = True
                                             End If
+                                            If .ID = "startsrv01" Then
+                                                trvStartSrv = True
+                                            End If
                                         Else
                                             _Dev.Enable = False
                                             Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", " -> Erreur lors du chargement du composant (information incomplete -> Disable) " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
@@ -1044,6 +1048,19 @@ Namespace HoMIDom
                                     _Devs.Enable = True
                                     _Devs.Adresse1 = "N/A"
                                     _Devs.Description = "Levé/Couché du soleil : True si il fait jour"
+                                    _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
+                                    _ListDevices.Add(_Devs)
+                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
+                                    _Devs = Nothing
+                                End If
+                                If trvStartSrv = False Then
+                                    Dim _Devs As New Device.GENERIQUEBOOLEEN(Me)
+                                    _Devs.ID = "startsrv01"
+                                    _Devs.Name = "HOMI_StartServeur"
+                                    _Devs.Enable = True
+                                    _Devs.Adresse1 = "N/A"
+                                    _Devs.AllValue = True
+                                    _Devs.Description = "Serveur Démarré"
                                     _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
                                     _ListDevices.Add(_Devs)
                                     Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
@@ -2969,6 +2986,10 @@ Namespace HoMIDom
                 'test log
                 CleanLog(_MaxMonthLog)
 
+                Dim _devstart As Object = ReturnRealDeviceById("startsrv01")
+                If _devstart IsNot Nothing Then _devstart.value = True
+                _devstart = Nothing
+
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Serveur démarré")
 
             Catch ex As Exception
@@ -3184,8 +3205,6 @@ Namespace HoMIDom
                 If VerifIdSrv(IdSrv) = False Then
                     Exit Sub
                 End If
-
-                'Dim retour As String
 
                 'on change l'etat du server pour ne plus lancer de traitement
                 Etat_server = False
@@ -4165,15 +4184,18 @@ Namespace HoMIDom
                 Dim _list As New List(Of ImageFile)
 
                 Dim dirInfo As New System.IO.DirectoryInfo(_MonRepertoire & "\images\")
-                Dim files() As System.IO.FileInfo = dirInfo.GetFiles("*.*g", System.IO.SearchOption.AllDirectories)
+                Dim files() As System.IO.FileInfo = dirInfo.GetFiles("*.*g*", System.IO.SearchOption.AllDirectories)
 
                 If (files IsNot Nothing) Then
                     For Each file As System.IO.FileInfo In files
-                        Dim x As New ImageFile
-                        x.Path = file.FullName
-                        x.FileName = file.Name
-                        _list.Add(x)
-                        x = Nothing
+                        Dim a As String = file.Extension.ToLower.Replace(".", "")
+                        If a = "jpg" Or a = "gif" Or a = "png" Then
+                            Dim x As New ImageFile
+                            x.Path = file.FullName
+                            x.FileName = file.Name
+                            _list.Add(x)
+                            x = Nothing
+                        End If
                     Next
                 End If
                 files = Nothing
