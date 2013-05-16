@@ -17,6 +17,20 @@ Namespace HoMIDom
 
 #Region "Serveur"
         ''' <summary>
+        ''' Retourne le code du pays du CultureInfo
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetCodePays() As Integer
+
+        ''' <summary>
+        ''' Fixe le code du pays suivant CultureInfo
+        ''' </summary>
+        ''' <param name="Code"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetCodePays(ByVal Code As Integer)
+
+        ''' <summary>
         ''' Retourne le répertoire courant du serveur
         ''' </summary>
         ''' <returns></returns>

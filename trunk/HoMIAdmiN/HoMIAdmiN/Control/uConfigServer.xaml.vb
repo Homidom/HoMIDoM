@@ -1,6 +1,7 @@
 ﻿Imports System.Text.RegularExpressions
 Imports System.IO
 Imports System.Threading
+Imports System.Globalization
 
 Partial Public Class uConfigServer
     Public Event CloseMe(ByVal MyObject As Object)
@@ -81,6 +82,11 @@ Partial Public Class uConfigServer
                 myService.SetEnableServeurWeb(ChKEnableSrvWeb.IsChecked)
 
                 myService.SetModeDecouverte(ChkModeDecouv.IsChecked)
+
+                Dim x As Label = CbCodePays.SelectedItem
+                If x IsNot Nothing Then
+                    myService.SetCodePays(x.Tag)
+                End If
 
                 Dim _list As New List(Of Boolean)
                 If ChkTyp0.IsChecked Then
@@ -163,7 +169,25 @@ Partial Public Class uConfigServer
 
         Try
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
+
+
             If IsConnect = True Then
+                Dim ci As CultureInfo
+                Dim _slct As Integer = -1
+                Dim _slct1 As Integer = -1
+
+                For Each ci In CultureInfo.GetCultures(CultureTypes.NeutralCultures)
+                    Dim lbl As New Label
+                    lbl.Content = ci.DisplayName
+                    lbl.Tag = ci.LCID
+                    CbCodePays.Items.Add(lbl)
+                    _slct += 1
+                    If ci.LCID = myService.GetCodePays Then
+                        _slct1 = _slct
+                    End If
+                Next ci
+                If _slct1 >= 0 Then CbCodePays.SelectedIndex = _slct1
+
                 TxtIPSOAP.Text = myService.GetIPSOAP
                 TxtSOAP.Text = myService.GetPortSOAP
                 TxtLat.Text = myService.GetLatitude
@@ -212,7 +236,6 @@ Partial Public Class uConfigServer
                     If myService.GetAllVoice.Item(i) = myService.GetDefautVoice Then idx = i
                 Next
                 CbVoice.SelectedIndex = idx
-
 
             End If
 
