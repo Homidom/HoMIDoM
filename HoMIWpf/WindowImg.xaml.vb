@@ -26,28 +26,31 @@ Public Class WindowImg
     End Sub
 
     Private Sub Affiche(Optional ByVal Filtre As String = "")
-        For i As Integer = 0 To _ListImg.Count - 1
-            Dim stk As New StackPanel
-            Dim img As New Image
-            Dim lbl As New Label
-            Dim x As HoMIDom.HoMIDom.ImageFile = _ListImg.Item(i)
+        If _ListImg IsNot Nothing Then
+            For i As Integer = 0 To _ListImg.Count - 1
+                Dim stk As New StackPanel
+                Dim img As New Image
+                Dim lbl As New Label
+                Dim x As HoMIDom.HoMIDom.ImageFile = _ListImg.Item(i)
 
-            img.Height = 45
-            img.Width = 45
-            stk.Orientation = Orientation.Horizontal
+                img.Height = 45
+                img.Width = 45
+                stk.Orientation = Orientation.Horizontal
 
-            Try
-                img.Source = ConvertArrayToImage(myservice.GetByteFromImage(x.Path))
-                lbl.Content = x.Path
-                lbl.Foreground = New SolidColorBrush(Colors.White)
-                stk.Tag = x.Path
-                stk.Children.Add(img)
-                stk.Children.Add(lbl)
-                ListBoxImg.Items.Add(stk)
-            Catch ex As Exception
-                MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-            End Try
-        Next
+                Try
+                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Path))
+                    lbl.Content = x.Path
+                    lbl.Foreground = New SolidColorBrush(Colors.White)
+                    stk.Tag = x.Path
+                    stk.Children.Add(img)
+                    stk.Children.Add(lbl)
+                    ListBoxImg.Items.Add(stk)
+
+                Catch ex As Exception
+                    MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                End Try
+            Next
+        End If
     End Sub
 
 

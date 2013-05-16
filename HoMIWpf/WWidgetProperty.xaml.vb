@@ -859,7 +859,7 @@ Public Class WWidgetProperty
             frm = Nothing
 
         Catch ex As Exception
-            MessageBox.Show("Erreur BtnInitPictServeur_Click: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Erreur BtnInitPictServeur_Click: " & ex.ToString, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
 
     End Sub
