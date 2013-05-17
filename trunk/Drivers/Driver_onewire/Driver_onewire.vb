@@ -823,7 +823,8 @@ Public Class Driver_onewire
         Dim state As Object
         SyncLock lock_portwrite
             Try
-                Dim owd As com.dalsemi.onewire.container.OneWireContainer12
+                'Dim owd As com.dalsemi.onewire.container.OneWireContainer12 'Modif du container suite à remarque Christ. sur TLD
+                Dim owd As com.dalsemi.onewire.container.OneWireContainer
                 Dim tc As com.dalsemi.onewire.container.SwitchContainer
                 Dim switch_state, switch_activity
                 If _IsConnect Then
