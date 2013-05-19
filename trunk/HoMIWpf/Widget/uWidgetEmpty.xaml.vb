@@ -1193,12 +1193,16 @@ Public Class uWidgetEmpty
                         x.Nom = _act.Methode
 
                         _FlagBlock = True
-                        myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                        'myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                        myService.RunMacro(IdSrv, _act.IdObject)
                         _FlagBlock = False
                     Else
                         Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
                         If _zon IsNot Nothing Then
                             frmMere.ShowZone(_act.IdObject)
+                        Else
+                            ' Commande Shell
+                            Process.Start(_act.Value)
                         End If
                     End If
                 End If
@@ -1231,11 +1235,14 @@ Public Class uWidgetEmpty
                     If _mac IsNot Nothing Then
                         Dim x As New HoMIDom.HoMIDom.DeviceAction
                         x.Nom = _act.Methode
-                        myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                        myService.RunMacro(IdSrv, _act.IdObject)
                     Else
                         Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
                         If _zon IsNot Nothing Then
                             frmMere.ShowZone(_act.IdObject)
+                        Else
+                            ' Commande Shell
+                            Process.Start(_act.Value)
                         End If
                     End If
                 End If
@@ -1270,12 +1277,15 @@ Public Class uWidgetEmpty
                         x.Nom = _act.Methode
 
                         _FlagBlock = True
-                        myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                        myService.RunMacro(IdSrv, _act.IdObject)
                         _FlagBlock = False
                     Else
                         Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
                         If _zon IsNot Nothing Then
                             frmMere.ShowZone(_act.IdObject)
+                        Else
+                            ' Commande Shell
+                            Process.Start(_act.Value)
                         End If
                     End If
                 End If
@@ -1310,12 +1320,15 @@ Public Class uWidgetEmpty
                         x.Nom = _act.Methode
 
                         _FlagBlock = True
-                        myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                        myService.RunMacro(IdSrv, _act.IdObject)
                         _FlagBlock = False
                     Else
                         Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
                         If _zon IsNot Nothing Then
                             frmMere.ShowZone(_act.IdObject)
+                        Else
+                            ' Commande Shell
+                            Process.Start(_act.Value)
                         End If
                     End If
                 End If
@@ -1350,12 +1363,15 @@ Public Class uWidgetEmpty
                         x.Nom = _act.Methode
 
                         _FlagBlock = True
-                        myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                        myService.RunMacro(IdSrv, _act.IdObject)
                         _FlagBlock = False
                     Else
                         Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
                         If _zon IsNot Nothing Then
                             frmMere.ShowZone(_act.IdObject)
+                        Else
+                            ' Commande Shell
+                            Process.Start(_act.Value)
                         End If
                     End If
                 End If
@@ -1390,12 +1406,15 @@ Public Class uWidgetEmpty
                         x.Nom = _act.Methode
 
                         _FlagBlock = True
-                        myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
+                        myService.RunMacro(IdSrv, _act.IdObject)
                         _FlagBlock = False
                     Else
                         Dim _zon As HoMIDom.HoMIDom.Zone = myService.ReturnZoneByID(IdSrv, _act.IdObject)
                         If _zon IsNot Nothing Then
                             frmMere.ShowZone(_act.IdObject)
+                        Else
+                            ' Commande Shell
+                            Process.Start(_act.Value)
                         End If
                     End If
                 End If
@@ -2067,7 +2086,7 @@ Public Class uWidgetEmpty
         Try
             Dim DisplayPictureFileName As String
             If _dev IsNot Nothing Then
-                DisplayPictureFileName = GetStatusPicture(Me.Picture, _dev.Value)
+                DisplayPictureFileName = GetStatusPicture(_Picture, _dev.Value)
                 If IO.File.Exists(DisplayPictureFileName) Then
                     ' L'image existe en local
                     'Image.Source = New BitmapImage(New Uri(DisplayPictureFileName))
@@ -2077,7 +2096,18 @@ Public Class uWidgetEmpty
                     'Image.Source = ConvertArrayToImage(myService.GetByteFromImage(DisplayPictureFileName))
                     ImageBehavior.SetAnimatedSource(Image, ConvertArrayToImage(myService.GetByteFromImage(DisplayPictureFileName)))
                 End If
+            ElseIf _type = TypeOfWidget.Empty And _Visuel.Count = 0 Then
+                ' Affichage de l'image pour un widget empty s'il n'existe aucune visualisation
+                ' L'image s'affiche également au premier affichage du widget (i.e. avant la première mise à jour de visualisation)
+                If IO.File.Exists(_Picture) Then
+                    ' L'image existe en local
+                    ImageBehavior.SetAnimatedSource(Image, New BitmapImage(New Uri(_Picture)))
+                Else
+                    ' L'image n'a pas été trouvée en local, on la reprend du serveur
+                    ImageBehavior.SetAnimatedSource(Image, ConvertArrayToImage(myService.GetByteFromImage(_Picture)))
+                End If
             End If
+
         Catch ex As Exception
             MessageBox.Show("Erreur LoadPicture: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
