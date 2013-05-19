@@ -112,6 +112,19 @@ Public Class WWidgetProperty
                                 lbl1 = Nothing
                                 lbl2 = Nothing
                             Next
+                            ' Commande locale
+                            Dim lb1 As New ComboBoxItem
+                            Dim lb2 As New ComboBoxItem
+                            lb1.Content = "Commande DOS locale"
+                            lb1.Tag = "SHELL"
+                            lb1.Uid = Nothing
+                            lb2.Content = "Commande DOS locale"
+                            lb2.Tag = "SHELL"
+                            lb2.Uid = Nothing
+                            CbObjet.Items.Add(lb1)
+                            CbObjetVisu.Items.Add(lb2)
+                            lb1 = Nothing
+                            lb2 = Nothing
                         Case uWidgetEmpty.TypeOfWidget.Web
                             StkPicture.Visibility = Visibility.Collapsed
                             StkStatus.Visibility = Visibility.Collapsed
@@ -331,6 +344,7 @@ Public Class WWidgetProperty
                 Next
 
                 _Device = Nothing
+                TxtValue.Text = Nothing
             End If
 
             If CbObjet.SelectedItem.tag = "MACRO" Then
@@ -350,6 +364,7 @@ Public Class WWidgetProperty
 
                 LblActionValue.Visibility = Windows.Visibility.Collapsed
                 TxtValue.Visibility = Windows.Visibility.Collapsed
+                TxtValue.Text = Nothing
             End If
 
             If CbObjet.SelectedItem.tag = "ZONE" Then
@@ -369,6 +384,20 @@ Public Class WWidgetProperty
 
                 LblActionValue.Visibility = Windows.Visibility.Collapsed
                 TxtValue.Visibility = Windows.Visibility.Collapsed
+                TxtValue.Text = Nothing
+            End If
+
+            If CbObjet.SelectedItem.tag = "SHELL" Then
+                CbMethode.Items.Clear()
+
+                Dim lbl1 As New ComboBoxItem
+                lbl1.Content = "Exécuter"
+                lbl1.Tag = 10 'c une commande Shell
+                CbMethode.Items.Add(lbl1)
+                CbMethode.SelectedIndex = 0
+
+                LblActionValue.Visibility = Windows.Visibility.Visible
+                TxtValue.Visibility = Windows.Visibility.Visible
             End If
         End If
     End Sub
@@ -412,9 +441,9 @@ Public Class WWidgetProperty
         CbObjet.Visibility = Windows.Visibility.Collapsed
         LblMethode.Visibility = Windows.Visibility.Collapsed
         CbMethode.Visibility = Windows.Visibility.Collapsed
-        LblActionValue.Visibility = Windows.Visibility.Collapsed
         TxtValue.Visibility = Windows.Visibility.Collapsed
-
+        LblActionValue.Visibility = Windows.Visibility.Collapsed
+        
         Refresh_LstObjetAction()
     End Sub
 
@@ -452,6 +481,8 @@ Public Class WWidgetProperty
                     Dim _zon As Zone = myService.ReturnZoneByID(IdSrv, Action.IdObject)
                     If _zon IsNot Nothing Then
                         x.Content = _zon.Name & "[Zone]"
+                    Else
+                        x.Content = "Commande DOS locale"
                     End If
                 End If
             End If
@@ -460,7 +491,7 @@ Public Class WWidgetProperty
 
     End Sub
 
-    Private Sub LstObjetActions_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles LstObjetActions.SelectionChanged
+    Private Sub LstObjetActions_SelectionChanged(ByVal sender As Object, ByVal e As Object) Handles LstObjetActions.SelectionChanged, LstObjetActions.MouseLeftButtonDown
         If LstObjetActions.SelectedIndex >= 0 Then
             Dim _act As cWidget.Action = Nothing
             Select Case CbAction.SelectedIndex
@@ -497,7 +528,14 @@ Public Class WWidgetProperty
             Next
             CbMethode.SelectedIndex = _idx
 
-            TxtValue.Text = _act.Value.ToString
+            If _act.Value.ToString = Nothing Then
+                TxtValue.Visibility = Windows.Visibility.Collapsed
+                LblActionValue.Visibility = Windows.Visibility.Collapsed
+            Else
+                TxtValue.Visibility = Windows.Visibility.Visible
+                LblActionValue.Visibility = Windows.Visibility.Visible
+                TxtValue.Text = _act.Value.ToString
+            End If
 
             BtnOkAction.Visibility = Windows.Visibility.Visible
             LblMethode.Visibility = Windows.Visibility.Visible
@@ -558,7 +596,7 @@ Public Class WWidgetProperty
             End Select
         End If
 
-        TxtValue.Text = ""
+        TxtValue.Text = Nothing
         Refresh_LstObjetAction()
         _FlagNewAction = False
         LstObjetActions.SelectedIndex = -1
@@ -569,12 +607,15 @@ Public Class WWidgetProperty
         CbMethode.Visibility = Windows.Visibility.Collapsed
         LblActionValue.Visibility = Windows.Visibility.Collapsed
         TxtValue.Visibility = Windows.Visibility.Collapsed
+
     End Sub
 
     Private Sub BtnNewAction_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewAction.Click
         BtnOkAction.Visibility = Windows.Visibility.Visible
         LblObjet.Visibility = Windows.Visibility.Visible
         CbObjet.Visibility = Windows.Visibility.Visible
+        TxtValue.Visibility = Windows.Visibility.Collapsed
+        LblActionValue.Visibility = Windows.Visibility.Collapsed
         _FlagNewAction = True
     End Sub
 
