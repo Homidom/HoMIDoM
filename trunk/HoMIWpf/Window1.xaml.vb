@@ -48,6 +48,7 @@ Class Window1
     'XML
     Dim myxml As HoMIDom.HoMIDom.XML
     Dim list As XmlNodeList
+    Dim _ConfigFile As String
 
     'User Graphic
     Dim _ShowSoleil As Boolean
@@ -251,7 +252,17 @@ Class Window1
             End If
 
             'Chargement des paramètres et connexion au serveur si ok
-            Log(TypeLog.INFO, TypeSource.CLIENT, "LOADCONFIG", "Message: " & LoadConfig(_MonRepertoireAppData & "\Config\"))
+            Dim s() As String = System.Environment.GetCommandLineArgs()
+            If s.Count > 1 Then
+                ' Utilisation du fichier de configuration spécifié à la ligne de commande
+                _ConfigFile = s(1)
+                If _ConfigFile.Contains("\") = False Then
+                    _ConfigFile = _MonRepertoireAppData & "\Config\" & _ConfigFile
+                End If
+            Else
+                _ConfigFile = _MonRepertoireAppData & "\Config\HoMIWpF.xml"
+            End If
+            Log(TypeLog.INFO, TypeSource.CLIENT, "LOADCONFIG", "Message: " & LoadConfig(_ConfigFile))
 
             ' Create StackPanel and set child elements to horizontal orientation
             imgStackPnl.HorizontalAlignment = HorizontalAlignment.Center
@@ -265,8 +276,8 @@ Class Window1
                 _ImageBackGroundDefault = _MonRepertoire & "\Images\Fond-logo.png"
                 Me.Show()
                 MnuConfig_Click(Me, Nothing)
-                SaveConfig(_MonRepertoireAppData & "\Config\HoMIWpF.xml")
-                Log(TypeLog.INFO, TypeSource.CLIENT, "LOADCONFIG", "Message: " & LoadConfig(_MonRepertoireAppData & "\Config\"))
+                SaveConfig(_ConfigFile)
+                Log(TypeLog.INFO, TypeSource.CLIENT, "LOADCONFIG", "Message: " & LoadConfig(_ConfigFile))
                 LoadZones()
             End If
 
@@ -303,378 +314,379 @@ Class Window1
     Public Function LoadConfig(ByVal Fichier As String) As String
         'Copy du fichier de config avant chargement
         Try
-            Dim _file As String = Fichier & "HoMIWpF"
-            If File.Exists(_file & ".bak") = True Then File.Delete(_file & ".bak")
-            If File.Exists(_file & ".xml") = True Then
-                File.Copy(_file & ".xml", Mid(_file & ".xml", 1, Len(_file & ".xml") - 4) & ".bak")
+            If File.Exists(Fichier.Replace(".xml", ".bak")) = True Then File.Delete(Fichier.Replace(".xml", ".bak"))
+            If File.Exists(Fichier) = True Then
+                File.Copy(Fichier, Fichier.Replace(".xml", ".bak"))
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Création du backup (.bak) du fichier de config avant chargement")
             Else
                 ' Le fichier de config est inexistant. Premier lancement de WPF.
+                LoadConfig = "Fichier de configuration inexistant."
+                Exit Function
             End If
         Catch ex As Exception
             MessageBox.Show("Erreur lors du lancement de l'application: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
 
         Try
-            Dim dirInfo As New System.IO.DirectoryInfo(Fichier)
-            Dim file As System.IO.FileInfo
-            Dim files() As System.IO.FileInfo = dirInfo.GetFiles("HoMIWpF.xml")
+            'Dim dirInfo As New System.IO.DirectoryInfo(Fichier)
+            'Dim file As System.IO.FileInfo
+            'Dim files() As System.IO.FileInfo = dirInfo.GetFiles("HoMIWpF.xml")
             Dim myxml As XML
 
-            If (files IsNot Nothing) Then
-                For Each file In files
-                    Dim myfile As String = file.FullName
-                    Dim list As XmlNodeList
+            'If (files IsNot Nothing) Then
+            'For Each file In files
+            'Dim myfile As String = File.FullName
+            Dim list As XmlNodeList
 
-                    myxml = New XML(myfile)
+            myxml = New XML(Fichier)
 
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement du fichier config: " & myfile)
+            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement du fichier config: " & Fichier)
 
-                    '******************************************
-                    'on va chercher les paramètres du serveur
-                    '******************************************
-                    list = myxml.SelectNodes("/homidom/server")
-                    If list.Count > 0 Then 'présence des paramètres du server
-                        For j As Integer = 0 To list.Item(0).Attributes.Count - 1
-                            Select Case list.Item(0).Attributes.Item(j).Name
-                                Case "portsoap"
-                                    _PortSOAP = list.Item(0).Attributes.Item(j).Value
-                                Case "ip"
-                                    _IP = list.Item(0).Attributes.Item(j).Value
-                                Case "id"
-                                    IdSrv = list.Item(0).Attributes.Item(j).Value
-                                Case Else
-                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
-                            End Select
-                        Next
-                    Else
-                        MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur serveur")
-                    End If
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres du client WPF chargés")
+            '******************************************
+            'on va chercher les paramètres du serveur
+            '******************************************
+            list = myxml.SelectNodes("/homidom/server")
+            If list.Count > 0 Then 'présence des paramètres du server
+                For j As Integer = 0 To list.Item(0).Attributes.Count - 1
+                    Select Case list.Item(0).Attributes.Item(j).Name
+                        Case "portsoap"
+                            _PortSOAP = list.Item(0).Attributes.Item(j).Value
+                        Case "ip"
+                            _IP = list.Item(0).Attributes.Item(j).Value
+                        Case "id"
+                            IdSrv = list.Item(0).Attributes.Item(j).Value
+                        Case Else
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                    End Select
+                Next
+            Else
+                MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur serveur")
+            End If
+            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres du client WPF chargés")
 
-                    'ON peut se connecter
-                    'Connexion à Homidom
-                    ConnectToHomidom()
+            'ON peut se connecter
+            'Connexion à Homidom
+            ConnectToHomidom()
 
-                    Dim _srv As New ClServer
-                    _srv.Adresse = _IP
-                    _srv.Defaut = True
-                    _srv.Nom = "Defaut"
-                    _srv.Port = _PortSOAP
-                    _ListServer.Add(_srv)
+            Dim _srv As New ClServer
+            _srv.Adresse = _IP
+            _srv.Defaut = True
+            _srv.Nom = "Defaut"
+            _srv.Port = _PortSOAP
+            _ListServer.Add(_srv)
 
-                    '******************************************
-                    'on va chercher les paramètres tactile
-                    '******************************************
-                    list = myxml.SelectNodes("/homidom/tactile")
-                    If list.Count > 0 Then 'présence des paramètres du server
-                        For j As Integer = 0 To list.Item(0).Attributes.Count - 1
-                            Select Case list.Item(0).Attributes.Item(j).Name
-                                Case "friction"
-                                    'm_friction = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", ","))
-                                    m_friction = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
-                                Case "speedtouch"
-                                    'm_SpeedTouch = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", ","))
-                                    m_SpeedTouch = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
-                                Case Else
-                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
-                            End Select
-                        Next
-                    Else
-                        MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
-                    End If
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres tactiles chargés")
+            '******************************************
+            'on va chercher les paramètres tactile
+            '******************************************
+            list = myxml.SelectNodes("/homidom/tactile")
+            If list.Count > 0 Then 'présence des paramètres du server
+                For j As Integer = 0 To list.Item(0).Attributes.Count - 1
+                    Select Case list.Item(0).Attributes.Item(j).Name
+                        Case "friction"
+                            'm_friction = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", ","))
+                            m_friction = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                        Case "speedtouch"
+                            'm_SpeedTouch = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", ","))
+                            m_SpeedTouch = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                        Case Else
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                    End Select
+                Next
+            Else
+                MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
+            End If
+            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres tactiles chargés")
 
-                    '******************************************
-                    'on va chercher les paramètres interface
-                    '******************************************
-                    list = myxml.SelectNodes("/homidom/interface")
-                    If list.Count > 0 Then 'présence des paramètres du server
-                        For j As Integer = 0 To list.Item(0).Attributes.Count - 1
-                            Select Case list.Item(0).Attributes.Item(j).Name
-                                Case "showsoleil"
-                                    ShowSoleil = list.Item(0).Attributes.Item(j).Value
-                                Case "showtemperature"
-                                    ShowTemperature = list.Item(0).Attributes.Item(j).Value
-                                Case "imgbackground"
-                                    ImageBackGround = list.Item(0).Attributes.Item(j).Value
-                                Case "fullscreen"
-                                    If list.Item(0).Attributes.Item(j).Value = False Then
-                                        Me.FullScreen = False
-                                        Me.WindowState = Windows.WindowState.Normal
-                                    Else
-                                        Me.FullScreen = True
-                                        Me.WindowState = Windows.WindowState.Maximized
-                                    End If
-                                Case "left"
-                                    Me.Left = list.Item(0).Attributes.Item(j).Value
-                                Case "top"
-                                    Me.Top = list.Item(0).Attributes.Item(j).Value
-                                Case "width"
-                                    Me.Width = list.Item(0).Attributes.Item(j).Value
-                                Case "height"
-                                    Me.Height = list.Item(0).Attributes.Item(j).Value
-                                Case Else
-                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
-                            End Select
-                        Next
-                    Else
-                        MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
-                    End If
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres de l'interface chargés")
+            '******************************************
+            'on va chercher les paramètres interface
+            '******************************************
+            list = myxml.SelectNodes("/homidom/interface")
+            If list.Count > 0 Then 'présence des paramètres du server
+                For j As Integer = 0 To list.Item(0).Attributes.Count - 1
+                    Select Case list.Item(0).Attributes.Item(j).Name
+                        Case "showsoleil"
+                            ShowSoleil = list.Item(0).Attributes.Item(j).Value
+                        Case "showtemperature"
+                            ShowTemperature = list.Item(0).Attributes.Item(j).Value
+                        Case "imgbackground"
+                            ImageBackGround = list.Item(0).Attributes.Item(j).Value
+                        Case "fullscreen"
+                            If list.Item(0).Attributes.Item(j).Value = False Then
+                                Me.FullScreen = False
+                                Me.WindowState = Windows.WindowState.Normal
+                            Else
+                                Me.FullScreen = True
+                                Me.WindowState = Windows.WindowState.Maximized
+                            End If
+                        Case "left"
+                            Me.Left = list.Item(0).Attributes.Item(j).Value
+                        Case "top"
+                            Me.Top = list.Item(0).Attributes.Item(j).Value
+                        Case "width"
+                            Me.Width = list.Item(0).Attributes.Item(j).Value
+                        Case "height"
+                            Me.Height = list.Item(0).Attributes.Item(j).Value
+                        Case Else
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                    End Select
+                Next
+            Else
+                MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
+            End If
+            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres de l'interface chargés")
 
-                    '******************************************
-                    'on va chercher les menus
-                    '******************************************
-                    list = myxml.SelectNodes("/homidom/menus/menu")
-                    If list.Count > 0 Then 'présence des paramètres du server
-                        For j As Integer = 0 To list.Count - 1
-                            Dim _MnuNom As String = ""
-                            Dim _MnuType As uCtrlImgMnu.TypeOfMnu
-                            Dim _MnuIcon As String = ""
-                            Dim _MnuParam As New List(Of String)
-                            Dim _Mnudefaut As Boolean
-                            Dim _MnuIDElement As String = ""
-                            Dim _MnuVisible As Boolean = False
+            '******************************************
+            'on va chercher les menus
+            '******************************************
+            list = myxml.SelectNodes("/homidom/menus/menu")
+            If list.Count > 0 Then 'présence des paramètres du server
+                For j As Integer = 0 To list.Count - 1
+                    Dim _MnuNom As String = ""
+                    Dim _MnuType As uCtrlImgMnu.TypeOfMnu
+                    Dim _MnuIcon As String = ""
+                    Dim _MnuParam As New List(Of String)
+                    Dim _Mnudefaut As Boolean
+                    Dim _MnuIDElement As String = ""
+                    Dim _MnuVisible As Boolean = False
 
-                            For k As Integer = 0 To list.Item(j).Attributes.Count - 1
-                                Select Case list.Item(j).Attributes.Item(k).Name
-                                    Case "nom"
-                                        _MnuNom = list.Item(j).Attributes.Item(k).Value
-                                    Case "defaut"
-                                        _Mnudefaut = list.Item(j).Attributes.Item(k).Value
-                                    Case "type"
-                                        Select Case list.Item(j).Attributes.Item(k).Value
-                                            Case uCtrlImgMnu.TypeOfMnu.Internet.ToString
-                                                _MnuType = uCtrlImgMnu.TypeOfMnu.Internet
-                                            Case uCtrlImgMnu.TypeOfMnu.Meteo.ToString
-                                                _MnuType = uCtrlImgMnu.TypeOfMnu.Meteo
-                                            Case uCtrlImgMnu.TypeOfMnu.Zone.ToString
-                                                _MnuType = uCtrlImgMnu.TypeOfMnu.Zone
-                                            Case uCtrlImgMnu.TypeOfMnu.Config.ToString
-                                                _MnuType = uCtrlImgMnu.TypeOfMnu.Config
-                                            Case uCtrlImgMnu.TypeOfMnu.LecteurMedia.ToString
-                                                _MnuType = uCtrlImgMnu.TypeOfMnu.LecteurMedia
-                                            Case uCtrlImgMnu.TypeOfMnu.None.ToString
-                                                _MnuType = uCtrlImgMnu.TypeOfMnu.Config
-                                        End Select
-                                    Case "icon"
-                                        _MnuIcon = list.Item(j).Attributes.Item(k).Value
-                                    Case "idelement"
-                                        _MnuIDElement = list.Item(j).Attributes.Item(k).Value
-                                    Case "visible"
-                                        _MnuVisible = list.Item(j).Attributes.Item(k).Value
-                                    Case Else
-                                        Dim a As String = list.Item(j).Attributes.Item(k).Name
-                                        If a.Contains("parametre") Then
-                                            _MnuParam.Add(list.Item(j).Attributes.Item(k).Value)
-                                        End If
+                    For k As Integer = 0 To list.Item(j).Attributes.Count - 1
+                        Select Case list.Item(j).Attributes.Item(k).Name
+                            Case "nom"
+                                _MnuNom = list.Item(j).Attributes.Item(k).Value
+                            Case "defaut"
+                                _Mnudefaut = list.Item(j).Attributes.Item(k).Value
+                            Case "type"
+                                Select Case list.Item(j).Attributes.Item(k).Value
+                                    Case uCtrlImgMnu.TypeOfMnu.Internet.ToString
+                                        _MnuType = uCtrlImgMnu.TypeOfMnu.Internet
+                                    Case uCtrlImgMnu.TypeOfMnu.Meteo.ToString
+                                        _MnuType = uCtrlImgMnu.TypeOfMnu.Meteo
+                                    Case uCtrlImgMnu.TypeOfMnu.Zone.ToString
+                                        _MnuType = uCtrlImgMnu.TypeOfMnu.Zone
+                                    Case uCtrlImgMnu.TypeOfMnu.Config.ToString
+                                        _MnuType = uCtrlImgMnu.TypeOfMnu.Config
+                                    Case uCtrlImgMnu.TypeOfMnu.LecteurMedia.ToString
+                                        _MnuType = uCtrlImgMnu.TypeOfMnu.LecteurMedia
+                                    Case uCtrlImgMnu.TypeOfMnu.None.ToString
+                                        _MnuType = uCtrlImgMnu.TypeOfMnu.Config
                                 End Select
-                            Next
-                            If _MnuType <> uCtrlImgMnu.TypeOfMnu.Config Then NewBtnMnu(_MnuNom, _MnuType, _MnuParam, _Mnudefaut, , _MnuIcon, _MnuIDElement, _MnuVisible)
-                        Next
-                    Else
-                        'MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
-                    End If
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Menus chargés")
+                            Case "icon"
+                                _MnuIcon = list.Item(j).Attributes.Item(k).Value
+                            Case "idelement"
+                                _MnuIDElement = list.Item(j).Attributes.Item(k).Value
+                            Case "visible"
+                                _MnuVisible = list.Item(j).Attributes.Item(k).Value
+                            Case Else
+                                Dim a As String = list.Item(j).Attributes.Item(k).Name
+                                If a.Contains("parametre") Then
+                                    _MnuParam.Add(list.Item(j).Attributes.Item(k).Value)
+                                End If
+                        End Select
+                    Next
+                    If _MnuType <> uCtrlImgMnu.TypeOfMnu.Config Then NewBtnMnu(_MnuNom, _MnuType, _MnuParam, _Mnudefaut, , _MnuIcon, _MnuIDElement, _MnuVisible)
+                Next
+            Else
+                'MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
+            End If
+            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Menus chargés")
 
-                    '******************************************
-                    'on va chercher les éléments
-                    '******************************************
-                    list = myxml.SelectNodes("/homidom/elements/element")
-                    If list.Count > 0 Then 'présence des éléments
-                        For j As Integer = 0 To list.Count - 1
-                            Dim x As New uWidgetEmpty
+            '******************************************
+            'on va chercher les éléments
+            '******************************************
+            list = myxml.SelectNodes("/homidom/elements/element")
+            If list.Count > 0 Then 'présence des éléments
+                For j As Integer = 0 To list.Count - 1
+                    Dim x As New uWidgetEmpty
 
-                            For k As Integer = 0 To list.Item(j).Attributes.Count - 1
-                                Select Case list.Item(j).Attributes.Item(k).Name
-                                    Case "uid"
-                                        x.Uid = list.Item(j).Attributes.Item(k).Value
-                                    Case "id"
-                                        x.Id = list.Item(j).Attributes.Item(k).Value
-                                    Case "isempty"
-                                        x.IsEmpty = list.Item(j).Attributes.Item(k).Value
-                                    Case "type"
-                                        Select Case list.Item(j).Attributes.Item(k).Value
-                                            Case uWidgetEmpty.TypeOfWidget.Empty.ToString
-                                                x.Type = uWidgetEmpty.TypeOfWidget.Empty
-                                            Case uWidgetEmpty.TypeOfWidget.Device.ToString
-                                                x.Type = uWidgetEmpty.TypeOfWidget.Device
-                                            Case uWidgetEmpty.TypeOfWidget.Media.ToString
-                                                x.Type = uWidgetEmpty.TypeOfWidget.Media
-                                            Case uWidgetEmpty.TypeOfWidget.Web.ToString
-                                                x.Type = uWidgetEmpty.TypeOfWidget.Web
-                                            Case uWidgetEmpty.TypeOfWidget.Camera.ToString
-                                                x.Type = uWidgetEmpty.TypeOfWidget.Camera
-                                            Case uWidgetEmpty.TypeOfWidget.Rss.ToString
-                                                x.Type = uWidgetEmpty.TypeOfWidget.Rss
-                                            Case uWidgetEmpty.TypeOfWidget.Meteo.ToString
-                                                x.Type = uWidgetEmpty.TypeOfWidget.Meteo
-                                            Case uWidgetEmpty.TypeOfWidget.KeyPad.ToString
-                                                x.Type = uWidgetEmpty.TypeOfWidget.KeyPad
-                                            Case uWidgetEmpty.TypeOfWidget.Label.ToString
-                                                x.Type = uWidgetEmpty.TypeOfWidget.Label
-                                        End Select
-                                    Case "caneditvalue"
-                                        x.CanEditValue = list.Item(j).Attributes.Item(k).Value
-                                    Case "zoneid"
-                                        x.ZoneId = list.Item(j).Attributes.Item(k).Value
-                                    Case "x"
-                                        x.X = list.Item(j).Attributes.Item(k).Value
-                                    Case "y"
-                                        x.Y = list.Item(j).Attributes.Item(k).Value
-                                    Case "width"
-                                        x.Width = list.Item(j).Attributes.Item(k).Value
-                                    Case "height"
-                                        x.Height = list.Item(j).Attributes.Item(k).Value
-                                    Case "angle"
-                                        x.Rotation = list.Item(j).Attributes.Item(k).Value
-                                    Case "anglex"
-                                        x.RotationX = list.Item(j).Attributes.Item(k).Value
-                                    Case "angley"
-                                        x.RotationY = list.Item(j).Attributes.Item(k).Value
-                                    Case "showetiquette"
-                                        x.ShowEtiquette = list.Item(j).Attributes.Item(k).Value
-                                    Case "showstatus"
-                                        x.ShowStatus = list.Item(j).Attributes.Item(k).Value
-                                    Case "etiquette"
-                                        x.Etiquette = list.Item(j).Attributes.Item(k).Value
-                                    Case "picture"
-                                        x.Picture = list.Item(j).Attributes.Item(k).Value
-                                    Case "showpicture"
-                                        x.ShowPicture = list.Item(j).Attributes.Item(k).Value
-                                    Case "defautlabelstatus"
-                                        x.DefautLabelStatus = list.Item(j).Attributes.Item(k).Value
-                                    Case "taillestatus"
-                                        x.TailleStatus = list.Item(j).Attributes.Item(k).Value
-                                    Case "tailleetiquette"
-                                        x.TailleEtiquette = list.Item(j).Attributes.Item(k).Value
-                                    Case "colorbackground"
-                                        If String.IsNullOrEmpty(list.Item(j).Attributes.Item(k).Value) = False Then
-                                            Dim a As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 2, 2))
-                                            Dim R As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 4, 2))
-                                            Dim G As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 6, 2))
-                                            Dim B As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 8, 2))
-                                            x.ColorBackGround = New SolidColorBrush(Color.FromArgb(a, R, G, B))
-                                        End If
-                                    Case "colorstatus"
-                                        Dim a As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 2, 2))
-                                        Dim R As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 4, 2))
-                                        Dim G As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 6, 2))
-                                        Dim B As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 8, 2))
-                                        x.ColorStatus = New SolidColorBrush(Color.FromArgb(a, R, G, B))
-                                    Case "coloretiquette"
-                                        Dim a As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 2, 2))
-                                        Dim R As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 4, 2))
-                                        Dim G As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 6, 2))
-                                        Dim B As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 8, 2))
-                                        x.ColorEtiquette = New SolidColorBrush(Color.FromArgb(a, R, G, B))
-                                    Case "url"
-                                        x.URL = list.Item(j).Attributes.Item(k).Value
-                                    Case "urlrss"
-                                        x.UrlRss = list.Item(j).Attributes.Item(k).Value
-                                    Case "idmeteo"
-                                        x.IDMeteo = list.Item(j).Attributes.Item(k).Value
-                                    Case "idkeypad"
-                                        x.IDKeyPad = list.Item(j).Attributes.Item(k).Value
-                                    Case "showpassword"
-                                        x.ShowPassWord = list.Item(j).Attributes.Item(k).Value
-                                    Case "clearafterenter"
-                                        x.ClearAfterEnter = list.Item(j).Attributes.Item(k).Value
-                                    Case "showclavier"
-                                        x.ShowClavier = list.Item(j).Attributes.Item(k).Value
-                                    Case "httprefresh"
-                                        x.HttpRefresh = list.Item(j).Attributes.Item(k).Value
+                    For k As Integer = 0 To list.Item(j).Attributes.Count - 1
+                        Select Case list.Item(j).Attributes.Item(k).Name
+                            Case "uid"
+                                x.Uid = list.Item(j).Attributes.Item(k).Value
+                            Case "id"
+                                x.Id = list.Item(j).Attributes.Item(k).Value
+                            Case "isempty"
+                                x.IsEmpty = list.Item(j).Attributes.Item(k).Value
+                            Case "type"
+                                Select Case list.Item(j).Attributes.Item(k).Value
+                                    Case uWidgetEmpty.TypeOfWidget.Empty.ToString
+                                        x.Type = uWidgetEmpty.TypeOfWidget.Empty
+                                    Case uWidgetEmpty.TypeOfWidget.Device.ToString
+                                        x.Type = uWidgetEmpty.TypeOfWidget.Device
+                                    Case uWidgetEmpty.TypeOfWidget.Media.ToString
+                                        x.Type = uWidgetEmpty.TypeOfWidget.Media
+                                    Case uWidgetEmpty.TypeOfWidget.Web.ToString
+                                        x.Type = uWidgetEmpty.TypeOfWidget.Web
+                                    Case uWidgetEmpty.TypeOfWidget.Camera.ToString
+                                        x.Type = uWidgetEmpty.TypeOfWidget.Camera
+                                    Case uWidgetEmpty.TypeOfWidget.Rss.ToString
+                                        x.Type = uWidgetEmpty.TypeOfWidget.Rss
+                                    Case uWidgetEmpty.TypeOfWidget.Meteo.ToString
+                                        x.Type = uWidgetEmpty.TypeOfWidget.Meteo
+                                    Case uWidgetEmpty.TypeOfWidget.KeyPad.ToString
+                                        x.Type = uWidgetEmpty.TypeOfWidget.KeyPad
+                                    Case uWidgetEmpty.TypeOfWidget.Label.ToString
+                                        x.Type = uWidgetEmpty.TypeOfWidget.Label
                                 End Select
-                            Next
+                            Case "caneditvalue"
+                                x.CanEditValue = list.Item(j).Attributes.Item(k).Value
+                            Case "zoneid"
+                                x.ZoneId = list.Item(j).Attributes.Item(k).Value
+                            Case "x"
+                                x.X = list.Item(j).Attributes.Item(k).Value
+                            Case "y"
+                                x.Y = list.Item(j).Attributes.Item(k).Value
+                            Case "width"
+                                x.Width = list.Item(j).Attributes.Item(k).Value
+                            Case "height"
+                                x.Height = list.Item(j).Attributes.Item(k).Value
+                            Case "angle"
+                                x.Rotation = list.Item(j).Attributes.Item(k).Value
+                            Case "anglex"
+                                x.RotationX = list.Item(j).Attributes.Item(k).Value
+                            Case "angley"
+                                x.RotationY = list.Item(j).Attributes.Item(k).Value
+                            Case "showetiquette"
+                                x.ShowEtiquette = list.Item(j).Attributes.Item(k).Value
+                            Case "showstatus"
+                                x.ShowStatus = list.Item(j).Attributes.Item(k).Value
+                            Case "etiquette"
+                                x.Etiquette = list.Item(j).Attributes.Item(k).Value
+                            Case "picture"
+                                x.Picture = list.Item(j).Attributes.Item(k).Value
+                            Case "showpicture"
+                                x.ShowPicture = list.Item(j).Attributes.Item(k).Value
+                            Case "defautlabelstatus"
+                                x.DefautLabelStatus = list.Item(j).Attributes.Item(k).Value
+                            Case "taillestatus"
+                                x.TailleStatus = list.Item(j).Attributes.Item(k).Value
+                            Case "tailleetiquette"
+                                x.TailleEtiquette = list.Item(j).Attributes.Item(k).Value
+                            Case "colorbackground"
+                                If String.IsNullOrEmpty(list.Item(j).Attributes.Item(k).Value) = False Then
+                                    Dim a As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 2, 2))
+                                    Dim R As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 4, 2))
+                                    Dim G As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 6, 2))
+                                    Dim B As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 8, 2))
+                                    x.ColorBackGround = New SolidColorBrush(Color.FromArgb(a, R, G, B))
+                                End If
+                            Case "colorstatus"
+                                Dim a As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 2, 2))
+                                Dim R As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 4, 2))
+                                Dim G As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 6, 2))
+                                Dim B As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 8, 2))
+                                x.ColorStatus = New SolidColorBrush(Color.FromArgb(a, R, G, B))
+                            Case "coloretiquette"
+                                Dim a As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 2, 2))
+                                Dim R As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 4, 2))
+                                Dim G As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 6, 2))
+                                Dim B As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 8, 2))
+                                x.ColorEtiquette = New SolidColorBrush(Color.FromArgb(a, R, G, B))
+                            Case "url"
+                                x.URL = list.Item(j).Attributes.Item(k).Value
+                            Case "urlrss"
+                                x.UrlRss = list.Item(j).Attributes.Item(k).Value
+                            Case "idmeteo"
+                                x.IDMeteo = list.Item(j).Attributes.Item(k).Value
+                            Case "idkeypad"
+                                x.IDKeyPad = list.Item(j).Attributes.Item(k).Value
+                            Case "showpassword"
+                                x.ShowPassWord = list.Item(j).Attributes.Item(k).Value
+                            Case "clearafterenter"
+                                x.ClearAfterEnter = list.Item(j).Attributes.Item(k).Value
+                            Case "showclavier"
+                                x.ShowClavier = list.Item(j).Attributes.Item(k).Value
+                            Case "httprefresh"
+                                x.HttpRefresh = list.Item(j).Attributes.Item(k).Value
+                        End Select
+                    Next
 
-                            If list.Item(j).HasChildNodes Then
-                                For l As Integer = 0 To list.Item(j).ChildNodes.Count - 1
-                                    If UCase(list.Item(j).ChildNodes.Item(l).Name) = "ACTIONS" Then
-                                        For m As Integer = 0 To list.Item(j).ChildNodes.Item(l).ChildNodes.Count - 1
-                                            Dim _act As New cWidget.Action
-                                            With _act
-                                                .IdObject = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(1).Value
-                                                .Methode = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(2).Value
-                                                If list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(3).Value IsNot Nothing Then .Value = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(3).Value
-                                                If list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(4).Value IsNot Nothing Then .Sound = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(4).Value
-                                            End With
+                    If list.Item(j).HasChildNodes Then
+                        For l As Integer = 0 To list.Item(j).ChildNodes.Count - 1
+                            If UCase(list.Item(j).ChildNodes.Item(l).Name) = "ACTIONS" Then
+                                For m As Integer = 0 To list.Item(j).ChildNodes.Item(l).ChildNodes.Count - 1
+                                    Dim _act As New cWidget.Action
+                                    With _act
+                                        .IdObject = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(1).Value
+                                        .Methode = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(2).Value
+                                        If list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(3).Value IsNot Nothing Then .Value = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(3).Value
+                                        If list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(4).Value IsNot Nothing Then .Sound = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(4).Value
+                                    End With
 
-                                            Select Case list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(0).Value
-                                                Case "gestureonclick"
-                                                    x.Action_On_Click.Add(_act)
-                                                Case "gestureonlongclick"
-                                                    x.Action_On_LongClick.Add(_act)
-                                                Case "gesturehautbas"
-                                                    x.Action_GestureHautBas.Add(_act)
-                                                Case "gesturebashaut"
-                                                    x.Action_GestureBasHaut.Add(_act)
-                                                Case "gesturegauchedroite"
-                                                    x.Action_GestureGaucheDroite.Add(_act)
-                                                Case "gesturedroitegauche"
-                                                    x.Action_GestureDroiteGauche.Add(_act)
-                                            End Select
-                                        Next
-                                    End If
-
-                                    If UCase(list.Item(j).ChildNodes.Item(l).Name) = "VISUELS" Then
-                                        For m As Integer = 0 To list.Item(j).ChildNodes.Item(l).ChildNodes.Count - 1
-                                            Dim _act As New cWidget.Visu
-                                            With _act
-                                                .IdObject = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(0).Value
-                                                .Propriete = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(1).Value
-                                                If list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(2).Value IsNot Nothing Then .Value = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(2).Value
-                                                If list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(3).Value IsNot Nothing Then .Image = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(3).Value
-                                            End With
-
-                                            x.Visuel.Add(_act)
-                                        Next
-                                    End If
-
-                                    If UCase(list.Item(j).ChildNodes.Item(l).Name) = "WEB" Or UCase(list.Item(j).ChildNodes.Item(l).Name) = "CAMERA" Then
-                                        For m As Integer = 0 To list.Item(j).ChildNodes.Item(l).ChildNodes.Count - 1
-                                            Dim _btn As New uHttp.ButtonHttp
-                                            With _btn
-                                                .Content = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(0).Value
-                                                .URL = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(1).Value
-                                                .Width = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(2).Value
-                                                .Height = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(3).Value
-                                            End With
-
-                                            x.ListHttpButton.Add(_btn)
-
-                                        Next
-                                    End If
+                                    Select Case list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(0).Value
+                                        Case "gestureonclick"
+                                            x.Action_On_Click.Add(_act)
+                                        Case "gestureonlongclick"
+                                            x.Action_On_LongClick.Add(_act)
+                                        Case "gesturehautbas"
+                                            x.Action_GestureHautBas.Add(_act)
+                                        Case "gesturebashaut"
+                                            x.Action_GestureBasHaut.Add(_act)
+                                        Case "gesturegauchedroite"
+                                            x.Action_GestureGaucheDroite.Add(_act)
+                                        Case "gesturedroitegauche"
+                                            x.Action_GestureDroiteGauche.Add(_act)
+                                    End Select
                                 Next
                             End If
 
-                            If x.IsEmpty = False Then 'si c pas un widget vide
-                                If IsConnect Then
-                                    If myService.ReturnDeviceByID(IdSrv, x.Id) IsNot Nothing Then 'Si le device n'a pas été trouvé on le prend pas en compte pour le supprimer par la suite
-                                        _ListElement.Add(x)
-                                    Else
-                                        If myService.ReturnMacroById(IdSrv, x.Id) IsNot Nothing Then
-                                            _ListElement.Add(x)
-                                        End If
-                                    End If
-                                End If
-                            Else
-                                _ListElement.Add(x)
+                            If UCase(list.Item(j).ChildNodes.Item(l).Name) = "VISUELS" Then
+                                For m As Integer = 0 To list.Item(j).ChildNodes.Item(l).ChildNodes.Count - 1
+                                    Dim _act As New cWidget.Visu
+                                    With _act
+                                        .IdObject = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(0).Value
+                                        .Propriete = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(1).Value
+                                        If list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(2).Value IsNot Nothing Then .Value = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(2).Value
+                                        If list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(3).Value IsNot Nothing Then .Image = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(3).Value
+                                    End With
+
+                                    x.Visuel.Add(_act)
+                                Next
+                            End If
+
+                            If UCase(list.Item(j).ChildNodes.Item(l).Name) = "WEB" Or UCase(list.Item(j).ChildNodes.Item(l).Name) = "CAMERA" Then
+                                For m As Integer = 0 To list.Item(j).ChildNodes.Item(l).ChildNodes.Count - 1
+                                    Dim _btn As New uHttp.ButtonHttp
+                                    With _btn
+                                        .Content = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(0).Value
+                                        .URL = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(1).Value
+                                        .Width = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(2).Value
+                                        .Height = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(3).Value
+                                    End With
+
+                                    x.ListHttpButton.Add(_btn)
+
+                                Next
                             End If
                         Next
-                    Else
-                        'MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
-                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Il manque des paramètres dans le fichier de configuration du client WPF")
                     End If
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Eléments chargés")
-                    '**************
-                Next
-            End If
 
-            'Vide les variables
-            dirInfo = Nothing
-            file = Nothing
-            files = Nothing
+                    If x.IsEmpty = False Then 'si c pas un widget vide
+                        If IsConnect Then
+                            If myService.ReturnDeviceByID(IdSrv, x.Id) IsNot Nothing Then 'Si le device n'a pas été trouvé on le prend pas en compte pour le supprimer par la suite
+                                _ListElement.Add(x)
+                            Else
+                                If myService.ReturnMacroById(IdSrv, x.Id) IsNot Nothing Then
+                                    _ListElement.Add(x)
+                                End If
+                            End If
+                        End If
+                    Else
+                        _ListElement.Add(x)
+                    End If
+                Next
+            Else
+                'MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Il manque des paramètres dans le fichier de configuration du client WPF")
+            End If
+            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Eléments chargés")
+            '**************
+            'Next
+            'End If
+
+            ''Vide les variables
+            'dirInfo = Nothing
+            'File = Nothing
+            'files = Nothing
             myxml = Nothing
 
             Return " Chargement de la configuration terminée"
@@ -694,10 +706,9 @@ Class Window1
 
             ''Copy du fichier de config avant sauvegarde
             Try
-                Dim _file As String = Fichier.Replace(".xml", "")
-                If File.Exists(_file & ".sav") = True Then File.Delete(_file & ".sav")
-                File.Copy(_file & ".xml", _file & ".sav")
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Création de sauvegarde (.sav) du fichier de config avant sauvegarde")
+                If File.Exists(Fichier.Replace(".xml", ".sav")) = True Then File.Delete(Fichier.Replace(".xml", ".sav"))
+                File.Copy(Fichier, Fichier.Replace(".xml", ".sav"))
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Création de sauvegarde (.sav) du fichier de config avant sauvegarde")
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
             End Try
@@ -2046,7 +2057,7 @@ Class Window1
             'Ajouter un nouveau Control
             Dim x As New ContentControl
             x.Width = 202
-            x.Height = 193
+            x.Height = 211
             x.Style = mybuttonstyle
             x.Tag = True
             x.Uid = System.Guid.NewGuid.ToString()
@@ -2090,7 +2101,7 @@ Class Window1
             'Ajouter un nouveau Control
             Dim x As New ContentControl
             x.Width = 214
-            x.Height = 287
+            x.Height = 305
             x.Style = mybuttonstyle
             x.Tag = True
             x.Uid = System.Guid.NewGuid.ToString()
@@ -2380,7 +2391,7 @@ Class Window1
 
     Private Sub Quitter()
         Try
-            SaveConfig(_MonRepertoireAppData & "\config\HoMIWpF.xml")
+            SaveConfig(_ConfigFile)
             Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermture de l'application")
             End
         Catch ex As Exception
