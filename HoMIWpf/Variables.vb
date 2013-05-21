@@ -8,6 +8,8 @@
     Public _MonRepertoire As String = System.Environment.CurrentDirectory
     Public _MonRepertoireAppData As String = System.Environment.CurrentDirectory
     Public _ListServer As New List(Of ClServer)
+    Public _PassWord As String
+    Public _WithPassword As Boolean
 
     'Ecriture dans le fichier log
     Public _Debug As Boolean

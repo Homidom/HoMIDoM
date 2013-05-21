@@ -904,8 +904,8 @@ Public Class uWidgetEmpty
                         If _dev IsNot Nothing Then
                             If _dev.Value = _ElmtVisu.Value Then
                                 If Image.Tag <> _ElmtVisu.Image Then
-                                    Image.Tag = _ElmtVisu.Image
-                                    Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_ElmtVisu.Image))
+                                    Picture = _ElmtVisu.Image
+                                    'Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_ElmtVisu.Image))
                                 End If
                             End If
                         End If
