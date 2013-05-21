@@ -402,8 +402,12 @@ Public Class WWidgetProperty
         End If
     End Sub
 
-    Private Sub CbObjetVisu_SelectionChanged(ByVal sender As Object, ByVal e As Object) Handles CbObjetVisu.SelectionChanged, CbObjetVisu.MouseLeftButtonDown
-        If CbObjetVisu.SelectedIndex < 0 Or CbObjetVisu.SelectedItem.tag <> "DEVICE" Then Exit Sub
+
+    Private Sub CbObjetVisu_SelectionChanged(ByVal sender As Object, ByVal e As Object) Handles CbObjetVisu.SelectionChanged, CbObjetVisu.MouseLeftButtonDown, CbObjetVisu.MouseDown
+        If CbObjetVisu.SelectedIndex < 0 Or CbObjetVisu.SelectedItem.tag <> "DEVICE" Then
+            Exit Sub
+        End If
+
 
         CbPropertyVisu.Items.Clear()
         Select Case myService.GetAllDevices(IdSrv).Item(CbObjetVisu.SelectedIndex).Type
@@ -431,6 +435,8 @@ Public Class WWidgetProperty
                 CbPropertyVisu.Items.Add("MinJ3")
                 CbPropertyVisu.Items.Add("MaxJ3")
                 CbPropertyVisu.Items.Add("ConditionJ3")
+            Case Else
+                CbPropertyVisu.Items.Add("Value")
         End Select
 
     End Sub
@@ -673,10 +679,10 @@ Public Class WWidgetProperty
         Next
     End Sub
 
-    Private Sub LstObjetVisu_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles LstObjetVisu.SelectionChanged
+    Private Sub LstObjetVisu_SelectionChanged(ByVal sender As System.Object, ByVal e As Object) Handles LstObjetVisu.SelectionChanged, LstObjetVisu.MouseLeftButtonDown
         If LstObjetVisu.SelectedIndex >= 0 Then
             Dim _act As cWidget.Visu = Obj.Visuel.Item(LstObjetVisu.SelectedIndex)
-   
+
             Dim _idx As Integer = -1
             For i As Integer = 0 To CbObjetVisu.Items.Count - 1
                 If CbObjetVisu.Items(i).uid = _act.IdObject Then
@@ -687,14 +693,15 @@ Public Class WWidgetProperty
             CbObjetVisu.SelectedIndex = _idx
 
             _idx = -1
-            CbPropertyVisu.SelectedIndex = -1
-            For i As Integer = 0 To CbPropertyVisu.Items.Count - 1
-                If CbPropertyVisu.Items(i) = _act.Propriete Then
-                    _idx = i
-                    Exit For
-                End If
-            Next
-            CbPropertyVisu.SelectedIndex = _idx
+            'CbPropertyVisu.SelectedIndex = -1
+            'For i As Integer = 0 To CbPropertyVisu.Items.Count - 1
+            '    If CbPropertyVisu.Items(i) = _act.Propriete Then
+            '        _idx = i
+            '        Exit For
+            '    End If
+            'Next
+            'CbPropertyVisu.SelectedIndex = _idx
+            CbPropertyVisu.SelectedValue = _act.Propriete
 
             TxtValueVisu.Text = _act.Value.ToString
             If _act.Image IsNot Nothing Then
