@@ -60,10 +60,24 @@ Class Window1
     Dim mybuttonstyle As Style
     Public _CurrentIdZone As String
     Dim RandomNumber As New Random
-
+    Dim _ShowQuitter As Boolean = True
 #End Region
 
 #Region "Property"
+
+    Public Property ShowQuitter As Boolean
+        Get
+            Return _ShowQuitter
+        End Get
+        Set(ByVal value As Boolean)
+            _ShowQuitter = value
+            If _ShowQuitter Then
+                BtnQuit.Visibility = Windows.Visibility.Visible
+            Else
+                BtnQuit.Visibility = Windows.Visibility.Hidden
+            End If
+        End Set
+    End Property
 
     Public Property ShowSoleil As Boolean
         Get
@@ -418,6 +432,12 @@ Class Window1
                                 Me.FullScreen = True
                                 Me.WindowState = Windows.WindowState.Maximized
                             End If
+                        Case "showquitter"
+                            ShowQuitter = list.Item(0).Attributes.Item(j).Value
+                        Case "widthpassword"
+                            _WithPassword = list.Item(0).Attributes.Item(j).Value
+                        Case "password"
+                            _Password = list.Item(0).Attributes.Item(j).Value
                         Case "left"
                             Me.Left = list.Item(0).Attributes.Item(j).Value
                         Case "top"
@@ -735,19 +755,6 @@ Class Window1
             writer.WriteEndAttribute()
             writer.WriteEndElement()
 
-            ''------------ HomeSeer
-            writer.WriteStartElement("HS")
-            writer.WriteStartAttribute("adresse")
-            writer.WriteValue(_Serveur)
-            writer.WriteEndAttribute()
-            writer.WriteStartAttribute("login")
-            writer.WriteValue(_Login)
-            writer.WriteEndAttribute()
-            writer.WriteStartAttribute("password")
-            writer.WriteValue(_Login)
-            writer.WriteEndAttribute()
-            writer.WriteEndElement()
-
             ''-------------------
             ''------------tactile
             ''------------------
@@ -788,7 +795,17 @@ Class Window1
             writer.WriteStartAttribute("height")
             writer.WriteValue(Me.Height)
             writer.WriteEndAttribute()
+            writer.WriteStartAttribute("showquitter")
+            writer.WriteValue(ShowQuitter)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("widthpassword")
+            writer.WriteValue(_WithPassword)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("password")
+            writer.WriteValue(_Password)
+            writer.WriteEndAttribute()
             writer.WriteEndElement()
+
 
             ''------------
             ''Sauvegarde des menus
@@ -2301,6 +2318,8 @@ Class Window1
 
     Private Sub MnuConfig_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuConfig.Click
         Try
+            If VerifPassword() = False Then Exit Sub
+
             Canvas1.Children.Clear()
             Me.UpdateLayout()
             ImageBackGround = _ImageBackGroundDefault
@@ -2391,6 +2410,7 @@ Class Window1
 
     Private Sub Quitter()
         Try
+            If VerifPassword() = False Then Exit Sub
             SaveConfig(_ConfigFile)
             Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermture de l'application")
             End
@@ -2399,5 +2419,23 @@ Class Window1
             End
         End Try
     End Sub
+
+    Private Function VerifPassword() As Boolean
+        Try
+            If _WithPassword And String.IsNullOrEmpty(_Password) = False Then
+                If InputBox("Veuillez saisir le mot de passe:", "Homidom") <> _Password Then
+                    MessageBox.Show("Mot de passe erroné!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Return False
+                Else
+                    Return True
+                End If
+            Else
+                Return True
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur VerifPassword: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            Return True
+        End Try
+    End Function
 #End Region
 End Class

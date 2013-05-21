@@ -40,13 +40,18 @@
             <TabItem Header="Affichage" >
                 <GroupBox Header="Affichage" Margin="2" Foreground="White">
                     <StackPanel >
-                        <CheckBox Name="ChkSoleil" Content="Afficher heure Lever/Coucher Soleil" Margin=" 2"  Foreground="White"/>
+                        <CheckBox Name="ChkSoleil" Content="Afficher heure Lever/Coucher Soleil" Foreground="White"/>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="File Image Background: " Foreground="White" />
                             <TextBox Name="TxtImgBack" Width="200" />
                             <Button Height="25" Width="25 "  Name="BtnFileImgBack" Content="..." Template="{DynamicResource GlassButton}" Foreground=" White"/>
                         </StackPanel>
-                        <CheckBox Name="ChkFullScreen" Content="Plein écran" Margin=" 2" Foreground="White"/>
+                        <CheckBox Name="ChkFullScreen" Content="Plein écran" Foreground="White"/>
+                        <CheckBox Name="ChkShowBtnQuit" Content="Afficher Bouton Quitter" Foreground="White"/>
+                        <StackPanel Orientation="Horizontal" >
+                            <CheckBox Name="ChkWidthPass" Content="Demander Mot de passe pour fonctions critiques" Foreground="White" />
+                            <TextBox Name="TxtPassword" Margin="5,0,0,0" Width="100" MaxLength="12" />
+                        </StackPanel>
                     </StackPanel>
                 </GroupBox >
             </TabItem>
