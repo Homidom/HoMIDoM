@@ -1,0 +1,13 @@
+K:\Perso\vb\SauveWMR100\USBHIDIO\Test_WMR100\bin\Debug\TestWMR100.exe
+K:\Perso\vb\SauveWMR100\USBHIDIO\Test_WMR100\bin\Debug\TestWMR100.pdb
+K:\Perso\vb\SauveWMR100\USBHIDIO\Test_WMR100\bin\Debug\TestWMR100.xml
+K:\Perso\vb\SauveWMR100\USBHIDIO\Test_WMR100\bin\Debug\Oregon.dll
+K:\Perso\vb\SauveWMR100\USBHIDIO\Test_WMR100\bin\Debug\Oregon.pdb
+K:\Perso\vb\SauveWMR100\USBHIDIO\Test_WMR100\bin\Debug\Oregon.xml
+K:\Perso\vb\SauveWMR100\USBHIDIO\Test_WMR100\obj\Debug\TestWMR100.vbprojResolveAssemblyReference.cache
+K:\Perso\vb\SauveWMR100\USBHIDIO\Test_WMR100\obj\Debug\TestWMR100.Form1.resources
+K:\Perso\vb\SauveWMR100\USBHIDIO\Test_WMR100\obj\Debug\TestWMR100.Resources.resources
+K:\Perso\vb\SauveWMR100\USBHIDIO\Test_WMR100\obj\Debug\TestWMR100.vbproj.GenerateResource.Cache
+K:\Perso\vb\SauveWMR100\USBHIDIO\Test_WMR100\obj\Debug\TestWMR100.exe
+K:\Perso\vb\SauveWMR100\USBHIDIO\Test_WMR100\obj\Debug\TestWMR100.xml
+K:\Perso\vb\SauveWMR100\USBHIDIO\Test_WMR100\obj\Debug\TestWMR100.pdb
