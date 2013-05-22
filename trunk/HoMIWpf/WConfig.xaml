@@ -40,16 +40,16 @@
             <TabItem Header="Affichage" >
                 <GroupBox Header="Affichage" Margin="2" Foreground="White">
                     <StackPanel >
-                        <CheckBox Name="ChkSoleil" Content="Afficher heure Lever/Coucher Soleil" Foreground="White"/>
+                        <CheckBox Name="ChkSoleil" Content="Afficher heure Lever/Coucher Soleil" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                         <StackPanel Orientation="Horizontal">
                             <Label Content="File Image Background: " Foreground="White" />
                             <TextBox Name="TxtImgBack" Width="200" />
                             <Button Height="25" Width="25 "  Name="BtnFileImgBack" Content="..." Template="{DynamicResource GlassButton}" Foreground=" White"/>
                         </StackPanel>
-                        <CheckBox Name="ChkFullScreen" Content="Plein écran" Foreground="White"/>
-                        <CheckBox Name="ChkShowBtnQuit" Content="Afficher Bouton Quitter" Foreground="White"/>
+                        <CheckBox Name="ChkFullScreen" Content="Plein écran" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
+                        <CheckBox Name="ChkShowBtnQuit" Content="Afficher Bouton Quitter" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                         <StackPanel Orientation="Horizontal" >
-                            <CheckBox Name="ChkWidthPass" Content="Demander Mot de passe pour fonctions critiques" Foreground="White" />
+                            <CheckBox Name="ChkWidthPass" Content="Demander Mot de passe pour fonctions critiques" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                             <TextBox Name="TxtPassword" Margin="5,0,0,0" Width="100" MaxLength="12" />
                         </StackPanel>
                     </StackPanel>
@@ -111,7 +111,7 @@
                                 <Label Name="LblType" Content="##" Foreground="White"/>
                         </StackPanel>
                             <StackPanel Orientation="Horizontal" Name="StkVisible">
-                                <CheckBox Name="ChkVisible" Content="Visible" Margin="2" Foreground="White"/>
+                                <CheckBox Name="ChkVisible" Content="Visible" Margin="2" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                             </StackPanel>
                             <StackPanel Name="StkImage" Orientation="Horizontal" VerticalAlignment="Top">
                                 <Label Content="Image: " MinWidth="50" Foreground="White"/>
@@ -132,7 +132,7 @@
             </TabItem>
             <TabItem Header="Services" Visibility="Collapsed">
                 <GroupBox Header="Service TV" Margin="2" Foreground="White">
-                    <CheckBox Content="Activer" Margin="3" Name="ChkServiceTV" Foreground="White" />
+                    <CheckBox Content="Activer" Margin="3" Name="ChkServiceTV" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                 </GroupBox >
             </TabItem>
             <TabItem Header="Info" Foreground="White">

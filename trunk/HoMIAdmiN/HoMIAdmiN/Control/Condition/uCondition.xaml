@@ -24,11 +24,11 @@
             <StackPanel Orientation="Horizontal" Name="StkTime">
                 <StackPanel >
                     <StackPanel >
-                        <CheckBox Name="ChkHeure" Content="Suivant une heure" IsChecked="True" Foreground="White" FontSize="11" />
-                        <CheckBox Name="ChkDate" Content="Suivant une date" Foreground="White" FontSize="11" />
-                        <CheckBox Name="ChkJour" Content="Suivant un jour" Foreground="White" FontSize="11" />
-                        <CheckBox Name="ChkLeveS" Content="Suivant heure du levé du soleil" Foreground="White" FontSize="11" />
-                        <CheckBox Name="ChkCoucheS" Content="Suivant heure du couché du soleil" Foreground="White" FontSize="11" />
+                        <CheckBox Name="ChkHeure" Content="Suivant une heure" IsChecked="True" Foreground="White" Background="DarkGray" BorderBrush="Black" FontSize="11" />
+                        <CheckBox Name="ChkDate" Content="Suivant une date" Foreground="White" Background="DarkGray" BorderBrush="Black" FontSize="11" />
+                        <CheckBox Name="ChkJour" Content="Suivant un jour" Foreground="White" Background="DarkGray" BorderBrush="Black" FontSize="11" />
+                        <CheckBox Name="ChkLeveS" Content="Suivant heure du levé du soleil" Foreground="White" Background="DarkGray" BorderBrush="Black" FontSize="11" />
+                        <CheckBox Name="ChkCoucheS" Content="Suivant heure du couché du soleil" Foreground="White" Background="DarkGray" BorderBrush="Black" FontSize="11" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
                         <Label Content="Date &amp; Heure" Height="24" Foreground="White" />
@@ -107,13 +107,13 @@
                             </StackPanel>
                         </StackPanel>
                         <StackPanel Name="stk3" Visibility="Hidden" Margin="20,2,2,2">
-                            <CheckBox Content="Lundi" Height="15" HorizontalAlignment="Left"  Name="Chk1" VerticalAlignment="Top"  Foreground="White" />
-                            <CheckBox Content="Mardi" Height="15" HorizontalAlignment="Left"  Name="Chk2" VerticalAlignment="Top"  Foreground="White" />
-                            <CheckBox Content="Mercredi" Height="15" HorizontalAlignment="Left"  Name="Chk3" VerticalAlignment="Top"  Foreground="White" />
-                            <CheckBox Content="Jeudi" Height="15" HorizontalAlignment="Left"  Name="Chk4" VerticalAlignment="Top"  Foreground="White" />
-                            <CheckBox Content="Vendredi" Height="15" HorizontalAlignment="Left"  Name="Chk5" VerticalAlignment="Top"  Foreground="White" />
-                            <CheckBox Content="Samedi" Height="15" HorizontalAlignment="Left"  Name="Chk6" VerticalAlignment="Top"  Foreground="White" />
-                            <CheckBox Content="Dimanche" Height="15" HorizontalAlignment="Left"  Name="Chk7" VerticalAlignment="Top"  Foreground="White" />
+                            <CheckBox Content="Lundi" Height="15" HorizontalAlignment="Left"  Name="Chk1" VerticalAlignment="Top"  Foreground="White" Background="DarkGray" BorderBrush="Black" />
+                            <CheckBox Content="Mardi" Height="15" HorizontalAlignment="Left"  Name="Chk2" VerticalAlignment="Top"  Foreground="White" Background="DarkGray" BorderBrush="Black"/>
+                            <CheckBox Content="Mercredi" Height="15" HorizontalAlignment="Left"  Name="Chk3" VerticalAlignment="Top"  Foreground="White" Background="DarkGray" BorderBrush="Black"/>
+                            <CheckBox Content="Jeudi" Height="15" HorizontalAlignment="Left"  Name="Chk4" VerticalAlignment="Top"  Foreground="White" Background="DarkGray" BorderBrush="Black"/>
+                            <CheckBox Content="Vendredi" Height="15" HorizontalAlignment="Left"  Name="Chk5" VerticalAlignment="Top"  Foreground="White" Background="DarkGray" BorderBrush="Black"/>
+                            <CheckBox Content="Samedi" Height="15" HorizontalAlignment="Left"  Name="Chk6" VerticalAlignment="Top"  Foreground="White" Background="DarkGray" BorderBrush="Black"/>
+                            <CheckBox Content="Dimanche" Height="15" HorizontalAlignment="Left"  Name="Chk7" VerticalAlignment="Top"  Foreground="White" Background="DarkGray" BorderBrush="Black" />
                         </StackPanel>
                     </StackPanel>
                 </StackPanel>
