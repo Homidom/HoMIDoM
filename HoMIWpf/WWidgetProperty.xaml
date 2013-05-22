@@ -15,8 +15,8 @@
                 </GroupBox.Header>
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                         <StackPanel >
-                                <CheckBox  Name="ChkShowEtiq" Content="Afficher Etiquette" Foreground="White" />
-                                <CheckBox Name="ChkShowStatus" Content="Afficher Status" Foreground="White"/>
+                            <CheckBox  Name="ChkShowEtiq" Content="Afficher Etiquette" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
+                            <CheckBox Name="ChkShowStatus" Content="Afficher Status" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                         <StackPanel Name="StkEtiq">
                             <StackPanel Orientation="Horizontal" >
                                 <Label Width="120" Content="Etiquette:" Foreground="White"/>
@@ -62,11 +62,11 @@
                             <TextBox Name="TxtRotationY" Width="150" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
-                            <CheckBox Name="ChkEditValue" Content="Valeur Editable" Foreground=" White"/>
+                                <CheckBox Name="ChkEditValue" Content="Valeur Editable" Foreground=" White" Background="DarkGray" BorderBrush="Black"/>
                         </StackPanel>
 
                         <StackPanel Name="StkPicture"  >
-                            <CheckBox Name="ChkPicture" Content="Picture Visible" Foreground=" White"/>
+                                <CheckBox Name="ChkPicture" Content="Picture Visible" Foreground=" White" Background="DarkGray" BorderBrush="Black"/>
                             <StackPanel Orientation="Horizontal" >
                                 <Label Width="120" Content="Picture:" Foreground="White"/>
                                 <Border BorderThickness="2" BorderBrush="Black" Width="85" Height="85" >
@@ -279,9 +279,9 @@
 
                     </GroupBox.Header>
                     <StackPanel >
-                        <CheckBox Name="ChKShowPassWord" Content="Afficher la valeur" Foreground=" White" IsChecked=" True"/>
-                        <CheckBox Name="ChKShowClavier" Content="Afficher le clavier" Foreground=" White" IsChecked=" True"/>
-                        <CheckBox Name="ChKClearAfterEnter" Content="Effacer la valeur après validation" Foreground=" White" IsChecked=" False"/>
+                        <CheckBox Name="ChKShowPassWord" Content="Afficher la valeur" Foreground=" White" IsChecked=" True" Background="DarkGray" BorderBrush="Black"/>
+                        <CheckBox Name="ChKShowClavier" Content="Afficher le clavier" Foreground=" White" IsChecked=" True" Background="DarkGray" BorderBrush="Black"/>
+                        <CheckBox Name="ChKClearAfterEnter" Content="Effacer la valeur après validation" Foreground=" White" IsChecked=" False" Background="DarkGray" BorderBrush="Black"/>
                     </StackPanel>
                 </GroupBox>
 
