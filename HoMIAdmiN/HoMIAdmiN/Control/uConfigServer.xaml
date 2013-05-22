@@ -114,7 +114,7 @@
                                 </GroupBox.Header>
                                 <Grid >
                                     <StackPanel Orientation="Horizontal">
-                                        <CheckBox Name="ChkModeDecouv" Content="Activer" Foreground=" White" ToolTip="Si activé, le mode découverte des nouveaux composants est forcé sur tous les drivers sinon il faut le paramétrer dans chaque driver suivant les besoins." />
+                                        <CheckBox Name="ChkModeDecouv" Content="Activer" Background="DarkGray" BorderBrush="Black" Foreground=" White" ToolTip="Si activé, le mode découverte des nouveaux composants est forcé sur tous les drivers sinon il faut le paramétrer dans chaque driver suivant les besoins." />
                                     </StackPanel>
                                 </Grid>
                             </GroupBox>
@@ -207,7 +207,7 @@
                                         <Label Foreground="White" Name="LblDevise" >Devise:</Label>
                                         <TextBox Name="TxtDevise" Width="40" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20"/>
                                     </StackPanel>
-                                    <CheckBox Name="ChkEnergie" Content="Gérer Energie" Foreground="White"/>
+                                    <CheckBox Name="ChkEnergie" Content="Gérer Energie" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
                                     <StackPanel Name="StkTarifEnergie">
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Content="Tarif Jour:" Foreground="White"/>
