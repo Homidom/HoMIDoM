@@ -7,16 +7,16 @@ Public Class WConfig
 
     Private Sub BtnOk_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOk.Click
         Frm.ShowQuitter = ChkShowBtnQuit.IsChecked
-        _WithPassword = ChkWidthPass.IsChecked
+        Frm.WithPassword = ChkWidthPass.IsChecked
 
-        If _WithPassword Then
+        If Frm.WithPassword Then
             If String.IsNullOrEmpty(TxtPassword.Text) = True Then
                 MessageBox.Show("Veuillez saisir un mot de passe pour accéder aux fonctions critiques!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                 Exit Sub
             End If
         End If
 
-        _PassWord = TxtPassword.Text
+        Frm.Password = TxtPassword.Text
         Frm.ShowSoleil = ChkSoleil.IsChecked
         Frm.FullScreen = ChkFullScreen.IsChecked
         Frm.Friction = SliderFriction.Value
@@ -41,7 +41,7 @@ Public Class WConfig
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         Frm = FrmMere
         ChkShowBtnQuit.IsChecked = Frm.ShowQuitter
-        ChkWidthPass.IsChecked = _WithPassword
+        ChkWidthPass.IsChecked = Frm.WithPassword
         ChkSoleil.IsChecked = Frm.ShowSoleil
         ChkFullScreen.IsChecked = Frm.FullScreen
         SliderFriction.Value = Frm.Friction
@@ -336,11 +336,12 @@ Public Class WConfig
 
     End Sub
 
-    Private Sub ChkWidthPass_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ChkWidthPass.Checked
+    Private Sub ChkWidthPass_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ChkWidthPass.Checked, ChkWidthPass.Click
         If ChkWidthPass.IsChecked Then
             TxtPassword.Visibility = Windows.Visibility.Visible
-            TxtPassword.Text = _PassWord
+            TxtPassword.Text = Frm.Password
         Else
+            TxtPassword.Text = ""
             TxtPassword.Visibility = Windows.Visibility.Collapsed
         End If
     End Sub

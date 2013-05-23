@@ -41,7 +41,7 @@ Class Window1
     'Paramètres de connexion à HomeSeer
     Dim _Serveur As String = ""
     Dim _Login As String = ""
-    Dim _Password As String = ""
+    Dim _PasswordHS As String = ""
     Dim _PortSOAP As String = "7999"
     Dim _IP As String = "localhost"
 
@@ -61,9 +61,29 @@ Class Window1
     Public _CurrentIdZone As String
     Dim RandomNumber As New Random
     Dim _ShowQuitter As Boolean = True
+    Dim _PassWord As String
+    Dim _WithPassword As Boolean = False
 #End Region
 
 #Region "Property"
+
+    Public Property WithPassword As Boolean
+        Get
+            Return _WithPassword
+        End Get
+        Set(ByVal value As Boolean)
+            _WithPassword = value
+        End Set
+    End Property
+
+    Public Property Password As String
+        Get
+            Return _Password
+        End Get
+        Set(ByVal value As String)
+            _Password = value
+        End Set
+    End Property
 
     Public Property ShowQuitter As Boolean
         Get
@@ -374,7 +394,7 @@ Class Window1
                     End Select
                 Next
             Else
-                MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur serveur")
+                MessageBox.Show("Il manque les paramètres du client WPF dans le fichier de config !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             End If
             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres du client WPF chargés")
 
@@ -407,7 +427,7 @@ Class Window1
                     End Select
                 Next
             Else
-                MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
+                MessageBox.Show("Il manque les paramètres du client WPF dans le fichier de config !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             End If
             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres tactiles chargés")
 
@@ -451,7 +471,7 @@ Class Window1
                     End Select
                 Next
             Else
-                MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
+                MessageBox.Show("Il manque les paramètres du client WPF dans le fichier de config !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             End If
             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres de l'interface chargés")
 
@@ -712,7 +732,7 @@ Class Window1
             Return " Chargement de la configuration terminée"
 
         Catch ex As Exception
-            MsgBox("ERREUR LOADCONFIG " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Client WPF")
+            MessageBox.Show("ERREUR LOADCONFIG " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             Return " Erreur de chargement de la config: " & ex.Message
         End Try
     End Function
@@ -1118,7 +1138,7 @@ Class Window1
             writer.Close()
             Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde terminée")
         Catch ex As Exception
-            MsgBox("ERREUR SAVECONFIG " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Client WPF")
+            MessageBox.Show("ERREUR SAVECONFIG " & ex.Message, "Erreur Client WPF", MessageBoxButton.OK, MessageBoxImage.Error)
             Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", " Erreur de sauvegarde de la configuration: " & ex.Message)
         End Try
 
@@ -1319,8 +1339,9 @@ Class Window1
             ctrl.Visible = Visible
             AddHandler ctrl.click, AddressOf IconMnuDoubleClick
             _ListMnu.Add(ctrl)
+
             If type = uCtrlImgMnu.TypeOfMnu.Zone Then
-                If Visible = True Then imgStackPnl.Children.Add(ctrl)
+                If Visible Then imgStackPnl.Children.Add(ctrl)
             Else
                 imgStackPnl.Children.Add(ctrl)
             End If
@@ -2422,8 +2443,8 @@ Class Window1
 
     Private Function VerifPassword() As Boolean
         Try
-            If _WithPassword And String.IsNullOrEmpty(_Password) = False Then
-                If InputBox("Veuillez saisir le mot de passe:", "Homidom") <> _Password Then
+            If _WithPassword And String.IsNullOrEmpty(_PassWord) = False Then
+                If InputBox("Veuillez saisir le mot de passe:", "Homidom") <> _PassWord Then
                     MessageBox.Show("Mot de passe erroné!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
                     Return False
                 Else

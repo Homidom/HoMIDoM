@@ -46,7 +46,7 @@ Namespace Customcontrols
                 Dim newColor As Color = DirectCast(ColorConverter.ConvertFromString(a), Color)
                 RaiseEvent SelectColorChange(New SolidColorBrush(newColor))
             Catch ex As Exception
-                MsgBox(ex.ToString)
+                MessageBox.Show("Erreur superCombo_SelectionChanged: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             End Try
         End Sub
     End Class

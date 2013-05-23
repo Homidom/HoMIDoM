@@ -77,13 +77,6 @@ Partial Public Class uCtrlImgMnu
         End Set
     End Property
 
-    Public Sub New()
-
-        ' Cet appel est requis par le Concepteur Windows Form.
-        InitializeComponent()
-
-        ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-    End Sub
 
     Private Sub Image_MouseLeftButtonUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Image.MouseLeftButtonUp
         Dim vDiff As TimeSpan = Now - vDown
@@ -109,18 +102,18 @@ Partial Public Class uCtrlImgMnu
         End Set
     End Property
 
-    Public Function ConvertArrayToImage(ByVal value As Object) As Object
-        Dim ImgSource As BitmapImage = Nothing
-        Dim array As Byte() = TryCast(value, Byte())
+    'Public Function ConvertArrayToImage(ByVal value As Object) As Object
+    '    Dim ImgSource As BitmapImage = Nothing
+    '    Dim array As Byte() = TryCast(value, Byte())
 
-        If array IsNot Nothing Then
-            ImgSource = New BitmapImage()
-            ImgSource.BeginInit()
-            ImgSource.StreamSource = New MemoryStream(array)
-            ImgSource.EndInit()
-        End If
-        Return ImgSource
-    End Function
+    '    If array IsNot Nothing Then
+    '        ImgSource = New BitmapImage()
+    '        ImgSource.BeginInit()
+    '        ImgSource.StreamSource = New MemoryStream(array)
+    '        ImgSource.EndInit()
+    '    End If
+    '    Return ImgSource
+    'End Function
 
     Public Property IDElement As String
         Get
