@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -45,6 +46,17 @@ namespace hitb
                     case "-cra":
                         Environment.Exit(IsProcessRunning("HomiAdmin") || IsProcessRunning("HomiWpf") ? 1 : 0);
                         break;
+
+                    case "--detect-previous-install":
+                    case "-dpi":
+                        Environment.Exit(DetectPreviousInstall() ? 1 : 0);
+                        break;
+
+                    case "--unsinstall-previous-install":
+                    case "-upi":
+                        Environment.Exit(DetectPreviousInstall(true) ? 1 : 0);
+
+                        break;
                     default:
                         break;
                 }
@@ -54,6 +66,46 @@ namespace hitb
             {
                 ShowUsage();
             }
+
+        }
+
+        private static bool DetectPreviousInstall(bool uninstall = false)
+        {
+
+            // HKEY_LOCAL_MACHINE\SOFTWARE\Classes\Installer\Products\B1CDED60CC25BC848B8A97B3F5D84E04
+            RegistryKey key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Classes\Installer\Products\");
+            foreach (var v in key.GetSubKeyNames())
+            {
+                RegistryKey productKey = key.OpenSubKey(v);
+                if (productKey != null)
+                {
+                    foreach (var value in productKey.GetValueNames())
+                    {
+                        string productName = Convert.ToString(productKey.GetValue("ProductName"));
+                        if (!productName.Equals("HoMIDoM", StringComparison.OrdinalIgnoreCase))
+                            continue;
+
+                        string productIcon = productKey.GetValue("ProductIcon").ToString();
+                        string installUID = productIcon.Substring(productIcon.LastIndexOf("\\") - 38, 38);
+
+                        if (!uninstall) return true;
+
+                        // msiexec /x {7FC2F25A-2D7C-48B8-88C8-4D1EE59ED19E} /passive
+
+                        Process proc = new Process();
+                        proc.StartInfo.FileName = "msiexec.exe";
+                        proc.StartInfo.Arguments = String.Format("/x {0} /passive", installUID);
+                        proc.StartInfo.UseShellExecute = true;
+                        proc.Start();
+                        proc.WaitForExit();
+
+                        return true;
+                    }
+                }
+            }
+
+
+            return false;
 
         }
 
