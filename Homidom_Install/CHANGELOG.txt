@@ -1,0 +1,28 @@
+2013-04-10
+----------
+* Multi-langues "ready"
+* Détection & télechargement du Framework .NET 4.0 Full (en,fr)
+* Bundle x86 + x64 - detection de l'OS et deploiement des DLL_externe correspondante
+* Detection d'une installation existante 
+* Arret des services et application en cours d'execution
+* (Re)démarrage du service après install/maj 
+
+
+2013-05-23 
+----------
+* Externalisation des drivers dans des fichiers "include" (~/includes/Driver_*.nsh)
+* Desactivation de la description détaillée des sections.
+* Suppression de la transparence su SplahScreen + Ajout d'un effet de fade-in/fade-out
+* Détection de la version précédement installée.
+* Ajout de profils d'installation pré-définis (Complete, Service uniquement, Admin uniquement)
+* Réorganisation des sections
+* Déplacement des drivers obligatoire dans la section "Service"
+* Ajout de la possibilité d'installer uniquement le service ou uniquement l'admin
+* Détection d'un installation existante faite avec l'ancien installeur (basé sur la présence de fichiers spécifiques)
+* Sauvegarde des fichiers de l'ancienne installation, Désinstallation de l'installation faite avec l'ancien installeur et réstauration des fichiers sauvegardé.
+
+
+
+
+
+

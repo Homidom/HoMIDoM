@@ -96,7 +96,7 @@ Var "DOTNET_RETURN_CODE"
       Abort
 
       ; "Downloading Microsoft .Net Framework"
-      AddSize 48100
+      ;AddSize 48100
       nsisdl::download /TRANSLATE "$(DESC_DOWNLOADING)" "$(DESC_CONNECTING)" \
          "$(DESC_SECOND)" "$(DESC_MINUTE)" "$(DESC_HOUR)" "$(DESC_PLURAL)" \
          "$(DESC_PROGRESS)" "$(DESC_REMAINING)" \
