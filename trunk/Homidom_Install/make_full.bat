@@ -11,14 +11,9 @@ set nsisScriptName=Homidom.Setup_Full_x86_x64
 
 
 set makensis="tools\nsis-2.46\makensis.exe"
-
-
-
-ECHO Numero de Build (%currentVersion%.xxx.0) :
-set /p currentBuild=Numero de release [%currentBuild%]: 
-
-ECHO Numero de Revision (%currentVersion%.%currentBuild%.xxxx) :
-set /p currentRevision=Numero de release [%currentRevision%]: 
+set /p currentVersion=Numero de Version (xx.xx.0.0) [%currentVersion%]:
+set /p currentBuild=Numero de Build (%currentVersion%.xxx.0) [%currentBuild%]: 
+set /p currentRevision=Numero de Revision (%currentVersion%.%currentBuild%.xxxx) [%currentRevision%]: 
 
 CHOICE /c ON /M "Voulez-vous creer un package pour la version %currentVersion%.%currentBuild%.%currentRevision% ?"
 IF ERRORLEVEL 2 GOTO Cleaning
