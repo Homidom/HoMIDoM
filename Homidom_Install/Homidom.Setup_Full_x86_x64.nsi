@@ -156,9 +156,13 @@ Function .onInit
   ; Impossible de lire cette entrée de registre ... pb de droit ??? => on se base donc sur la présence d'un fichier spécifique à l'ancien installeur :Uninstall.vbs
   ;ReadRegStr $0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{7FC2F25A-2D7C-48B8-88C8-4D1EE59ED19E}" "DisplayVersion"
   ;StrCmp "$0" "" homidomIsNotInstalled 0
-  IfFileExists "$INSTDIR\Uninstall.vbs" 0 homidomIsNotInstalled
-    StrCpy $IsPreviousInstallIsDeprecated "1"
-    
+  ;IfFileExists "$INSTDIR\Uninstall.vbs" 0 homidomIsNotInstalled
+  ;StrCpy $IsPreviousInstallIsDeprecated "1"
+
+  ExecCmd::exec /TIMEOUT=5000 '"$PLUGINSDIR\hitb.exe -dpi"' ""
+  Pop $IsPreviousInstallIsDeprecated
+
+
 homidomIsNotInstalled:
     
 FunctionEnd
@@ -263,8 +267,10 @@ backupPreviousFiles:
 uninstallPreviousVersion:
   ; --- Désinstallation
   ClearErrors
-  ExecWait "msiexec /x {7FC2F25A-2D7C-48B8-88C8-4D1EE59ED19E} /passive"
-  IFErrors 0 restorePreviousFile
+  ;ExecWait "msiexec /x {7FC2F25A-2D7C-48B8-88C8-4D1EE59ED19E} /passive"
+  ExecCmd::exec /TIMEOUT=5000 '"$PLUGINSDIR\hitb.exe -upi"' ""
+  Pop $0
+  StrCmp "$0" "0" 0 restorePreviousFile
     MessageBox MB_ICONSTOP "Echec de la désintallation de l'ancienne installation !"
     Abort
 
