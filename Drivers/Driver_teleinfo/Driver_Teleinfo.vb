@@ -785,13 +785,13 @@ Public Class Driver_Teleinfo
                             CptPort.SerialPort.StopBits = IO.Ports.StopBits.One 'un bit d'arrêt par octet
                             CptPort.SerialPort.DataBits = 8 'nombre de bit par octet
 
+                        Case "ParametreSysteme"
+                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Ouvrir", "Utilisation des parametres definis par le système Windows ")
 
                         Case Else
-                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Ouvrir", "Le modèle " & _Modele & " n'est pas conforme : Utilisation des parametres A_DAUGUET ")
-                            CptPort.SerialPort.BaudRate = 1200  'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
-                            CptPort.SerialPort.Parity = IO.Ports.Parity.Even ' parité paire
-                            CptPort.SerialPort.StopBits = IO.Ports.StopBits.One 'un bit d'arrêt par octet
-                            CptPort.SerialPort.DataBits = 7 'nombre de bit par octet                  
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Ouvrir", "Le modèle " & _Modele & " n'est pas conforme")
+                            Return ("ERR: Port " & CptPort.port_name & " Modèle non défini")
+                            Exit Function
                     End Select
 
                     CptPort.SerialPort.ReadTimeout = 3000
