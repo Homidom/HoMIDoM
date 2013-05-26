@@ -2,6 +2,8 @@
 Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
+Imports System.Threading
+
 Imports Google.GData.Client
 Imports Google.GData.Extensions
 Imports Google.GData.Calendar
@@ -193,17 +195,21 @@ Public Class Driver_GoogleCalendar
                 Return _Protocol
             End Get
         End Property
+
         Public Property Refresh() As Integer Implements HoMIDom.HoMIDom.IDriver.Refresh
             Get
                 Return _Refresh
             End Get
             Set(ByVal value As Integer)
-                If value >= 1 Then
-                    _Refresh = value
-
+                _Refresh = value
+                If _Refresh > 0 Then
+                    MyTimer.Interval = _Refresh
+                    MyTimer.Enabled = True
+                    AddHandler MyTimer.Elapsed, AddressOf TimerTick
                 End If
             End Set
         End Property
+
         Public Property Server() As HoMIDom.HoMIDom.Server Implements HoMIDom.HoMIDom.IDriver.Server
             Get
                 Return _Server
@@ -305,14 +311,17 @@ Public Class Driver_GoogleCalendar
             Dim CalendarFeed As CalendarFeed
 
             Try
+                ' Récuperation des parametres avancés
                 _DEBUG = _Parametres.Item(0).Valeur
                 _UserName = _Parametres.Item(1).Valeur
                 _PassWord = _Parametres.Item(2).Valeur
                 _CalHomidomName = _Parametres.Item(3).Valeur
                 _CalFeriesName = _Parametres.Item(4).Valeur
 
-                Service.setUserCredentials(_UserName, _PassWord)        ' Positionne le compte Gmail à utiliser
+                ' Positionne le compte Gmail à utiliser
+                Service.setUserCredentials(_UserName, _PassWord)
                 queryCal.Uri = New Uri("https://www.google.com/calendar/feeds/default/allcalendars/full")
+
                 ' Recupere la liste des calendriers du compte 
                 CalendarFeed = Service.Query(queryCal)
 
@@ -324,14 +333,16 @@ Public Class Driver_GoogleCalendar
                         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar", "Calendrier HoMIDoM trouvé dans le compte " & _UserName)
                         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar", "Driver " & Me.Nom & " démarré")
 
+                        ' Recherche le calendrier des jours Fériés  
                     ElseIf entry.Title.Text.ToUpper = _CalFeriesName.ToUpper Then
                         Calendarferies = entry
                         If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar", "Calendrier Jours fériés trouvé dans le compte " & _UserName)
                     End If
                 Next
 
+                ' Traitement en cas de calendrier non trouvé
                 If IsNothing(CalendarHomidom.SelfUri) Then
-                    ' pas de calendrier trouvé 
+                    ' pas de demarrage du drives
                     _IsConnect = False
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar", "Calendrier HoMIDoM non trouvé dans le compte " & _UserName)
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar", "Driver " & Me.Nom & " non démarré")
@@ -388,10 +399,9 @@ Public Class Driver_GoogleCalendar
                     ' L'objet est valide 
                     If Objet IsNot Nothing Then
 
-                        'If _DEBUG Then Console.WriteLine("la date du jour est : " & System.DateTime.Today.ToShortDateString)
                         'Parcourt toutes les entrees 
                         For Each feedEntry In calFeed.Entries
-                            If _DEBUG Then Console.WriteLine(feedEntry.Title.Text & vbTab & feedEntry.Content.Content & vbTab & feedEntry.Authors.FirstOrDefault.Name _
+                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Il est : " & feedEntry.Title.Text & vbTab & feedEntry.Content.Content & vbTab & feedEntry.Authors.FirstOrDefault.Name _
                                               & vbTab & "#" & feedEntry.Times.Item(0).StartTime & "#" & vbCrLf & feedEntry.Times.Item(0).AllDay)
 
 
@@ -409,13 +419,13 @@ Public Class Driver_GoogleCalendar
                                 If elementFound Then
                                     Select Case Objet.adresse2.ToString.ToUpper
                                         Case "TITRE"
-                                            Objet.Value = EntryFind.Title.ToString
+                                            Objet.Value = EntryFind.Title.Text
 
                                         Case "DESCRIPTION"
-                                            Objet.Value = EntryFind.Content.ToString
+                                            Objet.Value = EntryFind.Content.Content.ToString
 
                                         Case "LIEU"
-                                            Objet.Value = EntryFind.Locations.ToString
+                                            Objet.Value = EntryFind.Locations.Item(0).ValueString
 
                                     End Select
 
@@ -431,16 +441,10 @@ Public Class Driver_GoogleCalendar
                                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur du type du composant de " & Objet.Adresse1)
                         End Select
 
-
-
                     Else
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "L'objet est invalide")
                     End If
                 End If
-
-
-
-
 
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", ex.Message)
@@ -454,8 +458,24 @@ Public Class Driver_GoogleCalendar
         ''' <param name="Parametre2"></param>
         ''' <remarks></remarks>
         Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
+
+            ' Creation de l'evenement
+            Dim entryNew As New EventEntry()
+            ' Postionnement de l'heure de l'evenement à NOW avec un durée de 5 min 
+            Dim eventTime As New [When](DateTime.Now, DateTime.Now.AddMinutes(5))
+
             Try
-                If _Enable = False Then Exit Sub
+                If Not (IsNothing(Objet)) Then
+                    entryNew.Title.Text = Objet.Name & ":" & Objet.value.ToString
+
+                    ' Positionne l'heure de l'evenement 
+                    entryNew.Times.Add(eventTime)
+
+                    ' Envoie la requete de creation de l'evenement         
+                    Dim PostUri As New Uri(CalendarHomidom.Content.AbsoluteUri)
+                    Dim insertedEntry As AtomEntry = Service.Insert(PostUri, entryNew)
+                End If
+
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & "Write", ex.Message)
             End Try
@@ -563,15 +583,14 @@ Public Class Driver_GoogleCalendar
                 _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
                 _DeviceSupport.Add(ListeDevices.GENERIQUESTRING.ToString)
                 _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE.ToString)
+                ' _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
 
-                'Paramétres avancés
+                ' Défintion des Paramètres avancés
                 Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
                 Add_ParamAvance("Compte Google", "Adresse de messagerie Google", "")
                 Add_ParamAvance("Mot de passe", "Mot de passe du compte Google", "")
                 Add_ParamAvance("Calendrier Homidom", "Nom du calendrier réservé à HoMIDoM", "homidom")
                 Add_ParamAvance("Calendrier Jours Fériés", "Nom du calendrier réservé aux jours fériés du pays", "")
-
-
 
                 Add_LibelleDevice("ADRESSE1", "Valeur à rechercher", "Titre de l'evenement à rechercher")
                 Add_LibelleDevice("ADRESSE2", "Element à recuperer (Titre,Lieu,Description)", "Information de l'événement à retourner")
@@ -584,7 +603,9 @@ Public Class Driver_GoogleCalendar
         ''' <summary>Si refresh >0 gestion du timer</summary>
         ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
         Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
-
+            ' Attente de 3s pour eviter le relancement de la procedure dans le laps de temps
+            ' System.Threading.Thread.Sleep(3000)
+            ' ScanCalendar()
         End Sub
 
 #End Region
@@ -593,6 +614,74 @@ Public Class Driver_GoogleCalendar
 
 
 #End Region
+        Public Sub CreateEvent(ByVal Objet As Object, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing)
+
+            Dim entryNew As New EventEntry()
+
+            Try
+                If _Enable = False Then Exit Sub
+
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write ", "Creation d'un événement " & Objet)
+
+                ' Positionne le titre et le commentaire de l'evenement 
+                If Not (IsNothing(Objet)) Then entryNew.Title.Text = Objet.name.ToString & ":" & Objet.value.ToString
+                If Not (IsNothing(Parametre1)) Then entryNew.Content.Content = Parametre1
+
+                ' Positionne le lieu de l'evenement 
+                Dim eventLocation As New Where()
+                If Not (IsNothing(Parametre2)) Then
+                    eventLocation.ValueString = Parametre2
+                    entryNew.Locations.Add(eventLocation)
+                End If
+
+                ' Positionne l'heure de l'evenement 
+                Dim eventTime As New [When](DateTime.Now, DateTime.Now.AddMinutes(5))
+                entryNew.Times.Add(eventTime)
+
+                ' Envoie la requete de creation de l'evenement         
+                Dim PostUri As New Uri(CalendarHomidom.Content.AbsoluteUri)
+                Dim insertedEntry As AtomEntry = Service.Insert(PostUri, entryNew)
+
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & "Write", ex.Message)
+            End Try
+        End Sub
+
+        Public Sub ScanCalendar()
+
+            Try
+                ' Creation de la requete sur le calendrier reservé 
+                Dim queryCal As New EventQuery(CalendarHomidom.Content.AbsoluteUri.ToString)
+
+                queryCal.ExtraParameters = "orderby=starttime&sortorder=ascending"
+                queryCal.NumberToRetrieve = 20
+
+                queryCal.StartDate = New System.DateTime(Now.Year, Now.Month, Now.Day)
+                queryCal.StartTime = New System.DateTime(Now.Year, Now.Month, Now.Day, Now.Hour, Now.Minute, 0)
+                queryCal.EndTime = New System.DateTime(Now.AddMinutes(10).Year, Now.AddMinutes(10).Month, Now.AddMinutes(10).Day, Now.AddMinutes(10).Hour, Now.AddMinutes(10).Minute, 0)
+
+                ' Lancement de la requete de recherches des événements
+                Dim calFeed As AtomFeed = Service.Query(queryCal)
+                Dim feedEntry As EventEntry
+
+                'Recherche le calendrier Homidom 
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Il est : " & Now.ToShortTimeString)
+
+                'Parcourt tous les evenements 
+                For Each feedEntry In calFeed.Entries
+                    If feedEntry.Times.Item(0).StartTime.ToShortTimeString = Now.ToShortTimeString Then
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", feedEntry.Title.Text & ":" & feedEntry.Summary.Text & " - " & feedEntry.Times.Item(0).StartTime)
+                    Else
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Evenement non retenu : " & feedEntry.Title.Text)
+                    End If
+
+                Next
+
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ScanCalendar", ex.Message)
+            End Try
+        End Sub
+
 
     End Class
 
