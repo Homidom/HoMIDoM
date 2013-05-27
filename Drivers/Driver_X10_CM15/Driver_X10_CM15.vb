@@ -422,11 +422,23 @@ Public Class Driver_X10_CM15
             End If
             If Commande = "OUVERTURE" Then
                 If Parametre1 IsNot Nothing Then
-                    Dim _var As Double = Parametre1
-                    _var = _var * 0.25
-                    Dim _var2 As Byte = CByte(_var)
-                    ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " Extcode 01 " & Hex(_var2))
-                    Objet.Value = Parametre1
+                    Try
+                        Dim _var As Double = Parametre1
+                        _var = _var * 0.25
+                        Dim _var2 As Byte = CByte(_var)
+                        ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " Extcode 1 " & Hex(_var2))
+                        Objet.Value = Parametre1
+                    Catch ex As Exception
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write OUVERTURE ExtCode 1", "Erreur: " & ex.ToString)
+                        Try
+                            Dim hex As String
+                            hex = Conversion.Hex(Parametre1 * 0.64)
+                            ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " extcode 31 " & ex.ToString)
+                            Objet.Value = Parametre1
+                        Catch ex2 As Exception
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write OUVERTURE ExtCode 1", "Erreur: " & ex.ToString)
+                        End Try
+                    End Try
                 End If
             End If
 
