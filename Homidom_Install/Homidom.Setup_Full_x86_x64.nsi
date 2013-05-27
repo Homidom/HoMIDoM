@@ -295,8 +295,6 @@ Section "" HoMIDoM_FRAMEWORK
   CreateDirectory "$INSTDIR\Config"
   CreateDirectory "$INSTDIR\Drivers"
   CreateDirectory "$INSTDIR\Fichiers"
-  CreateDirectory "$INSTDIR\Images"
-  CreateDirectory "$INSTDIR\Images\Users"
   CreateDirectory "$INSTDIR\Logs"
   CreateDirectory "$INSTDIR\Templates"
   
@@ -362,6 +360,9 @@ Section "HoMIDoM Admin" HoMIDoM_ADMIN
   SetOverwrite on
   SetOutPath "$INSTDIR"
   File "..\RELEASE\HoMIAdmiN.exe"
+  
+  SetOverwrite off
+  CreateDirectory "$INSTDIR\Images"
   SetOutPath "$INSTDIR\Images"
   File /r "..\RELEASE\Images\*"
   
