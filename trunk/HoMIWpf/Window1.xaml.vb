@@ -3,6 +3,7 @@ Imports System
 Imports System.Collections.Generic
 Imports System.Linq
 Imports System.Text
+Imports System.Threading
 Imports System.Windows
 Imports System.Windows.Controls
 Imports System.Windows.Data
@@ -17,13 +18,10 @@ Imports System.ServiceModel
 Imports System.ServiceModel.Description
 Imports System.Xml.Serialization
 Imports HoMIDom.HoMIDom
-Imports STRGS = Microsoft.VisualBasic.Strings
 Imports System.Web.HttpUtility
 Imports System.Windows.Controls.Primitives
-'Imports WpfApplication1.Designer
 Imports HoMIWpF.Designer
 Imports HoMIWpF.Designer.ResizeRotateAdorner
-'Imports WpfApplication1.Designer.ResizeRotateAdorner
 #End Region
 
 
@@ -254,6 +252,10 @@ Class Window1
             InitializeComponent()
 
             Me.Cursor = Cursors.Wait
+
+            Dim spl As Window2 = New Window2
+            spl.Show()
+            Thread.Sleep(1000)
 
             Dim mystyles As New ResourceDictionary()
             mystyles.Source = New Uri("/HoMIWpF;component/Resources/DesignerItem.xaml",
