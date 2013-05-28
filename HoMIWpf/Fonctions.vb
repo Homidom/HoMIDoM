@@ -4,7 +4,7 @@ Imports System.Net
 
 Module Fonctions
 
-    Public Function ConvertArrayToImage(ByVal value As Object) As BitmapImage
+    Public Function ConvertArrayToImage(ByVal value As Byte()) As BitmapImage
         Try
             Dim ImgSource As BitmapImage = Nothing
             Dim array As Byte() = TryCast(value, Byte())
@@ -21,7 +21,6 @@ Module Fonctions
             End If
 
             Return ImgSource
-            ImgSource = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub ConvertArrayToImage: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
             Return Nothing
@@ -91,5 +90,32 @@ Module Fonctions
         Catch ex As Exception
             Return False
         End Try
+    End Function
+
+    ''' <summary>
+    ''' Fonction permettant de charger une image 
+    ''' </summary>
+    ''' <param name="FileChm">chemin du fichier</param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function LoadBitmapImage(ByVal FileChm As String) As BitmapImage
+        Dim bmpImage As New BitmapImage
+
+        Try
+            If File.Exists(FileChm) Then
+                bmpImage.BeginInit()
+                bmpImage.CacheOption = BitmapCacheOption.OnLoad
+                bmpImage.CreateOptions = BitmapCreateOptions.DelayCreation
+                bmpImage.UriSource = New Uri(FileChm, UriKind.Absolute)
+                bmpImage.EndInit()
+                If bmpImage.CanFreeze Then bmpImage.Freeze()
+            End If
+            Return bmpImage
+        Catch ex As Exception
+            MessageBox.Show("ERREUR Sub LoadBitmapImage (FileChm= " & FileChm & "): " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            Return Nothing
+        End Try
+
+        bmpImage = Nothing
     End Function
 End Module

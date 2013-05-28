@@ -113,12 +113,7 @@ Public Class WConfig
 
                 If String.IsNullOrEmpty(TxtImage.Text) = False Then
                     If File.Exists(TxtImage.Text) Then
-                        Dim bmpImage As New BitmapImage()
-                        bmpImage.BeginInit()
-                        bmpImage.UriSource = New Uri(TxtImage.Text, UriKind.Absolute)
-                        bmpImage.EndInit()
-                        ImgMnu.Source = bmpImage
-                        bmpImage = Nothing
+                        ImgMnu.Source = LoadBitmapImage(TxtImage.Text)
                     End If
                 End If
 
@@ -165,11 +160,7 @@ Public Class WConfig
                 TxtImage.Text = dlg.FileName
                 If String.IsNullOrEmpty(TxtImage.Text) = False Then
                     If File.Exists(TxtImage.Text) Then
-                        Dim bmpImage As New BitmapImage()
-                        bmpImage.BeginInit()
-                        bmpImage.UriSource = New Uri(TxtImage.Text, UriKind.Absolute)
-                        bmpImage.EndInit()
-                        ImgMnu.Source = bmpImage
+                        ImgMnu.Source = LoadBitmapImage(TxtImage.Text)
                     End If
                 End If
             End If

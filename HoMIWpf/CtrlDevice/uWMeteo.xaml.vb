@@ -50,76 +50,46 @@ Public Class uWMeteo
                     LblJ3.Content = _dev.JourJ2
                     LblJ4.Content = _dev.JourJ3
 
-                    Dim bmpImage As New BitmapImage()
-                    bmpImage.BeginInit()
-                    bmpImage.CacheOption = BitmapCacheOption.OnLoad
-                    bmpImage.CreateOptions = BitmapCreateOptions.DelayCreation
+                    Dim chm As String = ""
                     If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconActuel & ".png") = True Then
-                        bmpImage.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\" & _dev.IconActuel & ".png", UriKind.Absolute)
+                        chm = _MonRepertoire & "\Images\Meteo\" & _dev.IconActuel & ".png"
                     Else
-                        bmpImage.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\na.png", UriKind.Absolute)
+                        chm = _MonRepertoire & "\Images\Meteo\na.png"
                     End If
-                    bmpImage.EndInit()
-                    If bmpImage.CanFreeze Then bmpImage.Freeze()
-                    Icon.Source = bmpImage
-                    bmpImage = Nothing
+                    Icon.Source = LoadBitmapImage(chm)
+                    chm = ""
 
-                    Dim bmpImage2 As New BitmapImage()
-                    bmpImage2.BeginInit()
-                    bmpImage2.CacheOption = BitmapCacheOption.OnLoad
-                    bmpImage2.CreateOptions = BitmapCreateOptions.DelayCreation
                     If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconToday & ".png") = True Then
-                        bmpImage2.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\" & _dev.IconToday & ".png", UriKind.Absolute)
+                        chm = _MonRepertoire & "\Images\Meteo\" & _dev.IconToday & ".png"
                     Else
-                        bmpImage2.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\na.png", UriKind.Absolute)
+                        chm = _MonRepertoire & "\Images\Meteo\na.png"
                     End If
-                    bmpImage2.EndInit()
-                    If bmpImage2.CanFreeze Then bmpImage2.Freeze()
-                    IconJ1.Source = bmpImage2
-                    bmpImage2 = Nothing
+                    IconJ1.Source = LoadBitmapImage(chm)
+                    chm = ""
 
-                    Dim bmpImage3 As New BitmapImage()
-                    bmpImage3.BeginInit()
-                    bmpImage3.CacheOption = BitmapCacheOption.OnLoad
-                    bmpImage3.CreateOptions = BitmapCreateOptions.DelayCreation
                     If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ1 & ".png") = True Then
-                        bmpImage3.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ1 & ".png", UriKind.Absolute)
+                        chm = _MonRepertoire & "\Images\Meteo\" & _dev.IconJ1 & ".png"
                     Else
-                        bmpImage3.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\na.png", UriKind.Absolute)
+                        chm = _MonRepertoire & "\Images\Meteo\na.png"
                     End If
-                    bmpImage3.EndInit()
-                    If bmpImage3.CanFreeze Then bmpImage3.Freeze()
-                    IconJ2.Source = bmpImage3
-                    bmpImage3 = Nothing
+                    IconJ2.Source = LoadBitmapImage(chm)
+                    chm = ""
 
-                    Dim bmpImage4 As New BitmapImage()
-                    bmpImage4.BeginInit()
-                    bmpImage4.CacheOption = BitmapCacheOption.OnLoad
-                    bmpImage4.CreateOptions = BitmapCreateOptions.DelayCreation
                     If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ2 & ".png") = True Then
-                        bmpImage4.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ2 & ".png", UriKind.Absolute)
+                        chm = _MonRepertoire & "\Images\Meteo\" & _dev.IconJ2 & ".png"
                     Else
-                        bmpImage4.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\na.png", UriKind.Absolute)
+                        chm = _MonRepertoire & "\Images\Meteo\na.png"
                     End If
-                    bmpImage4.EndInit()
-                    If bmpImage4.CanFreeze Then bmpImage4.Freeze()
-                    IconJ3.Source = bmpImage4
-                    bmpImage4 = Nothing
+                    IconJ3.Source = LoadBitmapImage(chm)
+                    chm = ""
 
-                    Dim bmpImage5 As New BitmapImage()
-                    bmpImage5.BeginInit()
-                    bmpImage5.CacheOption = BitmapCacheOption.OnLoad
-                    bmpImage5.CreateOptions = BitmapCreateOptions.DelayCreation
                     If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ3 & ".png") = True Then
-                        bmpImage5.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ3 & ".png", UriKind.Absolute)
+                        chm = _MonRepertoire & "\Images\Meteo\" & _dev.IconJ3 & ".png"
                     Else
-                        bmpImage5.UriSource = New Uri(_MonRepertoire & "\Images\Meteo\na.png", UriKind.Absolute)
+                        chm = _MonRepertoire & "\Images\Meteo\na.png"
                     End If
-                    bmpImage5.EndInit()
-                    If bmpImage5.CanFreeze Then bmpImage5.Freeze()
-                    IconJ4.Source = bmpImage5
-                    bmpImage5 = Nothing
-
+                    IconJ4.Source = LoadBitmapImage(chm)
+                    chm = ""
                 End If
             End If
         Catch ex As Exception

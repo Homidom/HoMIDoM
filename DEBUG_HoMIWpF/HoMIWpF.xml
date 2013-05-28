@@ -315,6 +315,13 @@ uCtrlImgMnu
 	<param name="value"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIWpF.Fonctions.LoadBitmapImage(System.String)">
+	<summary>
+ Fonction permettant de charger une image 
+ </summary>
+	<param name="FileChm">chemin du fichier</param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="P:HoMIWpF.My.MyWpfExtension.Application">
 	<summary>
  Retourne l'objet application pour l'application en cours d'exécution
