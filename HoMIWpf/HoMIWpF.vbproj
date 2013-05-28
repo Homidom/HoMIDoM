@@ -173,6 +173,9 @@
     <Compile Include="CtrlDevice\uRSS.xaml.vb">
       <DependentUpon>uRSS.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Splash.xaml.vb">
+      <DependentUpon>Splash.xaml</DependentUpon>
+    </Compile>
     <Compile Include="uHisto.xaml.vb">
       <DependentUpon>uHisto.xaml</DependentUpon>
     </Compile>
@@ -257,6 +260,10 @@
     <Page Include="Resources\SizeChrome.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Splash.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="uHisto.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -703,10 +710,13 @@
     <Resource Include="Images\fond-defaut.png" />
     <Resource Include="Images\fond-logo.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Homidom_banniere_817_203.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="False" />
+      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
