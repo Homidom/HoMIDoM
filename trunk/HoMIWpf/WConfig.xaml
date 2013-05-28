@@ -135,12 +135,11 @@
                     <CheckBox Content="Activer" Margin="3" Name="ChkServiceTV" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                 </GroupBox >
             </TabItem>
-            <TabItem Header="Info" Foreground="White">
+            <TabItem Header="Info" >
                 <GroupBox Header="" Margin="2">
-                    <StackPanel Orientation="Horizontal" >
-                        <Label Content="Version:" Foreground="White"/>
-                    <Label Name="LblVersion" />
-                    </StackPanel>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                        <TextBlock Name="listesversionsprogrammes" Text="Recherche en cours..." Foreground="white" IsManipulationEnabled="True" />
+                    </ScrollViewer>
                 </GroupBox >
             </TabItem>
         </TabControl>
