@@ -58,7 +58,23 @@ Public Class WConfig
         Next
         MyListMnu = Frm.ListMnu
 
-        LblVersion.Content = My.Application.Info.Version.ToString
+        'affiche les programmes
+        Try
+            listesversionsprogrammes.Text = ""
+            listesversionsprogrammes.Text &= " HoMIWpF : " & My.Application.Info.Version.ToString & vbCrLf
+            listesversionsprogrammes.Text &= " HoMIDomService : " & myService.GetServerVersion() & vbCrLf
+            listesversionsprogrammes.Text &= " Service démarré : " & myService.GetLastStartTime & vbCrLf
+            listesversionsprogrammes.Text &= " Port SOAP utilisé : " & myService.GetPortSOAP & vbCrLf
+            listesversionsprogrammes.Text &= " Version du frameWork: " & System.Runtime.InteropServices.RuntimeEnvironment.GetSystemVersion() & vbCrLf
+            If System.Environment.Is64BitOperatingSystem = True Then
+                listesversionsprogrammes.Text &= " Version de l'OS: " & My.Computer.Info.OSFullName.ToString & " 64 Bits" & vbCrLf
+            Else
+                listesversionsprogrammes.Text &= " Version de l'OS: " & My.Computer.Info.OSFullName.ToString & " 32 Bits" & vbCrLf
+            End If
+            listesversionsprogrammes.Text &= " Répertoire utilisé par le client WPF: " & My.Application.Info.DirectoryPath.ToString & vbCrLf
+        Catch ex As Exception
+            MessageBox.Show("Erreur New lors de l'affichage des programmes: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Private Sub SliderFriction_ValueChanged(ByVal sender As System.Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of System.Double)) Handles SliderFriction.ValueChanged
