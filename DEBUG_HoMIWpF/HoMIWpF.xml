@@ -138,10 +138,6 @@ uReleve
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIWpF.Customcontrols.Colorpicker">
-	<summary>
-Colorpicker
-</summary>
 </member><member name="M:HoMIWpF.uVariateur.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -381,6 +377,11 @@ uCtrlImgMnu
 	<summary>
  Classe utilisée dans la liste des serveurs 
  </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIWpF.uLog.ReturnLog(System.String)">
+	<summary>renvoi le fichier log suivant une requête xml si besoin</summary>
+	<param name="Requete"></param>
+	<returns></returns>
 	<remarks></remarks>
 </member><member name="T:HoMIWpF.Appointment">
 	<summary>
