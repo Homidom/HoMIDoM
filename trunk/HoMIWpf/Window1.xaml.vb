@@ -2268,7 +2268,7 @@ Class Window1
 
 #Region "Menu"
 
-    Private Sub ViewLog_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ViewLog.Click
+    Private Sub ViewLog_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ViewLogClient.Click, ViewLogSrv.Click
         Try
             Me.Cursor = Cursors.Wait
             If Canvas1.Children.Count > 0 Then
@@ -2280,7 +2280,7 @@ Class Window1
             Chk2.Visibility = Windows.Visibility.Collapsed
             Chk3.Visibility = Windows.Visibility.Collapsed
 
-            Dim x As New uLog
+            Dim x As New uLog(sender.tag)
             x.Uid = System.Guid.NewGuid.ToString()
             AddHandler x.CloseMe, AddressOf UnloadControl
             x.Width = Canvas1.ActualWidth - 100

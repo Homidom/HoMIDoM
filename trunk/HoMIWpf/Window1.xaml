@@ -62,6 +62,10 @@
                             <MenuItem.Icon>
                                 <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Log_32.png" />
                             </MenuItem.Icon>
+                            <MenuItem Name="ViewLogClient" Header="Client" FontSize="10" Tag="1">
+                            </MenuItem>
+                            <MenuItem Name="ViewLogSrv" Header="Serveur" FontSize="10" Tag="0">
+                            </MenuItem>
                         </MenuItem>
                         <MenuItem Name="ViewCalendar" Header="Calendrier" FontSize="10" >
                             <MenuItem.Icon>
