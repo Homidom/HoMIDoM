@@ -2089,16 +2089,13 @@ Public Class uWidgetEmpty
                 DisplayPictureFileName = GetStatusPicture(_Picture, _dev.Value)
                 If IO.File.Exists(DisplayPictureFileName) Then
                     ' L'image existe en local
-                    'Image.Source = New BitmapImage(New Uri(DisplayPictureFileName))
                     ImageBehavior.SetAnimatedSource(Image, New BitmapImage(New Uri(DisplayPictureFileName)))
                 Else
                     ' L'image n'a pas été trouvée en local, on la reprend du serveur
-                    'Image.Source = ConvertArrayToImage(myService.GetByteFromImage(DisplayPictureFileName))
                     ImageBehavior.SetAnimatedSource(Image, ConvertArrayToImage(myService.GetByteFromImage(DisplayPictureFileName)))
                 End If
             ElseIf _type = TypeOfWidget.Empty And _Visuel.Count = 0 Then
                 ' Affichage de l'image pour un widget empty s'il n'existe aucune visualisation
-                ' L'image s'affiche également au premier affichage du widget (i.e. avant la première mise à jour de visualisation)
                 If IO.File.Exists(_Picture) Then
                     ' L'image existe en local
                     ImageBehavior.SetAnimatedSource(Image, New BitmapImage(New Uri(_Picture)))

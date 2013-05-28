@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 
 Partial Public Class uCtrlImgMnu
+    'Type de Menu
     Public Enum TypeOfMnu
         None = 0
         Internet = 1
@@ -10,6 +11,7 @@ Partial Public Class uCtrlImgMnu
         Config = 99
     End Enum
 
+    'Declaration des variables
     Dim vImage As String
     Dim vText As String
     Dim vTag As String
@@ -36,15 +38,13 @@ Partial Public Class uCtrlImgMnu
             Return vImage
         End Get
         Set(ByVal value As String)
-            vImage = value
-            If File.Exists(value) And _type <> TypeOfMnu.Zone Then
-                Dim bmpImage As New BitmapImage()
-                bmpImage.BeginInit()
-                bmpImage.UriSource = New Uri(vImage, UriKind.Absolute)
-                bmpImage.EndInit()
-                Image.Source = bmpImage
-            ElseIf File.Exists(value) = False And _type <> TypeOfMnu.Zone Then
-                vImage = ""
+            If String.IsNullOrEmpty(value) = False Then
+                vImage = value
+                If File.Exists(value) And _type <> TypeOfMnu.Zone Then
+                    Image.Source = LoadBitmapImage(vImage)
+                ElseIf File.Exists(value) = False And _type <> TypeOfMnu.Zone Then
+                    vImage = ""
+                End If
             End If
         End Set
     End Property
@@ -92,7 +92,6 @@ Partial Public Class uCtrlImgMnu
         End Set
     End Property
 
-
     Public Property SubMenu As List(Of String)
         Get
             Return _submnu
@@ -101,19 +100,6 @@ Partial Public Class uCtrlImgMnu
             _submnu = value
         End Set
     End Property
-
-    'Public Function ConvertArrayToImage(ByVal value As Object) As Object
-    '    Dim ImgSource As BitmapImage = Nothing
-    '    Dim array As Byte() = TryCast(value, Byte())
-
-    '    If array IsNot Nothing Then
-    '        ImgSource = New BitmapImage()
-    '        ImgSource.BeginInit()
-    '        ImgSource.StreamSource = New MemoryStream(array)
-    '        ImgSource.EndInit()
-    '    End If
-    '    Return ImgSource
-    'End Function
 
     Public Property IDElement As String
         Get
@@ -132,7 +118,7 @@ Partial Public Class uCtrlImgMnu
             Return _Parametres
         End Get
         Set(ByVal value As List(Of String))
-            _Parametres = value
+            If value IsNot Nothing Then _Parametres = value
         End Set
     End Property
 

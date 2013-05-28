@@ -136,15 +136,7 @@ Class Window1
             _ImageBackGroundDefault = value
             If String.IsNullOrEmpty(_ImageBackGroundDefault) = False Then
                 If File.Exists(_ImageBackGroundDefault) Then
-                    Dim bmpImage As New BitmapImage()
-                    bmpImage.BeginInit()
-                    bmpImage.CacheOption = BitmapCacheOption.OnLoad
-                    bmpImage.CreateOptions = BitmapCreateOptions.DelayCreation
-                    bmpImage.UriSource = New Uri(_ImageBackGroundDefault, UriKind.Absolute)
-                    bmpImage.EndInit()
-                    If bmpImage.CanFreeze Then bmpImage.Freeze()
-                    ImgBackground.Source = bmpImage
-                    bmpImage = Nothing
+                    ImgBackground.Source = LoadBitmapImage(_ImageBackGroundDefault)
                 Else
                     ImgBackground.Source = Nothing
                     _ImageBackGroundDefault = ""
@@ -268,6 +260,17 @@ Class Window1
                     UriKind.RelativeOrAbsolute)
             mybuttonstyle = mystyles("DesignerItemStyle")
 
+
+            'Cree les sous répertoires s'ils nexistent pas
+            If System.IO.Directory.Exists(_MonRepertoire & "\Cache") = False Then
+                System.IO.Directory.CreateDirectory(_MonRepertoire & "\Cache")
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier Cache")
+            End If
+            If System.IO.Directory.Exists(_MonRepertoire & "\Cache\Images") = False Then
+                System.IO.Directory.CreateDirectory(_MonRepertoire & "\Images")
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier images")
+            End If
+
             'si le repertoire appdata n'existe pas on le crée et copie la config depuis le repertoire d'installation
             If Not System.IO.Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData) & "\HoMIWpF") Then
                 System.IO.Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData) & "\HoMIWpF")
@@ -297,6 +300,7 @@ Class Window1
                 _ConfigFile = _MonRepertoireAppData & "\Config\HoMIWpF.xml"
             End If
             Log(TypeLog.INFO, TypeSource.CLIENT, "LOADCONFIG", "Message: " & LoadConfig(_ConfigFile))
+            s = Nothing
 
             ' Create StackPanel and set child elements to horizontal orientation
             imgStackPnl.HorizontalAlignment = HorizontalAlignment.Center
@@ -417,10 +421,8 @@ Class Window1
                 For j As Integer = 0 To list.Item(0).Attributes.Count - 1
                     Select Case list.Item(0).Attributes.Item(j).Name
                         Case "friction"
-                            'm_friction = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", ","))
                             m_friction = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                         Case "speedtouch"
-                            'm_SpeedTouch = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", ","))
                             m_SpeedTouch = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                         Case Else
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
@@ -463,9 +465,9 @@ Class Window1
                         Case "top"
                             Me.Top = list.Item(0).Attributes.Item(j).Value
                         Case "width"
-                            Me.Width = list.Item(0).Attributes.Item(j).Value
+                            Me.Width = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
                         Case "height"
-                            Me.Height = list.Item(0).Attributes.Item(j).Value
+                            Me.Height = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
                         Case Else
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                     End Select
@@ -508,7 +510,9 @@ Class Window1
                                     Case uCtrlImgMnu.TypeOfMnu.LecteurMedia.ToString
                                         _MnuType = uCtrlImgMnu.TypeOfMnu.LecteurMedia
                                     Case uCtrlImgMnu.TypeOfMnu.None.ToString
-                                        _MnuType = uCtrlImgMnu.TypeOfMnu.Config
+                                        _MnuType = uCtrlImgMnu.TypeOfMnu.None
+                                    Case Else
+                                        _MnuType = uCtrlImgMnu.TypeOfMnu.None
                                 End Select
                             Case "icon"
                                 _MnuIcon = list.Item(j).Attributes.Item(k).Value
@@ -576,15 +580,15 @@ Class Window1
                             Case "y"
                                 x.Y = list.Item(j).Attributes.Item(k).Value
                             Case "width"
-                                x.Width = list.Item(j).Attributes.Item(k).Value
+                                x.Width = list.Item(j).Attributes.Item(k).Value.Replace(".", ",")
                             Case "height"
-                                x.Height = list.Item(j).Attributes.Item(k).Value
+                                x.Height = list.Item(j).Attributes.Item(k).Value.Replace(".", ",")
                             Case "angle"
-                                x.Rotation = list.Item(j).Attributes.Item(k).Value
+                                x.Rotation = list.Item(j).Attributes.Item(k).Value.Replace(".", ",")
                             Case "anglex"
-                                x.RotationX = list.Item(j).Attributes.Item(k).Value
+                                x.RotationX = list.Item(j).Attributes.Item(k).Value.Replace(".", ",")
                             Case "angley"
-                                x.RotationY = list.Item(j).Attributes.Item(k).Value
+                                x.RotationY = list.Item(j).Attributes.Item(k).Value.Replace(".", ",")
                             Case "showetiquette"
                                 x.ShowEtiquette = list.Item(j).Attributes.Item(k).Value
                             Case "showstatus"
@@ -1347,7 +1351,7 @@ Class Window1
             End If
 
         Catch ex As Exception
-            Log(TypeLog.INFO, TypeSource.CLIENT, "NewBtnMnu", "Erreur NewBtnMnu: " & ex.Message)
+            Log(TypeLog.INFO, TypeSource.CLIENT, "NewBtnMnu", "Erreur NewBtnMnu: " & ex.ToString)
             MessageBox.Show("Erreur lors de la création du bouton menu: " & ex.Message)
         End Try
     End Sub
@@ -1531,6 +1535,7 @@ Class Window1
             _CurrentIdZone = IdZone
             _zone = myService.ReturnZoneByID(IdSrv, IdZone)
 
+            'Affiche l'image background de la zone
             ImgBackground.Source = Nothing
             If _zone.Image.Contains("Zone_Image.png") = True Or _zone.Image.EndsWith("\defaut.jpg") = True Then
                 ImageBackGround = _MonRepertoire & "\Images\Fond-defaut.png"
