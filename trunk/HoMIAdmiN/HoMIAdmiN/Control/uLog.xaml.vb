@@ -19,12 +19,13 @@ Partial Public Class uLog
             Me.Cursor = Cursors.Wait
 
             If IsConnect = True Then
+                Dim MyRepAppData As String = System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData) & "\HoMIAdmiN"
                 Dim TargetFile As StreamWriter
-                TargetFile = New StreamWriter("log.txt", False)
+                TargetFile = New StreamWriter(MyRepAppData & "\log.txt", False)
                 TargetFile.Write(myService.ReturnLog)
                 TargetFile.Close()
 
-                Dim tr As TextReader = New StreamReader("log.txt")
+                Dim tr As TextReader = New StreamReader(MyRepAppData & "\log.txt")
                 Dim lineCount As Integer = 1
 
                 While tr.Peek() >= 0
@@ -58,6 +59,13 @@ Partial Public Class uLog
                         MessageBox.Show("Erreur lors de la ligne du fichier log: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
                     End Try
                 End While
+                Try
+                    If File.Exists(MyRepAppData & "\log.txt") Then
+                        File.Delete(MyRepAppData & "\log.txt")
+                    End If
+                Catch ex As Exception
+                    MessageBox.Show("Erreur lors de la suppression du fichier log temporaire: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                End Try
             End If
 
             Try
