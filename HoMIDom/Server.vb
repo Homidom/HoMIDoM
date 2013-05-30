@@ -1597,6 +1597,9 @@ Namespace HoMIDom
                         Next
                     End If
                     writer.WriteEndElement()
+                    'on met à jour l'ID du serveur dans les drivers au cas ou il aurait changé
+                    Dim _drv As IDriver = ReturnDrvById(_IdSrv, _ListDrivers.Item(i).ID)
+                    If _drv IsNot Nothing Then _drv.IdSrv = _IdSrv
                 Next
                 writer.WriteEndElement()
 
