@@ -2912,7 +2912,7 @@ Imports System.Media
             Dim adresse As String = ""
             Dim valeur As String = ""
 
-            Select recbuf(REMOTE.subtype)
+            Select Case recbuf(REMOTE.subtype)
                 Case REMOTE.sTypeATI 'ATI Remote Wonder
                     adresse = recbuf(REMOTE.id).ToString
                     Select Case recbuf(REMOTE.cmnd)
@@ -3924,7 +3924,7 @@ Imports System.Media
         Try
             Dim adresse As String = ""
             Dim valeur As String = ""
-            Select recbuf(RFXSENSOR.subtype)
+            Select Case recbuf(RFXSENSOR.subtype)
                 Case RFXSENSOR.sTypeTemp 'Temperature
                     adresse = recbuf(RFXSENSOR.id).ToString
                     If (recbuf(RFXSENSOR.msg1) And &H80) = 0 Then 'positive temperature?
@@ -5197,6 +5197,10 @@ Imports System.Media
             Dim listedevices As New ArrayList
             'on cherche un composant de type batterie avec la même adresse que le composant, si trouvé, on modifie sa valeur
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "BATTERIE", Me._ID, True)
+            If IsNothing(listedevices) Then
+                WriteLog("ERR: Communication impossible avec le serveur, l'IDsrv est peut être erroné : " & _IdSrv)
+                Exit Sub
+            End If
             If (listedevices.Count = 1) Then
                 'listedevices.Item(0).Value = "Vide"
                 listedevices.Item(0).Value = valeur
@@ -5238,6 +5242,10 @@ Imports System.Media
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
+                If IsNothing(listedevices) Then
+                    WriteLog("ERR: Communication impossible avec le serveur, l'IDsrv est peut être erroné : " & _IdSrv)
+                    Exit Sub
+                End If
                 If (listedevices.Count = 1) Then
                     'un device trouvé on maj la value
                     If valeur = "ON" Then
@@ -5287,6 +5295,10 @@ Imports System.Media
             'Recherche si un device affecté
             Dim listedevices As New ArrayList
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
+            If IsNothing(listedevices) Then
+                WriteLog("ERR: Communication impossible avec le serveur, l'IDsrv est peut être erroné : " & _IdSrv)
+                Exit Sub
+            End If
             If (listedevices.Count = 1) Then
                 'un device trouvé 
                 If STRGS.InStr(valeur, "CFG:") > 0 Then

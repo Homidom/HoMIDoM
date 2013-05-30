@@ -774,6 +774,10 @@ Imports ZibaseDll
             'Recherche si un device affecté
             Dim listedevices As New ArrayList
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
+            If IsNothing(listedevices) Then
+                WriteLog("ERR: Communication impossible avec le serveur, l'IDsrv est peut être erroné : " & _IdSrv)
+                Exit Sub
+            End If
             If (listedevices.Count >= 1) Then
                 'on a trouvé un ou plusieurs composants avec cette adresse, on prend le premier
                 WriteLog("ERR: " & listedevices.Item(0).Name & " (" & adresse & ") : Battery Empty")
@@ -803,6 +807,10 @@ Imports ZibaseDll
             'Recherche si un device affecté
             Dim listedevices As New ArrayList
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
+            If IsNothing(listedevices) Then
+                WriteLog("ERR: Communication impossible avec le serveur, l'IDsrv est peut être erroné : " & _IdSrv)
+                Exit Sub
+            End If
             If (listedevices.Count = 1) Then
                 'un device trouvé 
                 If STRGS.InStr(valeur, "CFG:") > 0 Then

@@ -3142,6 +3142,10 @@ Imports System.Globalization
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
+                If IsNothing(listedevices) Then
+                    WriteLog("ERR: Communication impossible avec le serveur, l'IDsrv est peut être erroné : " & _IdSrv)
+                    Exit Sub
+                End If
                 If (listedevices.Count >= 1) Then
                     'on a trouvé un ou plusieurs composants avec cette adresse, on prend le premier
                     WriteLog("ERR: " & listedevices.Item(0).Name & " (" & adresse & ") : Battery Empty")
@@ -3172,6 +3176,10 @@ Imports System.Globalization
             Dim listedevices As New ArrayList
             'on cherche un composant de type batterie avec la même adresse que le composant, si trouvé, on modifie sa valeur
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "BATTERIE", Me._ID, True)
+            If IsNothing(listedevices) Then
+                WriteLog("ERR: Communication impossible avec le serveur, l'IDsrv est peut être erroné : " & _IdSrv)
+                Exit Sub
+            End If
             If (listedevices.Count = 1) Then
                 'listedevices.Item(0).Value = "Vide"
                 listedevices.Item(0).Value = valeur
@@ -3213,6 +3221,10 @@ Imports System.Globalization
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
+                If IsNothing(listedevices) Then
+                    WriteLog("ERR: Communication impossible avec le serveur, l'IDsrv est peut être erroné : " & _IdSrv)
+                    Exit Sub
+                End If
                 If (listedevices.Count = 1) Then
                     'un device trouvé 
                     If STRGS.InStr(valeur, "CFG:") > 0 Then
@@ -3237,6 +3249,10 @@ Imports System.Globalization
                 Else
                     'on vérifie si le device est configuré en RFXMitter
                     listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, "C2B6AA22-77E7-11E0-A193-47D34824019B", True)
+                    If IsNothing(listedevices) Then
+                        WriteLog("ERR: Communication impossible avec le serveur, l'IDsrv est peut être erroné : " & _IdSrv)
+                        Exit Sub
+                    End If
                     If (listedevices.Count = 1) Then
                         'un device trouvé on maj la value si la durée entre les deux receptions est > à 1.5s
                         If (DateTime.Now - Date.Parse(listedevices.Item(0).LastChange)).TotalMilliseconds > 1500 Then

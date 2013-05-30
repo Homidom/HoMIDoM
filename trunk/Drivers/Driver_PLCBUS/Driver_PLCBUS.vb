@@ -1181,6 +1181,10 @@ Imports System.IO.Ports
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
+                If IsNothing(listedevices) Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "PLCBUS Process", "Communication impossible avec le serveur, l'IDsrv est peut être erroné : " & _IdSrv)
+                    Exit Sub
+                End If
                 'un device trouvé on maj la value
                 If (listedevices.Count = 1) Then
                     'correction valeur pour correspondre au type de value

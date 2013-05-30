@@ -1389,6 +1389,10 @@ Imports System.Globalization
             'Recherche si un device affecté
             Dim listedevices As New ArrayList
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
+            If IsNothing(listedevices) Then
+                WriteLog("ERR: Communication impossible avec le serveur, l'IDsrv est peut être erroné : " & _IdSrv)
+                Exit Sub
+            End If
             If (listedevices.Count = 1) Then
                 'un device trouvé on maj la value
                 'correction valeur pour correspondre au type de value
