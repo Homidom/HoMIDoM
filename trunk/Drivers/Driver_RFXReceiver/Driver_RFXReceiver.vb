@@ -1105,21 +1105,21 @@ Imports System.Globalization
                     Case &H4 : valeur = "ON" '"S DWS Visonic door sensor Alert "
                     Case &H5
                         valeur = "ON" '"S DWS Visonic door sensor Alert (battery low)"
-                        WriteBattery(adresse)
+                        WriteBattery(adresse, "0")
                     Case &H84 : valeur = "OFF" '"S DWS Visonic door sensor Normal"
                     Case &H85
                         valeur = "OFF" '"S DWS Visonic door sensor Normal (battery low)"
-                        WriteBattery(adresse)
+                        WriteBattery(adresse, "0")
                     Case &H4C : valeur = "ON" '"S DWS Visonic motion sensor Alert + Tamper"
                     Case &HCC : valeur = "OFF" '"S DWS Visonic motion sensor Normal + Tamper)"
                     Case &HC : valeur = "ON" '"S DWS Visonic motion sensor Alert "
                     Case &HD
                         valeur = "ON" '"S DWS Visonic motion sensor Alert (battery low)"
-                        WriteBattery(adresse)
+                        WriteBattery(adresse, "0")
                     Case &H8C : valeur = "OFF" '"S DWS Visonic motion sensor Normal"
                     Case &H8D
                         valeur = "OFF" '"S DWS Visonic motion sensor Normal (battery low)"
-                        WriteBattery(adresse)
+                        WriteBattery(adresse, "0")
                     Case &HE0
                         If recbuf(0) = &HFF Then
                             WriteLog("X10Security : Master receiver jamming detected")
@@ -2154,7 +2154,7 @@ Imports System.Globalization
                 'valeur = valeur + " " + VB.Right("0" & Hex(recbuf(0)), 2) + "-" + VB.Right("0" & Hex(recbuf(1)), 2) + "-" + VB.Right("0" & Hex(recbuf(2)), 2) + "-" + VB.Right("0" & Hex(recbuf(3)), 2) + "-" + VB.Right("0" & Hex(recbuf(4)), 2) + "-" + VB.Right("0" & Hex(recbuf(5)), 2)
                 valeur = valeur & " (" & VB.Right("0" & Hex(recbuf(2)), 2) & ")"
                 WriteRetour(adresse, "", valeur)
-                If batteryempty Then WriteBattery(adresse)
+                If batteryempty Then WriteBattery(adresse, "0") Else WriteBattery(adresse, "100")
             End If
         Catch ex As Exception
             WriteLog("ERR: RFXCOM processx10security : " & ex.Message)
@@ -2240,7 +2240,7 @@ Imports System.Globalization
                     valeur = "ERR: wrong value in temperature field=" & Hex(recbuf(5)) & "." & Hex(recbuf(4) >> 4)
                 End If
                 WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
-                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
+                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse, "0") Else WriteBattery(adresse, "100")
                 'checksum8()
 
             ElseIf recbuf(0) = &HEA And recbuf(1) = &H4C And recbits >= 60 Then
@@ -2254,7 +2254,7 @@ Imports System.Globalization
                     valeur = CStr(0 - (CSng(Hex(recbuf(5))) + CSng(Hex(recbuf(4) >> 4)) / 10))
                 End If
                 WriteRetour(adresse, ListeDevices.TEMPERATURE.ToString, valeur)
-                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
+                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse, "0") Else WriteBattery(adresse, "100")
                 'checksumw()
 
             ElseIf recbuf(0) = &H1A And recbuf(1) = &H2D And recbits >= 72 Then
@@ -2272,7 +2272,7 @@ Imports System.Globalization
                 WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
-                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
+                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse, "0") Else WriteBattery(adresse, "100")
                 'checksum8()
 
             ElseIf recbuf(0) = &HFA And recbuf(1) = &H28 And recbits >= 72 Then
@@ -2290,7 +2290,7 @@ Imports System.Globalization
                 WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
-                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
+                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse, "0") Else WriteBattery(adresse, "100")
                 'checksum8()
 
             ElseIf (recbuf(0) And &HF) = &HA And recbuf(1) = &HCC And recbits >= 72 Then
@@ -2309,7 +2309,7 @@ Imports System.Globalization
                 WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
-                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
+                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse, "0") Else WriteBattery(adresse, "100")
                 'checksum8()
 
             ElseIf recbuf(0) = &HCA And recbuf(1) = &H2C And recbits >= 72 Then
@@ -2328,7 +2328,7 @@ Imports System.Globalization
                 WriteRetour(adresse, ListeDevices.HUMIDITE.ToString, valeur)
                 'valeur = wrhum(recbuf(7) And &HC0)
                 'WriteRetour(adresse & "_HUM", valeur)
-                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
+                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse, "0") Else WriteBattery(adresse, "100")
                 'checksum8()
 
             ElseIf recbuf(0) = &HFA And recbuf(1) = &HB8 And recbits >= 72 Then
@@ -2393,7 +2393,7 @@ Imports System.Globalization
 
 
 
-                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
+                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse, "0") Else WriteBattery(adresse, "100")
                 'checksum10()
 
             ElseIf recbuf(0) = &H5A And recbuf(1) = &H6D And recbits >= 88 Then
@@ -2441,7 +2441,7 @@ Imports System.Globalization
 
 
 
-                If (recbuf(4) And &H4) <> 0 Then WriteBattery(adresse)
+                If (recbuf(4) And &H4) <> 0 Then WriteBattery(adresse, "0") Else WriteBattery(adresse, "100")
                 'checksum2()
 
             ElseIf recbuf(0) = &H2A And recbuf(1) = &H19 And recbits >= 84 Then
@@ -2453,7 +2453,7 @@ Imports System.Globalization
                 valeur = (CSng(Hex(recbuf(7))) / 100 + CSng(Hex(recbuf(6) >> 4)) / 1000)
                 valeur = CStr(Round(((valeur + (CSng(Hex(recbuf(9) And &HF)) * 100 + CSng(Hex(recbuf(8))))) * 25.4), 2))
                 WriteRetour(adresse, ListeDevices.PLUIETOTAL.ToString, valeur) 'mm
-                If (recbuf(4) And &H4) <> 0 Then WriteBattery(adresse)
+                If (recbuf(4) And &H4) <> 0 Then WriteBattery(adresse, "0") Else WriteBattery(adresse, "100")
                 'checksumr()
 
             ElseIf recbuf(0) = &H6 And recbuf(1) = &HE4 And recbits >= 84 Then
@@ -2465,7 +2465,7 @@ Imports System.Globalization
                 valeur = (CSng(Hex(recbuf(7))) / 100 + CSng(Hex(recbuf(6) >> 4)) / 1000)
                 valeur = CStr(Round(((valeur + (CSng(Hex(recbuf(9) And &HF)) * 100 + CSng(Hex(recbuf(8))))) * 25.4), 2))
                 WriteRetour(adresse, ListeDevices.PLUIETOTAL.ToString, valeur) 'mm
-                If (recbuf(4) And &H4) <> 0 Then WriteBattery(adresse)
+                If (recbuf(4) And &H4) <> 0 Then WriteBattery(adresse, "0") Else WriteBattery(adresse, "100")
                 'checksumr()
 
             ElseIf recbuf(0) = &H1A And recbuf(1) = &H99 And recbits >= 80 Then
@@ -2546,7 +2546,7 @@ Imports System.Globalization
                 'Else
                 '    WriteRetour(adresse & "_UVL", "Dangerous") 'en level
                 'End If
-                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
+                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse, "0") Else WriteBattery(adresse, "100")
                 'checksumw()
 
             ElseIf recbuf(0) = &HDA And recbuf(1) = &H78 And recbits >= 64 Then
@@ -2566,7 +2566,7 @@ Imports System.Globalization
                 'Else
                 '    WriteRetour(adresse & "_UVL", "Dangerous") 'en level
                 'End If
-                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse)
+                If (recbuf(4) And &H4) = &H4 Then WriteBattery(adresse, "0") Else WriteBattery(adresse, "100")
                 'checksum7()
 
             ElseIf recbuf(0) = &H8A And recbuf(1) = &HEC And recbits >= 96 Then
@@ -3130,7 +3130,7 @@ Imports System.Globalization
         End Try
     End Sub
 
-    Private Sub WriteBattery(ByVal adresse As String)
+    Private Sub WriteBattery2(ByVal adresse As String)
         Try
             'Dim tabletmp() As DataRow
 
@@ -3153,6 +3153,45 @@ Imports System.Globalization
 
                 End If
             End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER WriteBattery", ex.Message & " --> " & adresse)
+        End Try
+    End Sub
+
+    Private Sub WriteBattery(ByVal adresse As String, ByVal valeur As String)
+        Try
+            'Dim tabletmp() As DataRow
+
+            'log tous les paquets en mode debug
+            If _DEBUG And (valeur = "vide" Or valeur = "0") Then WriteLog("DBG: WriteBattery : receive from " & adresse)
+
+            If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
+            If DateTime.Now < DateAdd(DateInterval.Second, 10, dateheurelancement) Then Exit Sub 'on ne traite rien pendant les 10 premieres secondes
+
+            'Recherche si un device affecté
+            Dim listedevices As New ArrayList
+            'on cherche un composant de type batterie avec la même adresse que le composant, si trouvé, on modifie sa valeur
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "BATTERIE", Me._ID, True)
+            If (listedevices.Count = 1) Then
+                'listedevices.Item(0).Value = "Vide"
+                listedevices.Item(0).Value = valeur
+            Else
+                'pas de composant Batterie trouvé avec la même adresse, on va loguer si batterie vide
+                If valeur = "vide" Or valeur = "0" Then
+                    listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
+                    If (listedevices.Count >= 1) Then
+                        'on a trouvé un ou plusieurs composants avec cette adresse, on prend le premier
+                        WriteLog("ERR: " & listedevices.Item(0).Name & " (" & adresse & ") : Battery Empty")
+                    Else
+                        'device pas trouvé
+                        WriteLog("ERR: Device non trouvé : " & adresse & ": Battery Empty")
+
+                        'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
+
+                    End If
+                End If
+            End If
+            listedevices = Nothing
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXCOM_RECEIVER WriteBattery", ex.Message & " --> " & adresse)
         End Try
