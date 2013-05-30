@@ -21,7 +21,7 @@ Imports System.Threading.Tasks
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "80964F08-9E3C-11E2-8A55-A64B6188709B" 'ne pas modifier car utilisé dans le code du serveur
-    Dim _Nom As String = "KNX/EIBD" 'Nom du driver à afficher
+    Dim _Nom As String = "KNX EIBD" 'Nom du driver à afficher
     Dim _Enable As Boolean = False 'Activer/Désactiver le driver
     Dim _Description As String = "Driver KNX over EIBD" 'Description du driver
     Dim _StartAuto As Boolean = False 'True si le driver doit démarrer automatiquement

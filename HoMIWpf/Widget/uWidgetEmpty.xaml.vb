@@ -2053,6 +2053,7 @@ Public Class uWidgetEmpty
                             GetStatusPicture = _MonRepertoire & "\Images\Devices\volet-0.png"
                         End If
                     Case Else
+                        GetStatusPicture = Filename
                 End Select
             ElseIf _file.Contains("_on") = True Or _file.Contains("_off") = True Then
                 ' On recherche s'il existe des images de type double état (ON/OFF) et si oui:
