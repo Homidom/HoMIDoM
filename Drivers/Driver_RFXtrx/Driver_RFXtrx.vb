@@ -4751,10 +4751,14 @@ Imports System.Media
                 Dim adressetab As String() = adresse.Split(CChar("-"))
                 kar(LIGHTING6.groupcode) = convert_housecode(adressetab(1).Substring(0, 1))
                 kar(LIGHTING6.unitcode) = CByte(adressetab(1).Substring(1, 1))
+                'on repasse pour id1/2 à l'ancienne methode car la nouvelle ne marche pas de façon trés stable à priori
                 'kar(LIGHTING6.id1) = CByte(adressetab(0).Substring(0, 2))
                 'kar(LIGHTING6.id2) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(2, 2)))
-                kar(LIGHTING6.id1) = convert_id(adressetab(0).Substring(0, 2))
-                kar(LIGHTING6.id2) = convert_id(adressetab(0).Substring(2, 2))
+                'kar(LIGHTING6.id1) = convert_id(adressetab(0).Substring(0, 2))
+                'kar(LIGHTING6.id2) = convert_id(adressetab(0).Substring(2, 2))
+                kar(LIGHTING6.id1) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(0, 2)))
+                kar(LIGHTING6.id2) = CByte(Array.IndexOf(adressetoint, adressetab(0).Substring(2, 2)))
+
             Catch ex As Exception
                 WriteLog("ERR: Send lighting6 Exception : Adresse incorrecte")
             End Try
