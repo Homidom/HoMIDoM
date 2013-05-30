@@ -596,6 +596,7 @@ Namespace HoMIDom
                                         _drv.COM = list.Item(j).Attributes.GetNamedItem("com").Value
                                         _drv.Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
                                         _drv.Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
+                                        _drv.IdSrv = _IdSrv
 
                                         If Not IsNothing(list.Item(j).Attributes.GetNamedItem("autodiscover")) Then
                                             _drv.AutoDiscover = list.Item(j).Attributes.GetNamedItem("autodiscover").Value

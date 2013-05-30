@@ -272,6 +272,12 @@ Class Window1
                     MessageBox.Show("Erreur lors de la connexion au serveur sélectionné: " & Chr(10) & Name & " - " & IP & ":" & Port & vbCrLf & "Erreur: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
                     Return -1
                 End Try
+
+                If myService.GetIdServer(IdSrv) = "99" Then
+                    MessageBox.Show("L'ID du serveur est erroné, impossible de communiquer avec celui-ci", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Return -1
+                End If
+
                 IsConnect = True
                 Tabcontrol1.SelectedIndex = 0
                 My.Settings.SaveRealTime = myService.GetSaveRealTime
