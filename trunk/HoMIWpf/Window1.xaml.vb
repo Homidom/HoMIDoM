@@ -1291,34 +1291,38 @@ Class Window1
             myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
             myService = myChannelFactory.CreateChannel()
             Try
-                myService.GetServerVersion()
-                IsConnect = True
+                If myService.GetIdServer(IdSrv) = "99" Then
+                    MessageBox.Show("L'ID du serveur est erroné, impossible de communiquer avec celui-ci", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    IsConnect = False
+                Else
+                    myService.GetServerVersion()
+                    IsConnect = True
 
-                MnuMacro.Items.Clear()
-                For Each _mac As Macro In myService.GetAllMacros(IdSrv)
-                    Dim mnu As New MenuItem
-                    mnu.Tag = _mac.ID
-                    mnu.Header = _mac.Nom
-                    AddHandler mnu.Click, AddressOf MnuExecuteMacro
-                    MnuMacro.Items.Add(mnu)
-                Next
-
-                MnuLastError.Items.Clear()
-                Dim list As List(Of String) = myService.GetLastLogsError
-                If list.Count > 0 Then
-                    Dim _tool As String = ""
-
-                    For Each logerror As String In list
-                        If String.IsNullOrEmpty(logerror) = False Then
-                            Dim mnu As New MenuItem
-                            mnu.Header = logerror
-                            mnu.FontSize = 10
-                            MnuLastError.Items.Add(mnu)
-                        End If
+                    MnuMacro.Items.Clear()
+                    For Each _mac As Macro In myService.GetAllMacros(IdSrv)
+                        Dim mnu As New MenuItem
+                        mnu.Tag = _mac.ID
+                        mnu.Header = _mac.Nom
+                        AddHandler mnu.Click, AddressOf MnuExecuteMacro
+                        MnuMacro.Items.Add(mnu)
                     Next
-                End If
-                list = Nothing
 
+                    MnuLastError.Items.Clear()
+                    Dim list As List(Of String) = myService.GetLastLogsError
+                    If list.Count > 0 Then
+                        Dim _tool As String = ""
+
+                        For Each logerror As String In list
+                            If String.IsNullOrEmpty(logerror) = False Then
+                                Dim mnu As New MenuItem
+                                mnu.Header = logerror
+                                mnu.FontSize = 10
+                                MnuLastError.Items.Add(mnu)
+                            End If
+                        Next
+                    End If
+                    list = Nothing
+                End If
             Catch ex As Exception
                 IsConnect = False
             End Try
