@@ -279,6 +279,14 @@ Namespace HoMIDom
                 _Var.Add(y)
             End Sub
 
+            Public Function AddNewVar(ByVal Var As TemplateVar) As Integer
+                Try
+
+                Catch ex As Exception
+
+                End Try
+            End Function
+
             ''' <summary>
             ''' Démarrer le template
             ''' </summary>
