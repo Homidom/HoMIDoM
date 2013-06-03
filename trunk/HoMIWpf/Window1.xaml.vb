@@ -352,6 +352,11 @@ Class Window1
     ''' <returns></returns>
     ''' <remarks></remarks>
     Public Function LoadConfig(ByVal Fichier As String) As String
+        _ListElement.Clear()
+        _ListMnu.Clear()
+        imgStackPnl.Children.Clear()
+        ScrollViewer1.Content = Nothing
+
         'Copy du fichier de config avant chargement
         Try
             If File.Exists(Fichier.Replace(".xml", ".bak")) = True Then File.Delete(Fichier.Replace(".xml", ".bak"))
@@ -461,7 +466,7 @@ Class Window1
                         Case "widthpassword"
                             _WithPassword = list.Item(0).Attributes.Item(j).Value
                         Case "password"
-                            _Password = list.Item(0).Attributes.Item(j).Value
+                            _PassWord = list.Item(0).Attributes.Item(j).Value
                         Case "left"
                             Me.Left = list.Item(0).Attributes.Item(j).Value
                         Case "top"
@@ -1337,6 +1342,10 @@ Class Window1
     'Creation  du menu
     Private Sub NewBtnMnu(ByVal Label As String, ByVal type As uCtrlImgMnu.TypeOfMnu, Optional ByVal Parametres As List(Of String) = Nothing, Optional ByVal Defaut As Boolean = False, Optional ByVal Tag As String = "", Optional ByVal Icon As String = "", Optional ByVal IdElement As String = "", Optional ByVal Visible As Boolean = False)
         Try
+            For Each _Mnu In _ListMnu
+                If _Mnu.Name = Label And _Mnu.Type = type Then Exit Sub
+            Next
+
             Dim ctrl As New uCtrlImgMnu
             ctrl.Type = type
             ctrl.Defaut = Defaut
@@ -1493,6 +1502,8 @@ Class Window1
     Private Sub LoadZones()
         Try
             Dim cntNewZone As Integer = 0
+
+            If IsConnect = False Then Exit Sub
 
             For Each _zon In myService.GetAllZones(IdSrv)
                 If ListMnu.Count = 0 Then
