@@ -52,6 +52,10 @@ Public Class WConfig
         TxtIP.Text = Frm.IP
         TxtPort.Text = Frm.PortSOAP
         TxtID.Text = IdSrv
+
+        ListMnu.Items.Clear()
+        MyListMnu.Clear()
+
         For i As Integer = 0 To Frm.ListMnu.Count - 1
             Dim x As uCtrlImgMnu = Frm.ListMnu.Item(i)
             ListMnu.Items.Add(x.Text)
