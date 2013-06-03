@@ -883,6 +883,10 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Commandes As New List(Of Telecommande.Commandes)
 
-
+        ''' <summary>
+        ''' Liste des noms des variables IR (device IR)
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Variables As New List(Of Telecommande.TemplateVar)
     End Class
 End Namespace
