@@ -77,7 +77,7 @@ Public Class WConfig
             End If
             listesversionsprogrammes.Text &= " Répertoire utilisé par le client WPF: " & My.Application.Info.DirectoryPath.ToString & vbCrLf
         Catch ex As Exception
-            MessageBox.Show("Erreur New lors de l'affichage des programmes: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur New lors de l'affichage des programmes: " & ex.ToString, "Erreur", "WConfig_New")
         End Try
     End Sub
 
@@ -167,7 +167,7 @@ Public Class WConfig
             End If
 
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.Message, "Erreur")
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur: " & ex.Message, "Erreur", "ListMnu_SelectionChanged")
         End Try
     End Sub
 
@@ -185,7 +185,7 @@ Public Class WConfig
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur WConfig.Button1_Click: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur WConfig.Button1_Click: " & ex.ToString, "Erreur", "WConfig.Button1_Click")
         End Try
     End Sub
 
@@ -238,7 +238,7 @@ Public Class WConfig
             End Select
             StkProperty.Visibility = Windows.Visibility.Hidden
         Catch ex As Exception
-            MessageBox.Show("Erreur WConfig.BtnOkMnu_Click: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur WConfig.BtnOkMnu_Click: " & ex.ToString, "Erreur", "WConfig.BtnOkMnu_Click")
         End Try
     End Sub
 
@@ -303,7 +303,7 @@ Public Class WConfig
             ListMnu.Items.RemoveAt(ListMnu.SelectedIndex)
             StkProperty.Visibility = Windows.Visibility.Hidden
         Catch ex As Exception
-            MessageBox.Show("Erreur WConfig.MenuItem1_Click: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur WConfig.MenuItem1_Click: " & ex.ToString, "Erreur", "WConfig.MenuItem1_Click")
         End Try
     End Sub
 

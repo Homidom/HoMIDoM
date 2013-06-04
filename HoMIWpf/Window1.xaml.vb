@@ -242,7 +242,7 @@ Class Window1
 
             ImageBackGround = _ImageBackGroundDefault
         Catch ex As Exception
-            MessageBox.Show("Erreur UnloadControl: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur UnloadControl: " & ex.Message, "Erreur", "UnloadControl")
         End Try
     End Sub
 
@@ -266,11 +266,11 @@ Class Window1
             'Cree les sous répertoires s'ils nexistent pas
             If System.IO.Directory.Exists(_MonRepertoire & "\Cache") = False Then
                 System.IO.Directory.CreateDirectory(_MonRepertoire & "\Cache")
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier Cache")
+                Log(TypeLog.INFO, TypeSource.CLIENT, "Start", "Création du dossier Cache")
             End If
             If System.IO.Directory.Exists(_MonRepertoire & "\Cache\Images") = False Then
                 System.IO.Directory.CreateDirectory(_MonRepertoire & "\Images")
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier images")
+                Log(TypeLog.INFO, TypeSource.CLIENT, "Start", "Création du dossier images")
             End If
 
             'si le repertoire appdata n'existe pas on le crée et copie la config depuis le repertoire d'installation
@@ -312,7 +312,7 @@ Class Window1
             If IsConnect = True Then
                 LoadZones()
             Else
-                MessageBox.Show("Pas de connexion au serveur. Veuillez entrer les informations de connexion dans l'onglet serveur de la fenêtre de configuration.", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
+                AfficheMessageAndLog(Fonctions.TypeLog.MESSAGE, "Pas de connexion au serveur. Veuillez entrer les informations de connexion dans l'onglet serveur de la fenêtre de configuration.", "Information", "New")
                 _ImageBackGroundDefault = _MonRepertoire & "\Images\Fond-logo.png"
                 Me.Show()
                 MnuConfig_Click(Me, Nothing)
@@ -341,7 +341,7 @@ Class Window1
             myxml = Nothing
             frmMere = Me
         Catch ex As Exception
-            MessageBox.Show("Erreur lors du lancement de l'application: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur lors du lancement de l'application: " & ex.Message, "Erreur", "New")
         End Try
     End Sub
 
@@ -362,14 +362,14 @@ Class Window1
             If File.Exists(Fichier.Replace(".xml", ".bak")) = True Then File.Delete(Fichier.Replace(".xml", ".bak"))
             If File.Exists(Fichier) = True Then
                 File.Copy(Fichier, Fichier.Replace(".xml", ".bak"))
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Création du backup (.bak) du fichier de config avant chargement")
+                Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Création du backup (.bak) du fichier de config avant chargement")
             Else
                 ' Le fichier de config est inexistant. Premier lancement de WPF.
                 LoadConfig = "Fichier de configuration inexistant."
                 Exit Function
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur lors du lancement de l'application: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur lors du lancement de l'application: " & ex.Message, "Erreur", "LoadConfig")
         End Try
 
         Try
@@ -385,7 +385,7 @@ Class Window1
 
             myxml = New XML(Fichier)
 
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement du fichier config: " & Fichier)
+            Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Chargement du fichier config: " & Fichier)
 
             '******************************************
             'on va chercher les paramètres du serveur
@@ -401,13 +401,13 @@ Class Window1
                         Case "id"
                             IdSrv = list.Item(0).Attributes.Item(j).Value
                         Case Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                            Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                     End Select
                 Next
             Else
-                MessageBox.Show("Il manque les paramètres du client WPF dans le fichier de config !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Il manque les paramètres du client WPF dans le fichier de config !!", "Erreur", "LoadConfig")
             End If
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres du client WPF chargés")
+            Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Paramètres du client WPF chargés")
 
             'ON peut se connecter
             'Connexion à Homidom
@@ -432,13 +432,13 @@ Class Window1
                         Case "speedtouch"
                             m_SpeedTouch = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                         Case Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                            Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                     End Select
                 Next
             Else
-                MessageBox.Show("Il manque les paramètres du client WPF dans le fichier de config !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Il manque les paramètres du client WPF dans le fichier de config !!", "Erreur", "LoadConfig")
             End If
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres tactiles chargés")
+            Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Paramètres tactiles chargés")
 
             '******************************************
             'on va chercher les paramètres interface
@@ -476,13 +476,13 @@ Class Window1
                         Case "height"
                             Me.Height = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
                         Case Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                            Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                     End Select
                 Next
             Else
-                MessageBox.Show("Il manque les paramètres du client WPF dans le fichier de config !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Il manque les paramètres du client WPF dans le fichier de config !!", "Erreur", "LoadConfig")
             End If
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres de l'interface chargés")
+            Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Paramètres de l'interface chargés")
 
             '******************************************
             'on va chercher les menus
@@ -537,9 +537,8 @@ Class Window1
                     If _MnuType <> uCtrlImgMnu.TypeOfMnu.Config Then NewBtnMnu(_MnuNom, _MnuType, _MnuParam, _Mnudefaut, , _MnuIcon, _MnuIDElement, _MnuVisible)
                 Next
             Else
-                'MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
             End If
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Menus chargés")
+            Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Menus chargés")
 
             '******************************************
             'on va chercher les éléments
@@ -726,10 +725,9 @@ Class Window1
                     End If
                 Next
             Else
-                'MsgBox("Il manque les paramètres du client WPF dans le fichier de config !!", MsgBoxStyle.Exclamation, "Erreur Client WPF")
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Il manque des paramètres dans le fichier de configuration du client WPF")
+                Log(TypeLog.ERREUR, TypeSource.CLIENT, "LoadConfig", "Il manque des paramètres dans le fichier de configuration du client WPF")
             End If
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Eléments chargés")
+            Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Eléments chargés")
             '**************
             'Next
             'End If
@@ -743,7 +741,7 @@ Class Window1
             Return " Chargement de la configuration terminée"
 
         Catch ex As Exception
-            MessageBox.Show("ERREUR LOADCONFIG " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "ERREUR LOADCONFIG " & ex.Message, "Erreur", "LoadConfig")
             Return " Erreur de chargement de la config: " & ex.Message
         End Try
     End Function
@@ -753,15 +751,15 @@ Class Window1
     Private Sub SaveConfig(ByVal Fichier As String)
         Try
 
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde de la config sous le fichier " & Fichier)
+            Log(TypeLog.INFO, TypeSource.CLIENT, "SaveConfig", "Sauvegarde de la config sous le fichier " & Fichier)
 
             ''Copy du fichier de config avant sauvegarde
             Try
                 If File.Exists(Fichier.Replace(".xml", ".sav")) = True Then File.Delete(Fichier.Replace(".xml", ".sav"))
                 File.Copy(Fichier, Fichier.Replace(".xml", ".sav"))
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Création de sauvegarde (.sav) du fichier de config avant sauvegarde")
+                Log(TypeLog.INFO, TypeSource.CLIENT, "SaveConfig", "Création de sauvegarde (.sav) du fichier de config avant sauvegarde")
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.CLIENT, "SaveConfig", "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
             End Try
 
             ''Creation du fichier XML
@@ -772,7 +770,7 @@ Class Window1
 
             writer.WriteStartElement("homidom")
 
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des paramètres du client WPF")
+            Log(TypeLog.INFO, TypeSource.CLIENT, "SaveConfig", "Sauvegarde des paramètres du client WPF")
             ''------------ server
             writer.WriteStartElement("server")
             writer.WriteStartAttribute("portsoap")
@@ -1147,132 +1145,13 @@ Class Window1
 
             writer.WriteEndDocument()
             writer.Close()
-            Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde terminée")
+            Log(TypeLog.INFO, TypeSource.CLIENT, "SaveConfig", "Sauvegarde terminée")
         Catch ex As Exception
-            MessageBox.Show("ERREUR SAVECONFIG " & ex.Message, "Erreur Client WPF", MessageBoxButton.OK, MessageBoxImage.Error)
-            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", " Erreur de sauvegarde de la configuration: " & ex.Message)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "ERREUR SAVECONFIG " & ex.Message, "Erreur", "SaveConfig")
         End Try
 
     End Sub
 
-#End Region
-
-#Region "Log"
-    Dim _File As String = _MonRepertoireAppData & "\logs\logClientWPF.xml" 'Représente le fichier log: ex"C:\users\xxx\homiwpf\logs\log.xml"
-    Dim _MaxFileSize As Long = 5120 'en Koctets
-
-    ''' <summary>
-    ''' Permet de connaître le chemin du fichier log
-    ''' </summary>
-    ''' <value></value>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public ReadOnly Property FichierLog() As String
-        Get
-            Return _File
-        End Get
-    End Property
-
-    ''' <summary>
-    ''' Retourne/Fixe la Taille max du fichier log en Ko
-    ''' </summary>
-    ''' <value></value>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public Property MaxFileSize() As Long
-        Get
-            Return _MaxFileSize
-        End Get
-        Set(ByVal value As Long)
-            _MaxFileSize = value
-        End Set
-    End Property
-
-    ''' <summary>Indique le type du Log: si c'est une erreur, une info, un message...</summary>
-    ''' <remarks></remarks>
-    Public Enum TypeLog
-        INFO = 1                    'divers
-        ACTION = 2                  'action lancé par un driver/device/trigger
-        MESSAGE = 3
-        VALEUR_CHANGE = 4           'Valeur ayant changé
-        VALEUR_INCHANGE = 5         'Valeur n'ayant pas changé
-        VALEUR_INCHANGE_PRECISION = 6 'Valeur n'ayant pas changé pour cause de precision
-        VALEUR_INCHANGE_LASTETAT = 7 'Valeur n'ayant pas changé pour cause de lastetat
-        ERREUR = 8                   'erreur générale
-        ERREUR_CRITIQUE = 9          'erreur critique demandant la fermeture du programme
-        DEBUG = 10                   'visible uniquement si Homidom est en mode debug
-    End Enum
-
-    ''' <summary>Indique la source du log si c'est le serveur, un script, un device...</summary>
-    ''' <remarks></remarks>
-    Public Enum TypeSource
-        SERVEUR = 1
-        SCRIPT = 2
-        TRIGGER = 3
-        DEVICE = 4
-        DRIVER = 5
-        SOAP = 6
-        CLIENT = 7
-    End Enum
-
-    ''' <summary>Ecrit un log dans le fichier log au format xml</summary>
-    ''' <param name="TypLog"></param>
-    ''' <param name="Source"></param>
-    ''' <param name="Fonction"></param>
-    ''' <param name="Message"></param>
-    ''' <remarks></remarks>
-    Public Sub Log(ByVal TypLog As TypeLog, ByVal Source As TypeSource, ByVal Fonction As String, ByVal Message As String)
-        Try
-
-            'écriture dans un fichier texte
-            _File = _MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt"
-            Dim FreeF As Integer
-            Dim texte As String = Now & vbTab & TypLog.ToString & vbTab & Source.ToString & vbTab & Fonction & vbTab & Message
-
-            Try
-                FreeF = FreeFile()
-                texte = Replace(texte, vbLf, vbCrLf)
-                SyncLock lock_logwrite
-                    FileOpen(FreeF, _File, OpenMode.Append)
-                    Print(FreeF, texte & vbCrLf)
-                    FileClose(FreeF)
-                End SyncLock
-            Catch ex As IOException
-                'wait(500)
-                Console.WriteLine(Now & " " & TypLog & " CLIENT WPF LOG ERROR IOException : " & ex.ToString)
-            Catch ex As Exception
-                'wait(500)
-                Console.WriteLine(Now & " " & TypLog & " CLIENT WPF LOG ERROR Exception : " & ex.ToString)
-            End Try
-            texte = Nothing
-            FreeF = Nothing
-
-        Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'écriture d'un log: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Client WPF")
-        End Try
-    End Sub
-
-    ''' <summary>Créer nouveau Fichier (donner chemin complet et nom) log</summary>
-    ''' <param name="NewFichier"></param>
-    ''' <remarks></remarks>
-    Public Sub CreateNewFileLog(ByVal NewFichier As String)
-        Try
-            Dim rw As XmlTextWriter = New XmlTextWriter(NewFichier, Nothing)
-            rw.WriteStartDocument()
-            rw.WriteStartElement("logs")
-            rw.WriteStartElement("log")
-            rw.WriteAttributeString("time", Now)
-            rw.WriteAttributeString("type", 0)
-            rw.WriteAttributeString("source", 0)
-            rw.WriteAttributeString("message", "Création du nouveau fichier log")
-            rw.WriteEndElement()
-            rw.WriteEndElement()
-            rw.WriteEndDocument()
-            rw.Close()
-        Catch ex As Exception
-            MessageBox.Show("Erreur CreateNewFileLog: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-        End Try
-    End Sub
 #End Region
 
 #Region "Connexion"
@@ -1297,7 +1176,7 @@ Class Window1
             myService = myChannelFactory.CreateChannel()
             Try
                 If myService.GetIdServer(IdSrv) = "99" Then
-                    MessageBox.Show("L'ID du serveur est erroné, impossible de communiquer avec celui-ci", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(Fonctions.TypeLog.MESSAGE, "L'ID du serveur est erroné, impossible de communiquer avec celui-ci", "Erreur", "ConnectToHomidom")
                     IsConnect = False
                 Else
                     myService.GetServerVersion()
@@ -1366,8 +1245,7 @@ Class Window1
             End If
 
         Catch ex As Exception
-            Log(TypeLog.INFO, TypeSource.CLIENT, "NewBtnMnu", "Erreur NewBtnMnu: " & ex.ToString)
-            MessageBox.Show("Erreur lors de la création du bouton menu: " & ex.Message)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur lors de la création du bouton menu: " & ex.ToString, "Erreur", "NewBtnMnu")
         End Try
     End Sub
 
@@ -1389,14 +1267,15 @@ Class Window1
         Catch ex As Exception
             IsConnect = False
             If FlagMsgDeconnect = False Then
-                MessageBox.Show("La communication a été perdue avec le serveur, veuillez vérifier que celui-ci est toujours actif et redémarrer le client", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(Fonctions.TypeLog.INFO, "La communication a été perdue avec le serveur, veuillez vérifier que celui-ci est toujours actif et redémarrer le client", "Erreur")
                 FlagMsgDeconnect = True
             End If
             Log(TypeLog.INFO, TypeSource.CLIENT, "DispatcherTimer", "DispatcherTimer: " & ex.Message)
             LblTime.Content = Now.ToLongDateString & " " & Now.ToShortTimeString
             LblLeve.Content = "?"
             LblCouche.Content = "?"
-            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur: " & ex.Message, "Erreur")
         End Try
     End Sub
 
@@ -1446,8 +1325,7 @@ Class Window1
             Me.UpdateLayout()
             Me.Cursor = Nothing
         Catch ex As Exception
-            MessageBox.Show("Erreur IconMnuDoubleClick: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-            Log(TypeLog.INFO, TypeSource.CLIENT, "IconMnuDoubleClick", "Erreur: " & ex.Message)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur IconMnuDoubleClick: " & ex.Message, "Erreur", "IconMnuDoubleClick")
         End Try
     End Sub
 
@@ -1464,8 +1342,7 @@ Class Window1
 
             ShowZone(Zoneid)
         Catch ex As Exception
-            MessageBox.Show("Erreur ElementShowZone: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-            Log(TypeLog.INFO, TypeSource.CLIENT, "ElementShowZone", "Erreur: " & ex.Message)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ElementShowZone: " & ex.Message, "Erreur", "ElementShowZone")
         End Try
     End Sub
 
@@ -1473,7 +1350,7 @@ Class Window1
         Try
             MyBase.Finalize()
         Catch ex As Exception
-            MessageBox.Show("Erreur Finalize Window1: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Finalize Window1: " & ex.Message, "Erreur", "Finalize")
         End Try
     End Sub
 
@@ -1527,17 +1404,17 @@ Class Window1
             Next
 
             If cntNewZone > 0 Then
-                MessageBox.Show(cntNewZone & " nouvelle(s) zone(s) ajoutée(s)", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
+                AfficheMessageAndLog(Fonctions.TypeLog.INFO, cntNewZone & " nouvelle(s) zone(s) ajoutée(s)", "Information", "LoadZones")
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur LoadZones: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur LoadZones: " & ex.Message, "Erreur", "LoadZones")
         End Try
     End Sub
     Public Sub ShowZone(ByVal IdZone As String)
         Try
             'Gestion de l'erreur si le serveur n'est pas connecté
             If IsConnect = False Then
-                MessageBox.Show("Le serveur Homidom n'est pas connecté, impossible d'afficher les éléments de la zone sélectionnée", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(Fonctions.TypeLog.INFO, "Le serveur Homidom n'est pas connecté, impossible d'afficher les éléments de la zone sélectionnée", "Information", "ShowZone")
                 Exit Sub
             End If
 
@@ -1752,9 +1629,8 @@ Class Window1
                 End If
             Next
 
-
         Catch ex As Exception
-            MessageBox.Show("Erreur ShowZone: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ShowZone: " & ex.ToString, "Erreur", "ShowZone")
         End Try
     End Sub
 
@@ -1829,7 +1705,7 @@ Class Window1
 
             Me.UpdateLayout()
         Catch ex As Exception
-            MessageBox.Show("Erreur Chk1: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Chk1: " & ex.Message, "Erreur", "Chk1")
         End Try
     End Sub
 
@@ -1841,7 +1717,7 @@ Class Window1
                 obj.Height = e.NewSize.Height
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur Resize: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Resize: " & ex.Message, "Erreur", "Resize")
         End Try
     End Sub
 
@@ -1915,7 +1791,7 @@ Class Window1
 
             Me.UpdateLayout()
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Chk2: " & ex.Message, "Erreur", "Chk2")
         End Try
     End Sub
 
@@ -1973,7 +1849,7 @@ Class Window1
                 lbl.IsHitTestVisible = True
             Next
         Catch ex As Exception
-            MessageBox.Show("Erreur Resize: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Resize: " & ex.Message, "Erreur", "Resize")
         End Try
     End Sub
 
@@ -2018,7 +1894,7 @@ Class Window1
             Canvas.SetTop(x, elmt.Y)
 
         Catch ex As Exception
-            MessageBox.Show("Erreur NewWidgetEmpty: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetEmpty: " & ex.Message, "Erreur", "NewWidgetEmpty")
         End Try
     End Sub
 
@@ -2060,7 +1936,7 @@ Class Window1
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
         Catch ex As Exception
-            MessageBox.Show("Erreur NewWidgetWeb: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetWeb: " & ex.Message, "Erreur", "NewWidgetWeb")
         End Try
     End Sub
 
@@ -2103,7 +1979,7 @@ Class Window1
             Canvas.SetTop(x, 300)
 
         Catch ex As Exception
-            MessageBox.Show("Erreur NewWidgetRss: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetRss: " & ex.Message, "Erreur", "NewWidgetRss")
         End Try
     End Sub
 
@@ -2147,7 +2023,7 @@ Class Window1
             Canvas.SetTop(x, 300)
 
         Catch ex As Exception
-            MessageBox.Show("Erreur NewWidgetMeteo: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetMeteo: " & ex.Message, "Erreur", "NewWidgetMeteo")
         End Try
     End Sub
 
@@ -2190,7 +2066,7 @@ Class Window1
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
         Catch ex As Exception
-            MessageBox.Show("Erreur NewWidgetKeyPad: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetKeyPad: " & ex.Message, "Erreur", "NewWidgetKeyPad")
         End Try
     End Sub
 
@@ -2235,7 +2111,7 @@ Class Window1
 
             elmt = Nothing
         Catch ex As Exception
-            MessageBox.Show("Erreur NewWidgetLabel_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetLabel_Click: " & ex.Message, "Erreur", "NewWidgetLabel_Click")
         End Try
     End Sub
 
@@ -2277,7 +2153,7 @@ Class Window1
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
         Catch ex As Exception
-            MessageBox.Show("Erreur NewWidgetCamera: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetCamera: " & ex.Message, "Erreur", "NewWidgetCamera")
         End Try
     End Sub
 
@@ -2305,7 +2181,7 @@ Class Window1
             Me.Cursor = Nothing
         Catch ex As Exception
             Me.Cursor = Nothing
-            MessageBox.Show("Erreur ViewLog: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ViewLog: " & ex.Message, "Erreur", "ViewLog")
         End Try
     End Sub
 
@@ -2315,7 +2191,7 @@ Class Window1
             x.Owner = Me
             x.ShowDialog()
         Catch ex As Exception
-            MessageBox.Show("Erreur ViewCalendar:" & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ViewCalendar: " & ex.Message, "Erreur", "ViewCalendar")
         End Try
     End Sub
 
@@ -2331,7 +2207,7 @@ Class Window1
             Canvas1.Children.Add(x)
         Catch ex As Exception
             Me.Cursor = Nothing
-            MessageBox.Show("Erreur MnuHisto: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur MnuHisto: " & ex.Message, "Erreur", "MnuHisto")
         End Try
     End Sub
 
@@ -2339,7 +2215,7 @@ Class Window1
         Try
             myService.RunMacro(IdSrv, sender.tag)
         Catch ex As Exception
-            MessageBox.Show("Erreur MnuMacro_MouseDown: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur MnuMacro_MouseDown: " & ex.Message, "Erreur", "MnuMacro_MouseDown")
         End Try
     End Sub
 
@@ -2355,7 +2231,7 @@ Class Window1
                 MnuMacro.Items.Add(mnu)
             Next
         Catch ex As Exception
-            MessageBox.Show("Erreur MnuMacro_MouseDown: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur MnuMacro_MouseDown: " & ex.Message, "Erreur", "MnuMacro_MouseDown")
         End Try
     End Sub
 
@@ -2389,7 +2265,7 @@ Class Window1
                 x.Close()
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur MnuConfig_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur MnuConfig_Click: " & ex.Message, "Erreur", "MnuConfig_Click")
         End Try
     End Sub
 
@@ -2413,7 +2289,7 @@ Class Window1
                 list = Nothing
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur MenuItem1_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur MenuItem1_Click: " & ex.Message, "Erreur", "MenuItem1_Click")
         End Try
     End Sub
 #End Region
@@ -2423,7 +2299,7 @@ Class Window1
         Try
             Me.Cursor = Nothing
         Catch ex As Exception
-            MessageBox.Show("Erreur Window1_Loaded: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Window1_Loaded: " & ex.Message, "Erreur", "Window1_Loaded")
         End Try
     End Sub
 
@@ -2458,7 +2334,7 @@ Class Window1
             Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermture de l'application")
             End
         Catch ex As Exception
-            MessageBox.Show("Erreur Quitter: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Quitter: " & ex.Message, "Erreur", "Quitter")
             End
         End Try
     End Sub
@@ -2467,7 +2343,7 @@ Class Window1
         Try
             If _WithPassword And String.IsNullOrEmpty(_PassWord) = False Then
                 If InputBox("Veuillez saisir le mot de passe:", "Homidom") <> _PassWord Then
-                    MessageBox.Show("Mot de passe erroné!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(Fonctions.TypeLog.MESSAGE, "Mot de passe erroné!", "Erreur", "VerifPassword")
                     Return False
                 Else
                     Return True
@@ -2476,7 +2352,7 @@ Class Window1
                 Return True
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur VerifPassword: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur VerifPassword: " & ex.Message, "Erreur", "VerifPassword")
             Return True
         End Try
     End Function

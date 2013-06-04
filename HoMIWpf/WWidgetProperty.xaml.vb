@@ -215,7 +215,7 @@ Public Class WWidgetProperty
 
                 End If
             Catch ex As Exception
-                MessageBox.Show("Erreur Set Objet: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur WWidgetProperty.Set Objet: " & ex.Message, "Erreur", " WWidgetProperty.Set Objet")
             End Try
         End Set
     End Property
@@ -252,14 +252,14 @@ Public Class WWidgetProperty
             Try
                 Obj.TailleStatus = TxtTailleStatus.Text
             Catch ex As Exception
-                MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur: " & ex.Message, "Erreur", "Erreur: " & ex.Message)
                 Exit Sub
             End Try
 
             Try
                 Obj.TailleEtiquette = CDbl(TxtSizeEtiq.Text)
             Catch ex As Exception
-                MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur: " & ex.Message, "Erreur", "Erreur: " & ex.Message)
                 Exit Sub
             End Try
 
@@ -280,7 +280,7 @@ Public Class WWidgetProperty
 
             DialogResult = True
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur: " & ex.Message, "Erreur", "Erreur: " & ex.Message)
         End Try
     End Sub
 
@@ -693,14 +693,6 @@ Public Class WWidgetProperty
             CbObjetVisu.SelectedIndex = _idx
 
             _idx = -1
-            'CbPropertyVisu.SelectedIndex = -1
-            'For i As Integer = 0 To CbPropertyVisu.Items.Count - 1
-            '    If CbPropertyVisu.Items(i) = _act.Propriete Then
-            '        _idx = i
-            '        Exit For
-            '    End If
-            'Next
-            'CbPropertyVisu.SelectedIndex = _idx
             CbPropertyVisu.SelectedValue = _act.Propriete
 
             TxtValueVisu.Text = _act.Value.ToString
@@ -804,7 +796,7 @@ Public Class WWidgetProperty
             End If
             frm = Nothing
         Catch ex As Exception
-            MessageBox.Show("Erreur ImgVisu_MouseDown: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur WWidgetProperty.ImgVisu_MouseDown: " & ex.Message, "Erreur", "WWidgetProperty.ImgVisu_MouseDown")
         End Try
     End Sub
 
@@ -824,7 +816,7 @@ Public Class WWidgetProperty
             End If
             frm = Nothing
         Catch ex As Exception
-            MessageBox.Show("Erreur ImgVisu_MouseDown: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur WWidgetProperty.ImgVisu_Click: " & ex.Message, "Erreur", "WWidgetProperty.ImgVisu_Click")
         End Try
     End Sub
 
@@ -861,7 +853,7 @@ Public Class WWidgetProperty
             End If
             frm = Nothing
         Catch ex As Exception
-            MessageBox.Show("Erreur ImgPicture_MouseDown: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ImgPicture.MouseDown: " & ex.Message, "Erreur", "ImgPicture_MouseDown")
         End Try
     End Sub
 
@@ -884,7 +876,7 @@ Public Class WWidgetProperty
                 ImgPicture.Tag = openFileDialog1.FileName
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur BtnInitPictLocal_Click: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ImgPicture.BtnInitPictLocal_Click: " & ex.Message, "Erreur", "ImgPicture.BtnInitPictLocal_Click")
         End Try
 
     End Sub
@@ -907,7 +899,7 @@ Public Class WWidgetProperty
             frm = Nothing
 
         Catch ex As Exception
-            MessageBox.Show("Erreur BtnInitPictServeur_Click: " & ex.ToString, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ImgPicture.BtnInitPictServeur_Click: " & ex.Message, "Erreur", "ImgPicture.BtnInitPictServeur_Click")
         End Try
 
     End Sub
@@ -950,7 +942,7 @@ Public Class WWidgetProperty
                 HttpListBtn.Items.Add(_listhttpbtn.Item(i).Content)
             Next
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur WWidgetProperty.Refresh_LstHttpBtn: " & ex.Message, "Erreur", "WWidgetProperty.Refresh_LstHttpBtn")
         End Try
     End Sub
 
@@ -992,7 +984,7 @@ Public Class WWidgetProperty
             End If
             HttpStkEditBtn.Visibility = Visibility.Collapsed
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur HttpOkBtn_Click: " & ex.Message, "Erreur", "HttpOkBtn_Click")
         End Try
     End Sub
 
@@ -1009,7 +1001,7 @@ Public Class WWidgetProperty
                 TxtHttpHeight.Text = _btn.Height
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur HttpListBtn_SelectionChanged: " & ex.Message, "Erreur", "HttpListBtn_SelectionChanged")
         End Try
     End Sub
 
@@ -1029,7 +1021,7 @@ Public Class WWidgetProperty
             End If
             frm = Nothing
         Catch ex As Exception
-            MessageBox.Show("Erreur HttpSearchIcon_Click: " & ex.Message, "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur HttpSearchIcon_Click: " & ex.Message, "Erreur", "HttpSearchIcon_Click")
         End Try
     End Sub
 
@@ -1176,10 +1168,9 @@ Public Class WWidgetProperty
                 End If
             End If
         Catch ex As Exception
-            If _flag = False Then MessageBox.Show("Erreur uCondition TxtValue_TextChanged: " & ex.ToString, "ERREUR", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            If _flag = False Then AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCondition TxtValue_TextChanged: " & ex.Message, "Erreur", "uCondition TxtValue_TextChanged")
         End Try
     End Sub
-
 
     Private Sub ColorPicker3_SelectColorChange(ByVal sender As System.Windows.Media.Brush) Handles ColorPicker3.SelectColorChange
         lblColorEtiquette.Background = ColorPicker3.SelectedColor

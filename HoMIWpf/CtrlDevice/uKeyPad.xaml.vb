@@ -84,8 +84,7 @@
             End If
 
         Catch ex As Exception
-            MessageBox.Show("Erreur Keypad BtnOK_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
-
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Keypad.BtnOK_Click: " & ex.ToString, "Erreur", "Keypad.BtnOK_Click")
         End Try
     End Sub
 
@@ -115,7 +114,7 @@
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur Keypad TxtEnter_PreviewKeyUp: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Keypad.TxtEnter_PreviewKeyUp: " & ex.ToString, "Erreur", "Keypad.TxtEnter_PreviewKeyUp")
         End Try
     End Sub
 

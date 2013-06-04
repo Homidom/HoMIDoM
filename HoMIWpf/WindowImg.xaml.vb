@@ -47,7 +47,7 @@ Public Class WindowImg
                     ListBoxImg.Items.Add(stk)
 
                 Catch ex As Exception
-                    MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur WindowImg.Affiche: " & ex.Message, "Erreur", "WindowImg.Affiche")
                 End Try
             Next
         End If
