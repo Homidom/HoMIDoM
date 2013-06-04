@@ -93,7 +93,7 @@ Public Class uWMeteo
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur GetMeteo: " & ex.Message)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur UWMeteo.GetMeteo: " & ex.ToString, "Erreur", "UWMeteo.GetMeteo")
         End Try
 
     End Sub
@@ -1104,7 +1104,7 @@ Public Class uWMeteo
             IconJ3.Source = Nothing
             IconJ4.Source = Nothing
         Catch ex As Exception
-            MessageBox.Show("Erreur uWMeteo_Unloaded: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWMeteo_Unloaded: " & ex.ToString, "Erreur", "uWMeteo_Unloaded")
         End Try
     End Sub
 End Class

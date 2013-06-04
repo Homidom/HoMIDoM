@@ -32,7 +32,7 @@ Public Class uCamera
                     lbl.Visibility = Windows.Visibility.Visible
                 End If
             Catch ex As Exception
-                MessageBox.Show("Erreur uCamera.URL: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.URL: " & ex.ToString, "Erreur", "uCamera.URL")
             End Try
         End Set
     End Property
@@ -62,7 +62,7 @@ Public Class uCamera
                     Next
                 End If
             Catch ex As Exception
-                MessageBox.Show("Erreur uCamera.ListButton.set: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.ListButton.set: " & ex.ToString, "Erreur", "uCamera.ListButton.set")
             End Try
         End Set
     End Property
@@ -84,7 +84,7 @@ Public Class uCamera
                 MessageBox.Show("Erreur l'url: " & x.URL & " n'est pas valide", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur uCamera.Button_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.Button_Click: " & ex.ToString, "Erreur", "uCamera.Button_Click")
         End Try
     End Sub
 
@@ -100,7 +100,7 @@ Public Class uCamera
             AddHandler _mjpeg.FrameReady, AddressOf mjpeg_FrameReady
 
         Catch ex As Exception
-            MessageBox.Show("Erreur uCamera.New: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.New: " & ex.ToString, "Erreur", "uCamera.New")
         End Try
     End Sub
 
@@ -118,7 +118,7 @@ Public Class uCamera
             image.Height = y
 
         Catch ex As Exception
-            MessageBox.Show("Erreur uCamera.uCamera_SizeChanged: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.uCamera_SizeChanged: " & ex.ToString, "Erreur", "uCamera.uCamera_SizeChanged")
         End Try
     End Sub
 
@@ -134,7 +134,7 @@ Public Class uCamera
         Try
             image.Source = e.BitmapImage
         Catch ex As Exception
-            MessageBox.Show("Erreur uCamera_mjpeg_FrameReady: " & ex.ToString)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.mjpeg_FrameReady: " & ex.ToString, "Erreur", "uCamera.mjpeg_FrameReady")
         End Try
     End Sub
 

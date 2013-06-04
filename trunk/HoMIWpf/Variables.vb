@@ -7,6 +7,7 @@
     Public Design As Boolean = False
     Public _MonRepertoire As String = System.Environment.CurrentDirectory
     Public _MonRepertoireAppData As String = System.Environment.CurrentDirectory
+    Public lock_logwrite As New Object
     Public _ListServer As New List(Of ClServer)
 
     'Ecriture dans le fichier log

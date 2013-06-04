@@ -102,7 +102,7 @@ Partial Public Class uMeteo
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur GetMeteo: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uMeteo.GetMeteo: " & ex.Message, "Erreur", "uMeteo.GetMeteo")
         End Try
 
     End Sub
