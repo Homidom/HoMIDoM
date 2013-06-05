@@ -835,7 +835,6 @@ Class Window1
             writer.WriteEndAttribute()
             writer.WriteEndElement()
 
-
             ''------------
             ''Sauvegarde des menus
             ''------------
@@ -1149,7 +1148,6 @@ Class Window1
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "ERREUR SAVECONFIG " & ex.Message, "Erreur", "SaveConfig")
         End Try
-
     End Sub
 
 #End Region
@@ -1263,6 +1261,8 @@ Class Window1
                     LblCouche.Content = mydate.ToShortTimeString
                     mydate = Nothing
                 End If
+            Else
+                LblTime.Content = Now.ToLongDateString & " " & Now.ToLongTimeString
             End If
         Catch ex As Exception
             IsConnect = False
@@ -1311,11 +1311,16 @@ Class Window1
                         x.Owner = Me
                         x.ShowDialog()
                     Case uCtrlImgMnu.TypeOfMnu.Meteo
-                        ImageBackGround = _ImageBackGroundDefault
-                        Dim x As New uMeteos
-                        Canvas1.Children.Add(x)
-                        x.Width = Canvas1.ActualWidth
-                        x.Height = Canvas1.ActualHeight
+                        'Gestion de l'erreur si le serveur n'est pas connecté
+                        If IsConnect = True Then
+                            ImageBackGround = _ImageBackGroundDefault
+                            Dim x As New uMeteos
+                            Canvas1.Children.Add(x)
+                            x.Width = Canvas1.ActualWidth
+                            x.Height = Canvas1.ActualHeight
+                        Else
+                            AfficheMessageAndLog(Fonctions.TypeLog.INFO, "Le serveur Homidom n'est pas connecté, impossible d'afficher les météos", "Information", "IconMnuDoubleClick")
+                        End If
                     Case uCtrlImgMnu.TypeOfMnu.Zone
                         ShowZone(y.IDElement)
                 End Select

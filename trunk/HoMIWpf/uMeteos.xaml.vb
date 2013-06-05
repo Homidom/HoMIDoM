@@ -35,11 +35,13 @@ Partial Public Class uMeteos
 
         'Creation  du menu
         Try
-            For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In myService.GetAllDevices(IdSrv)
-                If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True Then
-                    NewBtnMnu(ObjMeteo.ID)
-                End If
-            Next
+            If IsConnect Then
+                For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In myService.GetAllDevices(IdSrv)
+                    If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True Then
+                        NewBtnMnu(ObjMeteo.ID)
+                    End If
+                Next
+            End If
         Catch ex As Exception
             MessageBox.Show("Error updating meteo: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try

@@ -64,11 +64,13 @@ Public Class WConfig
 
         'affiche les programmes
         Try
-            listesversionsprogrammes.Text = ""
-            listesversionsprogrammes.Text &= " HoMIWpF : " & My.Application.Info.Version.ToString & vbCrLf
-            listesversionsprogrammes.Text &= " HoMIDomService : " & myService.GetServerVersion() & vbCrLf
-            listesversionsprogrammes.Text &= " Service démarré : " & myService.GetLastStartTime & vbCrLf
-            listesversionsprogrammes.Text &= " Port SOAP utilisé : " & myService.GetPortSOAP & vbCrLf
+            If IsConnect Then
+                listesversionsprogrammes.Text = ""
+                listesversionsprogrammes.Text &= " HoMIWpF : " & My.Application.Info.Version.ToString & vbCrLf
+                listesversionsprogrammes.Text &= " HoMIDomService : " & myService.GetServerVersion() & vbCrLf
+                listesversionsprogrammes.Text &= " Service démarré : " & myService.GetLastStartTime & vbCrLf
+                listesversionsprogrammes.Text &= " Port SOAP utilisé : " & myService.GetPortSOAP & vbCrLf
+            End If
             listesversionsprogrammes.Text &= " Version du frameWork: " & System.Runtime.InteropServices.RuntimeEnvironment.GetSystemVersion() & vbCrLf
             If System.Environment.Is64BitOperatingSystem = True Then
                 listesversionsprogrammes.Text &= " Version de l'OS: " & My.Computer.Info.OSFullName.ToString & " 64 Bits" & vbCrLf

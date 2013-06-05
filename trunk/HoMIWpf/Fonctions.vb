@@ -3,6 +3,7 @@ Imports System.Windows.Media.Animation
 Imports System.Net
 Imports System.Xml
 Imports System.Xml.XPath
+Imports HoMIDom
 
 Module Fonctions
     Public Sub AfficheMessageAndLog(ByVal Type As TypeLog, ByVal Message As String, Optional ByVal Title As String = "", Optional ByVal Fonction As String = "")
