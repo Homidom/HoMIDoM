@@ -7,6 +7,7 @@ Imports System.Net
 Partial Public Class uMeteo
     Dim dt As DispatcherTimer
     Dim _Id As String
+    Dim _dev As HoMIDom.HoMIDom.TemplateDevice
 
     Public Property ID As String
         Get
@@ -18,7 +19,7 @@ Partial Public Class uMeteo
                 If dt Is Nothing Then
                     dt = New DispatcherTimer()
                     AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
-                    dt.Interval = New TimeSpan(0, 5, 0)
+                    dt.Interval = New TimeSpan(0, 0, 10)
                     dt.Start()
                 End If
                 GetMeteo2()
@@ -34,6 +35,7 @@ Partial Public Class uMeteo
                     Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _Id)
                     Lbl.Content = _dev.Name
                     LblTemps.Content = _dev.ConditionActuel
+
                     If String.IsNullOrEmpty(_dev.TemperatureActuel) = False Then
                         LblTemp.Content = _dev.TemperatureActuel & "°"
                     Else
@@ -57,7 +59,6 @@ Partial Public Class uMeteo
                     MaxD1.Content = _dev.MaxJ1 & "°"
                     MaxD2.Content = _dev.MaxJ2 & "°"
                     MaxD3.Content = _dev.MaxJ3 & "°"
-
 
                      Dim chm As String = ""
                     If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconActuel & ".png") = True Then
