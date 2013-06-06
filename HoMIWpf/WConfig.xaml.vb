@@ -78,6 +78,7 @@ Public Class WConfig
                 listesversionsprogrammes.Text &= " Version de l'OS: " & My.Computer.Info.OSFullName.ToString & " 32 Bits" & vbCrLf
             End If
             listesversionsprogrammes.Text &= " Répertoire utilisé par le client WPF: " & My.Application.Info.DirectoryPath.ToString & vbCrLf
+            listesversionsprogrammes.Text &= " Fichier de configuration chargé : " & Frm.ConfigFile & vbCrLf
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur New lors de l'affichage des programmes: " & ex.ToString, "Erreur", "WConfig_New")
         End Try

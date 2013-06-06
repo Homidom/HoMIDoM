@@ -32,7 +32,7 @@ Class Window1
     Private scrollTarget As Point
     Private scrollStartPoint As Point
     Private scrollStartOffset As Point
-    Private imgStackPnl As New StackPanel()
+    Public imgStackPnl As New StackPanel()
     Dim FlagMsgDeconnect As Boolean = False
     Private Shared lock_logwrite As New Object
 
@@ -214,6 +214,15 @@ Class Window1
         End Get
         Set(ByVal value As List(Of uCtrlImgMnu))
             _ListMnu = value
+        End Set
+    End Property
+
+    Public Property ConfigFile As String
+        Get
+            Return _ConfigFile
+        End Get
+        Set(ByVal value As String)
+            _ConfigFile = value
         End Set
     End Property
 #End Region
@@ -748,7 +757,7 @@ Class Window1
 
     ''' <summary>Sauvegarde de la config dans le fichier XML</summary>
     ''' <remarks></remarks>
-    Private Sub SaveConfig(ByVal Fichier As String)
+    Public Sub SaveConfig(ByVal Fichier As String)
         Try
 
             Log(TypeLog.INFO, TypeSource.CLIENT, "SaveConfig", "Sauvegarde de la config sous le fichier " & Fichier)
@@ -1381,7 +1390,7 @@ Class Window1
         End If
     End Sub
 
-    Private Sub LoadZones()
+    Public Sub LoadZones()
         Try
             Dim cntNewZone As Integer = 0
 
