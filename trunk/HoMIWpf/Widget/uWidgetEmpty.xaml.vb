@@ -1199,8 +1199,8 @@ Public Class uWidgetEmpty
                         If _zon IsNot Nothing Then
                             frmMere.ShowZone(_act.IdObject)
                         Else
-                            ' Commande Shell
-                            Process.Start(_act.Value)
+                            ' Commandes
+                            ProcessCommand(_act.Methode, _act.Value)
                         End If
                     End If
                 End If
@@ -1239,8 +1239,8 @@ Public Class uWidgetEmpty
                         If _zon IsNot Nothing Then
                             frmMere.ShowZone(_act.IdObject)
                         Else
-                            ' Commande Shell
-                            Process.Start(_act.Value)
+                            ' Commandes
+                            ProcessCommand(_act.Methode, _act.Value)
                         End If
                     End If
                 End If
@@ -1282,8 +1282,8 @@ Public Class uWidgetEmpty
                         If _zon IsNot Nothing Then
                             frmMere.ShowZone(_act.IdObject)
                         Else
-                            ' Commande Shell
-                            Process.Start(_act.Value)
+                            ' Commandes
+                            ProcessCommand(_act.Methode, _act.Value)
                         End If
                     End If
                 End If
@@ -1325,8 +1325,8 @@ Public Class uWidgetEmpty
                         If _zon IsNot Nothing Then
                             frmMere.ShowZone(_act.IdObject)
                         Else
-                            ' Commande Shell
-                            Process.Start(_act.Value)
+                            ' Commandes
+                            ProcessCommand(_act.Methode, _act.Value)
                         End If
                     End If
                 End If
@@ -1368,8 +1368,8 @@ Public Class uWidgetEmpty
                         If _zon IsNot Nothing Then
                             frmMere.ShowZone(_act.IdObject)
                         Else
-                            ' Commande Shell
-                            Process.Start(_act.Value)
+                            ' Commandes
+                            ProcessCommand(_act.Methode, _act.Value)
                         End If
                     End If
                 End If
@@ -1411,8 +1411,8 @@ Public Class uWidgetEmpty
                         If _zon IsNot Nothing Then
                             frmMere.ShowZone(_act.IdObject)
                         Else
-                            ' Commande Shell
-                            Process.Start(_act.Value)
+                            ' Commandes
+                            ProcessCommand(_act.Methode, _act.Value)
                         End If
                     End If
                 End If
@@ -2107,6 +2107,25 @@ Public Class uWidgetEmpty
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.LoadPicture: " & ex.Message, "Erreur", " uWidgetEmpty.LoadPicture")
         End Try
+
+    End Sub
+
+    Private Sub ProcessCommand(Command As String, Argument As String)
+
+        Select Case Command
+            Case "Exécuter commande DOS"
+                Process.Start(Argument)
+            Case "Quitter HoMIWpF"
+                'frmMere.SaveConfig(frmMere.ConfigFile)
+                Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermture de l'application")
+                End
+            Case "Charger configuration"
+                frmMere.ConfigFile = Argument
+                frmMere.LoadConfig(Argument)
+                frmMere.Canvas1.Children.Clear()
+                frmMere.LoadZones()
+                frmMere.ScrollViewer1.Content = frmMere.imgStackPnl
+        End Select
 
     End Sub
 

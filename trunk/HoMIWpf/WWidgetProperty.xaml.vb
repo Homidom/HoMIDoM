@@ -112,19 +112,21 @@ Public Class WWidgetProperty
                                 lbl1 = Nothing
                                 lbl2 = Nothing
                             Next
-                            ' Commande locale
+
+                            ' Commandes
                             Dim lb1 As New ComboBoxItem
                             Dim lb2 As New ComboBoxItem
-                            lb1.Content = "Commande DOS locale"
-                            lb1.Tag = "SHELL"
+                            lb1.Content = "Commandes"
+                            lb1.Tag = "COMMAND"
                             lb1.Uid = Nothing
-                            lb2.Content = "Commande DOS locale"
-                            lb2.Tag = "SHELL"
+                            lb2.Content = "Commandes"
+                            lb2.Tag = "COMMAND"
                             lb2.Uid = Nothing
                             CbObjet.Items.Add(lb1)
                             CbObjetVisu.Items.Add(lb2)
                             lb1 = Nothing
                             lb2 = Nothing
+
                         Case uWidgetEmpty.TypeOfWidget.Web
                             StkPicture.Visibility = Visibility.Collapsed
                             StkStatus.Visibility = Visibility.Collapsed
@@ -387,16 +389,29 @@ Public Class WWidgetProperty
                 TxtValue.Text = Nothing
             End If
 
-            If CbObjet.SelectedItem.tag = "SHELL" Then
+            If CbObjet.SelectedItem.tag = "COMMAND" Then
                 CbMethode.Items.Clear()
 
                 Dim lbl1 As New ComboBoxItem
-                lbl1.Content = "Exécuter"
+                lbl1.Content = "Exécuter commande DOS"
                 lbl1.Tag = 10 'c une commande Shell
                 CbMethode.Items.Add(lbl1)
                 CbMethode.SelectedIndex = 0
 
+                lbl1 = New ComboBoxItem
+                lbl1.Content = "Charger configuration"
+                lbl1.Tag = 11 'c une commande LoadConfig
+                CbMethode.Items.Add(lbl1)
+                CbMethode.SelectedIndex = 0
+
+                lbl1 = New ComboBoxItem
+                lbl1.Content = "Quitter HoMIWpF"
+                lbl1.Tag = 12 'c une commande Quit
+                CbMethode.Items.Add(lbl1)
+                CbMethode.SelectedIndex = 0
+
                 LblActionValue.Visibility = Windows.Visibility.Visible
+                CbMethode.Visibility = Windows.Visibility.Visible
                 TxtValue.Visibility = Windows.Visibility.Visible
             End If
         End If
@@ -488,7 +503,7 @@ Public Class WWidgetProperty
                     If _zon IsNot Nothing Then
                         x.Content = _zon.Name & "[Zone]"
                     Else
-                        x.Content = "Commande DOS locale"
+                        x.Content = "Commande"
                     End If
                 End If
             End If
@@ -663,6 +678,15 @@ Public Class WWidgetProperty
                 TxtValue.Text = ""
             End If
         End If
+
+        If CType(CbMethode.SelectedItem, ComboBoxItem).Content = "Exécuter commande DOS" Or CType(CbMethode.SelectedItem, ComboBoxItem).Content = "Charger configuration" Then
+            TxtValue.Visibility = Windows.Visibility.Visible
+            LblActionValue.Visibility = Windows.Visibility.Visible
+        Else
+            TxtValue.Visibility = Windows.Visibility.Collapsed
+            LblActionValue.Visibility = Windows.Visibility.Collapsed
+        End If
+
     End Sub
 
     Private Sub Refresh_LstObjetVisu()
