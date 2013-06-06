@@ -12,10 +12,10 @@
                     <Label Name="Label2" Foreground="White">Nom:</Label>
                     <StackPanel Orientation="Horizontal" >
                             <TextBox Height="22" Name="TxtNom" Width="215" Foreground="White" Background="DarkGray" BorderBrush="Black" ToolTip="Obligatoire: Nom du composant"/>
-                            <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Name="ChkEnable" VerticalAlignment="Top" IsChecked="True">Enable</CheckBox>
-                            <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" HorizontalAlignment="Right" Name="ChKSolo" VerticalAlignment="Top" IsChecked="True" ToolTip="Utiliser dans certains drivers pour permettre de mettre à jour plusieurs composants d'un seul coup si décoché.">Solo</CheckBox>
-                            <CheckBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" HorizontalAlignment="Right" Name="ChKLastEtat" VerticalAlignment="Top" IsChecked="False" ToolTip="Prendre en compte l'avant dernier etat d'un device">LastEtat</CheckBox>
-                            <CheckBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" HorizontalAlignment="Right" Name="ChKAllValue" VerticalAlignment="Top" IsChecked="False" ToolTip="Prendre en compte tous les changements d'état d'un device">All Value</CheckBox>
+                            <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Name="ChkEnable" IsChecked="True">Enable</CheckBox>
+                            <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Name="ChKSolo" IsChecked="True" ToolTip="Utiliser dans certains drivers pour permettre de mettre à jour plusieurs composants d'un seul coup si décoché.">Solo</CheckBox>
+                            <CheckBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Name="ChKLastEtat" IsChecked="False" ToolTip="Prendre en compte l'avant dernier etat d'un device">Dernier Etat</CheckBox>
+                            <CheckBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Name="ChKAllValue" IsChecked="False" ToolTip="Prendre en compte tous les changements d'état d'un device">Toutes les Valeurs</CheckBox>
                             <StackPanel Name="StkUnit" Orientation="Horizontal" >
                                 <Label Name="LblUnit" Content="Unité:"  Foreground="White"/>
                                 <TextBox Text="" Name="TxtUnit" Width="40" Height="22" Foreground="White" Background="DarkGray" BorderBrush="Black" ToolTip="Unité du composant (ex: °C, km/h, Watt..)"/>
@@ -30,28 +30,28 @@
                     <StackPanel Orientation="Horizontal" >
                             <StackPanel >
                                 <Label Foreground="White" Name="LabelDriver"  Width="215">Driver:</Label>
-                                <ComboBox Width="215" Name="CbDriver" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" VerticalAlignment="Top" ToolTip="Liste des drivers actifs"/>
+                                <ComboBox Width="215" Name="CbDriver" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" ToolTip="Liste des drivers actifs"/>
                             </StackPanel>
                             
                             <StackPanel Margin="10,0,0,0">
                                 <Label Foreground="White" Name="LabelType">Type:</Label>
-                                <ComboBox HorizontalAlignment="Left" Name="CbType" Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" VerticalAlignment="Top" IsReadOnly="True" />
+                                <ComboBox HorizontalAlignment="Left" Name="CbType" Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" IsReadOnly="True" />
                             </StackPanel>
                         </StackPanel>
                     <StackPanel Orientation="Horizontal" >
                             <StackPanel Name="StkAdr1">
                                 <Label Foreground="White" Name="LabelAdresse1" Width="215" >Adresse1:</Label>
-                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtAdresse1" Width="215" Height="21.978" VerticalAlignment="Top" />
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtAdresse1" Width="215" Height="21.978" />
                             </StackPanel>
                             <StackPanel Name="StkAdr2" Margin="10,0,0,0">
                                 <Label Foreground="White" Name="LabelAdresse2" >Adresse2:</Label>
-                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtAdresse2" Height="21.978" VerticalAlignment="Top" Width="215" />
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtAdresse2" Height="21.978" Width="215" />
                             </StackPanel>
                         </StackPanel>
                     <StackPanel Orientation="Horizontal" >
                             <StackPanel Margin="0,0,10,0" Name="StkModel">
                                 <Label Foreground="White" Name="LabelModele" HorizontalAlignment="Left" Visibility="Collapsed">Modele:</Label>
-                                <ComboBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Width="215" Name="CBModele" BorderThickness="2" Height="25" VerticalAlignment="Top" IsEditable="True" Tag="0" Visibility="Collapsed" HorizontalAlignment="Left" />
+                                <ComboBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Width="215" Name="CBModele" BorderThickness="2" Height="25" IsEditable="True" Tag="0" Visibility="Collapsed" HorizontalAlignment="Left" />
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtModele" Height="22" Width="215" Tag="1" Visibility="Collapsed" />
                             </StackPanel>
                             <StackPanel Margin="0,0,10,0" Name="StkRefresh">
@@ -66,31 +66,31 @@
                     <StackPanel Orientation="Horizontal" Name="StkValueMINMAX">
                             <StackPanel Name="StkValueMin">
                                 <Label Foreground="White" Name="LabelValueMin" Width="215">Value Min:</Label>
-                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtValueMin" VerticalAlignment="Bottom" Width="215">-99999</TextBox>
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtValueMin" Width="215">-99999</TextBox>
                             </StackPanel>
                             <StackPanel Name="StkValueMax" Margin="10,0,0,0">
                                 <Label Foreground="White" Name="LabelValueMax">Value Max:</Label>
-                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtValueMax" VerticalAlignment="Bottom" Width="215">99999</TextBox>
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtValueMax" Width="215">99999</TextBox>
                             </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal"  Name="StkValueDefaultPrecision">
                             <StackPanel Name="StkValueDef">
                                 <Label Foreground="White" Name="LabelValDef" Width="215" >Value Default:</Label>
-                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtValDef" VerticalAlignment="Bottom" Width="215" Text="0" />
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtValDef" Width="215" Text="0" />
                             </StackPanel>
                             <StackPanel Name="StkPrecision" Margin="10,0,0,0">
                                 <Label Foreground="White" Name="LabelPrecision">Precision:</Label>
-                                <TextBox Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtPrecision" Height="22" VerticalAlignment="Bottom" Text="0" />
+                                <TextBox Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtPrecision" Height="22" Text="0" />
                             </StackPanel>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Name="StkValueCorrectionFormatage">
                             <StackPanel Name="StkCorrection">
                                 <Label Foreground="White" Name="LabelCorrection" Width="215">Correction:</Label>
-                                <TextBox Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtCorrection" Height="22" VerticalAlignment="Bottom">0</TextBox>
+                                <TextBox Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtCorrection" Height="22" >0</TextBox>
                             </StackPanel>
                             <StackPanel Name="StkFormatage" Margin="10,0,0,0">
                                 <Label Foreground="White" Name="LabelFormatage" Width="76" HorizontalAlignment="Left">Formatage:</Label>
-                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtFormatage" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="214.5" />
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtFormatage" HorizontalAlignment="Left" Width="214.5" />
                             </StackPanel>
                     </StackPanel>
                     

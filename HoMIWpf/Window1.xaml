@@ -63,8 +63,14 @@
                                 <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Log_32.png" />
                             </MenuItem.Icon>
                             <MenuItem Name="ViewLogClient" Header="Client" FontSize="10" Tag="1">
+                                <MenuItem.Icon>
+                                    <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/pc.png" />
+                                </MenuItem.Icon>
                             </MenuItem>
                             <MenuItem Name="ViewLogSrv" Header="Serveur" FontSize="10" Tag="0">
+                                <MenuItem.Icon>
+                                    <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Server.png" />
+                                </MenuItem.Icon>
                             </MenuItem>
                         </MenuItem>
                         <MenuItem Name="ViewCalendar" Header="Calendrier" FontSize="10" >
