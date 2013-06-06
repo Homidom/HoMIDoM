@@ -747,966 +747,968 @@ Imports System.Threading
 
     Private Function Traduire(ByVal txt As String) As String
         Try
-            Dim _retour As String = txt
-            Dim _txt = LCase(Trim(txt))
-            _txt = _txt.Replace("  ", " ")
+            Dim _txt As String = Trim(txt).ToLower.Replace("  ", " ")
 
             If _txt = "a few clouds" Then
-                _retour = "Quelques nuages"
+                Return "Quelques nuages"
             End If
             If _txt = "a few clouds and breezy" Then
-                _retour = "Quelques nuages et Frais"
+                Return "Quelques nuages et Frais"
             End If
             If _txt = "a few clouds and windy" Then
-                _retour = "Quelques nuages Grand vent"
+                Return "Quelques nuages Grand vent"
             End If
             If _txt = "a few clouds with haze" Then
-                _retour = "Quelques nuages et brume"
+                Return "Quelques nuages et brume"
             End If
             If _txt = "am clouds / pm sun" Then
-                _retour = "Matin nuages / Après-Midi Soleil"
+                Return "Matin nuages / Après-Midi Soleil"
             End If
             If _txt = "am fog / pm sun" Then
-                _retour = "Matin Brouillard / Après-Midi Soleil"
+                Return "Matin Brouillard / Après-Midi Soleil"
             End If
             If _txt = "am rain / snow showers" Then
-                _retour = "Matin pluie / averses neigeuses"
+                Return "Matin pluie / averses neigeuses"
             End If
             If _txt = "am showers" Then
-                _retour = "Averses matinales"
+                Return "Averses matinales"
             End If
             If _txt = "am snow showers" Then
-                _retour = "Averses de neige le matin"
+                Return "Averses de neige le matin"
             End If
             If _txt = "am t-storms" Then
-                _retour = "Orages le matin"
+                Return "Orages le matin"
             End If
             If _txt = "blowing dust" Then
-                _retour = "Vent de poussière"
+                Return "Vent de poussière"
             End If
             If _txt = "blowing sand" Then
-                _retour = "Vent de sable"
+                Return "Vent de sable"
             End If
             If _txt = "blowing snow" Then
-                _retour = "Vent de neige"
+                Return "Vent de neige"
             End If
             If _txt = "blowing snow in vicinity" Then
-                _retour = "Vent de neige dans les environs"
+                Return "Vent de neige dans les environs"
             End If
             If _txt = "clear" Then
-                _retour = "Clair"
+                Return "Clair"
             End If
             If _txt = "clear / wind" Then
-                _retour = "Clair / vent"
+                Return "Clair / vent"
             End If
             If _txt = "clear and breezy" Then
-                _retour = "Clair et frais"
+                Return "Clair et frais"
             End If
             If _txt = "clear with haze" Then
-                _retour = "Clair avec brume légère"
+                Return "Clair avec brume légère"
+            End If
+            If _txt = "clear and windy" Then
+                Return "Clair et venteux"
             End If
             If _txt = "cloudy clair" Then
-                _retour = "Nuageux clair"
+                Return "Nuageux clair"
             End If
             If _txt = "clouds early / clearing kate" Then
-                _retour = "Nuages matinaux suivis d'éclaircies"
+                Return "Nuages matinaux suivis d'éclaircies"
             End If
             If _txt = "cloudy" Then
-                _retour = "Nuageux"
+                Return "Nuageux"
             End If
             If _txt = "cloudy / wind" Then
-                _retour = "Nuageux / Vent"
+                Return "Nuageux / Vent"
             End If
             If _txt = "cloudy / windy" Then
-                _retour = "Nuageux et venteux"
+                Return "Nuageux et venteux"
             End If
             If _txt = "cloudy and windy" Then
-                _retour = "Nuageux et venteux"
+                Return "Nuageux et venteux"
             End If
             If _txt = "drifting snow" Then
-                _retour = "Amoncellement de neige"
+                Return "Amoncellement de neige"
             End If
             If _txt = "drizzle" Then
-                _retour = "crachin"
+                Return "crachin"
             End If
             If _txt = "drizzle fog/mist" Then
-                _retour = "Crachin brouillard/brume"
+                Return "Crachin brouillard/brume"
             End If
             If _txt = "drizzle fog" Then
-                _retour = "Crachin brouillard"
+                Return "Crachin brouillard"
             End If
             If _txt = "drizzle ice pellets" Then
-                _retour = "Crachin grêlons"
+                Return "Crachin grêlons"
             End If
             If _txt = "drizzle snow" Then
-                _retour = "Crachin neige"
+                Return "Crachin neige"
             End If
             If _txt = "dust" Then
-                _retour = "Poussière"
+                Return "Poussière"
             End If
             If _txt = "dust storm in vicinity" Then
-                _retour = "Tempête de poussière dans les environs"
+                Return "Tempête de poussière dans les environs"
             End If
             If _txt = "dust storm" Then
-                _retour = "Tempête de poussière"
+                Return "Tempête de poussière"
             End If
             If _txt = "dust/sand whirls" Then
-                _retour = "Tourbillons de poussière/sable"
+                Return "Tourbillons de poussière/sable"
             End If
             If _txt = "dust/sand whirls in vicinity" Then
-                _retour = "Tourbillons de poussière/sable dans les environs"
+                Return "Tourbillons de poussière/sable dans les environs"
             End If
             If _txt = "fair" Then
-                _retour = "Ciel dégagé"
+                Return "Ciel dégagé"
             End If
             If _txt = "fair/ windy" Then
-                _retour = "Ciel dégagé / grand vent"
+                Return "Ciel dégagé / grand vent"
             End If
             If _txt = "fair and breezy" Then
-                _retour = "Ciel dégagé et frais"
+                Return "Ciel dégagé et frais"
             End If
             If _txt = "fair and windy" Then
-                _retour = "Ciel dégagé et grand vent"
+                Return "Ciel dégagé et grand vent"
             End If
             If _txt = "fair with haze" Then
-                _retour = "Ciel dégagé avec brume légère"
+                Return "Ciel dégagé avec brume légère"
             End If
             If _txt = "few showers" Then
-                _retour = "Quelques averses"
+                Return "Quelques averses"
             End If
             If _txt = "few snow showers" Then
-                _retour = "Quelques averses de neige"
+                Return "Quelques averses de neige"
             End If
             If _txt = "few snow showers / wind" Then
-                _retour = "Quelques averses de neige / Vent"
+                Return "Quelques averses de neige / Vent"
             End If
             If _txt = "fog" Then
-                _retour = "Brouillard"
+                Return "Brouillard"
             End If
             If _txt = "fog in vicinity" Then
-                _retour = "Brouillard dans les environs"
+                Return "Brouillard dans les environs"
             End If
             If _txt = "fog/mist" Then
-                _retour = "Brouillard/brume"
+                Return "Brouillard/brume"
             End If
             If _txt = "freezing drizzle" Then
-                _retour = "Crachin givrant"
+                Return "Crachin givrant"
             End If
             If _txt = "freezing drizzle in vicinity" Then
-                _retour = "Crachin givrant dans les environs"
+                Return "Crachin givrant dans les environs"
             End If
             If _txt = "freezing drizzle rain" Then
-                _retour = "Crachin pluie givrant "
+                Return "Crachin pluie givrant "
             End If
             If _txt = "freezing drizzle snow" Then
-                _retour = "Crachin neige givrant"
+                Return "Crachin neige givrant"
             End If
             If _txt = "freezing fog" Then
-                _retour = "Brouillard givrant"
+                Return "Brouillard givrant"
             End If
             If _txt = "freezing fog in vicinity" Then
-                _retour = "Brouillard givrant dans les environs"
+                Return "Brouillard givrant dans les environs"
             End If
             If _txt = "freezing rain" Then
-                _retour = "Pluie givrante"
+                Return "Pluie givrante"
             End If
             If _txt = "freezing rain in vicinity" Then
-                _retour = "Pluie givrante dans les environs"
+                Return "Pluie givrante dans les environs"
             End If
             If _txt = "freezing rain snow" Then
-                _retour = "Pluie neige givrante dans les environs"
+                Return "Pluie neige givrante dans les environs"
             End If
             If _txt = "frigid" Then
-                _retour = "Grand froid"
+                Return "Grand froid"
             End If
             If _txt = "funnel cloud in vicinity" Then
-                _retour = "Nuage en entonnoir dans les environs"
+                Return "Nuage en entonnoir dans les environs"
             End If
             If _txt = "funnel cloud" Then
-                _retour = "Nuage en entonnoir"
+                Return "Nuage en entonnoir"
             End If
             If _txt = "hail" Then
-                _retour = "Grêle"
+                Return "Grêle"
             End If
             If _txt = "hail showers" Then
-                _retour = "Averses de grêle"
+                Return "Averses de grêle"
             End If
             If _txt = "haze" Then
-                _retour = "Brume légère"
+                Return "Brume légère"
             End If
             If _txt = "heavy drizzle" Then
-                _retour = "Gros Crachin "
+                Return "Gros Crachin "
             End If
             If _txt = "heavy drizzle gog/mist" Then
-                _retour = "Gros Crachin Brouillard/brume"
+                Return "Gros Crachin Brouillard/brume"
             End If
             If _txt = "heavy drizzle fog" Then
-                _retour = "Gros Crachin Brouillard"
+                Return "Gros Crachin Brouillard"
             End If
             If _txt = "heavy drizzle ice pellets" Then
-                _retour = "Gros Crachin Grêlons"
+                Return "Gros Crachin Grêlons"
             End If
             If _txt = "heavy drizzle snow" Then
-                _retour = "Gros Crachin Neige"
+                Return "Gros Crachin Neige"
             End If
             If _txt = "heavy Dust storm" Then
-                _retour = "Grosse tempête de poussière"
+                Return "Grosse tempête de poussière"
             End If
             If _txt = "heavy freezing drizzle rain" Then
-                _retour = "Gros Crachin verglassant Pluie"
+                Return "Gros Crachin verglassant Pluie"
             End If
             If _txt = "heavy freezing drizzle snow" Then
-                _retour = "Gros Crachin verglassant Neige"
+                Return "Gros Crachin verglassant Neige"
             End If
             If _txt = "heavy freezing drizzle" Then
-                _retour = "Gros Crachin verglassant"
+                Return "Gros Crachin verglassant"
             End If
             If _txt = "heavy freezing fog" Then
-                _retour = "Gros brouillard verglassant"
+                Return "Gros brouillard verglassant"
             End If
             If _txt = "heavy freezing rain snow" Then
-                _retour = "Grosse pluie verglassante Neige"
+                Return "Grosse pluie verglassante Neige"
             End If
             If _txt = "heavy freezing rain" Then
-                _retour = "Grosse pluie verglassante"
+                Return "Grosse pluie verglassante"
             End If
             If _txt = "heavy ice pellets" Then
-                _retour = "Gros Grêlons"
+                Return "Gros Grêlons"
             End If
             If _txt = "heavy ice pellets drizzle" Then
-                _retour = "Gros Grêlons Crachin"
+                Return "Gros Grêlons Crachin"
             End If
             If _txt = "heavy ice pellets rain" Then
-                _retour = "Gros Grêlons Pluie"
+                Return "Gros Grêlons Pluie"
             End If
             If _txt = "heavy rain" Then
-                _retour = "Grosse pluie"
+                Return "Grosse pluie"
             End If
             If _txt = "heavy rain fog/mist" Then
-                _retour = "Grosse pluie Brouillard/brume"
+                Return "Grosse pluie Brouillard/brume"
             End If
             If _txt = "heavy rain fog" Then
-                _retour = "Grosse pluie Brouillard"
+                Return "Grosse pluie Brouillard"
             End If
             If _txt = "heavy rain freezing drizzle" Then
-                _retour = "Grosse pluie Crachin verglassant"
+                Return "Grosse pluie Crachin verglassant"
             End If
             If _txt = "heavy rain freezing rain" Then
-                _retour = "Grosse pluie Pluie verglassante"
+                Return "Grosse pluie Pluie verglassante"
             End If
             If _txt = "heavy rain ice pellets" Then
-                _retour = "Grosse pluie Grêlons"
+                Return "Grosse pluie Grêlons"
             End If
             If _txt = "heavy rain icy" Then
-                _retour = "Grosse pluie verglassante"
+                Return "Grosse pluie verglassante"
             End If
             If _txt = "heavy rain showers fog/mist" Then
-                _retour = "Grosse pluie Averses Brouillard/brume"
+                Return "Grosse pluie Averses Brouillard/brume"
             End If
             If _txt = "heavy rain showers" Then
-                _retour = "Grosse pluie Averses"
+                Return "Grosse pluie Averses"
             End If
             If _txt = "heavy rain snow" Then
-                _retour = "Grosse pluie Neige"
+                Return "Grosse pluie Neige"
             End If
             If _txt = "heavy Sand storm" Then
-                _retour = "Grosse tempête de sable "
+                Return "Grosse tempête de sable "
             End If
             If _txt = "heavy showers rain fog/mist" Then
-                _retour = "Grosses averses Pluie Brouillard/brume"
+                Return "Grosses averses Pluie Brouillard/brume"
             End If
             If _txt = "heavy showers rain" Then
-                _retour = "Grosses averses Pluie"
+                Return "Grosses averses Pluie"
             End If
             If _txt = "heavy showers snow fog/mist" Then
-                _retour = "Grosses Neige Pluie Brouillard/brume"
+                Return "Grosses Neige Pluie Brouillard/brume"
             End If
             If _txt = "heavy showers snow fog" Then
-                _retour = "Grosses averses Neige Brouillard"
+                Return "Grosses averses Neige Brouillard"
             End If
             If _txt = "heavy showers snow" Then
-                _retour = "Grosses averses Neige"
+                Return "Grosses averses Neige"
             End If
             If _txt = "heavy snow" Then
-                _retour = "Beaucoup de neige"
+                Return "Beaucoup de neige"
             End If
             If _txt = "heavy snow drizzle" Then
-                _retour = "Beaucoup de neige Crachin"
+                Return "Beaucoup de neige Crachin"
             End If
             If _txt = "heavy snow fog/mist" Then
-                _retour = "Beaucoup de neige Brouillard/brume"
+                Return "Beaucoup de neige Brouillard/brume"
             End If
             If _txt = "heavy snow fog" Then
-                _retour = "Beaucoup de neige Brouillard"
+                Return "Beaucoup de neige Brouillard"
             End If
             If _txt = "heavy snow freezing drizzle" Then
-                _retour = "Beaucoup de neige Crachin verglassant"
+                Return "Beaucoup de neige Crachin verglassant"
             End If
             If _txt = "heavy snow freezing rain" Then
-                _retour = "Beaucoup de neige Pluie verglassante"
+                Return "Beaucoup de neige Pluie verglassante"
             End If
             If _txt = "heavy snow rain" Then
-                _retour = "Beaucoup de neige Pluie"
+                Return "Beaucoup de neige Pluie"
             End If
             If _txt = "heavy snow showers fog/mist" Then
-                _retour = "Beaucoup de neige Averses Brouillard/brume"
+                Return "Beaucoup de neige Averses Brouillard/brume"
             End If
             If _txt = "heavy snow showers fog" Then
-                _retour = "Beaucoup de neige Averses Brouillard"
+                Return "Beaucoup de neige Averses Brouillard"
             End If
             If _txt = "heavy snow showers" Then
-                _retour = "Beaucoup de neige Averses"
+                Return "Beaucoup de neige Averses"
             End If
             If _txt = "heavy t-storm" Then
-                _retour = "Gros orage"
+                Return "Gros orage"
             End If
             If _txt = "heavy t-storms rain fog/mist" Then
-                _retour = "Gros orage Brouillard/brume"
+                Return "Gros orage Brouillard/brume"
             End If
             If _txt = "heavy t-storms rain fog" Then
-                _retour = "Gros orage Brouillard"
+                Return "Gros orage Brouillard"
             End If
             If _txt = "heavy t-storms rain hail fog/mist" Then
-                _retour = "Gros orage Grêle Brouillard/brume"
+                Return "Gros orage Grêle Brouillard/brume"
             End If
             If _txt = "heavy t-storms rain hail fog" Then
-                _retour = "Gros orage Grêle  Brouillard"
+                Return "Gros orage Grêle  Brouillard"
             End If
             If _txt = "heavy t-storms rain hail haze" Then
-                _retour = "Gros orage Grêle Brume légère"
+                Return "Gros orage Grêle Brume légère"
             End If
             If _txt = "heavy t-storms rain hail" Then
-                _retour = "Gros orage Grêle"
+                Return "Gros orage Grêle"
             End If
             If _txt = "heavy t-storms rain haze" Then
-                _retour = "Gros orage Brume légère"
+                Return "Gros orage Brume légère"
             End If
             If _txt = "heavy t-storms rain" Then
-                _retour = "Gros orage Pluie"
+                Return "Gros orage Pluie"
             End If
             If _txt = "heavy t-storms snow" Then
-                _retour = "Gros orage Neige"
+                Return "Gros orage Neige"
             End If
             If _txt = "ice crystals" Then
-                _retour = "Cristaux de glace"
+                Return "Cristaux de glace"
             End If
             If _txt = "ice pellets drizzle" Then
-                _retour = "Grêlons Crachin"
+                Return "Grêlons Crachin"
             End If
             If _txt = "ice pellets in vicinity" Then
-                _retour = "Grêlons dans les environs "
+                Return "Grêlons dans les environs "
             End If
             If _txt = "ice pellets rain" Then
-                _retour = "Grêlons Pluie"
+                Return "Grêlons Pluie"
             End If
             If _txt = "ice pellets" Then
-                _retour = "Grêlons"
+                Return "Grêlons"
             End If
             If _txt = "Isokated t-storms" Then
-                _retour = "Orages isolés"
+                Return "Orages isolés"
             End If
             If _txt = "light drizzle" Then
-                _retour = "Léger crachin"
+                Return "Léger crachin"
             End If
             If _txt = "light drizzle fog/mist" Then
-                _retour = "Léger crachin Brouillard/brume"
+                Return "Léger crachin Brouillard/brume"
             End If
             If _txt = "light drizzle fog" Then
-                _retour = "Léger crachin Brouillard"
+                Return "Léger crachin Brouillard"
             End If
             If _txt = "light drizzle ice pellets" Then
-                _retour = "Léger crachin Grêlons"
+                Return "Léger crachin Grêlons"
             End If
             If _txt = "light drizzle snow" Then
-                _retour = "Léger crachin Neige"
+                Return "Léger crachin Neige"
             End If
             If _txt = "light freezing drizzle" Then
-                _retour = "Léger crachin verglassant"
+                Return "Léger crachin verglassant"
             End If
             If _txt = "light freezing drizzle rain" Then
-                _retour = "Léger crachin verglassant Pluie"
+                Return "Léger crachin verglassant Pluie"
             End If
             If _txt = "light freezing drizzle snow" Then
-                _retour = "Léger crachin verglassant Neige"
+                Return "Léger crachin verglassant Neige"
             End If
             If _txt = "light freezing fog" Then
-                _retour = "Léger brouillard verglassant"
+                Return "Léger brouillard verglassant"
             End If
             If _txt = "light freezing rain" Then
-                _retour = "Légère pluie verglassante"
+                Return "Légère pluie verglassante"
             End If
             If _txt = "light freezing rain snow" Then
-                _retour = "Légère pluie verglassante Neige"
+                Return "Légère pluie verglassante Neige"
             End If
             If _txt = "light ice pellets drizzle" Then
-                _retour = "Petit Grêlons Crachin"
+                Return "Petit Grêlons Crachin"
             End If
             If _txt = "light ice pellets rain" Then
-                _retour = "Petit Grêlons Pluie"
+                Return "Petit Grêlons Pluie"
             End If
             If _txt = "light ice pellets" Then
-                _retour = "Petit Grêlons"
+                Return "Petit Grêlons"
             End If
             If _txt = "light rain" Then
-                _retour = "Légère Pluie"
+                Return "Légère Pluie"
             End If
             If _txt = "light rain Early" Then
-                _retour = "Légère Pluie matinal"
+                Return "Légère Pluie matinal"
             End If
             If _txt = "light rain fog/mist" Then
-                _retour = "Légère Pluie Brouillard/brume"
+                Return "Légère Pluie Brouillard/brume"
             End If
             If _txt = "light rain fog" Then
-                _retour = "Légère Pluie Brouillard"
+                Return "Légère Pluie Brouillard"
             End If
             If _txt = "light rain freezing drizzle" Then
-                _retour = "Légère Pluie Crachin verglassant"
+                Return "Légère Pluie Crachin verglassant"
             End If
             If _txt = "light rain freezing rain" Then
-                _retour = "Légère Pluie Pluie verglassante"
+                Return "Légère Pluie Pluie verglassante"
             End If
             If _txt = "light rain ice pellets" Then
-                _retour = "Légère Pluie Grêlons"
+                Return "Légère Pluie Grêlons"
             End If
             If _txt = "light rain icy" Then
-                _retour = "Légère pluie verglassante"
+                Return "Légère pluie verglassante"
             End If
             If _txt = "light rain kate" Then
-                _retour = "Légère Pluie tardive"
+                Return "Légère Pluie tardive"
             End If
             If _txt = "light rain shower" Then
-                _retour = "Légère pluie Averse"
+                Return "Légère pluie Averse"
             End If
             If _txt = "light rain shower and windy" Then
-                _retour = "Légère pluie Averses et Vent"
+                Return "Légère pluie Averses et Vent"
             End If
             If _txt = "light rain showers" Then
-                _retour = "Légères pluie Averses"
+                Return "Légères pluie Averses"
             End If
             If _txt = "light rain snow" Then
-                _retour = "Légères pluie Neige"
+                Return "Légères pluie Neige"
             End If
             If _txt = "light rain with Thunder" Then
-                _retour = "Légère Pluie avec tonnerre"
+                Return "Légère Pluie avec tonnerre"
             End If
             If _txt = "light showers rain" Then
-                _retour = "Légère averses Pluie"
+                Return "Légère averses Pluie"
             End If
             If _txt = "light showers rain fog/mist" Then
-                _retour = "Légère averses Pluie Brouillard/brume"
+                Return "Légère averses Pluie Brouillard/brume"
             End If
             If _txt = "light showers snow" Then
-                _retour = "Légère averses Neige"
+                Return "Légère averses Neige"
             End If
             If _txt = "light showers snow fog" Then
-                _retour = "Légère averses Neige Brouillard"
+                Return "Légère averses Neige Brouillard"
             End If
             If _txt = "light showers snow fog/mist" Then
-                _retour = "Légère averses Neige Brouillard/brume"
+                Return "Légère averses Neige Brouillard/brume"
             End If
             If _txt = "light snow" Then
-                _retour = "Peu de neige"
+                Return "Peu de neige"
             End If
             If _txt = "light snow drizzle" Then
-                _retour = "Peu de neige Crachin"
+                Return "Peu de neige Crachin"
             End If
             If _txt = "light snow Fall" Then
-                _retour = "Légère chutes de neige"
+                Return "Légère chutes de neige"
             End If
             If _txt = "light snow fog/mist" Then
-                _retour = "Peu de neige Brouillard/brume"
+                Return "Peu de neige Brouillard/brume"
             End If
             If _txt = "light snow fog" Then
-                _retour = "Peu de neige Brouillard"
+                Return "Peu de neige Brouillard"
             End If
             If _txt = "light snow freezing drizzle" Then
-                _retour = "Peu de neige Crachin verglassant"
+                Return "Peu de neige Crachin verglassant"
             End If
             If _txt = "light snow freezing rain" Then
-                _retour = "Peu de neige Pluie Verglassante"
+                Return "Peu de neige Pluie Verglassante"
             End If
             If _txt = "light snow grains" Then
-                _retour = "Quelques flocons de neige"
+                Return "Quelques flocons de neige"
             End If
             If _txt = "light snow rain" Then
-                _retour = "Peu de neige Pluie"
+                Return "Peu de neige Pluie"
             End If
             If _txt = "light snow shower" Then
-                _retour = "Légère averse de neige"
+                Return "Légère averse de neige"
             End If
             If _txt = "light snow showers fog/mist" Then
-                _retour = "Légère averses de neige Brouillard/brume"
+                Return "Légère averses de neige Brouillard/brume"
             End If
             If _txt = "light snow showers fog" Then
-                _retour = "Légère averses de neige Brouillard"
+                Return "Légère averses de neige Brouillard"
             End If
             If _txt = "light t-storms rain fog/mist" Then
-                _retour = "Léger orages Pluie Brouillard/brume"
+                Return "Léger orages Pluie Brouillard/brume"
             End If
             If _txt = "light t-storms rain fog" Then
-                _retour = "Léger orages Pluie Brouillard"
+                Return "Léger orages Pluie Brouillard"
             End If
             If _txt = "light t-storms rain hail fog/mist" Then
-                _retour = "Léger orages Pluie Grêle Brouillard/brume"
+                Return "Léger orages Pluie Grêle Brouillard/brume"
             End If
             If _txt = "light t-storms rain hail fog" Then
-                _retour = "Léger orages Pluie Grêle Brouillard"
+                Return "Léger orages Pluie Grêle Brouillard"
             End If
             If _txt = "light t-storms rain hail haze" Then
-                _retour = "Léger orages Pluie Grêle Brume légère"
+                Return "Léger orages Pluie Grêle Brume légère"
             End If
             If _txt = "light t-storms rain hail" Then
-                _retour = "Léger orages Pluie Grêle"
+                Return "Léger orages Pluie Grêle"
             End If
             If _txt = "light t-storms rain haze" Then
-                _retour = "Léger orages Pluie Brume légère"
+                Return "Léger orages Pluie Brume légère"
             End If
             If _txt = "light t-storms rain" Then
-                _retour = "Léger orages Pluie"
+                Return "Léger orages Pluie"
             End If
             If _txt = "light t-storms snow" Then
-                _retour = "Léger orages Neige"
+                Return "Léger orages Neige"
             End If
             If _txt = "lightening" Then
-                _retour = "Eclairs"
+                Return "Eclairs"
             End If
             If _txt = "lightenings" Then
-                _retour = "Eclairs"
+                Return "Eclairs"
             End If
             If _txt = "mostly clear" Then
-                _retour = "Ciel plutôt dégagé"
+                Return "Ciel plutôt dégagé"
             End If
             If _txt = "mostly cloudy" Then
-                _retour = "Plutôt nuageux"
+                Return "Plutôt nuageux"
             End If
             If _txt = "mostly cloudy and breezy" Then
-                _retour = "Plutôt nuageux et Venteux"
+                Return "Plutôt nuageux et Venteux"
             End If
             If _txt = "mostly cloudy and windy" Or txt = "mostly cloudy/wind" Then
-                _retour = "Plutôt nuageux et Grand vent"
+                Return "Plutôt nuageux et Grand vent"
             End If
             If _txt = "mostly cloudy with haze" Then
-                _retour = "Plutôt nuageux avec Légère Brume"
+                Return "Plutôt nuageux avec Légère Brume"
             End If
             If _txt = "mostly sunny" Then
-                _retour = "Plutôt ensoleillé"
+                Return "Plutôt ensoleillé"
             End If
             If _txt = "mostly sunny / wind" Then
-                _retour = "Plutôt ensoleillé / vent"
+                Return "Plutôt ensoleillé / vent"
             End If
             If _txt = "overcast" Then
-                _retour = "Couvert"
+                Return "Couvert"
             End If
             If _txt = "overcast and Breezy" Then
-                _retour = "Couvert et Venteux"
+                Return "Couvert et Venteux"
             End If
             If _txt = "overcast and windy" Then
-                _retour = "Couvert et Grand vent"
+                Return "Couvert et Grand vent"
             End If
             If _txt = "overcast with haze" Then
-                _retour = "Couvert avec légère brume"
+                Return "Couvert avec légère brume"
             End If
             If _txt = "partial fog" Then
-                _retour = "Banc de Brouillard"
+                Return "Banc de Brouillard"
             End If
             If _txt = "partial fog in vicinity" Then
-                _retour = "Banc de Brouillard dans les environs"
+                Return "Banc de Brouillard dans les environs"
             End If
             If _txt = "p cloudy" Then
-                _retour = "Partiellement nuageux"
+                Return "Partiellement nuageux"
             End If
             If _txt = "partly cloudy" Then
-                _retour = "Partiellement nuageux"
+                Return "Partiellement nuageux"
             End If
             If _txt = "partly cloudy and breezy" Then
-                _retour = "Partiellement nuageux et Venteux"
+                Return "Partiellement nuageux et Venteux"
             End If
             If _txt = "partly cloudy and windy" Then
-                _retour = "Partiellement nuageux et Grand vent"
+                Return "Partiellement nuageux et Grand vent"
             End If
             If _txt = "partly cloudy / wind" Then
-                _retour = "Partiellement nuageux / Vent"
+                Return "Partiellement nuageux / Vent"
             End If
             If _txt = "partly cloudy/ windy" Or txt = "partly cloudy/wind" Then
-                _retour = "Partiellement nuageux / Venteux"
+                Return "Partiellement nuageux / Venteux"
             End If
             If _txt = "partly cloudy with haze" Then
-                _retour = "Partiellement nuageux avec légère brume"
+                Return "Partiellement nuageux avec légère brume"
             End If
             If _txt = "partly sunny" Then
-                _retour = "Partiellement ensoleillé"
+                Return "Partiellement ensoleillé"
             End If
             If _txt = "patches of fog" Then
-                _retour = "Nappes de Brouillard"
+                Return "Nappes de Brouillard"
             End If
             If _txt = "patches of fog in vicinity" Then
-                _retour = "Nappes de Brouillard dans les environs"
+                Return "Nappes de Brouillard dans les environs"
             End If
             If _txt = "pm light rain" Then
-                _retour = "PM Légère Pluie"
+                Return "PM Légère Pluie"
             End If
             If _txt = "pm rain / snow" Then
-                _retour = "PM Pluie / Neige"
+                Return "PM Pluie / Neige"
             End If
             If _txt = "pm rain / wind" Then
-                _retour = "PM Pluie / Vent"
+                Return "PM Pluie / Vent"
             End If
             If _txt = "pm showers" Then
-                _retour = "PM Averses"
+                Return "PM Averses"
             End If
             If _txt = "pm snow showers" Then
-                _retour = "PM averses neigeuses"
+                Return "PM averses neigeuses"
             End If
             If _txt = "pm t-storms" Then
-                _retour = "Orages l après-midi"
+                Return "Orages l après-midi"
             End If
             If _txt = "rain" Then
-                _retour = "Pluie"
+                Return "Pluie"
             End If
             If _txt = "rain / snow" Then
-                _retour = "Pluie / neige"
+                Return "Pluie / neige"
             End If
             If _txt = "rain / snow showers" Then
-                _retour = "Pluie / averses neigeuses"
+                Return "Pluie / averses neigeuses"
             End If
             If _txt = "rain / snow showers early" Then
-                _retour = "Pluie / averses neigeuses matinales"
+                Return "Pluie / averses neigeuses matinales"
             End If
             If _txt = "rain / thunder" Then
-                _retour = "Pluie / Tonnerre"
+                Return "Pluie / Tonnerre"
             End If
             If _txt = "rain / wind" Then
-                _retour = "Pluie / Vent"
+                Return "Pluie / Vent"
             End If
             If _txt = "rain and snow" Then
-                _retour = "Pluie et Neige"
+                Return "Pluie et Neige"
             End If
             If _txt = "rain early" Then
-                _retour = "Pluie matinale"
+                Return "Pluie matinale"
             End If
             If _txt = "rain fog/mist" Then
-                _retour = "Pluie Brouillard/brume"
+                Return "Pluie Brouillard/brume"
             End If
             If _txt = "rain fog" Then
-                _retour = "Pluie Brouillard"
+                Return "Pluie Brouillard"
             End If
             If _txt = "rain freezing drizzle" Then
-                _retour = "Pluie Crachin verglassant"
+                Return "Pluie Crachin verglassant"
             End If
             If _txt = "rain freezing rain" Then
-                _retour = "Pluie Pluie Verglassante"
+                Return "Pluie Pluie Verglassante"
             End If
             If _txt = "rain ice pellets" Then
-                _retour = "Pluie Grêlons"
+                Return "Pluie Grêlons"
             End If
             If _txt = "rain shower" Then
-                _retour = "Pluie Averses"
+                Return "Pluie Averses"
             End If
             If _txt = "rain showers fog/mist" Then
-                _retour = "Pluie Averses Brouillard/brume"
+                Return "Pluie Averses Brouillard/brume"
             End If
             If _txt = "rain showers in vicinity fog/mist" Then
-                _retour = "Pluie Averses dans les environs Brouillard/brume"
+                Return "Pluie Averses dans les environs Brouillard/brume"
             End If
             If _txt = "rain showers in vicinity" Then
-                _retour = "Pluie Averses dans les environs"
+                Return "Pluie Averses dans les environs"
             End If
             If _txt = "rain snow" Then
-                _retour = "Pluie Neige"
+                Return "Pluie Neige"
             End If
             If _txt = "rain to snow" Then
-                _retour = "Pluie vers Neige"
+                Return "Pluie vers Neige"
             End If
             If _txt = "sand storm" Then
-                _retour = "Tempête de Sable"
+                Return "Tempête de Sable"
             End If
             If _txt = "sand storm in vicinity" Then
-                _retour = "Tempête de Sable dans les environs"
+                Return "Tempête de Sable dans les environs"
             End If
             If _txt = "sand" Then
-                _retour = "Sable"
+                Return "Sable"
             End If
             If _txt = "shallow fog" Then
-                _retour = "Brouillard superficiel"
+                Return "Brouillard superficiel"
             End If
             If _txt = "shallow fog in vicinity" Then
-                _retour = "Brouillard superficiel dans les environs"
+                Return "Brouillard superficiel dans les environs"
             End If
             If _txt = "scattered showers" Then
-                _retour = "Averses éparses"
+                Return "Averses éparses"
             End If
             If _txt = "scattered showers / wind" Then
-                _retour = "Averses éparses / Vent"
+                Return "Averses éparses / Vent"
             End If
             If _txt = "scattered snow showers" Then
-                _retour = "Averses neigeuses éparses"
+                Return "Averses neigeuses éparses"
             End If
             If _txt = "scattered snow showers / wind" Then
-                _retour = "Averses neigeuses éparses / Vent"
+                Return "Averses neigeuses éparses / Vent"
             End If
             If _txt = "scattered strong storms" Then
-                _retour = "Violents orages locals"
+                Return "Violents orages locals"
             End If
             If _txt = "scattered t-storms" Then
-                _retour = "Orages éparses"
+                Return "Orages éparses"
             End If
             If _txt = "showers" Then
-                _retour = "Averses"
+                Return "Averses"
             End If
             If _txt = "showers / wind" Then
-                _retour = "Averses / Vent"
+                Return "Averses / Vent"
             End If
             If _txt = "showers hail" Then
-                _retour = "Averses Grêle"
+                Return "Averses Grêle"
             End If
             If _txt = "showers ice pellets" Then
-                _retour = "Averses Grêlons"
+                Return "Averses Grêlons"
             End If
             If _txt = "showers in the vicinity" Then
-                _retour = "Averses dans les environs"
+                Return "Averses dans les environs"
             End If
             If _txt = "showers in vicinity fog/mist" Then
-                _retour = "Averses dans les environs Brouillard/brume"
+                Return "Averses dans les environs Brouillard/brume"
             End If
             If _txt = "showers in vicinity fog" Then
-                _retour = "Averses dans les environs Brouillard"
+                Return "Averses dans les environs Brouillard"
             End If
             If _txt = "showers in vicinity haze" Then
-                _retour = "Averses dans les environs Brume légère"
+                Return "Averses dans les environs Brume légère"
             End If
             If _txt = "showers in vicinity snow" Then
-                _retour = "Averses dans les environs Neige"
+                Return "Averses dans les environs Neige"
             End If
             If _txt = "showers Early" Then
-                _retour = "Averses matinales"
+                Return "Averses matinales"
             End If
             If _txt = "showers kate" Then
-                _retour = "Averses tardives"
+                Return "Averses tardives"
             End If
             If _txt = "showers rain" Then
-                _retour = "Averses Pluie"
+                Return "Averses Pluie"
             End If
             If _txt = "showers rain fog/mist" Then
-                _retour = "Averses Pluie Brouillard/brume"
+                Return "Averses Pluie Brouillard/brume"
             End If
             If _txt = "showers rain in vicinity" Then
-                _retour = "Averses Pluie dans les environs"
+                Return "Averses Pluie dans les environs"
             End If
             If _txt = "showers rain in vicinity fog/mist" Then
-                _retour = "Averses Pluie dans les environs Brouillard/brume"
+                Return "Averses Pluie dans les environs Brouillard/brume"
             End If
             If _txt = "showers snow" Then
-                _retour = "Averses Neige"
+                Return "Averses Neige"
             End If
             If _txt = "showers snow fog" Then
-                _retour = "Averses Neige Brouillard"
+                Return "Averses Neige Brouillard"
             End If
             If _txt = "showers snow fog/mist" Then
-                _retour = "Averses Neige Brouillard/brume"
+                Return "Averses Neige Brouillard/brume"
             End If
             If _txt = "smoke" Then
-                _retour = "fumée"
+                Return "fumée"
             End If
             If _txt = "snow" Then
-                _retour = "Neige"
+                Return "Neige"
             End If
             If _txt = "snow / rain icy mix" Then
-                _retour = "Mélange Neige / Pluie Verglassante"
+                Return "Mélange Neige / Pluie Verglassante"
             End If
             If _txt = "snow and fog" Then
-                _retour = "Neige et Brouillard"
+                Return "Neige et Brouillard"
             End If
             If _txt = "snow drizzle" Then
-                _retour = "Neige Crachin"
+                Return "Neige Crachin"
             End If
             If _txt = "snow fog/mist" Then
-                _retour = "Neige Brouillard/brume"
+                Return "Neige Brouillard/brume"
             End If
             If _txt = "snow freezing drizzle" Then
-                _retour = "Neige Crachin verglassant"
+                Return "Neige Crachin verglassant"
             End If
             If _txt = "snow freezing rain" Then
-                _retour = "Neige Pluie verglassante"
+                Return "Neige Pluie verglassante"
             End If
             If _txt = "snow rain" Then
-                _retour = "Neige Pluie"
+                Return "Neige Pluie"
             End If
             If _txt = "snow shower" Then
-                _retour = "Averses de neige"
+                Return "Averses de neige"
             End If
             If _txt = "snow shower / wind" Then
-                _retour = "Averses de neige / vent"
+                Return "Averses de neige / vent"
             End If
             If _txt = "snow shower early" Then
-                _retour = "Averses de neige matinales"
+                Return "Averses de neige matinales"
             End If
             If _txt = "snow showers fog/mist" Then
-                _retour = "Averses de neige Brouillard/brume"
+                Return "Averses de neige Brouillard/brume"
             End If
             If _txt = "snow showers fog" Then
-                _retour = "Averses de neige Brouillard"
+                Return "Averses de neige Brouillard"
             End If
             If _txt = "snow showers in vicinity" Then
-                _retour = "Averses de neige dans les environs"
+                Return "Averses de neige dans les environs"
             End If
             If _txt = "snow showers in vicinity fog" Then
-                _retour = "Averses de neige dans les environs Brouillard"
+                Return "Averses de neige dans les environs Brouillard"
             End If
             If _txt = "snow showers in vicinity fog/mist" Then
-                _retour = "Averses de neige dans les environs Brouillard/brume"
+                Return "Averses de neige dans les environs Brouillard/brume"
             End If
             If _txt = "snow showers kate" Then
-                _retour = "Averses de neige tardives"
+                Return "Averses de neige tardives"
             End If
             If _txt = "snow to rain" Then
-                _retour = "Neige vers Pluie"
+                Return "Neige vers Pluie"
             End If
             If _txt = "snowflakes" Then
-                _retour = "Flocons de neige"
+                Return "Flocons de neige"
             End If
             If _txt = "sunny" Then
-                _retour = "Ensoleillé"
+                Return "Ensoleillé"
+            End If
+            If _txt = "sunny and widy" Then
+                Return "Ensoleillé et vent"
             End If
             If _txt = "sunny / wind" Then
-                _retour = "Ensoleillé / Vent"
+                Return "Ensoleillé / Vent"
             End If
             If _txt = "sunny day" Then
-                _retour = "Journée ensoleillé"
+                Return "Journée ensoleillé"
             End If
             If _txt = "thunder" Then
-                _retour = "Tonnerre"
+                Return "Tonnerre"
             End If
             If _txt = "thunder in the vicinity" Then
-                _retour = "Tonnerre dans les environs"
+                Return "Tonnerre dans les environs"
             End If
             If _txt = "t-storms" Then
-                _retour = "Orages"
+                Return "Orages"
             End If
             If _txt = "t-storms early" Then
-                _retour = "Orages matinaux"
+                Return "Orages matinaux"
             End If
             If _txt = "t-storms fog" Then
-                _retour = "Orages Brouillard"
+                Return "Orages Brouillard"
             End If
             If _txt = "t-storms hail fog" Then
-                _retour = "Orages Grêle Brouillard"
+                Return "Orages Grêle Brouillard"
             End If
             If _txt = "t-storms hail" Then
-                _retour = "Orages Grêle"
+                Return "Orages Grêle"
             End If
             If _txt = "t-storms haze in vicinity hail" Then
-                _retour = "Orages brume dans les environs Grêle"
+                Return "Orages brume dans les environs Grêle"
             End If
             If _txt = "t-storms haze in vicinity" Then
-                _retour = "Orages brume dans les environs"
+                Return "Orages brume dans les environs"
             End If
             If _txt = "t-storms heavy rain" Then
-                _retour = "Orages Grosse Pluie"
+                Return "Orages Grosse Pluie"
             End If
             If _txt = "t-storms heavy rain fog" Then
-                _retour = "Orages Grosse Pluie Brouillard"
+                Return "Orages Grosse Pluie Brouillard"
             End If
             If _txt = "t-storms heavy rain fog/mist" Then
-                _retour = "Orages Grosse pluie Brouillard/brume"
+                Return "Orages Grosse pluie Brouillard/brume"
             End If
             If _txt = "t-storms heavy rain hail fog" Then
-                _retour = "Orages Grosse Pluie Grêle Brouillard"
+                Return "Orages Grosse Pluie Grêle Brouillard"
             End If
             If _txt = "t-storms heavy rain hail fog/mist" Then
-                _retour = "Orages Grosse Pluie Grêle Brouillard/brume"
+                Return "Orages Grosse Pluie Grêle Brouillard/brume"
             End If
             If _txt = "t-storms heavy rain hail haze" Then
-                _retour = "Orages Grosse Pluie Grêle Brume légère"
+                Return "Orages Grosse Pluie Grêle Brume légère"
             End If
             If _txt = "t-storms heavy rain hail" Then
-                _retour = "Orages Grosse Pluie Grêle"
+                Return "Orages Grosse Pluie Grêle"
             End If
             If _txt = "t-storms heavy rain haze" Then
-                _retour = "Orages Grosse Pluie Brume légère"
+                Return "Orages Grosse Pluie Brume légère"
             End If
             If _txt = "t-storms ice pellets" Then
-                _retour = "Orages Grêlons"
+                Return "Orages Grêlons"
             End If
             If _txt = "t-storms in vicinity" Then
-                _retour = "Orages dans les environs"
+                Return "Orages dans les environs"
             End If
             If _txt = "t-storms in vicinity fog" Then
-                _retour = "Orages dans les environs Brouillard"
+                Return "Orages dans les environs Brouillard"
             End If
             If _txt = "t-storms in vicinity fog/mist" Then
-                _retour = "Orages dans les environs Brouillard/brume"
+                Return "Orages dans les environs Brouillard/brume"
             End If
             If _txt = "t-storms in vicinity hail fog/mist" Then
-                _retour = "Orages dans les environs Grêle Brouillard/brume"
+                Return "Orages dans les environs Grêle Brouillard/brume"
             End If
             If _txt = "t-storms in vicinity hail haze" Then
-                _retour = "Orages dans les environs Grêle Brume légère"
+                Return "Orages dans les environs Grêle Brume légère"
             End If
             If _txt = "t-storms in vicinity hail" Then
-                _retour = "Orages dans les environs Grêle"
+                Return "Orages dans les environs Grêle"
             End If
             If _txt = "t-storms in vicinity haze" Then
-                _retour = "Orages dans les environs Brume légère"
+                Return "Orages dans les environs Brume légère"
             End If
             If _txt = "t-storms light rain" Then
-                _retour = "Orages Légère pluie"
+                Return "Orages Légère pluie"
             End If
             If _txt = "t-storms light rain fog" Then
-                _retour = "Orages Légère pluie Brouillard"
+                Return "Orages Légère pluie Brouillard"
             End If
             If _txt = "t-storms light rain fog/mist" Then
-                _retour = "Orages Légère pluie Brouillard/brume"
+                Return "Orages Légère pluie Brouillard/brume"
             End If
             If _txt = "t-storms light rain hail" Then
-                _retour = "Orages Légère pluie Grêle"
+                Return "Orages Légère pluie Grêle"
             End If
             If _txt = "t-storms light rain hail fog" Then
-                _retour = "Orages Légère pluie Grêle Brouillard"
+                Return "Orages Légère pluie Grêle Brouillard"
             End If
             If _txt = "t-storms light rain hail fog/mist" Then
-                _retour = "Orages Légère pluie Grêle Brouillard/brume"
+                Return "Orages Légère pluie Grêle Brouillard/brume"
             End If
             If _txt = "t-storms light rain hail haze" Then
-                _retour = "Orages Légère pluie Grêle Brume légère"
+                Return "Orages Légère pluie Grêle Brume légère"
             End If
             If _txt = "t-storms light rain haze" Then
-                _retour = "Orages Légère pluie Brume légère"
+                Return "Orages Légère pluie Brume légère"
             End If
             If _txt = "t-storms rain fog/mist" Then
-                _retour = "Orages Pluie Brouillard/brume"
+                Return "Orages Pluie Brouillard/brume"
             End If
             If _txt = "t-storms rain hail fog/mist" Then
-                _retour = "Orages Pluie Grêle Brouillard/brume"
+                Return "Orages Pluie Grêle Brouillard/brume"
             End If
             If _txt = "t-storms showers in vicinity" Then
-                _retour = "Orages Averses dans les environs"
+                Return "Orages Averses dans les environs"
             End If
             If _txt = "t-storms showers in vicinity hail" Then
-                _retour = "Orages Averses dans les environs Grêle"
+                Return "Orages Averses dans les environs Grêle"
             End If
             If _txt = "t-storms snow" Then
-                _retour = "Orages Neige"
+                Return "Orages Neige"
             End If
             If _txt = "windy" Then
-                _retour = "Grand vent"
+                Return "Grand vent"
             End If
             If _txt = "windy / snowy" Then
-                _retour = "Grand vent / neigeux"
+                Return "Grand vent / neigeux"
             End If
             If _txt = "windy rain" Then
-                _retour = "giboulées"
+                Return "giboulées"
             End If
             If _txt = "wintry mix" Then
-                _retour = "Mélanges pluie/neige"
+                Return "Mélanges pluie/neige"
             End If
             If _txt = "wintry mix / wind" Then
-                _retour = "Mélanges pluie/neige / vent"
+                Return "Mélanges pluie/neige / vent"
             End If
 
-            Return _retour
+            Return txt
 
-            _retour = Nothing
-            _txt = Nothing
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "METEOWeather", "Traduire: " & ex.Message)
             Return txt

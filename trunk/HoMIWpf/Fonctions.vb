@@ -164,9 +164,13 @@ Module Fonctions
             End If
 
             For Each pi As PropertyInfo In objet1.GetType.GetProperties()
-                If pi.GetValue(objet1, Nothing) <> pi.GetValue(objet2, Nothing) Then
+                Try
+                    If pi.GetValue(objet1, Nothing) <> pi.GetValue(objet2, Nothing) Then
+                        Return True
+                    End If
+                Catch ex As Exception
                     Return True
-                End If
+                End Try
             Next
             Return False
 
