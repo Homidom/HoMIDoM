@@ -7,7 +7,7 @@ Imports System.Net
 Partial Public Class uMeteo
     Dim dt As DispatcherTimer
     Dim _Id As String
-    Dim _dev As HoMIDom.HoMIDom.TemplateDevice
+    Dim _dev As HoMIDom.HoMIDom.TemplateDevice = Nothing
 
     Public Property ID As String
         Get
@@ -29,10 +29,19 @@ Partial Public Class uMeteo
 
     Private Sub GetMeteo2()
         Try
-
             If IsConnect = True Then
                 If String.IsNullOrEmpty(_Id) = False Then
-                    Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _Id)
+                    Dim x As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _Id)
+
+                    If x Is Nothing Then Exit Sub
+
+                    If IsDiff(_dev, x) Then
+                        Exit Sub
+                    Else
+                        _dev = x
+                        x = Nothing
+                    End If
+
                     Lbl.Content = _dev.Name
                     LblTemps.Content = _dev.ConditionActuel
 
@@ -60,7 +69,7 @@ Partial Public Class uMeteo
                     MaxD2.Content = _dev.MaxJ2 & "°"
                     MaxD3.Content = _dev.MaxJ3 & "°"
 
-                     Dim chm As String = ""
+                    Dim chm As String = ""
                     If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconActuel & ".png") = True Then
                         chm = _MonRepertoire & "\Images\Meteo\" & _dev.IconActuel & ".png"
                     Else
@@ -93,7 +102,7 @@ Partial Public Class uMeteo
                     ImgD2.Source = LoadBitmapImage(chm)
                     chm = ""
 
-                   If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ3 & ".png") = True Then
+                    If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ3 & ".png") = True Then
                         chm = _MonRepertoire & "\Images\Meteo\" & _dev.IconJ3 & ".png"
                     Else
                         chm = _MonRepertoire & "\Images\Meteo\na.png"
@@ -103,30 +112,10 @@ Partial Public Class uMeteo
                 End If
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uMeteo.GetMeteo: " & ex.Message, "Erreur", "uMeteo.GetMeteo")
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uMeteo.GetMeteo: " & ex.ToString, "Erreur", "uMeteo.GetMeteo")
         End Try
 
     End Sub
-
-    Private Function TraduireJour(ByVal Jour As String) As String
-        TraduireJour = "?"
-        Select Case Jour
-            Case "Thu"
-                TraduireJour = "Jeu"
-            Case "Fri"
-                TraduireJour = "Ven"
-            Case "Sat"
-                TraduireJour = "Sam"
-            Case "Sun"
-                TraduireJour = "Dim"
-            Case "Mon"
-                TraduireJour = "Lun"
-            Case "Tue"
-                TraduireJour = "Mar"
-            Case "Wed"
-                TraduireJour = "Mer"
-        End Select
-    End Function
 
     Public Sub New(ByVal vID As String)
 

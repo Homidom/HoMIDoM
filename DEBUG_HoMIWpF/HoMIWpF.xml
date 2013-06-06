@@ -316,6 +316,14 @@ uCtrlImgMnu
 	<summary>Créer nouveau Fichier (donner chemin complet et nom) log</summary>
 	<param name="NewFichier"></param>
 	<remarks></remarks>
+</member><member name="M:HoMIWpF.Fonctions.IsDiff(System.Object,System.Object)">
+	<summary>
+ Permet de vérifier si 2 objets sont identiques au niveau type et valeur(s)
+ </summary>
+	<param name="objet1"></param>
+	<param name="objet2"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIWpF.Fonctions.IsBoolean(System.Object)">
 	<summary>
  Vérifie si la valeur est un boolean
