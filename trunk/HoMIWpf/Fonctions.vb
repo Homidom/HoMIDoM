@@ -4,6 +4,7 @@ Imports System.Net
 Imports System.Xml
 Imports System.Xml.XPath
 Imports HoMIDom
+Imports System.Reflection
 
 Module Fonctions
     Public Sub AfficheMessageAndLog(ByVal Type As TypeLog, ByVal Message As String, Optional ByVal Title As String = "", Optional ByVal Fonction As String = "")
@@ -147,6 +148,34 @@ Module Fonctions
 #End Region
 
 
+    ''' <summary>
+    ''' Permet de vérifier si 2 objets sont identiques au niveau type et valeur(s)
+    ''' </summary>
+    ''' <param name="objet1"></param>
+    ''' <param name="objet2"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function IsDiff(ByVal objet1 As Object, ByVal objet2 As Object) As Boolean
+        Try
+            If objet2 Is Nothing Or objet1 Is Nothing Then
+                Return False
+            ElseIf objet1.GetType <> objet2.GetType Then
+                Return False
+            End If
+
+            For Each pi As PropertyInfo In objet1.GetType.GetProperties()
+                If pi.GetValue(objet1, Nothing) <> pi.GetValue(objet2, Nothing) Then
+                    Return True
+                End If
+            Next
+            Return False
+
+        Catch ex As Exception
+            MessageBox.Show("Erreur: " & ex.ToString)
+        End Try
+    End Function
+
+
     Public Function ConvertArrayToImage(ByVal value As Byte()) As BitmapImage
         Try
             Dim ImgSource As BitmapImage = Nothing
@@ -261,4 +290,6 @@ Module Fonctions
 
         bmpImage = Nothing
     End Function
+
+
 End Module
