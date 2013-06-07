@@ -27,13 +27,11 @@ Public Class HoMIServicE
                 Catch ex As Exception
                     Console.SetWindowSize(largeur, hauteur)
                 End Try
-
                 Console.SetBufferSize(200, 1000)
                 Console.BackgroundColor = ConsoleColor.White 'Couleur du fond
                 Console.Clear()  'Applique la couleur du fond
                 Console.ForegroundColor = ConsoleColor.Black 'Couleur du texte
                 Console.Title = "HoMIDomService"
-
                 Console.WriteLine("******************************")
                 Console.WriteLine("**** DEMARRAGE DU SERVEUR ****")
                 Console.WriteLine(" ")
@@ -50,15 +48,10 @@ Public Class HoMIServicE
                 _Addrip = "localhost"
                 logerror("Le fichier de config ou la balise ip n'ont pas été trouvé, l'adresse par défaut sera localhost !")
             End If
-
             Dim baseAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/service")
             Dim fileServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/fileServer")
-
             log("Adresss SOAP: " & _Addrip & ":" & PortSOAP)
-
             host = New ServiceHost(GetType(Server), baseAddress)
-            '          Using host As New ServiceHost(GetType(Server), baseAddress)
-
             host.CloseTimeout = TimeSpan.FromMinutes(60)
             host.OpenTimeout = TimeSpan.FromMinutes(60)
             AddHandler host.Faulted, AddressOf HostFaulted
@@ -69,7 +62,6 @@ Public Class HoMIServicE
 
             'Connexion au serveur
             Dim myChannelFactory As ServiceModel.ChannelFactory(Of IHoMIDom) = Nothing
-
             Try
                 Dim myadress As String = "http://" & Dns.GetHostName() & ":" & PortSOAP & "/ServiceModelSamples/service"
                 Dim binding As New ServiceModel.BasicHttpBinding
@@ -85,31 +77,23 @@ Public Class HoMIServicE
                 binding.OpenTimeout = TimeSpan.FromMinutes(60)
                 binding.ReceiveTimeout = TimeSpan.FromMinutes(60)
                 myChannelFactory = New ServiceModel.ChannelFactory(Of IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
-
                 myService = myChannelFactory.CreateChannel()
-
                 'Démarrage du serveur pour charger la config
                 myService.Start()
-
             Catch ex As Exception
                 myChannelFactory.Abort()
                 logerror("Erreur lors du lancement du service SOAP: " & ex.Message)
             End Try
 
+            'démmarage de l'API WEB
             Dim apiServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP)
             HoMIDomWebAPI.HoMIDomAPI.CurrentServer = Server.Instance
             HoMIDomWebAPI.HoMIDomAPI.Start(apiServerAddress.ToString(), _IdSrv)
 
-
-
-
-
-            '=============== PROBLEME ICI avec le USING comment le mettre dans le STOP
-
-
+            'démarrage du serveur de fichier
             hostFileServer = New ServiceHost(GetType(FileServer), fileServerAddress)
             hostFileServer.Open()
-            Console.WriteLine(Now & " Serveur de fichiers démarré sur l'adresse: " & fileServerAddress.ToString())
+            log("Serveur de fichiers démarré sur l'adresse: " & fileServerAddress.ToString())
 
             'démarrage OK
             Console.WriteLine(" ")
@@ -117,9 +101,6 @@ Public Class HoMIServicE
             log("****   SERVEUR DEMARRE    ****")
             Console.WriteLine("******************************")
             Console.WriteLine(" ")
-
-
-
 
         Catch ex As Exception
             Dim message As String = ex.ToString
