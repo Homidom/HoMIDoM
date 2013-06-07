@@ -11,6 +11,8 @@ Imports System.Xml
 Imports System.Xml.XPath
 Imports System.IO
 
+
+
 Partial Public Class uMeteos
 #Region "Data"
     ' Used when manually scrolling.
@@ -73,4 +75,5 @@ Partial Public Class uMeteos
             ScrollToPosition(ScrollViewer1, scrollTarget.X, currentPoint.Y, m_SpeedTouch)
         End If
     End Sub
+
 End Class

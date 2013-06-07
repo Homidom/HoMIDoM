@@ -46,6 +46,7 @@ Public Class WWidgetProperty
                 ChKShowPassWord.IsChecked = Obj.ShowPassWord
                 ChKShowClavier.IsChecked = Obj.ShowClavier
                 ChKClearAfterEnter.IsChecked = Obj.ClearAfterEnter
+                ChkFondu.IsChecked = Obj.Fondu
                 _listhttpbtn = Obj.ListHttpButton
                 If IO.File.Exists(Obj.Picture) Then
                     ImgPicture.Source = New BitmapImage(New Uri(Obj.Picture))
@@ -250,6 +251,7 @@ Public Class WWidgetProperty
             Obj.ShowPassWord = ChKShowPassWord.IsChecked
             Obj.ShowClavier = ChKShowClavier.IsChecked
             Obj.ClearAfterEnter = ChKClearAfterEnter.IsChecked
+            Obj.Fondu = ChkFondu.IsChecked
 
             Try
                 Obj.TailleStatus = TxtTailleStatus.Text

@@ -2,6 +2,7 @@
 Imports System.Reflection
 Imports System.Threading
 Imports WpfAnimatedGif
+Imports System.Windows.Media.Animation
 
 Public Class uWidgetEmpty
     Public Enum TypeOfWidget
@@ -59,6 +60,7 @@ Public Class uWidgetEmpty
     Dim _CurrentValue As Object = Nothing
     Dim _type As TypeOfWidget = TypeOfWidget.Empty
     Dim _CanEditValue As Boolean = False
+    Dim _Fondu As Boolean = True
 
     'Variables Widget Web/Camera
     Dim _URL As String = ""
@@ -91,6 +93,9 @@ Public Class uWidgetEmpty
     Public Event GestureDroiteGauche(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event ShowZone(ByVal zoneid As String)
 
+    'Animation
+    Private myStoryboard As Storyboard
+
 #Region "Property"
     Public Property Show As Boolean
         Get
@@ -98,6 +103,15 @@ Public Class uWidgetEmpty
         End Get
         Set(ByVal value As Boolean)
             _Show = value
+        End Set
+    End Property
+
+    Public Property Fondu As Boolean
+        Get
+            Return _Fondu
+        End Get
+        Set(ByVal value As Boolean)
+            _Fondu = value
         End Set
     End Property
 
@@ -890,6 +904,16 @@ Public Class uWidgetEmpty
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         Try
             LblStatus.Content = DefautLabelStatus
+
+            Dim myDoubleAnimation As New DoubleAnimation()
+            myDoubleAnimation.From = 0.0
+            myDoubleAnimation.To = 1.0
+            myDoubleAnimation.Duration = New Duration(TimeSpan.FromSeconds(1))
+
+            myStoryboard = New Storyboard()
+            myStoryboard.Children.Add(myDoubleAnimation)
+            Storyboard.SetTarget(myDoubleAnimation, Me)
+            Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.New: " & ex.Message, "Erreur", " uWidgetEmpty.New")
         End Try
@@ -1054,6 +1078,7 @@ Public Class uWidgetEmpty
 
             End Select
 
+            If _Fondu Then myStoryboard.Begin()
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Loaded: " & ex.Message, "Erreur", " uWidgetEmpty.Loaded")
         End Try

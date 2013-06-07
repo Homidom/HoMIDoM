@@ -3,11 +3,13 @@ Imports System.Xml.XPath
 Imports System.Windows.Threading
 Imports System.IO
 Imports System.Net
+Imports System.Windows.Media.Animation
 
 Partial Public Class uMeteo
     Dim dt As New DispatcherTimer
     Dim _Id As String = ""
     Dim _dev As HoMIDom.HoMIDom.TemplateDevice = Nothing
+    Private myStoryboard As Storyboard
 
     Public Property ID As String
         Get
@@ -122,6 +124,16 @@ Partial Public Class uMeteo
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         GetMeteo2()
         GetMeteo2()
+
+        Dim myDoubleAnimation As New DoubleAnimation()
+        myDoubleAnimation.From = 0.0
+        myDoubleAnimation.To = 1.0
+        myDoubleAnimation.Duration = New Duration(TimeSpan.FromSeconds(1))
+
+        myStoryboard = New Storyboard()
+        myStoryboard.Children.Add(myDoubleAnimation)
+        Storyboard.SetTarget(myDoubleAnimation, Me)
+        Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
     End Sub
 
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
@@ -130,6 +142,10 @@ Partial Public Class uMeteo
 
     Protected Overrides Sub Finalize()
         MyBase.Finalize()
+    End Sub
+
+    Private Sub uMeteo_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
+        myStoryboard.Begin()
     End Sub
 
     Private Sub uMeteo_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded

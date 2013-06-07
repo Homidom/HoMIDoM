@@ -17,6 +17,7 @@
                         <StackPanel >
                             <CheckBox  Name="ChkShowEtiq" Content="Afficher Etiquette" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                             <CheckBox Name="ChkShowStatus" Content="Afficher Status" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
+                            <CheckBox  Name="ChkFondu" Content="Fondu" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                         <StackPanel Name="StkEtiq">
                             <StackPanel Orientation="Horizontal" >
                                 <Label Width="120" Content="Etiquette:" Foreground="White"/>

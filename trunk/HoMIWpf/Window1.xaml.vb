@@ -606,6 +606,8 @@ Class Window1
                                 x.RotationY = list.Item(j).Attributes.Item(k).Value.Replace(".", ",")
                             Case "showetiquette"
                                 x.ShowEtiquette = list.Item(j).Attributes.Item(k).Value
+                            Case "fondu"
+                                x.Fondu = list.Item(j).Attributes.Item(k).Value
                             Case "showstatus"
                                 x.ShowStatus = list.Item(j).Attributes.Item(k).Value
                             Case "etiquette"
@@ -931,6 +933,9 @@ Class Window1
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("showetiquette")
                 writer.WriteValue(_ListElement.Item(i).ShowEtiquette)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("fondu")
+                writer.WriteValue(_ListElement.Item(i).Fondu)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("showstatus")
                 writer.WriteValue(_ListElement.Item(i).ShowStatus)
@@ -1498,6 +1503,7 @@ Class Window1
                             y.RotationY = _ListElement.Item(j).RotationY
                             y.IsEmpty = _ListElement.Item(j).IsEmpty
                             y.ShowEtiquette = _ListElement.Item(j).ShowEtiquette
+                            y.Fondu = _ListElement.Item(j).Fondu
                             y.ShowStatus = _ListElement.Item(j).ShowStatus
                             y.ShowPicture = _ListElement.Item(j).ShowPicture
                             y.Picture = _ListElement.Item(j).Picture
@@ -1607,6 +1613,7 @@ Class Window1
                     y.Picture = _ListElement.Item(i).Picture
                     y.ShowPicture = _ListElement.Item(i).ShowPicture
                     y.ShowEtiquette = _ListElement.Item(i).ShowEtiquette
+                    y.Fondu = _ListElement.Item(i).Fondu
                     y.ShowStatus = _ListElement.Item(i).ShowStatus
                     y.Etiquette = _ListElement.Item(i).Etiquette
                     y.DefautLabelStatus = _ListElement.Item(i).DefautLabelStatus
