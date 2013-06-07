@@ -8,12 +8,12 @@ Imports System.Runtime.InteropServices
 
 ' Passez en revue les valeurs des attributs de l'assembly
 
-<Assembly: AssemblyTitle("ClassLibrary1")> 
+<Assembly: AssemblyTitle("Driver_GoogleCalendar")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("ClassLibrary1")> 
-<Assembly: AssemblyCopyright("Copyright ©  2013")> 
-<Assembly: AssemblyTrademark("")> 
+<Assembly: AssemblyCompany("HoMIDoM")> 
+<Assembly: AssemblyProduct("Driver_GoogleCalendar")> 
+<Assembly: AssemblyCopyright("Copyright HoMIDoM © 2013")> 
+<Assembly: AssemblyTrademark("HoMIDoM")> 
 
 <Assembly: ComVisible(False)>
 

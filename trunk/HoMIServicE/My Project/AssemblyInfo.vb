@@ -8,17 +8,17 @@ Imports System.Runtime.InteropServices
 
 ' Passez en revue les valeurs des attributs de l'assembly
 
-<Assembly: AssemblyTitle("Driver_OregonS")> 
+<Assembly: AssemblyTitle("HoMIServicE")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("HoMIDoM")> 
-<Assembly: AssemblyProduct("Driver_OregonS")> 
-<Assembly: AssemblyCopyright("Copyright © HoMIDoM 2011")> 
-<Assembly: AssemblyTrademark("HoMIDoM")> 
+<Assembly: AssemblyProduct("HoMIServicE")> 
+<Assembly: AssemblyCopyright("Copyright © HoMIDoM 2013")> 
+<Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
 
 'Le GUID suivant est pour l'ID de la typelib si ce projet est exposé à COM
-<Assembly: Guid("D68AD962-8A53-11E2-A373-2F456288709B")> 
+<Assembly: Guid("d624e947-0702-41d5-a83a-5c5d58ca92d5")> 
 
 ' Les informations de version pour un assembly se composent des quatre valeurs suivantes :
 '
