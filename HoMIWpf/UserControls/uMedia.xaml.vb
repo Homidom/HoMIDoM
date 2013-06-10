@@ -48,7 +48,10 @@ Public Class uMedia
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         ShowBtnReculTitre = False
         ShowBtnAvanceTitre = False
-        If _IsLocal Then _Volume = MediaElement1.Volume
+        If _IsLocal Then
+            _Volume = MediaElement1.Volume
+        End If
+
         VolumeValue.Value = _Volume
         AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
         dt.Interval = New TimeSpan(0, 0, 1)
@@ -307,10 +310,20 @@ Public Class uMedia
     Private Sub BtnStop_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnStop.MouseDown
         RaiseEvent Stop()
         If _IsLocal Then
+
             MediaElement1.LoadedBehavior = MediaState.Stop
             dt.Stop()
             SliderSeek.Value = 0
         End If
+
+        LblTitle.Content = ""
+        LblArtiste.Content = ""
+        LblAlbum.Content = ""
+        LblComment.Content = ""
+        LblGenre.Content = ""
+        LblDuree.Content = ""
+        LblAnnee.Content = ""
+
         ImgThumb.Source = Nothing
     End Sub
 
@@ -428,5 +441,4 @@ Public Class uMedia
         RaiseEvent VolumeUp()
         If _IsLocal Then MediaElement1.Volume = _Volume
     End Sub
-
 End Class

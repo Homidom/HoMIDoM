@@ -1297,7 +1297,10 @@ Class Window1
     Private Sub IconMnuDoubleClick(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
         Try
             Me.Cursor = Cursors.Wait
-            Canvas1.Children.Clear()
+            If sender.type <> uCtrlImgMnu.TypeOfMnu.LecteurMedia Then
+                Canvas1.Children.Clear()
+                If Media IsNot Nothing Then Media.Visibility = Windows.Visibility.Hidden
+            End If
 
             GC.Collect()
             GC.WaitForPendingFinalizers()
@@ -1321,10 +1324,20 @@ Class Window1
                         x.Height = Canvas1.ActualHeight
                     Case uCtrlImgMnu.TypeOfMnu.Config
                     Case uCtrlImgMnu.TypeOfMnu.LecteurMedia
-                        Dim x As New WMedia
-                        x.Owner = Me
-                        x.ShowDialog()
+                        If Media IsNot Nothing Then
+                            If Media.Visibility = Windows.Visibility.Hidden Then
+                                Media.Visibility = Windows.Visibility.Visible
+                            Else
+                                Media.Visibility = Windows.Visibility.Hidden
+                            End If
+                        Else
+                            Media = New WMedia
+                            Media.Owner = Me.Parent
+                            Media.Show()
+                            Media.WindowState = Windows.WindowState.Normal
+                        End If
                     Case uCtrlImgMnu.TypeOfMnu.Meteo
+
                         'Gestion de l'erreur si le serveur n'est pas connecté
                         If IsConnect = True Then
                             ImageBackGround = _ImageBackGroundDefault
@@ -1335,6 +1348,7 @@ Class Window1
                         Else
                             AfficheMessageAndLog(Fonctions.TypeLog.INFO, "Le serveur Homidom n'est pas connecté, impossible d'afficher les météos", "Information", "IconMnuDoubleClick")
                         End If
+
                     Case uCtrlImgMnu.TypeOfMnu.Zone
                         ShowZone(y.IDElement)
                 End Select
