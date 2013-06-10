@@ -9,7 +9,7 @@
     Public _MonRepertoireAppData As String = System.Environment.CurrentDirectory
     Public lock_logwrite As New Object
     Public _ListServer As New List(Of ClServer)
-
+    Public Media As WMedia = Nothing
     'Ecriture dans le fichier log
     Public _Debug As Boolean
 
