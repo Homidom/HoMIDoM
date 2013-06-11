@@ -10,67 +10,39 @@
         <StackPanel Orientation="Horizontal" >
             <StackPanel >
                 <Label Content="VOL" Margin="2" Foreground="DarkGray" HorizontalContentAlignment="Center" />
-                <Button Margin="3" Template="{DynamicResource GlassButton}" Name="BtnVolP" Width="45" Height="45" Tag="VolumeUp">
-                    <Image Source="/HoMIWpF;component/Images/kplus.png" />
-                </Button>
+                <Button Margin="3" Template="{DynamicResource GlassButton}" Name="BtnVolP" Width="45" Height="45" Tag="VolumeUp" Content="+" Foreground=" White" FontSize="20" />
                 <Button Margin="3" Template="{DynamicResource GlassButton}" Name="BtnVolMute" Width="45" Height="45" Tag="MUTE">
                     <Image Source="/HoMIWpF;component/Images/kmute.png" />
                 </Button>
-                <Button Margin="3" Template="{DynamicResource GlassButton}" Name="BtnVolM" Width="45" Height="45" Tag="VolumeDown">
-                    <Image Source="/HoMIWpF;component/Images/kmoi.png" />
-                </Button>
+                <Button Margin="3" Template="{DynamicResource GlassButton}" Name="BtnVolM" Width="45" Height="45" Tag="VolumeDown" Content="1" Foreground=" White" FontSize="20" />
             </StackPanel>
             <StackPanel HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal" >
-                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn1" Width="45" Height="45" Tag="Touche1">
-                    <Image Source="/HoMIWpF;component/Images/k1.png" />
-                </Button>
-                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn2" Width="45" Height="45" Tag="Touche2">
-                    <Image Source="/HoMIWpF;component/Images/k2.png" />
-                </Button>
-                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn3" Width="45" Height="45" Tag="Touche3">
-                    <Image Source="/HoMIWpF;component/Images/k3.png" />
-                </Button>
+                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn1" Width="45" Height="45" Tag="Touche1" Content="1" Foreground=" White" FontSize="20" />
+                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn2" Width="45" Height="45" Tag="Touche2" Content="2" Foreground=" White" FontSize="20" />
+                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn3" Width="45" Height="45" Tag="Touche3" Content="3" Foreground=" White" FontSize="20" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
-                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn4" Width="45" Height="45" Tag="Touche4">
-                    <Image Source="/HoMIWpF;component/Images/k4.png" />
-                </Button>
-                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn5" Width="45" Height="45" Tag="Touche5">
-                    <Image Source="/HoMIWpF;component/Images/k5.png" />
-                </Button>
-                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn6" Width="45" Height="45" Tag="Touche6">
-                    <Image Source="/HoMIWpF;component/Images/k6.png" />
-                </Button>
+                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn4" Width="45" Height="45" Tag="Touche4" Content="4" Foreground=" White" FontSize="20" />
+                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn5" Width="45" Height="45" Tag="Touche5" Content="5" Foreground=" White" FontSize="20" />
+                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn6" Width="45" Height="45" Tag="Touche6" Content="6" Foreground=" White" FontSize="20" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
-                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn7" Width="45" Height="45" Tag="Touche7">
-                    <Image Source="/HoMIWpF;component/Images/k7.png" />
-                </Button>
-                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn8" Width="45" Height="45" Tag="Touche8">
-                    <Image Source="/HoMIWpF;component/Images/k8.png" />
-                </Button>
-                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn9" Width="45" Height="45" Tag="Touche9">
-                    <Image Source="/HoMIWpF;component/Images/k9.png" />
-                </Button>
+                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn7" Width="45" Height="45" Tag="Touche7" Content="7" Foreground=" White" FontSize="20" />
+                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn8" Width="45" Height="45" Tag="Touche8" Content="8" Foreground=" White" FontSize="20" />
+                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn9" Width="45" Height="45" Tag="Touche9" Content="9" Foreground=" White" FontSize="20" />
             </StackPanel>
-<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn0" Width="45" Height="45" Tag="Touche0">
-                    <Image Source="/HoMIWpF;component/Images/k0.png" />
-                </Button>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Margin="3" Template="{DynamicResource GlassButton}" Name="Btn0" Width="45" Height="45" Tag="Touche0" Content="0" Foreground=" White" FontSize="20" />
              </StackPanel>
         </StackPanel>
             <StackPanel >
                 <Label Content="PROG" Margin="2" Foreground="DarkGray" HorizontalContentAlignment="Center" />
-                <Button Margin="3" Template="{DynamicResource GlassButton}" Name="BtnProgP" Width="45" Height="45" Tag="ProgPlus">
-                    <Image Source="/HoMIWpF;component/Images/kplus.png" />
-                </Button>
+                <Button Margin="3" Template="{DynamicResource GlassButton}" Name="BtnProgP" Width="45" Height="45" Tag="ProgPlus" Content="+" Foreground=" White" FontSize="20" />
                 <Button Margin="3" Template="{DynamicResource GlassButton}" Name="NA" Width="45" Height="45" Visibility="Hidden" >
                     <Image Source="/HoMIWpF;component/Images/kmute.png" />
                 </Button>
-                <Button Margin="3" Template="{DynamicResource GlassButton}" Name="BtnProgM" Width="45" Height="45" Tag="ProgMoins">
-                    <Image Source="/HoMIWpF;component/Images/kmoi.png" />
-                </Button>
+                <Button Margin="3" Template="{DynamicResource GlassButton}" Name="BtnProgM" Width="45" Height="45" Tag="ProgMoins" Content="-" Foreground=" White" FontSize="20" />
             </StackPanel>
 
         </StackPanel>

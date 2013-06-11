@@ -30,8 +30,8 @@
             <Image Stretch="Fill" Name="ImgBackground" Margin="0,-30,0,-130" />
     </DockPanel>
         <DockPanel >
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Height="24" Name="StkTop" Margin="0,0,1,0" Background="#66000000" MouseLeftButtonDown="StkTop_MouseLeftButtonDown">
-                <Menu >
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top"  Name="StkTop" Margin="0,0,1,0" Background="#66000000">
+                <Menu Height="24">
                     <MenuItem Header="Homidom" Name="MenuItem1" Width="105" HorizontalAlignment="Left" Background="White">
                         <MenuItem.Icon>
                             <Image Source="/HoMIWpF;component/icone.ico" />

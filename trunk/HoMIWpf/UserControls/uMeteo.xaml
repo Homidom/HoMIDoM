@@ -25,26 +25,26 @@
                 </StackPanel>
             <StackPanel Margin="2">
                 <StackPanel Background="DarkGray" Orientation="Horizontal" Margin="1">
-                    <Label Height="28" HorizontalAlignment="Left" Margin="2" Name="Day0" VerticalAlignment="Top" Width="119" Foreground="White">###</Label>        
+                    <Label HorizontalAlignment="Left" Margin="2" Name="Day0" VerticalAlignment="Top" Width="119" Foreground="White">###</Label>        
                     <Image Height="23" HorizontalAlignment="Right" Margin="2" Name="ImgD0" Stretch="Fill" VerticalAlignment="Top" Width="23" />
                     <Label HorizontalAlignment="Right" Margin="2" Name="MaxD0" Width="34" Foreground="White">##°</Label>
                     <Label Foreground="LightBlue" Height="26" HorizontalAlignment="Right" Margin="2" Name="MinD0" VerticalAlignment="Top" Width="34">##°</Label>
                 </StackPanel>
                 <StackPanel Background="Gray" Orientation="Horizontal" Margin="1">
                     <Label HorizontalAlignment="Left" Margin="2" Name="Day1" Width="119" Foreground="White">###</Label>
-                    <Image HorizontalAlignment="Right" Margin="2" Name="ImgD1" Stretch="Fill" Width="23" />
+                    <Image HorizontalAlignment="Right" Margin="2" Name="ImgD1" Stretch="Fill" Width="23" Height="23"/>
                     <Label Foreground="White" HorizontalAlignment="Right" Margin="2" Name="MaxD1" Width="34">##°</Label>
                     <Label Foreground="LightBlue" HorizontalAlignment="Right" Margin="2" Name="MinD1" Width="34">##°</Label>
                 </StackPanel>
                 <StackPanel Background="DarkGray" Orientation="Horizontal" Margin="1">
-                <Label Height="28" HorizontalAlignment="Left" Margin="2" Name="Day2" VerticalAlignment="Top" Width="119" Foreground="White">###</Label>
+                <Label HorizontalAlignment="Left" Margin="2" Name="Day2" VerticalAlignment="Top" Width="119" Foreground="White">###</Label>
                 <Image Height="23" HorizontalAlignment="Right" Margin="2" Name="ImgD2" Stretch="Fill" VerticalAlignment="Top" Width="23" />
                 <Label HorizontalAlignment="Right" Margin="2" Name="MaxD2" Width="34" Foreground="White">##°</Label>
                 <Label Foreground="LightBlue" Height="26" HorizontalAlignment="Right" Margin="2" Name="MinD2" VerticalAlignment="Top" Width="34">##°</Label>
             </StackPanel>
                 <StackPanel Background="Gray" Orientation="Horizontal" Margin="1">
                 <Label HorizontalAlignment="Left" Margin="2" Name="Day3" Width="119" Foreground="White">###</Label>
-                <Image HorizontalAlignment="Right" Margin="2" Name="ImgD3" Stretch="Fill" Width="23" />
+                    <Image HorizontalAlignment="Right" Margin="2" Name="ImgD3" Stretch="Fill" Width="23" Height="23"/>
                 <Label Foreground="White" HorizontalAlignment="Right" Margin="2" Name="MaxD3" Width="34">##°</Label>
                 <Label Foreground="LightBlue" HorizontalAlignment="Right" Margin="2" Name="MinD3" Width="34">##°</Label>
             </StackPanel>

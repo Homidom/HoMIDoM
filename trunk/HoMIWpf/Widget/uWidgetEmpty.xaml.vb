@@ -1078,7 +1078,11 @@ Public Class uWidgetEmpty
 
             End Select
 
-            If _Fondu Then myStoryboard.Begin()
+            If _Fondu Then
+                myStoryboard.Begin()
+                myStoryboard = Nothing
+            End If
+
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Loaded: " & ex.Message, "Erreur", " uWidgetEmpty.Loaded")
         End Try

@@ -262,9 +262,10 @@ Class Window1
 
             Me.Cursor = Cursors.Wait
 
+            'Affiche splash Screen
             Dim spl As Window2 = New Window2
             spl.Show()
-            Thread.Sleep(1000)
+            
 
             Dim mystyles As New ResourceDictionary()
             mystyles.Source = New Uri("/HoMIWpF;component/Resources/DesignerItem.xaml",
@@ -349,6 +350,9 @@ Class Window1
 
             myxml = Nothing
             frmMere = Me
+
+            spl.Close()
+            spl = Nothing
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur lors du lancement de l'application: " & ex.Message, "Erreur", "New")
         End Try
@@ -1256,6 +1260,7 @@ Class Window1
                 imgStackPnl.Children.Add(ctrl)
             End If
 
+            ctrl = Nothing
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur lors de la création du bouton menu: " & ex.ToString, "Erreur", "NewBtnMnu")
         End Try
@@ -2338,13 +2343,6 @@ Class Window1
         End Try
     End Sub
 
-
-    Private Sub StkTop_MouseLeftButtonDown(sender As Object, e As MouseButtonEventArgs) Handles StkTop.MouseLeftButtonDown
-        Try
-            DragMove()
-        Catch ex As Exception
-        End Try
-    End Sub
 
 #Region "Quitter"
     'Bouton Quitter

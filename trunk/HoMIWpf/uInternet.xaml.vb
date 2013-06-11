@@ -27,11 +27,11 @@ Partial Public Class uInternet
     End Sub
 
     Private Sub Image1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Image1.MouseDown
-        x.GoBack()
+        If x.CanGoBack Then x.GoBack()
     End Sub
 
     Private Sub Image2_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Image2.MouseDown
-        x.GoForward()
+        If x.CanGoForward Then x.GoForward()
     End Sub
 
     Sub SuppressScriptErrors(ByVal wb As Controls.WebBrowser, ByVal Hide As Boolean)
@@ -48,6 +48,19 @@ Partial Public Class uInternet
         Catch ex As Exception
             MessageBox.Show("Erreur uInternet.SuppressScriptErrors: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
+    End Sub
+
+    Private Sub x_LoadCompleted(ByVal sender As Object, ByVal e As System.Windows.Navigation.NavigationEventArgs) Handles x.LoadCompleted
+        If x.CanGoBack Then
+            Image1.Visibility = Windows.Visibility.Visible
+        Else
+            Image1.Visibility = Windows.Visibility.Hidden
+        End If
+        If x.CanGoForward Then
+            Image2.Visibility = Windows.Visibility.Visible
+        Else
+            Image2.Visibility = Windows.Visibility.Hidden
+        End If
     End Sub
 
     Private Sub x_Navigated(ByVal sender As Object, ByVal e As System.Windows.Navigation.NavigationEventArgs) Handles x.Navigated

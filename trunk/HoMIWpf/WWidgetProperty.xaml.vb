@@ -912,6 +912,7 @@ Public Class WWidgetProperty
             ' Image téléchargée depuis le serveur: une boîte de dialogue contenant les images du serveur est affichée.
             Dim frm As New WindowImg
             frm.ShowDialog()
+
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 Dim retour As String = frm.FileName
                 If String.IsNullOrEmpty(retour) = False Then
@@ -925,7 +926,7 @@ Public Class WWidgetProperty
             frm = Nothing
 
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ImgPicture.BtnInitPictServeur_Click: " & ex.Message, "Erreur", "ImgPicture.BtnInitPictServeur_Click")
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ImgPicture.BtnInitPictServeur_Click: " & ex.ToString, "Erreur", "ImgPicture.BtnInitPictServeur_Click")
         End Try
 
     End Sub
