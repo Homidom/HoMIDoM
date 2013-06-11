@@ -17,6 +17,7 @@ Public Class WConfig
         End If
 
         Frm.Password = TxtPassword.Text
+        Frm.AffLastError = ChkAffLastError.IsChecked
         Frm.ShowSoleil = ChkSoleil.IsChecked
         Frm.FullScreen = ChkFullScreen.IsChecked
         Frm.Friction = SliderFriction.Value
@@ -52,6 +53,7 @@ Public Class WConfig
         TxtIP.Text = Frm.IP
         TxtPort.Text = Frm.PortSOAP
         TxtID.Text = IdSrv
+        ChkAffLastError.IsChecked = Frm.AffLastError
 
         ListMnu.Items.Clear()
         MyListMnu.Clear()

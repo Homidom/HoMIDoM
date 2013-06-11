@@ -112,6 +112,7 @@
                 <Label Margin="1" Name="LblLeve" HorizontalAlignment="Right" Tag="Soleil" Foreground="White" FontSize="10">?</Label>
                 <Image HorizontalAlignment="Left" Margin="1" Name="ImageCouche" Stretch="Fill" Tag="Soleil" Width="20"  Height="20" Source="/HoMIWpF;component/Images/36.png" />
                 <Label Foreground="White" HorizontalAlignment="Left" Margin="1" Name="LblCouche" Tag="Soleil" FontSize="10">?</Label>
+                <Image HorizontalAlignment="Left" Margin="30,0,0,0" Name="ImgMess" Stretch="Fill" Width="20"  Height="20" Source="/HoMIWpF;component/Images/Warning.png" Visibility="Collapsed" />
             </StackPanel>
             <StackPanel DockPanel.Dock="Bottom" >
             <local:AniScrollViewer  x:Name="ScrollViewer1" Margin="2" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" BorderBrush="DarkGray" Background="#99000000">
