@@ -154,6 +154,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Cache.vb" />
     <Compile Include="ClsServer.vb" />
     <Compile Include="CtrlDevice\uCamera.xaml.vb">
       <DependentUpon>uCamera.xaml</DependentUpon>
@@ -456,9 +457,6 @@
     <Resource Include="Images\Panel01.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\11.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\Play.png" />
   </ItemGroup>
   <ItemGroup>
@@ -561,22 +559,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icone.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\k0.png" />
-    <Resource Include="Images\k1.png" />
-    <Resource Include="Images\k2.png" />
-    <Resource Include="Images\k3.png" />
-    <Resource Include="Images\k4.png" />
-    <Resource Include="Images\k5.png" />
-    <Resource Include="Images\k6.png" />
-    <Resource Include="Images\k7.png" />
-    <Resource Include="Images\k8.png" />
-    <Resource Include="Images\k9.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\kmoi.png" />
-    <Resource Include="Images\kplus.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\kmute.png" />
@@ -720,7 +702,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="False" />
+      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

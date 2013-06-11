@@ -5,7 +5,7 @@
 
     <Grid MinWidth="300" Background="DarkGray">
         <StackPanel >
-            <Button Name="BtnCloseEditAction" Margin="10" Width="25" Height="25" Template="{DynamicResource GlassButton}" Foreground="White" HorizontalAlignment="Right">X</Button>
+            <Button Name="BtnCloseEditAction" Margin="3" Width="25" Height="25" Template="{DynamicResource GlassButton}" Foreground="White" HorizontalAlignment="Right">X</Button>
             <my:uMedia x:Name="UMedia1" />
         </StackPanel>
     </Grid>

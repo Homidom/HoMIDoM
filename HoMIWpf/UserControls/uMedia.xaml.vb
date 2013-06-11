@@ -405,7 +405,7 @@ Public Class uMedia
 
     Private Sub MediaElement1_MediaOpened(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MediaElement1.MediaOpened
         dt.Stop()
-        SliderSeek.Maximum = MediaElement1.NaturalDuration.TimeSpan.Seconds
+        SliderSeek.Maximum = MediaElement1.NaturalDuration.TimeSpan.TotalSeconds
         SliderSeek.SmallChange = 2
         dt.Start()
     End Sub
@@ -415,7 +415,7 @@ Public Class uMedia
 
         ' Overloaded constructor takes the arguments days, hours, minutes, seconds, miniseconds. 
         ' Create a TimeSpan with miliseconds equal to the slider value. 
-        Dim ts As New TimeSpan(0, 0, 0, 0, SliderValue)
+        Dim ts As New TimeSpan(0, 0, SliderValue)
         If _IsLocal Then MediaElement1.Position = ts
     End Sub
 

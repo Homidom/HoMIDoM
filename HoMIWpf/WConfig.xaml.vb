@@ -327,6 +327,7 @@ Public Class WConfig
         Next
 
         If ListMnu.SelectedIndex - 1 = 0 Then BtnUP.IsEnabled = False
+        StkProperty.Visibility = Windows.Visibility.Hidden
     End Sub
 
     Private Sub BtnDown_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDown.Click
@@ -347,7 +348,7 @@ Public Class WConfig
         Next
 
         If ListMnu.SelectedIndex + 1 = ListMnu.Items.Count Then BtnDown.IsEnabled = False
-
+        StkProperty.Visibility = Windows.Visibility.Hidden
     End Sub
 
     Private Sub ChkWidthPass_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ChkWidthPass.Checked, ChkWidthPass.Click
