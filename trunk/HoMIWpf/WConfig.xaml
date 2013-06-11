@@ -52,6 +52,7 @@
                             <CheckBox Name="ChkWidthPass" Content="Demander Mot de passe pour fonctions critiques" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                             <TextBox Name="TxtPassword" Margin="5,0,0,0" Width="100" MaxLength="12" />
                         </StackPanel>
+                        <CheckBox Name="ChkAffLastError" Foreground="White" Content=" Afficher Message"/>
                     </StackPanel>
                 </GroupBox >
             </TabItem>

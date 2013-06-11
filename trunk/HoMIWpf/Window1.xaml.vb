@@ -27,7 +27,7 @@ Imports HoMIWpF.Designer.ResizeRotateAdorner
 
 Class Window1
 
-#Region "Data"
+#Region "Variables"
     ' Used when manually scrolling.
     Private scrollTarget As Point
     Private scrollStartPoint As Point
@@ -61,9 +61,24 @@ Class Window1
     Dim _ShowQuitter As Boolean = True
     Dim _PassWord As String
     Dim _WithPassword As Boolean = False
+    Dim _AffLastError As Boolean = False
+
 #End Region
 
 #Region "Property"
+    Public Property AffLastError As Boolean
+        Get
+            Return _AffLastError
+        End Get
+        Set(ByVal value As Boolean)
+            _AffLastError = value
+            If _AffLastError Then
+                ImgMess.Visibility = Windows.Visibility.Visible
+            Else
+                ImgMess.Visibility = Windows.Visibility.Collapsed
+            End If
+        End Set
+    End Property
 
     Public Property WithPassword As Boolean
         Get
@@ -488,6 +503,8 @@ Class Window1
                             Me.Width = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
                         Case "height"
                             Me.Height = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
+                        Case "afflasterror"
+                            If IsBoolean(list.Item(0).Attributes.Item(j).Value) Then AffLastError = list.Item(0).Attributes.Item(j).Value
                         Case Else
                             Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                     End Select
@@ -847,6 +864,9 @@ Class Window1
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("password")
             writer.WriteValue(_Password)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("afflasterror")
+            writer.WriteValue(_AffLastError)
             writer.WriteEndAttribute()
             writer.WriteEndElement()
 
@@ -1279,6 +1299,18 @@ Class Window1
                     mydate = myService.GetHeureCoucherSoleil
                     LblCouche.Content = mydate.ToShortTimeString
                     mydate = Nothing
+                End If
+
+                If _AffLastError Then
+                    If myService.GetLastLogsError.Count > 0 Then
+                        Dim _string As String = ""
+                        For Each logerror As String In myService.GetLastLogsError
+                            If String.IsNullOrEmpty(logerror) = False Then
+                                _string &= logerror & vbCrLf
+                                ImgMess.ToolTip = _string
+                            End If
+                        Next
+                    End If
                 End If
             Else
                 LblTime.Content = Now.ToLongDateString & " " & Now.ToLongTimeString
