@@ -29,7 +29,7 @@ Public Class uHisto
 
 
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de la création de la fenêtre des relevés: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la création de la fenêtre des relevés: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -41,14 +41,14 @@ Public Class uHisto
         Try
             _MaxData = TxtMaxData.Text
             If IsNumeric(_MaxData) = False Or _MaxData > 9999 Or _MaxData < 0 Then
-                MessageBox.Show("Le nombre maximal de données doit être un numérique et <9999", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nombre maximal de données doit être un numérique et <9999", "Erreur", "")
                 TxtMaxData.Text = 2000
                 Exit Sub
             End If
 
             Update_Graphe()
         Catch ex As Exception
-            MessageBox.Show("Erreur uHisto Refresh_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uHisto Refresh_Click: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -72,7 +72,7 @@ Public Class uHisto
     '            Me.Cursor = Cursors.Arrow
     '        End If
     '    Catch ex As Exception
-    '        MessageBox.Show("Erreur uHisto Chart2_MouseMove: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+    '        AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR,"Erreur uHisto Chart2_MouseMove: " & ex.ToString, "ERREUR","")
     '    End Try
     'End Sub
 
@@ -240,7 +240,7 @@ Public Class uHisto
             Me.UpdateLayout()
         Catch ex As Exception
             Me.Cursor = Nothing
-            MessageBox.Show("Erreur uHisto Update_Graphe: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uHisto Update_Graphe: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -291,14 +291,14 @@ Public Class uHisto
                     _CurrentChart.SaveImage(saveFileDialog1.FileName, format)
                 End If
             Else
-                MessageBox.Show("Pas de graphique en cours!!")
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Pas de graphique en cours!!")
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur uHisto BtnSave_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uHisto BtnSave_Click: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
-    Private Sub BtnExport_Click(sender As Object, e As RoutedEventArgs) Handles BtnExport.Click
+    Private Sub BtnExport_Click(ByVal sender As Object, ByVal e As RoutedEventArgs) Handles BtnExport.Click
         Try
             If _CurrentChart IsNot Nothing Then
 
@@ -319,7 +319,7 @@ Public Class uHisto
                     ElseIf saveFileDialog1.FileName.Contains(".") = False Then
                         saveFileDialog1.FileName = saveFileDialog1.FileName & ".csv"
                     Else
-                        MessageBox.Show("Format non supporté!")
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Format non supporté!")
                         Exit Sub
                     End If
 
@@ -350,13 +350,13 @@ Public Class uHisto
                         Next kvp
                     Next
                     sw.Close()
-                    MessageBox.Show("Exportation terminée.", "HoMIAdmiN", MessageBoxButton.OK, MessageBoxImage.Information)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Exportation terminée.", "HoMIAdmiN", "")
                 End If
             Else
-                MessageBox.Show("Aucune donnée!", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Aucune donnée!", "ERREUR", "")
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur uHisto BtnExport_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uHisto BtnExport_Click: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -382,7 +382,7 @@ Public Class uHisto
 
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur uHisto CbBackColor_SelectionChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uHisto CbBackColor_SelectionChanged: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -396,7 +396,7 @@ Public Class uHisto
             Test.Dispose()
             _CurrentChart = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uHisto_Unloaded: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uHisto_Unloaded: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -404,7 +404,7 @@ Public Class uHisto
         Try
             MyBase.Finalize()
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub Finalize: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Finalize: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 

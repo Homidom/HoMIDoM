@@ -28,7 +28,7 @@ Public Class uReleve
             '    _CurrentId = ListReleve(0).IdDevice
             'End If
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'affichage du relevé: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'affichage du relevé: " & ex.ToString, "Erreur Admin", "")
         End Try
     End Sub
 
@@ -36,7 +36,7 @@ Public Class uReleve
         Try
             RaiseEvent Refresh()
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'affichage du relevé RefreshGrid: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'affichage du relevé RefreshGrid: " & ex.ToString, "Erreur Admin", "")
         End Try
     End Sub
 
@@ -47,7 +47,7 @@ Public Class uReleve
             Loop
 
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'affichage du relevé GridOK: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'affichage du relevé GridOK: " & ex.ToString, "Erreur Admin", "")
         End Try
     End Sub
 
@@ -56,12 +56,12 @@ Public Class uReleve
             Dim retour As Integer = myService.UpdateHisto(IdSrv, _CurrentId, txtTime.Text, txtValue.Text, _CurrentDateTime, _CurrentValue, _CurrentSource)
 
             If retour <> 0 Then
-                MessageBox.Show("Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", "")
             Else
                 If Chk_refresh.IsChecked Then RefreshGrid()
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur BtnUpdate_Click: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnUpdate_Click: " & ex.ToString, "Erreur Admin", "")
         End Try
     End Sub
 
@@ -70,34 +70,34 @@ Public Class uReleve
             Dim retour As Integer = myService.DeleteHisto(IdSrv, _CurrentId, _CurrentDateTime, _CurrentValue, _CurrentSource)
 
             If retour <> 0 Then
-                MessageBox.Show("Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", "")
             Else
                 If Chk_refresh.IsChecked Then RefreshGrid()
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur BtnDelete_Click: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnDelete_Click: " & ex.ToString, "Erreur Admin", "")
         End Try
     End Sub
 
     Private Sub BtnAdd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnAdd.Click
         Try
             If String.IsNullOrEmpty(txtTime2.Text) = True Then
-                MessageBox.Show("Erreur veuillez saisir le champ DateTime", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur veuillez saisir le champ DateTime", "Erreur Admin", "")
             End If
             If String.IsNullOrEmpty(txtValue2.Text) = True Then
-                MessageBox.Show("Erreur veuillez saisir le champ Valeur", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur veuillez saisir le champ Valeur", "Erreur Admin", "")
             End If
 
             Dim retour As Integer = myService.AddHisto(IdSrv, _CurrentId, txtTime2.Text, txtValue2.Text, _CurrentSource)
 
 
             If retour <> 0 Then
-                MessageBox.Show("Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", "")
             Else
                 If Chk_refresh.IsChecked Then RefreshGrid()
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur BtnAdd_Click: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnAdd_Click: " & ex.ToString, "Erreur Admin", "")
         End Try
     End Sub
 

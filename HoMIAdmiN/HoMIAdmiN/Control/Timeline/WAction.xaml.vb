@@ -23,7 +23,7 @@ Public Class WActionParametrage
                 Select Case _typ
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionDevice
                         If Cb1.SelectedIndex < 0 Or Cb2.SelectedIndex < 0 Or (TxtValue.Visibility = Windows.Visibility.Visible And String.IsNullOrEmpty(TxtValue.Text) = True) Then
-                            MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez renseigner tous les champs !", "Erreur", "BtnOk.Click")
                             Exit Sub
                         End If
 
@@ -38,7 +38,7 @@ Public Class WActionParametrage
 
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionMacro
                         If Cb1.SelectedIndex < 0 Then
-                            MessageBox.Show("Veuillez sélectionner une macro !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez sélectionner une macro !", "Erreur", "BtnOK.Click")
                             Exit Sub
                         End If
 
@@ -48,7 +48,7 @@ Public Class WActionParametrage
 
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionMail
                         If Cb1.SelectedIndex < 0 Or String.IsNullOrEmpty(Txt2.Text) = True Or String.IsNullOrEmpty(TxtValue.Text) = True Then
-                            MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez renseigner tous les champs !", "Erreur", "BtnOK.Click")
                             Exit Sub
                         End If
 
@@ -60,7 +60,7 @@ Public Class WActionParametrage
 
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionSpeech
                         If String.IsNullOrEmpty(TxtValue.Text) = True Then
-                            MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez renseigner tous les champs !", "Erreur", "BtnOK.Click")
                             Exit Sub
                         End If
 
@@ -70,7 +70,7 @@ Public Class WActionParametrage
 
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionVB
                         If String.IsNullOrEmpty(TxtValue.Text) = True Or String.IsNullOrEmpty(Txt2.Text) = True Then
-                            MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez renseigner tous les champs !", "Erreur", "BtnOK.Click")
                             Exit Sub
                         End If
 
@@ -81,15 +81,15 @@ Public Class WActionParametrage
 
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionLogEvent
                         If String.IsNullOrEmpty(TxtValue.Text) = True Then
-                            MessageBox.Show("Veuillez renseigner tous les champs car il n'y a pas de message !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez renseigner tous les champs car il n'y a pas de message !", "Erreur", "BtnOK.Click")
                             Exit Sub
                         End If
                         If Cb1.SelectedIndex < 0 Then
-                            MessageBox.Show("Veuillez sélectionner un type de log !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez sélectionner un type de log !", "Erreur", "BtnOK.Click")
                             Exit Sub
                         End If
                         If IsNumeric(Txt2.Text) = False Then
-                            MessageBox.Show("L'event ID doit être numérique !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "L'event ID doit être numérique !", "Erreur", "BtnOK.Click")
                             Exit Sub
                         End If
 
@@ -101,15 +101,15 @@ Public Class WActionParametrage
 
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionLogEventHomidom
                         If String.IsNullOrEmpty(TxtValue.Text) = True Then
-                            MessageBox.Show("Veuillez renseigner tous les champs car il n'y a pas de message !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez renseigner tous les champs car il n'y a pas de message !", "Erreur", "BtnOK.Click")
                             Exit Sub
                         End If
                         If Cb1.SelectedIndex < 0 Then
-                            MessageBox.Show("Veuillez sélectionner un type de log !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez sélectionner un type de log !", "Erreur", "BtnOK.Click")
                             Exit Sub
                         End If
                         If String.IsNullOrEmpty(Txt2.Text) = True Then
-                            MessageBox.Show("Veuillez saisir le nom de la fonction !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir le nom de la fonction !", "Erreur", "BtnOK.Click")
                             Exit Sub
                         End If
 
@@ -121,7 +121,7 @@ Public Class WActionParametrage
 
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionDOS
                         If String.IsNullOrEmpty(Txt2.Text) = True Then
-                            MessageBox.Show("Veuillez saisir le chemin du fichier !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir le chemin du fichier !", "Erreur", "BtnOK.Click")
                             Exit Sub
                         End If
 
@@ -132,7 +132,7 @@ Public Class WActionParametrage
 
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionHttp
                         If String.IsNullOrEmpty(TxtValue.Text) = True Then
-                            MessageBox.Show("Veuillez renseigner tous les champs !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez renseigner tous les champs !", "Erreur", "BtnOK.Click")
                             Exit Sub
                         End If
 
@@ -171,7 +171,7 @@ Public Class WActionParametrage
 
             DialogResult = True
         Catch ex As Exception
-            MessageBox.Show("Erreur Click_Ok: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Click_Ok: " & ex.ToString, "Erreur Admin", "")
         End Try
     End Sub
 
@@ -196,7 +196,7 @@ Public Class WActionParametrage
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur Cb1_selectionChanged: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Cb1_selectionChanged: " & ex.ToString, "Erreur Admin", "")
         End Try
     End Sub
 
@@ -448,7 +448,7 @@ Public Class WActionParametrage
                             End If
                             x.Uid = HoMIDom.HoMIDom.Api.GenerateGUID
                             x.TypeCondition = obj.Conditions.Item(i).Type
-                            
+
                             x.Operateur = obj.Conditions.Item(i).Operateur
                             x.Signe = obj.Conditions.Item(i).Condition
                             If x.TypeCondition = Action.TypeCondition.DateTime Then
@@ -483,7 +483,7 @@ Public Class WActionParametrage
 
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur New: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur New: " & ex.ToString, "Erreur Admin", "")
         End Try
     End Sub
 
@@ -525,7 +525,7 @@ Public Class WActionParametrage
                 Next
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur Cb2_selectionChanged: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Cb2_selectionChanged: " & ex.ToString, "Erreur Admin", "")
         End Try
     End Sub
 
@@ -610,7 +610,7 @@ Public Class WActionParametrage
             StkCondition.Children.Add(x)
             _ListuConditions.Add(x)
         Catch ex As Exception
-            MessageBox.Show("Erreur WAction BtnCondiTime_MouseLeftButtonDown: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur WAction BtnCondiTime_MouseLeftButtonDown: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -629,7 +629,7 @@ Public Class WActionParametrage
             StkCondition.Children.Add(x)
             _ListuConditions.Add(x)
         Catch ex As Exception
-            MessageBox.Show("Erreur WAction BtnCondiDevice_MouseLeftButtonDown: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur WAction BtnCondiDevice_MouseLeftButtonDown: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -645,7 +645,7 @@ Public Class WActionParametrage
 
             RefreshCondition()
         Catch ex As Exception
-            MessageBox.Show("Erreur WAction DeleteCondition: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur WAction DeleteCondition: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -669,7 +669,7 @@ Public Class WActionParametrage
 
             RefreshCondition()
         Catch ex As Exception
-            MessageBox.Show("Erreur WAction UpCondition: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur WAction UpCondition: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -686,7 +686,7 @@ Public Class WActionParametrage
                 Next
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur RefreshCondition: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur RefreshCondition: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 #End Region

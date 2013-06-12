@@ -10,41 +10,41 @@ Partial Public Class uConfigServer
         Try
             If IsConnect = True Then
                 If String.IsNullOrEmpty(TxtIPSOAP.Text) = True Then
-                    MessageBox.Show("L'adresse IP SOAP est erronée !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'adresse IP SOAP est erronée !!", "Erreur", "")
                     Exit Sub
                 End If
                 If IsNumeric(TxtSOAP.Text) = False Or String.IsNullOrEmpty(TxtSOAP.Text) = True Then
-                    MessageBox.Show("Le port SOAP est erroné !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le port SOAP est erroné !!", "Erreur", "")
                     Exit Sub
                 End If
                 If String.IsNullOrEmpty(TxtIdSrv.Text) = True Then
-                    MessageBox.Show("L'id du serveur ne peut être vide !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'id du serveur ne peut être vide !!", "Erreur", "")
                     Exit Sub
                 End If
                 If TxtIdSrv.Text = "99" Then
-                    MessageBox.Show("L'id du serveur ne peut être 99, ce nombre est réservé pour le système.", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'id du serveur ne peut être 99, ce nombre est réservé pour le système.", "Erreur", "")
                     Exit Sub
                 End If
                 If IsNumeric(TxtSave.Text) = False Or String.IsNullOrEmpty(TxtSave.Text) = True Or CInt(TxtSave.Text) < 0 Then
-                    MessageBox.Show("La valeur de saubegarde doit être un chiffre et positif !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "La valeur de saubegarde doit être un chiffre et positif !!", "Erreur", "")
                     Exit Sub
                 End If
                 If TxtSOAP.Text <> myService.GetPortSOAP Then
-                    MessageBox.Show("Vous avez modifié le port SOAP, n'oubliez pas:" & vbCrLf & "- D'enregistrer la configuration pour qu'elle soit prise en compte au prochain démarrage" & vbCrLf & "- De redémarrer le service", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Vous avez modifié le port SOAP, n'oubliez pas:" & vbCrLf & "- D'enregistrer la configuration pour qu'elle soit prise en compte au prochain démarrage" & vbCrLf & "- De redémarrer le service", "Information", "")
                     myService.SetPortSOAP(IdSrv, TxtSOAP.Text)
                     If TxtSOAP.Text <> myService.GetPortSOAP Then
-                        MessageBox.Show("Une erreur est survenue lors du changement du port, veuillez consulter le log", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Une erreur est survenue lors du changement du port, veuillez consulter le log", "")
                     End If
                 End If
                 If TxtIPSOAP.Text <> myService.GetIPSOAP Then
-                    MessageBox.Show("Vous avez modifié l'adresse IP SOAP (donc celle du serveur), n'oubliez pas:" & vbCrLf & "- D'enregistrer la configuration pour qu'elle soit prise en compte au prochain démarrage" & vbCrLf & "- De redémarrer le service" & vbCrLf & "- De modifier l'adresse du serveur au prochain lancement de l'admin", "Information", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Vous avez modifié l'adresse IP SOAP (donc celle du serveur), n'oubliez pas:" & vbCrLf & "- D'enregistrer la configuration pour qu'elle soit prise en compte au prochain démarrage" & vbCrLf & "- De redémarrer le service" & vbCrLf & "- De modifier l'adresse du serveur au prochain lancement de l'admin", "Information", "")
                     myService.SetIPSOAP(IdSrv, TxtIPSOAP.Text)
                     If TxtIPSOAP.Text <> myService.GetIPSOAP Then
-                        MessageBox.Show("Une erreur est survenue lors du changement de l'adresse IP SOAP, veuillez consulter le log", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Une erreur est survenue lors du changement de l'adresse IP SOAP, veuillez consulter le log", "")
                     End If
                 End If
                 If IsNumeric(TxtFile.Text) = False Or CDbl(TxtFile.Text) < 1 Then
-                    MessageBox.Show("Veuillez saisir un numérique et positif pour la taille max du fichier de log!", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez saisir un numérique et positif pour la taille max du fichier de log!", "Admin", "")
                     Exit Sub
                 End If
 
@@ -55,7 +55,7 @@ Partial Public Class uConfigServer
 
                 tmpSave = Format(tmpSave, "#0")
                 Dim retour As String = myService.SetTimeSave(IdSrv, tmpSave)
-                If retour <> "0" Then MessageBox.Show(retour, "Erreur SetTimeSave")
+                If retour <> "0" Then AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, retour, "Erreur SetTimeSave")
 
                 'myService.SetLongitude(IdSrv, CDbl(TxtLong.Text.Replace(".", ",")))
                 'myService.SetLatitude(IdSrv, CDbl(TxtLat.Text.Replace(".", ",")))
@@ -150,7 +150,7 @@ Partial Public Class uConfigServer
             End If
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uconfigserver BtnOK_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uconfigserver BtnOK_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -158,7 +158,7 @@ Partial Public Class uConfigServer
         Try
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uconfigserver BtnCancel_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uconfigserver BtnCancel_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -240,29 +240,29 @@ Partial Public Class uConfigServer
             End If
 
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uconfigserver New: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uconfigserver New: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
     Private Sub TxtMaxLogMonth_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMaxLogMonth.TextChanged
         Try
             If IsNumeric(TxtMaxLogMonth.Text) = False Then
-                MessageBox.Show("Veuillez saisir un chiffre comme durée de mois maximum", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez saisir un chiffre comme durée de mois maximum", "Admin", "")
                 TxtMaxLogMonth.Text = myService.GetMaxMonthLog
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur uConfigServer TxtMaxLogMonth_TextChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uConfigServer TxtMaxLogMonth_TextChanged: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
     Private Sub TxtFile_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtFile.TextChanged
         Try
             If IsNumeric(TxtFile.Text) = False Then
-                MessageBox.Show("Veuillez saisir un chiffre comme taille maximale", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez saisir un chiffre comme taille maximale", "Admin", "")
                 TxtFile.Text = myService.GetMaxFileSizeLog
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur uConfigServer TxtFile_TextChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uConfigServer TxtFile_TextChanged: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -294,15 +294,15 @@ Partial Public Class uConfigServer
 
                 Dim retour As String = myService.ImportConfig(IdSrv, filename)
                 If retour <> "0" Then
-                    MessageBox.Show(retour, "Erreur import config", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, retour, "Erreur import config", "")
                 Else
-                    MessageBox.Show("L'import du fichier de configuration a été effectué, l'ancien fichier a été renommé en .old, veuillez redémarrer le serveur pour prendre en compte cette nouvelle configuration", "Import config", MessageBoxButton.OK, MessageBoxImage.Information)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'import du fichier de configuration a été effectué, l'ancien fichier a été renommé en .old, veuillez redémarrer le serveur pour prendre en compte cette nouvelle configuration", "Import config", "")
                 End If
             End If
 
             Me.Cursor = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub BtnImport_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnImport_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -313,7 +313,7 @@ Partial Public Class uConfigServer
             End If
 
             Me.Cursor = Cursors.Wait
-           'Exporter le fichier de config
+            'Exporter le fichier de config
 
             ' Configure open file dialog box
             Dim dlg As New Microsoft.Win32.SaveFileDialog()
@@ -330,19 +330,19 @@ Partial Public Class uConfigServer
                 Dim filename As String = dlg.FileName
                 Dim retour As String = myService.ExportConfig(IdSrv)
                 If retour.StartsWith("ERREUR") Then
-                    MessageBox.Show(retour, "Erreur export config", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, retour, "Erreur export config", "")
                 Else
                     Dim TargetFile As StreamWriter
                     TargetFile = New StreamWriter(filename, False)
                     TargetFile.Write(retour)
                     TargetFile.Close()
-                    MessageBox.Show("L'export du fichier de configuration a été effectué", "Export config", MessageBoxButton.OK, MessageBoxImage.Information)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'export du fichier de configuration a été effectué", "Export config", "")
                 End If
             End If
-       
-        Me.Cursor = Nothing
+
+            Me.Cursor = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub BtnExport_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnExport_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -356,41 +356,41 @@ Partial Public Class uConfigServer
             Dim retour As String = myService.TestSendMail(IdSrv, TxtMail.Text, mail, TxtAdresse.Text, TxtSmtpPort.Text, ChkSSL.IsChecked, TxtLogin.Text, TxtPassword.Password)
 
             If retour = "0" Then
-                MessageBox.Show("Le mail de test a été envoyé à l'adresse: " & mail, "Test mail", MessageBoxButton.OK, MessageBoxImage.Information)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le mail de test a été envoyé à l'adresse: " & mail, "Test mail", "")
             Else
-                MessageBox.Show("Erreur lors de l'envoi du mail de test envoyé à l'adresse: " & mail & ": " & retour, "Test mail", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'envoi du mail de test envoyé à l'adresse: " & mail & ": " & retour, "Test mail", "")
             End If
 
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub BtnTestMail_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnTestMail_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
     Private Sub TxtTarifJour_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtTarifJour.TextChanged
         Try
             If IsNumeric(TxtTarifJour.Text) = False Then
-                MessageBox.Show("Veuillez saisir une valeur numérique pour le tarif de jour et avec virgule si besoin", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez saisir une valeur numérique pour le tarif de jour et avec virgule si besoin", "ERREUR", "")
                 TxtTarifJour.Text = "0"
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub TxtTarifJour_TextChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub TxtTarifJour_TextChanged: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
     Private Sub TxtTarifNuit_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtTarifNuit.TextChanged
         Try
             If IsNumeric(TxtTarifNuit.Text) = False Then
-                MessageBox.Show("Veuillez saisir une valeur numérique pour le tarif de jour et avec virgule si besoin", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez saisir une valeur numérique pour le tarif de jour et avec virgule si besoin", "ERREUR", "")
                 TxtTarifNuit.Text = "0"
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub TxtTarifNuit_TextChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub TxtTarifNuit_TextChanged: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
     Private Sub TxtPortSrvWeb_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtPortSrvWeb.TextChanged
         If IsNumeric(TxtPortSrvWeb.Text) = False Then
-            MessageBox.Show("Veuillez saisir une valeur numérique pour le port du serveur web", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez saisir une valeur numérique pour le port du serveur web", "Erreur", "")
             TxtPortSrvWeb.Undo()
         End If
     End Sub
@@ -399,7 +399,7 @@ Partial Public Class uConfigServer
         Try
             myService.RestartServeurWeb()
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub BtnStartSrvWeb_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnStartSrvWeb_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 End Class

@@ -46,7 +46,7 @@
             MyContextMenu.Items.Add(MyContextMenuFille)
             Me.ContextMenu = MyContextMenu
         Catch ex As Exception
-            MessageBox.Show("Erreur ImageButton New: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur ImageButton New: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 

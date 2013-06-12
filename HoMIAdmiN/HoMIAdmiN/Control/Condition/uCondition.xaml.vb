@@ -33,7 +33,7 @@ Public Class uCondition
                         StkTime.Children.Clear()
                 End Select
             Catch ex As Exception
-                MessageBox.Show("Erreur uCondition TypeCondition: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCondition TypeCondition: " & ex.ToString, "ERREUR", "")
             End Try
         End Set
     End Property
@@ -48,7 +48,7 @@ Public Class uCondition
                 If value = 1 Then CbOperateur.SelectedIndex = 0
                 If value = 2 Then CbOperateur.SelectedIndex = 1
             Catch ex As Exception
-                MessageBox.Show("Erreur uCondition Operateur: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCondition Operateur: " & ex.ToString, "ERREUR", "")
             End Try
         End Set
     End Property
@@ -152,7 +152,7 @@ Public Class uCondition
                     If a(7) = "1" Then ChkCoucheS.IsChecked = True
                 End If
             Catch ex As Exception
-                MessageBox.Show("Erreur uCondition DateTime: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCondition DateTime: " & ex.ToString, "ERREUR", "")
             End Try
         End Set
     End Property
@@ -171,7 +171,7 @@ Public Class uCondition
                     End If
                 Next
             Catch ex As Exception
-                MessageBox.Show("Erreur uCondition IdDevice: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCondition IdDevice: " & ex.ToString, "ERREUR", "")
             End Try
         End Set
     End Property
@@ -190,7 +190,7 @@ Public Class uCondition
                     End If
                 Next
             Catch ex As Exception
-                MessageBox.Show("Erreur uCondition PropertyDevice: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCondition PropertyDevice: " & ex.ToString, "ERREUR", "")
             End Try
         End Set
     End Property
@@ -215,7 +215,7 @@ Public Class uCondition
                     TxtValue.Text = value
                 End If
             Catch ex As Exception
-                MessageBox.Show("Erreur uCondition Value: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCondition Value: " & ex.ToString, "ERREUR", "")
             End Try
         End Set
     End Property
@@ -266,7 +266,7 @@ Public Class uCondition
                 End If
             Next
         Catch ex As Exception
-            MessageBox.Show("Erreur uCondition CbDevice_DropDownClosed: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCondition CbDevice_DropDownClosed: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -415,7 +415,7 @@ Public Class uCondition
             TxtValue.ContextMenu = mycontextmnu
 
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString)
         End Try
     End Sub
 
@@ -431,7 +431,7 @@ Public Class uCondition
                 TxtValue.ToolTip = "Veuillez passer par le menu via le clic droit pour changer le device ou sa propriété"
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString)
         End Try
     End Sub
 
@@ -550,7 +550,7 @@ Public Class uCondition
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur uCondition uCondition_MouseLeave: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCondition uCondition_MouseLeave: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -590,7 +590,7 @@ Public Class uCondition
                 End If
             Next
         Catch ex As Exception
-            MessageBox.Show("Erreur uCondition CbDevice_SelectionChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCondition CbDevice_SelectionChanged: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -826,7 +826,7 @@ Public Class uCondition
                 TxtJr.Text = ""
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur uCondition ChkDate_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCondition ChkDate_Click: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -855,7 +855,7 @@ Public Class uCondition
                 Chk7.IsChecked = False
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur uCondition ChkJour_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCondition ChkJour_Click: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -871,7 +871,7 @@ Public Class uCondition
                 TxtSc.Text = ""
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur uCondition ChkHeure_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCondition ChkHeure_Click: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -900,7 +900,7 @@ Public Class uCondition
                 ChkCoucheS.IsChecked = False
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur uCondition ChkLeveS_Checked: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCondition ChkLeveS_Checked: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -929,7 +929,7 @@ Public Class uCondition
                 ChkLeveS.IsChecked = False
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur uCondition ChkCoucheS_Checked: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCondition ChkCoucheS_Checked: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -948,7 +948,7 @@ Public Class uCondition
                             Try
                                 _obj = CStr(TxtValue.Text)
                             Catch ex As Exception
-                                MessageBox.Show("Veuillez saisir un type String !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type String !!", "Erreur", "TxtValue.Changed")
                                 TxtValue.Text = ""
                                 _flag = True
                             End Try
@@ -956,7 +956,7 @@ Public Class uCondition
                             Try
                                 _obj = CBool(TxtValue.Text)
                             Catch ex As Exception
-                                MessageBox.Show("Veuillez saisir un type Boolean !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Boolean !!", "Erreur", "TxtValue.TextChanged")
                                 TxtValue.Text = 0
                                 _flag = True
                             End Try
@@ -964,7 +964,7 @@ Public Class uCondition
                             Try
                                 _obj = CByte(TxtValue.Text)
                             Catch ex As Exception
-                                MessageBox.Show("Veuillez saisir un type Byte !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Byte !!", "Erreur", "TxtValue.TextChanged")
                                 TxtValue.Text = 0
                                 _flag = True
                             End Try
@@ -972,7 +972,7 @@ Public Class uCondition
                             Try
                                 _obj = CChar(TxtValue.Text)
                             Catch ex As Exception
-                                MessageBox.Show("Veuillez saisir un type Char !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Char !!", "Erreur", "TxtValue.TextChanged")
                                 TxtValue.Text = ""
                                 _flag = True
                             End Try
@@ -980,7 +980,7 @@ Public Class uCondition
                             Try
                                 _obj = CDate(TxtValue.Text)
                             Catch ex As Exception
-                                MessageBox.Show("Veuillez saisir un type DateTime !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type DateTime !!", "Erreur", "TxtValue.TextChanged")
                                 TxtValue.Text = ""
                                 _flag = True
                             End Try
@@ -988,7 +988,7 @@ Public Class uCondition
                             Try
                                 _obj = CDec(TxtValue.Text)
                             Catch ex As Exception
-                                MessageBox.Show("Veuillez saisir un type Decimal !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Decimal !!", "Erreur", "TxtValue.TextChanged")
                                 TxtValue.Text = 0
                                 _flag = True
                             End Try
@@ -996,7 +996,7 @@ Public Class uCondition
                             Try
                                 _obj = CDbl(TxtValue.Text)
                             Catch ex As Exception
-                                MessageBox.Show("Veuillez saisir un type Double !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Double !!", "Erreur", "TxtValue.TextChanged")
                                 TxtValue.Text = "0"
                                 _flag = True
                             End Try
@@ -1004,7 +1004,7 @@ Public Class uCondition
                             Try
                                 _obj = CInt(TxtValue.Text)
                             Catch ex As Exception
-                                MessageBox.Show("Veuillez saisir un type Integer !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Integer !!", "Erreur", "TxtValue.TextChanged")
                                 TxtValue.Text = "0"
                                 _flag = True
                             End Try
@@ -1012,7 +1012,7 @@ Public Class uCondition
                             Try
                                 _obj = CInt(TxtValue.Text)
                             Catch ex As Exception
-                                MessageBox.Show("Veuillez saisir un type Integer !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Integer !!", "Erreur", "TxtValue.TextChanged")
                                 TxtValue.Text = "0"
                                 _flag = True
                             End Try
@@ -1020,7 +1020,7 @@ Public Class uCondition
                             Try
                                 _obj = CInt(TxtValue.Text)
                             Catch ex As Exception
-                                MessageBox.Show("Veuillez saisir un type Integer !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Integer !!", "Erreur", "TxtValue.TextChanged")
                                 TxtValue.Text = "0"
                                 _flag = True
                             End Try
@@ -1028,7 +1028,7 @@ Public Class uCondition
                             Try
                                 _obj = CInt(TxtValue.Text)
                             Catch ex As Exception
-                                MessageBox.Show("Veuillez saisir un type Integer !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Integer !!", "Erreur", "TxtValue.TextChanged")
                                 TxtValue.Text = "0"
                                 _flag = True
                             End Try
@@ -1036,7 +1036,7 @@ Public Class uCondition
                             Try
                                 _obj = CSng(TxtValue.Text)
                             Catch ex As Exception
-                                MessageBox.Show("Veuillez saisir un type Single !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Single !!", "Erreur", "TxtValue.TextChanged")
                                 TxtValue.Text = "0"
                                 _flag = True
                             End Try
@@ -1044,7 +1044,7 @@ Public Class uCondition
                 End If
             End If
         Catch ex As Exception
-            If _flag = False Then MessageBox.Show("Erreur uCondition TxtValue_TextChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            If _flag = False Then AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCondition TxtValue_TextChanged: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 

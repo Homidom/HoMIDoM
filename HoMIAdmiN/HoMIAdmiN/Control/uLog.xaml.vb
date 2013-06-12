@@ -56,7 +56,7 @@ Partial Public Class uLog
                         sensorData = Nothing
                         lineCount += 1
                     Catch ex As Exception
-                        MessageBox.Show("Erreur lors de la ligne du fichier log: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la ligne du fichier log: " & ex.ToString, "ERREUR", "")
                     End Try
                 End While
                 Try
@@ -64,24 +64,24 @@ Partial Public Class uLog
                         File.Delete(MyRepAppData & "\log.txt")
                     End If
                 Catch ex As Exception
-                    MessageBox.Show("Erreur lors de la suppression du fichier log temporaire: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la suppression du fichier log temporaire: " & ex.ToString, "ERREUR", "")
                 End Try
             End If
 
             Try
                 If _LigneIgnorees > 0 Then
-                    MessageBox.Show(_LigneIgnorees & " ligne(s) du log ne seront pas prises en compte car elles ne respectent pas le format attendu, veuillez consultez le fichier log sur le serveur pour avoir la totalité", "INFO", MessageBoxButton.OK, MessageBoxImage.Information)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, _LigneIgnorees & " ligne(s) du log ne seront pas prises en compte car elles ne respectent pas le format attendu, veuillez consultez le fichier log sur le serveur pour avoir la totalité", "INFO", "")
                 End If
 
                 DGW.DataContext = ligneLog
             Catch ex As Exception
-                MessageBox.Show("Erreur: " & ex.ToString)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString)
             End Try
 
 
             Me.Cursor = Nothing
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de la récuppération du fichier log: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la récuppération du fichier log: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -92,7 +92,7 @@ Partial Public Class uLog
             col1.Binding = New Binding(String.Format("[{0}]", headerText))
             DGW.Columns.Add(col1)
         Catch ex As Exception
-            MessageBox.Show("Erreur Sub CreateGridColumn: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Sub CreateGridColumn: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -110,7 +110,7 @@ Partial Public Class uLog
 
             RefreshLog()
         Catch ex As Exception
-            MessageBox.Show("Erreur lors sur la fonction New de uLog: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors sur la fonction New de uLog: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -149,7 +149,7 @@ Partial Public Class uLog
             End If
 
         Catch ex As Exception
-            MessageBox.Show("Erreur DGW_LoadingRow: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur DGW_LoadingRow: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -168,7 +168,7 @@ Partial Public Class uLog
                 Dim filename As String = dlg.FileName
                 Dim retour As String = myService.ReturnLog
                 If retour.StartsWith("ERREUR") Then
-                    MessageBox.Show(retour, "Erreur ReturnLog", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, retour, "Erreur ReturnLog", "")
                 Else
                     Dim TargetFile As StreamWriter
                     TargetFile = New StreamWriter(filename, False)
@@ -177,7 +177,7 @@ Partial Public Class uLog
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur ExportLog: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur ExportLog: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 

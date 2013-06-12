@@ -3,15 +3,15 @@
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         Try
             'If TxtUsername.Text = "" Or TxtPassword.Password = "" Then
-            '    MessageBox.Show("Le username ou le password doivent être renseigné", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            '    AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR,"Le username ou le password doivent être renseigné", "Erreur","")
             '    Exit Sub
             'End If
             If TxtIP.Text = "" Or TxtPort.Text = "" Then
-                MessageBox.Show("L'adresse IP et le port du serveur doivent être renseigné", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'adresse IP et le port du serveur doivent être renseigné", "Erreur", "")
                 Exit Sub
             End If
             If String.IsNullOrEmpty(TxtID.Text) = True Then
-                MessageBox.Show("L'ID du serveur doit être renseigné", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'ID du serveur doit être renseigné", "Erreur", "")
                 Exit Sub
             End If
 
@@ -30,7 +30,7 @@
             IdSrv = TxtID.Text
             DialogResult = True
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub Login BtnOK_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Login BtnOK_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -38,7 +38,7 @@
         Try
             DialogResult = False
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub Login BtnCancel_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Login BtnCancel_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -87,7 +87,7 @@
             Site.Children.Add(y)
             y = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub ShowSrv: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub ShowSrv: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -104,7 +104,7 @@
                 Next
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString, "Erreur")
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString, "Erreur")
         End Try
     End Sub
 
@@ -137,7 +137,7 @@
                 End If
             Next
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString, "Erreur")
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString, "Erreur")
         End Try
     End Sub
 
@@ -148,7 +148,7 @@
                 TxtPassword.Password = My.Settings.Password
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub Login TxtUsername_KeyDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Login TxtUsername_KeyDown: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -156,11 +156,11 @@
         If e.Key = Key.Enter And TxtPassword.Password <> "" Then
             Try
                 If TxtUsername.Text = "" Or TxtPassword.Password = "" Then
-                    MessageBox.Show("Le username ou le password doivent être renseigné", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le username ou le password doivent être renseigné", "Erreur", "")
                     Exit Sub
                 End If
                 If TxtIP.Text = "" Or TxtPort.Text = "" Then
-                    MessageBox.Show("L'adresse IP et le port du serveur doivent être renseigné", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'adresse IP et le port du serveur doivent être renseigné", "Erreur", "")
                     Exit Sub
                 End If
 
@@ -178,7 +178,7 @@
 
                 DialogResult = True
             Catch ex As Exception
-                MessageBox.Show("ERREUR Sub Login TxtPassword_KeyDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Login TxtPassword_KeyDown: " & ex.Message, "ERREUR", "")
             End Try
         End If
     End Sub
@@ -199,7 +199,7 @@
 
             If flagnew = False Then
                 If TxtName.Text = "" Or TxtName.Text = " " Or TxtIP.Text = "" Or TxtIP.Text = " " Or TxtPort.Text = "" Or TxtPort.Text = " " Or TxtID.Text = "" Or TxtID.Text = " " Then
-                    MessageBox.Show("Le nom, l'ID, l'adresse et le port du serveur ne peuvent être vide!", "Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom, l'ID, l'adresse et le port du serveur ne peuvent être vide!", "Admin", "")
                     Exit Sub
                 End If
                 Dim x As New ClServer
@@ -222,14 +222,14 @@
 
             ShowSrv()
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub NewSite_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub NewSite_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
     Private Sub DelSite_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles DelSite.Click
         Try
             If TxtName.Text = "Connexion Manuelle" Then
-                MessageBox.Show("Vous ne pouvez pas supprimer ce serveur!", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Vous ne pouvez pas supprimer ce serveur!", "Admin", "")
                 Exit Sub
             End If
             For i As Integer = 0 To Window1.ListServer.Count - 1
@@ -241,7 +241,7 @@
 
             ShowSrv()
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub DelSite_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub DelSite_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 

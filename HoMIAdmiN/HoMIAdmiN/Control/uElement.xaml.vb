@@ -72,7 +72,7 @@ Public Class uElement
         '    Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(SolidColorBrush.ColorProperty))
         '    myStoryboard.Begin()
         'Catch ex As Exception
-        '    MessageBox.Show("Erreur: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK)
+        '    AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR,"Erreur: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK)
         'End Try
     End Sub
 

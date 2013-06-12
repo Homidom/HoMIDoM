@@ -41,7 +41,7 @@ Partial Public Class uTestDevice
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur lors du test: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors du test: " & ex.Message, "Erreur", "")
         End Try
     End Sub
 
@@ -75,11 +75,11 @@ Partial Public Class uTestDevice
                 Next
 
             Else
-                MessageBox.Show("Le Device est inconnu !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le Device est inconnu !!", "Erreur", "")
                 RaiseEvent CloseMe(Me)
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.Message, "Erreur", "")
         End Try
     End Sub
 
@@ -143,7 +143,7 @@ Partial Public Class uTestDevice
                 Next
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur Sub CbCmd_SelectionChanged: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Sub CbCmd_SelectionChanged: " & ex.Message, "Erreur", "")
         End Try
     End Sub
 End Class

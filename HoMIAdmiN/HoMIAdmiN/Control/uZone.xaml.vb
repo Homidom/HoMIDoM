@@ -12,14 +12,14 @@ Partial Public Class uZone
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         Try
             If String.IsNullOrEmpty(TxtName.Text) = True Then
-                MessageBox.Show("Le nom de la zone est obligatoire!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom de la zone est obligatoire!", "Erreur", "")
                 Exit Sub
             End If
 
             If String.IsNullOrEmpty(_ZoneId) = True Then
                 For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
                     If myService.GetAllZones(IdSrv).Item(i).Name = TxtName.Text Then
-                        MessageBox.Show("Le nom de cette zone est déjà utilisée, veuillez en choisir un autre!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom de cette zone est déjà utilisée, veuillez en choisir un autre!", "Erreur", "")
                         Exit Sub
                     End If
                 Next
@@ -30,7 +30,7 @@ Partial Public Class uZone
             FlagChange = True
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'enregistrement de la zone, message: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement de la zone, message: " & ex.ToString, "Erreur", "")
         End Try
     End Sub
 
@@ -70,7 +70,7 @@ Partial Public Class uZone
                 End If
             Next
         Catch ex As Exception
-            MessageBox.Show("Erreur lors du traitement SaveElement: " & ex.ToString, "Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors du traitement SaveElement: " & ex.ToString, "Admin", "")
         End Try
     End Sub
 
@@ -209,7 +209,7 @@ Partial Public Class uZone
 
             RefreshLists()
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString, "Erreur", "")
         End Try
     End Sub
 
@@ -270,7 +270,7 @@ Partial Public Class uZone
                 Next
             Next
         Catch ex As Exception
-            MessageBox.Show("ERREUR Lors du refraichissement de la listes des zones: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Lors du refraichissement de la listes des zones: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -282,7 +282,7 @@ Partial Public Class uZone
                 e.Effects = DragDropEffects.None
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uZone ListBxDevice_DragOver: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uZone ListBxDevice_DragOver: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -301,7 +301,7 @@ Partial Public Class uZone
                 frm.Close()
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub ImgZone_MouseLeftButtonDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub ImgZone_MouseLeftButtonDown: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -320,7 +320,7 @@ Partial Public Class uZone
                 frm.Close()
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub ImgIcon_MouseLeftButtonDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub ImgIcon_MouseLeftButtonDown: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -357,7 +357,7 @@ Partial Public Class uZone
                 End If
             Next
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uZone ChkElement_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uZone ChkElement_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 End Class

@@ -24,7 +24,7 @@ Public Class uAction
                 Canvas.SetLeft(ImgDelete, j + 160)
                 Fond.Width = j
             Catch ex As Exception
-                MessageBox.Show("Erreur uAction Zoom: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uAction Zoom: " & ex.ToString, "ERREUR", "")
             End Try
         End Set
     End Property
@@ -41,7 +41,7 @@ Public Class uAction
                 Refresh_Position()
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur uAction Rectangle1_MouseLeftButtonDown: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uAction Rectangle1_MouseLeftButtonDown: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -53,7 +53,7 @@ Public Class uAction
             Canvas.SetLeft(Rectangle1, j)
             Canvas.SetLeft(ImgDelete, j + 160)
         Catch ex As Exception
-            MessageBox.Show("Erreur uAction Refresh_Position: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uAction Refresh_Position: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -126,7 +126,7 @@ Public Class uAction
                     Refresh_Position()
                 End If
             Catch ex As Exception
-                MessageBox.Show("Erreur Property ObjAction: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Property ObjAction: " & ex.ToString, "Erreur", "")
             End Try
         End Set
     End Property

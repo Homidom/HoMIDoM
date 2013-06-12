@@ -105,7 +105,7 @@
 
             LblTitle.Content = Title
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'exécution de NewSelectElement: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'exécution de NewSelectElement: " & ex.ToString, "Erreur Admin", "")
         End Try
     End Sub
 
@@ -115,14 +115,14 @@
     End Sub
 
     Private Sub BtnOK_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
-        try
-If ListBox1.SelectedItem IsNot Nothing Then
-            Dim stk As uElement = ListBox1.SelectedItem
-            _retour = stk.ID
-            RaiseEvent CloseMe(Me)
+        Try
+            If ListBox1.SelectedItem IsNot Nothing Then
+                Dim stk As uElement = ListBox1.SelectedItem
+                _retour = stk.ID
+                RaiseEvent CloseMe(Me)
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uSelectElmt BtnOK_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uSelectElmt BtnOK_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -134,7 +134,7 @@ If ListBox1.SelectedItem IsNot Nothing Then
                 RaiseEvent CloseMe(Me)
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uSelectElmt ListBox1_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uSelectElmt ListBox1_MouseDoubleClick: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -147,7 +147,7 @@ If ListBox1.SelectedItem IsNot Nothing Then
                 Objet.IsSelect = True
             Next
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uSelectElmt ListBox1_SelectionChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uSelectElmt ListBox1_SelectionChanged: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 End Class

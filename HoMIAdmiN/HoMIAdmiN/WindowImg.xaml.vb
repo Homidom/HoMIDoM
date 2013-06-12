@@ -4,7 +4,6 @@ Public Class WindowImg
     Dim _oldstk As StackPanel = Nothing
     Public FileName As String
 
-
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         DialogResult = True
     End Sub
@@ -53,11 +52,11 @@ Public Class WindowImg
                     stk.Children.Add(lbl)
                     Wrp.Children.Add(stk)
                 Catch ex As Exception
-                    MessageBox.Show("Erreur: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString, "ERREUR", "")
                 End Try
             Next
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -72,7 +71,7 @@ Public Class WindowImg
             sender.Background = Brushes.LightGray
             _oldstk = sender
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub stk_MouseDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub stk_MouseDown: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -103,16 +102,16 @@ Public Class WindowImg
                 Dim retour As String = myService.UploadFile(IdSrv, array, Namefile)
                 If retour <> "0" Then
                     If retour = "99" Then
-                        MessageBox.Show("Vous n'avez pas les droits pour accéder au serveur", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Vous n'avez pas les droits pour accéder au serveur", "Erreur", "")
                     Else
-                        MessageBox.Show("Erreur: " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & retour, "Erreur", "")
                     End If
                 Else
                     Affiche()
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 End Class
