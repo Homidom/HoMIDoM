@@ -46,14 +46,14 @@
             RemplirMacro()
             Mouse.OverrideCursor = Nothing
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'ouverture de la fenêtre triggerdevice, message: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'ouverture de la fenêtre triggerdevice, message: " & ex.ToString, "Erreur", "")
         End Try
     End Sub
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         Try
             If TxtNom.Text = "" Or CbDevice.SelectedIndex < 0 Or CbDevice.SelectedItem Is Nothing Then
-                MessageBox.Show("Le nom du trigger ou le device sont obligatoires!", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du trigger ou le device sont obligatoires!", "Trigger", "")
                 Exit Sub
             End If
 
@@ -73,7 +73,7 @@
             FlagChange = True
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'enregistrement du trigger, message: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement du trigger, message: " & ex.ToString, "Erreur", "")
         End Try
     End Sub
 
@@ -112,14 +112,14 @@
                 CbProperty.SelectedIndex = 0
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.Message)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.Message)
         End Try
     End Sub
 
     'Private Sub UpMacro_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles UpMacro.Click
     '    Try
     '        If ListBox1.SelectedIndex <= 0 Then
-    '            MessageBox.Show("Aucune macro sélectionnée ou celle-ci est déjà en 1ère position, veuillez en choisir une à déplacer !", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+    '            AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR,"Aucune macro sélectionnée ou celle-ci est déjà en 1ère position, veuillez en choisir une à déplacer !", "Trigger","")
     '            Exit Sub
     '        Else
     '            Dim i As Integer = ListBox1.SelectedIndex
@@ -127,7 +127,7 @@
     '            Dim x As StackPanel = ListBox1.Items.Item(i)
     '            Dim w As CheckBox = x.Children.Item(0)
     '            If w.IsChecked = False Then
-    '                MessageBox.Show("Cette macro n'est pas cochée, elle ne peut être déplacée !", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+    '                AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR,"Cette macro n'est pas cochée, elle ne peut être déplacée !", "Trigger","")
     '                Exit Sub
     '            End If
 
@@ -139,7 +139,7 @@
     '            RemplirMacro()
     '        End If
     '    Catch ex As Exception
-    '        MessageBox.Show("Erreur UpMacro: " & ex.ToString, "Erreur")
+    '        AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR,"Erreur UpMacro: " & ex.ToString, "Erreur")
     '    End Try
     'End Sub
 
@@ -147,7 +147,7 @@
     '    Try
 
     '        If ListBox1.SelectedIndex < 0 Or ListBox1.SelectedIndex = ListBox1.Items.Count - 1 Then
-    '            MessageBox.Show("Aucune macro sélectionnée ou celle-ci est déjà en dernière position, veuillez en choisir une déplacer!", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+    '            AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR,"Aucune macro sélectionnée ou celle-ci est déjà en dernière position, veuillez en choisir une déplacer!", "Trigger","")
     '            Exit Sub
     '        Else
     '            Dim i As Integer = ListBox1.SelectedIndex
@@ -155,13 +155,13 @@
     '            Dim x As StackPanel = ListBox1.Items.Item(i)
     '            Dim w As CheckBox = x.Children.Item(0)
     '            If w.IsChecked = False Then
-    '                MessageBox.Show("Cette macro n'est pas cochée, elle ne peut être déplacée !", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+    '                AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR,"Cette macro n'est pas cochée, elle ne peut être déplacée !", "Trigger","")
     '                Exit Sub
     '            End If
     '            x = ListBox1.Items.Item(i + 1)
     '            w = x.Children.Item(0)
     '            If w.IsChecked = False Then
-    '                MessageBox.Show("Cette macro ne peut pas être descendu dans la liste car la macro suivante n'est pas cochée, elle ne peut être déplacée !", "Trigger", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+    '                AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR,"Cette macro ne peut pas être descendu dans la liste car la macro suivante n'est pas cochée, elle ne peut être déplacée !", "Trigger","")
     '                Exit Sub
     '            End If
 
@@ -173,7 +173,7 @@
     '            RemplirMacro()
     '        End If
     '    Catch ex As Exception
-    '        MessageBox.Show("Erreur DownMacro: " & ex.ToString, "Erreur")
+    '        AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR,"Erreur DownMacro: " & ex.ToString, "Erreur")
     '    End Try
     'End Sub
 
@@ -225,7 +225,7 @@
                 End If
             Next
         Catch ex As Exception
-            MessageBox.Show("Erreur remplirMacro: " & ex.ToString, "Erreur")
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur remplirMacro: " & ex.ToString, "Erreur")
         End Try
     End Sub
 
@@ -243,7 +243,7 @@
             End If
             RemplirMacro()
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uTriggerDevice CheckClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerDevice CheckClick: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -260,7 +260,7 @@
 
             Return flag
         Catch ex As Exception
-            MessageBox.Show("Erreur IsInList: " & ex.ToString, "Erreur")
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur IsInList: " & ex.ToString, "Erreur")
         End Try
     End Function
 

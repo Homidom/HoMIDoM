@@ -82,7 +82,7 @@ Class Window1
 
             AffIsDisconnect()
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub New: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub New: " & ex.Message, "ERREUR", "")
         End Try
 
     End Sub
@@ -99,7 +99,7 @@ Class Window1
                     'Modifie les heures du soleil
                     LHS.Content = CDate(myService.GetHeureLeverSoleil).ToShortTimeString
                     LCS.Content = CDate(myService.GetHeureCoucherSoleil).ToShortTimeString
-                   
+
                     'Vérifie si nouveau device
                     If myService.AsNewDevice Then
                         If ImgNewDevice.Visibility = Windows.Visibility.Collapsed Then ImgNewDevice.Visibility = Windows.Visibility.Visible
@@ -154,7 +154,7 @@ Class Window1
                     AffIsDisconnect()
                     LblStatus.Content = Now.ToLongDateString & " " & Now.ToLongTimeString & " "
 
-                    MessageBox.Show("La communication a été perdue avec le serveur, veuillez vérifier que celui-ci est toujours actif", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "La communication a été perdue avec le serveur, veuillez vérifier que celui-ci est toujours actif", "ERREUR", "")
                     ClearAllTreeview() 'vide le treeview
                     CanvasRight.Children.Clear()  'ferme le menu principal
                     PageConnexion() 'affiche la fenetre de connexion
@@ -175,7 +175,7 @@ Class Window1
 
             Me.UpdateLayout()
         Catch ex As Exception
-            MessageBox.Show("ERREUR dispatcherTimer_Tick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR dispatcherTimer_Tick: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -221,7 +221,7 @@ Class Window1
                 x = Nothing
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'enregistrement du fichier de config xml de l'application Admin : " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement du fichier de config xml de l'application Admin : " & ex.Message, "Erreur", "")
         End Try
         MyBase.Finalize()
     End Sub
@@ -239,7 +239,7 @@ Class Window1
             MyPort = Port
 
             If UrlIsValid(myadress) = False Then
-                MessageBox.Show("Erreur lors de la connexion au serveur sélectionné: " & Chr(10) & Name & " - " & IP & ":" & Port & vbCrLf & "Veuillez vérifier que celui-ci est démarré", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la connexion au serveur sélectionné: " & Chr(10) & Name & " - " & IP & ":" & Port & vbCrLf & "Veuillez vérifier que celui-ci est démarré", "Erreur Admin", "")
                 Return -1
             End If
 
@@ -259,7 +259,7 @@ Class Window1
             myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
             myService = myChannelFactory.CreateChannel()
             If myChannelFactory.State <> CommunicationState.Opened Then
-                MessageBox.Show("Erreur lors de la connexion au serveur", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la connexion au serveur", "Erreur Admin", "")
                 IsConnect = False
                 Return -1
                 Exit Function
@@ -269,12 +269,12 @@ Class Window1
                 Catch ex As Exception
                     myChannelFactory.Abort()
                     IsConnect = False
-                    MessageBox.Show("Erreur lors de la connexion au serveur sélectionné: " & Chr(10) & Name & " - " & IP & ":" & Port & vbCrLf & "Erreur: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la connexion au serveur sélectionné: " & Chr(10) & Name & " - " & IP & ":" & Port & vbCrLf & "Erreur: " & ex.ToString, "Erreur Admin", "")
                     Return -1
                 End Try
 
                 If myService.GetIdServer(IdSrv) = "99" Then
-                    MessageBox.Show("L'ID du serveur est erroné, impossible de communiquer avec celui-ci", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'ID du serveur est erroné, impossible de communiquer avec celui-ci", "Erreur", "")
                     Return -1
                 End If
 
@@ -303,7 +303,7 @@ Class Window1
         Catch ex As Exception
             myChannelFactory.Abort()
             IsConnect = False
-            MessageBox.Show("Erreur lors de la connexion au serveur sélectionné: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la connexion au serveur sélectionné: " & ex.Message, "Erreur Admin", "")
             Return -1
         End Try
     End Function
@@ -319,13 +319,13 @@ Class Window1
                         Else
                             Dim retour As String = myService.SaveConfig(IdSrv)
                             If retour <> "0" Then
-                                MessageBox.Show("Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", "")
                             Else
-                                MessageBox.Show("Enregistrement effectué", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Information)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Enregistrement effectué", "HomIAdmin", "")
                             End If
                         End If
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub Unloaded: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Unloaded: " & ex.Message, "ERREUR", "")
                     End Try
 
                 End If
@@ -333,7 +333,7 @@ Class Window1
             End If
             End
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub Unloaded Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Unloaded Quitter: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -350,15 +350,15 @@ Class Window1
                     objStreamReader.Close()
                     objStreamReader = Nothing
                 Catch ex As Exception
-                    MessageBox.Show("Erreur lors de l'ouverture du fichier de config xml (" & Myfile & "), vérifiez que toutes les balises requisent soient présentes: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'ouverture du fichier de config xml (" & Myfile & "), vérifiez que toutes les balises requisent soient présentes: " & ex.Message, "Erreur Admin", "")
                 End Try
 
                 If ListServer.Count = 0 Then 'Aucun serveur trouvé dans le fichier de config
-                    MessageBox.Show("Aucun serveur n'a été trouvé dans le fichier de config (" & Myfile & "), veuillez saisir manuellement les paramètres du serveur", "Info Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Aucun serveur n'a été trouvé dans le fichier de config (" & Myfile & "), veuillez saisir manuellement les paramètres du serveur", "Info Admin", "")
                 End If
                 'on ajoute la liste des serveurs dans le menu Connexion
             Else
-                MessageBox.Show("Le fichier de config xml de l'admin (" & Myfile & ") est absent, veuillez utiliser la connexion manuelle", "Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le fichier de config xml de l'admin (" & Myfile & ") est absent, veuillez utiliser la connexion manuelle", "Admin", "")
             End If
 
             'Page de connexion
@@ -367,7 +367,7 @@ Class Window1
             Loop
 
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub Window1_Loaded: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Window1_Loaded: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -387,12 +387,12 @@ Class Window1
                     Exit Sub
                 Else
                     If myService.GetIdServer(IdSrv) = "99" Then
-                        MessageBox.Show("L'ID du serveur est erroné, impossible de communiquer avec celui-ci", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'ID du serveur est erroné, impossible de communiquer avec celui-ci", "Erreur", "")
                         frm.Close()
                         Exit Sub
                     End If
                     'If myService.VerifLogin(frm.TxtUsername.Text, frm.TxtPassword.Password) = False Then
-                    '    MessageBox.Show("Le username ou le password sont erroné, impossible veuillez réessayer", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    '    AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR,"Le username ou le password sont erroné, impossible veuillez réessayer", "Erreur","")
                     'Else
                     frm.Close()
                     FlagStart = True
@@ -403,7 +403,7 @@ Class Window1
                 End
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Connexion: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Connexion: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -432,7 +432,7 @@ Class Window1
             sc.BeginAnimation(ScaleTransform.ScaleXProperty, da3)
             flagTreeV = True
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub ShowTreeView: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub ShowTreeView: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -482,7 +482,7 @@ Class Window1
 
 
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub ClearAllTreeview: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub ClearAllTreeview: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -518,7 +518,7 @@ Class Window1
             End Select
             Me.Cursor = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub RefreshTreeView: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub RefreshTreeView: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -589,7 +589,7 @@ Class Window1
 
             ListeZones = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub AffZone: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub AffZone: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -612,7 +612,7 @@ Class Window1
             End Select
 
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub MnuitemZon_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MnuitemZon_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -680,7 +680,7 @@ Class Window1
 
             ListeUsers = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub AffUser: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub AffUser: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -703,7 +703,7 @@ Class Window1
             End Select
 
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub MnuitemUsr_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MnuitemUsr_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -869,7 +869,7 @@ Class Window1
             Drv = Nothing
             ListeDrivers = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub AffDriver: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub AffDriver: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -887,7 +887,7 @@ Class Window1
                         myService.StartDriver(IdSrv, sender.uid)
                         AffDriver()
                     Else
-                        MessageBox.Show("Le driver ne peut être démarré car sa propriété Enable est à False!", "Avertissement", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le driver ne peut être démarré car sa propriété Enable est à False!", "Avertissement", "")
                     End If
                 Case 1 'Arrêter
                     If sender.uid = "DE96B466-2540-11E0-A321-65D7DFD72085" Then
@@ -913,7 +913,7 @@ Class Window1
             End Select
 
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub MnuitemDrv_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MnuitemDrv_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -1092,7 +1092,7 @@ Class Window1
             ListeDevices = Nothing
             ListeZones = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub AffDevice: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub AffDevice: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -1111,7 +1111,7 @@ Class Window1
                 End If
             Next
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub AsMultiHisto: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub AsMultiHisto: " & ex.Message, "ERREUR", "")
         End Try
         Return retour
     End Function
@@ -1158,7 +1158,7 @@ Class Window1
             End Select
 
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub MnuitemDev_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MnuitemDev_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -1226,7 +1226,7 @@ Class Window1
 
             ListeMacros = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub AffScene: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub AffScene: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -1253,7 +1253,7 @@ Class Window1
             End Select
 
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub MnuitemMac_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MnuitemMac_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -1326,7 +1326,7 @@ Class Window1
 
             ListeTriggers = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub Afftrigger: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Afftrigger: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -1361,7 +1361,7 @@ Class Window1
             End Select
 
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub MnuitemTrig_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MnuitemTrig_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -1427,7 +1427,7 @@ Class Window1
 
                                 TreeViewHisto.Items.Add(y)
                                 trv = True
-                                 mnu0 = Nothing
+                                mnu0 = Nothing
                                 ctxMenu = Nothing
                             ElseIf _dev.ID = a.IdDevice And IsNode = True Then
                                 Dim y1 As New CheckBox
@@ -1452,7 +1452,7 @@ Class Window1
                                 AddHandler mnu0.Click, AddressOf MnuitemHisto_Click
                                 ctxMenu.Items.Add(mnu0)
                                 y1.ContextMenu = ctxMenu
-                                
+
                                 AddHandler y1.MouseDoubleClick, AddressOf MnuitemHisto_Click
 
                                 parent.Items.Add(y1)
@@ -1480,7 +1480,7 @@ Class Window1
             TreeViewHisto.Items.SortDescriptions.Clear()
             TreeViewHisto.Items.SortDescriptions.Add(New SortDescription("Content", ListSortDirection.Ascending))
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub AffHisto: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub AffHisto: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -1508,7 +1508,7 @@ Class Window1
             CanvasRight.Children.Add(x)
 
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub MnuitemHisto_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MnuitemHisto_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -1577,7 +1577,7 @@ Class Window1
 
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub TreeView_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub TreeView_MouseDoubleClick: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -1602,7 +1602,7 @@ Class Window1
             End If
 
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub TreeViewG_SelectedItemChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub TreeViewG_SelectedItemChanged: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -1634,14 +1634,14 @@ Class Window1
             Loop
 
             If OK = True Then
-                MessageBox.Show("Le driver n'a pas pu être arrêté, veuillez consulter le log pour en connaitre la raison", "INFO", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le driver n'a pas pu être arrêté, veuillez consulter le log pour en connaitre la raison", "INFO", "")
             Else
                 AffDriver()
             End If
 
             Me.Cursor = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub StopDriver: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub StopDriver: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -1665,17 +1665,17 @@ Class Window1
                 Loop
 
                 If OK = False Then
-                    MessageBox.Show("Le driver n'a pas pu être démarré, veuillez consulter le log pour en connaitre la raison", "INFO", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le driver n'a pas pu être démarré, veuillez consulter le log pour en connaitre la raison", "INFO", "")
                 Else
                     AffDriver()
                 End If
 
                 Me.Cursor = Nothing
             Else
-                MessageBox.Show("Le driver ne peut être démarré car sa propriété Enable est à False!", "Avertissement", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le driver ne peut être démarré car sa propriété Enable est à False!", "Avertissement", "")
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub BtnStart_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnStart_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -1703,7 +1703,7 @@ Class Window1
             AnimationApparition(MainMenu)
             flagShowMainMenu = True
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub ShowMainMenu: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub ShowMainMenu: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -1728,7 +1728,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu Driver Modifier: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu Driver Modifier: " & ex.Message, "ERREUR", "")
                             End Try
                     End Select
                 Case "cpt"
@@ -1742,7 +1742,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu COMPOSANTS Modifier: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu COMPOSANTS Modifier: " & ex.Message, "ERREUR", "")
                             End Try
                         Case "cpt_ajouter"
                             Try
@@ -1750,7 +1750,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadControl
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu COMPOSANTS Ajouter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu COMPOSANTS Ajouter: " & ex.Message, "ERREUR", "")
                             End Try
                         Case "cpt_supprimer"
                             Try
@@ -1759,7 +1759,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu COMPOSANTS Supprimer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu COMPOSANTS Supprimer: " & ex.Message, "ERREUR", "")
                             End Try
                     End Select
                 Case "zon"
@@ -1773,7 +1773,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu ZONE Modifier: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu ZONE Modifier: " & ex.Message, "ERREUR", "")
                             End Try
                         Case "zon_ajouter"
                             Try
@@ -1782,7 +1782,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadControl
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu ZONE Ajouter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu ZONE Ajouter: " & ex.Message, "ERREUR", "")
                             End Try
                         Case "zon_supprimer"
                             Try
@@ -1791,7 +1791,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu ZONE Supprimer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu ZONE Supprimer: " & ex.Message, "ERREUR", "")
                             End Try
                     End Select
                 Case "usr"
@@ -1805,7 +1805,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu USER Modifier: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu USER Modifier: " & ex.Message, "ERREUR", "")
                             End Try
                         Case "usr_ajouter"
                             Try
@@ -1814,7 +1814,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadControl
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu USER Ajouter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu USER Ajouter: " & ex.Message, "ERREUR", "")
                             End Try
                         Case "usr_supprimer"
                             Try
@@ -1823,7 +1823,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu USER Supprimer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu USER Supprimer: " & ex.Message, "ERREUR", "")
                             End Try
                     End Select
                 Case "trg"
@@ -1837,7 +1837,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu TRIGGER Modifier: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu TRIGGER Modifier: " & ex.Message, "ERREUR", "")
                             End Try
                         Case "trg_ajouter_timer"
                             Try
@@ -1846,7 +1846,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadControl
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu TRIGGER Ajouer Timer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu TRIGGER Ajouer Timer: " & ex.Message, "ERREUR", "")
                             End Try
                         Case "trg_ajouter_composant"
                             Try
@@ -1855,7 +1855,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadControl
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu TRIGGER Ajouter Composant: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu TRIGGER Ajouter Composant: " & ex.Message, "ERREUR", "")
                             End Try
                         Case "trg_supprimer"
                             Try
@@ -1864,7 +1864,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu TRIGGER Supprimer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu TRIGGER Supprimer: " & ex.Message, "ERREUR", "")
                             End Try
                     End Select
                 Case "mac"
@@ -1878,7 +1878,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu MACRO Modifier: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu MACRO Modifier: " & ex.Message, "ERREUR", "")
                             End Try
                         Case "mac_ajouter"
                             Try
@@ -1891,7 +1891,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadControl
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu MACRO ajouter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu MACRO ajouter: " & ex.Message, "ERREUR", "")
                             End Try
                         Case "mac_supprimer"
                             Try
@@ -1900,7 +1900,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadSelectElmt
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu MACRO Supprimer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu MACRO Supprimer: " & ex.Message, "ERREUR", "")
                             End Try
                     End Select
                 Case "cfg"
@@ -1914,7 +1914,7 @@ Class Window1
                                 x.Height = CanvasRight.ActualHeight - 50
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu LOG: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu LOG: " & ex.Message, "ERREUR", "")
                             End Try
                         Case "cfg_configurer"
                             Try
@@ -1923,7 +1923,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadControl
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu Configurer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu Configurer: " & ex.Message, "ERREUR", "")
                             End Try
                         Case "cfg_importer"
                             Try
@@ -1941,13 +1941,13 @@ Class Window1
                                     If MessageBox.Show("Etes vous sur que le serveur puisse accéder au fichier " & filename & " que ce soit en local ou via le réseau, sinon il ne pourra pas l'importer!", "Import Config", MessageBoxButton.OKCancel, MessageBoxImage.Question) = MessageBoxResult.Cancel Then Exit Sub
                                     Dim retour As String = myService.ImportConfig(IdSrv, filename)
                                     If retour <> "0" Then
-                                        MessageBox.Show(retour, "Erreur import config", MessageBoxButton.OK, MessageBoxImage.Error)
+                                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, retour, "Erreur import config", "")
                                     Else
-                                        MessageBox.Show("L'import du fichier de configuration a été effectué, l'ancien fichier a été renommé en .old, veuillez redémarrer le serveur pour prendre en compte cette nouvelle configuration", "Import config", MessageBoxButton.OK, MessageBoxImage.Information)
+                                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'import du fichier de configuration a été effectué, l'ancien fichier a été renommé en .old, veuillez redémarrer le serveur pour prendre en compte cette nouvelle configuration", "Import config", "")
                                     End If
                                 End If
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuAutre config_importer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuAutre config_importer: " & ex.Message, "ERREUR", "")
                             End Try
                         Case "cfg_exporter"
                             Try
@@ -1964,17 +1964,17 @@ Class Window1
                                     Dim filename As String = dlg.FileName
                                     Dim retour As String = myService.ExportConfig(IdSrv)
                                     If retour.StartsWith("ERREUR") Then
-                                        MessageBox.Show(retour, "Erreur export config", MessageBoxButton.OK, MessageBoxImage.Error)
+                                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, retour, "Erreur export config", "")
                                     Else
                                         Dim TargetFile As StreamWriter
                                         TargetFile = New StreamWriter(filename, False)
                                         TargetFile.Write(retour)
                                         TargetFile.Close()
-                                        MessageBox.Show("L'export du fichier de configuration a été effectué", "Export config", MessageBoxButton.OK, MessageBoxImage.Information)
+                                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'export du fichier de configuration a été effectué", "Export config", "")
                                     End If
                                 End If
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu config_exporter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu config_exporter: " & ex.Message, "ERREUR", "")
                             End Try
                         Case "cfg_sauvegarder"
                             Try
@@ -1985,13 +1985,13 @@ Class Window1
 
                                 Dim retour As String = myService.SaveConfig(IdSrv)
                                 If retour <> "0" Then
-                                    MessageBox.Show("Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Error)
+                                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", "")
                                 Else
-                                    MessageBox.Show("Enregistrement effectué", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Information)
+                                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Enregistrement effectué", "HomIAdmin", "")
                                     FlagChange = False
                                 End If
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu config_sauvegarder: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu config_sauvegarder: " & ex.Message, "ERREUR", "")
                             End Try
                     End Select
                 Case "qit"
@@ -2005,9 +2005,9 @@ Class Window1
                                         Else
                                             Dim retour As String = myService.SaveConfig(IdSrv)
                                             If retour <> "0" Then
-                                                MessageBox.Show("Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Error)
+                                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", "")
                                             Else
-                                                MessageBox.Show("Enregistrement effectué", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Information)
+                                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Enregistrement effectué", "HomIAdmin", "")
                                                 FlagChange = False
                                             End If
                                         End If
@@ -2017,7 +2017,7 @@ Class Window1
                                 Me.Close()
                                 End
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu Quitter: " & ex.Message, "ERREUR", "")
                             End Try
                         Case "qit_stop"
                             Try
@@ -2026,7 +2026,7 @@ Class Window1
                                     RefreshTreeView()
                                 End If
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu STOP: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu STOP: " & ex.Message, "ERREUR", "")
                             End Try
                         Case "qit_start"
                             Try
@@ -2035,7 +2035,7 @@ Class Window1
                                     RefreshTreeView()
                                 End If
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu START: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu START: " & ex.Message, "ERREUR", "")
                             End Try
                     End Select
                 Case "hst"
@@ -2052,7 +2052,7 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadControl
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu aide gérer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu aide gérer: " & ex.Message, "ERREUR", "")
                             End Try
                     End Select
                 Case "mod"
@@ -2063,14 +2063,14 @@ Class Window1
                                 AddHandler x.CloseMe, AddressOf UnloadControl
                                 AffControlPage(x)
                             Catch ex As Exception
-                                MessageBox.Show("ERREUR Sub MainMenuContextmenu Module ajouter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu Module ajouter: " & ex.Message, "ERREUR", "")
                             End Try
                     End Select
             End Select
             ShowTreeView()
             Me.Cursor = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub MainMenuGerer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuGerer: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -2095,7 +2095,7 @@ Class Window1
             ShowTreeView()
             Me.Cursor = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub MainMenuGerer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuGerer: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -2116,7 +2116,7 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub MainMenuNew Composants: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuNew Composants: " & ex.Message, "ERREUR", "")
                     End Try
                 Case "tag_zone"
                     Try
@@ -2125,7 +2125,7 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub MainMenuNew Zone: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuNew Zone: " & ex.Message, "ERREUR", "")
                     End Try
                 Case "tag_user"
                     Try
@@ -2134,7 +2134,7 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub MainMenuNew User: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuNew User: " & ex.Message, "ERREUR", "")
                     End Try
                 Case "tag_triggertimer"
                     Try
@@ -2143,7 +2143,7 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub MainMenuNew TriggerTime: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuNew TriggerTime: " & ex.Message, "ERREUR", "")
                     End Try
                 Case "tag_triggerdevice"
                     Try
@@ -2152,7 +2152,7 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub MainMenuNew TriggerDevice: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuNew TriggerDevice: " & ex.Message, "ERREUR", "")
                     End Try
                 Case "tag_macro"
                     Try
@@ -2165,7 +2165,7 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub MainMenuNew Macro: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuNew Macro: " & ex.Message, "ERREUR", "")
                     End Try
                 Case "tag_module"
                     Try
@@ -2173,13 +2173,13 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub MainMenuNew Module: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuNew Module: " & ex.Message, "ERREUR", "")
                     End Try
             End Select
             ShowTreeView()
             _MainMenuAction = -1
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'exécution de MainMenuNew: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'exécution de MainMenuNew: " & ex.ToString, "Erreur Admin", "")
         End Try
     End Sub
 
@@ -2196,7 +2196,7 @@ Class Window1
             AddHandler x.CloseMe, AddressOf UnloadSelectElmt
             AffControlPage(x)
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'exécution de MainMenuDelete: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'exécution de MainMenuDelete: " & ex.ToString, "Erreur Admin", "")
         End Try
     End Sub
 
@@ -2213,7 +2213,7 @@ Class Window1
             AddHandler x.CloseMe, AddressOf UnloadSelectElmt
             AffControlPage(x)
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'exécution de MainMenuEdit: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'exécution de MainMenuEdit: " & ex.ToString, "Erreur Admin", "")
         End Try
     End Sub
 
@@ -2257,17 +2257,17 @@ Class Window1
                                     Mouse.OverrideCursor = Nothing
                                 End If
                             Else
-                                MessageBox.Show("Format non supporté!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Format non supporté!", "Erreur", "")
                                 Exit Try
                             End If
                             If result.Contains("ERR") = True Then
-                                MessageBox.Show(result, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, result, "Erreur", "")
                             Else
-                                MessageBox.Show("Importation terminée.", "HoMIAdmiN", MessageBoxButton.OK, MessageBoxImage.Information)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Importation terminée.", "HoMIAdmiN", "")
                             End If
                         End If
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub MainMenuAutre import_histo: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuAutre import_histo: " & ex.Message, "Erreur", "")
                     End Try
                 Case "tag_config_log"
                     Try
@@ -2282,15 +2282,15 @@ Class Window1
                         x.Height = CanvasRight.ActualHeight - 50
                         AffControlPage(x)
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub MainMenuAutre log: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuAutre log: " & ex.Message, "ERREUR", "")
                     End Try
 
                 Case "tag_multimedia" 'Multimedia Playlist
                     Try
-                        MessageBox.Show("Désolé cette fonctionnalité n'est pas encore disponible...", "INFO", MessageBoxButton.OK, MessageBoxImage.Information)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Désolé cette fonctionnalité n'est pas encore disponible...", "INFO", "")
                         Exit Select
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub MainMenuAutre Playlist: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuAutre Playlist: " & ex.Message, "ERREUR", "")
                     End Try
 
                 Case "tag_config" 'Configurer le serveur
@@ -2300,7 +2300,7 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub MainMenuAutre config: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuAutre config: " & ex.Message, "ERREUR", "")
                     End Try
 
                 Case "tag_aide" 'Aide
@@ -2310,16 +2310,16 @@ Class Window1
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AffControlPage(x)
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub MainMenuAutre aide: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuAutre aide: " & ex.Message, "ERREUR", "")
                     End Try
                 Case "tag_composant_nvx" 'nvx composants
                     Try
-                     Dim x As New uNewDevice()
+                        Dim x As New uNewDevice()
                         AddHandler x.CloseMe, AddressOf UnloadControl
                         AddHandler x.CreateNewDevice, AddressOf CreateNewDevice
                         AffControlPage(x)
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub MainMenuAutre nvx composant: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuAutre nvx composant: " & ex.Message, "ERREUR", "")
                     End Try
                 Case "tag_quitter"
                     Try
@@ -2328,17 +2328,17 @@ Class Window1
                             If MessageBox.Show("Voulez-vous enregistrer la configuration avant de quitter?", "HomIAdmin", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
                                 Try
                                     If IsConnect = False Then
-                                        MessageBox.Show("Impossible d'enregistrer la configuration car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Impossible d'enregistrer la configuration car le serveur n'est pas connecté !!", "Erreur", "")
                                     Else
                                         Dim retour As String = myService.SaveConfig(IdSrv)
                                         If retour <> "0" Then
-                                            MessageBox.Show("Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Error)
+                                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", "")
                                         Else
-                                            MessageBox.Show("Enregistrement effectué", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Information)
+                                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Enregistrement effectué", "HomIAdmin", "")
                                         End If
                                     End If
                                 Catch ex As Exception
-                                    MessageBox.Show("ERREUR Sub Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Quitter: " & ex.Message, "ERREUR", "")
                                 End Try
 
                             End If
@@ -2347,7 +2347,7 @@ Class Window1
                         Me.Close()
                         End
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub MainMenuAutre Quitter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuAutre Quitter: " & ex.Message, "ERREUR", "")
                     End Try
                 Case "tag_quitter_stop"
                     If MessageBox.Show("Confirmer vous l'arrêt du serveur?", "HomIAdmin", MessageBoxButton.YesNo, MessageBoxImage.Question) = MessageBoxResult.Yes Then
@@ -2376,17 +2376,17 @@ Class Window1
                             Dim filename As String = dlg.FileName
                             Dim retour As String = myService.ExportConfig(IdSrv)
                             If retour.StartsWith("ERREUR") Then
-                                MessageBox.Show(retour, "Erreur export config", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, retour, "Erreur export config", "")
                             Else
                                 Dim TargetFile As StreamWriter
                                 TargetFile = New StreamWriter(filename, False)
                                 TargetFile.Write(retour)
                                 TargetFile.Close()
-                                MessageBox.Show("L'export du fichier de configuration a été effectué", "Export config", MessageBoxButton.OK, MessageBoxImage.Information)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'export du fichier de configuration a été effectué", "Export config", "")
                             End If
                         End If
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub MainMenuAutre config_exporter: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuAutre config_exporter: " & ex.Message, "ERREUR", "")
                     End Try
 
                 Case "tag_config_importer" 'Importer le fichier de config
@@ -2411,38 +2411,38 @@ Class Window1
 
                             Dim retour As String = myService.ImportConfig(IdSrv, filename)
                             If retour <> "0" Then
-                                MessageBox.Show(retour, "Erreur import config", MessageBoxButton.OK, MessageBoxImage.Error)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, retour, "Erreur import config", "")
                             Else
-                                MessageBox.Show("L'import du fichier de configuration a été effectué, l'ancien fichier a été renommé en .old, veuillez redémarrer le serveur pour prendre en compte cette nouvelle configuration", "Import config", MessageBoxButton.OK, MessageBoxImage.Information)
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'import du fichier de configuration a été effectué, l'ancien fichier a été renommé en .old, veuillez redémarrer le serveur pour prendre en compte cette nouvelle configuration", "Import config", "")
                             End If
                         End If
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub MainMenuAutre config_importer: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuAutre config_importer: " & ex.Message, "ERREUR", "")
                     End Try
 
                 Case "tag_config_sauvegarder"
                     Try
                         If IsConnect = False Then
-                            MessageBox.Show("Impossible d'enregistrer la config car le serveur n'est pas connecté !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Asterisk)
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Impossible d'enregistrer la config car le serveur n'est pas connecté !!", "Erreur", "Window1.MainMenuAutre")
                             Exit Sub
                         End If
 
                         Dim retour As String = myService.SaveConfig(IdSrv)
                         If retour <> "0" Then
-                            MessageBox.Show("Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Error)
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", "")
                         Else
-                            MessageBox.Show("Enregistrement effectué", "HomIAdmin", MessageBoxButton.OK, MessageBoxImage.Information)
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Enregistrement effectué", "HomIAdmin", "")
                             FlagChange = False
                         End If
                     Catch ex As Exception
-                        MessageBox.Show("ERREUR Sub MainMenuAutre config_sauvegarder: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuAutre config_sauvegarder: " & ex.Message, "ERREUR", "")
                     End Try
 
             End Select
             ShowTreeView()
             Me.Cursor = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub MainMenuAutre: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuAutre: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -2605,7 +2605,7 @@ Class Window1
                                 Me.Cursor = Nothing
                             End If
                         Catch ex As Exception
-                            MessageBox.Show("ERREUR Sub TreeView_MouseDoubleClick: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub TreeView_MouseDoubleClick: " & ex.Message, "ERREUR", "")
                         End Try
                     Case 2 'Supprimer
                         DeleteElement(Objet.retour, Objet.Type)
@@ -2613,7 +2613,7 @@ Class Window1
                 Me.UpdateLayout()
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub UnloadSelectElmt: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub UnloadSelectElmt: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -2626,7 +2626,7 @@ Class Window1
                 _retour = myService.CanDelete(IdSrv, ID)
 
                 If _retour(0).StartsWith("ERREUR") Then
-                    MessageBox.Show(_retour(0), "Erreur CanDelete", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, _retour(0), "Erreur CanDelete", "")
                     Exit Sub
                 Else
                     If _retour(0) <> "0" Then
@@ -2665,7 +2665,7 @@ Class Window1
                 End Select
 
                 If retour = -2 Then
-                    MessageBox.Show("Vous ne pouvez pas supprimer cet élément!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Vous ne pouvez pas supprimer cet élément!", "Erreur", "")
                     Me.Cursor = Nothing
                     Exit Sub
                 Else
@@ -2673,11 +2673,11 @@ Class Window1
                 End If
 
             Else
-                MessageBox.Show("Veuillez sélectionner un élément à supprimer!")
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez sélectionner un élément à supprimer!")
                 Me.Cursor = Nothing
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR de la suppression: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR de la suppression: " & ex.ToString, "ERREUR", "")
         End Try
         CanvasRight.Children.Clear()
         ShowMainMenu()
@@ -2688,7 +2688,7 @@ Class Window1
         Try
             Me.Cursor = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub ControlLoaded: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub ControlLoaded: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -2721,7 +2721,7 @@ Class Window1
 
             Objet3 = Objet
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub AffControlPage: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub AffControlPage: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -2742,7 +2742,7 @@ Class Window1
             AnimationApparition(Objet3)
             Objet3 = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub AffControlPageSuite: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub AffControlPageSuite: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -2769,7 +2769,7 @@ Class Window1
             myDoubleAnimation = Nothing
             Me.Cursor = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub UnloadControl: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub UnloadControl: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -2791,7 +2791,7 @@ Class Window1
                 myStoryboard = Nothing
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub AnimationApparition: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub AnimationApparition: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -2853,7 +2853,7 @@ Class Window1
             Me.Cursor = Nothing
         Catch ex As Exception
             Me.Cursor = Nothing
-            MessageBox.Show("ERREUR Sub BtnGenereGraph_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnGenereGraph_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -2861,7 +2861,7 @@ Class Window1
         Try
             If IsConnect = False Then PageConnexion()
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub Ellipse1_MouseDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Ellipse1_MouseDown: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -2881,7 +2881,7 @@ Class Window1
                 LOG.ToolTip = a
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub LOG_PreviewMouseMove: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub LOG_PreviewMouseMove: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -2897,7 +2897,7 @@ Class Window1
                 AffControlPage(x)
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub ImgNewDevice_MouseDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub ImgNewDevice_MouseDown: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -2910,7 +2910,7 @@ Class Window1
             AddHandler x.CloseMe, AddressOf UnloadControl
             AffControlPage(x)
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub CreateNewDevice: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub CreateNewDevice: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 

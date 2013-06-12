@@ -125,7 +125,7 @@ Partial Public Class uDriver
             End If
 
         Catch Ex As Exception
-            MessageBox.Show("Erreur: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & Ex.Message, "Erreur", "")
         End Try
     End Sub
 
@@ -142,31 +142,31 @@ Partial Public Class uDriver
             'verif of PORT_COM
             If String.IsNullOrEmpty(TxtCom.Text) = False And TxtCom.Text <> "@" Then
                 If Not (TxtCom.Text.StartsWith("COM") Or TxtCom.Text.StartsWith("USB")) Then
-                    MessageBox.Show("Le Champ COM doit être configuré avec COMx ou USBx (ou x est un entier)", "Erreur port COM", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le Champ COM doit être configuré avec COMx ou USBx (ou x est un entier)", "Erreur port COM", "")
                     Exit Sub
                 End If
             End If
             If String.IsNullOrEmpty(TxtPortTCP.Text) = False And TxtPortTCP.Text <> "@" Then
                 If IsValidPortIP(TxtPortTCP.Text) = False Then
-                    MessageBox.Show("Le Port TCP doit être compris entre 0 et 65535", "Erreur port COM", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le Port TCP doit être compris entre 0 et 65535", "Erreur port COM", "")
                     Exit Sub
                 End If
             End If
             If String.IsNullOrEmpty(TxtPortUDP.Text) = False And TxtPortUDP.Text <> "@" Then
                 If IsValidPortIP(TxtPortUDP.Text) = False Then
-                    MessageBox.Show("Le Port UDP doit être compris entre 0 et 65535", "Erreur port COM", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le Port UDP doit être compris entre 0 et 65535", "Erreur port COM", "")
                     Exit Sub
                 End If
             End If
             If String.IsNullOrEmpty(TxtAdrTCP.Text) = False And TxtAdrTCP.Text <> "@" Then
                 If IsValidIP(TxtAdrTCP.Text) = False Then
-                    MessageBox.Show("L'adresse IP doit être au format xx.xx.xx.xx", "Erreur port COM", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'adresse IP doit être au format xx.xx.xx.xx", "Erreur port COM", "")
                     Exit Sub
                 End If
             End If
             If String.IsNullOrEmpty(TxtAdrUDP.Text) = False And TxtAdrUDP.Text <> "@" Then
                 If IsValidIP(TxtAdrUDP.Text) = False Then
-                    MessageBox.Show("L'adresse UDP doit être au format xx.xx.xx.xx", "Erreur port COM", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'adresse UDP doit être au format xx.xx.xx.xx", "Erreur port COM", "")
                     Exit Sub
                 End If
             End If
@@ -186,11 +186,11 @@ Partial Public Class uDriver
     Private Sub TxtRefresh_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtRefresh.TextChanged
         Try
             If String.IsNullOrEmpty(TxtRefresh.Text) = False And IsNumeric(TxtRefresh.Text) = False Then
-                MessageBox.Show("Veuillez saisir une valeur numérique")
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez saisir une valeur numérique")
                 TxtRefresh.Text = 0
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur uDriver TxtRefresh_TextChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDriver TxtRefresh_TextChanged: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -203,7 +203,7 @@ Partial Public Class uDriver
                 End If
             Next
         Catch ex As Exception
-            MessageBox.Show("Erreur uDriver UnloadControl: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDriver UnloadControl: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -224,7 +224,7 @@ Partial Public Class uDriver
                 GroupBox1.Visibility = Windows.Visibility.Collapsed
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur uDriver BtnAv_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDriver BtnAv_Click: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -281,7 +281,7 @@ Partial Public Class uDriver
                 End Select
             Next
         Catch ex As Exception
-            MessageBox.Show("Erreur uDriver CbCmd_MouseLeave: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDriver CbCmd_MouseLeave: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -319,7 +319,7 @@ Partial Public Class uDriver
 
             myservice.ExecuteDriverCommand(IdSrv, _DriverId, a)
         Catch ex As Exception
-            MessageBox.Show("Erreur lors du test: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors du test: " & ex.Message, "Erreur", "")
         End Try
     End Sub
 
@@ -330,7 +330,7 @@ Partial Public Class uDriver
                 TxtParam.Text = _ListParam.Item(CbParam.SelectedIndex)
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur uDriver CbParam_SelectionChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDriver CbParam_SelectionChanged: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -339,10 +339,10 @@ Partial Public Class uDriver
             If CbParam.SelectedIndex >= 0 And String.IsNullOrEmpty(TxtParam.Text) = False Then
                 _ListParam.Item(CbParam.SelectedIndex) = TxtParam.Text
             Else
-                MessageBox.Show("Veuillez sélectionner un paramètre ou saisir sa valeur", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez sélectionner un paramètre ou saisir sa valeur", "Erreur", "")
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur uDriver BtnOkParam_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDriver BtnOkParam_Click: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -376,7 +376,7 @@ Partial Public Class uDriver
             'return the results
             Return (valid)
         Catch ex As Exception
-            MessageBox.Show("Erreur uDriver IsValidIP: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDriver IsValidIP: " & ex.ToString, "ERREUR", "")
         End Try
     End Function
 
@@ -407,7 +407,7 @@ Partial Public Class uDriver
 
             Return valid
         Catch ex As Exception
-            MessageBox.Show("Erreur uDriver IsValidPortIP: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDriver IsValidPortIP: " & ex.ToString, "ERREUR", "")
         End Try
     End Function
 

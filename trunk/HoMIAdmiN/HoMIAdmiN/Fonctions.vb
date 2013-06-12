@@ -3,8 +3,34 @@ Imports System.Net
 Imports System.Net.Sockets
 Imports System.Runtime.Serialization.Formatters.Soap
 Imports System.ServiceModel
+Imports HoMIDom
 
 Module Fonctions
+    ''' <summary>
+    ''' Affiche le message et connecté log dans le serveur
+    ''' </summary>
+    ''' <param name="Type"></param>
+    ''' <param name="Message"></param>
+    ''' <param name="Title"></param>
+    ''' <param name="Fonction"></param>
+    ''' <remarks></remarks>
+    Public Sub AfficheMessageAndLog(ByVal Type As HoMIDom.HoMIDom.Server.TypeLog, ByVal Message As String, Optional ByVal Title As String = "", Optional ByVal Fonction As String = "")
+        Dim Icon As MessageBoxImage = MessageBoxImage.Error
+
+        Select Case Type
+            Case HoMIDom.HoMIDom.Server.TypeLog.INFO
+                Icon = MessageBoxImage.Information
+            Case HoMIDom.HoMIDom.Server.TypeLog.MESSAGE
+                Icon = MessageBoxImage.Exclamation
+            Case Else
+                Icon = MessageBoxImage.Error
+        End Select
+        MessageBox.Show(Message, Title, MessageBoxButton.OK, Icon)
+
+        If IsConnect Then myService.Log(Type, HoMIDom.HoMIDom.Server.TypeSource.CLIENT, Fonction, Message)
+    End Sub
+
+
     Public Function ConvertArrayToImage(ByVal value As Object, Optional ByVal Taille As Integer = 0) As Object
         Try
             Dim ImgSource As BitmapImage = Nothing
@@ -28,7 +54,7 @@ Module Fonctions
             Return ImgSource
             ImgSource = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub ConvertArrayToImage: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub ConvertArrayToImage: " & ex.Message, "ERREUR", "")
             Return Nothing
         End Try
     End Function
@@ -46,7 +72,7 @@ Module Fonctions
             End Try
             Return bValid
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub UrlIsValid: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub UrlIsValid: " & ex.Message, "ERREUR", "")
             Return False
         End Try
     End Function
@@ -58,7 +84,7 @@ Module Fonctions
                 If retour = "0" Then FlagChange = False
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub SaveRealTime: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub SaveRealTime: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -76,7 +102,7 @@ Module Fonctions
 
             bmpImage = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR ImageFromUri: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR ImageFromUri: " & ex.Message, "ERREUR", "")
             Return Nothing
         End Try
     End Function
@@ -100,7 +126,7 @@ Module Fonctions
             Dim _myadress = Replace(myadress, "/service", "/fileServer")
 
             If UrlIsValid(_myadress) = False Then
-                MessageBox.Show("Erreur lors de la connexion au serveur de fichier, veuillez vérifier que celui-ci est démarré", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la connexion au serveur de fichier, veuillez vérifier que celui-ci est démarré", "Erreur Admin", "")
                 Return -1
             End If
 
@@ -124,7 +150,7 @@ Module Fonctions
 
             'On vérifie qu'on est bien connecté
             If myChannelFactory.State <> CommunicationState.Opened Then
-                MessageBox.Show("Erreur lors de la connexion au serveur de fichier", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la connexion au serveur de fichier", "Erreur Admin", "")
                 Return -1
                 Exit Function
             Else
@@ -152,7 +178,7 @@ Module Fonctions
             If Not fileData Is Nothing And Not fileData.Stream Is Nothing Then
                 fileData.Stream.Close()
             End If
-            MessageBox.Show("Erreur lors de la connexion au serveur de fichier sélectionné: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la connexion au serveur de fichier sélectionné: " & ex.Message, "Erreur Admin", "")
             Return -1
         End Try
     End Function
@@ -180,7 +206,7 @@ Module Fonctions
             Dim _myadress = Replace(myadress, "/service", "/fileServer")
 
             If UrlIsValid(_myadress) = False Then
-                MessageBox.Show("Erreur lors de la connexion au serveur de fichier, veuillez vérifier que celui-ci est démarré", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la connexion au serveur de fichier, veuillez vérifier que celui-ci est démarré", "Erreur Admin", "")
                 Return -1
             End If
 
@@ -203,7 +229,7 @@ Module Fonctions
 
             'On vérifie qu'on est bien connecté
             If myChannelFactory.State <> CommunicationState.Opened Then
-                MessageBox.Show("Erreur lors de la connexion au serveur de fichier", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la connexion au serveur de fichier", "Erreur Admin", "")
                 Return -1
                 Exit Function
             Else
@@ -229,7 +255,7 @@ Module Fonctions
             If Not myStream Is Nothing Then
                 myStream.Close()
             End If
-            MessageBox.Show("Erreur lors de la connexion au serveur de fichier sélectionné: " & ex.Message, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la connexion au serveur de fichier sélectionné: " & ex.Message, "Erreur Admin", "")
             Return -1
         End Try
     End Function

@@ -68,7 +68,7 @@ Class uModuleSimple
             CbEmetteur.SelectedIndex = 0
             CbRecepteur.SelectedIndex = 0
         Catch Ex As Exception
-            MessageBox.Show("Erreur: UmoduleSimple New: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: UmoduleSimple New: " & Ex.Message, "Erreur", "")
         End Try
     End Sub
 
@@ -76,7 +76,7 @@ Class uModuleSimple
         Try
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
-            MessageBox.Show("Erreur: UmoduleSimple BtnAnnuler_Click: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: UmoduleSimple BtnAnnuler_Click: " & ex.Message, "Erreur", "")
         End Try
     End Sub
 
@@ -89,24 +89,24 @@ Class uModuleSimple
 
             'vérifications
             If String.IsNullOrEmpty(TxtNom.Text) = True Then
-                MessageBox.Show("Il faut renseigner un nom de module !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Il faut renseigner un nom de module !", "Erreur", "")
                 Exit Sub
             End If
             For Each Mac In listemacros
                 If Mac.Nom.ToString.ToUpper = TxtNom.Text.ToUpper Then
-                    MessageBox.Show("Attention, ce nom existe déjà !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Attention, ce nom existe déjà !", "Erreur", "")
                     TxtNom.Text = ""
                     Exit Sub
                 End If
             Next
             For Each Trig In listetriggers
                 If TxtNom.Text.ToUpper = Split(Trig.Nom.ToString.ToUpper, " :: ")(0) Then
-                    MessageBox.Show("Attention, ce nom existe déjà !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Attention, ce nom existe déjà !", "Erreur", "")
                     TxtNom.Text = ""
                     Exit Sub
                 End If
                 If TxtNom.Text.ToUpper = Trig.Nom.ToString.ToUpper Then
-                    MessageBox.Show("Attention, ce nom existe déjà !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Attention, ce nom existe déjà !", "Erreur", "")
                     TxtNom.Text = ""
                     Exit Sub
                 End If
@@ -167,7 +167,7 @@ Class uModuleSimple
                         End If
                     Next
                     If nbemetteur = 0 Then
-                        MessageBox.Show("Il faut Sélectionner au moins un Emetteur !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Il faut Sélectionner au moins un Emetteur !", "Erreur", "")
                         Exit Sub
                     End If
                 End If
@@ -237,7 +237,7 @@ Class uModuleSimple
                         End If
                     Next
                     If nbrecepteur = 0 Then
-                        MessageBox.Show("Il faut Sélectionner au moins un Récepteur !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Il faut Sélectionner au moins un Récepteur !", "Erreur", "")
                         Exit Sub
                     End If
                 End If
@@ -307,10 +307,10 @@ Class uModuleSimple
 
 
             'End Select
-            MessageBox.Show(resultatmessage, "Création d'un module simple", MessageBoxButton.OK, MessageBoxImage.Information)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, resultatmessage, "Création d'un module simple", "")
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
-            MessageBox.Show("Erreur: ModuleSimple BtnAjouter_Click: " & ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: ModuleSimple BtnAjouter_Click: " & ex.Message, "Error", "")
         End Try
     End Sub
 
@@ -321,7 +321,7 @@ Class uModuleSimple
                             & "INFO: Un module permet uniquement de créer des triggers/macros, il faut ensuite utiliser le panneau des macros/triggers pour les modifier/supprimer",
                             "Aide", MessageBoxButton.OK, MessageBoxImage.Question)
         Catch ex As Exception
-            MessageBox.Show("Erreur: UmoduleSimple BtnHelp_Click: " & ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: UmoduleSimple BtnHelp_Click: " & ex.Message, "Error", "")
         End Try
     End Sub
 
@@ -370,7 +370,7 @@ Class uModuleSimple
                     StkCron.Visibility = Windows.Visibility.Visible
             End Select
         Catch ex As Exception
-            MessageBox.Show("Erreur: UmoduleSimple CbType_SelectionChanged: " & ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: UmoduleSimple CbType_SelectionChanged: " & ex.Message, "Error", "")
         End Try
     End Sub
 
@@ -379,7 +379,7 @@ Class uModuleSimple
             If String.IsNullOrEmpty(TxtNom.Text) = False Then
                 For Each Mac In listemacros
                     If Mac.Nom.ToString.ToUpper = TxtNom.Text.ToUpper Then
-                        MessageBox.Show("Attention, ce nom existe déjà !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Attention, ce nom existe déjà !", "Erreur", "")
                         TxtNom.Text = ""
                         Exit Sub
                     End If
@@ -387,23 +387,23 @@ Class uModuleSimple
                 For Each Trig In listetriggers
                     'If TxtNom.Text.ToUpper = Left(Trig.Nom.ToString.ToUpper, TxtNom.Text.Length) Then
                     If TxtNom.Text.ToUpper = Split(Trig.Nom.ToString.ToUpper, " :: ")(0) Then
-                        MessageBox.Show("Attention, ce nom existe déjà !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Attention, ce nom existe déjà !", "Erreur", "")
                         TxtNom.Text = ""
                         Exit Sub
                     End If
                     If TxtNom.Text.ToUpper = Trig.Nom.ToString.ToUpper Then
-                        MessageBox.Show("Attention, ce nom existe déjà !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Attention, ce nom existe déjà !", "Erreur", "")
                         TxtNom.Text = ""
                         Exit Sub
                     End If
                 Next
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur: UmoduleSimple TxtNom_LostFocus: " & ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: UmoduleSimple TxtNom_LostFocus: " & ex.Message, "Error", "")
         End Try
     End Sub
 
-    Private Sub CbComposant_SelectionChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbComposant.SelectionChanged
+    Private Sub CbComposant_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbComposant.SelectionChanged
         Try
             If CbComposant.SelectedItem IsNot Nothing Then
                 CbAction.ItemsSource = Nothing
@@ -412,11 +412,11 @@ Class uModuleSimple
                 CbAction.DisplayMemberPath = "Nom"
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur CbComposant_SelectionChanged: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur CbComposant_SelectionChanged: " & ex.ToString, "Erreur Admin", "")
         End Try
     End Sub
 
-    Private Sub CbAction_SelectionChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbAction.SelectionChanged
+    Private Sub CbAction_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbAction.SelectionChanged
         Try
             StkParametre.Visibility = Windows.Visibility.Hidden
 
@@ -433,7 +433,7 @@ Class uModuleSimple
                 End Select
             Next
         Catch ex As Exception
-            MessageBox.Show("Erreur CbAction_SelectionChanged: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur CbAction_SelectionChanged: " & ex.ToString, "Erreur Admin", "")
         End Try
     End Sub
 
@@ -454,7 +454,7 @@ Class uModuleSimple
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uModuleSimple BtnPHr_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uModuleSimple BtnPHr_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -474,7 +474,7 @@ Class uModuleSimple
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uModuleSimple BtnPMn_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uModuleSimple BtnPMn_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -494,7 +494,7 @@ Class uModuleSimple
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uModuleSimple BtnPSc_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uModuleSimple BtnPSc_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -514,7 +514,7 @@ Class uModuleSimple
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uModuleSimple BtnMHr_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uModuleSimple BtnMHr_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -534,7 +534,7 @@ Class uModuleSimple
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uModuleSimple BtnMMn_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uModuleSimple BtnMMn_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -554,7 +554,7 @@ Class uModuleSimple
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uModuleSimple BtnMSec_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uModuleSimple BtnMSec_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -574,7 +574,7 @@ Class uModuleSimple
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uModuleSimple BtnPJr_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uModuleSimple BtnPJr_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -594,7 +594,7 @@ Class uModuleSimple
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uModuleSimple BtnPMs_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uModuleSimple BtnPMs_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -614,7 +614,7 @@ Class uModuleSimple
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uModuleSimple BtnMJr_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uModuleSimple BtnMJr_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -634,7 +634,7 @@ Class uModuleSimple
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uModuleSimple BtnMMs_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uModuleSimple BtnMMs_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -649,7 +649,7 @@ Class uModuleSimple
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uModuleSimple TxtHr_TextChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uModuleSimple TxtHr_TextChanged: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -664,7 +664,7 @@ Class uModuleSimple
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uModuleSimple TxtMn_TextChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uModuleSimple TxtMn_TextChanged: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -679,7 +679,7 @@ Class uModuleSimple
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uModuleSimple TxtSc_TextChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uModuleSimple TxtSc_TextChanged: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -694,7 +694,7 @@ Class uModuleSimple
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uModuleSimple TxtJr_TextChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uModuleSimple TxtJr_TextChanged: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -709,7 +709,7 @@ Class uModuleSimple
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uModuleSimple TxtMs_TextChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uModuleSimple TxtMs_TextChanged: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 #End Region

@@ -62,7 +62,7 @@ Partial Public Class uHelp
             TexteSoutien.Text &= "Vous pouvez faire un don simplement et librement via Paypal depuis notre site web ci-dessous : " & vbCrLf
 
         Catch ex As Exception
-            MessageBox.Show("Erreur lors sur la fonction New de uHelp: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors sur la fonction New de uHelp: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 

@@ -10,12 +10,12 @@ Partial Public Class uUser
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         Try
             If TxtPassword.Password <> TxtConfirm.Password Then
-                MessageBox.Show("Le mot de passe est différent après confirmation !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le mot de passe est différent après confirmation !", "Erreur", "")
                 Exit Sub
             End If
 
             If String.IsNullOrEmpty(TxtUsername.Text) = True Or String.IsNullOrEmpty(TxtPassword.Password) = True Or ComboProfil.SelectedIndex < 0 Or String.IsNullOrEmpty(TxtNom.Text) = True Or String.IsNullOrEmpty(TxtPrenom.Text) = True Then
-                MessageBox.Show("Le username, le mot de passe, le profil, le nom et prénom sont obligatoires !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le username, le mot de passe, le profil, le nom et prénom sont obligatoires !", "Erreur", "")
                 Exit Sub
             End If
 
@@ -23,7 +23,7 @@ Partial Public Class uUser
             FlagChange = True
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'enregistrement du user, message: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement du user, message: " & ex.ToString, "Erreur", "")
         End Try
     End Sub
 
@@ -69,7 +69,7 @@ Partial Public Class uUser
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uUser New: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uUser New: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -88,7 +88,7 @@ Partial Public Class uUser
                 frm.Close()
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uUser ImgIcon_MouseLeftButtonDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uUser ImgIcon_MouseLeftButtonDown: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 

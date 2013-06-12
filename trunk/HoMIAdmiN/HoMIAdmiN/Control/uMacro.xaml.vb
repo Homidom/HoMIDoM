@@ -36,14 +36,14 @@
             AddHandler UScenario1.AsChange, AddressOf Scenario_AsChange
 
         Catch ex As Exception
-            MessageBox.Show("Erreur dans uMacro - New: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur dans uMacro - New: " & ex.ToString, "Erreur", "")
         End Try
     End Sub
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         Try
             If String.IsNullOrEmpty(TxtNom.Text) = True Then
-                MessageBox.Show("Le nom de la macro est obligatoire!", "Macro", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom de la macro est obligatoire!", "Macro", "")
                 Exit Sub
             End If
 
@@ -60,7 +60,7 @@
             FlagChange = True
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'enregistrement de la macro, message: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement de la macro, message: " & ex.ToString, "Erreur", "")
         End Try
     End Sub
 

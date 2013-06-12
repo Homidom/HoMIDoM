@@ -749,22 +749,27 @@
                         <StackPanel Orientation="Horizontal" >
                             <ListBox Name="ListVar" Width="120" Height="90" />
                             <StackPanel >
-                                <Button x:Name="BtnNewVar" Content="+" RenderTransformOrigin="0.5,0.5" Width="60" Height="30.5" Margin="3" Template="{DynamicResource GlassButton}" Foreground="White" />
-                                <Button x:Name="BtnDeleteVar" Content="-" RenderTransformOrigin="0.5,0.5" Width="60" Height="30.5" Margin="3" Template="{DynamicResource GlassButton}" Foreground="White" />
-                                <Button x:Name="BtnModifVar" Content="OK" RenderTransformOrigin="0.5,0.5" Width="60" Height="30.5" Margin="3" Template="{DynamicResource GlassButton}" Foreground="White" />
+                                <Button x:Name="BtnNewVar" Content="+" RenderTransformOrigin="0.5,0.5" Width="60" Height="30.5" Margin="3" Template="{DynamicResource GlassButton}" Foreground="White" HorizontalAlignment="Left" />
+                                <Button x:Name="BtnDeleteVar" Content="-" RenderTransformOrigin="0.5,0.5" Width="60" Height="30.5" Margin="3" Template="{DynamicResource GlassButton}" Foreground="White" HorizontalAlignment="Left"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                    <Button x:Name="BtnModifVar" Content="OK" RenderTransformOrigin="0.5,0.5" Width="60" Height="30.5" Margin="3" Template="{DynamicResource GlassButton}" Foreground="White" />
+                                    <Button x:Name="BtnAnnulVar" Content="Annuler" RenderTransformOrigin="0.5,0.5" Width="60" Height="30.5" Margin="3" Template="{DynamicResource GlassButton}" Foreground="White" />
+                                </StackPanel>
                             </StackPanel>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" >
+                        </StackPanel >
+                        <StackPanel Name="StkParamVar" Visibility="Collapsed">
+                        <StackPanel  Orientation="Horizontal" >
                             <Label Content="Nom:" Foreground=" White" />
                             <TextBox Name="TxtVarName" Width="120" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" >
+                        <StackPanel Orientation="Horizontal">
                             <Label Content="Type:" Foreground=" White" />
                             <ComboBox  Name="CbVarType" SelectedIndex="0" Width="90">
                                 <ComboBoxItem Content="String" />
                                 <ComboBoxItem Content="Double" />
                                 <ComboBoxItem Content="Tableau" />
                             </ComboBox>
+                        </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </Expander>

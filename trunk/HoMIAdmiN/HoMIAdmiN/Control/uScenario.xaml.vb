@@ -58,7 +58,7 @@ Public Class uScenario
                     x = Nothing
                 Next
             Catch ex As Exception
-                MessageBox.Show("ERREUR Sub uScenario Items: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uScenario Items: " & ex.Message, "ERREUR", "")
             End Try
         End Set
     End Property
@@ -77,7 +77,7 @@ Public Class uScenario
 
             Me.Cursor = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uScenario New: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uScenario New: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -89,7 +89,7 @@ Public Class uScenario
                 e.Effects = DragDropEffects.None
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uScenario ScrollViewer1_DragOver: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uScenario ScrollViewer1_DragOver: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -150,7 +150,7 @@ Public Class uScenario
                 e.Effects = DragDropEffects.None
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -166,7 +166,7 @@ Public Class uScenario
             Next
             RaiseEvent AsChange()
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uScenario DeleteAction: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uScenario DeleteAction: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -187,7 +187,7 @@ Public Class uScenario
             Me.Dispatcher.BeginInvoke(New Affiche_Action2(AddressOf Affiche_Action))
             RaiseEvent AsChange()
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uScenario ChangeAction: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uScenario ChangeAction: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -201,7 +201,7 @@ Public Class uScenario
             Me.Dispatcher.BeginInvoke(New Affiche_Action2(AddressOf Affiche_Action))
 
         Catch ex As Exception
-            MessageBox.Show("Erreur Affiche: " & ex.ToString)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Affiche: " & ex.ToString)
         End Try
     End Sub
 
@@ -218,7 +218,7 @@ Public Class uScenario
                 Next
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uScenario Affiche_Action: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uScenario Affiche_Action: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -249,7 +249,7 @@ Public Class uScenario
 
             x2 = Nothing
         Catch ex As Exception
-            MessageBox.Show("Erreur Affiche_Label: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Affiche_Label: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -287,7 +287,7 @@ Public Class uScenario
                 y1 = Nothing
             Next
         Catch ex As Exception
-            MessageBox.Show("Erreur Affiche_Trait: " & ex.ToString)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Affiche_Trait: " & ex.ToString)
         End Try
     End Sub
 
@@ -298,7 +298,7 @@ Public Class uScenario
             If _Zoom <= 0 Then _Zoom = 1
             Afficher()
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uScenario ZoomPlus_MouseDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uScenario ZoomPlus_MouseDown: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -308,7 +308,7 @@ Public Class uScenario
             _Zoom += 5
             Afficher()
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uScenario ZoomMoins_MouseDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uScenario ZoomMoins_MouseDown: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -316,7 +316,7 @@ Public Class uScenario
         Try
             ScrollViewer2.ScrollToHorizontalOffset(e.HorizontalOffset)
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uScenario ScrollViewer1_ScrollChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uScenario ScrollViewer1_ScrollChanged: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 

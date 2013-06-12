@@ -39,11 +39,11 @@
     Private Sub BtnSaveCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnSaveCmd.Click
         Try
             If IsNumeric(TxtCmdRepeat.Text) = False Then
-                MessageBox.Show("Numérique obligatoire pour repeat !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Numérique obligatoire pour repeat !!", "Erreur", "BtnSaveCmd.Click")
                 Exit Sub
             End If
             If TxtCmdName.Text = "" Or TxtCmdName.Text = " " Then
-                MessageBox.Show("Le nom de la commande est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Le nom de la commande est obligatoire !!", "Erreur", "BtnSaveCmd.Click")
                 Exit Sub
             End If
 
@@ -81,7 +81,7 @@
             BtnNewCmd.Visibility = Windows.Visibility.Visible
             FlagNewCmd = False
         Catch Ex As Exception
-            MessageBox.Show("Erreur BtnSaveCmd: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnSaveCmd: " & Ex.Message, "Erreur", "")
         End Try
     End Sub
 
@@ -97,7 +97,7 @@
                 x.Commandes.RemoveAt(ListCmd.SelectedIndex)
                 Dim retour As String = myService.SaveTemplate(IdSrv, cbTemplate.Text, x.Commandes, slider_Row.Value, slider_Column.Value)
                 If retour <> "0" Then
-                    MessageBox.Show("Erreur lors de l'enregistrement de la commande dans le template: " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement de la commande dans le template: " & retour, "Erreur", "")
                     Exit Sub
                 Else
                     ListCmd.Items.Clear()
@@ -112,7 +112,7 @@
                 TxtCmdRepeat.Text = ""
             End If
         Catch Ex As Exception
-            MessageBox.Show("Erreur BtnDelCmd: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnDelCmd: " & Ex.Message, "Erreur", "")
         End Try
     End Sub
 
@@ -129,10 +129,10 @@
             End If
             Dim retour As String = myService.TelecommandeSendCommand(IdSrv, _DeviceId, TxtCmdName.Text)
             If retour <> 0 Then
-                MessageBox.Show(retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, retour, "Erreur", "")
             End If
         Catch Ex As Exception
-            MessageBox.Show("Erreur BtnTstCmd: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnTstCmd: " & Ex.Message, "Erreur", "")
         End Try
     End Sub
 
@@ -148,13 +148,13 @@
                 If _Driver.Enable = True And _Driver.IsConnect Then
                     TxtCmdData.Text = myService.StartLearning(IdSrv, _Driver.ID)
                 Else
-                    MessageBox.Show("Impossible d'apprendre un code car le driver n'est pas activé ou n'est pas connecté", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Impossible d'apprendre un code car le driver n'est pas activé ou n'est pas connecté", "Erreur", "")
                 End If
             Else
-                MessageBox.Show("Impossible d'apprendre un code car le driver n'a pas été trouvé", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Impossible d'apprendre un code car le driver n'a pas été trouvé", "Erreur", "")
             End If
         Catch Ex As Exception
-            MessageBox.Show("Erreur BtnLearnCmd: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnLearnCmd: " & Ex.Message, "Erreur", "")
         End Try
     End Sub
 
@@ -175,7 +175,7 @@
             End If
             frm = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub ImgCommande_MouseLeftButtonDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub ImgCommande_MouseLeftButtonDown: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -205,7 +205,7 @@
 
             End If
         Catch Ex As Exception
-            MessageBox.Show("Erreur ListCmd_SelectionChanged: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur ListCmd_SelectionChanged: " & Ex.Message, "Erreur", "")
         End Try
     End Sub
 
@@ -237,7 +237,7 @@
                 If cvs.Children.Count <> 0 Then
                     Dim y As ImageButton = cvs.Children.Item(0)
                     If ListCmd.SelectedValue = y.Command Then
-                        MessageBox.Show("Vous ne pouvez pas inclure cette commande dans la grille car elle y est déjà utilisée!", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Vous ne pouvez pas inclure cette commande dans la grille car elle y est déjà utilisée!", "Information", "BtnImgCommande.Click")
                         Exit Sub
                     End If
 
@@ -251,7 +251,7 @@
             obj.SetData(GetType(Image), sender)
             effects = DragDrop.DoDragDrop(sender, obj, DragDropEffects.Copy Or DragDropEffects.Move)
         Else
-            MessageBox.Show("Vous ne pouvez pas inclure cette commande dans la grille car elle ne comporte aucune image!", "Information", MessageBoxButton.OK, MessageBoxImage.Information)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Vous ne pouvez pas inclure cette commande dans la grille car elle ne comporte aucune image!", "Information", "")
         End If
     End Sub
 
@@ -285,27 +285,27 @@
         Try
 
             If TxtTplFab.Text = "" Or TxtTplFab.Text = " " Or InStr(TxtTplFab.Text, "-") > 0 Then
-                MessageBox.Show("Le nom du fabricant est obligatoire et ne doit pas comporter le caractère: - ", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du fabricant est obligatoire et ne doit pas comporter le caractère: - ", "Erreur", "")
                 TxtTplFab.Focus()
                 Exit Sub
             End If
             If TxtTplMod.Text = "" Or TxtTplMod.Text = " " Or InStr(TxtTplMod.Text, "-") > 0 Then
-                MessageBox.Show("Le nom du modèle est obligatoire et ne doit pas comporter le caractère: - ", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du modèle est obligatoire et ne doit pas comporter le caractère: - ", "Erreur", "")
                 TxtTplMod.Focus()
                 Exit Sub
             End If
 
             If _Driver IsNot Nothing Then
-                MessageBox.Show("OK", "", MessageBoxButton.OK, MessageBoxImage.Information)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "OK", "", "")
             Else
-                MessageBox.Show("VIDE", "", MessageBoxButton.OK, MessageBoxImage.Information)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "VIDE", "", "")
             End If
 
             Dim mytemplate As String = LCase(TxtTplFab.Text) & "-" & LCase(TxtTplMod.Text) & "-" & _Driver.Protocol
 
             Dim retour As String = myService.CreateNewTemplate(TxtTplFab.Text, TxtTplMod.Text, _Driver.Protocol, cbBase.SelectedIndex, slider_Row.Value, slider_Column.Value)
             If retour <> "0" Then
-                MessageBox.Show("Erreur lors de la création du nouveau template: " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la création du nouveau template: " & retour, "Erreur", "")
                 Exit Sub
             Else
 
@@ -328,7 +328,7 @@
                 TxtTplMod.IsReadOnly = True
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString)
         End Try
     End Sub
 
@@ -395,7 +395,7 @@
 
             BtnSaveCmd.Visibility = Windows.Visibility.Collapsed
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'ouverture de la fenêtre d'édition:" & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'ouverture de la fenêtre d'édition:" & ex.ToString, "Erreur", "")
         End Try
     End Sub
 
@@ -471,7 +471,7 @@ Retour:
 
             'Remplir()
         Catch ex As Exception
-            MessageBox.Show("Erreur slider_Row_ValueChanged: " & ex.ToString)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur slider_Row_ValueChanged: " & ex.ToString)
         End Try
     End Sub
 
@@ -547,7 +547,7 @@ Retour:
 
             'Remplir()
         Catch ex As Exception
-            MessageBox.Show("Erreur slider_Column_ValueChanged: " & ex.ToString)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur slider_Column_ValueChanged: " & ex.ToString)
         End Try
     End Sub
 
@@ -564,7 +564,7 @@ Retour:
                 End If
             Next
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub Telecommande Save: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Telecommande Save: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -598,7 +598,7 @@ Retour:
                 grid_Telecommande.Children.Add(x)
             Next
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub Telecommande Recharge: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Telecommande Recharge: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -610,7 +610,7 @@ Retour:
                 e.Effects = DragDropEffects.None
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub Telecommande CVS_DragOver: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Telecommande CVS_DragOver: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -644,7 +644,7 @@ Retour:
                 e.Effects = DragDropEffects.None
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub Telecommande CVS_Drop: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Telecommande CVS_Drop: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -666,7 +666,7 @@ Retour:
                 Next
             Next
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub Telecommande Remplir: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Telecommande Remplir: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -682,7 +682,7 @@ Retour:
                 End If
             Next
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub Telecommande DeleteButton: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Telecommande DeleteButton: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -693,7 +693,7 @@ Retour:
             obj.SetData(GetType(Image), sender)
             effects = DragDrop.DoDragDrop(sender, obj, DragDropEffects.Copy Or DragDropEffects.Move)
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub Telecommande Img_MouseLeftButtonDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Telecommande Img_MouseLeftButtonDown: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -722,13 +722,13 @@ Retour:
             If cbTemplate.Text <> "" Then
                 Dim retour As String = myService.SaveTemplate(IdSrv, cbTemplate.Text, x.Commandes, slider_Row.Value, slider_Column.Value)
                 If retour <> "0" Then
-                    MessageBox.Show("Erreur lors de l'enregistrement de la commande dans le template: " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement de la commande dans le template: " & retour, "Erreur", "")
                 End If
             End If
 
             DialogResult = True
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub Telecommande button_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Telecommande button_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -782,7 +782,7 @@ Retour:
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, ex.ToString)
         End Try
     End Sub
 
@@ -800,7 +800,7 @@ Retour:
                 slider_Row.Value = _list.Item(cbTemplate.SelectedIndex).Ligne
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString)
         End Try
     End Sub
 

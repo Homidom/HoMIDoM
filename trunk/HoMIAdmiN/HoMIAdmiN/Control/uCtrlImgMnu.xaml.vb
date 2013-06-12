@@ -61,7 +61,7 @@ Partial Public Class uCtrlImgMnu
                     Image.Source = bmpImage
                 End If
             Catch ex As Exception
-                MessageBox.Show("Erreur uCtrlImgMnu SetIcon: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCtrlImgMnu SetIcon: " & ex.ToString, "ERREUR", "")
             End Try
         End Set
     End Property
@@ -116,7 +116,7 @@ Partial Public Class uCtrlImgMnu
             End If
             Return ImgSource
         Catch ex As Exception
-            MessageBox.Show("Erreur uCtrlImgMnu ConvertArrayToImage: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCtrlImgMnu ConvertArrayToImage: " & ex.ToString, "ERREUR", "")
             Return Nothing
         End Try
     End Function

@@ -29,7 +29,7 @@ Public Class uNewDevice
 
 
         Catch ex As Exception
-            MessageBox.Show("Erreur lors sur la fonction New de uNewDevice: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors sur la fonction New de uNewDevice: " & ex.ToString, "ERREUR", "")
         End Try
 
     End Sub
@@ -46,7 +46,7 @@ Public Class uNewDevice
             End If
 
         Catch ex As Exception
-            MessageBox.Show("Erreur uNewDevice GridOK: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uNewDevice GridOK: " & ex.ToString, "Erreur Admin", "")
         End Try
     End Sub
 
@@ -59,7 +59,7 @@ Public Class uNewDevice
                 If x IsNot Nothing Then LblDriver.Text = x.Nom
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur txtDriver_TextChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur txtDriver_TextChanged: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -69,9 +69,9 @@ Public Class uNewDevice
                 Dim retour As Integer = myService.DeleteNewDevice(IdSrv, txtID.Text)
 
                 If retour <> 0 Then
-                    MessageBox.Show("Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", "")
                 Else
-                    Refresh_Grid
+                    Refresh_Grid()
 
                     If DGW.Columns.Count > 2 Then
                         Dim x As DataGridColumn = DGW.Columns(0)
@@ -94,7 +94,7 @@ Public Class uNewDevice
     Private Sub BtnUpdate_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnUpdate.Click
         Try
             If String.IsNullOrEmpty(txtName.Text) Then
-                MessageBox.Show("Veuillez saisir un nom pour ce nouveau composant", "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez saisir un nom pour ce nouveau composant", "Erreur Admin", "")
                 txtName.Undo()
             Else
                 If String.IsNullOrEmpty(txtID.Text) = False Then
@@ -111,7 +111,7 @@ Public Class uNewDevice
                 FlagChange = True
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur BtnUpdate_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnUpdate_Click: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -134,7 +134,7 @@ Public Class uNewDevice
 
             GridOk(Me, Nothing)
         Catch ex As Exception
-            MessageBox.Show("Erreur Refresh_Grid: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Refresh_Grid: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -151,7 +151,7 @@ Public Class uNewDevice
     Private Sub BtnCreate_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnCreate.Click
         Try
             If String.IsNullOrEmpty(txtID.Text) Then
-                MessageBox.Show("Veuillez sélectionner un composant dans la grille!", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez sélectionner un composant dans la grille!", "ERREUR", "")
                 Exit Sub
             End If
 
@@ -165,7 +165,7 @@ Public Class uNewDevice
             NewDevice = x
             RaiseEvent CreateNewDevice(Me)
         Catch ex As Exception
-            MessageBox.Show("Erreur BtnCreate_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnCreate_Click: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 End Class

@@ -220,7 +220,7 @@ Partial Public Class uDevice
                 ListZone.Items.Add(stk)
             Next
         Catch Ex As Exception
-            MessageBox.Show("Erreur: " & Ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & Ex.ToString, "Erreur", "")
         End Try
     End Sub
 
@@ -253,7 +253,7 @@ Partial Public Class uDevice
             Next
 
         Catch ex As Exception
-            MessageBox.Show("Erreur dans le programme SaveInZone: " & ex.ToString, "Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur dans le programme SaveInZone: " & ex.ToString, "Admin", "")
         End Try
 
     End Sub
@@ -393,7 +393,7 @@ Partial Public Class uDevice
                 End If
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString, "Erreur", "")
         End Try
     End Sub
 
@@ -403,15 +403,15 @@ Partial Public Class uDevice
             Dim x As TemplateDriver = myService.ReturnDriverByID(IdSrv, IdDriver)
             If x IsNot Nothing Then
                 If x.Enable = False Then
-                    MessageBox.Show("Le driver " & x.Nom & " n'est pas activé (Enable), le composant ne pourra pas être utilisé!", "INFO", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le driver " & x.Nom & " n'est pas activé (Enable), le composant ne pourra pas être utilisé!", "INFO", "")
                     Exit Sub
                 End If
-                If x.IsConnect = False Then MessageBox.Show("Le driver " & x.Nom & " n'est pas démarré, le composant ne pourra pas être utilisé!", "INFO", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                If x.IsConnect = False Then AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le driver " & x.Nom & " n'est pas démarré, le composant ne pourra pas être utilisé!", "INFO", "")
             Else
-                MessageBox.Show("Le driver n'a pas pu être trouvé ! (ID du driver: " & IdDriver & ")", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le driver n'a pas pu être trouvé ! (ID du driver: " & IdDriver & ")", "ERREUR", "")
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR VerifDriver: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR VerifDriver: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -492,35 +492,35 @@ Partial Public Class uDevice
                 End If
             End If
         Catch Ex As Exception
-            MessageBox.Show("Erreur lors du changement de type: " & Ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors du changement de type: " & Ex.Message, "Erreur", "")
         End Try
     End Sub
 
     Private Sub TxtRefresh_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtRefresh.TextChanged
         Try
             If String.IsNullOrEmpty(TxtRefresh.Text) = False And IsNumeric(TxtRefresh.Text) = False Then
-                MessageBox.Show("Veuillez saisir une valeur numérique")
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez saisir une valeur numérique")
                 TxtRefresh.Text = 0
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uDevice TxtRefresh_TextChanged: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uDevice TxtRefresh_TextChanged: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
     Private Sub TxtLastChangeDuree_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtLastChangeDuree.TextChanged
         Try
             If String.IsNullOrEmpty(TxtLastChangeDuree.Text) = False And IsNumeric(TxtLastChangeDuree.Text) = False Then
-                MessageBox.Show("Veuillez saisir une valeur numérique")
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez saisir une valeur numérique")
                 TxtLastChangeDuree.Text = 0
             End If
         Catch ex As Exception
-            MessageBox.Show("Erreur uDevice TxtLastChangeDuree_TextChanged: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDevice TxtLastChangeDuree_TextChanged: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
     Private Sub TxtPuissance_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtPuissance.TextChanged
         If IsNumeric(TxtPuissance.Text) = False Then
-            MessageBox.Show("Veuillez saisir une valeur numérique !!", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez saisir une valeur numérique !!", "ERREUR", "")
             TxtPuissance.Undo()
         End If
     End Sub
@@ -541,7 +541,7 @@ Partial Public Class uDevice
             End If
             frm = Nothing
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub ImgDevice_MouseLeftButtonDown: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub ImgDevice_MouseLeftButtonDown: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -557,7 +557,7 @@ Partial Public Class uDevice
                 End If
             Next
         Catch ex As Exception
-            MessageBox.Show("Erreur uDevice ChkElement_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDevice ChkElement_Click: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -570,7 +570,7 @@ Partial Public Class uDevice
                 End If
             Next
         Catch ex As Exception
-            MessageBox.Show("Erreur uDevice UnloadControl: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDevice UnloadControl: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -612,50 +612,50 @@ Partial Public Class uDevice
 
             'on check les valeurs renseignés
             If IsNumeric(TxtPrecision.Text) = False Then
-                MessageBox.Show("Le champ Précision doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le champ Précision doit être un Nombre", "Erreur", "")
                 Exit Sub
             End If
             ' Le champ correction peut contenir des symboles mathematiques (*/+-)
             'If IsNumeric(TxtCorrection.Text) = False Then
-            'MessageBox.Show("Le champ Correction doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            'AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR,"Le champ Correction doit être un Nombre", "Erreur","")
             '  Exit Sub
             ' End If
             If IsNumeric(TxtValDef.Text) = False Then
-                MessageBox.Show("Le champ Valeur Defaut doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le champ Valeur Defaut doit être un Nombre", "Erreur", "")
                 Exit Sub
             End If
             If IsNumeric(TxtValueMax.Text) = False Then
-                MessageBox.Show("Le champ Valeur Max doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le champ Valeur Max doit être un Nombre", "Erreur", "")
                 Exit Sub
             End If
             If IsNumeric(TxtValueMin.Text) = False Then
-                MessageBox.Show("Le champ Valeur Min doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le champ Valeur Min doit être un Nombre", "Erreur", "")
                 Exit Sub
             End If
             If String.IsNullOrEmpty(TxtNom.Text) = True Then
-                MessageBox.Show("Le nom du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du device est obligatoire !!", "Erreur", "")
                 Exit Sub
             End If
             If String.IsNullOrEmpty(CbType.Text) = True Then
-                MessageBox.Show("Le type du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le type du device est obligatoire !!", "Erreur", "")
                 Exit Sub
             End If
             If String.IsNullOrEmpty(CbDriver.Text) = True Then
-                MessageBox.Show("Le driver du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le driver du device est obligatoire !!", "Erreur", "")
                 Exit Sub
             End If
             If String.IsNullOrEmpty(TxtAdresse1.Text) = True Then
-                MessageBox.Show("L'adresse de base du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'adresse de base du device est obligatoire !!", "Erreur", "")
                 Exit Sub
             End If
             retour = myService.VerifChamp(IdSrv, _driverid, "ADRESSE1", TxtAdresse1.Text)
             If retour <> "0" Then
-                MessageBox.Show("Champ " & LabelAdresse1.Content & ": " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Champ " & LabelAdresse1.Content & ": " & retour, "Erreur", "")
                 Exit Sub
             End If
             retour = myService.VerifChamp(IdSrv, _driverid, "ADRESSE2", TxtAdresse2.Text)
             If retour <> "0" Then
-                MessageBox.Show("Champ " & LabelAdresse2.Content & ": " & retour, "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Champ " & LabelAdresse2.Content & ": " & retour, "Erreur", "")
                 Exit Sub
             End If
 
@@ -675,7 +675,7 @@ Partial Public Class uDevice
             If CbType.Text = "MULTIMEDIA" Then
                 If x IsNot Nothing Then
                     If String.IsNullOrEmpty(x.Modele) = True Then
-                        MessageBox.Show("Veuillez sélectionner ou ajouter un template au device!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez sélectionner ou ajouter un template au device!", "Erreur", "")
                         Exit Sub
                     End If
                     _modele = x.Modele
@@ -689,7 +689,7 @@ Partial Public Class uDevice
                 retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
             End If
             If retour = "98" Then
-                MessageBox.Show("Le nom du device: " & TxtNom.Text & " existe déjà impossible de l'enregister", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du device: " & TxtNom.Text & " existe déjà impossible de l'enregister", "ERREUR", "")
                 Exit Sub
             End If
 
@@ -709,14 +709,14 @@ Partial Public Class uDevice
 
             RaiseEvent CloseMe(Me, False)
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uDevice BtnOK_Click: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uDevice BtnOK_Click: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
     Private Sub BtnTest_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTest.Click
         Try
             If myService.ReturnDeviceByID(IdSrv, _DeviceId).Enable = False Then
-                MessageBox.Show("Vous ne pouvez pas exécuter de commandes car le device n'est pas activé (propriété Enable)!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Vous ne pouvez pas exécuter de commandes car le device n'est pas activé (propriété Enable)!", "Erreur", "")
                 Exit Sub
             End If
 
@@ -725,7 +725,7 @@ Partial Public Class uDevice
             AddHandler y.CloseMe, AddressOf UnloadControl
             Window1.CanvasUser.Children.Add(y)
         Catch ex As Exception
-            MessageBox.Show("Erreur Tester: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Tester: " & ex.Message, "Erreur", "")
         End Try
     End Sub
 
@@ -774,41 +774,41 @@ Partial Public Class uDevice
                 Or CbType.Text = "VOLET" _
                 Then
                 If IsNumeric(TxtPrecision.Text) = False Then
-                    MessageBox.Show("Le champ Précision doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le champ Précision doit être un Nombre", "Erreur", "")
                     Exit Sub
                 End If
                 ' Le champ correction peut contenir des symboles mathematiques (*/+-)
                 'If IsNumeric(TxtCorrection.Text) = False Then
-                '    MessageBox.Show("Le champ Correction doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                '    AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR,"Le champ Correction doit être un Nombre", "Erreur","")
                 '    Exit Sub
                 'End If
                 If IsNumeric(TxtValDef.Text) = False Then
-                    MessageBox.Show("Le champ Valeur Defaut doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le champ Valeur Defaut doit être un Nombre", "Erreur", "")
                     Exit Sub
                 End If
                 If IsNumeric(TxtValueMax.Text) = False Then
-                    MessageBox.Show("Le champ Valeur Max doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le champ Valeur Max doit être un Nombre", "Erreur", "")
                     Exit Sub
                 End If
                 If IsNumeric(TxtValueMin.Text) = False Then
-                    MessageBox.Show("Le champ Valeur Min doit être un Nombre", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le champ Valeur Min doit être un Nombre", "Erreur", "")
                     Exit Sub
                 End If
             End If
             If String.IsNullOrEmpty(TxtNom.Text) = True Then
-                MessageBox.Show("Le nom du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du device est obligatoire !!", "Erreur", "")
                 Exit Sub
             End If
             If String.IsNullOrEmpty(CbType.Text) = True Then
-                MessageBox.Show("Le type du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le type du device est obligatoire !!", "Erreur", "")
                 Exit Sub
             End If
             If String.IsNullOrEmpty(CbDriver.Text) = True Then
-                MessageBox.Show("Le driver du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le driver du device est obligatoire !!", "Erreur", "")
                 Exit Sub
             End If
             If String.IsNullOrEmpty(TxtAdresse1.Text) = True Then
-                MessageBox.Show("L'adresse de base du device est obligatoire !!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'adresse de base du device est obligatoire !!", "Erreur", "")
                 Exit Sub
             End If
 
@@ -828,7 +828,7 @@ Partial Public Class uDevice
             If CbType.Text = "MULTIMEDIA" Then
                 If x IsNot Nothing Then
                     If String.IsNullOrEmpty(x.Modele) = True Then
-                        MessageBox.Show("Veuillez sélectionner ou ajouter un template au device!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez sélectionner ou ajouter un template au device!", "Erreur", "")
                         Exit Sub
                     End If
                     _modele = x.Modele
@@ -842,7 +842,7 @@ Partial Public Class uDevice
                 retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
             End If
             If retour = "98" Then
-                MessageBox.Show("Le nom du device: " & TxtNom.Text & " existe déjà impossible de l'enregister", "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du device: " & TxtNom.Text & " existe déjà impossible de l'enregister", "ERREUR", "")
                 Exit Sub
             End If
 
@@ -872,7 +872,7 @@ Partial Public Class uDevice
 
             If _DeviceId.Length > 3 Then x = myService.ReturnDeviceByID(IdSrv, _DeviceId)
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uDevice BtnSave_Click: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uDevice BtnSave_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -900,7 +900,7 @@ Partial Public Class uDevice
                 frm.Close()
             End If
         Catch ex As Exception
-            MessageBox.Show("ERREUR BtnEditTel_MouseDown: " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR BtnEditTel_MouseDown: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -929,7 +929,7 @@ Partial Public Class uDevice
             End If
             Me.Cursor = Nothing
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de la génération du relevé: " & ex.ToString, "Erreur Admin", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la génération du relevé: " & ex.ToString, "Erreur Admin", "")
         End Try
     End Sub
 

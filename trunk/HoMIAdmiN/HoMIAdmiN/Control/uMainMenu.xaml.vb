@@ -12,7 +12,7 @@
         Try
             If e.ClickCount = 1 Then RaiseEvent menu_gerer(sender.tag)
         Catch ex As Exception
-            MessageBox.Show("Erreur uMainMenu Gerer_ContextMenu : " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uMainMenu Gerer_ContextMenu : " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -23,7 +23,7 @@
         Try
             If e.ClickCount = 1 Then RaiseEvent menu_gerer(sender.tag)
         Catch ex As Exception
-            MessageBox.Show("Erreur uMainMenu Gerer_MouseLeftButtonDown : " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uMainMenu Gerer_MouseLeftButtonDown : " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -34,7 +34,7 @@
         Try
             If e.ClickCount = 1 Then RaiseEvent menu_delete(sender.tag)
         Catch ex As Exception
-            MessageBox.Show("Erreur uMainMenu Delete_MouseLeftButtonDown : " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uMainMenu Delete_MouseLeftButtonDown : " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -45,7 +45,7 @@
         Try
             If e.ClickCount = 1 Then RaiseEvent menu_create(sender.tag)
         Catch ex As Exception
-            MessageBox.Show("Erreur uMainMenu Create_MouseLeftButtonDown : " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uMainMenu Create_MouseLeftButtonDown : " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -56,7 +56,7 @@
         Try
             If e.ClickCount = 1 Then RaiseEvent menu_edit(sender.tag)
         Catch ex As Exception
-            MessageBox.Show("Erreur uMainMenu Edit_MouseLeftButtonDown : " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uMainMenu Edit_MouseLeftButtonDown : " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -69,7 +69,7 @@
         Try
             If e.ClickCount = 1 Then RaiseEvent menu_autre(sender.tag)
         Catch ex As Exception
-            MessageBox.Show("Erreur uMainMenu Autre_MouseLeftButtonDown : " & ex.ToString, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uMainMenu Autre_MouseLeftButtonDown : " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -286,7 +286,7 @@
             mnu62.Uid = "cfg_configurer"
             AddHandler mnu62.Click, AddressOf menu_contextmenuclick
             ctxMenuConfig.Items.Add(mnu62)
-         
+
             Dim mnu65 As New MenuItem
             mnu65.Header = "Sauvegarder la configuration"
             mnu65.Tag = "cfg"
@@ -372,7 +372,7 @@
 
             Me.UpdateLayout()
         Catch ex As Exception
-            MessageBox.Show("ERREUR Sub uMainMenu New: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uMainMenu New: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
