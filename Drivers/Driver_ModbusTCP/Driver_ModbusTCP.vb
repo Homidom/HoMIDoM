@@ -32,7 +32,7 @@ Imports System.Net.Sockets
     Dim _Port_UDP As String = "@"
     Dim _Com As String = "@"
     Dim _Refresh As Integer = 0
-    Dim _Modele As String = "@"
+    Dim _Modele As String = ""
     Dim _Version As String = My.Application.Info.Version.ToString
     Dim _OsPlatform As String = "3264"
     Dim _Picture As String = ""
@@ -55,6 +55,9 @@ Imports System.Net.Sockets
     Private WithEvents MBmaster As ModbusTCP.Master
     Private breading As Boolean = False
     Private cptsend As Integer = 0
+
+    Private adressRead As Integer
+    Private adressWrite As Integer
 
     Dim hex_to_bool As New Dictionary(Of Integer, Boolean)
 
@@ -317,9 +320,13 @@ Imports System.Net.Sockets
             Else
                 _IsConnect = True
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "ModbusTCP", retour)
-                MyTimer.Interval = 3000
-                MyTimer.Start()
+                MyTimer.Interval = _Parametres.Item(0).Valeur '2000
+                MyTimer.Enabled = True
             End If
+			
+            adressRead = _Parametres.Item(1).Valeur
+            adressWrite = _Parametres.Item(2).Valeur
+            _DEBUG = _Parametres.Item(3).Valeur
            
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP Start", ex.Message)
@@ -499,7 +506,13 @@ Imports System.Net.Sockets
             _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE.ToString)
             _DeviceSupport.Add(ListeDevices.LAMPE.ToString)
             _DeviceSupport.Add(ListeDevices.VOLET.ToString)
-            
+			
+            'Parametres avancés
+            add_paramavance("Rafraichissement de lecture", "le temps en millisecondes entre les demandes de lecture", 2000)
+            add_paramavance("Premier mot de lecture", "Adresse du premier mot à lire dans l'automate", 256)
+            add_paramavance("Premier mot d'écriture", "Adresse du premier mot à écrire dans l'automate", 100)
+            add_paramavance("Debug", "Activer le Debug complet (True/False)", False)
+
             'ajout des commandes avancées pour les devices
             add_devicecommande("OFF", "Eteint tous les appareils du meme range que ce device", 0)
             add_devicecommande("ON", "Allume toutes les lampes du meme range que ce device", 0)
@@ -540,7 +553,7 @@ Imports System.Net.Sockets
                 breading = True
                 cptsend += 1
                 If cptsend > 3 Then cptsend = 1
-                StartAddress = ReadStartAdr(12544 + ((cptsend - 1) * 75)) '%MW256
+                StartAddress = ReadStartAdr(12288 + adressRead + ((cptsend - 1) * 75)) '%MW256 = 12288 + 256 = 12544
                 Length = ReadStartAdr(75)
                 MBmaster.ReadHoldingRegister(3, StartAddress, Length)
 
@@ -630,7 +643,7 @@ Imports System.Net.Sockets
                 
                 '--- usercode ---
 
-                Dim StartAddress As UShort = ReadStartAdr(12388) '%MW128
+                Dim StartAddress As UShort = ReadStartAdr(12288 + adressWrite) '%MW0 = 12288 --> %MW100 = 12288 + 100 = 12388
                 Dim dataE(2) As UInteger
 
                 Try
@@ -693,9 +706,7 @@ Imports System.Net.Sockets
                     If j.adresse1 > 75 * (cptsend - 1) And j.adresse1 <= 75 * cptsend Then
                         msg += j.adresse1 & "=" & dataR(adresse) & " ; " & j.Value & " ;"
                         If TypeOf j.Value Is Integer And dataR(adresse) < 5 And dataR(adresse) > 0 Then
-                            If j.Value <> dataR(adresse) Then
-                                j.Value = dataR(adresse)
-                            End If
+                            j.Value = dataR(adresse)
                         End If
                     End If
                 Next
