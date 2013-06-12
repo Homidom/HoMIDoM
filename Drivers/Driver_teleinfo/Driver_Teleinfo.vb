@@ -4,7 +4,7 @@ Imports HoMIDom.HoMIDom.Device
 Imports STRGS = Microsoft.VisualBasic.Strings
 Imports System.IO.Ports
 Imports VB = Microsoft.VisualBasic
-
+Imports ftdi_cpt
 
 Public Class Driver_Teleinfo
 
@@ -44,7 +44,7 @@ Public Class Driver_Teleinfo
         Dim _Parametres As New ArrayList
         Dim _LabelsDriver As New ArrayList
         Dim _LabelsDevice As New ArrayList
-        Dim MyTimer As New Timers.Timer
+        WithEvents MyTimer As New Timers.Timer
         Dim _IdSrv As String
         Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
         Dim _AutoDiscover As Boolean = False
@@ -101,6 +101,8 @@ Public Class Driver_Teleinfo
         Dim TabCom As String() = {"COM1", "COM2", "COM3", "COM4", "COM5", "COM6", "COM7", "COM8", "COM9", "NOTHING"}
 
         Dim TabLabels([Enum].GetValues(GetType(Labels)).Length) As String
+
+        Dim icpt As Integer
 
         ' Definition d'une Classe Compteur TeleInfo 
         <Serializable()> Public Class TeleInfo
@@ -230,6 +232,7 @@ Public Class Driver_Teleinfo
 
         ' Tableau contenant les differents compteurs 
         Dim TabCompteur(0) As TeleInfo
+        Dim Ftdi As ftdi_cpt.Ftdi_cpt
 
 #End Region
 
@@ -477,6 +480,18 @@ Public Class Driver_Teleinfo
                 _DEBUG = _Parametres.Item(0).Valeur
                 _SecondPort = _Parametres.Item(1).Valeur.ToString.ToUpper
 
+                Select Case _Modele.ToUpper
+                    Case "2_COMPTEURS_CARTELECTRONIC"
+                        Ftdi = New ftdi_cpt.Ftdi_cpt
+                        Ftdi.Start(True)
+                        MyTimer.Interval = _Parametres.Item(2).Valeur
+                        MyTimer.Enabled = True
+                    Case "USBTIC_CARTELECTRONIC"
+                        Ftdi = New ftdi_cpt.Ftdi_cpt
+                        Ftdi.Start(True, "")
+                        Ftdi.cpt(1)
+                End Select
+
                 If TabCom.Contains(_SecondPort) Then
                     If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start ", "Valeur de SecondPort valide  : " & _SecondPort.ToUpper)
                 Else
@@ -501,43 +516,46 @@ Public Class Driver_Teleinfo
                     retour = "ERR: Port Com non défini. Impossible d'ouvrir le port !"
                 End If
                 'ouverture du port si un Second port est defini
-                If _SecondPort.ToLower <> "nothing" Then
-                    If _SecondPort.ToUpper = _Com.ToUpper Then
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le second Port " & _SecondPort.ToUpper & " ne doit pas etre identique avec le port Principal.")
-                        _SecondPort = "nothing"
-                    Else
-                        TempCompteur2.port_name = _SecondPort.ToUpper
-                        ReDim Preserve TabCompteur(TabCompteur.Count)
-                        TabCompteur(1) = TempCompteur2
-                        retour2 = ouvrir(TabCompteur(1))
+                If TabCom.Contains(_SecondPort) Then
+                    If _SecondPort.ToLower <> "nothing" Then
+                        If _SecondPort.ToUpper = _Com.ToUpper Then
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le second Port " & _SecondPort.ToUpper & " ne doit pas etre identique avec le port Principal.")
+                            _SecondPort = "nothing"
+                        Else
+                            TempCompteur2.port_name = _SecondPort.ToUpper
+                            ReDim Preserve TabCompteur(TabCompteur.Count)
+                            TabCompteur(1) = TempCompteur2
+                            retour2 = ouvrir(TabCompteur(1))
+                        End If
                     End If
-
+                Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le second Port " & _SecondPort.ToUpper & " n'a pas le bon format: nothing ou COMx")
                 End If
 
+
                 'traitement des messages de retour
-                If (STRGS.Left(retour, 4) = "ERR:") Or (STRGS.Left(retour2, 4) = "ERR:") Then
-                    If (STRGS.Left(retour, 4) = "ERR:") Then
-                        TabCompteur(0).IsConnectPort = False
-                        _IsConnect = False
-                    End If
+                If (STRGS.Left(retour, 4) = "ERR:") Then
+                    TabCompteur(0).IsConnectPort = False
+                    _IsConnect = False
                     retour = STRGS.Right(retour, retour.Length - 5)
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo", "Driver non démarré : " & retour)
-
-                    If _SecondPort.ToLower <> "nothing" Then
-                        TabCompteur(1).IsConnectPort = False
-                        retour2 = STRGS.Right(retour, retour.Length - 5)
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo", "Driver non démarré : " & retour2)
-                    End If
                 Else
                     _IsConnect = True
                     TabCompteur(0).IsConnectPort = True
                     _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo", retour)
-                    If _SecondPort.ToLower <> "nothing" Then
+                End If
+
+                If _SecondPort.ToLower <> "nothing" And TabCom.Contains(_SecondPort) Then
+                    If (STRGS.Left(retour2, 4) = "ERR:") Then
+                        TabCompteur(1).IsConnectPort = False
+                        retour2 = STRGS.Right(retour, retour.Length - 5)
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo", "Driver non démarré : le second port : " & retour2)
+                    Else
                         TabCompteur(1).IsConnectPort = True
                         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo", retour2)
                     End If
-
                 End If
+
             Catch ex As Exception
                 _IsConnect = False
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Teleinfo Start", ex.Message)
@@ -565,6 +583,7 @@ Public Class Driver_Teleinfo
                         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo Stop", "Port " & _Com & " est déjà fermé")
                     End If
                 Next
+                If Modele.ToUpper = "USBTIC_CARTELECTRONIC" Or Modele.ToUpper = "2_COMPTEURS_CARTELECTRONIC" Then Ftdi.cpt(0)
                 ' Effacement du tableau des compteurs
                 Array.Resize(TabCompteur, 1)
             Catch ex As Exception
@@ -735,6 +754,7 @@ Public Class Driver_Teleinfo
                 'Paramétres avancés
                 Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
                 Add_ParamAvance("SecondPort", "Second Teleinfo Port Com (COM2,COM3,COM4...nothing)", "nothing")
+                Add_ParamAvance("Interval 2 compteurs", "Temps en milliseconde entre lecture compteur 1 et 2", 60000)
 
                 Add_LibelleDevice("ADRESSE1", "Adresse", "")
                 Add_LibelleDevice("ADRESSE2", "Adresse Second TeleInfo", "La valeur peut etre COM1, COM2, COM3... ou nothing", "nothing")
@@ -747,7 +767,21 @@ Public Class Driver_Teleinfo
 
         ''' <summary>Si refresh >0 gestion du timer</summary>
         ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
-        Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
+        Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs) Handles MyTimer.Elapsed
+            If _Modele.ToUpper = "USBTIC_CARTELECTRONIC" Or "2_COMPTEURS_CARTELECTRONIC" Then
+
+                fermer(TabCompteur(icpt))
+
+                icpt = icpt + 1
+                If icpt = 2 Then icpt = 0
+
+                Ftdi.cpt(icpt + 1)
+
+                ouvrir(TabCompteur(icpt))
+
+
+            End If
+
 
         End Sub
 
@@ -773,7 +807,7 @@ Public Class Driver_Teleinfo
                     End If
 
                     Select Case _Modele.ToUpper
-                        Case "A_DAUGUET"
+                        Case "A_DAUGUET", "USBTIC_CARTELECTRONIC", "2_COMPTEURS_CARTELECTRONIC"
                             CptPort.SerialPort.BaudRate = 1200  'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
                             CptPort.SerialPort.Parity = IO.Ports.Parity.Even ' parité paire
                             CptPort.SerialPort.StopBits = IO.Ports.StopBits.One 'un bit d'arrêt par octet
@@ -815,6 +849,7 @@ Public Class Driver_Teleinfo
         Private Function fermer(ByVal CptPort As TeleInfo) As String
             Try
                 If CptPort.IsConnectPort Then
+                    CptPort.SerialPort.DiscardInBuffer()
                     RemoveHandler CptPort.SerialPort.DataReceived, AddressOf DataReceived
 
                     If (Not (CptPort.SerialPort Is Nothing)) Then ' The COM port exists.
