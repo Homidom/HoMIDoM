@@ -10,10 +10,7 @@ Imports Oregon
 ' 
 'ETAPE1: Le driver est créé par Homidom --> lancement de la fonction Sub (pour récupérer/définir les paramètres avancés)
 'ETAPE2: Le driver est lancé par Homidom --> lancement de la fonction Start (communication, ajout des évènements, config des pins...)
-'ETAPE3:
-'          - une pin (ana ou binaire) change sur la carte --> déclenchement des fonctions DigitalMessageReceieved ou AnalogMessageReceieved
-'          - l'utilisateur active un device (ON/OFF) --> lancement de la fonction write
-'          - l'utilisateur demande la lecture d'un device --> lancement de la fonction read
+'ETAPE3: l'utilisateur demande la lecture d'un device --> lancement de la fonction read
 'ETAPE4: le driver est arrêté par Homidom --> lancement de la fonction stop
 '************************************************
 
@@ -51,6 +48,7 @@ Public Class Driver_OregonS
     Dim _idsrv As String
     Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
     Dim _AutoDiscover As Boolean = False
+    Dim _DEBUG As Boolean = False
 
     'A ajouter dans les ppt du driver
     Dim _tempsentrereponse As Integer = 60000
@@ -343,15 +341,16 @@ Public Class Driver_OregonS
             Try
                 wmr100 = New wmr100
 
-                wmr100._ProductID = _Parametres.Item(0).ToString 'RemotingPort0
-                wmr100._VendorID = _Parametres.Item(1).ToString 'RemotingPort1
-                wmr100._ProductID = "CA01" '"0039" '"CA01"
-                wmr100._VendorID = "0FDE" '"045E" '"0FDE"
+                wmr100._ProductID = _Parametres.Item(0).Valeur
+                wmr100._VendorID = _Parametres.Item(1).Valeur
+                _DEBUG = _Parametres.Item(2).Valeur
+                'wmr100._ProductID = "CA01" 
+                'wmr100._VendorID = "0FDE" 
 
 
             Catch ex As Exception
-                wmr100._ProductID = "CA01" '"0039" '"CA01"
-                wmr100._VendorID = "0FDE" '"045E" '"0FDE"
+                'wmr100._ProductID = "CA01" 
+                'wmr100._VendorID = "0FDE" 
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
 
             End Try
@@ -365,7 +364,7 @@ Public Class Driver_OregonS
 
                 _IsConnect = True
                 MyTimer.Interval = 60000
-                MyTimer.Start()
+                MyTimer.Enabled = True
                 'System.Threading.Thread.Sleep(3000)
                 'wmr100.SendToHID("20 00 08 01 00 00 00 00") 'init
                 'System.Threading.Thread.Sleep(3000)
@@ -523,8 +522,9 @@ Public Class Driver_OregonS
             '_DeviceSupport.Add(ListeDevices.PREVISION.ToString)
 
             'Parametres avancés
-            Add_ParamAvance("ProductID", "le ProductID de votre appareil USB", "FFFF")
-            Add_ParamAvance("VendorID", "le VendorID de votre appareil USB", "FFFF")
+            Add_ParamAvance("ProductID", "le ProductID de votre appareil USB", "CA01")
+            Add_ParamAvance("VendorID", "le VendorID de votre appareil USB", "0FDE")
+            Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
@@ -631,24 +631,17 @@ Public Class Driver_OregonS
 
             'un device trouvé on maj la value
             If (listedevices.Count = 1) Then
-                'correction valeur pour correspondre au type de value
-                'If TypeOf listedevices.Item(0).Value Is Integer Then
-                '    If valeur = 1 Then
-                '        valeur = 100
-                '    ElseIf valeur = 0 Then
-                '        valeur = 0
-                '    End If
-                'Else
-                If listedevices.Item(0).Value <> valeur Then
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " " & listedevices.Item(0).type, listedevices.Item(0).adresse1 & " , " & listedevices.Item(0).Value & " <> " & CDbl(valeur))
-                    listedevices.Item(0).Value = valeur
-                End If
+
+                ' If listedevices.Item(0).Value <> valeur Then
+                If _debug Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " " & listedevices.Item(0).type, listedevices.Item(0).adresse1 & " , " & listedevices.Item(0).Value & " <> " & CDbl(valeur))
+                listedevices.Item(0).Value = valeur
                 'End If
+
 
             ElseIf (listedevices.Count > 1) Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traitement", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
             Else
-                '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " traitement", "Le device à l'adresse : " & adresse & " de type " & _Type & " nexiste pas")
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " traitement", "Le device à l'adresse : " & adresse & " de type " & _Type & " nexiste pas")
                 'Le Device n'existe pas dans Homidom
             End If
 
@@ -720,7 +713,7 @@ Public Class Driver_OregonS
 
                     Try
 
-                        '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " etat meteo", "tempdata= " & tempdata)
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " etat meteo", "tempdata= " & tempdata)
 
                         While tempdata <> ""
                             Dim w As Integer = InStr(tempdata, ";")
@@ -729,10 +722,10 @@ Public Class Driver_OregonS
                             tempdata = Strings.Right(tempdata, tempdata.Length - w)
                             InputReportBufferlenght += 1
                         End While
-                        
-                        '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " etat meteo", "InputReportBuffer= " & tmp2)
 
-                        '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " etat meteo", "InputReportBufferlenght= " & InputReportBufferlenght)
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " etat meteo", "InputReportBuffer= " & tmp2)
+
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " etat meteo", "InputReportBufferlenght= " & InputReportBufferlenght)
 
                         etape = "1"
 
@@ -902,14 +895,14 @@ Public Class Driver_OregonS
                                                     'TableMeteo.DirVent = (Bytes(2)) Mod 16
 
                                                     Try
-                                                        '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Vitesse du vent", "Vitesse du vent= " & bytes(4) + 256 * (bytes(5) Mod 16))
+                                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Vitesse du vent", "Vitesse du vent= " & bytes(4) + 256 * (bytes(5) Mod 16))
                                                         traitement(bytes(4) + 256 * (bytes(5) Mod 16), 0, 8) 'aller écrire la valeur dans le device --> Homidom
                                                     Catch ex As Exception
                                                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Vitesse du vent", "Erreur : " & ex.ToString)
                                                     End Try
 
                                                     Try
-                                                        '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Direction du vent", "Direction du vent= " & (bytes(2)) Mod 16)
+                                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Direction du vent", "Direction du vent= " & (bytes(2)) Mod 16)
                                                         traitement((bytes(2)) Mod 16, 0, 2) 'aller écrire la valeur dans le device --> Homidom
                                                     Catch ex As Exception
                                                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Direction du vent", "Erreur : " & ex.ToString)
@@ -954,14 +947,14 @@ Public Class Driver_OregonS
                                                     'TableTemperature.HG(iSensor) = Bytes(5)
 
                                                     Try
-                                                        '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Temperature", "Température " & iSensor & " = " & temp)
+                                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Temperature", "Température " & iSensor & " = " & temp)
                                                         traitement(temp, iSensor, 6) 'aller écrire la valeur dans le device --> Homidom
                                                     Catch ex As Exception
                                                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Temperature", "Erreur : " & ex.ToString)
                                                     End Try
 
                                                     Try
-                                                        '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Humidité", "Humidité " & iSensor & " = " & bytes(5))
+                                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Humidité", "Humidité " & iSensor & " = " & bytes(5))
                                                         traitement(bytes(5), iSensor, 3) 'aller écrire la valeur dans le device --> Homidom
                                                     Catch ex As Exception
                                                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Humidité", "Erreur : " & ex.ToString)
@@ -1008,14 +1001,14 @@ Public Class Driver_OregonS
                                                     'TableMeteo.Prevision = s
 
                                                     Try
-                                                        '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Barometre", "Barometre = " & (bytes(2) + (bytes(3) Mod 16) * 16 * 16))
+                                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Barometre", "Barometre = " & (bytes(2) + (bytes(3) Mod 16) * 16 * 16))
                                                         traitement((bytes(2) + (bytes(3) Mod 16) * 16 * 16), 1, 0) 'aller écrire la valeur dans le device --> Homidom
                                                     Catch ex As Exception
                                                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Barometre", "Erreur : " & ex.ToString)
                                                     End Try
 
                                                     Try
-                                                        '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Prévision", "Prévision = " & bytes(3) \ 16)
+                                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Prévision", "Prévision = " & bytes(3) \ 16)
                                                         traitement(bytes(3) \ 16, 1, 9) 'aller écrire la valeur dans le device --> Homidom
                                                     Catch ex As Exception
                                                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Prévision", "Erreur : " & ex.ToString)
@@ -1046,14 +1039,14 @@ Public Class Driver_OregonS
                                                     'TableMeteo.PluieAccu = Bytes(8) + Bytes(9) * 16 * 16
 
                                                     Try
-                                                        '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Pluie 24h", "Pluie 24h = " & CInt(bytes(6) + bytes(7) * 16 * 16))
+                                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Pluie 24h", "Pluie 24h = " & CInt(bytes(6) + bytes(7) * 16 * 16))
                                                         traitement(CInt(bytes(6) + bytes(7) * 16 * 16), 0, 5) 'aller écrire la valeur dans le device --> Homidom
                                                     Catch ex As Exception
                                                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Pluie 24h", "Erreur : " & ex.ToString)
                                                     End Try
 
                                                     Try
-                                                        '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Pluie Accumulée", "Pluie Accumulée = " & bytes(8) + bytes(9) * 16 * 16)
+                                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Pluie Accumulée", "Pluie Accumulée = " & bytes(8) + bytes(9) * 16 * 16)
                                                         traitement(CInt(bytes(8) + bytes(9) * 16 * 16), 0, 4) 'aller écrire la valeur dans le device --> Homidom
                                                     Catch ex As Exception
                                                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Pluie Accumulée", "Erreur : " & ex.ToString)
@@ -1085,10 +1078,8 @@ Public Class Driver_OregonS
 
                                                 End If
 
-                                                'MatableLocal.Data(3) = Format(Now, "HH")
-                                                'MatableLocal.Data(4) = Format(Now, "mm")
-                                                'MatableLocal.Data(5) = Format(Now, "ss")
-                                                '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Meteo ", " Translate OK ")
+
+                                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Meteo ", " Translate OK ")
 
                                             Catch ex As Exception
                                                 'restart_ex = True
@@ -1097,11 +1088,11 @@ Public Class Driver_OregonS
 
                                             iMaxFrame = i + frameLengths(f)
                                         Else
-                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " etat meteo", "Checksum= " & GlobalInputReportBuffer(i + frameLengths(f) - 1) + 256 * GlobalInputReportBuffer(i + frameLengths(f)) & " - " & checkSum)
-                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " etat meteo", "GlobalInputReportBuffer= " & tmp1)
-                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " etat meteo", "framekeys(f)= " & frameKeys(f))
-                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " etat meteo", "frameLengths(f)= " & frameLengths(f))
-                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " etat meteo", "i= " & i)
+                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " etat meteo", "Checksum= " & GlobalInputReportBuffer(i + frameLengths(f) - 1) + 256 * GlobalInputReportBuffer(i + frameLengths(f)) & " - " & checkSum)
+                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " etat meteo", "GlobalInputReportBuffer= " & tmp1)
+                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " etat meteo", "framekeys(f)= " & frameKeys(f))
+                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " etat meteo", "frameLengths(f)= " & frameLengths(f))
+                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " etat meteo", "i= " & i)
 
                                         End If
                                     End If
@@ -1127,10 +1118,12 @@ Public Class Driver_OregonS
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Translate Meteo ", " Erreur : " & etape & " / " & ex.ToString)
                     End Try
                 Case "Log2"
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom, formText)
+                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom, formText)
+
                     If InStr(formText, "Device has been detected") <> 0 Then
                         _IsConnect = True
                     End If
+
                     If InStr(formText, "Device not detected") <> 0 Then
                         _IsConnect = False
                         'System.Threading.Thread.Sleep(3000)
@@ -1139,6 +1132,7 @@ Public Class Driver_OregonS
                         'wmr100.SendToHID("01 0D 08 01 00 00 00 00") 'pc ready
                         'Restart()
                     End If
+
                     If InStr(formText, "Device has been lost") <> 0 Then
                         _IsConnect = False
                         'System.Threading.Thread.Sleep(3000)
@@ -1147,6 +1141,7 @@ Public Class Driver_OregonS
                         'wmr100.SendToHID("01 0D 08 01 00 00 00 00") 'pc ready
                         'Restart()
                     End If
+
                     If InStr(formText, "Device has been removed") <> 0 Then
                         _IsConnect = False
                     End If
