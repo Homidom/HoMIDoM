@@ -371,16 +371,14 @@ Imports System.Web.HttpUtility
                             End If
 
                             Dim ProcId As Object
-                            Dim myfile As String = Objet.fichier
-                            If myfile.StartsWith(Chr(34)) = False Then
-                                myfile = Chr(34) & myfile
-                            End If
-                            If myfile.EndsWith(Chr(34)) = False Then
-                                myfile = myfile & Chr(34)
-                            End If
-                            ProcId = Shell(Objet.Adresse1 & " /add " & Objet.Fichier, AppWinStyle.Hide)
-                            System.Threading.Thread.Sleep(3000)
-                            ProcId = Shell(Objet.Adresse1 & " /play", AppWinStyle.Hide)
+                            Dim _myfile As String = Chr(34) & Objet.fichier & Chr(34)
+                            Dim _Foo As String = Chr(34) & Objet.Adresse1 & Chr(34)
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "FOOBAR", "Fichier=" & _myfile)
+                            '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "FOOBAR", "Shell=" & _Foo & " /add " & _myfile)
+                            ProcId = Shell(_Foo & " /immediate " & _myfile, AppWinStyle.Hide)
+                            'ProcId = Shell(_Foo & " /add " & _myfile, AppWinStyle.Hide)
+                            'System.Threading.Thread.Sleep(1000)
+                            'ProcId = Shell(_Foo & " /play", AppWinStyle.Hide)
                         Else
                             SendCommandhttp(Objet.Adresse2, "PlayOrPause")
                         End If
@@ -493,14 +491,15 @@ Imports System.Web.HttpUtility
                         End If
                     Case "VOLUMEDOWNAUDIO"
                         If Objet.Adresse1 <> "" Then
-                            Dim ProcId As Object
-                            ProcId = Shell(Objet.Adresse1 & " /Volume Down", AppWinStyle.Hide)
+                            Dim ProcId As Integer
+
+                            ProcId = Shell(Chr(34) & Objet.Adresse1 & Chr(34) & " /VolumeDown", AppWinStyle.Hide)
                             Objet.Value = "VOLUME DOWN"
                         End If
                     Case "VOLUMEUPAUDIO"
                         If Objet.Adresse1 <> "" Then
                             Dim ProcId As Object
-                            ProcId = Shell(Objet.Adresse1 & " /Volume Up", AppWinStyle.Hide)
+                            ProcId = Shell(Objet.Adresse1 & " /Volum Up", AppWinStyle.Hide)
                             Objet.Value = "VOLUME UP"
                         End If
                     Case "VOLUMEMUTEAUDIO"

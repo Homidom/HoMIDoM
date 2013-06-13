@@ -7,6 +7,14 @@ Imports HoMIDom
 Imports System.Reflection
 
 Module Fonctions
+    ''' <summary>
+    ''' Affiche le message et connecté log dans le serveur
+    ''' </summary>
+    ''' <param name="Type"></param>
+    ''' <param name="Message"></param>
+    ''' <param name="Title"></param>
+    ''' <param name="Fonction"></param>
+    ''' <remarks></remarks>
     Public Sub AfficheMessageAndLog(ByVal Type As TypeLog, ByVal Message As String, Optional ByVal Title As String = "", Optional ByVal Fonction As String = "")
         Dim Icon As MessageBoxImage = MessageBoxImage.Error
 

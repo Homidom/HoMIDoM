@@ -39,6 +39,7 @@ Public Class uMedia
     Public Event Mute()
     Public Event VolumeUp()
     Public Event VolumeDown()
+    Public Event SetFile(ByVal Path As String)
 
     Public Sub New()
 
@@ -237,7 +238,7 @@ Public Class uMedia
                 MediaElement1.LoadedBehavior = MediaState.Play
             End If
             _Uri = value
-
+            RaiseEvent SetFile(_Uri)
         End Set
     End Property
 
@@ -388,6 +389,7 @@ Public Class uMedia
 
                 X = Nothing
 
+                Uri = ofd.FileName
                 If _IsLocal Then MediaElement1.Source = New Uri(ofd.FileName)
                 If _IsLocal Then MediaElement1.LoadedBehavior = MediaState.Play
             End If
