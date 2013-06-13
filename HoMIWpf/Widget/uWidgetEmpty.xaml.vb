@@ -151,6 +151,7 @@ Public Class uWidgetEmpty
                             x.ShowBtnAvance = False
                             x.ShowBtnRecul = False
                             x.ShowSliderTime = False
+                            x.ShowBtnVolume = False
                             AddHandler x.Play, AddressOf AudioPlay
                             AddHandler x.Pause, AddressOf AudioPause
                             AddHandler x.Stop, AddressOf AudioStop
@@ -161,6 +162,7 @@ Public Class uWidgetEmpty
                             AddHandler x.Mute, AddressOf AudioMute
                             AddHandler x.VolumeUp, AddressOf AudioVolumeUp
                             AddHandler x.VolumeDown, AddressOf AudioVolumeDown
+                            AddHandler x.SetFile, AddressOf AudioSetFile
 
                             StkPopup.Children.Add(x)
                         Case HoMIDom.HoMIDom.Device.ListeDevices.BAROMETRE
@@ -1633,6 +1635,14 @@ Public Class uWidgetEmpty
         Try
             Dim x As New HoMIDom.HoMIDom.DeviceAction
             If _dev IsNot Nothing Then
+                x.Nom = "EmptyPlayList"
+            End If
+            x.Parametres = Nothing
+
+            myService.ExecuteDeviceCommand(IdSrv, Id, x)
+
+            'Dim x As New HoMIDom.HoMIDom.DeviceAction
+            If _dev IsNot Nothing Then
                 x.Nom = "Play"
             End If
             x.Parametres = Nothing
@@ -1653,7 +1663,7 @@ Public Class uWidgetEmpty
         Try
             Dim x As New HoMIDom.HoMIDom.DeviceAction
             If _dev IsNot Nothing Then
-                x.Nom = "PauseAudio"
+                x.Nom = "Pause"
             End If
             x.Parametres = Nothing
 
@@ -1673,7 +1683,7 @@ Public Class uWidgetEmpty
         Try
             Dim x As New HoMIDom.HoMIDom.DeviceAction
             If _dev IsNot Nothing Then
-                x.Nom = "StopAudio"
+                x.Nom = "Stop"
             End If
             x.Parametres = Nothing
 
@@ -1757,11 +1767,28 @@ Public Class uWidgetEmpty
         End Try
     End Sub
 
+    Private Sub AudioSetFile(ByVal File As String)
+        Try
+            Dim x As New HoMIDom.HoMIDom.DeviceAction
+            If _dev IsNot Nothing Then
+                x.Nom = "SetFichierAudio"
+            End If
+            Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
+            y.Value = File
+            x.Parametres.Add(y)
+
+            myService.ExecuteDeviceCommand(IdSrv, Id, x)
+
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.AudioSetFile: " & ex.Message, "Erreur", " uWidgetEmpty.AudioSetFile")
+        End Try
+    End Sub
+
     Private Sub AudioVolumeUp()
         Try
             Dim x As New HoMIDom.HoMIDom.DeviceAction
             If _dev IsNot Nothing Then
-                x.Nom = "VolumeUpAudio"
+                x.Nom = "VolumeUp"
             End If
             x.Parametres = Nothing
 
@@ -1781,7 +1808,7 @@ Public Class uWidgetEmpty
         Try
             Dim x As New HoMIDom.HoMIDom.DeviceAction
             If _dev IsNot Nothing Then
-                x.Nom = "VolumeDownAudio"
+                x.Nom = "VolumeDown"
             End If
             x.Parametres = Nothing
 

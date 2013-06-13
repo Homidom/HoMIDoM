@@ -2690,24 +2690,23 @@ Namespace HoMIDom
             Try
 
                 If _TypeLogEnable(TypLog - 1) = True Then Exit Sub
-
-                Message = DelRep(Message)
+                Dim _Message As String = DelRep(Message)
 
                 'on affiche dans la console
-                Console.WriteLine(Now & " " & TypLog.ToString & " " & Source.ToString & " " & Fonction & " " & Message)
-                WriteLastLogs(TypLog, Source, Fonction, Message)
+                Console.WriteLine(Now & " " & TypLog.ToString & " " & Source.ToString & " " & Fonction & " " & _Message)
+                WriteLastLogs(TypLog, Source, Fonction, _Message)
 
                 Select Case TypLog
                     Case TypeLog.ERREUR
-                        WriteLastLogsError(TypLog, Source, Fonction, Message)
+                        WriteLastLogsError(TypLog, Source, Fonction, _Message)
                     Case TypeLog.ERREUR_CRITIQUE
-                        WriteLastLogsError(TypLog, Source, Fonction, Message)
+                        WriteLastLogsError(TypLog, Source, Fonction, _Message)
                 End Select
 
                 'écriture dans un fichier texte
                 _FichierLog = _MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt"
                 Dim FreeF As Integer
-                Dim texte As String = Now & vbTab & TypLog.ToString & vbTab & Source.ToString & vbTab & Fonction & vbTab & Message
+                Dim texte As String = Now & vbTab & TypLog.ToString & vbTab & Source.ToString & vbTab & Fonction & vbTab & _Message
 
                 Try
                     FreeF = FreeFile()

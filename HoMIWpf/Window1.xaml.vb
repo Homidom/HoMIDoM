@@ -270,6 +270,14 @@ Class Window1
         End Try
     End Sub
 
+    Private Sub StkTop_MouseLeftButtonDown(ByVal sender As Object, ByVal e As MouseButtonEventArgs) Handles StkTop.MouseLeftButtonDown
+        Try
+            DragMove()
+
+        Catch ex As Exception
+        End Try
+    End Sub
+
     Public Sub New()
         Try
             ' Cet appel est requis par le Concepteur Windows Form.

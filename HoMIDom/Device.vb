@@ -1116,6 +1116,7 @@ Namespace HoMIDom
                 Try
                     If _Enable = False Then Exit Sub
                     _Fichier = File
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DEVICE, Me.Name, " SetFichierAudio " & File)
                 Catch ex As Exception
                     _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, Me.Name, " SetFichierAudio " & File & " : " & ex.Message)
                 End Try
@@ -1158,7 +1159,7 @@ Namespace HoMIDom
 
             Public Sub Play(Optional ByVal Param1 As String = "")
                 Try
-                    _Fichier = Param1
+                    If String.IsNullOrEmpty(Param1) = False Then Fichier = Param1
                     If _Enable = False Then Exit Sub
                     Driver.Write(Me, "PlayAudio", _Fichier)
                     Value = "PlayAudio"
