@@ -519,7 +519,7 @@ Public Class Driver_OregonS
             _DeviceSupport.Add(ListeDevices.TEMPERATURE.ToString)
             _DeviceSupport.Add(ListeDevices.UV.ToString)
             _DeviceSupport.Add(ListeDevices.VITESSEVENT.ToString)
-            '_DeviceSupport.Add(ListeDevices.PREVISION.ToString)
+            _DeviceSupport.Add(ListeDevices.GENERIQUESTRING.ToString)
 
             'Parametres avancés
             Add_ParamAvance("ProductID", "le ProductID de votre appareil USB", "CA01")
@@ -594,7 +594,7 @@ Public Class Driver_OregonS
     ''' <remarks></remarks>
     ''' 
 
-    Private Sub traitement(ByVal valeur As Integer, ByVal adresse As String, ByVal type As Integer)
+    Private Sub traitement(ByVal valeur As Object, ByVal adresse As String, ByVal type As Integer)
         Try
             'Recherche si un device affecté
             Dim listedevices As New ArrayList
@@ -620,7 +620,7 @@ Public Class Driver_OregonS
                 Case 8
                     _Type = "VITESSEVENT"
                 Case 9
-                    _Type = "PREVISION"
+                    _Type = "GENERIQUESTRING"
 
                 Case Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Process", "Le type de device n'appartient pas à ce driver: " & type)
@@ -633,7 +633,7 @@ Public Class Driver_OregonS
             If (listedevices.Count = 1) Then
 
                 ' If listedevices.Item(0).Value <> valeur Then
-                If _debug Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " " & listedevices.Item(0).type, listedevices.Item(0).adresse1 & " , " & listedevices.Item(0).Value & " <> " & CDbl(valeur))
+                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " " & listedevices.Item(0).type, listedevices.Item(0).adresse1 & " , " & listedevices.Item(0).Value & " <> " & CDbl(valeur))
                 listedevices.Item(0).Value = valeur
                 'End If
 
@@ -884,11 +884,11 @@ Public Class Driver_OregonS
                                                     Dim dWindDirection As Double = (CDbl(bytes(2)) Mod 16) * 360 / 16
 
 
-                                                    s &= "Wind : "
-                                                    s &= "(G) " & dWindGust & " m/s ; "
+                                                    's &= "Wind : "
+                                                    's &= "(G) " & dWindGust & " m/s ; "
                                                     's &= "G " & CDbl(Bytes(4)) * 0.1 & " m/s ; "
-                                                    s &= "(M) " & dWindAverage & " m/s ; "
-                                                    s &= dWindDirection & "°"
+                                                    's &= "(M) " & dWindAverage & " m/s ; "
+                                                    's &= dWindDirection & "°"
 
                                                     'TableMeteo.VitVent = Bytes(4) + 256 * (Bytes(5) Mod 16)
 
@@ -896,14 +896,21 @@ Public Class Driver_OregonS
 
                                                     Try
                                                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Vitesse du vent", "Vitesse du vent= " & bytes(4) + 256 * (bytes(5) Mod 16))
-                                                        traitement(bytes(4) + 256 * (bytes(5) Mod 16), 0, 8) 'aller écrire la valeur dans le device --> Homidom
+                                                        traitement(dWindGust, 1, 8) 'aller écrire la valeur dans le device --> Homidom
+                                                    Catch ex As Exception
+                                                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Vitesse du vent", "Erreur : " & ex.ToString)
+                                                    End Try
+
+                                                    Try
+                                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Vitesse du vent", "Vitesse du vent= " & bytes(4) + 256 * (bytes(5) Mod 16))
+                                                        traitement(dWindAverage, 0, 8) 'aller écrire la valeur dans le device --> Homidom
                                                     Catch ex As Exception
                                                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Vitesse du vent", "Erreur : " & ex.ToString)
                                                     End Try
 
                                                     Try
                                                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Direction du vent", "Direction du vent= " & (bytes(2)) Mod 16)
-                                                        traitement((bytes(2)) Mod 16, 0, 2) 'aller écrire la valeur dans le device --> Homidom
+                                                        traitement(dWindDirection, 0, 2) 'aller écrire la valeur dans le device --> Homidom
                                                     Catch ex As Exception
                                                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Direction du vent", "Erreur : " & ex.ToString)
                                                     End Try
@@ -938,9 +945,9 @@ Public Class Driver_OregonS
 
                                                     Dim temp As Int32
                                                     If (bytes(3) + bytes(4) * 16 * 16) > 32467 Then
-                                                        temp = CInt(((bytes(3) + bytes(4) * 16 * 16) - 32767) * (-1))
+                                                        temp = CInt(((bytes(3) + bytes(4) * 16 * 16) - 32767) * (-1)) / 10
                                                     Else
-                                                        temp = CInt(bytes(3) + bytes(4) * 16 * 16)
+                                                        temp = CInt(bytes(3) + bytes(4) * 16 * 16) / 10
                                                     End If
 
                                                     'TableTemperature.TH(iSensor) = temp
@@ -972,14 +979,16 @@ Public Class Driver_OregonS
                                                     s &= "PA=" & dPressionAbsolue & "mb ; "
 
                                                     Dim p As Integer
+                                                    Dim s1 As String = ""
+                                                    Dim s2 As String = ""
 
                                                     p = bytes(5) \ 16
                                                     Select Case p
-                                                        Case 0 : s &= "Partly Cloudy"
-                                                        Case 1 : s &= "Rainy"
-                                                        Case 2 : s &= "Cloudy"
-                                                        Case 3 : s &= "Sunny"
-                                                        Case 4 : s &= "Snowy"
+                                                        Case 0 : s1 &= "Partiellement nuageux"
+                                                        Case 1 : s1 &= "Pluvieux"
+                                                        Case 2 : s1 &= "Nuageux"
+                                                        Case 3 : s1 &= "Ensoleillé"
+                                                        Case 4 : s1 &= "Neigeux"
                                                         Case Else : s &= "?"
                                                     End Select
 
@@ -987,12 +996,12 @@ Public Class Driver_OregonS
 
                                                     p = bytes(3) \ 16
                                                     Select Case p
-                                                        Case 0 : s &= "Partly Cloudy"
-                                                        Case 1 : s &= "Rainy"
-                                                        Case 2 : s &= "Cloudy"
-                                                        Case 3 : s &= "Sunny"
-                                                        Case 4 : s &= "Snowy"
-                                                        Case Else : s &= "?"
+                                                        Case 0 : s2 = "Partiellement nuageux"
+                                                        Case 1 : s2 = "Pluvieux"
+                                                        Case 2 : s2 = "Nuageux"
+                                                        Case 3 : s2 = "Ensoleillé"
+                                                        Case 4 : s2 = "Neigeux"
+                                                        Case Else : s = "?"
                                                     End Select
 
 
@@ -1002,14 +1011,28 @@ Public Class Driver_OregonS
 
                                                     Try
                                                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Barometre", "Barometre = " & (bytes(2) + (bytes(3) Mod 16) * 16 * 16))
-                                                        traitement((bytes(2) + (bytes(3) Mod 16) * 16 * 16), 1, 0) 'aller écrire la valeur dans le device --> Homidom
+                                                        traitement(dPressionRelative, 0, 0) 'aller écrire la valeur dans le device --> Homidom
                                                     Catch ex As Exception
                                                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Barometre", "Erreur : " & ex.ToString)
                                                     End Try
 
                                                     Try
-                                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Prévision", "Prévision = " & bytes(3) \ 16)
-                                                        traitement(bytes(3) \ 16, 1, 9) 'aller écrire la valeur dans le device --> Homidom
+                                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Prévision", "Prévision = " & s)
+                                                        traitement(s1, 0, 9) 'aller écrire la valeur dans le device --> Homidom
+                                                    Catch ex As Exception
+                                                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Prévision", "Erreur : " & ex.ToString)
+                                                    End Try
+
+                                                    Try
+                                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Barometre", "Barometre = " & (bytes(2) + (bytes(3) Mod 16) * 16 * 16))
+                                                        traitement(dPressionAbsolue, 1, 0) 'aller écrire la valeur dans le device --> Homidom
+                                                    Catch ex As Exception
+                                                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Barometre", "Erreur : " & ex.ToString)
+                                                    End Try
+
+                                                    Try
+                                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Prévision", "Prévision = " & s)
+                                                        traitement(s2, 1, 9) 'aller écrire la valeur dans le device --> Homidom
                                                     Catch ex As Exception
                                                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Prévision", "Erreur : " & ex.ToString)
                                                     End Try
@@ -1040,14 +1063,29 @@ Public Class Driver_OregonS
 
                                                     Try
                                                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Pluie 24h", "Pluie 24h = " & CInt(bytes(6) + bytes(7) * 16 * 16))
-                                                        traitement(CInt(bytes(6) + bytes(7) * 16 * 16), 0, 5) 'aller écrire la valeur dans le device --> Homidom
+                                                        traitement(dRainRate, 0, 5) 'aller écrire la valeur dans le device --> Homidom
+                                                    Catch ex As Exception
+                                                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Pluie immediat", "Erreur : " & ex.ToString)
+                                                    End Try
+
+                                                    Try
+                                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Pluie 24h", "Pluie 24h = " & CInt(bytes(6) + bytes(7) * 16 * 16))
+                                                        traitement(dRain1h, 1, 5) 'aller écrire la valeur dans le device --> Homidom
+                                                    Catch ex As Exception
+                                                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Pluie 1h", "Erreur : " & ex.ToString)
+                                                    End Try
+
+
+                                                    Try
+                                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Pluie 24h", "Pluie 24h = " & CInt(bytes(6) + bytes(7) * 16 * 16))
+                                                        traitement(dRain24h, 2, 5) 'aller écrire la valeur dans le device --> Homidom
                                                     Catch ex As Exception
                                                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Pluie 24h", "Erreur : " & ex.ToString)
                                                     End Try
 
                                                     Try
                                                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Pluie Accumulée", "Pluie Accumulée = " & bytes(8) + bytes(9) * 16 * 16)
-                                                        traitement(CInt(bytes(8) + bytes(9) * 16 * 16), 0, 4) 'aller écrire la valeur dans le device --> Homidom
+                                                        traitement(dRainAccum, 0, 4) 'aller écrire la valeur dans le device --> Homidom
                                                     Catch ex As Exception
                                                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Pluie Accumulée", "Erreur : " & ex.ToString)
                                                     End Try
