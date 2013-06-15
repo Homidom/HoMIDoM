@@ -481,14 +481,23 @@ Public Class Driver_Teleinfo
                 _SecondPort = _Parametres.Item(1).Valeur.ToString.ToUpper
 
                 Select Case _Modele.ToUpper
+                    Case "XBEE_2_COMPTEURS_CARTELECTRONIC"
+                        Ftdi = New ftdi_cpt.Ftdi_cpt
+                        Ftdi.Start("Interface XBEE -> Compteur")
+                        If _SecondPort.ToLower <> "nothing" And TabCom.Contains(_SecondPort) Then
+                            MyTimer.Interval = _Parametres.Item(2).Valeur
+                            MyTimer.Enabled = True
+                        End If
                     Case "2_COMPTEURS_CARTELECTRONIC"
                         Ftdi = New ftdi_cpt.Ftdi_cpt
-                        Ftdi.Start(True)
-                        MyTimer.Interval = _Parametres.Item(2).Valeur
-                        MyTimer.Enabled = True
+                        Ftdi.Start("Interface USB -> Compteur")
+                        If _SecondPort.ToLower <> "nothing" And TabCom.Contains(_SecondPort) Then
+                            MyTimer.Interval = _Parametres.Item(2).Valeur
+                            MyTimer.Enabled = True
+                        End If
                     Case "USBTIC_CARTELECTRONIC"
                         Ftdi = New ftdi_cpt.Ftdi_cpt
-                        Ftdi.Start(True, "")
+                        Ftdi.Start("Interface USB 1 TIC")
                         Ftdi.cpt(1)
                 End Select
 
@@ -515,23 +524,27 @@ Public Class Driver_Teleinfo
                 Else
                     retour = "ERR: Port Com non défini. Impossible d'ouvrir le port !"
                 End If
-                'ouverture du port si un Second port est defini
-                If TabCom.Contains(_SecondPort) Then
-                    If _SecondPort.ToLower <> "nothing" Then
-                        If _SecondPort.ToUpper = _Com.ToUpper Then
-                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le second Port " & _SecondPort.ToUpper & " ne doit pas etre identique avec le port Principal.")
-                            _SecondPort = "nothing"
-                        Else
-                            TempCompteur2.port_name = _SecondPort.ToUpper
-                            ReDim Preserve TabCompteur(TabCompteur.Count)
-                            TabCompteur(1) = TempCompteur2
-                            retour2 = ouvrir(TabCompteur(1))
-                        End If
-                    End If
-                Else
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le second Port " & _SecondPort.ToUpper & " n'a pas le bon format: nothing ou COMx")
-                End If
 
+                 Select _Modele.ToUpper
+                    Case "XBEE_2_COMPTEURS_CARTELECTRONIC", "2_COMPTEURS_CARTELECTRONIC", "USBTIC_CARTELECTRONIC"
+                    Case Else
+                        'ouverture du port si un Second port est defini
+                        If TabCom.Contains(_SecondPort) Then
+                            If _SecondPort.ToLower <> "nothing" Then
+                                If _SecondPort.ToUpper = _Com.ToUpper Then
+                                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le second Port " & _SecondPort.ToUpper & " ne doit pas etre identique avec le port Principal.")
+                                    _SecondPort = "nothing"
+                                Else
+                                    TempCompteur2.port_name = _SecondPort.ToUpper
+                                    ReDim Preserve TabCompteur(TabCompteur.Count)
+                                    TabCompteur(1) = TempCompteur2
+                                    retour2 = ouvrir(TabCompteur(1))
+                                End If
+                            End If
+                        Else
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le second Port " & _SecondPort.ToUpper & " n'a pas le bon format: nothing ou COMx")
+                        End If
+                End Select
 
                 'traitement des messages de retour
                 If (STRGS.Left(retour, 4) = "ERR:") Then
@@ -545,16 +558,20 @@ Public Class Driver_Teleinfo
                     _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo", retour)
                 End If
 
-                If _SecondPort.ToLower <> "nothing" And TabCom.Contains(_SecondPort) Then
-                    If (STRGS.Left(retour2, 4) = "ERR:") Then
-                        TabCompteur(1).IsConnectPort = False
-                        retour2 = STRGS.Right(retour, retour.Length - 5)
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo", "Driver non démarré : le second port : " & retour2)
-                    Else
-                        TabCompteur(1).IsConnectPort = True
-                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo", retour2)
-                    End If
-                End If
+                Select _Modele.ToUpper
+                    Case "XBEE_2_COMPTEURS_CARTELECTRONIC", "2_COMPTEURS_CARTELECTRONIC", "USBTIC_CARTELECTRONIC"
+                    Case Else
+                        If _SecondPort.ToLower <> "nothing" And TabCom.Contains(_SecondPort) Then
+                            If (STRGS.Left(retour2, 4) = "ERR:") Then
+                                TabCompteur(1).IsConnectPort = False
+                                retour2 = STRGS.Right(retour, retour.Length - 5)
+                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo", "Driver non démarré : le second port : " & retour2)
+                            Else
+                                TabCompteur(1).IsConnectPort = True
+                                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo", retour2)
+                            End If
+                        End If
+                End Select
 
             Catch ex As Exception
                 _IsConnect = False
@@ -583,7 +600,7 @@ Public Class Driver_Teleinfo
                         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo Stop", "Port " & _Com & " est déjà fermé")
                     End If
                 Next
-                If Modele.ToUpper = "USBTIC_CARTELECTRONIC" Or Modele.ToUpper = "2_COMPTEURS_CARTELECTRONIC" Then Ftdi.cpt(0)
+                If Modele.ToUpper = "USBTIC_CARTELECTRONIC" Or Modele.ToUpper = "2_COMPTEURS_CARTELECTRONIC" Or Modele.ToUpper = "XBEE_2_COMPTEURS_CARTELECTRONIC" Then Ftdi.cpt(0)
                 ' Effacement du tableau des compteurs
                 Array.Resize(TabCompteur, 1)
             Catch ex As Exception
@@ -768,7 +785,7 @@ Public Class Driver_Teleinfo
         ''' <summary>Si refresh >0 gestion du timer</summary>
         ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
         Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs) Handles MyTimer.Elapsed
-            If _Modele.ToUpper = "USBTIC_CARTELECTRONIC" Or "2_COMPTEURS_CARTELECTRONIC" Then
+            If _Modele.ToUpper = "USBTIC_CARTELECTRONIC" Or _Modele.ToUpper = "2_COMPTEURS_CARTELECTRONIC" Or _Modele.ToUpper = "XBEE_2_COMPTEURS_CARTELECTRONIC" Then
 
                 fermer(TabCompteur(icpt))
 
@@ -807,7 +824,7 @@ Public Class Driver_Teleinfo
                     End If
 
                     Select Case _Modele.ToUpper
-                        Case "A_DAUGUET", "USBTIC_CARTELECTRONIC", "2_COMPTEURS_CARTELECTRONIC"
+                        Case "A_DAUGUET", "USBTIC_CARTELECTRONIC", "XBEE_2_COMPTEURS_CARTELECTRONIC", "2_COMPTEURS_CARTELECTRONIC"
                             CptPort.SerialPort.BaudRate = 1200  'vitesse du port 300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200
                             CptPort.SerialPort.Parity = IO.Ports.Parity.Even ' parité paire
                             CptPort.SerialPort.StopBits = IO.Ports.StopBits.One 'un bit d'arrêt par octet
