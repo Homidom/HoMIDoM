@@ -62,7 +62,11 @@ Class Window1
     Dim _PassWord As String
     Dim _WithPassword As Boolean = False
     Dim _AffLastError As Boolean = False
-
+    Dim _MousePosition As Point
+    Dim _TimeMouseDown As DateTime = Now
+    Dim _TimeOutPage As Integer = 1 'Timeout d'une page en minute
+    Dim _DefautPage As String = "Aucune" 'Page par défaut à afficher après tiemout
+    Dim _AsTimeOutPage As Boolean = False 'definit si on gère le timeout d'une page
 #End Region
 
 #Region "Property"
@@ -238,6 +242,34 @@ Class Window1
         End Get
         Set(ByVal value As String)
             _ConfigFile = value
+        End Set
+    End Property
+
+    Public Property AsTimeOutPage As Boolean
+        Get
+            Return _AsTimeOutPage
+        End Get
+        Set(ByVal value As Boolean)
+            _AsTimeOutPage = value
+            If value Then _TimeMouseDown = Now
+        End Set
+    End Property
+
+    Public Property DefautPage As String
+        Get
+            Return _DefautPage
+        End Get
+        Set(ByVal value As String)
+            _DefautPage = value
+        End Set
+    End Property
+
+    Public Property TimeOutPage As Integer
+        Get
+            Return _TimeOutPage
+        End Get
+        Set(ByVal value As Integer)
+            _TimeOutPage = value
         End Set
     End Property
 #End Region
@@ -513,6 +545,12 @@ Class Window1
                             Me.Height = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
                         Case "afflasterror"
                             If IsBoolean(list.Item(0).Attributes.Item(j).Value) Then AffLastError = list.Item(0).Attributes.Item(j).Value
+                        Case "astimeoutpage"
+                            _AsTimeOutPage = list.Item(0).Attributes.Item(j).Value
+                        Case "timeoutpage"
+                            _TimeOutPage = list.Item(0).Attributes.Item(j).Value
+                        Case "defautpage"
+                            _DefautPage = list.Item(0).Attributes.Item(j).Value
                         Case Else
                             Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                     End Select
@@ -577,6 +615,7 @@ Class Window1
             Else
             End If
             Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Menus chargés")
+
 
             '******************************************
             'on va chercher les éléments
@@ -875,6 +914,15 @@ Class Window1
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("afflasterror")
             writer.WriteValue(_AffLastError)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("astimeoutpage")
+            writer.WriteValue(_AsTimeOutPage)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("timeoutpage")
+            writer.WriteValue(_TimeOutPage)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("defautpage")
+            writer.WriteValue(_DefautPage)
             writer.WriteEndAttribute()
             writer.WriteEndElement()
 
@@ -1323,6 +1371,22 @@ Class Window1
             Else
                 LblTime.Content = Now.ToLongDateString & " " & Now.ToLongTimeString
             End If
+
+            If _AsTimeOutPage Then
+                Dim vDiff As TimeSpan = Now - _TimeMouseDown
+                If vDiff.Minutes >= _TimeOutPage Then
+                    If Canvas1.Children.Count > 0 Then Canvas1.Children.Clear()
+                    ImageBackGround = _ImageBackGroundDefault
+                    If _DefautPage IsNot Nothing Then 'si la page par defaut est pas null on l'affiche sinon on affiche rien
+                        For Each icmnu In ListMnu
+                            If icmnu.Text = _DefautPage Then
+                                IconMnuDoubleClick(icmnu, Nothing)
+                                Exit For
+                            End If
+                        Next
+                    End If
+                End If
+            End If
         Catch ex As Exception
             IsConnect = False
             If FlagMsgDeconnect = False Then
@@ -1342,6 +1406,8 @@ Class Window1
     Private Sub IconMnuDoubleClick(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
         Try
             Me.Cursor = Cursors.Wait
+            _TimeMouseDown = Now
+
             If sender.type <> uCtrlImgMnu.TypeOfMnu.LecteurMedia Then
                 Canvas1.Children.Clear()
                 If Media IsNot Nothing Then Media.Visibility = Windows.Visibility.Hidden
@@ -2430,4 +2496,14 @@ Class Window1
         End Try
     End Function
 #End Region
+
+
+    Private Sub Window1_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Me.MouseMove
+        If _AsTimeOutPage Then
+            If e.GetPosition(Me) <> _MousePosition Then
+                _TimeMouseDown = Now
+                _MousePosition = e.GetPosition(Me)
+            End If
+        End If
+    End Sub
 End Class

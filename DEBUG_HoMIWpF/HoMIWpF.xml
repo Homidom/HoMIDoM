@@ -285,6 +285,15 @@ uCtrlImgMnu
 	<param name="sender"></param>
 	<param name="e"></param>
 	<remarks></remarks>
+</member><member name="M:HoMIWpF.Fonctions.AfficheMessageAndLog(HoMIWpF.Fonctions.TypeLog,System.String,System.String,System.String)">
+	<summary>
+ Affiche le message et connecté log dans le serveur
+ </summary>
+	<param name="Type"></param>
+	<param name="Message"></param>
+	<param name="Title"></param>
+	<param name="Fonction"></param>
+	<remarks></remarks>
 </member><member name="P:HoMIWpF.Fonctions.FichierLog">
 	<summary>
  Permet de connaître le chemin du fichier log

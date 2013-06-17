@@ -27,6 +27,10 @@ Public Class WConfig
         Frm.PortSOAP = TxtPort.Text
         Frm.ListMnu = MyListMnu
         IdSrv = TxtID.Text
+        Frm.AsTimeOutPage = ChkTimeOutPage.IsChecked
+        Frm.TimeOutPage = CInt(CbTimeOutPage.Text)
+        Frm.DefautPage = CbPageDefaut.Text
+
         DialogResult = True
     End Sub
 
@@ -54,15 +58,25 @@ Public Class WConfig
         TxtPort.Text = Frm.PortSOAP
         TxtID.Text = IdSrv
         ChkAffLastError.IsChecked = Frm.AffLastError
+        ChkTimeOutPage.IsChecked = Frm.AsTimeOutPage
+        If Frm.TimeOutPage >= 0 Then CbTimeOutPage.Text = Frm.TimeOutPage
 
         ListMnu.Items.Clear()
         MyListMnu.Clear()
+        CbPageDefaut.Items.Clear()
 
-        For i As Integer = 0 To Frm.ListMnu.Count - 1
-            Dim x As uCtrlImgMnu = Frm.ListMnu.Item(i)
-            ListMnu.Items.Add(x.Text)
+        CbPageDefaut.Items.Add("Aucune")
+        For Each icmnu In Frm.ListMnu
+            ListMnu.Items.Add(icmnu.Text)
+            CbPageDefaut.Items.Add(icmnu.Text)
         Next
         MyListMnu = Frm.ListMnu
+
+        Try
+            CbPageDefaut.SelectedValue = Frm.DefautPage
+        Catch ex As Exception
+            CbPageDefaut.SelectedIndex = 0
+        End Try
 
         'affiche les programmes
         Try
@@ -364,4 +378,13 @@ Public Class WConfig
     End Sub
 
 
+    Private Sub ChkTimeOutPage_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ChkTimeOutPage.Click
+        If ChkTimeOutPage.IsChecked Then
+            CbPageDefaut.IsEnabled = True
+            CbTimeOutPage.IsEnabled = True
+        Else
+            CbPageDefaut.IsEnabled = False
+            CbTimeOutPage.IsEnabled = False
+        End If
+    End Sub
 End Class
