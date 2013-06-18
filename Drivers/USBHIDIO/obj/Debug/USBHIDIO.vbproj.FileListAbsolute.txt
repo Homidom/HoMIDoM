@@ -1,9 +1,0 @@
-K:\Perso\vb\SauveWMR100\USBHIDIO\bin\Oregon.dll
-K:\Perso\vb\SauveWMR100\USBHIDIO\bin\Oregon.pdb
-K:\Perso\vb\SauveWMR100\USBHIDIO\bin\Oregon.xml
-K:\Perso\vb\SauveWMR100\USBHIDIO\obj\Debug\Oregon.WMR100.resources
-K:\Perso\vb\SauveWMR100\USBHIDIO\obj\Debug\Oregon.Resources.resources
-K:\Perso\vb\SauveWMR100\USBHIDIO\obj\Debug\USBHIDIO.vbproj.GenerateResource.Cache
-K:\Perso\vb\SauveWMR100\USBHIDIO\obj\Debug\Oregon.dll
-K:\Perso\vb\SauveWMR100\USBHIDIO\obj\Debug\Oregon.xml
-K:\Perso\vb\SauveWMR100\USBHIDIO\obj\Debug\Oregon.pdb
