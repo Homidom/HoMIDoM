@@ -70,9 +70,20 @@ Class Window1
     Dim _TimeOutPage As Integer = 1 'Timeout d'une page en minute
     Dim _DefautPage As String = "Aucune" 'Page par défaut à afficher après tiemout
     Dim _AsTimeOutPage As Boolean = False 'definit si on gère le timeout d'une page
+    Dim _TaskMnuTransp As Byte = 99
 #End Region
 
 #Region "Property"
+    Public Property TaskMnuTranp As Byte
+        Get
+            Return _TaskMnuTransp
+        End Get
+        Set(ByVal value As Byte)
+            _TaskMnuTransp = value
+
+        End Set
+    End Property
+
     Public Property AffLastError As Boolean
         Get
             Return _AffLastError
@@ -98,10 +109,10 @@ Class Window1
 
     Public Property Password As String
         Get
-            Return _Password
+            Return _PassWord
         End Get
         Set(ByVal value As String)
-            _Password = value
+            _PassWord = value
         End Set
     End Property
 
@@ -245,10 +256,10 @@ Class Window1
 
     Public Property HSPassword As String
         Get
-            Return _Password
+            Return _PassWord
         End Get
         Set(ByVal value As String)
-            _Password = value
+            _PassWord = value
         End Set
     End Property
 
