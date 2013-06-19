@@ -19,17 +19,17 @@ Public Class uCamera
             Try
                 _URL = value
                 If String.IsNullOrEmpty(_URL) = False Then 'UrlIsValid(_URL) = False Then
-                    If My.Computer.Network.Ping(_URL) = True Then
-                        lbl.Visibility = Windows.Visibility.Collapsed
-                        lbl.Content = ""
-                        _mjpeg.ParseStream(New Uri(_URL))
-                    Else
-                        lbl.Content = "Ping de la caméra fail " & _URL & " est erronée !!"
-                        lbl.Visibility = Windows.Visibility.Visible
-                    End If
-                Else
-                    lbl.Content = "L'URL de la caméra doit être renseignée !!"
-                    lbl.Visibility = Windows.Visibility.Visible
+                    '    If My.Computer.Network.Ping(_URL) = True Then
+                    lbl.Visibility = Windows.Visibility.Collapsed
+                    lbl.Content = ""
+                    _mjpeg.ParseStream(New Uri(_URL))
+                    '    Else
+                    'lbl.Content = "Ping de la caméra fail " & _URL & " est erronée !!"
+                    'lbl.Visibility = Windows.Visibility.Visible
+                    '    End If
+                    'Else
+                    'lbl.Content = "L'URL de la caméra doit être renseignée !!"
+                    'lbl.Visibility = Windows.Visibility.Visible
                 End If
             Catch ex As Exception
                 AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.URL: " & ex.ToString, "Erreur", "uCamera.URL")
