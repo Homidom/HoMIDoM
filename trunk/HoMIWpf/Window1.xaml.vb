@@ -160,6 +160,12 @@ Class Window1
                     Dim st2 As Storyboard = TryFindResource("sb_Rect")
                     ScrollViewer1.BeginStoryboard(st2)
                 End If
+            Else
+                If _flagIsShowScroll = False Then
+                    _flagIsShowScroll = True
+                    Dim st2 As Storyboard = TryFindResource("sb_Rect2")
+                    ScrollViewer1.BeginStoryboard(st2)
+                End If
             End If
         End Set
     End Property
@@ -2459,29 +2465,29 @@ Class Window1
         End Try
     End Sub
 
-    Private Sub MenuItem1_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem1.Click
-        Try
-            MnuLastError.Items.Clear()
+    'Private Sub MenuItem1_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem1.Click
+    '    Try
+    '        MnuLastError.Items.Clear()
 
-            If IsConnect Then
-                Dim list As List(Of String) = myService.GetLastLogsError
-                If list.Count > 0 Then
-                    Dim _tool As String = ""
-                    For Each logerror As String In list
-                        If String.IsNullOrEmpty(logerror) = False Then
-                            Dim mnu As New MenuItem
-                            mnu.Header = logerror
-                            mnu.FontSize = 10
-                            MnuLastError.Items.Add(mnu)
-                        End If
-                    Next
-                End If
-                list = Nothing
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur MenuItem1_Click: " & ex.Message, "Erreur", "MenuItem1_Click")
-        End Try
-    End Sub
+    '        If IsConnect Then
+    '            Dim list As List(Of String) = myService.GetLastLogsError
+    '            If list.Count > 0 Then
+    '                Dim _tool As String = ""
+    '                For Each logerror As String In list
+    '                    If String.IsNullOrEmpty(logerror) = False Then
+    '                        Dim mnu As New MenuItem
+    '                        mnu.Header = logerror
+    '                        mnu.FontSize = 10
+    '                        MnuLastError.Items.Add(mnu)
+    '                    End If
+    '                Next
+    '            End If
+    '            list = Nothing
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur MenuItem1_Click: " & ex.Message, "Erreur", "MenuItem1_Click")
+    '    End Try
+    'End Sub
 #End Region
 
 
@@ -2559,6 +2565,29 @@ Class Window1
                 Dim st2 As Storyboard = TryFindResource("sb_Rect2")
                 ScrollViewer1.BeginStoryboard(st2)
             End If
+        End If
+    End Sub
+
+    Private Sub Menu1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Menu1.MouseDown
+        CtxMnuBtn.PlacementTarget = sender
+        CtxMnuBtn.IsOpen = True
+
+        MnuLastError.Items.Clear()
+
+        If IsConnect Then
+            Dim list As List(Of String) = myService.GetLastLogsError
+            If list.Count > 0 Then
+                Dim _tool As String = ""
+                For Each logerror As String In list
+                    If String.IsNullOrEmpty(logerror) = False Then
+                        Dim mnu As New MenuItem
+                        mnu.Header = logerror
+                        mnu.FontSize = 10
+                        MnuLastError.Items.Add(mnu)
+                    End If
+                Next
+            End If
+            list = Nothing
         End If
     End Sub
 End Class

@@ -15,6 +15,7 @@
                Storyboard.TargetProperty="Y" 
                Source="Y" 
                Duration="0:0:0.4" 
+               AccelerationRatio="0.5"
                RepeatBehavior="1x"
                 AutoReverse="False">
                     <DoubleAnimationUsingPath.PathGeometry>
@@ -30,7 +31,7 @@
                Source="Y" 
                Duration="0:0:0.4" 
                RepeatBehavior="1x" 
-                DecelerationRatio="0.6"
+               DecelerationRatio="0.6"
                AutoReverse="False">
                     <DoubleAnimationUsingPath.PathGeometry>
                         <PathGeometry Figures="M0,200 L0,0"/>
@@ -58,25 +59,24 @@
     </DockPanel>
         <DockPanel >
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top"  Name="StkTop" Margin="0,0,1,0" Background="#66000000">
-                <Menu Height="24">
-                    <MenuItem Header="Homidom" Name="MenuItem1" Width="105" HorizontalAlignment="Left" Background="White">
-                        <MenuItem.Icon>
-                            <Image Source="/HoMIWpF;component/icone.ico" />
-                        </MenuItem.Icon>
-                        <MenuItem Name="Chk1" Header="Déplacer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" FontSize="10">
-                            <MenuItem.Icon>
-                                <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/move.png" />
-                            </MenuItem.Icon>
+                <StackPanel Background="#FF5F5F5F">
+                    <Image Name="Menu1" Height="40" Width="40" Source="/HoMIWpF;component/Images/Rond_32x32.png" >
+                        <Image.ContextMenu >
+                            <ContextMenu Name="CtxMnuBtn"> 
+                            <MenuItem Name="Chk1" Header="Déplacer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" FontSize="10">
+                                <MenuItem.Icon>
+                                    <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/move.png" />
+                                </MenuItem.Icon>
                             </MenuItem>
-                        <MenuItem Name="Chk2" Header="Editer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" FontSize="10" >
-                            <MenuItem.Icon>
-                                <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Modifier_32.png" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Name="Chk3" Header="Ajouter" Visibility="Collapsed" FontSize="10">
-                            <MenuItem.Icon>
-                                <Image Width="40" Height="40"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
-                            </MenuItem.Icon>
+                            <MenuItem Name="Chk2" Header="Editer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" FontSize="10" >
+                                <MenuItem.Icon>
+                                    <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Modifier_32.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Name="Chk3" Header="Ajouter" Visibility="Collapsed" FontSize="10">
+                                <MenuItem.Icon>
+                                    <Image Width="40" Height="40"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
+                                </MenuItem.Icon>
                                 <MenuItem Name="NewWidgetEmpty" Header="Nouveau Widget Vide" FontSize="10" />
                                 <MenuItem Name="NewWidgetWeb" Header="Nouveau Widget Web" FontSize="10" />
                                 <MenuItem Name="NewWidgetRss" Header="Nouveau Widget Rss" FontSize="10" />
@@ -85,54 +85,55 @@
                                 <MenuItem Name="NewWidgetLabel" Header="Nouveau Widget Label" FontSize="10" />
                                 <MenuItem Name="NewWidgetCamera" Header="Nouveau Widget Camera" FontSize="10" />
                             </MenuItem>
-                        <MenuItem Name="ViewLog" Header="Consulter les logs" FontSize="10" >
-                            <MenuItem.Icon>
-                                <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Log_32.png" />
-                            </MenuItem.Icon>
-                            <MenuItem Name="ViewLogClient" Header="Client" FontSize="10" Tag="1">
+                            <MenuItem Name="ViewLog" Header="Consulter les logs" FontSize="10" >
                                 <MenuItem.Icon>
-                                    <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/pc.png" />
+                                    <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Log_32.png" />
+                                </MenuItem.Icon>
+                                <MenuItem Name="ViewLogClient" Header="Client" FontSize="10" Tag="1">
+                                    <MenuItem.Icon>
+                                        <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/pc.png" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Name="ViewLogSrv" Header="Serveur" FontSize="10" Tag="0">
+                                    <MenuItem.Icon>
+                                        <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Server.png" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </MenuItem>
+                            <MenuItem Name="ViewCalendar" Header="Calendrier" FontSize="10" >
+                                <MenuItem.Icon>
+                                    <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Calendar.png" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Name="ViewLogSrv" Header="Serveur" FontSize="10" Tag="0">
+                            <MenuItem Name="MnuHisto" Header="Historique" FontSize="10">
                                 <MenuItem.Icon>
-                                    <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Server.png" />
+                                    <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Courbe_32.png" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                        </MenuItem>
-                        <MenuItem Name="ViewCalendar" Header="Calendrier" FontSize="10" >
-                            <MenuItem.Icon>
-                                <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Calendar.png" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Name="MnuHisto" Header="Historique" FontSize="10">
-                            <MenuItem.Icon>
-                                <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Courbe_32.png" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Name="MnuMacro" Header="Macros" FontSize="10">
-                            <MenuItem.Icon>
-                                <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/script-128.png" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Name="MnuConfig" Header="Configurer" FontSize="10">
-                            <MenuItem.Icon>
-                                <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Configurer_64.png" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Name="MnuLastError" Header="Dernières erreurs" FontSize="10">
-                            <MenuItem.Icon>
-                                <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Error.png" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                        <MenuItem Name="MnuQuitter" Header="Quitter" FontSize="10">
-                            <MenuItem.Icon>
-                                <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/btnQuitter_32.png" />
-                            </MenuItem.Icon>
-                        </MenuItem>
-                    </MenuItem>
-
-                </Menu>
+                            <MenuItem Name="MnuMacro" Header="Macros" FontSize="10">
+                                <MenuItem.Icon>
+                                    <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/script-128.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Name="MnuConfig" Header="Configurer" FontSize="10">
+                                <MenuItem.Icon>
+                                    <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Configurer_64.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Name="MnuLastError" Header="Dernières erreurs" FontSize="10">
+                                <MenuItem.Icon>
+                                    <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Error.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Name="MnuQuitter" Header="Quitter" FontSize="10">
+                                <MenuItem.Icon>
+                                    <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/btnQuitter_32.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            </ContextMenu>
+                        </Image.ContextMenu>
+                    </Image> 
+                </StackPanel>
                 <Label Margin="1" Name="LblTime" FontSize="10" Foreground="White" FlowDirection="RightToLeft">#####</Label>
                 <Rectangle Width="100" Margin="0,-1,0,1" />
                 <Image Margin="1" Name="ImageLeve" Stretch="Fill" Tag="Soleil" HorizontalAlignment="Right" Width="20"  Height="20" Source="/HoMIWpF;component/Images/01.png" />
@@ -141,7 +142,7 @@
                 <Label Foreground="White" HorizontalAlignment="Left" Margin="1" Name="LblCouche" Tag="Soleil" FontSize="10">?</Label>
                 <Image HorizontalAlignment="Left" Margin="30,0,0,0" Name="ImgMess" Stretch="Fill" Width="20"  Height="20" Source="/HoMIWpF;component/Images/Warning.png" Visibility="Collapsed" />
             </StackPanel>
-            <StackPanel DockPanel.Dock="Bottom" >
+            <StackPanel DockPanel.Dock="Bottom" Name="StkBottom">
                 <local:AniScrollViewer  x:Name="ScrollViewer1" Margin="2" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" BorderBrush="DarkGray" Background="#99000000" >
 
                     <local:AniScrollViewer.RenderTransform>
