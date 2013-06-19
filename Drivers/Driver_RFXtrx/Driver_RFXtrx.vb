@@ -73,7 +73,33 @@ Imports System.Media
 
     'param avancé
     Dim _DEBUG As Boolean = False
-    Dim _PARAMMODE As String = "20011111111111111011111111"
+    'Dim _PARAMMODE As String = "20011111111111111011111111"
+    Dim _PARAMMODE_1_frequence As Integer = 2 '1 : type frequence (310, 315, 433, 868.30, 868.30 FSK, 868.35, 868.35 FSK, 868.95)
+    Dim _PARAMMODE_2_undec As Integer = 0 '2 : UNDEC
+    Dim _PARAMMODE_3_novatis As Integer = 0 '3 : novatis --> NOT USED ANYMORE 200
+    Dim _PARAMMODE_4_proguard As Integer = 1 '4 : proguard
+    Dim _PARAMMODE_5_fs20 As Integer = 1 '5 : FS20
+    Dim _PARAMMODE_6_lacrosse As Integer = 1 '6 : Lacrosse
+    Dim _PARAMMODE_7_hideki As Integer = 1 '7 : Hideki
+    Dim _PARAMMODE_8_ad As Integer = 1 '8 : AD
+    Dim _PARAMMODE_9_mertik As Integer = 1 '9 : Mertik 111111
+    Dim _PARAMMODE_10_visonic As Integer = 1 '10 : Visonic
+    Dim _PARAMMODE_11_ati As Integer = 1 '11 : ATI
+    Dim _PARAMMODE_12_oregon As Integer = 1 '12 : Oregon
+    Dim _PARAMMODE_13_meiantech As Integer = 1 '13 : Meiantech
+    Dim _PARAMMODE_14_heeu As Integer = 1 '14 : HEEU
+    Dim _PARAMMODE_15_ac As Integer = 1 '15 : AC
+    Dim _PARAMMODE_16_arc As Integer = 1 '16 : ARC
+    Dim _PARAMMODE_17_x10 As Integer = 1 '17 : X10 11111111
+    Dim _PARAMMODE_18_blindst0 As Integer = 0 '18 : BlindsT0
+    Dim _PARAMMODE_19_rfu6 As Integer = 1 '19 : RFU6
+    Dim _PARAMMODE_20_rfu5 As Integer = 1 '20 : RFU5
+    Dim _PARAMMODE_21_rfu4 As Integer = 1 '21 : RFU4
+    Dim _PARAMMODE_22_lighting4 As Integer = 1 '22 : RFU3 --> LIGHTING4
+    Dim _PARAMMODE_23_fineoffset As Integer = 1 '23 : FINEOFFSET
+    Dim _PARAMMODE_24_rubicson As Integer = 1 '24 : RUBICSON
+    Dim _PARAMMODE_25_ae As Integer = 1 '25 : AE
+    Dim _PARAMMODE_26_blindst1 As Integer = 1 '26 : BlindsT1
 
 #End Region
 
@@ -1323,8 +1349,66 @@ Imports System.Media
         'récupération des paramétres avancés
         Try
             _DEBUG = _Parametres.Item(0).Valeur
-            _PARAMMODE = _Parametres.Item(1).Valeur
+            '_PARAMMODE = _Parametres.Item(1).Valeur
             '_AUTODISCOVER = _Parametres.Item(2).Valeur
+            'correction si valeur correspond à ancienne valeur parammode de type "20011111111111111011111111"
+            If CInt(_Parametres.Item(1).Valeur) > 10 Then
+                WriteLog("ERR: Anciens Paramétres avancés trouvés. Conversion de l'ancienne valeur au nouveau format. Veuillez")
+                _PARAMMODE_1_frequence = _Parametres.Item(1).Valeur.Substring(0, 1)
+                _PARAMMODE_2_undec = _Parametres.Item(1).Valeur.Substring(1, 1)
+                _PARAMMODE_3_novatis = _Parametres.Item(1).Valeur.Substring(2, 1)
+                _PARAMMODE_4_proguard = _Parametres.Item(1).Valeur.Substring(3, 1)
+                _PARAMMODE_5_fs20 = _Parametres.Item(1).Valeur.Substring(4, 1)
+                _PARAMMODE_6_lacrosse = _Parametres.Item(1).Valeur.Substring(5, 1)
+                _PARAMMODE_7_hideki = _Parametres.Item(1).Valeur.Substring(6, 1)
+                _PARAMMODE_8_ad = _Parametres.Item(1).Valeur.Substring(7, 1)
+                _PARAMMODE_9_mertik = _Parametres.Item(1).Valeur.Substring(8, 1)
+                _PARAMMODE_10_visonic = _Parametres.Item(1).Valeur.Substring(9, 1)
+                _PARAMMODE_11_ati = _Parametres.Item(1).Valeur.Substring(10, 1)
+                _PARAMMODE_12_oregon = _Parametres.Item(1).Valeur.Substring(11, 1)
+                _PARAMMODE_13_meiantech = _Parametres.Item(1).Valeur.Substring(12, 1)
+                _PARAMMODE_14_heeu = _Parametres.Item(1).Valeur.Substring(13, 1)
+                _PARAMMODE_15_ac = _Parametres.Item(1).Valeur.Substring(14, 1)
+                _PARAMMODE_16_arc = _Parametres.Item(1).Valeur.Substring(15, 1)
+                _PARAMMODE_17_x10 = _Parametres.Item(1).Valeur.Substring(16, 1)
+                _PARAMMODE_18_blindst0 = _Parametres.Item(1).Valeur.Substring(17, 1)
+                _PARAMMODE_19_rfu6 = _Parametres.Item(1).Valeur.Substring(18, 1)
+                _PARAMMODE_20_rfu5 = _Parametres.Item(1).Valeur.Substring(19, 1)
+                _PARAMMODE_21_rfu4 = _Parametres.Item(1).Valeur.Substring(20, 1)
+                _PARAMMODE_22_lighting4 = _Parametres.Item(1).Valeur.Substring(21, 1)
+                _PARAMMODE_23_fineoffset = _Parametres.Item(1).Valeur.Substring(22, 1)
+                _PARAMMODE_24_rubicson = _Parametres.Item(1).Valeur.Substring(23, 1)
+                _PARAMMODE_25_ae = _Parametres.Item(1).Valeur.Substring(24, 1)
+                _PARAMMODE_26_blindst1 = _Parametres.Item(1).Valeur.Substring(25, 1)
+            Else
+                _PARAMMODE_1_frequence = _Parametres.Item(1).Valeur
+                _PARAMMODE_2_undec = _Parametres.Item(2).Valeur
+                _PARAMMODE_3_novatis = _Parametres.Item(3).Valeur
+                _PARAMMODE_4_proguard = _Parametres.Item(4).Valeur
+                _PARAMMODE_5_fs20 = _Parametres.Item(5).Valeur
+                _PARAMMODE_6_lacrosse = _Parametres.Item(6).Valeur
+                _PARAMMODE_7_hideki = _Parametres.Item(7).Valeur
+                _PARAMMODE_8_ad = _Parametres.Item(8).Valeur
+                _PARAMMODE_9_mertik = _Parametres.Item(9).Valeur
+                _PARAMMODE_10_visonic = _Parametres.Item(10).Valeur
+                _PARAMMODE_11_ati = _Parametres.Item(11).Valeur
+                _PARAMMODE_12_oregon = _Parametres.Item(12).Valeur
+                _PARAMMODE_13_meiantech = _Parametres.Item(13).Valeur
+                _PARAMMODE_14_heeu = _Parametres.Item(14).Valeur
+                _PARAMMODE_15_ac = _Parametres.Item(15).Valeur
+                _PARAMMODE_16_arc = _Parametres.Item(19).Valeur
+                _PARAMMODE_17_x10 = _Parametres.Item(17).Valeur
+                _PARAMMODE_18_blindst0 = _Parametres.Item(18).Valeur
+                _PARAMMODE_19_rfu6 = _Parametres.Item(19).Valeur
+                _PARAMMODE_20_rfu5 = _Parametres.Item(20).Valeur
+                _PARAMMODE_21_rfu4 = _Parametres.Item(21).Valeur
+                _PARAMMODE_22_lighting4 = _Parametres.Item(22).Valeur
+                _PARAMMODE_23_fineoffset = _Parametres.Item(23).Valeur
+                _PARAMMODE_24_rubicson = _Parametres.Item(24).Valeur
+                _PARAMMODE_25_ae = _Parametres.Item(25).Valeur
+                _PARAMMODE_26_blindst1 = _Parametres.Item(26).Valeur
+            End If
+
         Catch ex As Exception
             WriteLog("ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
         End Try
@@ -1586,8 +1670,34 @@ Imports System.Media
 
             'Parametres avancés
             add_paramavance("Debug", "Activer le Debug complet (True/False)", False)
-            add_paramavance("ParamMode", "Paramétres (ex: 20011111111111111011111111)", "20011111111111111011111111")
+            'add_paramavance("ParamMode", "Paramétres (ex: 20011111111111111011111111)", "20011111111111111011111111")
             'add_paramavance("AutoDiscover", "Permet de créer automatiquement des composants si ceux-ci n'existent pas encore (True/False)", False)
+            add_paramavance("Frequence", "Frequence utilisée : 0=310, 1=315, 2=433, 3=868.30, 4=868.30 FSK, 5=868.35, 6=868.35 FSK, 7=868.95", 2)
+            add_paramavance("Protocole Undec", "Protocole UNDEC 0=disable 1=enable", 0)
+            add_paramavance("Protocole Novatis", "0=disable 1=enable", 0)
+            add_paramavance("Protocole Proguard", "0=disable 1=enable", 1)
+            add_paramavance("Protocole FS20", "0=disable 1=enable", 1)
+            add_paramavance("Protocole Lacrosse", "0=disable 1=enable", 1)
+            add_paramavance("Protocole Hideki", "0=disable 1=enable", 1)
+            add_paramavance("Protocole AD", "0=disable 1=enable", 1)
+            add_paramavance("Protocole Mertik", "0=disable 1=enable", 1)
+            add_paramavance("Protocole Visonic", "0=disable 1=enable", 1)
+            add_paramavance("Protocole ATI", "0=disable 1=enable", 1)
+            add_paramavance("Protocole oregon", "0=disable 1=enable", 1)
+            add_paramavance("Protocole meiantech", "0=disable 1=enable", 1)
+            add_paramavance("Protocole heeu", "0=disable 1=enable", 1)
+            add_paramavance("Protocole AC", "0=disable 1=enable", 1)
+            add_paramavance("Protocole ARC", "0=disable 1=enable", 1)
+            add_paramavance("Protocole X10", "0=disable 1=enable", 1)
+            add_paramavance("Protocole Blinds t0", "0=disable 1=enable", 0)
+            add_paramavance("Protocole RFU6", "0=disable 1=enable", 1)
+            add_paramavance("Protocole RFU5", "0=disable 1=enable", 1)
+            add_paramavance("Protocole RFU4", "0=disable 1=enable", 1)
+            add_paramavance("Protocole Lighting4", "0=disable 1=enable", 1)
+            add_paramavance("Protocole Fineoffset", "0=disable 1=enable", 1)
+            add_paramavance("Protocole Rubicson", "0=disable 1=enable", 1)
+            add_paramavance("Protocole AE", "0=disable 1=enable", 1)
+            add_paramavance("Protocole Blinds t1", "0=disable 1=enable", 1)
 
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
@@ -1751,7 +1861,8 @@ Imports System.Media
             SendCommand(ICMD.cmdRESET, "Reset receiver/transceiver:")
             System.Threading.Thread.Sleep(2000)
             'configure Transceiver mode
-            SetMode(_PARAMMODE)
+            'SetMode(_PARAMMODE)
+            SetMode2()
             System.Threading.Thread.Sleep(2000)
 
             dateheurelancement = DateTime.Now
@@ -4194,6 +4305,77 @@ Imports System.Media
 
 #Region "Send messages"
 
+    Private Sub SetMode2()
+        Try
+            Dim temp As String = ""
+
+            Dim kar(ICMD.size) As Byte
+            kar(ICMD.packetlength) = ICMD.size
+            kar(ICMD.packettype) = ICMD.pTypeInterfaceControl
+            kar(ICMD.subtype) = ICMD.sTypeInterfaceCommand
+            kar(ICMD.seqnbr) = bytSeqNbr
+            kar(ICMD.cmnd) = ICMD.cmdSETMODE
+
+            'type frequence
+            Select Case _PARAMMODE_1_frequence
+                Case 0 : kar(ICMD.msg1) = IRESPONSE.recType310
+                Case 1 : kar(ICMD.msg1) = IRESPONSE.recType315
+                Case 2 : kar(ICMD.msg1) = IRESPONSE.recType43392
+                Case 3 : kar(ICMD.msg1) = IRESPONSE.recType86830
+                Case 4 : kar(ICMD.msg1) = IRESPONSE.recType86830FSK
+                Case 5 : kar(ICMD.msg1) = IRESPONSE.recType86835
+                Case 6 : kar(ICMD.msg1) = IRESPONSE.recType86835FSK
+                Case 7 : kar(ICMD.msg1) = IRESPONSE.recType86895
+            End Select
+
+            'UNDEC
+            If _PARAMMODE_2_undec = 1 Then kar(ICMD.msg3) = &H80 Else kar(ICMD.msg3) = 0
+
+            If _PARAMMODE_18_blindst0 = 1 Then
+                'All other protocol receiving is disabled if BlindsT0 enabled, BlindsT0 receive is only used to read the address code of the remote
+                kar(ICMD.msg4) = 0
+                kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_BlindsT0
+                kar(ICMD.msg5) = 0
+            Else
+                If _PARAMMODE_19_rfu6 = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RFU6
+                If _PARAMMODE_20_rfu5 = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RFU5
+                If _PARAMMODE_21_rfu4 = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RFU4
+                If _PARAMMODE_22_lighting4 = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_LIGHTING4
+                If _PARAMMODE_23_fineoffset = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_FINEOFFSET
+                If _PARAMMODE_24_rubicson = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RUBICSON
+                If _PARAMMODE_25_ae = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_AE
+
+                kar(ICMD.msg4) = 0
+                If _PARAMMODE_26_blindst1 = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_BlindsT1
+                If _PARAMMODE_4_proguard = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_PROGUARD
+                If _PARAMMODE_5_fs20 = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_FS20
+                If _PARAMMODE_6_lacrosse = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_LCROS
+                If _PARAMMODE_7_hideki = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_HID
+                If _PARAMMODE_8_ad = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_AD
+                If _PARAMMODE_9_mertik = 1 Then kar(ICMD.msg4) = kar(ICMD.msg4) Or IRESPONSE.msg4_MERTIK
+
+                kar(ICMD.msg5) = 0
+                If _PARAMMODE_10_visonic = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_VISONIC
+                If _PARAMMODE_11_ati = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_ATI
+                If _PARAMMODE_12_oregon = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_OREGON
+                If _PARAMMODE_13_meiantech = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_MEI
+                If _PARAMMODE_14_heeu = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_HEU
+                If _PARAMMODE_15_ac = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_AC
+                If _PARAMMODE_16_arc = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_ARC
+                If _PARAMMODE_17_x10 = 1 Then kar(ICMD.msg5) = kar(ICMD.msg5) Or IRESPONSE.msg5_X10
+
+            End If
+            If _DEBUG Then
+                For Each bt As Byte In kar
+                    temp = temp & VB.Right("0" & Hex(bt), 2) & " "
+                Next
+                WriteLog("DBG: Setmode : Commande envoyée : " & temp)
+            End If
+            ecrire(kar)
+        Catch ex As Exception
+            WriteLog("ERR: SetMode Exception : " & ex.Message)
+        End Try
+    End Sub
     Private Sub SetMode(ByVal paramMode As String)
         Try
             Dim temp As String = ""
