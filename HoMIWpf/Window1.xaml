@@ -58,9 +58,9 @@
             <Image Stretch="Fill" Name="ImgBackground" Margin="0,-30,0,-130" />
     </DockPanel>
         <DockPanel >
-            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top"  Name="StkTop" Margin="0,0,1,0" Background="#66000000">
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Top"  Name="StkTop" Margin="0,0,1,0" Background="#3A000000">
                 <StackPanel Background="#FF5F5F5F">
-                    <Image Name="Menu1" Height="40" Width="40" Source="/HoMIWpF;component/Images/Rond_32x32.png" >
+                    <Image Name="Menu1" Height="40" Width="40" Margin="3" Source="/HoMIWpF;component/Images/Rond_32x32.png" >
                         <Image.ContextMenu >
                             <ContextMenu Name="CtxMnuBtn"> 
                             <MenuItem Name="Chk1" Header="Déplacer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" FontSize="10">
@@ -137,10 +137,10 @@
                 <Label Margin="1" Name="LblTime" FontSize="10" Foreground="White" FlowDirection="RightToLeft">#####</Label>
                 <Rectangle Width="100" Margin="0,-1,0,1" />
                 <Image Margin="1" Name="ImageLeve" Stretch="Fill" Tag="Soleil" HorizontalAlignment="Right" Width="20"  Height="20" Source="/HoMIWpF;component/Images/01.png" />
-                <Label Margin="1" Name="LblLeve" HorizontalAlignment="Right" Tag="Soleil" Foreground="White" FontSize="10">?</Label>
+                <Label Margin="1" Name="LblLeve" HorizontalAlignment="Right" Tag="Soleil" Foreground="White" FontSize="10" VerticalContentAlignment="Center">?</Label>
                 <Image HorizontalAlignment="Left" Margin="1" Name="ImageCouche" Stretch="Fill" Tag="Soleil" Width="20"  Height="20" Source="/HoMIWpF;component/Images/36.png" />
-                <Label Foreground="White" HorizontalAlignment="Left" Margin="1" Name="LblCouche" Tag="Soleil" FontSize="10">?</Label>
-                <Image HorizontalAlignment="Left" Margin="30,0,0,0" Name="ImgMess" Stretch="Fill" Width="20"  Height="20" Source="/HoMIWpF;component/Images/Warning.png" Visibility="Collapsed" />
+                <Label Foreground="White" HorizontalAlignment="Left" Margin="1" Name="LblCouche" Tag="Soleil" FontSize="10" VerticalContentAlignment="Center">?</Label>
+                <Image HorizontalAlignment="Left" Margin="30,1,1,1" Name="ImgMess" Stretch="Fill" Width="20"  Height="20" Source="/HoMIWpF;component/Images/Warning.png" Visibility="Collapsed" />
             </StackPanel>
             <StackPanel DockPanel.Dock="Bottom" Name="StkBottom">
                 <local:AniScrollViewer  x:Name="ScrollViewer1" Margin="2" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" BorderBrush="DarkGray" Background="#99000000" >
@@ -148,7 +148,6 @@
                     <local:AniScrollViewer.RenderTransform>
                         <TransformGroup >
                             <TranslateTransform x:Name="ttAnimationTarget_Rect" X="0" Y="0" />
-                            <!--<TranslateTransform x:Name="ttAnimationTarget_Rect2" X="0" Y="-200" />-->
                         </TransformGroup>
                     </local:AniScrollViewer.RenderTransform>
                 </local:AniScrollViewer> 
@@ -159,7 +158,7 @@
             </StackPanel>    
             <Canvas Margin="1" Name="Canvas1" ClipToBounds="True" SnapsToDevicePixels="True"/>
         </DockPanel>
-        <Button DockPanel.Dock="right" Height="23" Margin="2,2,5,2" x:Name="BtnQuit"  Width="23"  VerticalAlignment="Top"  Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" >
+        <Button DockPanel.Dock="right" Height="30" Margin="2,2,5,2" x:Name="BtnQuit"  Width="30"  VerticalAlignment="Top"  Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" >
             <Image Source="/HoMIWpF;component/Images/btnQuitter_32.png" />
         </Button>
     </Grid> 
