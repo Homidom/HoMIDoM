@@ -30,6 +30,7 @@ Public Class WConfig
         Frm.AsTimeOutPage = ChkTimeOutPage.IsChecked
         Frm.TimeOutPage = CInt(CbTimeOutPage.Text)
         Frm.DefautPage = CbPageDefaut.Text
+        Frm.MaskTaskMnu = ChkMaskTaskMnu.IsChecked
 
         DialogResult = True
     End Sub
@@ -59,6 +60,7 @@ Public Class WConfig
         TxtID.Text = IdSrv
         ChkAffLastError.IsChecked = Frm.AffLastError
         ChkTimeOutPage.IsChecked = Frm.AsTimeOutPage
+        ChkMaskTaskMnu.IsChecked = Frm.MaskTaskMnu
         If Frm.TimeOutPage >= 0 Then CbTimeOutPage.Text = Frm.TimeOutPage
 
         ListMnu.Items.Clear()
@@ -143,7 +145,7 @@ Public Class WConfig
             End If
 
             If MyListMnu.Item(ListMnu.SelectedIndex).Defaut = True Then
-                ListMnu.ContextMenu.Items(1).isenabled = False
+                BtnNewMnu.ContextMenu.Items(1).isenabled = False
                 TxtName.Text = MyListMnu.Item(ListMnu.SelectedIndex).Text
                 LblType.Content = MyListMnu.Item(ListMnu.SelectedIndex).Type.ToString
                 TxtImage.Text = MyListMnu.Item(ListMnu.SelectedIndex).Icon
@@ -157,7 +159,7 @@ Public Class WConfig
                 End If
 
             Else
-                ListMnu.ContextMenu.Items(1).isenabled = True
+                BtnNewMnu.ContextMenu.Items(1).isenabled = True
                 TxtName.Text = MyListMnu.Item(ListMnu.SelectedIndex).Text
                 LblType.Content = MyListMnu.Item(ListMnu.SelectedIndex).Type.ToString
                 If Frm.ListMnu.Item(ListMnu.SelectedIndex).Type <> uCtrlImgMnu.TypeOfMnu.Zone Then
@@ -299,6 +301,13 @@ Public Class WConfig
     End Sub
 
     Private Sub MnuAddMedia_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuAddMedia.Click
+        For i As Integer = 0 To MyListMnu.Count - 1
+            If MyListMnu.Item(i).Type = uCtrlImgMnu.TypeOfMnu.LecteurMedia Then
+                MessageBox.Show("Vous ne pouvez plus ajouter de menu Media car il en existe déjà un ! ")
+                Exit Sub
+            End If
+        Next
+
         TxtName.Text = ""
         LblType.Content = uCtrlImgMnu.TypeOfMnu.LecteurMedia.ToString
         TxtImage.Text = ""
@@ -308,22 +317,6 @@ Public Class WConfig
         StkParam.Visibility = Windows.Visibility.Hidden
         StkProperty.Visibility = Windows.Visibility.Visible
         FlagNewMnu = 4
-    End Sub
-
-    'Supprimer un menu
-    Private Sub MenuItem1_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem1.Click
-        Try
-            If ListMnu.SelectedIndex < 0 Then Exit Sub
-            If MyListMnu.Item(ListMnu.SelectedIndex).Type = uCtrlImgMnu.TypeOfMnu.Zone Then
-                MessageBox.Show("Une zone ne peut être supprimée, veuillez sélectionner sa propriété visible pour la cacher dans les menus")
-                Exit Sub
-            End If
-            MyListMnu.RemoveAt(ListMnu.SelectedIndex)
-            ListMnu.Items.RemoveAt(ListMnu.SelectedIndex)
-            StkProperty.Visibility = Windows.Visibility.Hidden
-        Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur WConfig.MenuItem1_Click: " & ex.ToString, "Erreur", "WConfig.MenuItem1_Click")
-        End Try
     End Sub
 
     Private Sub BtnUP_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnUP.Click
@@ -386,5 +379,37 @@ Public Class WConfig
             CbPageDefaut.IsEnabled = False
             CbTimeOutPage.IsEnabled = False
         End If
+    End Sub
+
+    ''' <summary>
+    ''' Supprimer un menu
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub BtnDel_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDel.Click
+        Try
+            If ListMnu.SelectedIndex < 0 Then Exit Sub
+            If MyListMnu.Item(ListMnu.SelectedIndex).Type = uCtrlImgMnu.TypeOfMnu.Zone Then
+                MessageBox.Show("Une zone ne peut être supprimée, veuillez sélectionner sa propriété visible pour la cacher dans les menus")
+                Exit Sub
+            End If
+            MyListMnu.RemoveAt(ListMnu.SelectedIndex)
+            ListMnu.Items.RemoveAt(ListMnu.SelectedIndex)
+            StkProperty.Visibility = Windows.Visibility.Hidden
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur WConfig.MenuItem1_Click: " & ex.ToString, "Erreur", "WConfig.MenuItem1_Click")
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Afficher le menu Ajouter Menu
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub BtnNewMnu_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewMnu.Click
+        CtxMnuBtn.PlacementTarget = sender
+        CtxMnuBtn.IsOpen = True
     End Sub
 End Class

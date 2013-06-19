@@ -53,6 +53,8 @@
                             <TextBox Name="TxtPassword" Margin="5,0,0,0" Width="100" MaxLength="12" />
                         </StackPanel>
                         <CheckBox Name="ChkAffLastError" Foreground="White" Content=" Afficher Message"/>
+                        <CheckBox Name="ChkMaskTaskMnu" Foreground="White" Content="Masquer automatiquement la barre de menu"/>
+
                         <StackPanel Orientation="Horizontal" >
                             <CheckBox Name="ChkTimeOutPage" Foreground="White" Content="Gérer TimeOut des Pages"/>
                             <Label Margin="15,0,0,0" Content="Timeout:" Foreground="White" />
@@ -104,20 +106,24 @@
                                 </Button>
                                 <Button Name="BtnDown"  Height="25" Width="25" Margin="2" IsEnabled="False" Template="{DynamicResource GlassButton}" >
                                     <Image Source="/HoMIWpF;component/Images/fleche-bas.png" />
-                                    </Button> 
+                                    </Button>
+                                <Button Name="BtnNewMnu"  Height="25" Width="25" Margin="2" IsEnabled="True" Template="{DynamicResource GlassButton}" >
+                                    <Image Source="/HoMIWpF;component/Images/ajouter_32.png" />
+                                    <Button.ContextMenu>
+                                        <ContextMenu Name="CtxMnuBtn">
+                                                <MenuItem Name="MnuAddInternet" Header="Page Internet"/>
+                                                <MenuItem Name="MnuAddMeteo" Header="Meteo"/>
+                                                <MenuItem Name="MnuAddMedia" Header="Lecteur Audio"/>
+                                        </ContextMenu>
+                                    </Button.ContextMenu>
+                                </Button>
+
+                                <Button Name="BtnDel"  Height="25" Width="25" Margin="2" IsEnabled="True" Template="{DynamicResource GlassButton}" >
+                                    <Image Source="/HoMIWpF;component/Images/Supprimer_32.png" />
+                                </Button>
+
                             </StackPanel>
-                        <ListBox Name="ListMnu" MinHeight=" 150" MinWidth=" 120">
-                            <ListBox.ContextMenu>
-                                <ContextMenu >
-                                    <MenuItem Name="MnuAdd" Header="Ajouter" >
-                                        <MenuItem Name="MnuAddInternet" Header="Page Internet"/>
-                                        <MenuItem Name="MnuAddMeteo" Header="Meteo"/>
-                                            <MenuItem Name="MnuAddMedia" Header="Lecteur Audio"/>
-                                        </MenuItem> 
-                                    <MenuItem Header="Supprimer" Name="MenuItem1" />
-                                </ContextMenu> 
-                            </ListBox.ContextMenu>
-                        </ListBox>
+                        <ListBox Name="ListMnu" MinHeight=" 150" MinWidth=" 120" Height="186"/>
                         </StackPanel>
                     </GroupBox >
                     <GroupBox Header="Propriétés" Margin="2" MinWidth="150" Foreground="White">
@@ -127,7 +133,7 @@
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
                                 <Label Content="Label: " MinWidth="50" Foreground="White"/>
-                            <TextBox Name="TxtName" Width=" 150" MaxHeight=" 20"/>
+                            <TextBox Name="TxtName" Width=" 150" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
                                 <Label Content="Type: " MinWidth="50" Foreground="White"/>
@@ -138,12 +144,12 @@
                             </StackPanel>
                             <StackPanel Name="StkImage" Orientation="Horizontal" VerticalAlignment="Top">
                                 <Label Content="Image: " MinWidth="50" Foreground="White"/>
-                                <TextBox Name="TxtImage" Width=" 150" Height=" 25" />
+                                <TextBox Name="TxtImage" Width=" 150" Height=" 28" />
                                 <Button Content="..." Width="35" Height="35" Margin="2" Name="Button1" Template="{DynamicResource GlassButton}" Foreground=" White"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Visibility="Hidden" Name="StkParam">
                                 <Label Content="###: " Name="LblParam" MinWidth="50" Foreground="White"/>
-                                <TextBox Name="TxtParam" Width=" 150" MaxHeight=" 20"/>
+                                <TextBox Name="TxtParam" Width=" 150" />
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="4" HorizontalAlignment="Center"  >
                                 <Button Content="Ok" Width="50" Height="35"  Name="BtnOkMnu" Margin="2" Template="{DynamicResource GlassButton}" Foreground=" White"/>
