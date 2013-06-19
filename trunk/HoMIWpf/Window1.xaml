@@ -7,38 +7,36 @@
 
     <Window.Resources>
 
-        <!-- The Rectangle's animation (path) -->
-        <Storyboard x:Key="sb_Rect">
-            <!-- The X-axis animation -->
-            <DoubleAnimationUsingPath 
+        <ResourceDictionary >
+            <Storyboard x:Key="sb_Rect">
+                <!-- The X-axis animation -->
+                <DoubleAnimationUsingPath 
+               Storyboard.TargetName="ttAnimationTarget_Rect" 
+               Storyboard.TargetProperty="Y" 
+               Source="Y" 
+               Duration="0:0:0.4" 
+               RepeatBehavior="1x"
+                AutoReverse="False">
+                    <DoubleAnimationUsingPath.PathGeometry>
+                        <PathGeometry Figures="M0,0 L0,200"/>
+                    </DoubleAnimationUsingPath.PathGeometry>
+                </DoubleAnimationUsingPath>
+            </Storyboard>
+            <Storyboard x:Key="sb_Rect2">
+                <!-- The X-axis animation -->
+                <DoubleAnimationUsingPath 
                Storyboard.TargetName="ttAnimationTarget_Rect" 
                Storyboard.TargetProperty="Y" 
                Source="Y" 
                Duration="0:0:0.4" 
                RepeatBehavior="1x" 
+                DecelerationRatio="0.6"
                AutoReverse="False">
-                <DoubleAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M0,0 L0,200"/>
-                </DoubleAnimationUsingPath.PathGeometry>
-            </DoubleAnimationUsingPath>
-        </Storyboard>
-        <Storyboard x:Key="sb_Rect2">
-            <!-- The X-axis animation -->
-            <DoubleAnimationUsingPath 
-               Storyboard.TargetName="ttAnimationTarget_Rect" 
-               Storyboard.TargetProperty="Y" 
-               Source="Y" 
-               Duration="0:0:0.4" 
-               RepeatBehavior="1x" 
-               AutoReverse="False">
-                <DoubleAnimationUsingPath.PathGeometry>
-                    <PathGeometry Figures="M0,200 L0,0"/>
-                </DoubleAnimationUsingPath.PathGeometry>
-            </DoubleAnimationUsingPath>
-        </Storyboard>
-
-        <ResourceDictionary x:Key="sb">
-            
+                    <DoubleAnimationUsingPath.PathGeometry>
+                        <PathGeometry Figures="M0,200 L0,0"/>
+                    </DoubleAnimationUsingPath.PathGeometry>
+                </DoubleAnimationUsingPath>
+            </Storyboard>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/DesignerItem.xaml"/>
                 <ResourceDictionary Source="Resources/SizeChrome.xaml"/>

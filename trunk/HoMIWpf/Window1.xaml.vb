@@ -1541,6 +1541,7 @@ Class Window1
     Private Sub ScrollViewer1_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles ScrollViewer1.MouseLeave
         If _MaskTaskMnu Then
             If _flagIsShowScroll = True Then
+                Thread.Sleep(2000)
                 _flagIsShowScroll = False
                 Dim st2 As Storyboard = TryFindResource("sb_Rect")
                 ScrollViewer1.BeginStoryboard(st2)

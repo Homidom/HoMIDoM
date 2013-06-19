@@ -2158,7 +2158,18 @@ Public Class uWidgetEmpty
                     ' L'image n'a pas été trouvée en local, on la reprend du serveur
                     ImageBehavior.SetAnimatedSource(Image, ConvertArrayToImage(myService.GetByteFromImage(_Picture)))
                 End If
-            End If
+            ElseIf _type = TypeOfWidget.Device And _Visuel.Count = 0 Then
+                If String.IsNullOrEmpty(_Picture) = False Then
+                    ' Affichage de l'image pour un widget device s'il n'existe aucune visualisation
+                    If IO.File.Exists(_Picture) Then
+                        ' L'image existe en local
+                        ImageBehavior.SetAnimatedSource(Image, New BitmapImage(New Uri(_Picture)))
+                    Else
+                        ' L'image n'a pas été trouvée en local, on la reprend du serveur
+                        ImageBehavior.SetAnimatedSource(Image, ConvertArrayToImage(myService.GetByteFromImage(_Picture)))
+                    End If
+                End If
+                End If
 
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.LoadPicture: " & ex.Message, "Erreur", " uWidgetEmpty.LoadPicture")
