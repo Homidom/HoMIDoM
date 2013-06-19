@@ -138,10 +138,6 @@ uReleve
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIWpF.Customcontrols.Colorpicker">
-	<summary>
-Colorpicker
-</summary>
 </member><member name="M:HoMIWpF.uVariateur.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -346,6 +342,20 @@ uCtrlImgMnu
  </summary>
 	<param name="FileChm">chemin du fichier</param>
 	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIWpF.WConfig.BtnDel_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Supprimer un menu
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIWpF.WConfig.BtnNewMnu_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Afficher le menu Ajouter Menu
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
 	<remarks></remarks>
 </member><member name="P:HoMIWpF.My.MyWpfExtension.Application">
 	<summary>

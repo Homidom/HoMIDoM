@@ -22,6 +22,7 @@ Imports System.Web.HttpUtility
 Imports System.Windows.Controls.Primitives
 Imports HoMIWpF.Designer
 Imports HoMIWpF.Designer.ResizeRotateAdorner
+Imports System.Windows.Media.Animation
 #End Region
 
 
@@ -35,6 +36,8 @@ Class Window1
     Public imgStackPnl As New StackPanel()
     Dim FlagMsgDeconnect As Boolean = False
     Private Shared lock_logwrite As New Object
+    Dim _flagIsShowScroll As Boolean = True
+    Dim _MaskTaskMnu As Boolean = False
 
     'Paramètres de connexion à HomeSeer
     Dim _Serveur As String = ""
@@ -142,6 +145,22 @@ Class Window1
         End Get
         Set(ByVal value As Boolean)
             _ShowTemperature = value
+        End Set
+    End Property
+
+    Public Property MaskTaskMnu As Boolean
+        Get
+            Return _MaskTaskMnu
+        End Get
+        Set(ByVal value As Boolean)
+            _MaskTaskMnu = value
+            If value Then
+                If _flagIsShowScroll = True Then
+                    _flagIsShowScroll = False
+                    Dim st2 As Storyboard = TryFindResource("sb_Rect")
+                    ScrollViewer1.BeginStoryboard(st2)
+                End If
+            End If
         End Set
     End Property
 
@@ -389,6 +408,7 @@ Class Window1
             'Mise en forme du scrollviewer
             ScrollViewer1.Content = imgStackPnl
 
+
             'Timer pour afficher la date & heure et levé/couché soleil
             Dim dt As DispatcherTimer = New DispatcherTimer()
             AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
@@ -549,6 +569,8 @@ Class Window1
                             _AsTimeOutPage = list.Item(0).Attributes.Item(j).Value
                         Case "timeoutpage"
                             _TimeOutPage = list.Item(0).Attributes.Item(j).Value
+                        Case "masktaskmenu"
+                            _MaskTaskMnu = list.Item(0).Attributes.Item(j).Value
                         Case "defautpage"
                             _DefautPage = list.Item(0).Attributes.Item(j).Value
                         Case Else
@@ -923,6 +945,9 @@ Class Window1
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("defautpage")
             writer.WriteValue(_DefautPage)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("masktaskmenu")
+            writer.WriteValue(_MaskTaskMnu)
             writer.WriteEndAttribute()
             writer.WriteEndElement()
 
@@ -1406,6 +1431,13 @@ Class Window1
     Private Sub IconMnuDoubleClick(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
         Try
             Me.Cursor = Cursors.Wait
+
+            If _MaskTaskMnu Then
+                _flagIsShowScroll = False
+                Dim st As Storyboard = TryFindResource("sb_Rect")
+                ScrollViewer1.BeginStoryboard(st)
+            End If
+
             _TimeMouseDown = Now
 
             If sender.type <> uCtrlImgMnu.TypeOfMnu.LecteurMedia Then
@@ -1505,6 +1537,17 @@ Class Window1
             Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Erreur Lors de la fermeture: " & ex.Message)
         End Try
     End Sub
+
+    Private Sub ScrollViewer1_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles ScrollViewer1.MouseLeave
+        If _MaskTaskMnu Then
+            If _flagIsShowScroll = True Then
+                _flagIsShowScroll = False
+                Dim st2 As Storyboard = TryFindResource("sb_Rect")
+                ScrollViewer1.BeginStoryboard(st2)
+            End If
+        End If
+    End Sub
+
 
     Private Sub ScrollViewer1_PreviewMouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ScrollViewer1.PreviewMouseDown
         scrollStartPoint = e.GetPosition(Me)
@@ -2450,6 +2493,7 @@ Class Window1
     End Sub
 
 
+
 #Region "Quitter"
     'Bouton Quitter
     Private Sub BtnQuit_Click_1(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnQuit.Click
@@ -2503,6 +2547,16 @@ Class Window1
             If e.GetPosition(Me) <> _MousePosition Then
                 _TimeMouseDown = Now
                 _MousePosition = e.GetPosition(Me)
+            End If
+        End If
+    End Sub
+
+    Private Sub Keyboard1_MouseEnter(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Keyboard1.MouseEnter
+        If _MaskTaskMnu Then
+            If _flagIsShowScroll = False Then
+                _flagIsShowScroll = True
+                Dim st2 As Storyboard = TryFindResource("sb_Rect2")
+                ScrollViewer1.BeginStoryboard(st2)
             End If
         End If
     End Sub
