@@ -166,17 +166,9 @@ Class Window1
         Set(ByVal value As Boolean)
             _MaskTaskMnu = value
             If value Then
-                If _flagIsShowScroll = True Then
-                    _flagIsShowScroll = False
-                    Dim st2 As Storyboard = TryFindResource("sb_Rect")
-                    ScrollViewer1.BeginStoryboard(st2)
-                End If
+                Aff_TaskMnu()
             Else
-                If _flagIsShowScroll = False Then
-                    _flagIsShowScroll = True
-                    Dim st2 As Storyboard = TryFindResource("sb_Rect2")
-                    ScrollViewer1.BeginStoryboard(st2)
-                End If
+                DesAff_TaskMnu()
             End If
         End Set
     End Property
@@ -1449,11 +1441,7 @@ Class Window1
         Try
             Me.Cursor = Cursors.Wait
 
-            If _MaskTaskMnu Then
-                _flagIsShowScroll = False
-                Dim st As Storyboard = TryFindResource("sb_Rect")
-                ScrollViewer1.BeginStoryboard(st)
-            End If
+            DesAff_TaskMnu()
 
             _TimeMouseDown = Now
 
@@ -1556,14 +1544,7 @@ Class Window1
     End Sub
 
     Private Sub ScrollViewer1_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles ScrollViewer1.MouseLeave
-        If _MaskTaskMnu Then
-            If _flagIsShowScroll = True Then
-                Thread.Sleep(2000)
-                _flagIsShowScroll = False
-                Dim st2 As Storyboard = TryFindResource("sb_Rect")
-                ScrollViewer1.BeginStoryboard(st2)
-            End If
-        End If
+        DesAff_TaskMnu()
     End Sub
 
 
@@ -1615,6 +1596,7 @@ Class Window1
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur LoadZones: " & ex.Message, "Erreur", "LoadZones")
         End Try
     End Sub
+
     Public Sub ShowZone(ByVal IdZone As String)
         Try
             'Gestion de l'erreur si le serveur n'est pas connecté
@@ -1929,7 +1911,6 @@ Class Window1
     End Sub
 
     Private Sub ModeEdition_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk2.Click
-
         Try
 
             If Chk2.IsChecked = True Then
@@ -2476,29 +2457,6 @@ Class Window1
         End Try
     End Sub
 
-    'Private Sub MenuItem1_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles MenuItem1.Click
-    '    Try
-    '        MnuLastError.Items.Clear()
-
-    '        If IsConnect Then
-    '            Dim list As List(Of String) = myService.GetLastLogsError
-    '            If list.Count > 0 Then
-    '                Dim _tool As String = ""
-    '                For Each logerror As String In list
-    '                    If String.IsNullOrEmpty(logerror) = False Then
-    '                        Dim mnu As New MenuItem
-    '                        mnu.Header = logerror
-    '                        mnu.FontSize = 10
-    '                        MnuLastError.Items.Add(mnu)
-    '                    End If
-    '                Next
-    '            End If
-    '            list = Nothing
-    '        End If
-    '    Catch ex As Exception
-    '        AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur MenuItem1_Click: " & ex.Message, "Erreur", "MenuItem1_Click")
-    '    End Try
-    'End Sub
 #End Region
 
 
@@ -2559,6 +2517,13 @@ Class Window1
     End Function
 #End Region
 
+    Private Sub Window1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Me.MouseDown
+        If _flagIsShowScroll Then
+            DesAff_TaskMnu()
+        Else
+            Aff_TaskMnu()
+        End If
+    End Sub
 
     Private Sub Window1_MouseMove(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Me.MouseMove
         If _AsTimeOutPage Then
@@ -2570,22 +2535,15 @@ Class Window1
     End Sub
 
     Private Sub Keyboard1_MouseEnter(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Keyboard1.MouseEnter
-        If _MaskTaskMnu Then
-            If _flagIsShowScroll = False Then
-                _flagIsShowScroll = True
-                Dim st2 As Storyboard = TryFindResource("sb_Rect2")
-                ScrollViewer1.BeginStoryboard(st2)
-            End If
-        End If
+        Aff_TaskMnu()
     End Sub
 
     Private Sub Menu1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Menu1.MouseDown
         CtxMnuBtn.PlacementTarget = sender
         CtxMnuBtn.IsOpen = True
 
-        MnuLastError.Items.Clear()
-
         If IsConnect Then
+            MnuLastError.Items.Clear()
             Dim list As List(Of String) = myService.GetLastLogsError
             If list.Count > 0 Then
                 Dim _tool As String = ""
@@ -2601,4 +2559,37 @@ Class Window1
             list = Nothing
         End If
     End Sub
+
+#Region "TaskMenu"
+    ''' <summary>
+    ''' Disapparaitre la barre de menu du bas
+    ''' </summary>
+    ''' <remarks></remarks>
+    Sub DesAff_TaskMnu()
+        If _MaskTaskMnu Then
+            If _flagIsShowScroll Then
+                _flagIsShowScroll = False
+                Dim st As Storyboard = TryFindResource("sb_Rect")
+                ScrollViewer1.BeginStoryboard(st)
+            End If
+        End If
+    End Sub
+
+    ''' <summary>
+    ''' fait apparaitre la barre de menu du bas
+    ''' </summary>
+    ''' <remarks></remarks>
+    Sub Aff_TaskMnu()
+        If _MaskTaskMnu Then
+            If _flagIsShowScroll = False Then
+                _flagIsShowScroll = True
+                Dim st2 As Storyboard = TryFindResource("sb_Rect2")
+                ScrollViewer1.BeginStoryboard(st2)
+            End If
+        End If
+    End Sub
+#End Region
+
+   
+
 End Class

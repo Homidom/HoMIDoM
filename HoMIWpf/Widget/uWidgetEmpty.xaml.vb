@@ -2196,4 +2196,7 @@ Public Class uWidgetEmpty
 
     End Sub
 
+    Private Sub Popup1_MouseLeave(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Popup1.MouseLeave
+        Popup1.IsOpen = False
+    End Sub
 End Class

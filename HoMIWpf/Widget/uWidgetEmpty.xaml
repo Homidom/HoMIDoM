@@ -4,14 +4,13 @@
     
     <Grid >
 
-        <Border Name="Border1" CornerRadius="5" Background="#FF000000">
+        <Border Name="Border1" CornerRadius="6" Background="#FF000000">
             
             <StackPanel Name="Stk1">
                 <Popup Margin="2" Name="Popup1" HorizontalAlignment="Left" VerticalAlignment="Top"  
                        IsOpen="False">
-                    <StackPanel Name="StkPopup" Background="#FF312D2D" MaxWidth="300" MinHeight="50">
+                    <StackPanel Name="StkPopup" Background="#44312D2D" MaxWidth="300" MinHeight="50"/>
            
-                    </StackPanel>
                 </Popup>
                 
                 <Label Name="Lbl" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" FontSize="9" Foreground="White" >?</Label>
