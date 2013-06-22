@@ -332,7 +332,11 @@ Class Window1
 
     Private Sub StkTop_MouseLeftButtonDown(ByVal sender As Object, ByVal e As MouseButtonEventArgs) Handles StkTop.MouseLeftButtonDown
         Try
-            DragMove()
+            Dim pt As System.Windows.Point
+            pt = e.GetPosition(sender)
+            If pt.X > 40 Then
+                DragMove()
+            End If
 
         Catch ex As Exception
         End Try
