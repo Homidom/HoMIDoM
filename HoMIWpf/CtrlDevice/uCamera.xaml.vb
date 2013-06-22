@@ -74,7 +74,7 @@ Public Class uCamera
             If String.IsNullOrEmpty(x.URL) = False Then
                 Dim reader As StreamReader = Nothing
                 Dim str As String = ""
-                Dim request As WebRequest = WebRequest.Create(URL)
+                Dim request As WebRequest = WebRequest.Create(x.URL)
                 Dim response As WebResponse = request.GetResponse()
 
                 reader = New StreamReader(response.GetResponseStream())
