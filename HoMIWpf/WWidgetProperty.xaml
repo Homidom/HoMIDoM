@@ -15,6 +15,7 @@
                 </GroupBox.Header>
                     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                         <StackPanel >
+                            <CheckBox  Name="ChkMajEtiq" Content="Mettre à jour Etiquette depuis le serveur automatiquement " Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                             <CheckBox  Name="ChkShowEtiq" Content="Afficher Etiquette" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                             <CheckBox Name="ChkShowStatus" Content="Afficher Status" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                             <CheckBox  Name="ChkFondu" Content="Fondu" Foreground="White" Background="DarkGray" BorderBrush="Black"/>

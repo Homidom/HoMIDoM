@@ -266,6 +266,13 @@ InitializeComponent
 	<summary>
 uCtrlImgMnu
 </summary>
+</member><member name="P:HoMIWpF.uWidgetEmpty.MaJEtiquetteFromServeur">
+	<summary>
+ Mettre à jour l'étiquette automatiquement depuis le serveur
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="T:HoMIWpF.Customcontrols.Colorpicker">
 	<summary>
  Interaction logic for Colorpicker.xaml
