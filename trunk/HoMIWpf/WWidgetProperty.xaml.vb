@@ -18,6 +18,7 @@ Public Class WWidgetProperty
 
             Try
                 ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
+                ChkMajEtiq.IsChecked = Obj.MaJEtiquetteFromServeur
                 ChkShowStatus.IsChecked = Obj.ShowStatus
                 ChkShowEtiq.IsChecked = Obj.ShowEtiquette
                 ChkEditValue.IsChecked = Obj.CanEditValue
@@ -61,7 +62,7 @@ Public Class WWidgetProperty
                     BtnDelete.Visibility = Windows.Visibility.Collapsed
                     ImgPicture.IsEnabled = False
                     BtnInitPict.Visibility = Windows.Visibility.Visible
-                    TxtEtiq.IsReadOnly = True
+                    'TxtEtiq.IsReadOnly = True
                 Else
                     Select Case Obj.Type
                         Case uWidgetEmpty.TypeOfWidget.Empty
@@ -144,7 +145,6 @@ Public Class WWidgetProperty
                             BtnDelete.Visibility = Windows.Visibility.Visible
                             GrpPropertyHttp.Visibility = Windows.Visibility.Visible
                             Refresh_LstHttpBtn()
-
                         Case uWidgetEmpty.TypeOfWidget.Rss
                             StkPicture.Visibility = Visibility.Collapsed
                             StkStatus.Visibility = Visibility.Collapsed
@@ -236,6 +236,7 @@ Public Class WWidgetProperty
             Obj.ShowEtiquette = ChkShowEtiq.IsChecked
             Obj.ShowPicture = ChkPicture.IsChecked
             Obj.CanEditValue = ChkEditValue.IsChecked
+            Obj.MaJEtiquetteFromServeur = ChkMajEtiq.IsChecked
             Obj.Etiquette = TxtEtiq.Text
             Obj.X = TxtX.Text
             Obj.Y = TxtY.Text

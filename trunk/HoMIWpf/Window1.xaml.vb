@@ -709,6 +709,8 @@ Class Window1
                                 x.RotationY = list.Item(j).Attributes.Item(k).Value.Replace(".", ",")
                             Case "showetiquette"
                                 x.ShowEtiquette = list.Item(j).Attributes.Item(k).Value
+                            Case "majetiquettefromsrv"
+                                x.MaJEtiquetteFromServeur = list.Item(j).Attributes.Item(k).Value
                             Case "fondu"
                                 x.Fondu = list.Item(j).Attributes.Item(k).Value
                             Case "showstatus"
@@ -1048,6 +1050,9 @@ Class Window1
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("angley")
                 writer.WriteValue(_ListElement.Item(i).RotationY)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("majetiquettefromsrv")
+                writer.WriteValue(_ListElement.Item(i).MaJEtiquetteFromServeur)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("showetiquette")
                 writer.WriteValue(_ListElement.Item(i).ShowEtiquette)
@@ -1675,6 +1680,7 @@ Class Window1
                             y.RotationY = _ListElement.Item(j).RotationY
                             y.IsEmpty = _ListElement.Item(j).IsEmpty
                             y.ShowEtiquette = _ListElement.Item(j).ShowEtiquette
+                            y.MaJEtiquetteFromServeur = _ListElement.Item(j).MaJEtiquetteFromServeur
                             y.Fondu = _ListElement.Item(j).Fondu
                             y.ShowStatus = _ListElement.Item(j).ShowStatus
                             y.ShowPicture = _ListElement.Item(j).ShowPicture
@@ -1791,6 +1797,7 @@ Class Window1
                     y.DefautLabelStatus = _ListElement.Item(i).DefautLabelStatus
                     y.TailleStatus = _ListElement.Item(i).TailleStatus
                     y.TailleEtiquette = _ListElement.Item(i).TailleEtiquette
+                    y.MaJEtiquetteFromServeur = _ListElement.Item(i).MaJEtiquetteFromServeur
                     y.ColorBackGround = _ListElement.Item(i).ColorBackGround
                     y.ColorEtiquette = _ListElement.Item(i).ColorEtiquette
                     y.ColorStatus = _ListElement.Item(i).ColorStatus
@@ -2073,6 +2080,7 @@ Class Window1
             elmt.IsEmpty = True
             elmt.Type = uWidgetEmpty.TypeOfWidget.Empty
             elmt.ShowStatus = False
+            elmt.MaJEtiquetteFromServeur = False
             elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
             elmt.Visibility = Windows.Visibility.Visible
             elmt.ColorBackGround = New SolidColorBrush(Color.FromArgb(127, 80, 80, 80))
