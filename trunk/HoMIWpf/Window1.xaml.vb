@@ -1948,7 +1948,7 @@ Class Window1
                             _ListElement.Item(j).Height = child.Height
 
                             If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
-                                Dim gt As TransformGroup = child.RenderTransform '.GetValue(RotateTransform.AngleProperty)
+                                Dim gt As TransformGroup = child.RenderTransform
                                 For k = 0 To gt.Children.Count - 1
                                     If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
                                         Dim rt As RotateTransform = gt.Children.Item(k)
