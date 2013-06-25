@@ -77,6 +77,10 @@
                                 <ComboBoxItem Content="Aucune" />
                             </ComboBox>
                         </StackPanel>
+                        <StackPanel Orientation="Horizontal" >
+                            <Label Content="Ville du client:" Foreground="White" />
+                            <ComboBox Name="CbVille" Width="150" />
+                        </StackPanel>
                     </StackPanel>
                 </GroupBox >
             </TabItem>

@@ -303,5 +303,56 @@ Module Fonctions
         bmpImage = Nothing
     End Function
 
+    ''' <summary>
+    ''' Retourne la valeur d'une variable entourée par des balises "<" ">"
+    ''' </summary>
+    ''' <param name="ValueTxt"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Function TraiteBalise(ByVal ValueTxt As String) As String
+        Try
+            If String.IsNullOrEmpty(ValueTxt) Then Return ""
+            Dim x As String = ValueTxt.ToUpper.Trim(" ")
+
+            If x.StartsWith("<") And x.EndsWith(">") Then
+                Dim _val As String = Mid(x, 2, Len(x) - 2)
+                Select Case _val
+                    Case "SYSTEM_DATE"
+                        Return Now.Date.ToShortDateString
+                    Case "SYSTEM_LONG_DATE"
+                        Return Now.Date.ToLongDateString
+                    Case "SYSTEM_TIME"
+                        Return Now.ToShortTimeString
+                    Case "SYSTEM_LONG_TIME"
+                        Return Now.ToLongTimeString
+                    Case "SYSTEM_CONDITION"
+                        If IsConnect Then
+                            For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In myService.GetAllDevices(IdSrv)
+                                If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True And ObjMeteo.Name.ToUpper = frmMere.Ville.ToUpper Then
+                                    Return ObjMeteo.ConditionActuel
+                                    Exit For
+                                End If
+                            Next
+                        End If
+                    Case "SYSTEM_TEMP_ACTUELLE"
+                        If IsConnect Then
+                            For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In myService.GetAllDevices(IdSrv)
+                                If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True And ObjMeteo.Name.ToUpper = frmMere.Ville.ToUpper Then
+                                    Return ObjMeteo.TemperatureActuel & " °C"
+                                    Exit For
+                                End If
+                            Next
+                        End If
+                    Case Else
+                        Return " "
+                End Select
+            Else
+                Return ValueTxt
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.TraiteBalise: " & ex.ToString, "Erreur", " uWidgetEmpty.TraiteBalise")
+            Return "Erreur"
+        End Try
+    End Function
 
 End Module

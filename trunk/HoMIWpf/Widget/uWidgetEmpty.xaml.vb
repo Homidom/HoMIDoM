@@ -132,7 +132,7 @@ Public Class uWidgetEmpty
                 IsEmpty = True
 
                 If _dev IsNot Nothing Then
-                    If MaJEtiquetteFromServeur Or String.IsNullOrEmpty(Etiquette) Then Etiquette = _dev.Name
+                    If MaJEtiquetteFromServeur Then Etiquette = _dev.Name
                     Picture = _dev.Picture
                     Dim _ShowValue As Boolean = True
 
@@ -260,11 +260,11 @@ Public Class uWidgetEmpty
                         LoadPicture()
                     End If
                 ElseIf _macro IsNot Nothing Then
-                    If MaJEtiquetteFromServeur Or String.IsNullOrEmpty(Etiquette) Then Etiquette = _macro.Nom
+                    If MaJEtiquetteFromServeur Then Etiquette = _macro.Nom
                     ShowStatus = False
                     IsEmpty = False
                 ElseIf _zone IsNot Nothing Then
-                    If MaJEtiquetteFromServeur Or String.IsNullOrEmpty(Etiquette) Then Etiquette = _zone.Name
+                    If MaJEtiquetteFromServeur Then Etiquette = _zone.Name
                     Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Icon))
                     ShowStatus = False
                     _Picture = _zone.Icon
@@ -317,6 +317,7 @@ Public Class uWidgetEmpty
             Return _type
         End Get
         Set(ByVal value As TypeOfWidget)
+
             _type = value
 
             If _Show = False Then Exit Property
@@ -400,13 +401,13 @@ Public Class uWidgetEmpty
             If value = True Then
                 Lbl.Visibility = Windows.Visibility.Visible
                 If _dev IsNot Nothing Then
-                    If MaJEtiquetteFromServeur Or String.IsNullOrEmpty(Etiquette) Then Etiquette = _dev.Name
+                    If MaJEtiquetteFromServeur Then Etiquette = _dev.Name
                 End If
                 If _zone IsNot Nothing Then
-                    If MaJEtiquetteFromServeur Or String.IsNullOrEmpty(Etiquette) Then Etiquette = _zone.Name
+                    If MaJEtiquetteFromServeur Then Etiquette = _zone.Name
                 End If
                 If _macro IsNot Nothing Then
-                    If MaJEtiquetteFromServeur Or String.IsNullOrEmpty(Etiquette) Then Etiquette = _macro.Nom
+                    If MaJEtiquetteFromServeur Then Etiquette = _macro.Nom
                 End If
             Else
                 Lbl.Visibility = Windows.Visibility.Collapsed
@@ -421,7 +422,11 @@ Public Class uWidgetEmpty
         Set(ByVal value As String)
             _Etiquette = value
             If _Show = False Then Exit Property
-            Lbl.Content = _Etiquette
+            If MaJEtiquetteFromServeur = False Then
+                Lbl.Content = TraiteBalise(_Etiquette)
+            Else
+                Lbl.Content = _Etiquette
+            End If
         End Set
     End Property
 
@@ -961,7 +966,7 @@ Public Class uWidgetEmpty
 
                 If _dev IsNot Nothing Then
                     If ShowEtiquette And _dev.Name <> Etiquette Then
-                        If ShowEtiquette And ((MaJEtiquetteFromServeur Or String.IsNullOrEmpty(Etiquette)) Or ((MaJEtiquetteFromServeur = False And _dev.Name <> Etiquette))) Then Etiquette = _dev.Name
+                        If ShowEtiquette And MaJEtiquetteFromServeur Then Etiquette = _dev.Name
                     End If
 
                     Dim _ShowValue As Boolean = True
@@ -1038,7 +1043,7 @@ Public Class uWidgetEmpty
                     End If
                 ElseIf _zone IsNot Nothing Then
                     If ShowEtiquette And _zone.Name <> Etiquette Then
-                        If MaJEtiquetteFromServeur Or String.IsNullOrEmpty(Etiquette) Then Etiquette = _zone.Name
+                        If MaJEtiquetteFromServeur Then Etiquette = _zone.Name
                         If Image.Tag <> _zone.Icon Then
                             Image.Tag = _zone.Icon
                             Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Icon))
@@ -1046,12 +1051,12 @@ Public Class uWidgetEmpty
                     End If
                 ElseIf _macro IsNot Nothing Then
                     If ShowEtiquette And _macro.Nom <> Etiquette Then
-                        If MaJEtiquetteFromServeur Or String.IsNullOrEmpty(Etiquette) Then Etiquette = _macro.Nom
+                        If MaJEtiquetteFromServeur Then Etiquette = _macro.Nom
                     End If
                 End If
             End If
 
-            Etiquette = TraiteBalise(Etiquette)
+            Lbl.Content = TraiteBalise(Etiquette)
 
             Me.UpdateLayout()
         Catch ex As Exception
@@ -1059,34 +1064,6 @@ Public Class uWidgetEmpty
             _dt.Stop()
         End Try
     End Sub
-
-    Private Function TraiteBalise(ByVal ValueTxt As String) As String
-        Try
-            If String.IsNullOrEmpty(ValueTxt) Then Return ""
-            Dim x As String = ValueTxt.ToUpper.Trim(" ")
-
-            If x.StartsWith("<") And x.EndsWith(">") Then
-                Dim _val As String = Mid(x, 2, Len(x) - 2)
-                Select Case _val
-                    Case "SYSTEM_DATE"
-                        Return Now.Date.ToShortDateString
-                    Case "SYSTEM_TIME"
-                        Return Now.ToShortTimeString
-                    Case "SYSTEM_CONDITION"
-                        Return " "
-                    Case "SYSTEM_TEMP_ACTUELLE"
-                        Return " "
-                    Case Else
-                        Return " "
-                End Select
-            Else
-                Return ValueTxt
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.TraiteBalise: " & ex.ToString, "Erreur", " uWidgetEmpty.TraiteBalise")
-            Return "Erreur"
-        End Try
-    End Function
 
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
         If _FlagBlock = False Then TraiteRefresh()

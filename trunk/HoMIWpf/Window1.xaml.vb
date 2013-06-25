@@ -54,17 +54,18 @@ Class Window1
     'User Graphic
     Dim _ShowSoleil As Boolean
     Dim _ShowTemperature As Boolean
-    Dim _ImageBackGroundDefault As String
+    Dim _ImageBackGroundDefault As String = ""
     Dim _ListMnu As New List(Of uCtrlImgMnu)
     Dim _Design As Boolean = False
     Dim _FullScreen As Boolean = True
     Dim mybuttonstyle As Style
-    Public _CurrentIdZone As String
+    Public _CurrentIdZone As String = ""
     Dim RandomNumber As New Random
     Dim _ShowQuitter As Boolean = True
-    Dim _PassWord As String
+    Dim _PassWord As String = ""
     Dim _WithPassword As Boolean = False
     Dim _AffLastError As Boolean = False
+    Dim _Ville As String = "" 'Ville par défaut du client
     Dim _MousePosition As Point
     Dim _TimeMouseDown As DateTime = Now
     Dim _TimeOutPage As Integer = 1 'Timeout d'une page en minute
@@ -74,6 +75,15 @@ Class Window1
 #End Region
 
 #Region "Property"
+    Public Property Ville As String
+        Get
+            Return _Ville
+        End Get
+        Set(ByVal value As String)
+            _Ville = value
+        End Set
+    End Property
+
     Public Property TaskMnuTranp As Byte
         Get
             Return _TaskMnuTransp
@@ -586,6 +596,8 @@ Class Window1
                             _MaskTaskMnu = list.Item(0).Attributes.Item(j).Value
                         Case "defautpage"
                             _DefautPage = list.Item(0).Attributes.Item(j).Value
+                        Case "ville"
+                            _Ville = list.Item(0).Attributes.Item(j).Value
                         Case Else
                             Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                     End Select
@@ -963,6 +975,9 @@ Class Window1
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("masktaskmenu")
             writer.WriteValue(_MaskTaskMnu)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("ville")
+            writer.WriteValue(_Ville)
             writer.WriteEndAttribute()
             writer.WriteEndElement()
 
