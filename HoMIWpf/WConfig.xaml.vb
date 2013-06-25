@@ -31,6 +31,7 @@ Public Class WConfig
         Frm.TimeOutPage = CInt(CbTimeOutPage.Text)
         Frm.DefautPage = CbPageDefaut.Text
         Frm.MaskTaskMnu = ChkMaskTaskMnu.IsChecked
+        Frm.Ville = CbVille.Text
 
         DialogResult = True
     End Sub
@@ -67,6 +68,7 @@ Public Class WConfig
         MyListMnu.Clear()
         CbPageDefaut.Items.Clear()
 
+        'charger les pages
         CbPageDefaut.Items.Add("Aucune")
         For Each icmnu In Frm.ListMnu
             ListMnu.Items.Add(icmnu.Text)
@@ -411,5 +413,20 @@ Public Class WConfig
     Private Sub BtnNewMnu_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewMnu.Click
         CtxMnuBtn.PlacementTarget = sender
         CtxMnuBtn.IsOpen = True
+    End Sub
+
+    Private Sub CbVille_Loaded(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CbVille.Loaded
+        'charger les villes
+        CbVille.Items.Clear()
+
+        If IsConnect Then
+            For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In myService.GetAllDevices(IdSrv)
+                If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True Then
+                    CbVille.Items.Add(ObjMeteo.Name)
+                End If
+            Next
+
+            If CbVille.Items.Count > 0 Then CbVille.SelectedValue = Frm.Ville
+        End If
     End Sub
 End Class
