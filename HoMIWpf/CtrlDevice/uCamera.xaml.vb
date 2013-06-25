@@ -32,7 +32,7 @@ Public Class uCamera
                     'lbl.Visibility = Windows.Visibility.Visible
                 End If
             Catch ex As Exception
-                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.URL: " & ex.ToString, "Erreur", "uCamera.URL")
+                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.URL: " & ex.Message, "Erreur", "uCamera.URL")
             End Try
         End Set
     End Property
@@ -62,7 +62,7 @@ Public Class uCamera
                     Next
                 End If
             Catch ex As Exception
-                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.ListButton.set: " & ex.ToString, "Erreur", "uCamera.ListButton.set")
+                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.ListButton.set: " & ex.Message, "Erreur", "uCamera.ListButton.set")
             End Try
         End Set
     End Property
@@ -84,7 +84,7 @@ Public Class uCamera
                 MessageBox.Show("Erreur l'url: " & x.URL & " n'est pas valide", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.Button_Click: " & ex.ToString, "Erreur", "uCamera.Button_Click")
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.Button_Click: " & ex.Message, "Erreur", "uCamera.Button_Click")
         End Try
     End Sub
 
@@ -100,7 +100,7 @@ Public Class uCamera
             AddHandler _mjpeg.FrameReady, AddressOf mjpeg_FrameReady
 
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.New: " & ex.ToString, "Erreur", "uCamera.New")
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.New: " & ex.Message, "Erreur", "uCamera.New")
         End Try
     End Sub
 
@@ -127,6 +127,7 @@ Public Class uCamera
     End Sub
 
     Private Sub uCamera_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
+        _mjpeg.StopStream()
         _mjpeg = Nothing
     End Sub
 

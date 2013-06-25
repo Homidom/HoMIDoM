@@ -420,7 +420,6 @@ Public Class WWidgetProperty
         End If
     End Sub
 
-
     Private Sub CbObjetVisu_SelectionChanged(ByVal sender As Object, ByVal e As Object) Handles CbObjetVisu.SelectionChanged, CbObjetVisu.MouseLeftButtonDown, CbObjetVisu.MouseDown
         If CbObjetVisu.SelectedIndex < 0 Or CbObjetVisu.SelectedItem.tag <> "DEVICE" Then
             Exit Sub
