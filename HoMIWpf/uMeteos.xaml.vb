@@ -38,7 +38,7 @@ Partial Public Class uMeteos
         'Creation  du menu
         Try
             If IsConnect Then
-                For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In AllDevices
+                For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In myService.GetAllDevices(IdSrv)
                     If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True Then
                         NewBtnMnu(ObjMeteo.ID)
                     End If
