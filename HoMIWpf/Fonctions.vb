@@ -3,7 +3,7 @@ Imports System.Windows.Media.Animation
 Imports System.Net
 Imports System.Xml
 Imports System.Xml.XPath
-Imports HoMIDom
+Imports HoMIDom.HoMIDom
 Imports System.Reflection
 
 Module Fonctions
@@ -326,23 +326,17 @@ Module Fonctions
                     Case "SYSTEM_LONG_TIME"
                         Return Now.ToLongTimeString
                     Case "SYSTEM_CONDITION"
-                        If IsConnect Then
-                            For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In myService.GetAllDevices(IdSrv)
-                                If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True And ObjMeteo.Name.ToUpper = frmMere.Ville.ToUpper Then
-                                    Return ObjMeteo.ConditionActuel
-                                    Exit For
-                                End If
-                            Next
-                        End If
+                        For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In AllDevices
+                            If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True And ObjMeteo.Name.ToUpper = frmMere.Ville.ToUpper Then
+                                Return ObjMeteo.ConditionActuel
+                            End If
+                        Next
                     Case "SYSTEM_TEMP_ACTUELLE"
-                        If IsConnect Then
-                            For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In myService.GetAllDevices(IdSrv)
-                                If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True And ObjMeteo.Name.ToUpper = frmMere.Ville.ToUpper Then
-                                    Return ObjMeteo.TemperatureActuel & " °C"
-                                    Exit For
-                                End If
-                            Next
-                        End If
+                        For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In AllDevices
+                            If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True And ObjMeteo.Name.ToUpper = frmMere.Ville.ToUpper Then
+                                Return ObjMeteo.TemperatureActuel & " °C"
+                            End If
+                        Next
                     Case Else
                         Return " "
                 End Select
@@ -350,9 +344,21 @@ Module Fonctions
                 Return ValueTxt
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.TraiteBalise: " & ex.ToString, "Erreur", " uWidgetEmpty.TraiteBalise")
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Fonctions.TraiteBalise: " & ex.ToString, "Erreur", " Fonctions.TraiteBalise")
             Return "Erreur"
         End Try
     End Function
 
+    Public Class Thread_MAJ
+
+        Public Sub Refresh()
+            Try
+                If IsConnect Then
+                    If IsDiff(AllDevices, myService.GetAllDevices(IdSrv)) Then AllDevices = myService.GetAllDevices(IdSrv)
+                End If
+            Catch ex As Exception
+                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Fonctions.Thread_MAJ.Refresh: " & ex.ToString, "Erreur", " Fonctions.Thread_MAJ.Refresh")
+            End Try
+        End Sub
+    End Class
 End Module

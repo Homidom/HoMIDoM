@@ -1406,6 +1406,12 @@ Class Window1
             If IsConnect Then
                 LblTime.Content = Now.ToLongDateString & " " & myService.GetTime
 
+                Dim _MaJSrv As New Thread_MAJ()
+                Dim x As New Thread(AddressOf _MaJSrv.Refresh)
+                x.Start()
+
+                lblDebug.Content = AllDevices.Count
+
                 If ShowSoleil = True And ((LblLeve.Content <> "?" And LblCouche.Content <> "?") Or Now.Second = 0) Then
                     Dim mydate As Date
                     mydate = myService.GetHeureLeverSoleil
@@ -1445,6 +1451,7 @@ Class Window1
                     End If
                 End If
             End If
+
         Catch ex As Exception
             IsConnect = False
             If FlagMsgDeconnect = False Then
