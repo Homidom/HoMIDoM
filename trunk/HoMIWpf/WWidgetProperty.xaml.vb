@@ -18,6 +18,7 @@ Public Class WWidgetProperty
 
             Try
                 ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
+                ChkIsCommun.IsChecked = Obj.IsCommun
                 ChkMajEtiq.IsChecked = Obj.MaJEtiquetteFromServeur
                 ChkShowStatus.IsChecked = Obj.ShowStatus
                 ChkShowEtiq.IsChecked = Obj.ShowEtiquette
@@ -235,6 +236,7 @@ Public Class WWidgetProperty
             Obj.ShowStatus = ChkShowStatus.IsChecked
             Obj.ShowEtiquette = ChkShowEtiq.IsChecked
             Obj.ShowPicture = ChkPicture.IsChecked
+            Obj.IsCommun = ChkIsCommun.IsChecked
             Obj.CanEditValue = ChkEditValue.IsChecked
             Obj.MaJEtiquetteFromServeur = ChkMajEtiq.IsChecked
             Obj.Etiquette = TxtEtiq.Text

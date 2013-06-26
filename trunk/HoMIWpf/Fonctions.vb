@@ -183,10 +183,9 @@ Module Fonctions
             Return False
 
         Catch ex As Exception
-            MessageBox.Show("Erreur: " & ex.ToString)
+            MessageBox.Show("Erreur IsDiff: " & ex.Message)
         End Try
     End Function
-
 
     Public Function ConvertArrayToImage(ByVal value As Byte()) As BitmapImage
         Try
@@ -210,7 +209,6 @@ Module Fonctions
             Return Nothing
         End Try
     End Function
-
 
     Public Sub ScrollToPosition(ByVal ScrollViewer As UAniScrollViewer.AniScrollViewer, ByVal x As Double, ByVal y As Double, ByVal Duree As Double)
         Dim vertAnim As New DoubleAnimation()
@@ -349,16 +347,14 @@ Module Fonctions
         End Try
     End Function
 
-    Public Class Thread_MAJ
+    Public Sub Refresh()
+        Try
+            If IsConnect Then
+                If IsDiff(AllDevices, myService.GetAllDevices(IdSrv)) Then AllDevices = myService.GetAllDevices(IdSrv)
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Fonctions.Thread_MAJ.Refresh: " & ex.ToString, "Erreur", " Fonctions.Thread_MAJ.Refresh")
+        End Try
+    End Sub
 
-        Public Sub Refresh()
-            Try
-                If IsConnect Then
-                    If IsDiff(AllDevices, myService.GetAllDevices(IdSrv)) Then AllDevices = myService.GetAllDevices(IdSrv)
-                End If
-            Catch ex As Exception
-                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Fonctions.Thread_MAJ.Refresh: " & ex.ToString, "Erreur", " Fonctions.Thread_MAJ.Refresh")
-            End Try
-        End Sub
-    End Class
 End Module

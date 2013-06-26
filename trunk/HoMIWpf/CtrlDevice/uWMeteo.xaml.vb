@@ -3,7 +3,7 @@ Imports System.IO
 Imports System.Threading
 
 Public Class uWMeteo
-    Dim _Id As String
+    Dim _Id As String = ""
     Dim dt As DispatcherTimer
     Dim _dev As HoMIDom.HoMIDom.TemplateDevice = Nothing
 
@@ -109,15 +109,6 @@ Public Class uWMeteo
 
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
         GetMeteo()
-    End Sub
-
-    Public Sub New()
-
-        ' Cet appel est requis par le concepteur.
-        InitializeComponent()
-
-        ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-
     End Sub
 
     Protected Overrides Sub Finalize()

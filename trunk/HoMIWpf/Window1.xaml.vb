@@ -705,6 +705,8 @@ Class Window1
                                 x.CanEditValue = list.Item(j).Attributes.Item(k).Value
                             Case "zoneid"
                                 x.ZoneId = list.Item(j).Attributes.Item(k).Value
+                            Case "iscommun"
+                                x.IsCommun = list.Item(j).Attributes.Item(k).Value
                             Case "x"
                                 x.X = list.Item(j).Attributes.Item(k).Value
                             Case "y"
@@ -1044,6 +1046,9 @@ Class Window1
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("zoneid")
                 writer.WriteValue(_ListElement.Item(i).ZoneId)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("iscommun")
+                writer.WriteValue(_ListElement.Item(i).IsCommun)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("x")
                 writer.WriteValue(Replace(CDbl(_ListElement.Item(i).X), ".", ","))
@@ -1406,15 +1411,12 @@ Class Window1
             If IsConnect Then
                 LblTime.Content = Now.ToLongDateString & " " & myService.GetTime
 
-                Dim _MaJSrv As New Thread_MAJ()
-                Dim x As New Thread(AddressOf _MaJSrv.Refresh)
+                Dim x As New Thread(AddressOf Refresh)
                 x.Start()
-
-                lblDebug.Content = AllDevices.Count
+                x = Nothing
 
                 If ShowSoleil = True And ((LblLeve.Content <> "?" And LblCouche.Content <> "?") Or Now.Second = 0) Then
-                    Dim mydate As Date
-                    mydate = myService.GetHeureLeverSoleil
+                    Dim mydate As Date = myService.GetHeureLeverSoleil
                     LblLeve.Content = mydate.ToShortTimeString
                     mydate = myService.GetHeureCoucherSoleil
                     LblCouche.Content = mydate.ToShortTimeString
@@ -1422,15 +1424,13 @@ Class Window1
                 End If
 
                 If _AffLastError Then
-                    If myService.GetLastLogsError.Count > 0 Then
-                        Dim _string As String = ""
-                        For Each logerror As String In myService.GetLastLogsError
-                            If String.IsNullOrEmpty(logerror) = False Then
-                                _string &= logerror & vbCrLf
-                                ImgMess.ToolTip = _string
-                            End If
-                        Next
-                    End If
+                    Dim _string As String = ""
+                    For Each logerror As String In myService.GetLastLogsError
+                        If String.IsNullOrEmpty(logerror) = False Then
+                            _string &= logerror & vbCrLf
+                            ImgMess.ToolTip = _string
+                        End If
+                    Next
                 End If
             Else
                 LblTime.Content = Now.ToLongDateString & " " & Now.ToLongTimeString
@@ -1466,6 +1466,7 @@ Class Window1
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur: " & ex.Message, "Erreur")
         End Try
     End Sub
+
 
     'Clic sur un menu de la barre du bas
     Private Sub IconMnuDoubleClick(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
@@ -1669,7 +1670,7 @@ Class Window1
                 'l'élément est définit comme visible dans la zone
                 If z.Visible = True Then
                     For j As Integer = 0 To _ListElement.Count - 1
-                        If _ListElement.Item(j).Id = z.ElementID And _ListElement.Item(j).ZoneId = IdZone And _ListElement.Item(j).IsEmpty = False Then
+                        If ((_ListElement.Item(j).Id = z.ElementID And _ListElement.Item(j).ZoneId = IdZone) Or _ListElement.Item(j).IsCommun) And _ListElement.Item(j).IsEmpty = False Then
                             'Ajouter un nouveau Control
                             Dim x As New ContentControl
                             Dim Trg As New TransformGroup
@@ -1703,6 +1704,7 @@ Class Window1
                             y.IsEmpty = _ListElement.Item(j).IsEmpty
                             y.ShowEtiquette = _ListElement.Item(j).ShowEtiquette
                             y.MaJEtiquetteFromServeur = _ListElement.Item(j).MaJEtiquetteFromServeur
+                            y.IsCommun = _ListElement.Item(i).IsCommun
                             y.Fondu = _ListElement.Item(j).Fondu
                             y.ShowStatus = _ListElement.Item(j).ShowStatus
                             y.ShowPicture = _ListElement.Item(j).ShowPicture
@@ -1782,7 +1784,7 @@ Class Window1
 
             'On va afficher tous les widgets empty
             For i As Integer = 0 To _ListElement.Count - 1
-                If _ListElement.Item(i).ZoneId = IdZone And _ListElement.Item(i).IsEmpty = True Then
+                If (_ListElement.Item(i).ZoneId = IdZone Or _ListElement.Item(i).IsCommun) And _ListElement.Item(i).IsEmpty = True Then
                     'Ajouter un nouveau Control
                     Dim x As New ContentControl
                     Dim Trg As New TransformGroup
@@ -1813,6 +1815,7 @@ Class Window1
                     y.Picture = _ListElement.Item(i).Picture
                     y.ShowPicture = _ListElement.Item(i).ShowPicture
                     y.ShowEtiquette = _ListElement.Item(i).ShowEtiquette
+                    y.IsCommun = _ListElement.Item(i).IsCommun
                     y.Fondu = _ListElement.Item(i).Fondu
                     y.ShowStatus = _ListElement.Item(i).ShowStatus
                     y.Etiquette = _ListElement.Item(i).Etiquette
@@ -2624,6 +2627,6 @@ Class Window1
     End Sub
 #End Region
 
-   
+
 
 End Class

@@ -17,8 +17,6 @@
                         <StackPanel >
                             <CheckBox  Name="ChkMajEtiq" Content="Mettre à jour Etiquette depuis le serveur automatiquement " Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                             <CheckBox  Name="ChkShowEtiq" Content="Afficher Etiquette" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
-                            <CheckBox Name="ChkShowStatus" Content="Afficher Status" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
-                            <CheckBox  Name="ChkFondu" Content="Fondu" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                         <StackPanel Name="StkEtiq">
                             <StackPanel Orientation="Horizontal" >
                                 <Label Width="120" Content="Etiquette:" Foreground="White"/>
@@ -34,10 +32,13 @@
                                 <TextBox Name="TxtColorEtiquette" Width="0" Text="" Background="{Binding ElementName=ColorPicker3, Path=SelectedColor}" Visibility="Collapsed" />
                                 <my:Colorpicker x:Name="ColorPicker3" Width="177" />
                             </StackPanel>
-                        </StackPanel>
-            <StackPanel Orientation="Horizontal" >
-            <Label Width="120" Content="X:" Foreground="White"/>
-                <TextBox Name="TxtX" Width="150" />
+                            </StackPanel>
+                            <CheckBox Name="ChkShowStatus" Content="Afficher Status" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
+                            <CheckBox  Name="ChkFondu" Content="Fondu" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
+                            <CheckBox  Name="ChkIsCommun" Content="Commun à toutes les pages" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
+                            <StackPanel Orientation="Horizontal" >
+                                <Label Width="120" Content="X:" Foreground="White"/>
+                                <TextBox Name="TxtX" Width="150" />
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
             <Label Width="120" Content="Y:" Foreground="White"/>
