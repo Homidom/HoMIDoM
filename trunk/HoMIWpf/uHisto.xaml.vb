@@ -288,7 +288,7 @@ Public Class uHisto
             TreeViewHisto.Items.Clear()
 
             Dim x As New List(Of HoMIDom.HoMIDom.Historisation)
-            Dim ListeDevices = myService.GetAllDevices(IdSrv)
+            Dim ListeDevices = AllDevices
 
             x = myService.GetAllListHisto(IdSrv)
 

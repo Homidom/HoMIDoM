@@ -420,12 +420,11 @@ Public Class WConfig
         CbVille.Items.Clear()
 
         If IsConnect Then
-            For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In myService.GetAllDevices(IdSrv)
+            For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In AllDevices
                 If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True Then
                     CbVille.Items.Add(ObjMeteo.Name)
                 End If
             Next
-
             If CbVille.Items.Count > 0 Then CbVille.SelectedValue = Frm.Ville
         End If
     End Sub

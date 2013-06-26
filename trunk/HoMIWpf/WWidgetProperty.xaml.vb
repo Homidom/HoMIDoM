@@ -72,7 +72,7 @@ Public Class WWidgetProperty
 
                             Refresh_LstObjetVisu()
 
-                            For Each obj As TemplateDevice In myService.GetAllDevices(IdSrv)
+                            For Each obj As TemplateDevice In AllDevices
                                 Dim lbl1 As New ComboBoxItem
                                 Dim lbl2 As New ComboBoxItem
                                 lbl1.Content = obj.Name & " [Device]"
@@ -164,7 +164,7 @@ Public Class WWidgetProperty
                             If IsConnect Then
                                 CbVilleMeteo.Items.Clear()
                                 Dim idx As Integer = -1
-                                For Each _devmeteo As TemplateDevice In myService.GetAllDevices(IdSrv)
+                                For Each _devmeteo As TemplateDevice In AllDevices
                                     If _devmeteo.Type = Device.ListeDevices.METEO Then
                                         Dim x As New ComboBoxItem
                                         x.Content = _devmeteo.Name
@@ -191,7 +191,7 @@ Public Class WWidgetProperty
                             If IsConnect Then
                                 CbDeviceKeyPad.Items.Clear()
                                 Dim idx As Integer = -1
-                                For Each _devk As TemplateDevice In myService.GetAllDevices(IdSrv)
+                                For Each _devk As TemplateDevice In AllDevices
                                     If _devk.Type = Device.ListeDevices.GENERIQUEVALUE Then
                                         Dim x As New ComboBoxItem
                                         x.Content = _devk.Name
@@ -427,7 +427,7 @@ Public Class WWidgetProperty
 
 
         CbPropertyVisu.Items.Clear()
-        Select Case myService.GetAllDevices(IdSrv).Item(CbObjetVisu.SelectedIndex).Type
+        Select Case AllDevices.Item(CbObjetVisu.SelectedIndex).Type
             Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
                 CbPropertyVisu.Items.Add("Value")
             Case 17
@@ -1081,7 +1081,7 @@ Public Class WWidgetProperty
         Dim _flag As Boolean = False
         Try
             If String.IsNullOrEmpty(CbObjetVisu.Text) = False And String.IsNullOrEmpty(CbPropertyVisu.Text) = False And String.IsNullOrEmpty(TxtValueVisu.Text) = False Then
-                Dim _ID As String = myService.GetAllDevices(IdSrv).Item(CbObjetVisu.SelectedIndex).ID
+                Dim _ID As String = AllDevices.Item(CbObjetVisu.SelectedIndex).ID
                 Dim _type As String = myService.TypeOfPropertyOfDevice(_ID, CbPropertyVisu.Text)
                 Dim _obj As Object = Nothing
 
