@@ -506,8 +506,27 @@ Imports System.Net.Sockets
             _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
 
             'Liste des devices compatibles
+            _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
+            _DeviceSupport.Add(ListeDevices.BAROMETRE.ToString)
+            _DeviceSupport.Add(ListeDevices.BATTERIE.ToString)
+            _DeviceSupport.Add(ListeDevices.COMPTEUR.ToString)
+            _DeviceSupport.Add(ListeDevices.CONTACT.ToString)
+            _DeviceSupport.Add(ListeDevices.DETECTEUR.ToString)
+            _DeviceSupport.Add(ListeDevices.DIRECTIONVENT.ToString)
+            _DeviceSupport.Add(ListeDevices.ENERGIEINSTANTANEE.ToString)
+            _DeviceSupport.Add(ListeDevices.ENERGIETOTALE.ToString)
+            _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
             _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE.ToString)
+            _DeviceSupport.Add(ListeDevices.HUMIDITE.ToString)
             _DeviceSupport.Add(ListeDevices.LAMPE.ToString)
+            _DeviceSupport.Add(ListeDevices.PLUIECOURANT.ToString)
+            _DeviceSupport.Add(ListeDevices.PLUIETOTAL.ToString)
+            _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
+            _DeviceSupport.Add(ListeDevices.TELECOMMANDE.ToString)
+            _DeviceSupport.Add(ListeDevices.TEMPERATURE.ToString)
+            _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE.ToString)
+            _DeviceSupport.Add(ListeDevices.UV.ToString)
+            _DeviceSupport.Add(ListeDevices.VITESSEVENT.ToString)
             _DeviceSupport.Add(ListeDevices.VOLET.ToString)
 			
             'Parametres avancés
@@ -710,8 +729,11 @@ Imports System.Net.Sockets
                     adresse = j.adresse1 - ((cptsend - 1) * 75) - 1
                     If j.adresse1 > 75 * (cptsend - 1) And j.adresse1 <= 75 * cptsend Then
                         msg += j.adresse1 & "=" & dataR(adresse) & " ; " & j.Value & " ;"
-                        If TypeOf j.Value Is Integer And dataR(adresse) < 5 And dataR(adresse) > -1 Then
+                        If TypeOf j.Value Is Integer Then
                             j.Value = dataR(adresse)
+                        End If
+                        If TypeOf j.Value Is Boolean And Not TypeOf j.Value Is Integer And dataR(adresse) > -1 And dataR(adresse) < 2 Then
+                            j.Value = CBool(dataR(adresse))
                         End If
                     End If
                 Next
