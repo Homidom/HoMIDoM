@@ -350,7 +350,9 @@ Module Fonctions
     Public Sub Refresh()
         Try
             If IsConnect Then
-                If IsDiff(AllDevices, myService.GetAllDevices(IdSrv)) Then AllDevices = myService.GetAllDevices(IdSrv)
+                Dim _tmpalldevices As New List(Of HoMIDom.HoMIDom.TemplateDevice)
+                _tmpalldevices = myService.GetAllDevices(IdSrv)
+                If IsDiff(AllDevices, _tmpalldevices) Then AllDevices = _tmpalldevices
             End If
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Fonctions.Thread_MAJ.Refresh: " & ex.ToString, "Erreur", " Fonctions.Thread_MAJ.Refresh")
