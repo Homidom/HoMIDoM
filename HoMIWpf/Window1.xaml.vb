@@ -446,6 +446,11 @@ Class Window1
                 LblCouche.Content = mydate.ToShortTimeString
             End If
 
+            'MaJ Liste des devices
+            Dim x As New Thread(AddressOf Refresh)
+            x.Start()
+            x = Nothing
+
             myxml = Nothing
             frmMere = Me
 
@@ -1411,9 +1416,11 @@ Class Window1
             If IsConnect Then
                 LblTime.Content = Now.ToLongDateString & " " & myService.GetTime
 
-                Dim x As New Thread(AddressOf Refresh)
-                x.Start()
-                x = Nothing
+                If Now.Second = 0 Then
+                    Dim x As New Thread(AddressOf Refresh)
+                    x.Start()
+                    x = Nothing
+                End If
 
                 If ShowSoleil = True And ((LblLeve.Content <> "?" And LblCouche.Content <> "?") Or Now.Second = 0) Then
                     Dim mydate As Date = myService.GetHeureLeverSoleil

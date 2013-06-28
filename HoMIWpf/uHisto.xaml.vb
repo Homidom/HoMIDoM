@@ -285,6 +285,7 @@ Public Class uHisto
     'Afficher la liste des historisations
     Public Sub AffHisto()
         Try
+            Cursor = Cursors.Wait
             TreeViewHisto.Items.Clear()
 
             Dim x As New List(Of HoMIDom.HoMIDom.Historisation)
@@ -350,6 +351,7 @@ Public Class uHisto
 
             TreeViewHisto.Items.SortDescriptions.Clear()
             TreeViewHisto.Items.SortDescriptions.Add(New SortDescription("Content", ListSortDirection.Ascending))
+            Me.Cursor = Nothing
         Catch ex As Exception
             MessageBox.Show("ERREUR Sub AffHisto: " & ex.Message, "ERREUR", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
