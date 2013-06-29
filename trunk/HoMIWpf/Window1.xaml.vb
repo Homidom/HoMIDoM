@@ -189,14 +189,22 @@ Class Window1
         End Get
         Set(ByVal value As String)
             _ImageBackGroundDefault = value
-            If String.IsNullOrEmpty(_ImageBackGroundDefault) = False Then
-                If File.Exists(_ImageBackGroundDefault) Then
-                    ImgBackground.Source = LoadBitmapImage(_ImageBackGroundDefault)
+            Try
+                If String.IsNullOrEmpty(_ImageBackGroundDefault) = False Then
+                    If File.Exists(_ImageBackGroundDefault) Then
+                        ImgBackground.Source = LoadBitmapImage(_ImageBackGroundDefault)
+                    Else
+                        ImgBackground.Source = New BitmapImage(New Uri(_MonRepertoire & "\Images\Fond-logo.png"))
+                        _ImageBackGroundDefault = _MonRepertoire & "\Images\Fond-logo.png"
+                    End If
                 Else
-                    ImgBackground.Source = Nothing
-                    _ImageBackGroundDefault = ""
+                    ImgBackground.Source = New BitmapImage(New Uri(_MonRepertoire & "\Images\Fond-logo.png"))
+                    _ImageBackGroundDefault = _MonRepertoire & "\Images\Fond-logo.png"
                 End If
-            End If
+            Catch ex As Exception
+                ImgBackground.Source = Nothing
+                _ImageBackGroundDefault = ""
+            End Try
         End Set
     End Property
 
@@ -1673,7 +1681,7 @@ Class Window1
                 _result = _MonRepertoire & "\cache\images\" & _result
 
                 If File.Exists(_result) Then
-                    ImageBackGround = _result
+                    ImgBackground.Source = LoadBitmapImage(_result)
                 Else
                     ImgBackground.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Image))
 
