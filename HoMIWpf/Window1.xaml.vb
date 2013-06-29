@@ -376,7 +376,7 @@ Class Window1
                 Log(TypeLog.INFO, TypeSource.CLIENT, "Start", "Création du dossier Cache")
             End If
             If System.IO.Directory.Exists(_MonRepertoire & "\Cache\Images") = False Then
-                System.IO.Directory.CreateDirectory(_MonRepertoire & "\Images")
+                System.IO.Directory.CreateDirectory(_MonRepertoire & "\Cache\Images")
                 Log(TypeLog.INFO, TypeSource.CLIENT, "Start", "Création du dossier images")
             End If
 
@@ -1660,7 +1660,33 @@ Class Window1
             If _zone.Image.Contains("Zone_Image.png") = True Or _zone.Image.EndsWith("\defaut.jpg") = True Then
                 ImageBackGround = _MonRepertoire & "\Images\Fond-defaut.png"
             Else
-                ImgBackground.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Image))
+                Dim _nfile As String = _zone.Image
+                Dim _result As String = ""
+
+                For j As Integer = Len(_nfile) To 1 Step -1
+                    If Mid(_nfile, j, 1) <> "\" Then
+                        _result = Mid(_nfile, j, 1) & _result
+                    Else
+                        Exit For
+                    End If
+                Next
+                _result = _MonRepertoire & "\cache\images\" & _result
+
+                If File.Exists(_result) Then
+                    ImageBackGround = _result
+                Else
+                    ImgBackground.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Image))
+
+                    'on enregistre l'image en cache
+                    Dim oFileStream As System.IO.FileStream
+                    oFileStream = New System.IO.FileStream(_result, System.IO.FileMode.Create)
+                    oFileStream.Write(myService.GetByteFromImage(_zone.Image), 0, myService.GetByteFromImage(_zone.Image).Length)
+                    oFileStream.Close()
+                    oFileStream = Nothing
+                End If
+
+                _nfile = ""
+                _result = ""
             End If
 
             'Desgin

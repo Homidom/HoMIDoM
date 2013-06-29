@@ -297,8 +297,6 @@ Module Fonctions
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "ERREUR Sub LoadBitmapImage (FileChm= " & FileChm & "): " & ex.Message, "Erreur", "LoadBitmapImage")
             Return Nothing
         End Try
-
-        bmpImage = Nothing
     End Function
 
     ''' <summary>
