@@ -351,6 +351,7 @@ Module Fonctions
                 Dim _tmpalldevices As New List(Of HoMIDom.HoMIDom.TemplateDevice)
                 _tmpalldevices = myService.GetAllDevices(IdSrv)
                 If IsDiff(AllDevices, _tmpalldevices) Then AllDevices = _tmpalldevices
+                _tmpalldevices = Nothing
             End If
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Fonctions.Thread_MAJ.Refresh: " & ex.ToString, "Erreur", " Fonctions.Thread_MAJ.Refresh")
