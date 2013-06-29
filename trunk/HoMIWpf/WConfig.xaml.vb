@@ -428,4 +428,11 @@ Public Class WConfig
             If CbVille.Items.Count > 0 Then CbVille.SelectedValue = Frm.Ville
         End If
     End Sub
+
+    Private Sub BtnDeleteCache_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDeleteCache.Click
+        Dim retour As String = Cache.DeleteAllFileOffPath(_MonRepertoire & "\cache\images\")
+        If retour IsNot Nothing Then
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur DeleteAllFileOffPath: " & retour, "Erreur", "BtnDeleteCache_Click")
+        End If
+    End Sub
 End Class

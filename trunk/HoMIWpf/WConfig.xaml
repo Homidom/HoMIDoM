@@ -38,6 +38,7 @@
 
             </TabItem>
             <TabItem Header="Affichage" >
+                <StackPanel >
                 <GroupBox Header="Affichage" Margin="2" Foreground="White">
                     <StackPanel >
                         <CheckBox Name="ChkSoleil" Content="Afficher heure Lever/Coucher Soleil" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
@@ -83,6 +84,12 @@
                         </StackPanel>
                     </StackPanel>
                 </GroupBox >
+                <GroupBox Header="Cache" Margin="2" Foreground="White">
+                        <StackPanel HorizontalAlignment="Left">
+                            <Button Margin="2" Width="80" Height="35"  Content="Vider le cache" Name="BtnDeleteCache" Template="{DynamicResource GlassButton}" Foreground="White" />
+                        </StackPanel>
+                    </GroupBox>
+                </StackPanel >
             </TabItem>
             <TabItem Header="Tactile" >
                 <GroupBox Header="Ecran Tactile" Margin="2" Foreground="White">
