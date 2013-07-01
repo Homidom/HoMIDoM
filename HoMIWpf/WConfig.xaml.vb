@@ -18,7 +18,9 @@ Public Class WConfig
 
         Frm.Password = TxtPassword.Text
         Frm.AffLastError = ChkAffLastError.IsChecked
+        Frm.ShowDateTime = ChkDateTime.IsChecked
         Frm.ShowSoleil = ChkSoleil.IsChecked
+        Frm.ShowLabelMnu = ChkShowlblMnu.IsChecked
         Frm.FullScreen = ChkFullScreen.IsChecked
         Frm.Friction = SliderFriction.Value
         Frm.ImageBackGround = TxtImgBack.Text
@@ -47,9 +49,11 @@ Public Class WConfig
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         Frm = FrmMere
+        ChkDateTime.IsChecked = Frm.ShowDateTime
         ChkShowBtnQuit.IsChecked = Frm.ShowQuitter
         ChkWidthPass.IsChecked = Frm.WithPassword
         ChkSoleil.IsChecked = Frm.ShowSoleil
+        ChkShowlblMnu.IsChecked = Frm.ShowLabelMnu
         ChkFullScreen.IsChecked = Frm.FullScreen
         SliderFriction.Value = Frm.Friction
         LblFriction.Content = Frm.Friction
