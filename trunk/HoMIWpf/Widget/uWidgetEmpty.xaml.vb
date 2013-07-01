@@ -970,98 +970,99 @@ Public Class uWidgetEmpty
                     Next
                 End If
 
-                If String.IsNullOrEmpty(_Id) Then Exit Sub
+                If String.IsNullOrEmpty(_Id) = False Then
 
-                _dev = myService.ReturnDeviceByID(IdSrv, _Id)
+                    _dev = myService.ReturnDeviceByID(IdSrv, _Id)
 
-                If _dev IsNot Nothing Then
-                    If ShowEtiquette And _dev.Name <> Etiquette Then
-                        If ShowEtiquette And MaJEtiquetteFromServeur Then Etiquette = _dev.Name
-                    End If
+                    If _dev IsNot Nothing Then
+                        If ShowEtiquette And _dev.Name <> Etiquette Then
+                            If ShowEtiquette And MaJEtiquetteFromServeur Then Etiquette = _dev.Name
+                        End If
 
-                    Dim _ShowValue As Boolean = True
-                    Dim _IsVariation As Boolean = False
+                        Dim _ShowValue As Boolean = True
+                        Dim _IsVariation As Boolean = False
 
-                    Select Case _dev.Type
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL
+                        Select Case _dev.Type
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.AUDIO
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.AUDIO
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.BAROMETRE
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.BAROMETRE
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.BATTERIE
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.BATTERIE
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.COMPTEUR
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.COMPTEUR
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.CONTACT
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.CONTACT
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.DETECTEUR
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.DETECTEUR
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.DIRECTIONVENT
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.DIRECTIONVENT
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.ENERGIEINSTANTANEE
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.ENERGIEINSTANTANEE
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.ENERGIETOTALE
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.ENERGIETOTALE
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUESTRING
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUESTRING
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEBOOLEEN
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEBOOLEEN
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.LAMPE
-                            _IsVariation = True
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.METEO
-                            _ShowValue = False
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA
-                            _ShowValue = False
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.PLUIECOURANT
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.LAMPE
+                                _IsVariation = True
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.METEO
+                                _ShowValue = False
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA
+                                _ShowValue = False
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.PLUIECOURANT
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.PLUIETOTAL
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.PLUIETOTAL
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.SWITCH
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.SWITCH
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.TELECOMMANDE
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.TELECOMMANDE
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.VITESSEVENT
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.VITESSEVENT
 
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.VOLET
-                            _IsVariation = True
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.UV
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.VOLET
+                                _IsVariation = True
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.UV
 
-                    End Select
+                        End Select
 
-                    If _ShowValue Then
-                        If _CurrentValue <> _dev.Value Then
-                            LblStatus.Content = _dev.Value & _dev.Unit
-                            _CurrentValue = _dev.Value
-                            LoadPicture()
+                        If _ShowValue Then
+                            If _CurrentValue <> _dev.Value Then
+                                LblStatus.Content = _dev.Value & _dev.Unit
+                                _CurrentValue = _dev.Value
+                                LoadPicture()
 
-                            If _IsVariation Then
-                                If StkPopup.Children.Count = 2 Then
-                                    Dim x2 As uVariateur = StkPopup.Children.Item(1)
-                                    x2.Value = _dev.Value
+                                If _IsVariation Then
+                                    If StkPopup.Children.Count = 2 Then
+                                        Dim x2 As uVariateur = StkPopup.Children.Item(1)
+                                        x2.Value = _dev.Value
+                                    End If
                                 End If
                             End If
                         End If
-                    End If
-                ElseIf _zone IsNot Nothing Then
-                    If ShowEtiquette And _zone.Name <> Etiquette Then
-                        If MaJEtiquetteFromServeur Then Etiquette = _zone.Name
-                        If Image.Tag <> _zone.Icon Then
-                            Image.Tag = _zone.Icon
-                            Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Icon))
+                    ElseIf _zone IsNot Nothing Then
+                        If ShowEtiquette And _zone.Name <> Etiquette Then
+                            If MaJEtiquetteFromServeur Then Etiquette = _zone.Name
+                            If Image.Tag <> _zone.Icon Then
+                                Image.Tag = _zone.Icon
+                                Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Icon))
+                            End If
                         End If
-                    End If
-                ElseIf _macro IsNot Nothing Then
-                    If ShowEtiquette And _macro.Nom <> Etiquette Then
-                        If MaJEtiquetteFromServeur Then Etiquette = _macro.Nom
+                    ElseIf _macro IsNot Nothing Then
+                        If ShowEtiquette And _macro.Nom <> Etiquette Then
+                            If MaJEtiquetteFromServeur Then Etiquette = _macro.Nom
+                        End If
                     End If
                 End If
             End If
