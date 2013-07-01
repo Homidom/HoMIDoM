@@ -72,9 +72,39 @@ Class Window1
     Dim _DefautPage As String = "Aucune" 'Page par défaut à afficher après tiemout
     Dim _AsTimeOutPage As Boolean = False 'definit si on gère le timeout d'une page
     Dim _TaskMnuTransp As Byte = 99
+    Dim _ShowLabelMnu As Boolean = False 'si true affiche le nom du menu sélectionné dans la barre du haut
+    Dim _ShowDateTime As Boolean = True 'si true affiche l'heure du menu sélectionné dans la barre du haut
 #End Region
 
 #Region "Property"
+    Public Property ShowLabelMnu As Boolean
+        Get
+            Return _ShowLabelMnu
+        End Get
+        Set(ByVal value As Boolean)
+            _ShowLabelMnu = value
+            If _ShowLabelMnu Then
+                LblZone.Visibility = Windows.Visibility.Visible
+            Else
+                LblZone.Visibility = Windows.Visibility.Collapsed
+            End If
+        End Set
+    End Property
+
+    Public Property ShowDateTime As Boolean
+        Get
+            Return _ShowDateTime
+        End Get
+        Set(ByVal value As Boolean)
+            _ShowDateTime = value
+            If _ShowDateTime Then
+                LblTime.Visibility = Windows.Visibility.Visible
+            Else
+                LblTime.Visibility = Windows.Visibility.Collapsed
+            End If
+        End Set
+    End Property
+
     Public Property Ville As String
         Get
             Return _Ville
@@ -571,10 +601,14 @@ Class Window1
             If list.Count > 0 Then 'présence des paramètres du server
                 For j As Integer = 0 To list.Item(0).Attributes.Count - 1
                     Select Case list.Item(0).Attributes.Item(j).Name
+                        Case "showlbltime"
+                            ShowDateTime = list.Item(0).Attributes.Item(j).Value
                         Case "showsoleil"
                             ShowSoleil = list.Item(0).Attributes.Item(j).Value
                         Case "showtemperature"
                             ShowTemperature = list.Item(0).Attributes.Item(j).Value
+                        Case "showlblzone"
+                            ShowLabelMnu = list.Item(0).Attributes.Item(j).Value
                         Case "imgbackground"
                             ImageBackGround = list.Item(0).Attributes.Item(j).Value
                         Case "fullscreen"
@@ -945,6 +979,12 @@ Class Window1
             writer.WriteStartElement("interface")
             writer.WriteStartAttribute("showsoleil")
             writer.WriteValue(ShowSoleil)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("showlblzone")
+            writer.WriteValue(ShowLabelMnu)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("showlbltime")
+            writer.WriteValue(ShowDateTime)
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("showtemperature")
             writer.WriteValue(ShowTemperature)
@@ -1492,6 +1532,8 @@ Class Window1
 
             _TimeMouseDown = Now
 
+            LblZone.Content = sender.Text
+
             If sender.type <> uCtrlImgMnu.TypeOfMnu.LecteurMedia Then
                 Canvas1.Children.Clear()
                 If Media IsNot Nothing Then Media.Visibility = Windows.Visibility.Hidden
@@ -1508,6 +1550,8 @@ Class Window1
             Chk3.Visibility = Windows.Visibility.Collapsed
 
             Dim y As uCtrlImgMnu = sender
+
+
 
             If y IsNot Nothing Then
                 Select Case y.Type
