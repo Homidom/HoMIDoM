@@ -206,15 +206,9 @@ Public Class WActionParametrage
             ElseIf _ObjAction.TypeAction = Action.TypeAction.ActionDriver Then
                 If Cb1.SelectedItem IsNot Nothing Then
                     'Ajout des commandes standard
-                    'For i As Integer = 0 To Cb1.SelectedItem.DeviceAction.Count - 1
-                    '    Cb2.Items.Add(Cb1.SelectedItem.DeviceAction.Item(i).Nom)
-                    'Next
                     Cb2.Items.Add("Start")
                     Cb2.Items.Add("Stop")
-                    ''Ajout des commandes avancées
-                    'For i As Integer = 0 To Cb1.SelectedItem.GetDeviceCommandePlus.Count - 1
-                    '    Cb2.Items.Add("{" & Cb1.SelectedItem.GetDeviceCommandePlus.Item(i).NameCommand & "}")
-                    'Next
+                    Cb2.Items.Add("Restart")
                 End If
             End If
         Catch ex As Exception

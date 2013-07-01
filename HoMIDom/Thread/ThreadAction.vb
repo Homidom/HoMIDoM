@@ -97,7 +97,12 @@ Namespace HoMIDom
 
                         If y.Nom.ToUpper = "START" Then _Server.StartDriver(_IdSrv, x.IdDriver)
                         If y.Nom.ToUpper = "STOP" Then _Server.StopDriver(_IdSrv, x.IdDriver)
-                        '_Server.ExecuteDeviceCommand(_IdSrv, x.IdDriver, y)
+                        If y.Nom.ToUpper = "RESTART" Then
+                            _Server.StopDriver(_IdSrv, x.IdDriver)
+                            Thread.Sleep(2000)
+                            _Server.StartDriver(_IdSrv, x.IdDriver)
+                            Thread.Sleep(2000)
+                        End If
                     Case Action.TypeAction.ActionIf
                         Dim x As Action.ActionIf = _Action
                         Dim flag As Boolean = False
