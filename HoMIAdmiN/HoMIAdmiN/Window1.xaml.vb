@@ -321,7 +321,7 @@ Class Window1
                             If retour <> "0" Then
                                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", "")
                             Else
-                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Enregistrement effectué", "HomIAdmin", "")
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Enregistrement effectué", "HomIAdmin", "")
                             End If
                         End If
                     Catch ex As Exception

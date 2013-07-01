@@ -109,6 +109,9 @@ Public Class uScenario
                     Case "ACTIONDEVICE"
                         Dim y As New Action.ActionDevice
                         x.ObjAction = y
+                    Case "ACTIONDRIVER"
+                        Dim y As New Action.ActionDriver
+                        x.ObjAction = y
                     Case "ACTIONMAIL"
                         Dim y As New Action.ActionMail
                         x.ObjAction = y
@@ -326,6 +329,14 @@ Public Class uScenario
         Dim effects As DragDropEffects
         Dim obj As New DataObject()
         obj.SetData(GetType(String), "ACTIONDEVICE")
+        effects = DragDrop.DoDragDrop(Me.ImgActDevice, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+    End Sub
+
+    'Ajouter action driver
+    Private Sub ImgActDriver_MouseLeftButtonDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgActDriver.MouseLeftButtonDown
+        Dim effects As DragDropEffects
+        Dim obj As New DataObject()
+        obj.SetData(GetType(String), "ACTIONDRIVER")
         effects = DragDrop.DoDragDrop(Me.ImgActDevice, obj, DragDropEffects.Copy Or DragDropEffects.Move)
     End Sub
 

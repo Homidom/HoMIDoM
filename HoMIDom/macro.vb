@@ -430,6 +430,12 @@ Namespace HoMIDom
             ''' </summary>
             ''' <remarks></remarks>
             ActionStop = 10
+
+            ''' <summary>
+            ''' Action de type Driver
+            ''' </summary>
+            ''' <remarks></remarks>
+            ActionDriver = 11
         End Enum
 
         ''' <summary>
@@ -566,6 +572,60 @@ Namespace HoMIDom
                 End Get
             End Property
         End Class
+
+        ''' <summary>
+        ''' Action Driver
+        ''' </summary>
+        ''' <remarks></remarks>
+        <Serializable()> Public Class ActionDriver
+            Dim _IdDriver As String
+            Dim _Method As String
+            Dim _Parametres As New ArrayList
+            Dim _Timing As DateTime
+
+            Public Property Timing As DateTime
+                Get
+                    Return _Timing
+                End Get
+                Set(ByVal value As DateTime)
+                    _Timing = value
+                End Set
+            End Property
+
+            Public Property IdDriver As String
+                Get
+                    Return _IdDriver
+                End Get
+                Set(ByVal value As String)
+                    _IdDriver = value
+                End Set
+            End Property
+
+            Public Property Method As String
+                Get
+                    Return _Method
+                End Get
+                Set(ByVal value As String)
+                    _Method = value
+                End Set
+            End Property
+
+            Public Property Parametres As ArrayList
+                Get
+                    Return _Parametres
+                End Get
+                Set(ByVal value As ArrayList)
+                    _Parametres = value
+                End Set
+            End Property
+
+            Public ReadOnly Property TypeAction As TypeAction
+                Get
+                    Return TypeAction.ActionDriver
+                End Get
+            End Property
+        End Class
+
 
         ''' <summary>
         ''' Action Mail

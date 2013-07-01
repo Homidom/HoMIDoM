@@ -35,7 +35,20 @@ Public Class WActionParametrage
                         If String.IsNullOrEmpty(TxtValue.Text) = False Then obj.Parametres.Add(TxtValue.Text)
 
                         _ObjAction = obj
+                    Case HoMIDom.HoMIDom.Action.TypeAction.ActionDriver
+                        If Cb1.SelectedIndex < 0 Or Cb2.SelectedIndex < 0 Or (TxtValue.Visibility = Windows.Visibility.Visible And String.IsNullOrEmpty(TxtValue.Text) = True) Then
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez renseigner tous les champs !", "Erreur", "BtnOk.Click")
+                            Exit Sub
+                        End If
 
+                        Dim obj As Action.ActionDriver = _ObjAction
+                        obj.IdDriver = Cb1.SelectedItem.Id
+                        obj.Method = Cb2.Text
+                        obj.Parametres.Clear()
+
+                        If String.IsNullOrEmpty(TxtValue.Text) = False Then obj.Parametres.Add(TxtValue.Text)
+
+                        _ObjAction = obj
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionMacro
                         If Cb1.SelectedIndex < 0 Then
                             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez sélectionner une macro !", "Erreur", "BtnOK.Click")
@@ -189,10 +202,19 @@ Public Class WActionParametrage
                         Cb2.Items.Add("{" & Cb1.SelectedItem.GetDeviceCommandePlus.Item(i).NameCommand & "}")
                     Next
 
-                    'Cb2.ItemsSource = Nothing
-                    'Cb2.Items.Clear()
-                    'Cb2.ItemsSource = Cb1.SelectedItem.DeviceAction
-                    'Cb2.DisplayMemberPath = "Nom"
+                End If
+            ElseIf _ObjAction.TypeAction = Action.TypeAction.ActionDriver Then
+                If Cb1.SelectedItem IsNot Nothing Then
+                    'Ajout des commandes standard
+                    'For i As Integer = 0 To Cb1.SelectedItem.DeviceAction.Count - 1
+                    '    Cb2.Items.Add(Cb1.SelectedItem.DeviceAction.Item(i).Nom)
+                    'Next
+                    Cb2.Items.Add("Start")
+                    Cb2.Items.Add("Stop")
+                    ''Ajout des commandes avancées
+                    'For i As Integer = 0 To Cb1.SelectedItem.GetDeviceCommandePlus.Count - 1
+                    '    Cb2.Items.Add("{" & Cb1.SelectedItem.GetDeviceCommandePlus.Item(i).NameCommand & "}")
+                    'Next
                 End If
             End If
         Catch ex As Exception
@@ -233,6 +255,35 @@ Public Class WActionParametrage
                         If obj.IdDevice IsNot Nothing Then
                             For i As Integer = 0 To Cb1.Items.Count - 1
                                 If obj.IdDevice = Cb1.Items(i).Id Then
+                                    Cb1.SelectedIndex = i
+                                    Exit For
+                                End If
+                            Next
+                            For i As Integer = 0 To Cb2.Items.Count - 1
+                                If obj.Method = Cb2.Items(i).ToString Then
+                                    Cb2.SelectedIndex = i
+                                    Exit For
+                                End If
+                            Next
+                            If obj.Parametres.Count > 0 Then TxtValue.Text = obj.Parametres.Item(0)
+                        End If
+                    Case HoMIDom.HoMIDom.Action.TypeAction.ActionDriver
+                        Dim obj As Action.ActionDriver = _ObjAction
+
+                        'Mise en forme graphique
+                        Lbl1.Content = "Driver:"
+                        Lbl2.Content = "Action:"
+                        Lbl2.Visibility = Visibility.Visible
+                        Cb2.Visibility = Windows.Visibility.Visible
+                        Txt2.Visibility = Windows.Visibility.Collapsed
+                        TxtValue.Height = 25
+
+                        Cb1.ItemsSource = myService.GetAllDrivers(IdSrv)
+                        Cb1.DisplayMemberPath = "Nom"
+
+                        If obj.IdDriver IsNot Nothing Then
+                            For i As Integer = 0 To Cb1.Items.Count - 1
+                                If obj.IdDriver = Cb1.Items(i).Id Then
                                     Cb1.SelectedIndex = i
                                     Exit For
                                 End If
@@ -498,31 +549,33 @@ Public Class WActionParametrage
             Cb2.ToolTip = ""
             Dim Idx As Integer = Cb2.SelectedIndex
 
-            If Cb2.SelectedValue.ToString.StartsWith("{") And Cb2.SelectedValue.ToString.EndsWith("}") Then
-                'c'est une commande avancée
-                Dim _cmdav As String = Mid(Cb2.SelectedValue.ToString, 2, Cb2.SelectedValue.ToString.Length - 2)
-                For j As Integer = 0 To myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).GetDeviceCommandePlus.Count - 1
-                    If myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).GetDeviceCommandePlus.Item(j).NameCommand = _cmdav Then
-                        Cb2.ToolTip = myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).GetDeviceCommandePlus.Item(j).DescriptionCommand
-                        If myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).GetDeviceCommandePlus.Item(j).CountParam > 0 Then
-                            LblValue.Content = "Parametre:"
-                            LblValue.Visibility = Windows.Visibility.Visible
-                            TxtValue.Visibility = Windows.Visibility.Visible
-                            Exit For
+            If _ObjAction.TypeAction = HoMIDom.HoMIDom.Action.TypeAction.ActionDevice Then
+                If Cb2.SelectedValue.ToString.StartsWith("{") And Cb2.SelectedValue.ToString.EndsWith("}") Then
+                    'c'est une commande avancée
+                    Dim _cmdav As String = Mid(Cb2.SelectedValue.ToString, 2, Cb2.SelectedValue.ToString.Length - 2)
+                    For j As Integer = 0 To myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).GetDeviceCommandePlus.Count - 1
+                        If myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).GetDeviceCommandePlus.Item(j).NameCommand = _cmdav Then
+                            Cb2.ToolTip = myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).GetDeviceCommandePlus.Item(j).DescriptionCommand
+                            If myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).GetDeviceCommandePlus.Item(j).CountParam > 0 Then
+                                LblValue.Content = "Parametre:"
+                                LblValue.Visibility = Windows.Visibility.Visible
+                                TxtValue.Visibility = Windows.Visibility.Visible
+                                Exit For
+                            End If
                         End If
-                    End If
-                Next
-            Else
-                'c'est une commande standard
-                For j As Integer = 0 To myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).DeviceAction.Item(Idx).Parametres.Count - 1
-                    Select Case j
-                        Case 0
-                            LblValue.Content = Cb1.SelectedItem.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
-                            LblValue.Visibility = Windows.Visibility.Visible
-                            TxtValue.ToolTip = Cb1.SelectedItem.DeviceAction.Item(Idx).Parametres.Item(j).Type
-                            TxtValue.Visibility = Windows.Visibility.Visible
-                    End Select
-                Next
+                    Next
+                Else
+                    'c'est une commande standard
+                    For j As Integer = 0 To myService.GetAllDevices(IdSrv).Item(Cb1.SelectedIndex).DeviceAction.Item(Idx).Parametres.Count - 1
+                        Select Case j
+                            Case 0
+                                LblValue.Content = Cb1.SelectedItem.DeviceAction.Item(Idx).Parametres.Item(j).Nom & " :"
+                                LblValue.Visibility = Windows.Visibility.Visible
+                                TxtValue.ToolTip = Cb1.SelectedItem.DeviceAction.Item(Idx).Parametres.Item(j).Type
+                                TxtValue.Visibility = Windows.Visibility.Visible
+                        End Select
+                    Next
+                End If
             End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Cb2_selectionChanged: " & ex.ToString, "Erreur Admin", "")
