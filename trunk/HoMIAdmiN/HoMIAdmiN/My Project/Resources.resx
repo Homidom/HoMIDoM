@@ -140,9 +140,9 @@ Namespace Dynam
    Dim Serveur as Homidom.Homidom.server
 
    Serveur=prmParameters(0)
-   MessageBox.Show(strTest)
-   MessageBox.Show(1*2*3)
-   MessageBox.Show( "You passed in parameter: " &amp; Serveur.GetTime)
+   AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR,strTest)
+   AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR,1*2*3)
+   AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "You passed in parameter: " &amp; Serveur.GetTime)
   End Function
 
  End Class

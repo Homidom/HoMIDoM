@@ -1221,6 +1221,10 @@ Namespace HoMIDom
                                     Dim o As New Action.ActionDevice
                                     _Act = o
                                     o = Nothing
+                                Case "ActionDriver"
+                                    Dim o As New Action.ActionDriver
+                                    _Act = o
+                                    o = Nothing
                                 Case "ActionMail"
                                     Dim o As New Action.ActionMail
                                     _Act = o
@@ -1270,6 +1274,8 @@ Namespace HoMIDom
                                         _Act.timing = CDate(list.ChildNodes.Item(j2).Attributes.Item(j3).Value)
                                     Case "iddevice"
                                         _Act.iddevice = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                    Case "iddriver"
+                                        _Act.iddriver = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                     Case "idmacro"
                                         _Act.idmacro = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                     Case "method"
@@ -1969,6 +1975,20 @@ Namespace HoMIDom
                         Case Action.TypeAction.ActionDevice
                             writer.WriteStartAttribute("iddevice")
                             writer.WriteValue(ListActions.Item(j).IdDevice)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("method")
+                            writer.WriteValue(ListActions.Item(j).Method)
+                            writer.WriteEndAttribute()
+                            Dim a As String = ""
+                            For k As Integer = 0 To ListActions.Item(j).parametres.count - 1
+                                a = a & ListActions.Item(j).parametres.item(k) & "|"
+                            Next
+                            writer.WriteStartAttribute("parametres")
+                            writer.WriteValue(a)
+                            writer.WriteEndAttribute()
+                        Case Action.TypeAction.ActionDriver
+                            writer.WriteStartAttribute("iddriver")
+                            writer.WriteValue(ListActions.Item(j).Iddriver)
                             writer.WriteEndAttribute()
                             writer.WriteStartAttribute("method")
                             writer.WriteValue(ListActions.Item(j).Method)

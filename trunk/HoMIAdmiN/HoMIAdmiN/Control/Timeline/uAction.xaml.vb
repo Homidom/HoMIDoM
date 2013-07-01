@@ -78,6 +78,15 @@ Public Class uAction
                                 End If
                             End If
                             If x.Method IsNot Nothing Then Label2.Content = x.Method
+                        Case Action.TypeAction.ActionDriver
+                            Dim x As Action.ActionDriver = _ObjAction
+                            Label1.Content = "Driver"
+                            If x.IdDriver IsNot Nothing Then
+                                If myService.ReturnDriverByID(IdSrv, x.IdDriver) IsNot Nothing Then
+                                    Label1.Content = myService.ReturnDriverByID(IdSrv, x.IdDriver).Nom
+                                End If
+                            End If
+                            If x.Method IsNot Nothing Then Label2.Content = x.Method
                         Case Action.TypeAction.ActionMail
                             Dim x As Action.ActionMail = _ObjAction
                             Label1.Content = "Mail "

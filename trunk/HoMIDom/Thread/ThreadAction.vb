@@ -76,7 +76,28 @@ Namespace HoMIDom
                         End If
 
                         _Server.ExecuteDeviceCommand(_IdSrv, x.IdDevice, y)
+                    Case Action.TypeAction.ActionDriver
+                        Dim x As Action.ActionDriver = _Action
+                        Dim y As New HoMIDom.DeviceAction
 
+                            'C'est une commande standard
+                            y.Nom = x.Method
+
+                            If x.Parametres IsNot Nothing Then
+                                If x.Parametres.Count > 0 Then
+                                    If x.Parametres.Item(0) IsNot Nothing Then
+                                        If x.Parametres.Item(0) <> "" Then
+                                            Dim y2 As New HoMIDom.DeviceAction.Parametre
+                                            y2.Value = x.Parametres.Item(0)
+                                            y.Parametres.Add(y2)
+                                        End If
+                                    End If
+                                End If
+                            End If
+
+                        If y.Nom.ToUpper = "START" Then _Server.StartDriver(_IdSrv, x.IdDriver)
+                        If y.Nom.ToUpper = "STOP" Then _Server.StopDriver(_IdSrv, x.IdDriver)
+                        '_Server.ExecuteDeviceCommand(_IdSrv, x.IdDriver, y)
                     Case Action.TypeAction.ActionIf
                         Dim x As Action.ActionIf = _Action
                         Dim flag As Boolean = False
