@@ -32,7 +32,7 @@ Imports System.Net.Sockets
     Dim _Port_UDP As String = "@"
     Dim _Com As String = "@"
     Dim _Refresh As Integer = 0
-    Dim _Modele As String = ""
+    Dim _Modele As String = "Wago"
     Dim _Version As String = My.Application.Info.Version.ToString
     Dim _OsPlatform As String = "3264"
     Dim _Picture As String = ""
@@ -56,6 +56,7 @@ Imports System.Net.Sockets
     Private breading As Boolean = False
     Private cptsend As Integer = 0
 
+    Private adressStart As Integer
     Private adressRead As Integer
     Private adressWrite As Integer
     Private unit As Integer
@@ -322,6 +323,13 @@ Imports System.Net.Sockets
                 _IsConnect = True
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "ModbusTCP", retour)
 
+                 Select _Modele.ToUpper
+                    Case "WAGO"
+                        adressStart = 12288
+                    Case Else
+                        adressStart = 0
+                End Select
+
                 adressRead = _Parametres.Item(1).Valeur
                 adressWrite = _Parametres.Item(2).Valeur
                 unit = _Parametres.Item(3).Valeur
@@ -548,7 +556,7 @@ Imports System.Net.Sockets
             Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant")
             Add_LibelleDevice("ADRESSE2", "@", "")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "@", "")
+            Add_LibelleDevice("MODELE", "Wago", "Wago, Schneider, Autre - Wago commence a 12288 et les autres à 0")
             Add_LibelleDevice("REFRESH", "Fastpooling/STATUS_REQUEST (Secondes)", "Permet de faire un STATUS_REQUEST (ex: L2) ou du fastpooling (ex: 'L')")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
@@ -576,7 +584,7 @@ Imports System.Net.Sockets
                 breading = True
                 cptsend += 1
                 If cptsend > 3 Then cptsend = 1
-                StartAddress = ReadStartAdr(12288 + adressRead + ((cptsend - 1) * 75)) '%MW256 = 12288 + 256 = 12544
+                StartAddress = ReadStartAdr(adressStart + adressRead + ((cptsend - 1) * 75)) '%MW256 = 12288 + 256 = 12544
                 Length = ReadStartAdr(75)
                 MBmaster.ReadHoldingRegister(unit, 3, StartAddress, Length)
 
@@ -667,7 +675,7 @@ Imports System.Net.Sockets
                 
                 '--- usercode ---
 
-                Dim StartAddress As UShort = ReadStartAdr(12288 + adressWrite) '%MW0 = 12288 --> %MW100 = 12288 + 100 = 12388
+                Dim StartAddress As UShort = ReadStartAdr(adressStart + adressWrite) '%MW0 = 12288 --> %MW100 = 12288 + 100 = 12388
                 Dim dataE(2) As UInteger
 
                 Try
