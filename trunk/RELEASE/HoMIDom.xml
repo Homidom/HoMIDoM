@@ -888,6 +888,11 @@ HoMIDom
  Action de type ScriptVB
  </summary>
 	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionDriver">
+	<summary>
+ Action de type Driver
+ </summary>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action.TypeAction">
 	<summary>
  Enumération des types d'actions
@@ -971,6 +976,11 @@ HoMIDom
 </member><member name="T:HoMIDom.HoMIDom.Action.ActionDevice">
 	<summary>
  Action Device
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionDriver">
+	<summary>
+ Action Driver
  </summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action.ActionMail">
