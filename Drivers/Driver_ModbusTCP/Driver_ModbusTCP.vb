@@ -556,7 +556,6 @@ Imports System.Net.Sockets
             Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant")
             Add_LibelleDevice("ADRESSE2", "@", "")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "Wago", "Wago, Schneider, Autre - Wago commence a 12288 et les autres à 0")
             Add_LibelleDevice("REFRESH", "Fastpooling/STATUS_REQUEST (Secondes)", "Permet de faire un STATUS_REQUEST (ex: L2) ou du fastpooling (ex: 'L')")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
@@ -737,7 +736,7 @@ Imports System.Net.Sockets
                     adresse = j.adresse1 - ((cptsend - 1) * 75) - 1
                     If j.adresse1 > 75 * (cptsend - 1) And j.adresse1 <= 75 * cptsend Then
                         msg += j.adresse1 & "=" & dataR(adresse) & " ; " & j.Value & " ;"
-                        If TypeOf j.Value Is Integer Then
+                        If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
                             j.Value = dataR(adresse)
                         End If
                         If TypeOf j.Value Is Boolean And Not TypeOf j.Value Is Integer And dataR(adresse) > -1 And dataR(adresse) < 2 Then
