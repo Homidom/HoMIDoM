@@ -28,19 +28,28 @@ Partial Class HoMIServicE
         '
         '   ServicesToRun = New System.ServiceProcess.ServiceBase () {New Service1, New MySecondUserService}
         '
-        ServicesToRun = New System.ServiceProcess.ServiceBase() {New HoMIServicE}
-        'System.ServiceProcess.ServiceBase.Run(ServicesToRun)
 
-        If (Environment.UserInteractive) Then
-            Dim service As New HoMIServicE
-            Dim args As String()
-            service.OnStart(args)
-            Console.WriteLine("Press any key to stop program")
-            Console.Read()
-            service.OnStop()
-        Else
-            System.ServiceProcess.ServiceBase.Run(ServicesToRun)
-        End If
+        Try
+            'ServicesToRun = New System.ServiceProcess.ServiceBase() {New HoMIServicE}
+            'System.ServiceProcess.ServiceBase.Run(ServicesToRun)
+
+            If (Environment.UserInteractive) Then
+                Dim service As New HoMIServicE
+                Dim args As String()
+                service.OnStart(args)
+                'Console.WriteLine("Press any key to stop program")
+                'Console.Read()
+                'service.OnStop()
+            Else
+                ServicesToRun = New System.ServiceProcess.ServiceBase() {New HoMIServicE}
+                System.ServiceProcess.ServiceBase.Run(ServicesToRun)
+            End If
+        Catch ex As Exception
+            Dim myEventLog = New EventLog()
+            myEventLog.Source = "HoMIDoM"
+            myEventLog.WriteEntry("Erreur lors du lancement du service : " & ex.ToString, EventLogEntryType.Error, 1)
+            myEventLog = Nothing
+        End Try
 
     End Sub
 
