@@ -106,15 +106,26 @@ Public Class HoMIServicE
             Dim message As String = ex.ToString
             message = DelRep(message)
 
-            'MsgBox("Erreur lors du démarrage service: " & ex.Message & vbCrLf & vbCrLf & message, MsgBoxStyle.Critical, "ERREUR SERVICE")
-            logerror("Erreur lors du démarrage service: " & ex.Message & vbCrLf & vbCrLf & message)
-
             If LCase(ex.ToString).Contains("badimageformat") And LCase(ex.ToString).Contains("sqlite") Then
-                'MsgBox("Veuillez vérifier que la dll sqlite installée dans le répertoire du service correspond bien à la version de votre OS (32 ou 64 bits)!!", MsgBoxStyle.Information, "RESOLUTION")
                 logerror("Veuillez vérifier que la dll sqlite installée dans le répertoire du service correspond bien à la version de votre OS (32 ou 64 bits)!!")
+                logerror("ERREUR " & ex.Message & " : " & message)
+            Else
+                logerror("Erreur lors du démarrage service: " & ex.Message & vbCrLf & vbCrLf & message)
             End If
+            If (Environment.UserInteractive) Then Console.ReadLine()
+        End Try
 
-            logerror("ERREUR " & ex.Message & " : " & message)
+        'en mode interactif (console) on attend une frappe du clavier pour fermer l'appli
+        Try
+            If (Environment.UserInteractive) Then
+                Console.WriteLine("Press any key to stop program")
+                Console.Read()
+                OnStop()
+            End If
+        Catch ex As Exception
+            Dim message As String = ex.ToString
+            message = DelRep(message)
+            logerror("Erreur lors du démarrage service: " & ex.Message & vbCrLf & vbCrLf & message)
             If (Environment.UserInteractive) Then Console.ReadLine()
         End Try
     End Sub
