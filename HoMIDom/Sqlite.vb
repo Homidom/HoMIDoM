@@ -63,8 +63,11 @@ Namespace HoMIDom
         ''' <remarks></remarks>          
         Public Function connect() As String
             Try
-                If File.Exists("./bdd/" & bdd_name & ".db") Then
-                    SQLconnect.ConnectionString = "Data Source=./bdd/" & bdd_name & ".db;"
+
+                'If File.Exists("./bdd/" & bdd_name & ".db") Then
+                '    SQLconnect.ConnectionString = "Data Source=./bdd/" & bdd_name & ".db;"
+                If File.Exists(My.Application.Info.DirectoryPath & "/bdd/" & bdd_name & ".db") Then
+                    SQLconnect.ConnectionString = "Data Source=" & My.Application.Info.DirectoryPath & "/bdd/" & bdd_name & ".db;"
                     SQLconnect.Open()
                     If SQLconnect.State = ConnectionState.Open Then
                         connecte = True

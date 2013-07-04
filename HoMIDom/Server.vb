@@ -3193,7 +3193,14 @@ Namespace HoMIDom
                     If Mid(retoursql, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update version_dll", "Erreur Requete sqlite : " & retoursql)
 
                     'on ouvre la page web de remerciement
-                    Process.Start("http://www.homidom.com/premiereinstall_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html")
+                    Try
+                        'If (Environment.UserInteractive) Then Process.Start("http://www.homidom.com/premiereinstall_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html")
+                        Dim request As HttpWebRequest = WebRequest.Create("http://www.homidom.com/premiereinstall_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html")
+                        CType(request, HttpWebRequest).UserAgent = "Other"
+                        Dim response As WebResponse = request.GetResponse()
+                    Catch ex As Exception
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start OpenWebPage", "Exception : " & ex.ToString)
+                    End Try
 
                     'Gestion clé enregistrement
 
@@ -3210,7 +3217,15 @@ Namespace HoMIDom
 
 
                         ' on ouvre la page web de remerciement
-                        Process.Start("http://www.homidom.com/miseajour_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html")
+                        Try
+                            'If (Environment.UserInteractive) Then Process.Start("http://www.homidom.com/miseajour_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html")
+                            Dim request As HttpWebRequest = WebRequest.Create("http://www.homidom.com/miseajour_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html")
+                            CType(request, HttpWebRequest).UserAgent = "Other"
+                            Dim response As WebResponse = request.GetResponse()
+                        Catch ex As Exception
+                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start OpenWebPage", "Exception : " & ex.ToString)
+                        End Try
+
                         'Dim startInfo As ProcessStartInfo = New ProcessStartInfo()
                         'startInfo.UseShellExecute = False
                         'startInfo.FileName = "http://www.homidom.com/miseajour_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html"
@@ -4552,7 +4567,7 @@ Namespace HoMIDom
             Try
                 If VerifIdSrv(idsrv) = False Then
                     Return Nothing
-                    
+
                 End If
 
                 Dim result As New DataTable
@@ -5546,7 +5561,7 @@ Namespace HoMIDom
                         _ListDrivers.Item(i).Refresh = refresh
                         _ListDrivers.Item(i).Picture = picture
                         _ListDrivers.Item(i).Modele = modele
-                        _ListDrivers.Item(i).Autodiscover = Autodiscover
+                        _ListDrivers.Item(i).Autodiscover = autodiscover
                         If Parametres IsNot Nothing Then
                             For j As Integer = 0 To Parametres.Count - 1
                                 _ListDrivers.Item(i).parametres.item(j).valeur = Parametres.Item(j)
