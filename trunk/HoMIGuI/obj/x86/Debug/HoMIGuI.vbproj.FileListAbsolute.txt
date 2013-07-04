@@ -1,0 +1,13 @@
+D:\Domotique\Homidom\DEBUG\HoMIGuI.exe.config
+D:\Domotique\Homidom\DEBUG\HoMIGuI.exe
+D:\Domotique\Homidom\DEBUG\HoMIGuI.pdb
+D:\Domotique\Homidom\DEBUG\HoMIGuI.xml
+D:\Domotique\Homidom\HoMIGuI\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\Domotique\Homidom\HoMIGuI\obj\x86\Debug\HoMIGuI.About.resources
+D:\Domotique\Homidom\HoMIGuI\obj\x86\Debug\HoMIGuI.HoMIGuI.resources
+D:\Domotique\Homidom\HoMIGuI\obj\x86\Debug\HoMIGuI.Resources.resources
+D:\Domotique\Homidom\HoMIGuI\obj\x86\Debug\GenerateResource.read.1.tlog
+D:\Domotique\Homidom\HoMIGuI\obj\x86\Debug\GenerateResource.write.1.tlog
+D:\Domotique\Homidom\HoMIGuI\obj\x86\Debug\HoMIGuI.exe
+D:\Domotique\Homidom\HoMIGuI\obj\x86\Debug\HoMIGuI.xml
+D:\Domotique\Homidom\HoMIGuI\obj\x86\Debug\HoMIGuI.pdb
