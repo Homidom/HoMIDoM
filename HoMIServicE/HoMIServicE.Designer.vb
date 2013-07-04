@@ -61,8 +61,11 @@ Partial Class HoMIServicE
     ' Ne la modifiez pas à l'aide de l'éditeur de code.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        components = New System.ComponentModel.Container()
-        Me.ServiceName = "Service1"
+        '
+        'HoMIServicE
+        '
+        Me.ServiceName = "HoMIServicE"
+
     End Sub
 
 End Class

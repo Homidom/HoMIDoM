@@ -36,7 +36,7 @@ Public Class HoMIServicE
                 Console.WriteLine("**** DEMARRAGE DU SERVEUR ****")
                 Console.WriteLine(" ")
             End If
-            
+
             'Démarrage du serviceWeb
             log("Start ServiceWeb")
             Dim PortSOAP As String = LoadPort()

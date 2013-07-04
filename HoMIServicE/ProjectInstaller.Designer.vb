@@ -32,7 +32,7 @@
         '
         'ServiceInstaller1
         '
-        Me.ServiceInstaller1.Description = "HoMIServicE"
+        Me.ServiceInstaller1.Description = "Serveur HoMIDoM"
         Me.ServiceInstaller1.DisplayName = "HoMIServicE"
         Me.ServiceInstaller1.ServiceName = "HoMIServicE"
         '
