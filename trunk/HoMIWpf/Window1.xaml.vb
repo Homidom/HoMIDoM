@@ -1611,12 +1611,12 @@ Class Window1
             GC.Collect()
 
             Me.UpdateLayout()
-
-            ShowZone(Zoneid)
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ElementShowZone: " & ex.Message, "Erreur", "ElementShowZone")
         End Try
     End Sub
+
+
 
     Protected Overrides Sub Finalize()
         Try
@@ -1928,6 +1928,7 @@ Class Window1
                     y.ShowPassWord = _ListElement.Item(i).ShowPassWord
                     y.ClearAfterEnter = _ListElement.Item(i).ClearAfterEnter
                     y.ShowClavier = _ListElement.Item(i).ShowClavier
+
                     AddHandler y.ShowZone, AddressOf ElementShowZone
                     x.Content = y
                     Canvas1.Children.Add(x)

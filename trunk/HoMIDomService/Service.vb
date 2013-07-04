@@ -57,34 +57,19 @@ Module Service
                 Console.WriteLine(Now & "ERREUR: Le fichier de config ou la balise ip n'ont pas été trouvé, l'adresse par défaut sera localhost !")
             End If
 
-            'Dim _IP As String = Nothing
-            'Dim _IPHostEntry As System.Net.IPHostEntry = System.Net.Dns.GetHostEntry(System.Net.Dns.GetHostName())
-            'Dim _ListUri(0) As Uri
-            'Dim idx As Integer = 0
-
-            ' IPAddress class contains the address of a computer on an IP network.
-            'For Each _IPAddress As System.Net.IPAddress In _IPHostEntry.AddressList
-            '    Console.WriteLine(Now & " Adresse IP du serveur trouvée: " & _IPAddress.ToString() & " (" & _IPAddress.AddressFamily.ToString() & ")")
-            '    If _IPAddress.AddressFamily.ToString() = "InterNetwork" Then
-            '        ReDim Preserve _ListUri(idx)
-            '        Dim baseAddress As Uri = New Uri("http://" & _IPAddress.ToString() & ":" & PortSOAP & "/ServiceModelSamples/service")
-            '        _ListUri(idx) = baseAddress
-            '        Console.WriteLine(Now & " Adresse IP du serveur utilisée: " & _IPAddress.ToString())
-            '        idx += 1
-            '        If _IP Is Nothing Then _IP = _IPAddress.ToString()
-            '    End If
-            'Next _IPAddress
-            'Console.WriteLine(Now & " Adresse IP du serveur utilisée: " & _IP)
-
             Dim baseAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/service")
             Dim fileServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/fileServer")
+            'Dim ServerCallBack As Uri = New Uri("http://" & _Addrip & ":" & "8000" & "/callback")
+
             'Dim CallBackAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/callback")
             'Dim baseAddress As Uri = New Uri("http://" & Dns.GetHostName() & ":" & PortSOAP & "/ServiceModelSamples/service")
             'Dim fileServerAddress As Uri = New Uri("http://" & Dns.GetHostName() & ":" & PortSOAP & "/ServiceModelSamples/fileServer")
 
-            'Dim _aip() As IPAddress = Dns.GetHostAddresses(Dns.GetHostName)
-            'Console.WriteLine(Now & " Adresss SOAP: " & Dns.GetHostName() & " [" & _aip(0).ToString & "] :" & PortSOAP)
             Console.WriteLine(Now & " Adresss SOAP: " & _Addrip & ":" & PortSOAP)
+
+            'Dim hostsrvcallback As New ServiceHost(GetType(HomiCallBack.HoMIDom.MyServiceCallBack), ServerCallBack)
+            'hostsrvcallback.Open()
+            'Console.WriteLine(Now & " Service CallBack démarré sur l'adresse: " & ServerCallBack.ToString())
 
             Using host As New ServiceHost(GetType(Server), baseAddress)
 

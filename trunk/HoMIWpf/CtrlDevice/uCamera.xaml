@@ -6,7 +6,8 @@
              mc:Ignorable="d" >
     
     <StackPanel VerticalAlignment="Top">
-        <Label Name="lbl" Foreground="Red" FontSize="18" Visibility="Collapsed" Background="Black" />
+        <!--<Label Name="lbl" Foreground="Red" FontSize="18" Visibility="Collapsed" Background="Black" />-->
+        <TextBlock Name="lbl" Foreground="Red" FontSize="18" Visibility="Collapsed" Background="Black" TextWrapping="Wrap" />        
         <Image x:Name="image" Width="640" Height="480" />
         <StackPanel Name="StkButton" Orientation="Horizontal" Background="Black" MinHeight="15"/> 
 

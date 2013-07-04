@@ -9,6 +9,7 @@ Imports System.IO
 Public Class uCamera
     Dim _URL As String = ""
     Dim _ListButton As New List(Of uHttp.ButtonHttp)
+    Dim _AsError As Boolean
     Private _mjpeg As MjpegDecoder
 
     Public Property URL As String
@@ -18,21 +19,14 @@ Public Class uCamera
         Set(ByVal value As String)
             Try
                 _URL = value
-                If String.IsNullOrEmpty(_URL) = False Then 'UrlIsValid(_URL) = False Then
-                    '    If My.Computer.Network.Ping(_URL) = True Then
+                If String.IsNullOrEmpty(_URL) = False Then 
                     lbl.Visibility = Windows.Visibility.Collapsed
-                    lbl.Content = ""
+                    lbl.Text = ""
                     _mjpeg.ParseStream(New Uri(_URL))
-                    '    Else
-                    'lbl.Content = "Ping de la caméra fail " & _URL & " est erronée !!"
-                    'lbl.Visibility = Windows.Visibility.Visible
-                    '    End If
-                    'Else
-                    'lbl.Content = "L'URL de la caméra doit être renseignée !!"
-                    'lbl.Visibility = Windows.Visibility.Visible
                 End If
             Catch ex As Exception
-                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.URL: " & ex.Message, "Erreur", "uCamera.URL")
+                lbl.Text = "Erreur: " & ex.Message
+                lbl.Visibility = Windows.Visibility.Visible
             End Try
         End Set
     End Property
