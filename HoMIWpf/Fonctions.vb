@@ -187,6 +187,39 @@ Module Fonctions
         End Try
     End Function
 
+    ' ''' <summary>
+    ' ''' Permet de recopier les valeurs propriétés d'un objet vers un autre
+    ' ''' </summary>
+    ' ''' <param name="objet1"></param>
+    ' ''' <param name="objet2"></param>
+    ' ''' <returns></returns>
+    ' ''' <remarks></remarks>
+    'Public Function Duplicate(ByVal source As Object, ByVal destination As Object) As Boolean
+    '    Try
+    '        If source Is Nothing Then
+    '            Return False
+    '        ElseIf source.GetType <> destination.GetType Then
+    '            Return False
+    '        End If
+
+    '        For Each pi As PropertyInfo In source.GetType.GetProperties()
+    '            Try
+    '                pi.SetValue (source,pi.GetValue (source,
+    '                If pi.GetValue(source, Nothing) <> pi.GetValue(objet2, Nothing) Then
+    '                    Return True
+    '                End If
+    '            Catch ex As Exception
+    '                Return True
+    '            End Try
+    '        Next
+    '        Return False
+
+    '    Catch ex As Exception
+    '        MessageBox.Show("Erreur IsDiff: " & ex.Message)
+    '    End Try
+    'End Function
+
+
     Public Function ConvertArrayToImage(ByVal value As Byte()) As BitmapImage
         Try
             Dim ImgSource As BitmapImage = Nothing

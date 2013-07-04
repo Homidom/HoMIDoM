@@ -6061,8 +6061,8 @@ Namespace HoMIDom
 
                         _listact = ListMethod(_ListDevices.Item(i).id)
                         If _listact.Count > 0 Then
-                            For n As Integer = 0 To _listact.Count - 1
-                                Dim a() As String = _listact.Item(n).Split("|")
+                            For Each n In _listact
+                                Dim a() As String = n.Split("|")
                                 Dim p As New DeviceAction
                                 With p
                                     .Nom = a(0)
@@ -6085,58 +6085,62 @@ Namespace HoMIDom
                         End If
                         _listact = Nothing
 
-                        If .Type = (Device.ListeDevices.BAROMETRE) _
-                                        Or .Type = Device.ListeDevices.COMPTEUR _
-                                        Or .Type = Device.ListeDevices.ENERGIEINSTANTANEE _
-                                        Or .Type = Device.ListeDevices.ENERGIETOTALE _
-                                        Or .Type = Device.ListeDevices.GENERIQUEVALUE _
-                                        Or .Type = Device.ListeDevices.HUMIDITE _
-                                        Or .Type = Device.ListeDevices.PLUIECOURANT _
-                                        Or .Type = Device.ListeDevices.PLUIETOTAL _
-                                        Or .Type = Device.ListeDevices.TEMPERATURE _
-                                        Or .Type = Device.ListeDevices.TEMPERATURECONSIGNE _
-                                        Or .Type = Device.ListeDevices.VITESSEVENT _
-                                        Or .Type = Device.ListeDevices.UV _
-                                        Or .Type = Device.ListeDevices.VITESSEVENT _
-                                        Then
+                        Dim _flag As Boolean = True
+                        Select Case .Type
+                            Case Device.ListeDevices.BAROMETRE
+                            Case Device.ListeDevices.COMPTEUR
+                            Case Device.ListeDevices.ENERGIEINSTANTANEE
+                            Case Device.ListeDevices.ENERGIETOTALE
+                            Case Device.ListeDevices.GENERIQUEVALUE
+                            Case Device.ListeDevices.HUMIDITE
+                            Case Device.ListeDevices.PLUIECOURANT
+                            Case Device.ListeDevices.PLUIETOTAL
+                            Case Device.ListeDevices.TEMPERATURE
+                            Case Device.ListeDevices.TEMPERATURECONSIGNE
+                            Case Device.ListeDevices.VITESSEVENT
+                            Case Device.ListeDevices.UV
+                            Case Device.ListeDevices.VITESSEVENT
+                            Case Device.ListeDevices.METEO
+                                .ConditionActuel = _ListDevices.Item(i).ConditionActuel
+                                .ConditionJ1 = _ListDevices.Item(i).ConditionJ1
+                                .ConditionJ2 = _ListDevices.Item(i).ConditionActuel
+                                .ConditionJ3 = _ListDevices.Item(i).ConditionJ3
+                                .ConditionToday = _ListDevices.Item(i).ConditionToday
+                                .HumiditeActuel = _ListDevices.Item(i).HumiditeActuel
+                                .IconActuel = _ListDevices.Item(i).IconActuel
+                                .IconJ1 = _ListDevices.Item(i).IconJ1
+                                .IconJ2 = _ListDevices.Item(i).IconJ2
+                                .IconJ3 = _ListDevices.Item(i).IconJ3
+                                .IconToday = _ListDevices.Item(i).IconToday
+                                .JourJ1 = _ListDevices.Item(i).JourJ1
+                                .JourJ2 = _ListDevices.Item(i).JourJ2
+                                .JourJ3 = _ListDevices.Item(i).JourJ3
+                                .JourToday = _ListDevices.Item(i).JourToday
+                                .MaxJ1 = _ListDevices.Item(i).MaxJ1
+                                .MaxJ2 = _ListDevices.Item(i).MaxJ2
+                                .MaxJ3 = _ListDevices.Item(i).MaxJ3
+                                .MaxToday = _ListDevices.Item(i).MaxToday
+                                .MinJ1 = _ListDevices.Item(i).MinJ1
+                                .MinJ2 = _ListDevices.Item(i).MinJ2
+                                .MinJ3 = _ListDevices.Item(i).MinJ3
+                                .MinToday = _ListDevices.Item(i).MinToday
+                                .TemperatureActuel = _ListDevices.Item(i).TemperatureActuel
+                                .VentActuel = _ListDevices.Item(i).VentActuel
+                                _flag = False
+                            Case Device.ListeDevices.MULTIMEDIA
+                                .Commandes = _ListDevices.Item(i).Commandes
+                                _flag = False
+                            Case Else
+                                _flag = False
+                        End Select
+
+                        If _flag Then
                             .Correction = _ListDevices.Item(i).correction
                             .Precision = _ListDevices.Item(i).precision
                             .Formatage = _ListDevices.Item(i).formatage
                             .ValueDef = _ListDevices.Item(i).valuedef
                             .ValueMax = _ListDevices.Item(i).valuemax
                             .ValueMin = _ListDevices.Item(i).valuemin
-                        End If
-
-                        If .Type = Device.ListeDevices.METEO Then
-                            .ConditionActuel = _ListDevices.Item(i).ConditionActuel
-                            .ConditionJ1 = _ListDevices.Item(i).ConditionJ1
-                            .ConditionJ2 = _ListDevices.Item(i).ConditionActuel
-                            .ConditionJ3 = _ListDevices.Item(i).ConditionJ3
-                            .ConditionToday = _ListDevices.Item(i).ConditionToday
-                            .HumiditeActuel = _ListDevices.Item(i).HumiditeActuel
-                            .IconActuel = _ListDevices.Item(i).IconActuel
-                            .IconJ1 = _ListDevices.Item(i).IconJ1
-                            .IconJ2 = _ListDevices.Item(i).IconJ2
-                            .IconJ3 = _ListDevices.Item(i).IconJ3
-                            .IconToday = _ListDevices.Item(i).IconToday
-                            .JourJ1 = _ListDevices.Item(i).JourJ1
-                            .JourJ2 = _ListDevices.Item(i).JourJ2
-                            .JourJ3 = _ListDevices.Item(i).JourJ3
-                            .JourToday = _ListDevices.Item(i).JourToday
-                            .MaxJ1 = _ListDevices.Item(i).MaxJ1
-                            .MaxJ2 = _ListDevices.Item(i).MaxJ2
-                            .MaxJ3 = _ListDevices.Item(i).MaxJ3
-                            .MaxToday = _ListDevices.Item(i).MaxToday
-                            .MinJ1 = _ListDevices.Item(i).MinJ1
-                            .MinJ2 = _ListDevices.Item(i).MinJ2
-                            .MinJ3 = _ListDevices.Item(i).MinJ3
-                            .MinToday = _ListDevices.Item(i).MinToday
-                            .TemperatureActuel = _ListDevices.Item(i).TemperatureActuel
-                            .VentActuel = _ListDevices.Item(i).VentActuel
-                        End If
-
-                        If .Type = Device.ListeDevices.MULTIMEDIA Then
-                            .Commandes = _ListDevices.Item(i).Commandes
                         End If
                     End With
 
@@ -6590,8 +6594,8 @@ Namespace HoMIDom
                         _listact = ListMethod(_ListDevices.Item(i).id)
 
                         If _listact.Count > 0 Then
-                            For n As Integer = 0 To _listact.Count - 1
-                                Dim a() As String = _listact.Item(n).Split("|")
+                            For Each n In _listact
+                                Dim a() As String = n.Split("|")
                                 Dim p As New DeviceAction
                                 With p
                                     .Nom = a(0)
@@ -6612,22 +6616,59 @@ Namespace HoMIDom
                                 a = Nothing
                             Next
                         End If
-                       
-                        If retour.Type = Device.ListeDevices.BAROMETRE _
-                                        Or retour.Type = Device.ListeDevices.COMPTEUR _
-                                        Or retour.Type = Device.ListeDevices.ENERGIEINSTANTANEE _
-                                        Or retour.Type = Device.ListeDevices.ENERGIETOTALE _
-                                        Or retour.Type = Device.ListeDevices.GENERIQUEVALUE _
-                                        Or retour.Type = Device.ListeDevices.HUMIDITE _
-                                        Or retour.Type = Device.ListeDevices.LAMPE _
-                                        Or retour.Type = Device.ListeDevices.PLUIECOURANT _
-                                        Or retour.Type = Device.ListeDevices.PLUIETOTAL _
-                                        Or retour.Type = Device.ListeDevices.TEMPERATURE _
-                                        Or retour.Type = Device.ListeDevices.TEMPERATURECONSIGNE _
-                                        Or retour.Type = Device.ListeDevices.VITESSEVENT _
-                                        Or retour.Type = Device.ListeDevices.UV _
-                                        Or retour.Type = Device.ListeDevices.VOLET _
-                                        Then
+
+                        Dim _retour1 As Boolean = True
+                        Select Case retour.Type
+                            Case Device.ListeDevices.BAROMETRE
+                            Case Device.ListeDevices.COMPTEUR
+                            Case Device.ListeDevices.ENERGIEINSTANTANEE
+                            Case Device.ListeDevices.ENERGIETOTALE
+                            Case Device.ListeDevices.GENERIQUEVALUE
+                            Case Device.ListeDevices.HUMIDITE
+                            Case Device.ListeDevices.LAMPE
+                            Case Device.ListeDevices.PLUIECOURANT
+                            Case Device.ListeDevices.PLUIETOTAL
+                            Case Device.ListeDevices.TEMPERATURE
+                            Case Device.ListeDevices.TEMPERATURECONSIGNE
+                            Case Device.ListeDevices.VITESSEVENT
+                            Case Device.ListeDevices.UV
+                            Case Device.ListeDevices.VOLET
+                            Case Device.ListeDevices.METEO
+                                _retour1 = False
+                                retour.ConditionActuel = _ListDevices.Item(i).ConditionActuel
+                                retour.ConditionJ1 = _ListDevices.Item(i).ConditionJ1
+                                retour.ConditionJ2 = _ListDevices.Item(i).ConditionActuel
+                                retour.ConditionJ3 = _ListDevices.Item(i).ConditionJ3
+                                retour.ConditionToday = _ListDevices.Item(i).ConditionToday
+                                retour.HumiditeActuel = _ListDevices.Item(i).HumiditeActuel
+                                retour.IconActuel = _ListDevices.Item(i).IconActuel
+                                retour.IconJ1 = _ListDevices.Item(i).IconJ1
+                                retour.IconJ2 = _ListDevices.Item(i).IconJ2
+                                retour.IconJ3 = _ListDevices.Item(i).IconJ3
+                                retour.IconToday = _ListDevices.Item(i).IconToday
+                                retour.JourJ1 = _ListDevices.Item(i).JourJ1
+                                retour.JourJ2 = _ListDevices.Item(i).JourJ2
+                                retour.JourJ3 = _ListDevices.Item(i).JourJ3
+                                retour.JourToday = _ListDevices.Item(i).JourToday
+                                retour.MaxJ1 = _ListDevices.Item(i).MaxJ1
+                                retour.MaxJ2 = _ListDevices.Item(i).MaxJ2
+                                retour.MaxJ3 = _ListDevices.Item(i).MaxJ3
+                                retour.MaxToday = _ListDevices.Item(i).MaxToday
+                                retour.MinJ1 = _ListDevices.Item(i).MinJ1
+                                retour.MinJ2 = _ListDevices.Item(i).MinJ2
+                                retour.MinJ3 = _ListDevices.Item(i).MinJ3
+                                retour.MinToday = _ListDevices.Item(i).MinToday
+                                retour.TemperatureActuel = _ListDevices.Item(i).TemperatureActuel
+                                retour.VentActuel = _ListDevices.Item(i).VentActuel
+                                _retour1 = False
+                            Case Device.ListeDevices.MULTIMEDIA
+                                retour.Commandes = _ListDevices.Item(i).Commandes
+                                _retour1 = False
+                            Case Else
+                                _retour1 = False
+                        End Select
+
+                        If _retour1 Then
                             retour.Correction = _ListDevices.Item(i).correction
                             retour.Precision = _ListDevices.Item(i).precision
                             retour.Formatage = _ListDevices.Item(i).formatage
@@ -6638,41 +6679,6 @@ Namespace HoMIDom
                             retour.ValueMin = _ListDevices.Item(i).valuemin
                         End If
 
-                        If retour.Type <> Device.ListeDevices.METEO And retour.Type <> Device.ListeDevices.MULTIMEDIA And retour.Type <> Device.ListeDevices.FREEBOX Then
-                            retour.Value = _ListDevices.Item(i).value
-                        End If
-
-                        If retour.Type = Device.ListeDevices.METEO Then
-                            retour.ConditionActuel = _ListDevices.Item(i).ConditionActuel
-                            retour.ConditionJ1 = _ListDevices.Item(i).ConditionJ1
-                            retour.ConditionJ2 = _ListDevices.Item(i).ConditionActuel
-                            retour.ConditionJ3 = _ListDevices.Item(i).ConditionJ3
-                            retour.ConditionToday = _ListDevices.Item(i).ConditionToday
-                            retour.HumiditeActuel = _ListDevices.Item(i).HumiditeActuel
-                            retour.IconActuel = _ListDevices.Item(i).IconActuel
-                            retour.IconJ1 = _ListDevices.Item(i).IconJ1
-                            retour.IconJ2 = _ListDevices.Item(i).IconJ2
-                            retour.IconJ3 = _ListDevices.Item(i).IconJ3
-                            retour.IconToday = _ListDevices.Item(i).IconToday
-                            retour.JourJ1 = _ListDevices.Item(i).JourJ1
-                            retour.JourJ2 = _ListDevices.Item(i).JourJ2
-                            retour.JourJ3 = _ListDevices.Item(i).JourJ3
-                            retour.JourToday = _ListDevices.Item(i).JourToday
-                            retour.MaxJ1 = _ListDevices.Item(i).MaxJ1
-                            retour.MaxJ2 = _ListDevices.Item(i).MaxJ2
-                            retour.MaxJ3 = _ListDevices.Item(i).MaxJ3
-                            retour.MaxToday = _ListDevices.Item(i).MaxToday
-                            retour.MinJ1 = _ListDevices.Item(i).MinJ1
-                            retour.MinJ2 = _ListDevices.Item(i).MinJ2
-                            retour.MinJ3 = _ListDevices.Item(i).MinJ3
-                            retour.MinToday = _ListDevices.Item(i).MinToday
-                            retour.TemperatureActuel = _ListDevices.Item(i).TemperatureActuel
-                            retour.VentActuel = _ListDevices.Item(i).VentActuel
-                        End If
-
-                        If retour.Type = Device.ListeDevices.MULTIMEDIA Then
-                            retour.Commandes = _ListDevices.Item(i).Commandes
-                        End If
                         Exit For
                     End If
                 Next
@@ -6797,15 +6803,14 @@ Namespace HoMIDom
                     Return Nothing
                 End If
 
-                Dim retour As Object = Nothing
                 Dim listresultat As New ArrayList
+
                 For i As Integer = 0 To _ListDevices.Count - 1
                     If (String.IsNullOrEmpty(DeviceAdresse) = True Or _ListDevices.Item(i).Adresse1.ToUpper() = DeviceAdresse.ToUpper()) And (DeviceType = "" Or _ListDevices.Item(i).type = DeviceType.ToUpper()) And (DriverID = "" Or _ListDevices.Item(i).DriverID = DriverID.ToUpper()) And _ListDevices.Item(i).Enable = Enable Then
-                        retour = _ListDevices.Item(i)
-                        listresultat.Add(retour)
-                        retour = Nothing
+                        listresultat.Add(_ListDevices.Item(i))
                     End If
                 Next
+
                 Return listresultat
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDeviceByAdresse1TypeDriver", "Exception : " & ex.Message)
@@ -6863,6 +6868,7 @@ Namespace HoMIDom
                             Exit For
                         End If
                     Next
+
                     If Action.Parametres IsNot Nothing Then
                         Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "parametres count: " & Action.Parametres.Count)
 
