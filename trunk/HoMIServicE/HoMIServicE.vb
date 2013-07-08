@@ -32,8 +32,8 @@ Public Class HoMIServicE
                 Console.Clear()  'Applique la couleur du fond
                 Console.ForegroundColor = ConsoleColor.Black 'Couleur du texte
                 Console.Title = "HoMIDomService"
-                Console.WriteLine("******************************")
-                Console.WriteLine("**** DEMARRAGE DU SERVEUR ****")
+                Console.WriteLine(Now & " INFO    ******************************")
+                Console.WriteLine(Now & " INFO    **** DEMARRAGE DU SERVEUR ****")
                 Console.WriteLine(" ")
             End If
 
@@ -97,9 +97,8 @@ Public Class HoMIServicE
 
             'démarrage OK
             Console.WriteLine(" ")
-            Console.WriteLine("******************************")
-            log("****   SERVEUR DEMARRE    ****")
-            Console.WriteLine("******************************")
+            Console.WriteLine(Now & " INFO    ****   SERVEUR DEMARRE    ****")
+            Console.WriteLine(Now & " INFO    ******************************")
             Console.WriteLine(" ")
 
         Catch ex As Exception
@@ -118,7 +117,9 @@ Public Class HoMIServicE
         'en mode interactif (console) on attend une frappe du clavier pour fermer l'appli
         Try
             If (Environment.UserInteractive) Then
+                Console.WriteLine(" ")
                 Console.WriteLine("Press any key to stop program")
+                Console.WriteLine(" ")
                 Console.Read()
                 OnStop()
             End If
@@ -202,13 +203,11 @@ Public Class HoMIServicE
     End Function
 
     Sub HostFaulted(ByVal sender As Object, ByVal e As System.EventArgs)
-        Console.WriteLine(Now & " Le serveur s'est mis en erreur")
-        MsgBox(Now & " Le serveur s'est mis en erreur")
+        logerror("Le serveur s'est mis en erreur")
     End Sub
 
     Sub HostUnknown(ByVal sender As Object, ByVal e As System.ServiceModel.UnknownMessageReceivedEventArgs)
-        Console.WriteLine(Now & " Le serveur a reçu un message inconnu:" & e.Message.ToString)
-        MsgBox(Now & " Le serveur a reçu un message inconnu:" & e.Message.ToString)
+        logerror("Le serveur a reçu un message inconnu: " & e.Message.ToString)
     End Sub
 
     Function LoadPort() As String
@@ -245,50 +244,53 @@ Public Class HoMIServicE
 
             Return _portip
         Catch ex As Exception
-            Dim reponse As MsgBoxResult = MsgBox("Erreur lors de la lecture des paramètres du serveur dans le fichier xml: " & ex.Message & vbCrLf & "Voulez-vous tenter de récupérer ces paramètres depuis le fichier de config sauvegardé?", MsgBoxStyle.YesNo, "ERREUR SERVICE LoadPort")
-            Console.WriteLine(Now & " ERREUR LoadPort : " & ex.Message & " : " & ex.ToString)
+            logerror("Erreur lors de la lecture des paramètres du serveur dans le fichier xml: " & ex.Message)
+            Return ""
 
-            If reponse = MsgBoxResult.Yes Then
-                Try 'Seconde chance
-                    Dim _portip As String = ""
-                    MyRep = MyRep & "\Config\homidom.sav"
+            'Dim reponse As MsgBoxResult = MsgBox("Erreur lors de la lecture des paramètres du serveur dans le fichier xml: " & ex.Message & vbCrLf & "Voulez-vous tenter de récupérer ces paramètres depuis le fichier de config sauvegardé?", MsgBoxStyle.YesNo, "ERREUR SERVICE LoadPort")
+            'Console.WriteLine(Now & " ERREUR LoadPort : " & ex.Message & " : " & ex.ToString)
 
-                    If File.Exists(MyRep) = True Then
-                        Dim myxml As XML
-                        Dim list As XmlNodeList
+            'If reponse = MsgBoxResult.Yes Then
+            '    Try 'Seconde chance
+            '        Dim _portip As String = ""
+            '        MyRep = MyRep & "\Config\homidom.sav"
 
-                        myxml = New XML(MyRep)
+            '        If File.Exists(MyRep) = True Then
+            '            Dim myxml As XML
+            '            Dim list As XmlNodeList
 
-                        list = myxml.SelectNodes("/homidom/server")
-                        If list IsNot Nothing Then
-                            If list.Count > 0 Then 'présence des paramètres du server
-                                For j As Integer = 0 To list.Item(0).Attributes.Count - 1
-                                    Select Case list.Item(0).Attributes.Item(j).Name
-                                        Case "ipsoap"
-                                            _Addrip = list.Item(0).Attributes.Item(j).Value
-                                        Case "portsoap"
-                                            _portip = list.Item(0).Attributes.Item(j).Value
-                                        Case "idsrv"
-                                            _IdSrv = list.Item(0).Attributes.Item(j).Value
-                                    End Select
-                                Next
-                            Else
-                                _portip = ""
-                            End If
-                            list = Nothing
-                        End If
-                        myxml = Nothing
-                    End If
-                    Return _portip
-                Catch ex2 As Exception
-                    MsgBox("Erreur lors de la lecture des paramètres du serveur dans le fichier xml de sauvegarde: " & ex.Message, MsgBoxStyle.Critical, "ERREUR SERVICE LoadPort")
-                    Console.WriteLine(Now & " ERREUR LoadPort seconde chance: " & ex.Message & " : " & ex.ToString)
-                    Console.ReadLine()
-                    Return ""
-                End Try
-            Else
-                Return ""
-            End If
+            '            myxml = New XML(MyRep)
+
+            '            list = myxml.SelectNodes("/homidom/server")
+            '            If list IsNot Nothing Then
+            '                If list.Count > 0 Then 'présence des paramètres du server
+            '                    For j As Integer = 0 To list.Item(0).Attributes.Count - 1
+            '                        Select Case list.Item(0).Attributes.Item(j).Name
+            '                            Case "ipsoap"
+            '                                _Addrip = list.Item(0).Attributes.Item(j).Value
+            '                            Case "portsoap"
+            '                                _portip = list.Item(0).Attributes.Item(j).Value
+            '                            Case "idsrv"
+            '                                _IdSrv = list.Item(0).Attributes.Item(j).Value
+            '                        End Select
+            '                    Next
+            '                Else
+            '                    _portip = ""
+            '                End If
+            '                list = Nothing
+            '            End If
+            '            myxml = Nothing
+            '        End If
+            '        Return _portip
+            '    Catch ex2 As Exception
+            '        MsgBox("Erreur lors de la lecture des paramètres du serveur dans le fichier xml de sauvegarde: " & ex.Message, MsgBoxStyle.Critical, "ERREUR SERVICE LoadPort")
+            '        Console.WriteLine(Now & " ERREUR LoadPort seconde chance: " & ex.Message & " : " & ex.ToString)
+            '        Console.ReadLine()
+            '        Return ""
+            '    End Try
+            'Else
+            '    Return ""
+            'End If
         End Try
     End Function
 
@@ -297,9 +299,8 @@ Public Class HoMIServicE
             myService.Stop(_IdSrv)
             End
         Catch ex As Exception
-            MsgBox("Erreur lors de l'arret du service: " & ex.Message, MsgBoxStyle.Critical, "ERREUR SERVICE close")
-            Console.WriteLine(Now & " ERREUR SERVICE close : " & ex.Message & " : " & ex.ToString)
-            Console.ReadLine()
+            logerror("Erreur lors de l'arret du service: " & ex.Message)
+            If (Environment.UserInteractive) Then Console.ReadLine()
         End Try
     End Sub
 
