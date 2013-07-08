@@ -1494,6 +1494,7 @@ Class Window1
             If _AsTimeOutPage Then
                 Dim vDiff As TimeSpan = Now - _TimeMouseDown
                 If vDiff.Minutes >= _TimeOutPage Then
+                    _TimeMouseDown = Now
                     If Canvas1.Children.Count > 0 Then Canvas1.Children.Clear()
                     ImageBackGround = _ImageBackGroundDefault
                     If _DefautPage IsNot Nothing Then 'si la page par defaut est pas null on l'affiche sinon on affiche rien
@@ -2537,7 +2538,7 @@ Class Window1
                 Dim mnu As New MenuItem
                 mnu.Tag = _mac.ID
                 mnu.Header = _mac.Nom
-                mnu.FontSize = 14
+                mnu.FontSize = 18
                 AddHandler mnu.Click, AddressOf MnuExecuteMacro
                 MnuMacro.Items.Add(mnu)
             Next
