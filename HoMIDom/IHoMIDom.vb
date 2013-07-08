@@ -1160,7 +1160,7 @@ Namespace HoMIDom
         ''' <param name="Type">Type de base, si différent de VIDE va mettre les commandes de bases par défaut</param>
         ''' <returns>0 si ok, sinon message d'erreur</returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function CreateNewTemplate(ByVal Fabricant As String, ByVal Modele As String, ByVal Driver As String, ByVal Type As Telecommande.TypeEquipement, ByVal Ligne As Integer, ByVal Colonne As Integer) As String
+        <OperationContract()> Function CreateNewTemplate(Template As Telecommande.Template) As String
 
         ''' <summary>Demander un apprentissage à un driver</summary>
         ''' <returns></returns>
@@ -1175,7 +1175,7 @@ Namespace HoMIDom
         ''' <param name="Commandes">Liste des commandes</param>
         ''' <returns>O si ok sinon message d'erreur</returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function SaveTemplate(ByVal IdSrv As String, ByVal Template As String, ByVal Commandes As List(Of Telecommande.Commandes), ByVal Ligne As Integer, ByVal Colonne As Integer) As String
+        <OperationContract()> Function SaveTemplate(ByVal IdSrv As String, Template As Telecommande.Template) As String
 
         ''' <summary>
         ''' Demande au device d'envoyer une commande (telecommande) à son driver

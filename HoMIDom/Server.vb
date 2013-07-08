@@ -7991,27 +7991,71 @@ Namespace HoMIDom
                     For Each file In files
                         MyXML = New XML(file.FullName)
                         Dim list As XmlNodeList
+                        Dim x As New Telecommande.Template
 
                         list = MyXML.SelectNodes("/template")
                         If list.Count > 0 Then 'présence des paramètres du template
-                            Dim x As New Telecommande.Template
+                            Dim _xmlnode As XmlNode = list.Item(0)
+
                             For j As Integer = 0 To list.Item(0).Attributes.Count - 1
-                                Select Case list.Item(0).Attributes.Item(j).Name
+                                Select Case _xmlnode.Attributes.Item(j).Name
+                                    Case "name"
+                                        x.Name = _xmlnode.Attributes.Item(j).Value
                                     Case "fabricant"
-                                        x.Fabricant = list.Item(0).Attributes.Item(j).Value
+                                        x.Fabricant = _xmlnode.Attributes.Item(j).Value
                                     Case "modele"
-                                        x.Modele = list.Item(0).Attributes.Item(j).Value
+                                        x.Modele = _xmlnode.Attributes.Item(j).Value
                                     Case "driver"
-                                        x.Driver = list.Item(0).Attributes.Item(j).Value
+                                        x.Driver = _xmlnode.Attributes.Item(j).Value
                                     Case "colonne"
-                                        x.Colonne = list.Item(0).Attributes.Item(j).Value
+                                        x.Colonne = _xmlnode.Attributes.Item(j).Value
                                     Case "ligne"
-                                        x.Ligne = list.Item(0).Attributes.Item(j).Value
+                                        x.Ligne = _xmlnode.Attributes.Item(j).Value
                                 End Select
                                 x.File = file.Name
+
                             Next
+
+                            'on charge les commandes du template
+                            If _xmlnode.HasChildNodes = True Then
+                                For Each _child As XmlNode In _xmlnode.ChildNodes
+                                    If _child.Name = "commandes" Then
+                                        If _child.HasChildNodes Then
+                                            For Each _child2 As XmlNode In _child.ChildNodes
+                                                If _child2.Name = "cmd" Then
+                                                    Dim _cmd As New Telecommande.Commandes
+                                                    If Not IsNothing(_child2.Attributes.GetNamedItem("name")) Then _cmd.Name = _child2.Attributes.GetNamedItem("name").Value
+                                                    If Not IsNothing(_child2.Attributes.GetNamedItem("code")) Then _cmd.Code = _child2.Attributes.GetNamedItem("code").Value
+                                                    If Not IsNothing(_child2.Attributes.GetNamedItem("repeat")) Then _cmd.Repeat = _child2.Attributes.GetNamedItem("repeat").Value
+                                                    If Not IsNothing(_child2.Attributes.GetNamedItem("row")) Then _cmd.Row = _child2.Attributes.GetNamedItem("row").Value
+                                                    If Not IsNothing(_child2.Attributes.GetNamedItem("column")) Then _cmd.Column = _child2.Attributes.GetNamedItem("column").Value
+                                                    If Not IsNothing(_child2.Attributes.GetNamedItem("picture")) Then _cmd.Picture = _child2.Attributes.GetNamedItem("picture").Value
+                                                    If Not IsNothing(_child2.Attributes.GetNamedItem("isscript")) Then _cmd.IsScript = _child2.Attributes.GetNamedItem("isscript").Value
+                                                    x.Commandes.Add(_cmd)
+                                                End If
+                                            Next
+                                        End If
+                                    End If
+                                    If _child.Name = "variables" Then
+                                        If _child.HasChildNodes Then
+                                            For Each _child2 As XmlNode In _child.ChildNodes
+                                                If _child2.Name = "var" Then
+                                                    Dim _var As New Telecommande.TemplateVar
+                                                    If Not IsNothing(_child2.Attributes.GetNamedItem("name")) Then _var.Name = _child2.Attributes.GetNamedItem("name").Value
+                                                    If Not IsNothing(_child2.Attributes.GetNamedItem("type")) Then _var.Type = _child2.Attributes.GetNamedItem("code").Value
+                                                    If Not IsNothing(_child2.Attributes.GetNamedItem("value")) Then _var.Value = _child2.Attributes.GetNamedItem("repeat").Value
+                                                    x.Variables.Add(_var)
+                                                End If
+                                            Next
+                                        End If
+                                    End If
+                                Next
+                            End If
+
                             Tabl.Add(x)
                         End If
+
+
                         xml = Nothing
                         list = Nothing
                     Next
@@ -8019,6 +8063,7 @@ Namespace HoMIDom
 
                 Return Tabl
             Catch ex As Exception
+                MsgBox(ex.ToString)
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetListOfTemplate", "Erreur : " & ex.Message)
                 Return Nothing
             End Try
@@ -8027,16 +8072,12 @@ Namespace HoMIDom
         ''' <summary>
         ''' Crée un nouveau template dans le répertoire templates
         ''' </summary>
-        ''' <param name="Fabricant">nom du fabricant</param>
-        ''' <param name="Modele">modele</param>
-        ''' <param name="Driver">driver</param>
-        ''' <param name="Type">Type de base, si différent de VIDE va mettre les commandes de bases par défaut</param>
         ''' <returns>0 si ok, sinon message d'erreur</returns>
         ''' <remarks></remarks>
-        Public Function CreateNewTemplate(ByVal Fabricant As String, ByVal Modele As String, ByVal Driver As String, ByVal Type As Telecommande.TypeEquipement, ByVal Ligne As Integer, ByVal Colonne As Integer) As String Implements IHoMIDom.CreateNewTemplate
+        Public Function CreateNewTemplate(Template As Telecommande.Template) As String Implements IHoMIDom.CreateNewTemplate
             Try
                 Dim MyPath As String = _MonRepertoire & "\templates\"
-                Dim _Fichier As String = MyPath & LCase(Fabricant) & "-" & LCase(Modele) & "-" & Trim(LCase(Driver)) & ".xml"
+                Dim _Fichier As String = MyPath & Template.Name & ".xml"
 
                 If IO.File.Exists(_Fichier) Then
                     Log(TypeLog.DEBUG, TypeSource.SERVEUR, "CreateNewTemplate", "Le template existe déjà pour ce même couple fabricant, modèle et driver!")
@@ -8050,25 +8091,31 @@ Namespace HoMIDom
                 writer.Indentation = 2
 
                 writer.WriteStartElement("template")
+                writer.WriteStartAttribute("name")
+                writer.WriteValue(Template.Name)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("type")
+                writer.WriteValue(Template.Type)
+                writer.WriteEndAttribute()
                 writer.WriteStartAttribute("fabricant")
-                writer.WriteValue(LCase(Fabricant))
+                writer.WriteValue(LCase(Template.Fabricant))
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("modele")
-                writer.WriteValue(LCase(Modele))
+                writer.WriteValue(LCase(Template.Modele))
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("driver")
-                writer.WriteValue(LCase(Driver))
+                writer.WriteValue(LCase(Template.Driver))
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("ligne")
-                writer.WriteValue(Ligne)
+                writer.WriteValue(Template.Ligne)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("colonne")
-                writer.WriteValue(Colonne)
+                writer.WriteValue(Template.Colonne)
                 writer.WriteEndAttribute()
                 writer.WriteStartElement("commandes")
 
                 Dim _listcmd() As String = Nothing
-                Select Case Type
+                Select Case Template.Type
                     Case Telecommande.TypeEquipement.VIDE
                     Case Telecommande.TypeEquipement.TV
                         _listcmd = Telecommande.TemplateTV
@@ -8101,16 +8148,22 @@ Namespace HoMIDom
                         writer.WriteStartAttribute("column")
                         writer.WriteValue("0")
                         writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("isscript")
+                        writer.WriteValue("false")
+                        writer.WriteEndAttribute()
                         writer.WriteEndElement()
                     Next
                 End If
-
                 writer.WriteEndElement()
+
+                writer.WriteStartElement("variables")
+                writer.WriteEndElement()
+
                 writer.WriteEndElement()
 
                 writer.WriteEndDocument()
                 writer.Close()
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "CreateNewTemplate", "Nouveau template créé: " & Fabricant & "-" & Modele & "-" & Driver)
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "CreateNewTemplate", "Nouveau template créé: " & Template.Name)
 
                 Return "0"
             Catch ex As Exception
@@ -8127,11 +8180,11 @@ Namespace HoMIDom
         ''' <param name="Driver"></param>
         ''' <returns>Liste de commandes</returns>
         ''' <remarks></remarks>
-        Public Function ReadTemplate(ByVal Fabricant As String, ByVal Modele As String, ByVal Driver As String) As List(Of Telecommande.Commandes)
+        Public Function ReadTemplate(Name As String) As List(Of Telecommande.Commandes)
             Try
                 Dim _list As New List(Of Telecommande.Commandes)
 
-                Dim MyPath As String = _MonRepertoire & "\templates\" & LCase(Fabricant) & "-" & LCase(Modele) & "-" & LCase(Driver) & ".xml"
+                Dim MyPath As String = _MonRepertoire & "\templates\" & Name & ".xml"
 
                 If IO.File.Exists(MyPath) = False Then
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReadTemplate", "Erreur le fichier n'existe pas: " & MyPath)
@@ -8216,29 +8269,24 @@ Namespace HoMIDom
         End Function
 
         ''' <summary>
-        ''' Sauvegarde les commandes dans un template donné
+        ''' Sauvegarde un template donné
         ''' </summary>
         ''' <param name="IdSrv">Id du Serveur</param>
         ''' <param name="Template">Nom du template</param>
         ''' <param name="Commandes">Liste des commandes</param>
         ''' <returns>O si ok sinon message d'erreur</returns>
         ''' <remarks></remarks>
-        Public Function SaveTemplate(ByVal IdSrv As String, ByVal Template As String, ByVal Commandes As List(Of Telecommande.Commandes), ByVal Ligne As Integer, ByVal Colonne As Integer) As String Implements IHoMIDom.SaveTemplate
+        Public Function SaveTemplate(ByVal IdSrv As String, Template As Telecommande.Template) As String Implements IHoMIDom.SaveTemplate
             Try
                 If VerifIdSrv(IdSrv) = False Then
                     Return 99
                 End If
 
                 Dim MyPath As String = _MonRepertoire & "\templates\"
-                Dim _Fichier As String = MyPath & LCase(Template) & ".xml"
+                Dim _Fichier As String = MyPath & Template.Name & ".xml"
 
                 If IO.File.Exists(_Fichier) = False Then
-                    Return "Le template " & Template & ".xml n'existe pas!"
-                End If
-
-                Dim a() As String = Template.Split("-")
-                If a.Length <> 3 Then
-                    Return "Le nom du template " & Template & " est erroné!"
+                    Return "Le template " & Template.Name & ".xml n'existe pas!"
                 End If
 
                 ''Creation du fichier XML
@@ -8248,49 +8296,78 @@ Namespace HoMIDom
                 writer.Indentation = 2
 
                 writer.WriteStartElement("template")
+                writer.WriteStartAttribute("name")
+                writer.WriteValue(Template.Name)
+                writer.WriteEndAttribute()
                 writer.WriteStartAttribute("fabricant")
-                writer.WriteValue(LCase(a(0)))
+                writer.WriteValue(Template.Fabricant)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("modele")
-                writer.WriteValue(LCase(a(1)))
+                writer.WriteValue(Template.Modele)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("driver")
-                writer.WriteValue(LCase(a(2)))
+                writer.WriteValue(Template.Driver)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("ligne")
-                writer.WriteValue(Ligne)
+                writer.WriteValue(Template.Ligne)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("colonne")
-                writer.WriteValue(Colonne)
+                writer.WriteValue(Template.Colonne)
                 writer.WriteEndAttribute()
-                writer.WriteStartElement("commandes")
 
-                If Commandes IsNot Nothing Then
-                    For i As Integer = 0 To Commandes.Count - 1
+                'ecriture des commandes
+                writer.WriteStartElement("commandes")
+                If Template.Commandes IsNot Nothing Then
+                    For i As Integer = 0 To Template.Commandes.Count - 1
                         writer.WriteStartElement("cmd")
                         writer.WriteStartAttribute("name")
-                        writer.WriteValue(Commandes(i).Name)
+                        writer.WriteValue(Template.Commandes(i).Name)
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("code")
-                        writer.WriteValue(HtmlEncode(Commandes(i).Code))
+                        writer.WriteValue(HtmlEncode(Template.Commandes(i).Code))
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("repeat")
-                        writer.WriteValue(Commandes(i).Repeat)
+                        writer.WriteValue(Template.Commandes(i).Repeat)
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("row")
-                        writer.WriteValue(Commandes(i).Row)
+                        writer.WriteValue(Template.Commandes(i).Row)
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("column")
-                        writer.WriteValue(Commandes(i).Column)
+                        writer.WriteValue(Template.Commandes(i).Column)
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("picture")
-                        If Commandes(i).Picture IsNot Nothing Then writer.WriteValue(Commandes(i).Picture)
+                        If Template.Commandes(i).Picture IsNot Nothing Then writer.WriteValue(Template.Commandes(i).Picture)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("isscript")
+                        writer.WriteValue(Template.Commandes(i).IsScript)
                         writer.WriteEndAttribute()
                         writer.WriteEndElement()
                     Next
                 End If
-
                 writer.WriteEndElement()
+
+                'ecriture des commandes
+                writer.WriteStartElement("variables")
+                If Template.Variables IsNot Nothing Then
+                    For i As Integer = 0 To Template.Variables.Count - 1
+                        'ne pas pendre en comtpe la variable si elle est crée par défaut lors de la création de la classe
+                        If Template.Variables(i).Name <> "command" And Template.Variables(i).Name <> "ip" Then
+                            writer.WriteStartElement("var")
+                            writer.WriteStartAttribute("name")
+                            writer.WriteValue(Template.Variables(i).Name)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("type")
+                            writer.WriteValue(HtmlEncode(Template.Variables(i).Type))
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("value")
+                            writer.WriteValue(Template.Variables(i).Value)
+                            writer.WriteEndAttribute()
+                            writer.WriteEndElement()
+                        End If
+                    Next
+                End If
+                writer.WriteEndElement()
+
                 writer.WriteEndElement()
 
                 writer.WriteEndDocument()

@@ -373,15 +373,15 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _Modele = value
-                    If _Type = "MULTIMEDIA" Then
-                        Dim a() As String = value.Split("-")
-                        If a.Length = 3 Then
-                            Dim _fab As String = a(0)
-                            Dim _mod As String = a(1)
-                            Dim _drv As String = a(2)
-                            Commandes = _Server.ReadTemplate(_fab, _mod, _drv)
-                        End If
-                    End If
+                    'If _Type = "MULTIMEDIA" Then
+                    '    Dim a() As String = value.Split("-")
+                    '    If a.Length = 3 Then
+                    '        Dim _fab As String = a(0)
+                    '        Dim _mod As String = a(1)
+                    '        Dim _drv As String = a(2)
+                    '        Commandes = _Server.ReadTemplate(_fab, _mod, _drv)
+                    '    End If
+                    'End If
                 End Set
             End Property
 
