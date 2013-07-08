@@ -26,7 +26,7 @@ namespace HoMIDroid.Controllers
         }
 
 
-        public override View GetListItemView(int viewId)
+        public override View CreateListItemView(int viewId)
         {
             //return base.GetListItemView(viewId);
 

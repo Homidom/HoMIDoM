@@ -32,7 +32,7 @@ namespace HoMIDroid.Adapters
             var view = convertView;
 
             if (view == null)
-                return device.GetController(this.Context).GetListItemView(position);
+                return device.GetController(this.Context).CreateListItemView(position);
 
             return view;
         }

@@ -29,7 +29,7 @@ namespace HoMIDroid.Adapters
             var item = this.GetChild(groupPosition, childPosition) as BaseObject;
             var controller = item.GetController(this.Context);
 
-            return controller.GetListItemView(groupPosition * childPosition);
+            return controller.CreateListItemView(groupPosition * childPosition);
 
         }
 
@@ -37,7 +37,7 @@ namespace HoMIDroid.Adapters
         {
             var group= this.GetGroup(groupPosition) as Group<BaseObject>;
             var controller = group.GetController(this.Context);
-            var view = controller.GetListItemView(groupPosition);
+            var view = controller.CreateListItemView(groupPosition);
             view.SetPadding(60, 0, 0, 0);
             return view;
         }

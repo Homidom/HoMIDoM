@@ -28,14 +28,14 @@ namespace HoMIDroid.Adapters
             var device = this.GetChild(groupPosition, childPosition) as Device;
             var deviceView = new DeviceController(this.Context, device);
 
-            return deviceView.GetListItemView(groupPosition * childPosition);
+            return deviceView.CreateListItemView(groupPosition * childPosition);
 
         }
 
         public override View GetGroupView(int groupPosition, bool isExpanded, View convertView, ViewGroup parent)
         {
             var group= this.GetGroup(groupPosition) as Group<Device>;
-            var view = group.GetController(this.Context).GetListItemView(groupPosition);
+            var view = group.GetController(this.Context).CreateListItemView(groupPosition);
 
             view.SetPadding(60, 0, 0, 0);
             return view;

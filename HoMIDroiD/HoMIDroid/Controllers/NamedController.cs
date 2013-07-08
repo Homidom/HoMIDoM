@@ -27,24 +27,36 @@ namespace HoMIDroid.Controllers
 
         public override View GetView()
         {
-            return this.GetListItemView(0);
+            return this.CreateListItemView(0);
         }
 
-        public override View GetListItemView(int viewId)
+        public override View CreateListItemView(int viewId)
         {
             TextView textView = new TextView(this.Context);
+            this.updateView(viewId, textView);
+            return textView;
+        }
+
+        public override void UpdateListItemView(int viewId, View view)
+        {
+            base.UpdateListItemView(viewId, view);
+            this.updateView(viewId, (TextView)view);
+        }
+
+        public override View GetContextMenuView()
+        {
+            return null;
+        }
+
+
+        private void updateView(int viewId, TextView textView)
+        {
             textView.Text = this.Item.Name;
             textView.Id = viewId;
             textView.Gravity = GravityFlags.CenterVertical;
 
             textView.SetMinimumHeight(80);
             textView.TextSize = 25;
-            return textView;
-        }
-
-        public override View GetContextMenuView()
-        {
-            return null;
         }
     }
 }
