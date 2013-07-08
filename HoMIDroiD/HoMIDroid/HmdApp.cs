@@ -33,7 +33,7 @@ namespace HoMIDroid
         {
             TinyIoCContainer.Current.Register<Application>(this);
             TinyIoCContainer.Current.Register<HmdApp>(this);
-            TinyIoCContainer.Current.Register<IHmdServer>(new MixedServer(new MockServer(), new RealServer()));
+            TinyIoCContainer.Current.Register<IHmdServer>(new MixedServer(new MockServer(), new RealServerWithCache()));
         }
 
 
@@ -45,12 +45,6 @@ namespace HoMIDroid
             public string Tab { get; set; }
             public Android.Content.Intent Intent { get; set; }
         }
-
-        //public void RequestActivity(string tab, Android.Content.Intent intent)
-        //{
-        //    if (this.StartActivityRequest != null)
-        //        this.StartActivityRequest(this, new StartActivityEventArgs() { Tab = tab, Intent = intent });
-        //}
         public void ThrowRefreshData()
         {
             if (this.RefreshData != null)

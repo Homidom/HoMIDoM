@@ -39,7 +39,6 @@ namespace HoMIDroid.BO
             {
                 Toast.MakeText(app, string.Format("{0}: {1} ({2})", device.Name, this.Caption, device.NumericValue), ToastLength.Short).Show();
                 Android.Util.Log.Debug("HoMIDroid.BO.DeviceAction", "device new value: {0}", device.NumericValue);
-                server.Refresh();
                 return true;
             }
             return false;

@@ -18,12 +18,14 @@ namespace HoMIDroid.Activities
     [Activity(Label = "HoMIDroid - Devices", ConfigurationChanges=Android.Content.PM.ConfigChanges.Orientation)]
     public class ListGroupDevice : ExpandableListActivity
     {
+        List<Group<Device>> data;
+
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
 
             this.ExpandableListView.Clickable = true;
-            this.ExpandableListView.ChildClick += (sender, e) => { this.childClick(e.Parent, e.ClickedView, e.GroupPosition, e.ChildPosition, e.Id); };
+            this.ExpandableListView.ChildClick += (sender, e) => { this.childClick(e.GroupPosition, e.ChildPosition); };
             
             var app = TinyIoC.TinyIoCContainer.Current.Resolve<HmdApp>();
             app.RefreshData += app_RefreshData;
@@ -39,6 +41,13 @@ namespace HoMIDroid.Activities
             app.RefreshData -= app_RefreshData;
         }
 
+        protected override void OnResume()
+        {
+            if (this.data != null)
+                this.data.ForEach(g => g.Elements.ForEach(e => e.TriggerValueChanged()));
+            base.OnResume();
+        }
+
         private void app_RefreshData(object sender, EventArgs e)
         {
             this.refresh();
@@ -47,10 +56,11 @@ namespace HoMIDroid.Activities
         private void refresh()
         {
             var server = TinyIoC.TinyIoCContainer.Current.Resolve<IHmdServer>();
-            this.SetListAdapter(new DeviceExpandableGroupAdapter(this, server.GetDevicesByCategory()));
+            this.data = server.GetDevicesByCategory();
+            this.SetListAdapter(new DeviceExpandableGroupAdapter(this, this.data));
         }
 
-        private bool childClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id)
+        private bool childClick(int groupPosition, int childPosition)
         {
             var item = this.ExpandableListAdapter.GetChild(groupPosition, childPosition) as BaseObject;
             if (item != null)
