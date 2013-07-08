@@ -1,10 +1,10 @@
-﻿Public Class WTelecommandeNew
+﻿Imports HoMIDom.HoMIDom.Telecommande
+
+Public Class WTelecommandeNew
 
 #Region "Variables"
     Dim FlagNewCmd As Boolean
     Dim x As HoMIDom.HoMIDom.TemplateDevice = Nothing
-    Dim _DeviceId As String 'Id du device à modifier
-    Dim _Driver As HoMIDom.HoMIDom.TemplateDriver
     'Dim _SelectDriverIndex As Integer 'Index du driver sélectionné
     Dim ListButton As New List(Of ImageButton)
     Dim _Row As Integer
@@ -44,12 +44,12 @@
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Numérique obligatoire pour repeat !!", "Erreur", "")
                 Exit Sub
             End If
-            If TxtCmdName.Text = "" Or TxtCmdName.Text = " " Then
+            If String.IsNullOrEmpty(TxtCmdName.Text) Then
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom de la commande est obligatoire !!", "Erreur", "")
                 Exit Sub
             End If
 
-            If x IsNot Nothing Then
+            If _CurrentTemplate IsNot Nothing Then
 
                 If FlagNewCmd = True Then 'nouvelle commande
                     Dim _cmd As New HoMIDom.HoMIDom.Telecommande.Commandes
@@ -59,26 +59,27 @@
                         .Repeat = TxtCmdRepeat.Text
                         .Picture = ImgCommande.Tag
                     End With
-                    x.Commandes.Add(_cmd)
+                    _CurrentTemplate.Commandes.Add(_cmd)
                 Else 'modifier commande
                     Dim idx As Integer = ListCmd.SelectedIndex
                     If idx < 0 Then Exit Sub
 
-                    With x.Commandes.Item(idx)
+                    With _CurrentTemplate.Commandes.Item(idx)
                         .Name = TxtCmdName.Text
                         .Code = TxtCmdData.Text
                         .Repeat = TxtCmdRepeat.Text
                         .Picture = ImgCommande.Tag
-
                     End With
                 End If
+                TxtCmdName.Text = ""
+                TxtCmdData.Text = ""
+                TxtCmdRepeat.Text = ""
 
+                ListCmd.Items.Clear()
+                For i2 As Integer = 0 To _CurrentTemplate.Commandes.Count - 1
+                    ListCmd.Items.Add(_CurrentTemplate.Commandes.Item(i2).Name)
+                Next
             End If
-
-            ListCmd.Items.Clear()
-            For i2 As Integer = 0 To x.Commandes.Count - 1
-                ListCmd.Items.Add(x.Commandes.Item(i2).Name)
-            Next
 
             BtnNewCmd.Visibility = Windows.Visibility.Visible
             FlagNewCmd = False
@@ -97,7 +98,7 @@
         Try
             If ListCmd.SelectedIndex >= 0 Then
                 x.Commandes.RemoveAt(ListCmd.SelectedIndex)
-                Dim retour As String = myService.SaveTemplate(IdSrv, cbTemplate.Text, x.Commandes, slider_Row.Value, slider_Column.Value)
+                Dim retour As String = myService.SaveTemplate(IdSrv, _CurrentTemplate)
                 If retour <> "0" Then
                     AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement de la commande dans le template: " & retour, "Erreur", "")
                     Exit Sub
@@ -129,10 +130,10 @@
             If TxtCmdName.Text = "" Or TxtCmdName.Text = " " Then
 
             End If
-            Dim retour As String = myService.TelecommandeSendCommand(IdSrv, _DeviceId, TxtCmdName.Text)
-            If retour <> 0 Then
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, retour, "Erreur", "")
-            End If
+            'Dim retour As String = myService.TelecommandeSendCommand(IdSrv, _DeviceId, TxtCmdName.Text)
+            'If retour <> 0 Then
+            '    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, retour, "Erreur", "")
+            'End If
         Catch Ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnTstCmd: " & Ex.Message, "Erreur", "")
         End Try
@@ -146,15 +147,15 @@
     ''' <remarks></remarks>
     Private Sub BtnLearn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnLearn.Click
         Try
-            If _Driver IsNot Nothing Then
-                If _Driver.Enable = True And _Driver.IsConnect Then
-                    TxtCmdData.Text = myService.StartLearning(IdSrv, _Driver.ID)
-                Else
-                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Impossible d'apprendre un code car le driver n'est pas activé ou n'est pas connecté", "Erreur", "")
-                End If
-            Else
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Impossible d'apprendre un code car le driver n'a pas été trouvé", "Erreur", "")
-            End If
+            'If _Driver IsNot Nothing Then
+            '    If _Driver.Enable = True And _Driver.IsConnect Then
+            '        TxtCmdData.Text = myService.StartLearning(IdSrv, _Driver.ID)
+            '    Else
+            '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Impossible d'apprendre un code car le driver n'est pas activé ou n'est pas connecté", "Erreur", "")
+            '    End If
+            'Else
+            '    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Impossible d'apprendre un code car le driver n'a pas été trouvé", "Erreur", "")
+            'End If
         Catch Ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnLearnCmd: " & Ex.Message, "Erreur", "")
         End Try
@@ -192,17 +193,18 @@
             Dim i As Integer = ListCmd.SelectedIndex
             If i < 0 Then Exit Sub
 
-            BtnSaveCmd.Visibility = Windows.Visibility.Collapsed
-            BtnDelCmd.Visibility = Windows.Visibility.Visible
-            BtnTstCmd.Visibility = Windows.Visibility.Visible
-            TxtCmdName.Text = x.Commandes.Item(i).Name
-            TxtCmdData.Text = x.Commandes.Item(i).Code
-            TxtCmdRepeat.Text = x.Commandes.Item(i).Repeat
+            If _CurrentTemplate IsNot Nothing Then
 
-            If x.Commandes.Item(i).Picture IsNot Nothing Then
-                If x.Commandes.Item(i).Picture <> " " Then
-                    ImgCommande.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Commandes.Item(i).Picture))
-                    ImgCommande.Tag = x.Commandes.Item(i).Picture
+                BtnSaveCmd.Visibility = Windows.Visibility.Collapsed
+                BtnDelCmd.Visibility = Windows.Visibility.Visible
+                BtnTstCmd.Visibility = Windows.Visibility.Visible
+                TxtCmdName.Text = _CurrentTemplate.Commandes.Item(i).Name
+                TxtCmdData.Text = _CurrentTemplate.Commandes.Item(i).Code
+                TxtCmdRepeat.Text = _CurrentTemplate.Commandes.Item(i).Repeat
+
+                If String.IsNullOrEmpty(_CurrentTemplate.Commandes.Item(i).Picture) = False Then
+                    ImgCommande.Source = ConvertArrayToImage(myService.GetByteFromImage(_CurrentTemplate.Commandes.Item(i).Picture))
+                    ImgCommande.Tag = _CurrentTemplate.Commandes.Item(i).Picture
                 End If
 
             End If
@@ -275,6 +277,7 @@
         cbBase.Visibility = Windows.Visibility.Visible
         TxtTplFab.IsReadOnly = False
         TxtTplMod.IsReadOnly = False
+        TxtTplName.IsReadOnly = False
     End Sub
 
     Function HaveCaractSpecial(ByVal txt As String) As Boolean
@@ -305,30 +308,41 @@
                 TxtTplFab.Focus()
                 Exit Sub
             End If
-            If String.IsNullOrEmpty(TxtTplMod.Text) Or HaveCaractSpecial(TxtTplMod.Text) > 0 Then
+            If String.IsNullOrEmpty(TxtTplMod.Text) Or HaveCaractSpecial(TxtTplMod.Text) Then
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du modèle est obligatoire et ne doit pas comporter de caractère spécial (%,-,!...)", "Erreur", "")
                 TxtTplMod.Focus()
                 Exit Sub
             End If
-
-            If _Driver IsNot Nothing Then
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "OK", "", "")
-            Else
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "VIDE", "", "")
+            If String.IsNullOrEmpty(TxtTplName.Text) Or HaveCaractSpecial(TxtTplName.Text) Then
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du template est obligatoire et ne doit pas comporter de caractère spécial (%,-,!...)", "Erreur", "")
+                TxtTplName.Focus()
+                Exit Sub
             End If
+
+            _CurrentTemplate = New HoMIDom.HoMIDom.Telecommande.Template
+
+            With _CurrentTemplate
+                .Name = TxtTplName.Text
+                .Modele = TxtTplMod.Text
+                .Fabricant = TxtTplFab.Text
+            End With
+
+            'If _Driver IsNot Nothing Then
+            '    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "OK", "", "")
+            'Else
+            '    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "VIDE", "", "")
+            'End If
 
             Dim _type As String = ""
             If RdHttp.IsChecked Then
-                _type = "http"
+                _CurrentTemplate.Type = 0
             ElseIf RdIR.IsChecked Then
-                _type = "ir"
+                _CurrentTemplate.Type = 1
             ElseIf RdRS232.IsChecked Then
-                _type = "rs232"
+                _CurrentTemplate.Type = 2
             End If
 
-            Dim mytemplate As String = LCase(TxtTplFab.Text) & "-" & LCase(TxtTplMod.Text) & "-" & _type '_Driver.Protocol
-
-            Dim retour As String = myService.CreateNewTemplate(TxtTplFab.Text, TxtTplMod.Text, _type, cbBase.SelectedIndex, slider_Row.Value, slider_Column.Value)
+            Dim retour As String = myService.CreateNewTemplate(_CurrentTemplate)
             If retour <> "0" Then
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la création du nouveau template: " & retour, "Erreur", "")
                 Exit Sub
@@ -347,10 +361,11 @@
                     cbTemplate.Items.Add(tpl)
                 Next
 
-                cbTemplate.Text = mytemplate
+                cbTemplate.SelectedValue = _CurrentTemplate.Name
 
                 TxtTplFab.IsReadOnly = True
                 TxtTplMod.IsReadOnly = True
+                TxtTplName.IsReadOnly = True
             End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString)
@@ -361,14 +376,12 @@
 #End Region
 
 
-    Public Sub New(Optional ByVal DeviceId As String = "", Optional ByVal DriverUid As String = "", Optional ByVal Template As HoMIDom.HoMIDom.TemplateDevice = Nothing)
+    Public Sub New(Optional ByVal Template As HoMIDom.HoMIDom.TemplateDevice = Nothing)
 
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
 
         Try
-            _DeviceId = DeviceId
-            _Driver = myService.ReturnDriverByID(IdSrv, DriverUid)
             x = Template
 
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
@@ -429,6 +442,7 @@
 
             BtnSaveCmd.Visibility = Windows.Visibility.Collapsed
         Catch ex As Exception
+            MessageBox.Show(ex.ToString)
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'ouverture de la fenêtre d'édition:" & ex.ToString, "Erreur", "")
         End Try
     End Sub
@@ -732,33 +746,33 @@ Retour:
     End Sub
 
     'Fermer
-    Private Sub button_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Button.Click
+    Private Sub button_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles button.Click
         Try
-            x.Modele = cbTemplate.Text
-            For i As Integer = 0 To grid_Telecommande.Children.Count - 1
-                Dim cvs As Canvas = grid_Telecommande.Children.Item(i)
+            'x.Modele = cbTemplate.Text
+            'For i As Integer = 0 To grid_Telecommande.Children.Count - 1
+            '    Dim cvs As Canvas = grid_Telecommande.Children.Item(i)
 
-                If cvs IsNot Nothing Then
-                    If cvs.Children.Count <> 0 Then
-                        For j As Integer = 0 To x.Commandes.Count - 1
+            '    If cvs IsNot Nothing Then
+            '        If cvs.Children.Count <> 0 Then
+            '            For j As Integer = 0 To x.Commandes.Count - 1
 
-                            Dim y As ImageButton = cvs.Children.Item(0)
-                            If x.Commandes(j).Name = y.Command Then
-                                x.Commandes(j).Row = y.Row
-                                x.Commandes(j).Column = y.Column
-                                Exit For
-                            End If
-                        Next
-                    End If
-                End If
-            Next
+            '                Dim y As ImageButton = cvs.Children.Item(0)
+            '                If x.Commandes(j).Name = y.Command Then
+            '                    x.Commandes(j).Row = y.Row
+            '                    x.Commandes(j).Column = y.Column
+            '                    Exit For
+            '                End If
+            '            Next
+            '        End If
+            '    End If
+            'Next
 
-            If cbTemplate.Text <> "" Then
-                Dim retour As String = myService.SaveTemplate(IdSrv, cbTemplate.Text, x.Commandes, slider_Row.Value, slider_Column.Value)
-                If retour <> "0" Then
-                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement de la commande dans le template: " & retour, "Erreur", "")
-                End If
-            End If
+            'If cbTemplate.Text <> "" Then
+            '    Dim retour As String = myService.SaveTemplate(IdSrv, cbTemplate.Text, x.Commandes, slider_Row.Value, slider_Column.Value, _CurrentTemplate.Variables)
+            '    If retour <> "0" Then
+            '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement de la commande dans le template: " & retour, "Erreur", "")
+            '    End If
+            'End If
 
             DialogResult = True
         Catch ex As Exception
@@ -824,37 +838,92 @@ Retour:
         Try
             If cbTemplate.SelectedIndex < 0 Then
             Else
-                'Récupère la liste des template
+                'Récupère la liste des templates
                 Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
                 _list = myService.GetListOfTemplate
 
+                _CurrentTemplate = _list.Item(cbTemplate.SelectedIndex)
+                ChargeCmd()
+                ChargeVar()
+
+                TxtCmdName.Text = _list.Item(cbTemplate.SelectedIndex).Name
                 TxtTplFab.Text = _list.Item(cbTemplate.SelectedIndex).Fabricant
                 TxtTplMod.Text = _list.Item(cbTemplate.SelectedIndex).Modele
                 slider_Column.Value = _list.Item(cbTemplate.SelectedIndex).Colonne
                 slider_Row.Value = _list.Item(cbTemplate.SelectedIndex).Ligne
+
+                StkCmd.Visibility = Windows.Visibility.Visible
+                StkVar.Visibility = Windows.Visibility.Visible
             End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString)
         End Try
     End Sub
 
-    Private Sub TxtCmdName_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtCmdName.TextChanged
+    Private Sub ChargeCmd()
+        Try
+            ListCmd.Items.Clear()
+
+            If _CurrentTemplate IsNot Nothing Then
+                For Each cmd In _CurrentTemplate.Commandes
+                    ListCmd.Items.Add(cmd.Name)
+                Next
+            Else
+
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString)
+        End Try
+    End Sub
+
+    Private Sub ChargeVar()
+        Try
+            ListVar.Items.Clear()
+
+            If _CurrentTemplate IsNot Nothing Then
+                For Each var In _CurrentTemplate.Variables
+                    ListVar.Items.Add(var.Name)
+                Next
+            Else
+
+            End If
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString)
+        End Try
+    End Sub
+
+    Private Sub TxtCmdName_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TxtCmdName.MouseDown
         BtnSaveCmd.Visibility = Windows.Visibility.Visible
     End Sub
 
-    Private Sub TxtCmdRepeat_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtCmdRepeat.TextChanged
+    Private Sub TxtCmdRepeat_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TxtCmdRepeat.MouseDown
         BtnSaveCmd.Visibility = Windows.Visibility.Visible
     End Sub
+
+#Region "Variable"
+    Dim FlagNewVar As Boolean
 
     Private Sub BtnNewVar_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewVar.Click
         StkParamVar.Visibility = Windows.Visibility.Visible
+        TxtVarName.IsEnabled = True
         TxtVarName.Text = ""
         CbVarType.SelectedIndex = 0
+        FlagNewVar = True
     End Sub
 
     Private Sub ListVar_SelectionChanged(ByVal sender As System.Object, ByVal e As Object) Handles ListVar.SelectionChanged, ListVar.MouseLeftButtonDown
         Try
-
+            FlagNewVar = False
+            If _CurrentTemplate IsNot Nothing Then
+                For Each _var In _CurrentTemplate.Variables
+                    If _var.Name = ListVar.SelectedValue Then
+                        TxtVarName.Text = _var.Name
+                        TxtVarName.IsEnabled = False
+                        CbVarType.SelectedValue = _var.Type.ToString
+                        Exit For
+                    End If
+                Next
+            End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur ListVar_SelectionChanged: " & ex.Message, "Erreur", "")
         End Try
@@ -862,6 +931,7 @@ Retour:
 
     Private Sub BtnAnnulVar_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnAnnulVar.Click
         Try
+            FlagNewVar = False
             StkParamVar.Visibility = Windows.Visibility.Collapsed
             TxtVarName.Text = ""
             CbVarType.SelectedIndex = 0
@@ -872,14 +942,25 @@ Retour:
 
     Private Sub BtnDeleteVar_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDeleteVar.Click
         Try
+            FlagNewVar = False
+
             If ListVar.SelectedIndex < 0 Then
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez sélectionner une variable à supprimer!", "Erreur", "")
                 Exit Sub
             End If
 
-            For Each var In _CurrentTemplate.Variables
+            If _CurrentTemplate IsNot Nothing Then
+                Dim idx As Integer = 0
+                For Each var In _CurrentTemplate.Variables
+                    If var.Name = ListVar.SelectedValue Then
+                        _CurrentTemplate.Variables.RemoveAt(idx)
+                        Exit For
+                    End If
+                    idx += 1
+                Next
 
-            Next
+                ChargeVar()
+            End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnDeleteVar_Click: " & ex.Message, "Erreur", "")
         End Try
@@ -887,9 +968,64 @@ Retour:
 
     Private Sub BtnModifVar_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnModifVar.Click
         Try
+            If FlagNewVar Then
+                TxtVarName.IsEnabled = True
+            Else
+                TxtVarName.IsEnabled = False
 
+                If ListVar.SelectedIndex < 0 Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez sélectionner une variable à modifier!", "Erreur", "")
+                    Exit Sub
+                End If
+            End If
+
+            If _CurrentTemplate IsNot Nothing Then
+                If FlagNewVar Then
+                    For Each var In _CurrentTemplate.Variables
+                        If var.Name.ToUpper = TxtVarName.Text.ToUpper Then
+                            MessageBox.Show("Vous ne pouvez pas utiliser ce nom de variable car il existe déjà !", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                            Exit For
+                        End If
+                    Next
+
+                    Dim v As New TemplateVar
+                    With v
+                        .Name = TxtVarName.Text
+                        .Type = CbVarType.SelectedIndex
+                    End With
+                    _CurrentTemplate.Variables.Add(v)
+
+                Else
+                    Dim idx As Integer = 0
+                    For Each var In _CurrentTemplate.Variables
+                        If var.Name = TxtVarName.Text Then
+                            var.Type = CbVarType.SelectedIndex
+                            Exit For
+                        End If
+                        idx += 1
+                    Next
+                End If
+
+
+                ChargeVar()
+            End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnModifVar_Click: " & ex.Message, "Erreur", "")
+        End Try
+    End Sub
+#End Region
+
+    Private Sub buttonOk_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles buttonOk.Click
+        Try
+            If _CurrentTemplate IsNot Nothing Then
+                Dim retour As String = myService.SaveTemplate(IdSrv, _CurrentTemplate)
+
+                If retour <> "0" Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement de la commande dans le template: " & retour, "Erreur", "")
+                End If
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur buttonOk_Click: " & ex.Message, "Erreur", "buttonOk_Click")
         End Try
     End Sub
 End Class

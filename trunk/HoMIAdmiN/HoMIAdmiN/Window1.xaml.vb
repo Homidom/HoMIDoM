@@ -2914,6 +2914,14 @@ Class Window1
         End Try
     End Sub
 
+    Private Sub LHS_MouseDoubleClick(sender As System.Object, e As System.Windows.Input.MouseButtonEventArgs) Handles LHS.MouseDoubleClick
+        Try
+            Dim frm As New WTelecommandeNew
+            frm.ShowDialog()
+        Catch ex As Exception
+            MessageBox.Show(ex.ToString)
+        End Try
+    End Sub
 End Class
 
 
