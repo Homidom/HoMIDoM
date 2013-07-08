@@ -140,12 +140,18 @@ namespace HoMIDroid.BO
             return new DeviceController(context, this);
         }
 
+        public void TriggerValueChanged()
+        {
+            this.OnValueChanged(EventArgs.Empty);
+        }
+
         protected virtual void OnValueChanged(EventArgs e)
         {
             if (this.ValueChanged != null)
                 this.ValueChanged(this, e);
         }
 
+        #region Private methods
         private DeviceAction retrieveAction<T>() where T: DeviceAction
         {
             var q = from a in this.Actions
@@ -154,5 +160,6 @@ namespace HoMIDroid.BO
 
             return q.FirstOrDefault();
         }
+        #endregion
     }
 }

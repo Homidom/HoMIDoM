@@ -129,7 +129,7 @@ namespace HoMIDroid.Server
 
                 this.Server.ExecuteDeviceCommand(this.ServerID, device.Id, action.ToServerAction(device));
 
-                this.RefreshDevice(device);
+                //this.RefreshDevice(device);
 
                 return true;
             }
@@ -159,7 +159,8 @@ namespace HoMIDroid.Server
 
         public override bool RefreshDevice(BO.Device device)
         {
-            var refreshed = this.getDevice(this.Server.ReturnDeviceByID(device.Id, this.ServerID));
+            var rawDevice = this.Server.ReturnDeviceByID(this.ServerID, device.Id);
+            var refreshed = this.getDevice(rawDevice);
 
             if (refreshed != null)
             {

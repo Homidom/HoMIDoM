@@ -19,6 +19,8 @@ namespace HoMIDroid.Activities
     [Activity(Label = "HoMIDroid - Zone", ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation)]
     public class ZoneContent : ExpandableListActivity
     {
+        private Zone zone;
+
         public const string PARAMS_ID = "id";
 
         protected override void OnCreate(Bundle bundle)
@@ -27,17 +29,25 @@ namespace HoMIDroid.Activities
 
             var server = TinyIoC.TinyIoCContainer.Current.Resolve<IHmdServer>();
 
-            Zone zone = null;
+            this.zone = null;
 
             var zoneId = this.Intent.GetStringExtra(PARAMS_ID);
             if (!string.IsNullOrEmpty(zoneId))
-                zone = server.GetZone(zoneId);
+                this.zone = server.GetZone(zoneId);
 
             this.ExpandableListView.Clickable = true;
             this.ExpandableListView.ChildClick += (sender, e) => { this.childClick(e.GroupPosition, e.ChildPosition); };
 
-            if (zone != null)
-                this.SetListAdapter(new ZoneContentExpandableGroupAdapter(this, zone));
+            if (this.zone != null)
+                this.SetListAdapter(new ZoneContentExpandableGroupAdapter(this, this.zone));
+        }
+
+
+        protected override void OnResume()
+        {
+            if (this.zone != null)
+                this.zone.Devices.ForEach(d => d.TriggerValueChanged());
+            base.OnResume();
         }
 
         private bool childClick(int groupPosition, int childPosition)

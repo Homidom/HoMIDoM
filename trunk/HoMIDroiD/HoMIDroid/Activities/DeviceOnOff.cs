@@ -55,16 +55,16 @@ namespace HoMIDroid.Activities
                 switch (this.CurrentDevice.DeviceCategory)
                 {
                     case DeviceCategory.Light:
-                        if (this.CurrentDevice.NumericValue == 0)
-                            btnAction.SetImageDrawable(Resources.GetDrawable(Resource.Drawable.light_bulb_off));
-                        else
+                        if (this.CurrentDevice.NumericValue > 0)
                             btnAction.SetImageDrawable(Resources.GetDrawable(Resource.Drawable.light_bulb_on));
+                        else
+                            btnAction.SetImageDrawable(Resources.GetDrawable(Resource.Drawable.light_bulb_off));
                         break;
                     default:
-                        if (this.CurrentDevice.NumericValue == 0)
-                            btnAction.SetImageDrawable(Resources.GetDrawable(Resource.Drawable.switch_OFF));
-                        else
+                        if (this.CurrentDevice.NumericValue > 0)
                             btnAction.SetImageDrawable(Resources.GetDrawable(Resource.Drawable.switch_ON));
+                        else
+                            btnAction.SetImageDrawable(Resources.GetDrawable(Resource.Drawable.switch_OFF));
                         break;
                 }
             }
