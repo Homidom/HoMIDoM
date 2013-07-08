@@ -30,12 +30,12 @@ namespace HoMIDroid.Adapters
         {
             var macro = this.GetItem(position);
             var view = convertView;
+            var controller = macro.GetController(this.Context);
 
             if (view == null)
-            {
-                var dv = macro.GetController(this.Context);
-                return dv.GetListItemView(position);
-            }
+                return controller.CreateListItemView(position);
+            else
+                controller.UpdateListItemView(position, view);
 
             return view;
         }

@@ -22,7 +22,10 @@ namespace HoMIDroid.Controllers
         }
 
         public abstract View GetView();
-        public abstract View GetListItemView(int viewId);
+        public abstract View CreateListItemView(int viewId);
+        public virtual void UpdateListItemView(int viewId, View view)
+        {
+        }
         public abstract View GetContextMenuView();
 
         public virtual bool Click() 
