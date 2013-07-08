@@ -117,12 +117,26 @@ Public Class uCamera
     End Sub
 
     Protected Overrides Sub Finalize()
+        Try
+            If _mjpeg IsNot Nothing Then
+                _mjpeg.StopStream()
+                _mjpeg = Nothing
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.Finalize: " & ex.ToString, "Erreur", "uCamera.Finalize")
+        End Try
         MyBase.Finalize()
     End Sub
 
     Private Sub uCamera_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
-        _mjpeg.StopStream()
-        _mjpeg = Nothing
+        Try
+            If _mjpeg IsNot Nothing Then
+                _mjpeg.StopStream()
+                _mjpeg = Nothing
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.uCamera_Unloaded: " & ex.ToString, "Erreur", "uCamera.uCamera_Unloaded")
+        End Try
     End Sub
 
     Private Sub mjpeg_FrameReady(ByVal sender As Object, ByVal e As FrameReadyEventArgs)
