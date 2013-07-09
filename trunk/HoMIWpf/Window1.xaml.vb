@@ -51,6 +51,10 @@ Class Window1
     Dim list As XmlNodeList
     Dim _ConfigFile As String
 
+    'Divers
+    Dim _AutoSave As Boolean = True 'Sauvegarde automatique en quittant
+    Dim _flagSave As Boolean = False 'True si première execution du client ou si on a changer un paramètre de config
+
     'User Graphic
     Dim _ShowSoleil As Boolean
     Dim _ShowTemperature As Boolean
@@ -77,6 +81,28 @@ Class Window1
 #End Region
 
 #Region "Property"
+    Public Property FlagSave As Boolean
+        Get
+            Return _flagSave
+        End Get
+        Set(value As Boolean)
+            _flagSave = value
+        End Set
+    End Property
+
+    Public Property AutoSave As Boolean
+        Get
+            Return _AutoSave
+        End Get
+        Set(value As Boolean)
+            _AutoSave = value
+            If _AutoSave Then
+                MnuSave.Visibility = Windows.Visibility.Collapsed
+            Else
+                MnuSave.Visibility = Windows.Visibility.Visible
+            End If
+        End Set
+    End Property
     Public Property ShowLabelMnu As Boolean
         Get
             Return _ShowLabelMnu
@@ -541,6 +567,8 @@ Class Window1
 
             Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Chargement du fichier config: " & Fichier)
 
+            FlagSave = True
+
             '******************************************
             'on va chercher les paramètres du serveur
             '******************************************
@@ -601,6 +629,10 @@ Class Window1
             If list.Count > 0 Then 'présence des paramètres du server
                 For j As Integer = 0 To list.Item(0).Attributes.Count - 1
                     Select Case list.Item(0).Attributes.Item(j).Name
+                        Case "flagsave"
+                            FlagSave = list.Item(0).Attributes.Item(j).Value
+                        Case "autosave"
+                            AutoSave = list.Item(0).Attributes.Item(j).Value
                         Case "showlbltime"
                             ShowDateTime = list.Item(0).Attributes.Item(j).Value
                         Case "showsoleil"
@@ -977,6 +1009,12 @@ Class Window1
             ''Sauvegarde des parametres d'interface
             ''------------
             writer.WriteStartElement("interface")
+            writer.WriteStartAttribute("flagsave")
+            writer.WriteValue(FlagSave)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("autosave")
+            writer.WriteValue(AutoSave)
+            writer.WriteEndAttribute()
             writer.WriteStartAttribute("showsoleil")
             writer.WriteValue(ShowSoleil)
             writer.WriteEndAttribute()
@@ -1551,8 +1589,6 @@ Class Window1
             Chk3.Visibility = Windows.Visibility.Collapsed
 
             Dim y As uCtrlImgMnu = sender
-
-
 
             If y IsNot Nothing Then
                 Select Case y.Type
@@ -2553,14 +2589,19 @@ Class Window1
 
             Canvas1.Children.Clear()
             Me.UpdateLayout()
+
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
+
             ImageBackGround = _ImageBackGroundDefault
             Dim x As New WConfig(Me)
             x.Owner = Me
             x.ShowDialog()
+
             If x.DialogResult.HasValue And x.DialogResult.Value Then
                 imgStackPnl.Children.Clear()
                 For i As Integer = 0 To ListMnu.Count - 1
-                    AddHandler ListMnu.Item(i).click, AddressOf IconMnuDoubleClick
                     If ListMnu.Item(i).Type = uCtrlImgMnu.TypeOfMnu.Zone Then
                         If ListMnu.Item(i).Visible = True Then imgStackPnl.Children.Add(ListMnu.Item(i))
                     Else
@@ -2573,6 +2614,7 @@ Class Window1
                     Me.WindowState = Windows.WindowState.Maximized
                 End If
                 x.Close()
+                FlagSave = True
             Else
                 x.Close()
             End If
@@ -2613,7 +2655,7 @@ Class Window1
     Private Sub Quitter()
         Try
             If VerifPassword() = False Then Exit Sub
-            SaveConfig(_ConfigFile)
+            If AutoSave Or FlagSave Then SaveConfig(_ConfigFile)
             Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermture de l'application")
             End
         Catch ex As Exception
@@ -2715,5 +2757,17 @@ Class Window1
 #End Region
 
 
-
+    ''' <summary>
+    ''' Menu sauvegarder
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub MnuSave_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles MnuSave.Click
+        Try
+            SaveConfig(_ConfigFile)
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur MnuSave_Click: " & ex.Message, "Erreur", "MnuSave_Click")
+        End Try
+    End Sub
 End Class
