@@ -302,6 +302,13 @@ uCtrlImgMnu
  fait apparaitre la barre de menu du bas
  </summary>
 	<remarks></remarks>
+</member><member name="M:HoMIWpF.Window1.MnuSave_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Menu sauvegarder
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
 </member><member name="M:HoMIWpF.Fonctions.AfficheMessageAndLog(HoMIWpF.Fonctions.TypeLog,System.String,System.String,System.String)">
 	<summary>
  Affiche le message et connecté log dans le serveur

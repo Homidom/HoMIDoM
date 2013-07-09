@@ -1,7 +1,7 @@
 ﻿<Window x:Class="WConfig"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Configurer le client" MinHeight="350" MinWidth="300" Topmost="False" >
+    Title="Configurer le client" MinHeight="550" MinWidth="400" Topmost="False" >
    
     <StackPanel Margin="5" Background="DarkGray">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -37,7 +37,7 @@
                 </GroupBox >
 
             </TabItem>
-            <TabItem Header="Affichage" >
+            <TabItem Header="Client" >
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                     <StackPanel >
                 <GroupBox Header="Affichage" Margin="2" Foreground="White">
@@ -57,7 +57,7 @@
                             <CheckBox Name="ChkWidthPass" Content="Demander Mot de passe pour fonctions critiques" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                             <TextBox Name="TxtPassword" Margin="5,0,0,0" Width="100" MaxLength="12" />
                         </StackPanel>
-                        <CheckBox Name="ChkAffLastError" Foreground="White" Content=" Afficher Message"/>
+                        <CheckBox Name="ChkAffLastError" Foreground="White" Content="Afficher Message"/>
                         <CheckBox Name="ChkMaskTaskMnu" Foreground="White" Content="Masquer automatiquement la barre de menu"/>
 
                         <StackPanel Orientation="Horizontal" >
@@ -93,7 +93,13 @@
                             <Button Margin="2" Width="80" Height="35"  Content="Vider le cache" Name="BtnDeleteCache" Template="{DynamicResource GlassButton}" Foreground="White" />
                         </StackPanel>
                     </GroupBox>
-                </StackPanel >
+                        <GroupBox Header="Sauvegarde" Margin="2" Foreground="White">
+                            <StackPanel HorizontalAlignment="Left">
+                                <CheckBox Name="ChkSaveAuto" Foreground="White" Content="Sauvegarder automatiquement en quittant"/>
+                            </StackPanel>
+                        </GroupBox>
+
+                    </StackPanel >
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Tactile" >

@@ -6,7 +6,6 @@ Public Class WConfig
     Dim MyListMnu As New List(Of uCtrlImgMnu)
 
     Private Sub BtnOk_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOk.Click
-        Frm.ShowQuitter = ChkShowBtnQuit.IsChecked
         Frm.WithPassword = ChkWidthPass.IsChecked
 
         If Frm.WithPassword Then
@@ -16,15 +15,17 @@ Public Class WConfig
             End If
         End If
 
+        Frm.AutoSave = ChkSaveAuto.IsChecked
+        Frm.ShowQuitter = ChkShowBtnQuit.IsChecked
         Frm.Password = TxtPassword.Text
         Frm.AffLastError = ChkAffLastError.IsChecked
         Frm.ShowDateTime = ChkDateTime.IsChecked
         Frm.ShowSoleil = ChkSoleil.IsChecked
         Frm.ShowLabelMnu = ChkShowlblMnu.IsChecked
         Frm.FullScreen = ChkFullScreen.IsChecked
-        Frm.Friction = SliderFriction.Value
+        Frm.Friction = SliderFriction.Value.ToString("0.00")
         Frm.ImageBackGround = TxtImgBack.Text
-        Frm.SpeedTouch = SliderSpeed.Value
+        Frm.SpeedTouch = SliderSpeed.Value.ToString("0.00")
         Frm.IP = TxtIP.Text
         Frm.PortSOAP = TxtPort.Text
         Frm.ListMnu = MyListMnu
@@ -49,17 +50,18 @@ Public Class WConfig
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         Frm = FrmMere
+        ChkSaveAuto.IsChecked = Frm.AutoSave
         ChkDateTime.IsChecked = Frm.ShowDateTime
         ChkShowBtnQuit.IsChecked = Frm.ShowQuitter
         ChkWidthPass.IsChecked = Frm.WithPassword
         ChkSoleil.IsChecked = Frm.ShowSoleil
         ChkShowlblMnu.IsChecked = Frm.ShowLabelMnu
         ChkFullScreen.IsChecked = Frm.FullScreen
-        SliderFriction.Value = Frm.Friction
-        LblFriction.Content = Frm.Friction
+        SliderFriction.Value = Frm.Friction.ToString("0.00")
+        LblFriction.Content = Frm.Friction.ToString("0.00")
         TxtImgBack.Text = Frm.ImageBackGround
-        SliderSpeed.Value = Frm.SpeedTouch
-        LblSpeed.Content = Frm.SpeedTouch
+        SliderSpeed.Value = Frm.SpeedTouch.ToString("0.00")
+        LblSpeed.Content = Frm.SpeedTouch.ToString("0.00")
         TxtIP.Text = Frm.IP
         TxtPort.Text = Frm.PortSOAP
         TxtID.Text = IdSrv
@@ -438,5 +440,9 @@ Public Class WConfig
         If retour IsNot Nothing Then
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur DeleteAllFileOffPath: " & retour, "Erreur", "BtnDeleteCache_Click")
         End If
+    End Sub
+
+    Private Sub WConfig_Closing(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles Me.Closing
+        Frm = Nothing
     End Sub
 End Class

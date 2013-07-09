@@ -10,9 +10,11 @@
     Public lock_logwrite As New Object
     Public _ListServer As New List(Of ClServer)
     Public Media As WMedia = Nothing
+
     'Ecriture dans le fichier log
     Public _Debug As Boolean
     Public AllDevices As New List(Of HoMIDom.HoMIDom.TemplateDevice)
+
     'Animation des ScrollViewer
     Public m_friction As Double = 0.75
     Public m_SpeedTouch As Double = 600
