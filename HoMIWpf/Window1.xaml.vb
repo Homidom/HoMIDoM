@@ -1499,7 +1499,9 @@ Class Window1
     'Affiche la date et heure, heures levé et couché du soleil
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
         Try
+
             If IsConnect Then
+
                 LblTime.Content = Now.ToLongDateString & " " & myService.GetTime
 
                 If Now.Second = 0 Then
@@ -1548,6 +1550,7 @@ Class Window1
 
         Catch ex As Exception
             IsConnect = False
+
             If FlagMsgDeconnect = False Then
                 AfficheMessageAndLog(Fonctions.TypeLog.INFO, "La communication a été perdue avec le serveur, veuillez vérifier que celui-ci est toujours actif et redémarrer le client", "Erreur")
                 FlagMsgDeconnect = True
@@ -1560,7 +1563,6 @@ Class Window1
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur: " & ex.Message, "Erreur")
         End Try
     End Sub
-
 
     'Clic sur un menu de la barre du bas
     Private Sub IconMnuDoubleClick(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
@@ -1653,8 +1655,6 @@ Class Window1
         End Try
     End Sub
 
-
-
     Protected Overrides Sub Finalize()
         Try
             MyBase.Finalize()
@@ -1665,6 +1665,7 @@ Class Window1
 
     Private Sub Window1_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles Me.Closing
         Try
+            myService = Nothing
             Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermeture de l'application")
         Catch ex As Exception
             Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Erreur Lors de la fermeture: " & ex.Message)

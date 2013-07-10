@@ -1,4 +1,6 @@
-﻿Public Class uMacro
+﻿Imports HoMIDom.HoMIDom.Api
+
+Public Class uMacro
     Public Event CloseMe(ByVal MyObject As Object)
 
     Dim _Action As EAction
@@ -42,8 +44,8 @@
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         Try
-            If String.IsNullOrEmpty(TxtNom.Text) = True Then
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom de la macro est obligatoire!", "Macro", "")
+            If String.IsNullOrEmpty(TxtNom.Text) Or HaveCaractSpecial(TxtNom.Text) Then
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom de la macro est obligatoire et ne doit pas comporter de caractère spécial!", "Macro", "")
                 Exit Sub
             End If
 

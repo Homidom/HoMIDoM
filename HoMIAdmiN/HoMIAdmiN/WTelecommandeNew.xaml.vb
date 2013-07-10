@@ -1,4 +1,5 @@
 ﻿Imports HoMIDom.HoMIDom.Telecommande
+Imports HoMIDom.HoMIDom.Api
 
 Public Class WTelecommandeNew
 
@@ -279,20 +280,6 @@ Public Class WTelecommandeNew
         TxtTplMod.IsReadOnly = False
         TxtTplName.IsReadOnly = False
     End Sub
-
-    Function HaveCaractSpecial(ByVal txt As String) As Boolean
-        Dim illegalChars As Char() = "!@#$%^&*(){}[]""_+<>?/-".ToCharArray()
-        Dim str As String = txt
-        Dim retour As Boolean = False
-
-        For Each ch As Char In str
-            If Not Array.IndexOf(illegalChars, ch) = -1 Then
-                retour = True
-            End If
-        Next
-
-        Return retour
-    End Function
 
     ''' <summary>
     ''' Sauvegarder Template
