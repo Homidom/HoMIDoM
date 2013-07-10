@@ -78,7 +78,7 @@ Partial Public Class uCtrlImgMnu
     End Property
 
 
-    Private Sub Image_MouseLeftButtonUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Image.MouseLeftButtonUp
+    Private Sub Image_MouseLeftButtonUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Border.MouseLeftButtonUp
         Dim vDiff As TimeSpan = Now - vDown
         If vDiff.Seconds < 1 Then RaiseEvent click(Me, e)
     End Sub
@@ -133,7 +133,7 @@ Partial Public Class uCtrlImgMnu
 
     Public Event click(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
 
-    Private Sub Image_PreviewMouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Image.PreviewMouseDown
+    Private Sub Image_PreviewMouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Border.PreviewMouseDown
         vDown = Now
     End Sub
 End Class

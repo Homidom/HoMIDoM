@@ -1,4 +1,6 @@
-﻿Public Class uTriggerTimer
+﻿Imports HoMIDom.HoMIDom.Api
+
+Public Class uTriggerTimer
     Public Event CloseMe(ByVal MyObject As Object)
 
     Dim _Action As EAction
@@ -24,7 +26,7 @@
             If _Action = EAction.Nouveau Then 'Nouveau Trigger
 
             Else 'Modifier Trigger
-                Dim x As HoMIDom.HoMIDom.Trigger = myservice.ReturnTriggerById(IdSrv, _TriggerId)
+                Dim x As HoMIDom.HoMIDom.Trigger = myService.ReturnTriggerById(IdSrv, _TriggerId)
 
                 If x IsNot Nothing Then
                     TxtNom.Text = x.Nom
@@ -81,8 +83,8 @@
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         Try
-            If TxtNom.Text = "" Then
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du trigger est obligatoire!", "Trigger", "")
+            If String.IsNullOrEmpty(TxtNom.Text) Or HaveCaractSpecial(TxtNom.Text) Then
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du trigger est obligatoire et ne doit pas comporter de caractère spécial!", "Trigger", "")
                 Exit Sub
             End If
 
@@ -168,7 +170,7 @@
             Next
 
             If _Action = EAction.Nouveau Then
-                myservice.SaveTrigger(IdSrv, "", TxtNom.Text, ChkEnable.IsChecked, 0, TxtDescription.Text, _myconditiontime, "", "", _ListMacro)
+                myService.SaveTrigger(IdSrv, "", TxtNom.Text, ChkEnable.IsChecked, 0, TxtDescription.Text, _myconditiontime, "", "", _ListMacro)
             Else
                 myService.SaveTrigger(IdSrv, _TriggerId, TxtNom.Text, ChkEnable.IsChecked, 0, TxtDescription.Text, _myconditiontime, "", "", _ListMacro)
             End If

@@ -1,4 +1,6 @@
-﻿Public Class uTriggerDevice
+﻿Imports HoMIDom.HoMIDom.Api
+
+Public Class uTriggerDevice
     Public Event CloseMe(ByVal MyObject As Object)
 
     Dim _Action As EAction
@@ -52,8 +54,8 @@
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         Try
-            If TxtNom.Text = "" Or CbDevice.SelectedIndex < 0 Or CbDevice.SelectedItem Is Nothing Then
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du trigger ou le device sont obligatoires!", "Trigger", "")
+            If String.IsNullOrEmpty(TxtNom.Text) Or HaveCaractSpecial(TxtNom.Text) Or CbDevice.SelectedIndex < 0 Or CbDevice.SelectedItem Is Nothing Then
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du trigger ou le device sont obligatoires et ne doivent pas comporter de caractère spécial!", "Trigger", "")
                 Exit Sub
             End If
 
@@ -65,7 +67,7 @@
             Next
 
             If _Action = EAction.Nouveau Then
-                myservice.SaveTrigger(IdSrv, "", TxtNom.Text, ChkEnable.IsChecked, HoMIDom.HoMIDom.Trigger.TypeTrigger.DEVICE, TxtDescription.Text, "", CbDevice.SelectedItem.id, CbProperty.Text, _ListMacro)
+                myService.SaveTrigger(IdSrv, "", TxtNom.Text, ChkEnable.IsChecked, HoMIDom.HoMIDom.Trigger.TypeTrigger.DEVICE, TxtDescription.Text, "", CbDevice.SelectedItem.id, CbProperty.Text, _ListMacro)
             Else
                 myService.SaveTrigger(IdSrv, _TriggerId, TxtNom.Text, ChkEnable.IsChecked, HoMIDom.HoMIDom.Trigger.TypeTrigger.DEVICE, TxtDescription.Text, "", CbDevice.SelectedItem.id, CbProperty.Text, _ListMacro)
             End If

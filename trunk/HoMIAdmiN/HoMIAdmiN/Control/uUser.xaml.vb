@@ -1,4 +1,5 @@
 ﻿Imports HoMIDom.HoMIDom
+Imports HoMIDom.HoMIDom.Api
 Imports System.IO
 
 Partial Public Class uUser
@@ -14,8 +15,8 @@ Partial Public Class uUser
                 Exit Sub
             End If
 
-            If String.IsNullOrEmpty(TxtUsername.Text) = True Or String.IsNullOrEmpty(TxtPassword.Password) = True Or ComboProfil.SelectedIndex < 0 Or String.IsNullOrEmpty(TxtNom.Text) = True Or String.IsNullOrEmpty(TxtPrenom.Text) = True Then
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le username, le mot de passe, le profil, le nom et prénom sont obligatoires !", "Erreur", "")
+            If String.IsNullOrEmpty(TxtUsername.Text) Or HaveCaractSpecial(TxtUsername.Text) Or String.IsNullOrEmpty(TxtPassword.Password) Or ComboProfil.SelectedIndex < 0 Or String.IsNullOrEmpty(TxtNom.Text) Or String.IsNullOrEmpty(TxtPrenom.Text) Or HaveCaractSpecial(TxtPrenom.Text) Then
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le username, le mot de passe, le profil, le nom et prénom sont obligatoires et ne doivent pas comporter de caractère spécial!", "Erreur", "")
                 Exit Sub
             End If
 

@@ -611,6 +611,10 @@ Partial Public Class uDevice
             TxtValueMin.Text = Replace(TxtValueMin.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
 
             'on check les valeurs renseignés
+            If String.IsNullOrEmpty(TxtNom.Text) Or HaveCaractSpecial(TxtNom.Text) Then
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du composant doit être renseigné et ne doit pas comporter de caractère spécial", "Erreur", "")
+                Exit Sub
+            End If
             If IsNumeric(TxtPrecision.Text) = False Then
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le champ Précision doit être un Nombre", "Erreur", "")
                 Exit Sub
@@ -795,8 +799,8 @@ Partial Public Class uDevice
                     Exit Sub
                 End If
             End If
-            If String.IsNullOrEmpty(TxtNom.Text) = True Then
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du device est obligatoire !!", "Erreur", "")
+            If String.IsNullOrEmpty(TxtNom.Text) Or HaveCaractSpecial(TxtNom.Text) Then
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du composant doit être renseigné et ne doit pas comporter de caractère spécial", "Erreur", "")
                 Exit Sub
             End If
             If String.IsNullOrEmpty(CbType.Text) = True Then
