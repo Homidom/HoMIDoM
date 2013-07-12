@@ -8011,6 +8011,10 @@ Namespace HoMIDom
                                         x.Colonne = _xmlnode.Attributes.Item(j).Value
                                     Case "ligne"
                                         x.Ligne = _xmlnode.Attributes.Item(j).Value
+                                    Case "trameinit"
+                                        x.TrameInit = _xmlnode.Attributes.Item(j).Value
+                                    Case "charendreceive"
+                                        x.CharEndReceive = _xmlnode.Attributes.Item(j).Value
                                 End Select
                                 x.File = file.Name
 
@@ -8080,8 +8084,8 @@ Namespace HoMIDom
                 Dim _Fichier As String = MyPath & Template.Name & ".xml"
 
                 If IO.File.Exists(_Fichier) Then
-                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "CreateNewTemplate", "Le template existe déjà pour ce même couple fabricant, modèle et driver!")
-                    Return "Le template existe déjà pour ce même couple fabricant, modèle et driver!"
+                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "CreateNewTemplate", "Le template existe déjà pour ce même nom!")
+                    Return "Le template existe déjà pour ce mêmenom!"
                 End If
 
                 ''Creation du fichier XML
@@ -8102,6 +8106,12 @@ Namespace HoMIDom
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("modele")
                 writer.WriteValue(LCase(Template.Modele))
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("trameinit")
+                writer.WriteValue(LCase(Template.TrameInit))
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("charendreceive")
+                writer.WriteValue(LCase(Template.TrameInit))
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("driver")
                 writer.WriteValue(LCase(Template.Driver))
@@ -8313,6 +8323,12 @@ Namespace HoMIDom
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("colonne")
                 writer.WriteValue(Template.Colonne)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("trameinit")
+                writer.WriteValue(Template.TrameInit)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("charendreceive")
+                writer.WriteValue(Template.CharEndReceive)
                 writer.WriteEndAttribute()
 
                 'ecriture des commandes
