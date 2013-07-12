@@ -1,4 +1,5 @@
-﻿Public Class ImageButton
+﻿
+Public Class ImageButton
     Inherits Image
 
     Dim _Row As Integer = -1
@@ -54,3 +55,5 @@
         RaiseEvent Delete(Me)
     End Sub
 End Class
+
+

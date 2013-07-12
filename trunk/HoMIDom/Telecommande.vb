@@ -1,4 +1,5 @@
-﻿
+﻿'Imports System.Windows.Media
+
 Namespace HoMIDom
     ''' <summary>
     ''' Class pour gérer les télécommandes
@@ -11,6 +12,8 @@ Namespace HoMIDom
         Public Shared TemplateAUDIO() As String = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Power""VolumeUp", "VolumeDown", "Mute", "Play", "Pause", "Stop", "Avance", "Recul"}
 
         Public Class Template
+
+#Region "Variables"
             Dim _ID As String = ""
             Dim _Name As String = ""
             Dim _Fabricant As String = ""
@@ -26,6 +29,16 @@ Namespace HoMIDom
             Dim _Port As Integer 'Port IP
             Dim _Cmd As New List(Of Commandes)
             Dim _Var As New List(Of TemplateVar)
+
+            'Variables graphiques
+            Dim _Width As Double = 200
+            Dim _Height As Double = 570
+            Dim _BackgroundPicture As String = ""
+            Dim _ColorBackGround As Double 'SolidColorBrush = Brushes.Black
+
+#End Region
+
+#Region "Property"
 
             Public Property ID As String
                 Get
@@ -263,6 +276,45 @@ Namespace HoMIDom
                     IP = _IP
                 End Set
             End Property
+#End Region
+
+#Region "Property Graphic"
+            Public Property Width As Double
+                Get
+                    Return _Width
+                End Get
+                Set(ByVal value As Double)
+                    _Width = value
+                End Set
+            End Property
+
+            Public Property Height As Double
+                Get
+                    Return _Height
+                End Get
+                Set(ByVal value As Double)
+                    _Height = value
+                End Set
+            End Property
+
+            Public Property BackGroundPicture As String
+                Get
+                    Return _BackgroundPicture
+                End Get
+                Set(ByVal value As String)
+                    _BackgroundPicture = value
+                End Set
+            End Property
+
+            Public Property ColorBackGround As Double 'SolidColorBrush
+                Get
+                    Return _ColorBackGround
+                End Get
+                Set(ByVal value As Double) 'SolidColorBrush)
+                    _ColorBackGround = value
+                End Set
+            End Property
+#End Region
 
             Public Sub New()
                 'Création des variables par défaut
@@ -353,7 +405,7 @@ Namespace HoMIDom
                             Dim code As String = cmd.Code.ToLower
 
                             'on remplace les variables mis en accolades par leur valeur
-                            For Each var In _var
+                            For Each var In _Var
                                 If var.Type = TypeOfVar.String Or var.Type = TypeOfVar.Double Then
                                     Dim _var As String = "{" & var.Name & "}"
                                     If code.Contains(_var) Then
@@ -421,6 +473,14 @@ Namespace HoMIDom
             Dim _Picture As String
             Dim _Row As Integer = -1
             Dim _Column As Integer = -1
+
+            'Variables graphiques
+            Dim _Width As Double = 45
+            Dim _Height As Double = 45
+            Dim _X As Double = 0
+            Dim _Y As Double = 0
+            Dim _BackgroundPicture As String = ""
+            Dim _ColorBackGround As Double 'SolidColorBrush = Brushes.Black
 
             Property Name As String
                 Get

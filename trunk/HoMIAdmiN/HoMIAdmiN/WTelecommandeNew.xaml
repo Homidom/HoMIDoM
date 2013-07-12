@@ -1,8 +1,8 @@
-﻿<Window x:Class="WTelecommandeNew"
+﻿<Window xmlns:my="clr-namespace:WpfApplication1"  x:Class="WTelecommandeNew"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:Microsoft_Windows_Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
-    Title="Télécommandes" AllowDrop="True" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
+    Title="Télécommandes" AllowDrop="True" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" VerticalAlignment="Top">
 
     <Window.Resources>
         <ImageBrush x:Key="ImageBrushDataSource" d:IsDataSource="True"/>
@@ -647,9 +647,9 @@
                              <ComboBox Width="150" Name="cbTemplate" />
                                 <Button Name="BtnNewTemplate" Width="25" Margin="2" Height="25" Content="+" Foreground="White" Template="{DynamicResource GlassButton}"/>
                          </StackPanel>
-                        <StackPanel Orientation="Horizontal" >
-                          <Label Name="lbltplbase" Width="75" Content="Base:" Foreground="White" Visibility="Hidden" />
-                         <ComboBox Width="90" Name="cbBase" Visibility="Hidden" SelectedIndex="0">
+                        <StackPanel Orientation="Horizontal" Name="StkTplBase" Visibility="Collapsed" >
+                          <Label Name="lbltplbase" Width="75" Content="Base:" Foreground="White"  />
+                         <ComboBox Width="90" Name="cbBase" SelectedIndex="0">
                         <ComboBoxItem Content="VIDE" />
                         <ComboBoxItem Content="TV" />
                         <ComboBoxItem Content="DVD" />
@@ -685,19 +685,21 @@
                             <TextBox Name="TxtCharEndReceive" Width="40" Background="DarkGray" BorderBrush="Black" Foreground=" White" IsReadOnly="True" />
                         </StackPanel>
                         <TextBlock Height="20" TextWrapping="Wrap" Foreground="White"><Run Language="fr-fr" Text="Nombre de lignes :"/></TextBlock>
-                    <StackPanel Height="27" Orientation="Horizontal" >
-                        <Slider x:Name="slider_Row" Height="27" VerticalAlignment="Top" Width="150" Cursor="Hand" Maximum="10" Interval="1" IsSnapToTickEnabled="True" OpacityMask="Black" Style="{DynamicResource SliderStyle1}" TickPlacement="TopLeft"  Minimum="1"/>
-                        <Label Content="{Binding Value, ElementName=slider_Row}" Foreground="White" Width="44"/>
-                    </StackPanel>
-                    <TextBlock Height="20" TextWrapping="Wrap" Foreground="White"><Run Language="fr-fr" Text="Nombre de colonnes :"/></TextBlock>
-                    <StackPanel Height="27" Orientation="Horizontal" >
-                        <Slider x:Name="slider_Column" Height="27" VerticalAlignment="Top" Width="150" Cursor="Hand" Maximum="10" Interval="1" IsSnapToTickEnabled="True" OpacityMask="Black" Style="{DynamicResource SliderStyle1}" TickPlacement="TopLeft" Minimum="1"/>
-                        <Label Content="{Binding Value, ElementName=slider_Column}" Foreground="White" Width="44"/>
-                    </StackPanel>
-
-                </StackPanel>
+                                    </StackPanel>
                 </Expander>
-                
+                <Expander Name="ExpdGraph" Header="Graphisme" Foreground=" White">
+                    <StackPanel >
+                        <StackPanel Height="27" Orientation="Horizontal" >
+                            <Slider x:Name="slider_Row" Height="27" VerticalAlignment="Top" Width="150" Cursor="Hand" Maximum="10" Interval="1" IsSnapToTickEnabled="True" OpacityMask="Black" Style="{DynamicResource SliderStyle1}" TickPlacement="TopLeft"  Minimum="1"/>
+                            <Label Content="{Binding Value, ElementName=slider_Row}" Foreground="White" Width="44"/>
+                        </StackPanel>
+                        <TextBlock Height="20" TextWrapping="Wrap" Foreground="White"><Run Language="fr-fr" Text="Nombre de colonnes :"/></TextBlock>
+                        <StackPanel Height="27" Orientation="Horizontal" >
+                            <Slider x:Name="slider_Column" Height="27" VerticalAlignment="Top" Width="150" Cursor="Hand" Maximum="10" Interval="1" IsSnapToTickEnabled="True" OpacityMask="Black" Style="{DynamicResource SliderStyle1}" TickPlacement="TopLeft" Minimum="1"/>
+                            <Label Content="{Binding Value, ElementName=slider_Column}" Foreground="White" Width="44"/>
+                        </StackPanel>
+                    </StackPanel>
+                    </Expander> 
                 <Expander Name="ExpdCmd" Header="Commandes" Foreground=" White">
                 <StackPanel Name="StkCmd" Visibility="Collapsed" >
                     <ListBox HorizontalAlignment="Left" Margin="1" Height="100" Name="ListCmd" Width="145" Background="DarkGray" BorderBrush="Black" Foreground=" White"/>
@@ -726,9 +728,11 @@
                                 <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
                                 </ImageBrush>
                             </Canvas.Background>
-                            <Image Margin="5" Name="ImgCommande" Width="40" Height="40" />
-                        </Canvas>
-                        <Button Height="26.664" Margin="2" Name="BtnImg" Width="26" Foreground="White" Template="{DynamicResource GlassButton}">...</Button>
+                            <!--<Image Margin="5" Name="ImgCommande" Width="40" Height="40" />-->
+                                <my:ImageButton Margin="5" x:Name="ImgCommande2" Width="40" Height="40" />
+                            </Canvas>
+                            
+                            <Button Height="26.664" Margin="2" Name="BtnImg" Width="26" Foreground="White" Template="{DynamicResource GlassButton}">...</Button>
 
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
@@ -740,7 +744,7 @@
                         <Button Height="26.664" Margin="2" Name="BtnTstCmd" Width="67" Visibility="Hidden" Foreground="White" Template="{DynamicResource GlassButton}">Tester</Button>
                         <Button Height="26.664" Margin="2" Name="BtnLearn" Width="67" Foreground="White" Template="{DynamicResource GlassButton}">Apprendre</Button>
                     </StackPanel >
-                
+               
                 </StackPanel>
 
                 </Expander>

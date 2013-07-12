@@ -188,17 +188,14 @@ Public Class uWidgetEmpty
                             Dim x As New uEditValue
                             AddHandler x.ChangeValue, AddressOf ChangeValue
                             StkPopup.Children.Add(x)
-
                         Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEBOOLEEN
                             Dim x As New uEditValue
                             AddHandler x.ChangeValue, AddressOf ChangeValue
                             StkPopup.Children.Add(x)
-
                         Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE
                             Dim x As New uEditValue
                             AddHandler x.ChangeValue, AddressOf ChangeValue
                             StkPopup.Children.Add(x)
-
                         Case HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE
 
                         Case HoMIDom.HoMIDom.Device.ListeDevices.LAMPE
@@ -2159,8 +2156,8 @@ Public Class uWidgetEmpty
                 GetStatusPicture = _file
             End If
 
-            If _dev.Name = "HOMI_Jour" Then
-                If Value = "True" <> 0 Then
+            If _dev.Name.ToUpper = "HOMI_JOUR".ToUpper Then
+                If _dev.Value = True Then
                     GetStatusPicture = _MonRepertoire & "\Images\Devices\jour-jour.png"
                 Else
                     GetStatusPicture = _MonRepertoire & "\Images\Devices\jour-nuit.png"

@@ -5,9 +5,9 @@ Public Class WTelecommandeNew
 
 #Region "Variables"
     Dim FlagNewCmd As Boolean
-    Dim x As HoMIDom.HoMIDom.TemplateDevice = Nothing
+    'Dim x As HoMIDom.HoMIDom.TemplateDevice = Nothing
     'Dim _SelectDriverIndex As Integer 'Index du driver sélectionné
-    Dim ListButton As New List(Of ImageButton)
+    'Dim ListButton As New List(Of ImageButton)
     Dim _Row As Integer
     Dim _Col As Integer
     Dim _MyTemplate As HoMIDom.HoMIDom.Telecommande.Template = Nothing
@@ -25,8 +25,8 @@ Public Class WTelecommandeNew
         TxtCmdName.Text = ""
         TxtCmdRepeat.Text = "0"
         TxtCmdData.Text = ""
-        ImgCommande.Source = Nothing
-        ImgCommande.Tag = ""
+        ImgCommande2.Source = Nothing
+        ImgCommande2.Tag = ""
 
         BtnNewCmd.Visibility = Windows.Visibility.Hidden
         BtnSaveCmd.Visibility = Windows.Visibility.Visible
@@ -58,7 +58,7 @@ Public Class WTelecommandeNew
                         .Name = TxtCmdName.Text
                         .Code = TxtCmdData.Text
                         .Repeat = TxtCmdRepeat.Text
-                        .Picture = ImgCommande.Tag
+                        .Picture = ImgCommande2.Tag
                     End With
                     _CurrentTemplate.Commandes.Add(_cmd)
                 Else 'modifier commande
@@ -69,7 +69,7 @@ Public Class WTelecommandeNew
                         .Name = TxtCmdName.Text
                         .Code = TxtCmdData.Text
                         .Repeat = TxtCmdRepeat.Text
-                        .Picture = ImgCommande.Tag
+                        .Picture = ImgCommande2.Tag
                     End With
                 End If
                 TxtCmdName.Text = ""
@@ -98,15 +98,15 @@ Public Class WTelecommandeNew
     Private Sub BtnDelCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelCmd.Click
         Try
             If ListCmd.SelectedIndex >= 0 Then
-                x.Commandes.RemoveAt(ListCmd.SelectedIndex)
+                _CurrentTemplate.Commandes.RemoveAt(ListCmd.SelectedIndex)
                 Dim retour As String = myService.SaveTemplate(IdSrv, _CurrentTemplate)
                 If retour <> "0" Then
                     AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement de la commande dans le template: " & retour, "Erreur", "")
                     Exit Sub
                 Else
                     ListCmd.Items.Clear()
-                    For i2 As Integer = 0 To x.Commandes.Count - 1
-                        ListCmd.Items.Add(x.Commandes.Item(i2).Name)
+                    For i2 As Integer = 0 To _CurrentTemplate.Commandes.Count - 1
+                        ListCmd.Items.Add(_CurrentTemplate.Commandes.Item(i2).Name)
                     Next
 
                 End If
@@ -114,6 +114,8 @@ Public Class WTelecommandeNew
                 TxtCmdData.Text = ""
                 TxtCmdName.Text = ""
                 TxtCmdRepeat.Text = ""
+                ImgCommande2.Source = Nothing
+                ImgCommande2.Tag = Nothing
             End If
         Catch Ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnDelCmd: " & Ex.Message, "Erreur", "")
@@ -128,8 +130,8 @@ Public Class WTelecommandeNew
     ''' <remarks></remarks>
     Private Sub BtnTstCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTstCmd.Click
         Try
-            If TxtCmdName.Text = "" Or TxtCmdName.Text = " " Then
-
+            If String.IsNullOrEmpty(TxtCmdName.Text) = False Then
+                _CurrentTemplate.ExecuteCommand(IdSrv, TxtCmdName.Text)
             End If
             'Dim retour As String = myService.TelecommandeSendCommand(IdSrv, _DeviceId, TxtCmdName.Text)
             'If retour <> 0 Then
@@ -168,9 +170,9 @@ Public Class WTelecommandeNew
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 Dim retour As String = frm.FileName
-                If retour <> "" Then
-                    ImgCommande.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
-                    ImgCommande.Tag = retour
+                If String.IsNullOrEmpty(retour) = False Then
+                    ImgCommande2.Source = ConvertArrayToImage(myService.GetByteFromImage(retour))
+                    ImgCommande2.Tag = retour
                     BtnSaveCmd.Visibility = Windows.Visibility.Visible
                 End If
                 frm.Close()
@@ -204,8 +206,9 @@ Public Class WTelecommandeNew
                 TxtCmdRepeat.Text = _CurrentTemplate.Commandes.Item(i).Repeat
 
                 If String.IsNullOrEmpty(_CurrentTemplate.Commandes.Item(i).Picture) = False Then
-                    ImgCommande.Source = ConvertArrayToImage(myService.GetByteFromImage(_CurrentTemplate.Commandes.Item(i).Picture))
-                    ImgCommande.Tag = _CurrentTemplate.Commandes.Item(i).Picture
+                    ImgCommande2.Source = ConvertArrayToImage(myService.GetByteFromImage(_CurrentTemplate.Commandes.Item(i).Picture))
+                    ImgCommande2.Tag = _CurrentTemplate.Commandes.Item(i).Picture
+                    ImgCommande2.Command = TxtCmdName.Text
                 End If
 
             End If
@@ -234,7 +237,7 @@ Public Class WTelecommandeNew
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub ImgCommande_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgCommande.MouseLeftButtonDown ', Canvas2.MouseLeftButtonDown
+    Private Sub ImgCommande_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgCommande2.MouseLeftButtonDown ', Canvas2.MouseLeftButtonDown
         For i As Integer = 0 To grid_Telecommande.Children.Count - 1
             Dim cvs As Canvas = grid_Telecommande.Children.Item(i)
 
@@ -250,10 +253,10 @@ Public Class WTelecommandeNew
             End If
         Next
 
-        If ImgCommande.Source IsNot Nothing Then
+        If ImgCommande2.Source IsNot Nothing Then
             Dim effects As DragDropEffects
             Dim obj As New DataObject()
-            obj.SetData(GetType(Image), sender)
+            obj.SetData(GetType(ImageButton), sender)
             effects = DragDrop.DoDragDrop(sender, obj, DragDropEffects.Copy Or DragDropEffects.Move)
         Else
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Vous ne pouvez pas inclure cette commande dans la grille car elle ne comporte aucune image!", "Information", "")
@@ -272,13 +275,19 @@ Public Class WTelecommandeNew
     ''' <remarks></remarks>
     Private Sub BtnNewTemplate_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewTemplate.Click
         StkNewTemplate.Visibility = Windows.Visibility.Visible
-        TxtTplFab.Focus()
+        TxtTplName.Focus()
         BtnSaveTemplate.Visibility = Windows.Visibility.Visible
-        lbltplbase.Visibility = Windows.Visibility.Visible
-        cbBase.Visibility = Windows.Visibility.Visible
+        StkTplBase.Visibility = Windows.Visibility.Visible
         TxtTplFab.IsReadOnly = False
         TxtTplMod.IsReadOnly = False
         TxtTplName.IsReadOnly = False
+        TxtTplFab.Text = ""
+        TxtTplName.Text = ""
+        TxtTplMod.Text = ""
+        cbTemplate.Text = ""
+        RdHttp.IsEnabled = True
+        RdIR.IsEnabled = True
+        RdRS232.IsEnabled = True
     End Sub
 
     ''' <summary>
@@ -337,8 +346,7 @@ Public Class WTelecommandeNew
 
                 StkNewTemplate.Visibility = Windows.Visibility.Collapsed
                 BtnSaveTemplate.Visibility = Windows.Visibility.Hidden
-                lbltplbase.Visibility = Windows.Visibility.Hidden
-                cbBase.Visibility = Windows.Visibility.Hidden
+                StkTplBase.Visibility = Windows.Visibility.Collapsed
 
                 cbTemplate.Items.Clear()
                 Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
@@ -353,6 +361,9 @@ Public Class WTelecommandeNew
                 TxtTplFab.IsReadOnly = True
                 TxtTplMod.IsReadOnly = True
                 TxtTplName.IsReadOnly = True
+                RdHttp.IsEnabled = False
+                RdIR.IsEnabled = False
+                RdRS232.IsEnabled = False
             End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString)
@@ -363,30 +374,18 @@ Public Class WTelecommandeNew
 #End Region
 
 
-    Public Sub New(Optional ByVal Template As HoMIDom.HoMIDom.TemplateDevice = Nothing)
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="TemplateName">Nom du template à afficher</param>
+    ''' <param name="HaveDevice">Si le template est associé à un device (si oui on peut tester ou apprendre des commandes sinon non)</param>
+    ''' <remarks></remarks>
+    Public Sub New(Optional TemplateName As String = "", Optional HaveDevice As Boolean = False)
 
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
 
         Try
-            x = Template
-
-            ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-            ListCmd.Items.Clear()
-
-            'Affiche le bouton apprendre que si c'est un protocole de type IR
-            'If _Driver IsNot Nothing Then
-            '    If _Driver.Protocol = "IR" Then
-            '        BtnLearn.Visibility = Windows.Visibility.Visible
-            '    Else
-            '        BtnLearn.Visibility = Windows.Visibility.Collapsed
-            '    End If
-            'End If
-            If RdRS232.IsChecked Then
-                BtnLearn.Visibility = Windows.Visibility.Visible
-            Else
-                BtnLearn.Visibility = Windows.Visibility.Collapsed
-            End If
 
             'Récupère la liste des template
             Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
@@ -394,35 +393,9 @@ Public Class WTelecommandeNew
 
             Dim idx As Integer = -1
             For i As Integer = 0 To _list.Count - 1
-                Dim tpl As String = Replace(_list(i).File, ".xml", "") 'récupère le nom du template
-                cbTemplate.Items.Add(tpl) 'ajoute le nom du template dans la liste
-
-                'si le device comporte un template (qui est stocké dans son modele)
-                If x IsNot Nothing Then
-                    If x.Modele <> "" Then
-                        If tpl = x.Modele.ToString Then
-
-                            cbTemplate.IsEnabled = False 'impossible de modifier le template
-                            BtnNewTemplate.Visibility = Windows.Visibility.Collapsed
-                            TxtTplFab.Text = _list.Item(i).Fabricant
-                            TxtTplMod.Text = _list.Item(i).Modele
-                            idx = i
-                            _Col = _list.Item(i).Colonne
-                            _Row = _list.Item(i).Ligne
-
-                            If x.Commandes IsNot Nothing Then
-                                For Each cmd In x.Commandes
-                                    ListCmd.Items.Add(cmd.Name)
-                                Next
-                            End If
-
-                            If x.Variables IsNot Nothing Then
-                                For Each var In x.Variables
-                                    ListCmd.Items.Add(var.Name)
-                                Next
-                            End If
-                        End If
-                    End If
+                cbTemplate.Items.Add(_list(i).Name) 'ajoute le nom du template dans la liste
+                If String.IsNullOrEmpty(TemplateName) = False Then
+                    If TemplateName = _list(i).Name Then idx = i
                 End If
             Next
             cbTemplate.SelectedIndex = idx
@@ -586,42 +559,29 @@ Retour:
         End Try
     End Sub
 
-    Private Sub Save()
-        Try
-            ListButton.Clear()
-
-            For i As Integer = 0 To grid_Telecommande.Children.Count - 1
-                Dim cvs As Canvas = grid_Telecommande.Children.Item(i)
-                If cvs IsNot Nothing Then
-                    If cvs.Children.Count <> 0 Then
-                        ListButton.Add(cvs.Children.Item(0))
-                    End If
-                End If
-            Next
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Telecommande Save: " & ex.Message, "ERREUR", "")
-        End Try
-    End Sub
 
     Private Sub Recharge()
         Try
             Remplir()
 
-            For i As Integer = 0 To ListButton.Count - 1
+            For i As Integer = 0 To _CurrentTemplate.Commandes.Count - 1
                 Dim x As New Canvas
                 x.Width = 45
                 x.Height = 45
+                x.Margin = New Thickness(15)
+                x.HorizontalAlignment = Windows.HorizontalAlignment.Center
+                x.VerticalAlignment = Windows.VerticalAlignment.Center
                 x.Background = Brushes.Black
                 x.AllowDrop = True
-                x.Tag = ListButton(i).Row & "|" & ListButton(i).Column
+                x.Tag = _CurrentTemplate.Commandes(i).Row & "|" & _CurrentTemplate.Commandes(i).Column
                 AddHandler x.DragOver, AddressOf CVS_DragOver
                 AddHandler x.Drop, AddressOf CVS_Drop
-                Grid.SetColumn(x, ListButton(i).Column)
-                Grid.SetRow(x, ListButton(i).Row)
+                Grid.SetColumn(x, _CurrentTemplate.Commandes(i).Column)
+                Grid.SetRow(x, _CurrentTemplate.Commandes(i).Row)
 
                 Dim img1 As New ImageButton
-                img1.Source = ListButton(i).Source
-                img1.Command = ListButton(i).Command
+                img1.Source = ConvertArrayToImage(myService.GetByteFromImage(_CurrentTemplate.Commandes(i).Picture))
+                img1.Command = _CurrentTemplate.Commandes(i).Name
                 img1.AllowDrop = True
                 Dim a() As String = x.Tag.split("|")
                 img1.Row = a(0)
@@ -639,7 +599,7 @@ Retour:
 
     Private Sub CVS_DragOver(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs)
         Try
-            If e.Data.GetDataPresent(GetType(Image)) Then
+            If e.Data.GetDataPresent(GetType(ImageButton)) Then
                 e.Effects = DragDropEffects.Copy
             Else
                 e.Effects = DragDropEffects.None
@@ -651,7 +611,7 @@ Retour:
 
     Private Sub CVS_Drop(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs)
         Try
-            If e.Data.GetDataPresent(GetType(Image)) Then
+            If e.Data.GetDataPresent(GetType(ImageButton)) Then
                 If sender.children.count > 0 Then
                     Exit Sub
                 End If
@@ -659,27 +619,37 @@ Retour:
                 e.Effects = DragDropEffects.Copy
                 ' Utiliser uri comme vous le souhaitez
                 Dim img1 As New ImageButton
-                If InStr(e.Data.GetData(GetType(Image)).parent.GetType.ToString, "Canvas") Then
-                    If e.Data.GetData(GetType(Image)).name <> "ImgCommande" Then
-                        e.Data.GetData(GetType(Image)).parent.children.clear()
+                If InStr(e.Data.GetData(GetType(ImageButton)).parent.GetType.ToString, "Canvas") Then
+                    If e.Data.GetData(GetType(ImageButton)).name <> "ImgCommande" Then
+                        e.Data.GetData(GetType(ImageButton)).parent.children.clear()
                     End If
                 End If
-                img1.Source = e.Data.GetData(GetType(Image)).source
-                img1.Tag = e.Data.GetData(GetType(Image)).Tag
+                img1.Source = e.Data.GetData(GetType(ImageButton)).source
+                img1.Tag = e.Data.GetData(GetType(ImageButton)).Tag
                 img1.AllowDrop = True
-                img1.Command = ListCmd.SelectedValue
-                img1.ToolTip = ListCmd.SelectedValue
+                If String.IsNullOrEmpty(ListCmd.SelectedValue) = False Then
+                    img1.Command = ListCmd.SelectedValue
+                    img1.ToolTip = ListCmd.SelectedValue
+                Else
+                    img1.Command = e.Data.GetData(GetType(ImageButton)).Command
+                    img1.ToolTip = e.Data.GetData(GetType(ImageButton)).ToolTip
+                End If
+
                 Dim a() As String = sender.tag.split("|")
                 img1.Row = a(0)
                 img1.Column = a(1)
+                img1.HorizontalAlignment = Windows.HorizontalAlignment.Center
+                img1.VerticalAlignment = Windows.VerticalAlignment.Center
+
                 AddHandler img1.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
                 AddHandler img1.Delete, AddressOf DeleteButton
                 sender.Children.Add(img1)
+
             Else
                 e.Effects = DragDropEffects.None
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Telecommande CVS_Drop: " & ex.Message, "ERREUR", "")
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Telecommande CVS_Drop: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 
@@ -691,6 +661,9 @@ Retour:
                     x.Width = 45
                     x.Height = 45
                     x.Background = Brushes.Black
+                    x.Margin = New Thickness(15)
+                    x.VerticalAlignment = Windows.VerticalAlignment.Center
+                    x.HorizontalAlignment = Windows.HorizontalAlignment.Center
                     x.AllowDrop = True
                     x.Tag = i & "|" & j
                     AddHandler x.DragOver, AddressOf CVS_DragOver
@@ -710,10 +683,10 @@ Retour:
         Try
             sender.parent.children.clear()
 
-            For i As Integer = 0 To x.Commandes.Count - 1
-                If x.Commandes(i).Name = sender.command Then
-                    x.Commandes(i).Row = -1
-                    x.Commandes(i).Column = -1
+            For i As Integer = 0 To _CurrentTemplate.Commandes.Count - 1
+                If _CurrentTemplate.Commandes(i).Name = sender.command Then
+                    _CurrentTemplate.Commandes(i).Row = -1
+                    _CurrentTemplate.Commandes(i).Column = -1
                 End If
             Next
         Catch ex As Exception
@@ -725,7 +698,7 @@ Retour:
         Try
             Dim effects As DragDropEffects
             Dim obj As New DataObject()
-            obj.SetData(GetType(Image), sender)
+            obj.SetData(GetType(ImageButton), sender)
             effects = DragDrop.DoDragDrop(sender, obj, DragDropEffects.Copy Or DragDropEffects.Move)
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Telecommande Img_MouseLeftButtonDown: " & ex.Message, "ERREUR", "")
@@ -735,32 +708,6 @@ Retour:
     'Fermer
     Private Sub button_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles button.Click
         Try
-            'x.Modele = cbTemplate.Text
-            'For i As Integer = 0 To grid_Telecommande.Children.Count - 1
-            '    Dim cvs As Canvas = grid_Telecommande.Children.Item(i)
-
-            '    If cvs IsNot Nothing Then
-            '        If cvs.Children.Count <> 0 Then
-            '            For j As Integer = 0 To x.Commandes.Count - 1
-
-            '                Dim y As ImageButton = cvs.Children.Item(0)
-            '                If x.Commandes(j).Name = y.Command Then
-            '                    x.Commandes(j).Row = y.Row
-            '                    x.Commandes(j).Column = y.Column
-            '                    Exit For
-            '                End If
-            '            Next
-            '        End If
-            '    End If
-            'Next
-
-            'If cbTemplate.Text <> "" Then
-            '    Dim retour As String = myService.SaveTemplate(IdSrv, cbTemplate.Text, x.Commandes, slider_Row.Value, slider_Column.Value, _CurrentTemplate.Variables)
-            '    If retour <> "0" Then
-            '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement de la commande dans le template: " & retour, "Erreur", "")
-            '    End If
-            'End If
-
             DialogResult = True
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Telecommande button_Click: " & ex.Message, "ERREUR", "")
@@ -775,38 +722,49 @@ Retour:
         Try
             slider_Column.Value = _Col
             slider_Row.Value = _Row
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, ex.ToString)
+        End Try
+    End Sub
 
-            If x IsNot Nothing Then
-                If x.Commandes IsNot Nothing Then
-                    'GrpCmd.Visibility = Windows.Visibility.Visible
+    ''' <summary>
+    ''' Affiche les boutons (commandes) du template dans la grille
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub AfficheGrilleOfCurrentTemplate()
+        Try
+            If _CurrentTemplate IsNot Nothing Then
+                If _CurrentTemplate.Commandes IsNot Nothing Then
 
                     Remplir()
 
-                    For i2 As Integer = 0 To x.Commandes.Count - 1
+                    For i2 As Integer = 0 To _CurrentTemplate.Commandes.Count - 1
 
-                        If x.Commandes.Item(i2).Row > 0 And x.Commandes.Item(i2).Column > 0 Then
+                        If _CurrentTemplate.Commandes.Item(i2).Row >= 0 And _CurrentTemplate.Commandes.Item(i2).Column >= 0 Then
                             Dim cvs As New Canvas
                             cvs.Width = 45
                             cvs.Height = 45
                             cvs.Background = Brushes.Black
                             cvs.AllowDrop = True
-                            cvs.Tag = x.Commandes.Item(i2).Row & "|" & x.Commandes.Item(i2).Column 'ListButton(i).Row & "|" & ListButton(i).Column
+                            cvs.Tag = _CurrentTemplate.Commandes.Item(i2).Row & "|" & _CurrentTemplate.Commandes.Item(i2).Column
                             AddHandler cvs.DragOver, AddressOf CVS_DragOver
                             AddHandler cvs.Drop, AddressOf CVS_Drop
-                            Grid.SetColumn(cvs, x.Commandes.Item(i2).Column) ' ListButton(i).Column)
-                            Grid.SetRow(cvs, x.Commandes.Item(i2).Row) 'ListButton(i).Row)
+                            Grid.SetColumn(cvs, _CurrentTemplate.Commandes.Item(i2).Column)
+                            Grid.SetRow(cvs, _CurrentTemplate.Commandes.Item(i2).Row)
 
                             Dim img1 As New ImageButton
-                            img1.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Commandes.Item(i2).Picture))
-                            img1.Tag = x.Commandes.Item(i2).Picture
-                            img1.Command = x.Commandes.Item(i2).Name
+                            img1.Source = ConvertArrayToImage(myService.GetByteFromImage(_CurrentTemplate.Commandes.Item(i2).Picture))
+                            img1.Tag = _CurrentTemplate.Commandes.Item(i2).Picture
+                            img1.Command = _CurrentTemplate.Commandes.Item(i2).Name
 
                             img1.AllowDrop = True
                             Dim a() As String = cvs.Tag.split("|")
                             img1.Row = a(0)
                             img1.Column = a(1)
-                            img1.HorizontalAlignment = Windows.HorizontalAlignment.Stretch
-                            img1.VerticalAlignment = Windows.VerticalAlignment.Stretch
+                            img1.Width = 45
+                            img1.Height = 45
+                            img1.HorizontalAlignment = Windows.HorizontalAlignment.Center
+                            img1.VerticalAlignment = Windows.VerticalAlignment.Center
                             AddHandler img1.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
                             AddHandler img1.Delete, AddressOf DeleteButton
                             cvs.Children.Add(img1)
@@ -821,6 +779,12 @@ Retour:
         End Try
     End Sub
 
+    ''' <summary>
+    ''' Sélection d'un template
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub cbTemplate_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles cbTemplate.SelectionChanged
         Try
             If cbTemplate.SelectedIndex < 0 Then
@@ -833,14 +797,32 @@ Retour:
                 ChargeCmd()
                 ChargeVar()
 
-                TxtCmdName.Text = _list.Item(cbTemplate.SelectedIndex).Name
+                TxtTplName.Text = _list.Item(cbTemplate.SelectedIndex).Name
                 TxtTplFab.Text = _list.Item(cbTemplate.SelectedIndex).Fabricant
                 TxtTplMod.Text = _list.Item(cbTemplate.SelectedIndex).Modele
                 slider_Column.Value = _list.Item(cbTemplate.SelectedIndex).Colonne
                 slider_Row.Value = _list.Item(cbTemplate.SelectedIndex).Ligne
 
+                Select Case _list.Item(cbTemplate.SelectedIndex).Type
+                    Case 0 'http
+                        RdHttp.IsChecked = True
+                        BtnLearn.Visibility = Windows.Visibility.Collapsed
+                    Case 1 'IR
+                        RdIR.IsChecked = True
+                        BtnLearn.Visibility = Windows.Visibility.Visible
+                    Case 2 'RS232
+                        RdRS232.IsChecked = True
+                        BtnLearn.Visibility = Windows.Visibility.Visible
+                End Select
+
+                RdHttp.IsEnabled = False
+                RdIR.IsEnabled = False
+                RdRS232.IsEnabled = False
+
                 StkCmd.Visibility = Windows.Visibility.Visible
                 StkVar.Visibility = Windows.Visibility.Visible
+
+                AfficheGrilleOfCurrentTemplate()
             End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString)
@@ -850,16 +832,17 @@ Retour:
     Private Sub ChargeCmd()
         Try
             ListCmd.Items.Clear()
+            ImgCommande2.Source = Nothing
+            ImgCommande2.Tag = Nothing
 
             If _CurrentTemplate IsNot Nothing Then
                 For Each cmd In _CurrentTemplate.Commandes
                     ListCmd.Items.Add(cmd.Name)
                 Next
-            Else
 
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur ChargeCmd: " & ex.Message)
         End Try
     End Sub
 
@@ -875,7 +858,7 @@ Retour:
 
             End If
         Catch ex As Exception
-            MessageBox.Show(ex.ToString)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur ChargeVar: " & ex.Message)
         End Try
     End Sub
 
@@ -1005,6 +988,24 @@ Retour:
     Private Sub buttonOk_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles buttonOk.Click
         Try
             If _CurrentTemplate IsNot Nothing Then
+                For i As Integer = 0 To grid_Telecommande.Children.Count - 1
+                    Dim cvs As Canvas = grid_Telecommande.Children.Item(i)
+
+                    If cvs IsNot Nothing Then
+                        If cvs.Children.Count <> 0 Then
+                            For j As Integer = 0 To _CurrentTemplate.Commandes.Count - 1
+
+                                Dim y As ImageButton = cvs.Children.Item(0)
+                                If _CurrentTemplate.Commandes(j).Name = y.Command Then
+                                    _CurrentTemplate.Commandes(j).Row = y.Row
+                                    _CurrentTemplate.Commandes(j).Column = y.Column
+                                    Exit For
+                                End If
+                            Next
+                        End If
+                    End If
+                Next
+
                 Dim retour As String = myService.SaveTemplate(IdSrv, _CurrentTemplate)
 
                 If retour <> "0" Then
