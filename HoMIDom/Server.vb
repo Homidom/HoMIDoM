@@ -32,6 +32,11 @@ Namespace HoMIDom
 
         Public Shared Property Instance() As Server
 
+
+#Region "Evènements"
+        Public Event DeviceChanged(ByVal DeviceId As String, ByVal DeviceValue As String) Implements IHoMIDom.DeviceChanged
+#End Region
+
 #Region "Declaration des variables"
 
         Private Shared WithEvents _ListDrivers As New ArrayList 'Liste des drivers
@@ -116,6 +121,12 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub DeviceChange(ByVal Device As Object, ByVal [Property] As String, ByVal Parametres As Object)
             Dim retour As String = ""
+            Dim valeurString As String = String.Empty
+            If Parametres IsNot Nothing Then
+                valeurString = Parametres.ToString()
+            End If
+            Dim genericDevice As HoMIDom.Device.DeviceGenerique = Device
+            RaiseEvent DeviceChanged(genericDevice.ID, valeurString)
 
             Try
                 If Etat_server Then
@@ -3845,6 +3856,7 @@ Namespace HoMIDom
 #Region "Serveur Web"
 
 #End Region
+
 #End Region
 
 #Region "Interface Client via IHOMIDOM"

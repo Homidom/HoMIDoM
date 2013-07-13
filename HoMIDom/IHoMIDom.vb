@@ -1260,6 +1260,11 @@ Namespace HoMIDom
         <OperationContract()> Function DeleteNewDevice(ByVal IdSrv As String, ByVal NewDeviceId As String) As Integer
 
 #End Region
+
+#Region "Evènements"
+        Event DeviceChanged(ByVal DeviceId As String, ByVal DeviceValue As String)
+#End Region
+
     End Interface
 
     
