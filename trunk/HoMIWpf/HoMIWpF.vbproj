@@ -88,8 +88,14 @@
       <HintPath>..\Dll_externes\HoMIWpF\Jarloo.Calendar.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNet.SignalR.Client">
+      <HintPath>..\Dll_externes\HoMIWpF\Microsoft.AspNet.SignalR.Client.dll</HintPath>
+    </Reference>
     <Reference Include="MjpegProcessor">
       <HintPath>..\Dll_externes\Homidom-32bits\MjpegProcessor.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\Dll_externes\HoMIWpF\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -174,6 +180,7 @@
     <Compile Include="CtrlDevice\uRSS.xaml.vb">
       <DependentUpon>uRSS.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PushNotification.vb" />
     <Compile Include="Splash.xaml.vb">
       <DependentUpon>Splash.xaml</DependentUpon>
     </Compile>
@@ -714,7 +721,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
