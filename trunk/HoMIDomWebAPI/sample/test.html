@@ -6,8 +6,16 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script src="jquery.jsonp-2.4.0.min.js"></script>
+		<script src="jquery.signalR.min.js"></script>
+		<script src="http://localhost:7999/live/signalr/hubs/"></script>
 	</head>
 	<body>
+		<div id="rightPanel" style="float:right; width:350px; right:500;">
+			<p> <b><u>Last event logs:</u></b></p>
+			<div id="events">
+				
+			</div>
+		</div>
 		Devices:
 		<div id="devices"></div>
 		<hr/>
@@ -18,8 +26,10 @@
 		<div id="macros"></div>
 		<hr/>
 
-		
+		<button id="btnTest">Test</button>
 		<script type="text/javascript">
+			var devices;
+		
 			$(document).ready(function () {
 				$.jsonp({
 					url: 'http://localhost:7999/api/123456789/device/',
@@ -39,18 +49,37 @@
 					success: loadMacros,
 					error: onError
 				})
+				$('#btnTest').click(function(){
+					$.connection.NotificationHub.server.test("Test");
+				});
 
-
+				var connection = $.hubConnection('http://localhost:7999/live');
+				var nHubProxy = connection.createHubProxy('NotificationHub');
+				nHubProxy.on('DeviceChanged', function (id, value) {
+					console.log(id + ' = ' + value);
+					var dName = getDeviceName(id);
+					var currentdate = new Date(); 
+					var time = currentdate.getHours() + ":"  + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+					$('#events').prepend(time+' - '+dName+' = ' + value + '<br/>');
+				});
+				connection.qs = { "sKey" : '123456789' };
+				connection.start()
+					.done(function(){ console.log('Now connected, connection ID=' + connection.id); })
+					.fail(function(){ console.log('Could not connect'); });
 			});
 			
 			function onError(jqXHR, textStatus, errorThrown ) {
 				alert('erreur:' + textStatus);
 			}
 			
+			function getDeviceName(id) {
+				return $('#'+id).find('p').text();
+			}
+			
 			function loadDevices(data) {
 				var items = [];
 				$.each(data, function(index, device) {
-					items.push('<li id="' + device._ID + '">' + device._Name);
+					items.push('<li id="' + device._ID + '"><p>' + device._Name + '</p>');
 					var actions = [];
 					$.each(device._DeviceAction, function(i, command) {
 						actions.push('<li class="command"><a href="#" onClick="execute(\''+device._ID+'\', \''+command.Nom+'\')">' + command.Nom + '</a></li>');
@@ -88,8 +117,6 @@
 					html: items.join('')
 				}).appendTo('#macros');
 			}
-
-
 			
 			function execute(deviceId, command) {
 				$.jsonp({
@@ -101,7 +128,6 @@
 				})
 			}
 			
-			
 			function executeMacro(macroId) {
 				$.jsonp({
 					url: 'http://localhost:7999/api/123456789/command/macro/'+macroId+'/EXEC',
@@ -112,9 +138,8 @@
 				})
 			}
 
-			
 			function onExecuteSuccess() {
-				alert('Commande executée');
+				//alert('Commande executée');
 			}
 		</script>
 	</body>
