@@ -28,6 +28,7 @@ Public Class HubAuthorizeAttribute
     Implements IAuthorizeHubConnection
 
     Public Function AuthorizeHubConnection(hubDescriptor As HubDescriptor, request As IRequest) As Boolean Implements IAuthorizeHubConnection.AuthorizeHubConnection
-        Return request.Headers("sKey") = HoMIDomAPI.ServerKey
+        Return request.Headers("sKey") = HoMIDomAPI.ServerKey Or request.QueryString("sKey") = HoMIDomAPI.ServerKey
+        'Return True
     End Function
 End Class
