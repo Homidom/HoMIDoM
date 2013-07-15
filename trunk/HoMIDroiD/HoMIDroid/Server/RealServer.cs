@@ -176,7 +176,7 @@ namespace HoMIDroid.Server
         private void configure(string hostName, int port = 7999)
         {
             this._server = null; // reset current instance
-            this.Url = string.Format("http://{0}:{1}/ServiceModelSamples/service", hostName, port);
+            this.Url = string.Format("http://{0}:{1}/service", hostName, port);
         }
         private List<BO.Device> getDevices(HmdService.TemplateDevice[] list)
         {
