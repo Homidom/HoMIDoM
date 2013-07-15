@@ -57,8 +57,8 @@ Module Service
                 Console.WriteLine(Now & "ERREUR: Le fichier de config ou la balise ip n'ont pas été trouvé, l'adresse par défaut sera localhost !")
             End If
 
-            Dim baseAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/service")
-            Dim fileServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/fileServer")
+            Dim baseAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/service")
+            Dim fileServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/file")
             'Dim ServerCallBack As Uri = New Uri("http://" & _Addrip & ":" & "8000" & "/callback")
 
             'Dim CallBackAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/callback")
@@ -87,7 +87,7 @@ Module Service
                 Try
                     'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
                     'Dim myadress As String = "http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/service"
-                    Dim myadress As String = "http://" & Dns.GetHostName() & ":" & PortSOAP & "/ServiceModelSamples/service"
+                    Dim myadress As String = "http://" & Dns.GetHostName() & ":" & PortSOAP & "/service"
                     Dim binding As New ServiceModel.BasicHttpBinding
                     'Dim Context As OperationContext = OperationContext.Current 'non utilisé donc commenté : DMS
                     binding.MaxBufferPoolSize = 250000000

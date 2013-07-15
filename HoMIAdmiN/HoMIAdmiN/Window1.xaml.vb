@@ -235,7 +235,7 @@ Class Window1
     ''' <remarks></remarks>
     Public Function Connect_Srv(ByVal Name As String, ByVal IP As String, ByVal Port As String) As Integer
         Try
-            myadress = "http://" & IP & ":" & Port & "/ServiceModelSamples/service"
+            myadress = "http://" & IP & ":" & Port & "/service"
             MyPort = Port
 
             If UrlIsValid(myadress) = False Then

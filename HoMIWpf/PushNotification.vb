@@ -15,14 +15,10 @@ Public Class PushNotification
     Public Function Open() As Boolean
         _Connection = New HubConnection(Me._Url)
         _Connection.Headers.Add("sKey", Me._Key)
+        Dim hub = _Connection.CreateHubProxy("NotificationHub")
+        hub.On(Of String, String)("DeviceChanged", AddressOf Me.OnDeviceChanged)
 
-        If _Connection.Start().Wait(5000) Then
-            Dim hub = _Connection.CreateHubProxy("NotificationHub")
-            hub.On(Of String, String)("DeviceChanged", AddressOf Me.OnDeviceChanged)
-            Return True
-        End If
-
-        Return False
+        Return _Connection.Start().Wait(5000)
     End Function
 
     Public Function Close()
@@ -32,4 +28,9 @@ Public Class PushNotification
     Protected Function OnDeviceChanged(ByVal id As String, ByVal val As String) As Boolean
         RaiseEvent DeviceChanged(id, val)
     End Function
+
+    Public Sub New(ByVal url As String, ByVal serverKey As String)
+        Me._Url = url
+        Me._Key = serverKey
+    End Sub
 End Class
