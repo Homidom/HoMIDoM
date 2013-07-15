@@ -183,10 +183,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\HomiCallBack\HomiCallBack.vbproj">
-      <Project>{EC391D4C-334C-4B4A-A8E7-D9BD279DF5F9}</Project>
-      <Name>HomiCallBack</Name>
-    </ProjectReference>
     <ProjectReference Include="..\HoMIDomWebAPI\HoMIDomWebAPI.vbproj">
       <Project>{96963754-902F-4F02-AB66-D06A0D2E3242}</Project>
       <Name>HoMIDomWebAPI</Name>
@@ -205,7 +201,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="False" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

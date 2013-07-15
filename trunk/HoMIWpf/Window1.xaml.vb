@@ -56,6 +56,7 @@ Class Window1
     Dim _flagSave As Boolean = False 'True si première execution du client ou si on a changer un paramètre de config
 
     'User Graphic
+    Dim mypush As PushNotification()
     Dim _ShowSoleil As Boolean
     Dim _ShowTemperature As Boolean
     Dim _ImageBackGroundDefault As String = ""
@@ -515,14 +516,25 @@ Class Window1
             x.Start()
             x = Nothing
 
+            Dim mypush As New PushNotification("Http://localhost:7999/live", "123456789")
+            AddHandler mypush.DeviceChanged, AddressOf DeviceChanged
+            'push = New PushNotification("Http://localhost:7999/live", "123456789")
+            'push.PushNotification("Http://localhost:7999/live", "123456789")
+            mypush.Open()
+
             myxml = Nothing
             frmMere = Me
 
             spl.Close()
             spl = Nothing
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur lors du lancement de l'application: " & ex.Message, "Erreur", "New")
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur lors du lancement de l'application: " & ex.ToString, "Erreur", "New")
         End Try
+    End Sub
+
+    'Event lorsqu'un device change
+    Private Sub DeviceChanged(deviceid As String, DeviceValue As String)
+
     End Sub
 
 
@@ -1406,7 +1418,7 @@ Class Window1
         Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
 
         Try
-            Dim myadress As String = "http://" & IP & ":" & PortSOAP & "/ServiceModelSamples/service"
+            Dim myadress As String = "http://" & IP & ":" & PortSOAP & "/service"
             Dim binding As New ServiceModel.BasicHttpBinding
             binding.MaxBufferPoolSize = 5000000
             binding.MaxReceivedMessageSize = 5000000
@@ -1665,6 +1677,7 @@ Class Window1
 
     Private Sub Window1_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles Me.Closing
         Try
+            'push.Close()
             myService = Nothing
             Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermeture de l'application")
         Catch ex As Exception
