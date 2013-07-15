@@ -518,12 +518,20 @@ Class Window1
 
             Dim mypush As New PushNotification("Http://localhost:7999/live", "123456789")
             AddHandler mypush.DeviceChanged, AddressOf DeviceChanged
-            'push = New PushNotification("Http://localhost:7999/live", "123456789")
-            'push.PushNotification("Http://localhost:7999/live", "123456789")
             mypush.Open()
 
             myxml = Nothing
             frmMere = Me
+
+            If _AffLastError Then
+                Dim _string As String = ""
+                For Each logerror As String In myService.GetLastLogsError
+                    If String.IsNullOrEmpty(logerror) = False Then
+                        _string &= logerror & vbCrLf
+                        ImgMess.ToolTip = _string
+                    End If
+                Next
+            End If
 
             spl.Close()
             spl = Nothing
@@ -534,7 +542,42 @@ Class Window1
 
     'Event lorsqu'un device change
     Private Sub DeviceChanged(deviceid As String, DeviceValue As String)
+        Dim x As New Thread(AddressOf Refresh)
+        x.Start()
+        x = Nothing
+    End Sub
 
+    Private Sub NewLog(ByVal TypLog As HoMIDom.HoMIDom.Server.TypeLog, ByVal Source As HoMIDom.HoMIDom.Server.TypeSource, ByVal Fonction As String, ByVal Message As String) 'Evènement lorsqu'un nouveau log est écrit
+        If _AffLastError Then
+            Dim _string As String = ""
+            For Each logerror As String In myService.GetLastLogsError
+                If String.IsNullOrEmpty(logerror) = False Then
+                    _string &= logerror & vbCrLf
+                    ImgMess.ToolTip = _string
+                End If
+            Next
+        End If
+    End Sub
+    Private Sub MessageFromServeur(Id As String, Time As DateTime, Message As String) 'Message provenant du serveur
+
+    End Sub
+    Private Sub DriverChanged(DriverId As String) 'Evènement lorsq'un driver est modifié
+
+    End Sub
+    Private Sub ZoneChanged(ZoneId As String) 'Evènement lorsq'une zone est modifiée ou créée
+
+    End Sub
+    Private Sub MacroChanged(MacroId As String) 'Evènement lorsq'une macro est modifiée ou créée
+
+    End Sub
+    Private Sub HeureSoleilChanged() 'Evènement lorsque l'heure de lever/couché du soleil est modifié
+        If ShowSoleil = True Then
+            Dim mydate As Date = myService.GetHeureLeverSoleil
+            LblLeve.Content = mydate.ToShortTimeString
+            mydate = myService.GetHeureCoucherSoleil
+            LblCouche.Content = mydate.ToShortTimeString
+            mydate = Nothing
+        End If
     End Sub
 
 
@@ -1516,29 +1559,12 @@ Class Window1
 
                 LblTime.Content = Now.ToLongDateString & " " & myService.GetTime
 
-                If Now.Second = 0 Then
-                    Dim x As New Thread(AddressOf Refresh)
-                    x.Start()
-                    x = Nothing
-                End If
+                'If Now.Second = 0 Then
+                '    Dim x As New Thread(AddressOf Refresh)
+                '    x.Start()
+                '    x = Nothing
+                'End If
 
-                If ShowSoleil = True And ((LblLeve.Content <> "?" And LblCouche.Content <> "?") Or Now.Second = 0) Then
-                    Dim mydate As Date = myService.GetHeureLeverSoleil
-                    LblLeve.Content = mydate.ToShortTimeString
-                    mydate = myService.GetHeureCoucherSoleil
-                    LblCouche.Content = mydate.ToShortTimeString
-                    mydate = Nothing
-                End If
-
-                If _AffLastError Then
-                    Dim _string As String = ""
-                    For Each logerror As String In myService.GetLastLogsError
-                        If String.IsNullOrEmpty(logerror) = False Then
-                            _string &= logerror & vbCrLf
-                            ImgMess.ToolTip = _string
-                        End If
-                    Next
-                End If
             Else
                 LblTime.Content = Now.ToLongDateString & " " & Now.ToLongTimeString
             End If

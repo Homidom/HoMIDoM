@@ -1,4 +1,5 @@
 ﻿Imports HoMIDom.HoMIDom
+Imports HoMIDom.HoMIDom.Server
 Imports System.Web.Http.SelfHost
 Imports System.Web.Http
 Imports Microsoft.Owin.Hosting
@@ -17,9 +18,21 @@ Public Class HoMIDomAPI
         Set(ByVal value As IHoMIDom)
             If homidom IsNot Nothing Then
                 RemoveHandler homidom.DeviceChanged, AddressOf DeviceChanged
+                RemoveHandler homidom.DriverChanged, AddressOf DriverChanged
+                RemoveHandler homidom.NewLog, AddressOf NewLog
+                RemoveHandler homidom.ZoneChanged, AddressOf ZoneChanged
+                RemoveHandler homidom.DriverChanged, AddressOf DriverChanged
+                RemoveHandler homidom.MacroChanged, AddressOf MacroChanged
+                RemoveHandler homidom.HeureSoleilChanged, AddressOf HeureSoleilChanged
             End If
             homidom = value
             AddHandler homidom.DeviceChanged, AddressOf DeviceChanged
+            AddHandler homidom.DriverChanged, AddressOf DriverChanged
+            AddHandler homidom.NewLog, AddressOf NewLog
+            AddHandler homidom.ZoneChanged, AddressOf ZoneChanged
+            AddHandler homidom.DriverChanged, AddressOf DriverChanged
+            AddHandler homidom.MacroChanged, AddressOf MacroChanged
+            AddHandler homidom.HeureSoleilChanged, AddressOf HeureSoleilChanged
         End Set
     End Property
 
@@ -72,5 +85,30 @@ Public Class HoMIDomAPI
     Private Shared Sub DeviceChanged(id As String, val As String)
         Dim context As IHubContext = GlobalHost.ConnectionManager.GetHubContext(Of NotificationHub)()
         context.Clients.All.DeviceChanged(id, val)
+    End Sub
+
+    Private Shared Sub NewLog(ByVal TypLog As HoMIDom.HoMIDom.Server.TypeLog, ByVal Source As HoMIDom.HoMIDom.Server.TypeSource, ByVal Fonction As String, ByVal Message As String) 'Evènement lorsqu'un nouveau log est écrit
+        Dim context As IHubContext = GlobalHost.ConnectionManager.GetHubContext(Of NotificationHub)()
+        context.Clients.All.NewLog(TypLog, Source, Fonction, Message)
+    End Sub
+    Private Shared Sub MessageFromServeur(Id As String, Time As DateTime, Message As String) 'Message provenant du serveur
+        Dim context As IHubContext = GlobalHost.ConnectionManager.GetHubContext(Of NotificationHub)()
+        context.Clients.All.MessageFromServeur(Id, Time, Message)
+    End Sub
+    Private Shared Sub DriverChanged(DriverId As String) 'Evènement lorsq'un driver est modifié
+        Dim context As IHubContext = GlobalHost.ConnectionManager.GetHubContext(Of NotificationHub)()
+        context.Clients.All.DriverChanged(DriverId)
+    End Sub
+    Private Shared Sub ZoneChanged(ZoneId As String) 'Evènement lorsq'une zone est modifiée ou créée
+        Dim context As IHubContext = GlobalHost.ConnectionManager.GetHubContext(Of NotificationHub)()
+        context.Clients.All.ZoneChanged(ZoneId)
+    End Sub
+    Private Shared Sub MacroChanged(MacroId As String) 'Evènement lorsq'une macro est modifiée ou créée
+        Dim context As IHubContext = GlobalHost.ConnectionManager.GetHubContext(Of NotificationHub)()
+        context.Clients.All.MacroChanged(MacroId)
+    End Sub
+    Private Shared Sub HeureSoleilChanged() 'Evènement lorsque l'heure de lever/couché du soleil est modifié
+        Dim context As IHubContext = GlobalHost.ConnectionManager.GetHubContext(Of NotificationHub)()
+        context.Clients.All.HeureSoleilChanged()
     End Sub
 End Class
