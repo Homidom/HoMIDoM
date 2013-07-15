@@ -1262,7 +1262,13 @@ Namespace HoMIDom
 #End Region
 
 #Region "Evènements"
-        Event DeviceChanged(ByVal DeviceId As String, ByVal DeviceValue As String)
+        Event DeviceChanged(ByVal DeviceId As String, ByVal DeviceValue As String) 'Evènement lorsqu'un device change
+        Event NewLog(ByVal TypLog As HoMIDom.Server.TypeLog, ByVal Source As HoMIDom.Server.TypeSource, ByVal Fonction As String, ByVal Message As String) 'Evènement lorsqu'un nouveau log est écrit
+        Event MessageFromServeur(Id As String, Time As DateTime, Message As String) 'Message provenant du serveur
+        Event DriverChanged(DriverId As String) 'Evènement lorsq'un driver est modifié
+        Event ZoneChanged(ZoneId As String) 'Evènement lorsq'une zone est modifiée ou créée
+        Event MacroChanged(MacroId As String) 'Evènement lorsq'une macro est modifiée ou créée
+        Event HeureSoleilChanged() 'Evènement lorsque l'heure de lever/couché du soleil est modifié
 #End Region
 
     End Interface

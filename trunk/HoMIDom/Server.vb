@@ -34,7 +34,13 @@ Namespace HoMIDom
 
 
 #Region "Evènements"
-        Public Event DeviceChanged(ByVal DeviceId As String, ByVal DeviceValue As String) Implements IHoMIDom.DeviceChanged
+        Public Event DeviceChanged(ByVal DeviceId As String, ByVal DeviceValue As String) Implements IHoMIDom.DeviceChanged 'Evènement lorsqu'un device change
+        Public Event NewLog(ByVal TypLog As HoMIDom.Server.TypeLog, ByVal Source As HoMIDom.Server.TypeSource, ByVal Fonction As String, ByVal Message As String) Implements IHoMIDom.NewLog  'Evènement lorsqu'un nouveau log est écrit
+        Public Event MessageFromServeur(Id As String, Time As DateTime, Message As String) Implements IHoMIDom.MessageFromServeur  'Message provenant du serveur
+        Public Event DriverChanged(DriverId As String) Implements IHoMIDom.DriverChanged 'Evènement lorsq'un driver est modifié
+        Public Event ZoneChanged(ZoneId As String) Implements IHoMIDom.ZoneChanged 'Evènement lorsq'une zone est modifiée ou créée
+        Public Event MacroChanged(MacroId As String) Implements IHoMIDom.MacroChanged 'Evènement lorsq'une macro est modifiée ou créée
+        Public Event HeureSoleilChanged() Implements IHoMIDom.HeureSoleilChanged 'Evènement lorsque l'heure de lever/couché du soleil est modifié
 #End Region
 
 #Region "Declaration des variables"
@@ -107,6 +113,12 @@ Namespace HoMIDom
         Public Sub DriversEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object)
             Try
                 If Etat_server Then
+                    For Each _drv In GetAllDrivers(_IdSrv)
+                        If _drv.Nom = DriveName Then
+                            RaiseEvent DriverChanged(_drv.ID)
+                            Exit For
+                        End If
+                    Next
 
                 End If
             Catch ex As Exception
@@ -334,6 +346,16 @@ Namespace HoMIDom
 #Region "Fonctions/Sub propres au serveur"
 
 #Region "Serveur"
+        ''' <summary>Permet d'envoyer un message d'un client vers le server</summary>
+        ''' <param name="Message"></param>
+        ''' <remarks></remarks>
+        Public Sub MessageFromServer(ByVal Message As String)
+            Try
+                RaiseEvent MessageFromServeur(Api.GenerateGUID, Now, Message)
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "MessageFromServer", "Exception : " & ex.Message)
+            End Try
+        End Sub
 
         'Public Function SaveFileToSrv(ByVal File As Object) As String
         '    Try
@@ -407,6 +429,8 @@ Namespace HoMIDom
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Initialisation des heures du soleil")
                 _HeureCoucherSoleil = DateAdd(DateInterval.Minute, _HeureCoucherSoleilCorrection, dtSunset)
                 _HeureLeverSoleil = DateAdd(DateInterval.Minute, _HeureLeverSoleilCorrection, dtSunrise)
+
+                RaiseEvent HeureSoleilChanged()
 
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Heure du lever : " & _HeureLeverSoleil)
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "MAJ_HeuresSoleil", "Heure du coucher : " & _HeureCoucherSoleil)
@@ -2726,6 +2750,8 @@ Namespace HoMIDom
                 'on affiche dans la console
                 Console.WriteLine(Now & " " & TypLog.ToString & " " & Source.ToString & " " & Fonction & " " & _Message)
                 WriteLastLogs(TypLog, Source, Fonction, _Message)
+
+                RaiseEvent NewLog(TypLog, Source, Fonction, _Message)
 
                 Select Case TypLog
                     Case TypeLog.ERREUR
@@ -6449,6 +6475,8 @@ Namespace HoMIDom
                     Next
                 End If
 
+                RaiseEvent DeviceChanged(myID, "")
+
                 Return myID
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveDevice", "Exception : " & ex.ToString)
@@ -7174,6 +7202,8 @@ Namespace HoMIDom
                     Next
                 End If
 
+                RaiseEvent ZoneChanged(myID)
+
                 Return myID
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveZone", "Exception : " & ex.Message)
@@ -7480,6 +7510,8 @@ Namespace HoMIDom
                         End If
                     Next
                 End If
+
+                RaiseEvent MacroChanged(myID)
 
                 Return myID
             Catch ex As Exception

@@ -72,6 +72,13 @@ HoMIDom
 	<param name="Valeur"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Api.HaveCaractSpecial(System.String)">
+	<summary>
+ Retourne True si la chaine comporte un caractère spécial
+ </summary>
+	<param name="txt"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="P:HoMIDom.My.Resources.Resources.ResourceManager">
 	<summary>
   Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
@@ -1111,6 +1118,10 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.Server.Server_UnhandledExceptionEvent(System.Object,System.UnhandledExceptionEventArgs)">
 	<summary>Evenement sur UnhandleException</summary>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.MessageFromServer(System.String)">
+	<summary>Permet d'envoyer un message d'un client vers le server</summary>
+	<param name="Message"></param>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.VerifIdSrv(System.String)">
 	<summary>
  Vérifie si l'IDsrv est correct, retourne True si ok
@@ -1904,37 +1915,15 @@ HoMIDom
  </summary>
 	<returns>List of Templates</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.CreateNewTemplate(System.String,System.String,System.String,HoMIDom.HoMIDom.Telecommande.TypeEquipement,System.Int32,System.Int32)">
+</member><member name="M:HoMIDom.HoMIDom.Server.CreateNewTemplate(HoMIDom.HoMIDom.Telecommande.Template)">
 	<summary>
  Crée un nouveau template dans le répertoire templates
  </summary>
-	<param name="Fabricant">nom du fabricant</param>
-	<param name="Modele">modele</param>
-	<param name="Driver">driver</param>
-	<param name="Type">Type de base, si différent de VIDE va mettre les commandes de bases par défaut</param>
 	<returns>0 si ok, sinon message d'erreur</returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.ReadTemplate(System.String,System.String,System.String)">
-	<summary>
- Recupère la liste des commandes d'un template donné
- </summary>
-	<param name="Fabricant"></param>
-	<param name="Modele"></param>
-	<param name="Driver"></param>
-	<returns>Liste de commandes</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.StartLearning(System.String,System.String)">
 	<summary>Demander un apprentissage à un driver</summary>
 	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveTemplate(System.String,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes},System.Int32,System.Int32)">
-	<summary>
- Sauvegarde les commandes dans un template donné
- </summary>
-	<param name="IdSrv">Id du Serveur</param>
-	<param name="Template">Nom du template</param>
-	<param name="Commandes">Liste des commandes</param>
-	<returns>O si ok sinon message d'erreur</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.TelecommandeSendCommand(System.String,System.String,System.String)">
 	<summary>
@@ -3135,28 +3124,9 @@ HoMIDom
  </summary>
 	<returns>List of Templates</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.CreateNewTemplate(System.String,System.String,System.String,HoMIDom.HoMIDom.Telecommande.TypeEquipement,System.Int32,System.Int32)">
-	<summary>
- Crée un nouveau template dans le répertoire templates
- </summary>
-	<param name="Fabricant">nom du fabricant</param>
-	<param name="Modele">modele</param>
-	<param name="Driver">driver</param>
-	<param name="Type">Type de base, si différent de VIDE va mettre les commandes de bases par défaut</param>
-	<returns>0 si ok, sinon message d'erreur</returns>
-	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.StartLearning(System.String,System.String)">
 	<summary>Demander un apprentissage à un driver</summary>
 	<returns></returns>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveTemplate(System.String,System.String,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes},System.Int32,System.Int32)">
-	<summary>
- Sauvegarde les commandes dans un template donné
- </summary>
-	<param name="IdSrv">Id du Serveur</param>
-	<param name="Template">Nom du template</param>
-	<param name="Commandes">Liste des commandes</param>
-	<returns>O si ok sinon message d'erreur</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.TelecommandeSendCommand(System.String,System.String,System.String)">
 	<summary>
