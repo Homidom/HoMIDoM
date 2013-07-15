@@ -61,7 +61,7 @@ Imports System.Net.Sockets
     Private adressWrite As Integer
     Private unit As Integer
 
-    Dim hex_to_bool As New Dictionary(Of Integer, Boolean)
+    Dim str_to_bool As New Dictionary(Of String, Integer)
 
 #End Region
 
@@ -396,7 +396,7 @@ Imports System.Net.Sockets
     ''' <summary>Commander un device</summary>
     ''' <param name="Objet">Objet représetant le device à interroger</param>
     ''' <param name="Commande">La commande à passer</param>
-    ''' <param name="Parametre1"></param>
+    ''' <param name="Parametre1">La valeur à passer</param>
     ''' <param name="Parametre2"></param>
     ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
@@ -412,7 +412,16 @@ Imports System.Net.Sockets
             If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Write", "Ecriture de " & Objet.Name)
             If Parametre1 Is Nothing Then Parametre1 = 0
             If Parametre2 Is Nothing Then Parametre2 = 0
-            ecrire(Objet.adresse1, Commande, Parametre1, Parametre2, sendtwice)
+
+            If TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
+                ecrire(Objet.adresse1, Commande, Parametre1, Parametre2, sendtwice)
+            End If
+
+            If TypeOf Objet.Value Is Boolean And Not TypeOf Objet.Value Is Integer And Not TypeOf Objet.Value Is Double Then
+                Parametre1 = str_to_bool(Commande)
+                ecrire(Objet.adresse1, Commande, Parametre1, Parametre2, sendtwice)
+            End If
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP Write", ex.Message)
         End Try
@@ -547,7 +556,8 @@ Imports System.Net.Sockets
             'ajout des commandes avancées pour les devices
             add_devicecommande("OFF", "Eteint tous les appareils du meme range que ce device", 0)
             add_devicecommande("ON", "Allume toutes les lampes du meme range que ce device", 0)
-            add_devicecommande("DIM", "Variation, parametre = Variation", 0)
+            add_devicecommande("DIM", "Variation, parametre = Variation", 1)
+            add_devicecommande("VALUE", "Valeur, parametre = Valeur", 1)
 
             'Libellé Driver
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
@@ -559,12 +569,9 @@ Imports System.Net.Sockets
             Add_LibelleDevice("REFRESH", "Fastpooling/STATUS_REQUEST (Secondes)", "Permet de faire un STATUS_REQUEST (ex: L2) ou du fastpooling (ex: 'L')")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
-            'dictionnaire Commande INT -> BOOL
-            hex_to_bool.Add(0, False)
-            hex_to_bool.Add(1, True)
-            hex_to_bool.Add(2, False)
-            hex_to_bool.Add(3, True)
-            hex_to_bool.Add(4, False)
+            'dictionnaire Commande STR -> INT
+            str_to_bool.Add("OFF", 0)
+            str_to_bool.Add("ON", 1)
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP New", "Exception : " & ex.Message)
