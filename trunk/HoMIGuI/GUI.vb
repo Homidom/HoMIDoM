@@ -3,6 +3,7 @@ Imports System.ServiceProcess
 Imports Microsoft.Win32
 Imports System.Threading
 Imports System.Globalization
+Imports System.IO
 
 Public Class HoMIGuI
     Private controller As New ServiceController
@@ -94,7 +95,13 @@ Public Class HoMIGuI
     End Sub
 
     Private Sub LogsToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles LogsToolStripMenuItem.Click
-        MsgBox("Pas encore implémenté", MsgBoxStyle.Information, "Afficher les Logs")
+        Dim Chemin As String = My.Application.Info.DirectoryPath & "\logs"
+        If Directory.Exists(Chemin) Then
+            System.Diagnostics.Process.Start(Chemin)
+        Else
+            MsgBox("Chemin non trouvé : " & Chemin, MsgBoxStyle.Information, "Ouvrir le dossier Logs")
+        End If
+
     End Sub
 
     Private Sub DossierHomidomStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles DossierHomidomStripMenuItem.Click
