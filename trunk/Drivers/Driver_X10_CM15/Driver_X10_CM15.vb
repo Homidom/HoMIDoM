@@ -410,7 +410,12 @@ Public Class Driver_X10_CM15
             End If
             If Commande = "DIM" Then
                 If Parametre1 IsNot Nothing Then
-                    ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " dim " & Parametre1)
+                    Dim _old As Integer = Objet.ValueLast
+                    Dim _new As Integer = CInt(Parametre1)
+                    Dim _cmd As String = ""
+                    If _old > _new Then _cmd = "dim"
+                    If _old <= _new Then _cmd = "bright"
+                    ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " " & _cmd & " " & Parametre1)
                     Objet.Value = Parametre1
                 End If
             End If
@@ -422,23 +427,64 @@ Public Class Driver_X10_CM15
             End If
             If Commande = "OUVERTURE" Then
                 If Parametre1 IsNot Nothing Then
-                    Try
-                        Dim _var As Double = Parametre1
-                        _var = _var * 0.25
-                        Dim _var2 As Byte = CByte(_var)
-                        ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " Extcode 1 " & Hex(_var2))
+                    'Try
+                    '    Dim _var As Double = Parametre1
+                    '    _var = _var * 0.25
+                    '    Dim _var2 As Byte = CByte(_var)
+                    '    ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " Extcode 1 " & Hex(_var2))
+                    '    Objet.Value = Parametre1
+                    'Catch ex As Exception
+                    '    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write OUVERTURE ExtCode 1", "Erreur: " & ex.ToString)
+                    '    Try
+                    '        Dim hex As String
+                    '        hex = Conversion.Hex(Parametre1 * 0.64)
+                    '        ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " extcode 31 " & ex.ToString)
+                    '        Objet.Value = Parametre1
+                    '    Catch ex2 As Exception
+                    '        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write OUVERTURE ExtCode 1", "Erreur: " & ex.ToString)
+                    '    End Try
+                    'End Try
+                    Dim _old As Integer = Objet.ValueLast
+                    Dim _new As Integer = CInt(Parametre1)
+                    Dim _diff As Integer = _new - _old
+                    Dim _cmd As String = ""
+                    If _diff < 0 Then
+                        _diff = _diff * -1
+                        _cmd = "dim"
+                    Else
+                        _cmd = "bright"
+                    End If
+                    If _new <= 15 Then
+                        ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " off")
+                        Objet.Value = 0
+                    ElseIf _diff > 15 And _diff <= 30 Then
+                        ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " " & _cmd & " 80")
                         Objet.Value = Parametre1
-                    Catch ex As Exception
-                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write OUVERTURE ExtCode 1", "Erreur: " & ex.ToString)
-                        Try
-                            Dim hex As String
-                            hex = Conversion.Hex(Parametre1 * 0.64)
-                            ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " extcode 31 " & ex.ToString)
-                            Objet.Value = Parametre1
-                        Catch ex2 As Exception
-                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write OUVERTURE ExtCode 1", "Erreur: " & ex.ToString)
-                        End Try
-                    End Try
+                    ElseIf _diff > 30 And _diff <= 45 Then
+                        ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " " & _cmd & " 80")
+                        Threading.Thread.Sleep(1000)
+                        ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " " & _cmd & " 80")
+                        Objet.Value = Parametre1
+                    ElseIf _diff > 45 And _diff <= 60 Then
+                        ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " " & _cmd & " 80")
+                        Threading.Thread.Sleep(1000)
+                        ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " " & _cmd & " 80")
+                        Threading.Thread.Sleep(1000)
+                        ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " " & _cmd & " 80")
+                        Objet.Value = Parametre1
+                    ElseIf _diff > 60 And _diff <= 75 Then
+                        ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " " & _cmd & " 80")
+                        Threading.Thread.Sleep(1000)
+                        ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " " & _cmd & " 80")
+                        Threading.Thread.Sleep(1000)
+                        ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " " & _cmd & " 80")
+                        Threading.Thread.Sleep(1000)
+                        ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " " & _cmd & " 80")
+                        Objet.Value = Parametre1
+                    ElseIf _new > 75 Then
+                        ActiveHomeObj.SendAction(TypeDev, LCase(Objet.adresse1) & " on")
+                        Objet.Value = 100
+                    End If
                 End If
             End If
 
