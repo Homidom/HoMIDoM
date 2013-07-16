@@ -31,7 +31,7 @@ Public Class HoMIServicE
                 Console.BackgroundColor = ConsoleColor.White 'Couleur du fond
                 Console.Clear()  'Applique la couleur du fond
                 Console.ForegroundColor = ConsoleColor.Black 'Couleur du texte
-                Console.Title = "HoMIDomService"
+                Console.Title = "HoMIService"
                 Console.WriteLine(Now & " INFO    ******************************")
                 Console.WriteLine(Now & " INFO    **** DEMARRAGE DU SERVEUR ****")
                 Console.WriteLine(" ")
@@ -63,7 +63,8 @@ Public Class HoMIServicE
             'Connexion au serveur
             Dim myChannelFactory As ServiceModel.ChannelFactory(Of IHoMIDom) = Nothing
             Try
-                Dim myadress As String = "http://" & Dns.GetHostName() & ":" & PortSOAP & "/service"
+                'Dim myadress As String = "http://" & Dns.GetHostName() & ":" & PortSOAP & "/service"
+                Dim myadress As String = "http://" & _Addrip & ":" & PortSOAP & "/service"
                 Dim binding As New ServiceModel.BasicHttpBinding
                 binding.MaxBufferPoolSize = 250000000
                 binding.MaxReceivedMessageSize = Integer.MaxValue
