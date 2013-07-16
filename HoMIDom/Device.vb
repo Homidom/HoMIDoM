@@ -1772,12 +1772,14 @@ Namespace HoMIDom
 
             'DIM
             Public Sub [DIM](ByVal Variation As Integer)
+                If _Enable = False Then Exit Sub
+
                 If Variation < 0 Then
                     Variation = 0
                 ElseIf Variation > 100 Then
                     Variation = 100
                 End If
-                If _Enable = False Then Exit Sub
+
                 Driver.Write(Me, "DIM", Variation)
             End Sub
 
