@@ -7,11 +7,13 @@ Imports System.ServiceModel.Description
 Imports System.Xml.Serialization
 Imports System.ServiceModel.Channels
 Imports System.Net
+Imports STRGS = Microsoft.VisualBasic.Strings
 
 Public Class HoMIServicE
 
     Dim myService As IHoMIDom
-    Dim MyRep As String = System.Environment.CurrentDirectory
+    'Dim MyRep As String = System.Environment.CurrentDirectory
+    Dim MyRep As String = My.Application.Info.DirectoryPath
     Dim _IdSrv As String
     Dim _Addrip As String = "localhost"
     Dim host As ServiceHost
@@ -38,7 +40,11 @@ Public Class HoMIServicE
             End If
 
             'Démarrage du serviceWeb
-            log("Start ServiceWeb")
+            log("Service Web -> Démarrage")
+
+            'MyRep = "c:\homidom"
+            'MyRep = My.Application.Info.DirectoryPath
+
             Dim PortSOAP As String = LoadPort()
             If PortSOAP = "" Or IsNumeric(PortSOAP) = False Then
                 PortSOAP = "7999"
@@ -57,12 +63,13 @@ Public Class HoMIServicE
             AddHandler host.Faulted, AddressOf HostFaulted
             'AddHandler host.UnknownMessageReceived, AddressOf HostUnknown
             host.Open()
-            log("ServiceWeb Démarré")
+            log("Service Web -> Démarré : http://" & _Addrip & ":" & PortSOAP & "/service")
             Console.WriteLine("")
 
             'Connexion au serveur
             Dim myChannelFactory As ServiceModel.ChannelFactory(Of IHoMIDom) = Nothing
             Try
+                log("Serveur Homidom -> Démarrage")
                 'Dim myadress As String = "http://" & Dns.GetHostName() & ":" & PortSOAP & "/service"
                 Dim myadress As String = "http://" & _Addrip & ":" & PortSOAP & "/service"
                 Dim binding As New ServiceModel.BasicHttpBinding
@@ -81,20 +88,22 @@ Public Class HoMIServicE
                 myService = myChannelFactory.CreateChannel()
                 'Démarrage du serveur pour charger la config
                 myService.Start()
+                log("Serveur HoMIDoM -> démarré")
             Catch ex As Exception
                 myChannelFactory.Abort()
-                logerror("Erreur lors du lancement du service SOAP: " & ex.Message)
+                logerror("Erreur lors du démmarage du serveur HoMIDoM : " & ex.Message)
             End Try
 
             'démmarage de l'API WEB
             Dim apiServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP)
             HoMIDomWebAPI.HoMIDomAPI.CurrentServer = Server.Instance
             HoMIDomWebAPI.HoMIDomAPI.Start(apiServerAddress.ToString(), _IdSrv)
+            log("API Web démarré : http://" & _Addrip & ":" & PortSOAP & "/api")
 
             'démarrage du serveur de fichier
             hostFileServer = New ServiceHost(GetType(FileServer), fileServerAddress)
             hostFileServer.Open()
-            log("Serveur de fichiers démarré sur l'adresse: " & fileServerAddress.ToString())
+            log("Serveur de fichiers démarré : http://" & _Addrip & ":" & PortSOAP & "/fileServer")
 
             'démarrage OK
             Console.WriteLine(" ")
@@ -112,7 +121,7 @@ Public Class HoMIServicE
             Else
                 logerror("Erreur lors du démarrage service: " & ex.Message & vbCrLf & vbCrLf & message)
             End If
-            If (Environment.UserInteractive) Then Console.ReadLine()
+            'If (Environment.UserInteractive) Then Console.ReadLine()
         End Try
 
         'en mode interactif (console) on attend une frappe du clavier pour fermer l'appli
@@ -138,6 +147,9 @@ Public Class HoMIServicE
             Console.WriteLine(Now & " INFO    " & texte)
         Else
             'log dans les events
+            Dim myEventLog = New EventLog()
+            myEventLog.Source = "HoMIServicE"
+            myEventLog.WriteEntry(texte, EventLogEntryType.Information, 0)
 
         End If
     End Sub
@@ -147,7 +159,9 @@ Public Class HoMIServicE
             Console.WriteLine(Now & " ERROR   " & texte)
         Else
             'log dans les events
-
+            Dim myEventLog = New EventLog()
+            myEventLog.Source = "HoMIServicE"
+            myEventLog.WriteEntry(texte, EventLogEntryType.Error, 90)
         End If
     End Sub
 
