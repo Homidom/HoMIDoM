@@ -2,24 +2,11 @@
 <doc>
 <assembly>
 <name>
-Driver_KNX
+Driver_Skype
 </name>
 </assembly>
 <members>
-<member name="P:Driver_KNX.My.Resources.Resources.ResourceManager">
-	<summary>
-  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
-</summary>
-</member><member name="P:Driver_KNX.My.Resources.Resources.Culture">
-	<summary>
-  Remplace la propriété CurrentUICulture du thread actuel pour toutes
-  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
-</summary>
-</member><member name="T:Driver_KNX.My.Resources.Resources">
-	<summary>
-  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
-</summary>
-</member><member name="E:Driver_KNX.Driver_KNX.DriverEvent">
+<member name="E:Driver_Skype.Driver_Skype.DriverEvent">
 	<summary>
  Evènement déclenché par le driver au serveur
  </summary>
@@ -27,245 +14,242 @@ Driver_KNX
 	<param name="TypeEvent"></param>
 	<param name="Parametre"></param>
 	<remarks></remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.IdSrv">
+</member><member name="P:Driver_Skype.Driver_Skype.IdSrv">
 	<summary>
  ID du serveur
  </summary>
 	<value>ID du serveur</value>
 	<remarks>Permet d'accéder aux commandes du serveur pour lesquels il faut passer l'ID du serveur</remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.COM">
+</member><member name="P:Driver_Skype.Driver_Skype.COM">
 	<summary>
  Port COM du driver
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.DeviceSupport">
+</member><member name="P:Driver_Skype.Driver_Skype.DeviceSupport">
 	<summary>
  Retourne la liste des devices supportés par le driver
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks>Voir Sub New</remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.Parametres">
+</member><member name="P:Driver_Skype.Driver_Skype.Parametres">
 	<summary>
  Liste des paramètres avancés du driver
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks>Voir Sub New</remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.LabelsDriver">
+</member><member name="P:Driver_Skype.Driver_Skype.LabelsDriver">
 	<summary>
  Liste les libellés et tooltip des champs associés au driver
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.LabelsDevice">
+</member><member name="P:Driver_Skype.Driver_Skype.LabelsDevice">
 	<summary>
  Liste les libellés et tooltip des champs associés au device associé au driver
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.Enable">
+</member><member name="P:Driver_Skype.Driver_Skype.Enable">
 	<summary>
  Active/Désactive le driver
  </summary>
 	<value>True si actif</value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.ID">
+</member><member name="P:Driver_Skype.Driver_Skype.ID">
 	<summary>
  ID du driver
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.IP_TCP">
+</member><member name="P:Driver_Skype.Driver_Skype.IP_TCP">
 	<summary>
  Adresse IP TCP du driver
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.IP_UDP">
+</member><member name="P:Driver_Skype.Driver_Skype.IP_UDP">
 	<summary>
  Adresse IP UDP du driver
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.IsConnect">
+</member><member name="P:Driver_Skype.Driver_Skype.IsConnect">
 	<summary>
  Permet de savoir si le driver est actif
  </summary>
 	<value>Retourne True si le driver est démarré</value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.Modele">
+</member><member name="P:Driver_Skype.Driver_Skype.Modele">
 	<summary>
  Modèle du driver
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.Nom">
+</member><member name="P:Driver_Skype.Driver_Skype.Nom">
 	<summary>
  Nom du driver
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.Picture">
+</member><member name="P:Driver_Skype.Driver_Skype.Picture">
 	<summary>
  Image du driver (non utilisé)
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.Port_TCP">
+</member><member name="P:Driver_Skype.Driver_Skype.Port_TCP">
 	<summary>
  Port TCP du driver
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.Port_UDP">
+</member><member name="P:Driver_Skype.Driver_Skype.Port_UDP">
 	<summary>
  Port UDP du driver
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.Protocol">
+</member><member name="P:Driver_Skype.Driver_Skype.Protocol">
 	<summary>
  Type de protocole utilisé par le driver
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.Refresh">
+</member><member name="P:Driver_Skype.Driver_Skype.Refresh">
 	<summary>
  Valeur de rafraichissement des devices
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.Server">
+</member><member name="P:Driver_Skype.Driver_Skype.Server">
 	<summary>
  Objet représentant le serveur
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.Version">
+</member><member name="P:Driver_Skype.Driver_Skype.Version">
 	<summary>
  Version du driver
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:Driver_KNX.Driver_KNX.StartAuto">
+</member><member name="P:Driver_Skype.Driver_Skype.StartAuto">
 	<summary>
  True si le driver doit démarrer automatiquement
  </summary>
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:Driver_KNX.Driver_KNX.GetCommandPlus">
+</member><member name="M:Driver_Skype.Driver_Skype.GetCommandPlus">
 	<summary>Retourne la liste des Commandes avancées de type DeviceCommande</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_KNX.Driver_KNX.ExecuteCommand(System.Object,System.String,System.Object[])">
+</member><member name="M:Driver_Skype.Driver_Skype.ExecuteCommand(System.Object,System.String,System.Object[])">
 	<summary>Execute une commande avancée</summary>
 	<param name="MyDevice">Objet représentant le Device </param>
 	<param name="Command">Nom de la commande avancée à éxécuter</param>
 	<param name="Param">tableau de paramétres</param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:Driver_KNX.Driver_KNX.VerifChamp(System.String,System.Object)">
+</member><member name="M:Driver_Skype.Driver_Skype.VerifChamp(System.String,System.Object)">
 	<summary>Permet de vérifier si un champ est valide</summary>
 	<param name="Champ">Nom du champ à vérifier, ex ADRESSE1</param>
 	<param name="Value">Valeur à vérifier</param>
 	<returns>Retourne 0 si OK, sinon un message d'erreur</returns>
 	<remarks></remarks>
-</member><member name="M:Driver_KNX.Driver_KNX.Start">
-	<summary>Permet de démarrer le driver</summary>
+</member><member name="M:Driver_Skype.Driver_Skype.Start">
+	<summary>Démarrer le driver</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_KNX.Driver_KNX.Stop">
-	<summary>Permet d'arrêter le driver</summary>
+</member><member name="M:Driver_Skype.Driver_Skype.Stop">
+	<summary>Arrêter le du driver</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_KNX.Driver_KNX.Restart">
+</member><member name="M:Driver_Skype.Driver_Skype.Restart">
 	<summary>Re-Démarrer le du driver</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_KNX.Driver_KNX.Read(System.Object)">
+</member><member name="M:Driver_Skype.Driver_Skype.Read(System.Object)">
 	<summary>Intérroger un device</summary>
 	<param name="Objet">Objet représetant le device à interroger</param>
 	<remarks>Le device demande au driver d'aller le lire suivant son adresse</remarks>
-</member><member name="M:Driver_KNX.Driver_KNX.Write(System.Object,System.String,System.Object,System.Object)">
-	<summary>Commander un composant (device)</summary>
-	<param name="Objet">Objet représetant le composant à commander</param>
+</member><member name="M:Driver_Skype.Driver_Skype.Write(System.Object,System.String,System.Object,System.Object)">
+	<summary>Commander un device</summary>
+	<param name="Objet">Objet représetant le device à commander</param>
 	<param name="Command">La commande à passer</param>
-	<param name="Parametre1">parametre 1 de la commande (optionnel)</param>
-	<param name="Parametre2">parametre 2 de la commande (optionnel)</param>
+	<param name="Parametre1">parametre 1 de la commande, optionnel</param>
+	<param name="Parametre2">parametre 2 de la commande, optionnel</param>
 	<remarks></remarks>
-</member><member name="M:Driver_KNX.Driver_KNX.DeleteDevice(System.String)">
+</member><member name="M:Driver_Skype.Driver_Skype.DeleteDevice(System.String)">
 	<summary>Fonction lancée lors de la suppression d'un device</summary>
 	<param name="DeviceId">Objet représetant le device à interroger</param>
 	<remarks></remarks>
-</member><member name="M:Driver_KNX.Driver_KNX.NewDevice(System.String)">
+</member><member name="M:Driver_Skype.Driver_Skype.NewDevice(System.String)">
 	<summary>Fonction lancée lors de l'ajout d'un device</summary>
 	<param name="DeviceId">Objet représetant le device à interroger</param>
 	<remarks></remarks>
-</member><member name="M:Driver_KNX.Driver_KNX.Add_DeviceCommande(System.String,System.String,System.Int32)">
+</member><member name="M:Driver_Skype.Driver_Skype.Add_DeviceCommande(System.String,System.String,System.Int32)">
 	<summary>ajout des commandes avancées pour les devices</summary>
 	<param name="nom">Nom de la commande avancée</param>
 	<param name="description">Description qui sera affichée dans l'admin</param>
 	<param name="nbparam">Nombre de parametres attendus</param>
 	<remarks></remarks>
-</member><member name="M:Driver_KNX.Driver_KNX.Add_LibelleDriver(System.String,System.String,System.String,System.String)">
+</member><member name="M:Driver_Skype.Driver_Skype.Add_LibelleDriver(System.String,System.String,System.String,System.String)">
 	<summary>ajout Libellé pour le Driver</summary>
 	<param name="nom">Nom du champ : HELP</param>
 	<param name="labelchamp">Nom à afficher : Aide</param>
 	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
 	<remarks></remarks>
-</member><member name="M:Driver_KNX.Driver_KNX.Add_LibelleDevice(System.String,System.String,System.String,System.String)">
+</member><member name="M:Driver_Skype.Driver_Skype.Add_LibelleDevice(System.String,System.String,System.String,System.String)">
 	<summary>Ajout Libellé pour les Devices</summary>
 	<param name="nom">Nom du champ : HELP</param>
 	<param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
 	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
 	<remarks></remarks>
-</member><member name="M:Driver_KNX.Driver_KNX.Add_ParamAvance(System.String,System.String,System.Object)">
+</member><member name="M:Driver_Skype.Driver_Skype.Add_ParamAvance(System.String,System.String,System.Object)">
 	<summary>ajout de parametre avancés</summary>
 	<param name="nom">Nom du parametre (sans espace)</param>
 	<param name="description">Description du parametre</param>
 	<param name="valeur">Sa valeur</param>
 	<remarks></remarks>
-</member><member name="M:Driver_KNX.Driver_KNX.#ctor">
+</member><member name="M:Driver_Skype.Driver_Skype.#ctor">
 	<summary>Creation d'un objet de type</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_KNX.Driver_KNX.TimerTick(System.Object,System.Timers.ElapsedEventArgs)">
+</member><member name="M:Driver_Skype.Driver_Skype.TimerTick(System.Object,System.Timers.ElapsedEventArgs)">
 	<summary>Si refresh &gt;0 gestion du timer</summary>
 	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
-</member><member name="M:Driver_KNX.Driver_KNX.UpdateDeviceValue(System.String,System.String,System.String)">
+</member><member name="T:Driver_Skype.Driver_Skype">
+	<summary>Class Driver_Skype</summary>
+	<remarks></remarks>
+</member><member name="P:Driver_Skype.My.Resources.Resources.ResourceManager">
 	<summary>
- Permet de mettre à jour la valeur d'un composant
- </summary>
-	<param name="adresse">ID du composant KNX</param>
-	<param name="type"></param>
-	<param name="valeur"></param>
-	<remarks></remarks>
-</member><member name="M:Driver_KNX.Driver_KNX.BasicChecks">
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_Skype.My.Resources.Resources.Culture">
 	<summary>
- Vérifications de base : 
- * Le driver doit être activé
- * Le driver doit être connecté au daemon EIBD
- </summary>
-	<returns>True | False</returns>
-	<remarks></remarks>
-</member><member name="T:Driver_KNX.Driver_KNX">
-	<summary>Class Driver_KNX</summary>
-	<remarks></remarks>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_Skype.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
 </member>
 </members>
 </doc>

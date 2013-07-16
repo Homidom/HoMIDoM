@@ -94,6 +94,9 @@ Driver_Zwave
 </member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.ResetControler">
 	<summary>Reset le controleur Z-Wave avec les parametres d'Usine</summary>
 	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.SoftReset">
+	<summary>Reset le controleur Z-Wave sans effacer les parametres de configuration </summary>
+	<remarks></remarks>
 </member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.NotificationHandler(OpenZWaveDotNet.ZWNotification)">
 	<summary>Handler lors d'une reception d'une trame</summary>
 	<param name="m_notification"></param>
@@ -102,7 +105,7 @@ Driver_Zwave
 	<param name="homeId"></param>
 	<param name="nodeId"></param>
 	<returns>Node</returns>
-</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.GetValueID(Driver_Zwave.Driver_ZWave.Driver_ZWave.Node,System.String,System.Byte)">
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.GetValeur(Driver_Zwave.Driver_ZWave.Driver_ZWave.Node,System.String,System.Byte)">
 	<summary>Gets a Node value ID</summary>
 	<param name="node"></param>
 	<param name="valueLabel"></param>
