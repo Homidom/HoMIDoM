@@ -43,7 +43,7 @@ Driver_ModbusTCP
 	<summary>Commander un device</summary>
 	<param name="Objet">Objet représetant le device à interroger</param>
 	<param name="Commande">La commande à passer</param>
-	<param name="Parametre1"></param>
+	<param name="Parametre1">La valeur à passer</param>
 	<param name="Parametre2"></param>
 	<remarks></remarks>
 </member><member name="M:Driver_ModbusTCP.Driver_ModbusTCP.DeleteDevice(System.String)">
@@ -157,104 +157,104 @@ Driver_ModbusTCP
 	<summary>Destroy master instance.</summary>
 </member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.Dispose">
 	<summary>Destroy master instance</summary>
-</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadCoils(System.UInt16,System.UInt16,System.UInt16)">
+</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadCoils(System.Byte,System.UInt16,System.UInt16,System.UInt16)">
 	<summary>Read coils from slave asynchronous. The result is given in the response function.</summary>
 	<param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
 	<param name="startAddress">Address from where the data read begins.</param>
 	<param name="numInputs">Length of data.</param>
-</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadCoils(System.UInt16,System.UInt16,System.UInt16,System.Byte[]@)">
+</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadCoils(System.Byte,System.UInt16,System.UInt16,System.UInt16,System.Byte[]@)">
 	<summary>Read coils from slave synchronous.</summary>
 	<param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
 	<param name="startAddress">Address from where the data read begins.</param>
 	<param name="numInputs">Length of data.</param>
 	<param name="values">Contains the result of function.</param>
-</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadDiscreteInputs(System.UInt16,System.UInt16,System.UInt16)">
+</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadDiscreteInputs(System.Byte,System.UInt16,System.UInt16,System.UInt16)">
 	<summary>Read discrete inputs from slave asynchronous. The result is given in the response function.</summary>
 	<param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
 	<param name="startAddress">Address from where the data read begins.</param>
 	<param name="numInputs">Length of data.</param>
-</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadDiscreteInputs(System.UInt16,System.UInt16,System.UInt16,System.Byte[]@)">
+</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadDiscreteInputs(System.Byte,System.UInt16,System.UInt16,System.UInt16,System.Byte[]@)">
 	<summary>Read discrete inputs from slave synchronous.</summary>
 	<param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
 	<param name="startAddress">Address from where the data read begins.</param>
 	<param name="numInputs">Length of data.</param>
 	<param name="values">Contains the result of function.</param>
-</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadHoldingRegister(System.UInt16,System.UInt16,System.UInt16)">
+</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadHoldingRegister(System.Byte,System.UInt16,System.UInt16,System.UInt16)">
 	<summary>Read holding registers from slave asynchronous. The result is given in the response function.</summary>
 	<param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
 	<param name="startAddress">Address from where the data read begins.</param>
 	<param name="numInputs">Length of data.</param>
-</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadHoldingRegister(System.UInt16,System.UInt16,System.UInt16,System.Byte[]@)">
+</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadHoldingRegister(System.Byte,System.UInt16,System.UInt16,System.UInt16,System.Byte[]@)">
 	<summary>Read holding registers from slave synchronous.</summary>
 	<param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
 	<param name="startAddress">Address from where the data read begins.</param>
 	<param name="numInputs">Length of data.</param>
 	<param name="values">Contains the result of function.</param>
-</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadInputRegister(System.UInt16,System.UInt16,System.UInt16)">
+</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadInputRegister(System.Byte,System.UInt16,System.UInt16,System.UInt16)">
 	<summary>Read input registers from slave asynchronous. The result is given in the response function.</summary>
 	<param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
 	<param name="startAddress">Address from where the data read begins.</param>
 	<param name="numInputs">Length of data.</param>
-</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadInputRegister(System.UInt16,System.UInt16,System.UInt16,System.Byte[]@)">
+</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadInputRegister(System.Byte,System.UInt16,System.UInt16,System.UInt16,System.Byte[]@)">
 	<summary>Read input registers from slave synchronous.</summary>
 	<param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
 	<param name="startAddress">Address from where the data read begins.</param>
 	<param name="numInputs">Length of data.</param>
 	<param name="values">Contains the result of function.</param>
-</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.WriteSingleCoils(System.UInt16,System.UInt16,System.Boolean)">
+</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.WriteSingleCoils(System.Byte,System.UInt16,System.UInt16,System.Boolean)">
 	<summary>Write single coil in slave asynchronous. The result is given in the response function.</summary>
 	<param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
 	<param name="startAddress">Address from where the data read begins.</param>
 	<param name="OnOff">Specifys if the coil should be switched on or off.</param>
-</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.WriteSingleCoils(System.UInt16,System.UInt16,System.Boolean,System.Byte[]@)">
+</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.WriteSingleCoils(System.Byte,System.UInt16,System.UInt16,System.Boolean,System.Byte[]@)">
 	<summary>Write single coil in slave synchronous.</summary>
 	<param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
 	<param name="startAddress">Address from where the data read begins.</param>
 	<param name="OnOff">Specifys if the coil should be switched on or off.</param>
 	<param name="result">Contains the result of the synchronous write.</param>
-</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.WriteMultipleCoils(System.UInt16,System.UInt16,System.UInt16,System.Byte[])">
+</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.WriteMultipleCoils(System.Byte,System.UInt16,System.UInt16,System.UInt16,System.Byte[])">
 	<summary>Write multiple coils in slave asynchronous. The result is given in the response function.</summary>
 	<param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
 	<param name="startAddress">Address from where the data read begins.</param>
 	<param name="numBits">Specifys number of bits.</param>
 	<param name="values">Contains the bit information in byte format.</param>
-</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.WriteMultipleCoils(System.UInt16,System.UInt16,System.UInt16,System.Byte[],System.Byte[]@)">
+</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.WriteMultipleCoils(System.Byte,System.UInt16,System.UInt16,System.UInt16,System.Byte[],System.Byte[]@)">
 	<summary>Write multiple coils in slave synchronous.</summary>
 	<param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
 	<param name="startAddress">Address from where the data read begins.</param>
 	<param name="numBits">Specifys number of bits.</param>
 	<param name="values">Contains the bit information in byte format.</param>
 	<param name="result">Contains the result of the synchronous write.</param>
-</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.WriteSingleRegister(System.UInt16,System.UInt16,System.Byte[])">
+</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.WriteSingleRegister(System.Byte,System.UInt16,System.UInt16,System.Byte[])">
 	<summary>Write single register in slave asynchronous. The result is given in the response function.</summary>
 	<param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
 	<param name="startAddress">Address to where the data is written.</param>
 	<param name="values">Contains the register information.</param>
-</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.WriteSingleRegister(System.UInt16,System.UInt16,System.Byte[],System.Byte[]@)">
+</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.WriteSingleRegister(System.Byte,System.UInt16,System.UInt16,System.Byte[],System.Byte[]@)">
 	<summary>Write single register in slave synchronous.</summary>
 	<param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
 	<param name="startAddress">Address to where the data is written.</param>
 	<param name="values">Contains the register information.</param>
 	<param name="result">Contains the result of the synchronous write.</param>
-</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.WriteMultipleRegister(System.UInt16,System.UInt16,System.Byte[])">
+</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.WriteMultipleRegister(System.Byte,System.UInt16,System.UInt16,System.Byte[])">
 	<summary>Write multiple registers in slave asynchronous. The result is given in the response function.</summary>
 	<param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
 	<param name="startAddress">Address to where the data is written.</param>
 	<param name="values">Contains the register information.</param>
-</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.WriteMultipleRegister(System.UInt16,System.UInt16,System.Byte[],System.Byte[]@)">
+</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.WriteMultipleRegister(System.Byte,System.UInt16,System.UInt16,System.Byte[],System.Byte[]@)">
 	<summary>Write multiple registers in slave synchronous.</summary>
 	<param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
 	<param name="startAddress">Address to where the data is written.</param>
 	<param name="values">Contains the register information.</param>
 	<param name="result">Contains the result of the synchronous write.</param>
-</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadWriteMultipleRegister(System.UInt16,System.UInt16,System.UInt16,System.UInt16,System.Byte[])">
+</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadWriteMultipleRegister(System.Byte,System.UInt16,System.UInt16,System.UInt16,System.UInt16,System.Byte[])">
 	<summary>Read/Write multiple registers in slave asynchronous. The result is given in the response function.</summary>
 	<param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
 	<param name="startReadAddress">Address from where the data read begins.</param>
 	<param name="numInputs">Length of data.</param>
 	<param name="startWriteAddress">Address to where the data is written.</param>
 	<param name="values">Contains the register information.</param>
-</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadWriteMultipleRegister(System.UInt16,System.UInt16,System.UInt16,System.UInt16,System.Byte[],System.Byte[]@)">
+</member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.ReadWriteMultipleRegister(System.Byte,System.UInt16,System.UInt16,System.UInt16,System.UInt16,System.Byte[],System.Byte[]@)">
 	<summary>Read/Write multiple registers in slave synchronous. The result is given in the response function.</summary>
 	<param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
 	<param name="startReadAddress">Address from where the data read begins.</param>

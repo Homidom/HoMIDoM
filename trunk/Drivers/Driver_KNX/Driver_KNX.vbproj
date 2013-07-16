@@ -46,19 +46,21 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HoMIDom, Version=1.0.385.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\DEBUG\HoMIDom.dll</HintPath>
+    <Reference Include="HoMIDom">
+      <HintPath>..\..\RELEASE\HoMIDom.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="KNXConnector">
       <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\KNXConnector.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="KNXConnector.EIBD">
       <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\KNXConnector.EIBD.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="KNXObjects">
       <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\KNXObjects.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
