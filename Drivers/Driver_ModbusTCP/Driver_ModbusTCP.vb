@@ -557,7 +557,6 @@ Imports System.Net.Sockets
             add_devicecommande("OFF", "Eteint tous les appareils du meme range que ce device", 0)
             add_devicecommande("ON", "Allume toutes les lampes du meme range que ce device", 0)
             add_devicecommande("DIM", "Variation, parametre = Variation", 1)
-            add_devicecommande("VALUE", "Valeur, parametre = Valeur", 1)
 
             'Libellé Driver
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
@@ -566,8 +565,8 @@ Imports System.Net.Sockets
             Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant")
             Add_LibelleDevice("ADRESSE2", "@", "")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("REFRESH", "Fastpooling/STATUS_REQUEST (Secondes)", "Permet de faire un STATUS_REQUEST (ex: L2) ou du fastpooling (ex: 'L')")
-            'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
+            Add_LibelleDevice("REFRESH", "Rafraichissement", "Mettre 1 ou 0 pour que la valeur soit rafraichi ou pas")
+            Add_LibelleDevice("LASTCHANGEDUREE", "@", "")
 
             'dictionnaire Commande STR -> INT
             str_to_bool.Add("OFF", 0)
@@ -740,14 +739,16 @@ Imports System.Net.Sockets
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, "", "", Me._ID, True)
 
                 For Each j As Object In listedevices
-                    adresse = j.adresse1 - ((cptsend - 1) * 75) - 1
-                    If j.adresse1 > 75 * (cptsend - 1) And j.adresse1 <= 75 * cptsend Then
-                        msg += j.adresse1 & "=" & dataR(adresse) & " ; " & j.Value & " ;"
-                        If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
-                            j.Value = dataR(adresse)
-                        End If
-                        If TypeOf j.Value Is Boolean And Not TypeOf j.Value Is Integer And dataR(adresse) > -1 And dataR(adresse) < 2 Then
-                            j.Value = CBool(dataR(adresse))
+                    If j.refresh > 0 Then
+                        adresse = j.adresse1 - ((cptsend - 1) * 75) - 1
+                        If j.adresse1 > 75 * (cptsend - 1) And j.adresse1 <= 75 * cptsend Then
+                            msg += j.adresse1 & "=" & dataR(adresse) & " ; " & j.Value & " ;"
+                            If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
+                                j.Value = dataR(adresse)
+                            End If
+                            If TypeOf j.Value Is Boolean And Not TypeOf j.Value Is Integer And dataR(adresse) > -1 And dataR(adresse) < 2 Then
+                                j.Value = CBool(dataR(adresse))
+                            End If
                         End If
                     End If
                 Next
