@@ -6646,6 +6646,12 @@ Namespace HoMIDom
                         retour.Puissance = _ListDevices.Item(i).Puissance
                         retour.AllValue = _ListDevices.Item(i).AllValue
 
+                        Try
+                            retour.Value = _ListDevices.Item(i).Value
+                        Catch ex As Exception
+
+                        End Try
+
                         _listact = ListMethod(_ListDevices.Item(i).id)
 
                         If _listact.Count > 0 Then
