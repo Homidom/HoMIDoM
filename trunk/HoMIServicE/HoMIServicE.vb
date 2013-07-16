@@ -48,8 +48,8 @@ Public Class HoMIServicE
                 _Addrip = "localhost"
                 logerror("Le fichier de config ou la balise ip n'ont pas été trouvé, l'adresse par défaut sera localhost !")
             End If
-            Dim baseAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/service")
-            Dim fileServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/fileServer")
+            Dim baseAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/service")
+            Dim fileServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/fileServer")
             log("Adresss SOAP: " & _Addrip & ":" & PortSOAP)
             host = New ServiceHost(GetType(Server), baseAddress)
             host.CloseTimeout = TimeSpan.FromMinutes(60)
@@ -63,7 +63,7 @@ Public Class HoMIServicE
             'Connexion au serveur
             Dim myChannelFactory As ServiceModel.ChannelFactory(Of IHoMIDom) = Nothing
             Try
-                Dim myadress As String = "http://" & Dns.GetHostName() & ":" & PortSOAP & "/ServiceModelSamples/service"
+                Dim myadress As String = "http://" & Dns.GetHostName() & ":" & PortSOAP & "/service"
                 Dim binding As New ServiceModel.BasicHttpBinding
                 binding.MaxBufferPoolSize = 250000000
                 binding.MaxReceivedMessageSize = Integer.MaxValue
