@@ -1,5 +1,6 @@
 ﻿'Option Strict On
 Imports HoMIDom
+Imports HoMIDom.HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 Imports STRGS = Microsoft.VisualBasic.Strings
@@ -337,6 +338,9 @@ Imports System.Net.Sockets
 
                 MyTimer.Interval = _Parametres.Item(0).Valeur '2000
                 MyTimer.Enabled = True
+
+                AddHandler _Server.DeviceChanged, AddressOf DeviceChange
+
             End If
 			
         Catch ex As Exception
@@ -351,6 +355,8 @@ Imports System.Net.Sockets
         Dim retour As String
         Try
             retour = fermer()
+            RemoveHandler _Server.DeviceChanged, AddressOf DeviceChange
+
             If STRGS.Left(retour, 4) = "ERR:" Then
                 retour = STRGS.Right(retour, retour.Length - 5)
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP", retour)
@@ -602,6 +608,13 @@ Imports System.Net.Sockets
 
     End Sub
 
+    Sub DeviceChange(ByVal DeviceID, ByVal valeurString)
+        Dim genericDevice As templateDevice = _Server.ReturnDeviceById(_IdSrv, DeviceID)
+        If genericDevice.DriverID = _ID And (TypeOf genericDevice.Value Is Integer Or TypeOf genericDevice.Value Is Double) Then
+            Write(genericDevice, "", CInt(valeurString))
+        End If
+    End Sub
+
 #End Region
 
 #Region "Fonctions internes"
@@ -621,7 +634,7 @@ Imports System.Net.Sockets
             Else
                 Return ("Echec de connexion Modbus à l'adresse:" & AdressIP)
             End If
-            
+
         Catch ex As Exception
             Return ("ERR: " & ex.Message)
         End Try
@@ -677,7 +690,7 @@ Imports System.Net.Sockets
         'Dim tblack() As DataRow
         Try
             If _IsConnect Then
-                
+
                 '--- usercode ---
 
                 Dim StartAddress As UShort = ReadStartAdr(adressStart + adressWrite) '%MW0 = 12288 --> %MW100 = 12288 + 100 = 12388
@@ -696,7 +709,7 @@ Imports System.Net.Sockets
                 End Try
 
                 'renvoie la valeur ecrite
-               Return "VALUE"
+                Return "VALUE"
 
             Else
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP Ecrire", "Port Fermé, impossible d ecrire : " & adresse & " : " & commande & " " & data1 & "-" & data2)
