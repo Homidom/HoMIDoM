@@ -135,7 +135,7 @@ Public Class uWidgetEmpty
             If _Show = False Then Exit Property
 
             If IsConnect = True And String.IsNullOrEmpty(value) = False Then
-                _dev = myService.ReturnDeviceByID(IdSrv, _Id)
+                _dev = ReturnDeviceById(_Id)
                 _macro = myService.ReturnMacroById(IdSrv, _Id)
                 _zone = myService.ReturnZoneByID(IdSrv, _Id)
 
@@ -213,8 +213,9 @@ Public Class uWidgetEmpty
                             StkTool.Visibility = Windows.Visibility.Visible
 
                             _METEO = New uWMeteo
-                            StkTool.Children.Add(_METEO)
                             IDMeteo = _Id
+                            StkTool.Children.Add(_METEO)
+
                         Case HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA
                             ShowStatus = False
                             _ShowValue = False
@@ -820,7 +821,7 @@ Public Class uWidgetEmpty
             _IDMeteo = value
             If _Show = False Then Exit Property
 
-            If _METEO IsNot Nothing And _type = TypeOfWidget.Meteo Then _METEO.ID = value
+            If _METEO IsNot Nothing Then _METEO.ID = value
         End Set
     End Property
 #End Region
@@ -928,6 +929,11 @@ Public Class uWidgetEmpty
     End Property
 #End Region
 
+    Public Sub Update()
+        MsgBox("ok")
+    End Sub
+
+
     Public Sub New()
 
         ' Cet appel est requis par le Concepteur Windows Form.
@@ -969,7 +975,7 @@ Public Class uWidgetEmpty
 
                 If String.IsNullOrEmpty(_Id) = False Then
 
-                    _dev = myService.ReturnDeviceByID(IdSrv, _Id)
+                    _dev = ReturnDeviceById(_Id)
 
                     If _dev IsNot Nothing Then
                         If ShowEtiquette And _dev.Name <> Etiquette Then
@@ -2156,7 +2162,7 @@ Public Class uWidgetEmpty
                 GetStatusPicture = _file
             End If
 
-            If _dev.Name.ToUpper = "HOMI_JOUR".ToUpper Then
+            If _dev.Name.ToUpper = "HOMI_JOUR" Then
                 If _dev.Value = True Then
                     GetStatusPicture = _MonRepertoire & "\Images\Devices\jour-jour.png"
                 Else

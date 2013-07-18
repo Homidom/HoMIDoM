@@ -5,7 +5,6 @@ Imports System.Threading
 Public Class uWMeteo
     Dim _Id As String = ""
     Dim dt As DispatcherTimer
-    Dim _dev As HoMIDom.HoMIDom.TemplateDevice = Nothing
 
     Public Property ID As String
         Get
@@ -15,12 +14,7 @@ Public Class uWMeteo
             _Id = value
 
             If String.IsNullOrEmpty(_Id) = False Then
-                If dt Is Nothing Then
-                    dt = New DispatcherTimer()
-                    AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
-                    dt.Interval = New TimeSpan(0, 5, 0)
-                    dt.Start()
-                End If
+                
                 GetMeteo()
             End If
 
@@ -31,74 +25,68 @@ Public Class uWMeteo
         Try
             If IsConnect = True Then
                 If String.IsNullOrEmpty(_Id) = False Then
-                    Dim x As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _Id)
+                    Dim x As HoMIDom.HoMIDom.TemplateDevice = ReturnDeviceById(_Id)
 
-                    If x Is Nothing Then Exit Sub
+                    If x IsNot Nothing Then
 
-                    If IsDiff(_dev, x) Then
-                        Exit Sub
-                    Else
-                        _dev = x
-                        x = Nothing
+                        LblVille.Content = x.Name
+                        LblTemp.Content = x.TemperatureActuel & "°"
+                        LblMin.Content = "Min: " & x.MinToday & "°"
+                        LblMinJ1.Content = x.MinToday & "°"
+                        LblMinJ2.Content = x.MinJ1 & "°"
+                        LblMinJ3.Content = x.MinJ2 & "°"
+                        LblMinJ4.Content = x.MinJ3 & "°"
+                        LblMax.Content = "Max: " & x.MaxToday & "°"
+                        LblMaxJ1.Content = x.MaxToday & "°"
+                        LblMaxJ2.Content = x.MaxJ1 & "°"
+                        LblMaxJ3.Content = x.MaxJ2 & "°"
+                        LblMaxJ4.Content = x.MaxJ3 & "°"
+                        LblJ1.Content = x.JourToday
+                        LblJ2.Content = x.JourJ1
+                        LblJ3.Content = x.JourJ2
+                        LblJ4.Content = x.JourJ3
+
+                        Dim chm As String = ""
+                        If File.Exists(_MonRepertoire & "\Images\Meteo\" & x.IconActuel & ".png") = True Then
+                            chm = _MonRepertoire & "\Images\Meteo\" & x.IconActuel & ".png"
+                        Else
+                            chm = _MonRepertoire & "\Images\Meteo\na.png"
+                        End If
+                        Icon.Source = LoadBitmapImage(chm)
+                        chm = ""
+
+                        If File.Exists(_MonRepertoire & "\Images\Meteo\" & x.IconToday & ".png") = True Then
+                            chm = _MonRepertoire & "\Images\Meteo\" & x.IconToday & ".png"
+                        Else
+                            chm = _MonRepertoire & "\Images\Meteo\na.png"
+                        End If
+                        IconJ1.Source = LoadBitmapImage(chm)
+                        chm = ""
+
+                        If File.Exists(_MonRepertoire & "\Images\Meteo\" & x.IconJ1 & ".png") = True Then
+                            chm = _MonRepertoire & "\Images\Meteo\" & x.IconJ1 & ".png"
+                        Else
+                            chm = _MonRepertoire & "\Images\Meteo\na.png"
+                        End If
+                        IconJ2.Source = LoadBitmapImage(chm)
+                        chm = ""
+
+                        If File.Exists(_MonRepertoire & "\Images\Meteo\" & x.IconJ2 & ".png") = True Then
+                            chm = _MonRepertoire & "\Images\Meteo\" & x.IconJ2 & ".png"
+                        Else
+                            chm = _MonRepertoire & "\Images\Meteo\na.png"
+                        End If
+                        IconJ3.Source = LoadBitmapImage(chm)
+                        chm = ""
+
+                        If File.Exists(_MonRepertoire & "\Images\Meteo\" & x.IconJ3 & ".png") = True Then
+                            chm = _MonRepertoire & "\Images\Meteo\" & x.IconJ3 & ".png"
+                        Else
+                            chm = _MonRepertoire & "\Images\Meteo\na.png"
+                        End If
+                        IconJ4.Source = LoadBitmapImage(chm)
+                        chm = ""
                     End If
-
-                    LblVille.Content = _dev.Name
-                    LblTemp.Content = _dev.TemperatureActuel & "°"
-                    LblMin.Content = "Min: " & _dev.MinToday & "°"
-                    LblMinJ1.Content = _dev.MinToday & "°"
-                    LblMinJ2.Content = _dev.MinJ1 & "°"
-                    LblMinJ3.Content = _dev.MinJ2 & "°"
-                    LblMinJ4.Content = _dev.MinJ3 & "°"
-                    LblMax.Content = "Max: " & _dev.MaxToday & "°"
-                    LblMaxJ1.Content = _dev.MaxToday & "°"
-                    LblMaxJ2.Content = _dev.MaxJ1 & "°"
-                    LblMaxJ3.Content = _dev.MaxJ2 & "°"
-                    LblMaxJ4.Content = _dev.MaxJ3 & "°"
-                    LblJ1.Content = _dev.JourToday
-                    LblJ2.Content = _dev.JourJ1
-                    LblJ3.Content = _dev.JourJ2
-                    LblJ4.Content = _dev.JourJ3
-
-                    Dim chm As String = ""
-                    If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconActuel & ".png") = True Then
-                        chm = _MonRepertoire & "\Images\Meteo\" & _dev.IconActuel & ".png"
-                    Else
-                        chm = _MonRepertoire & "\Images\Meteo\na.png"
-                    End If
-                    Icon.Source = LoadBitmapImage(chm)
-                    chm = ""
-
-                    If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconToday & ".png") = True Then
-                        chm = _MonRepertoire & "\Images\Meteo\" & _dev.IconToday & ".png"
-                    Else
-                        chm = _MonRepertoire & "\Images\Meteo\na.png"
-                    End If
-                    IconJ1.Source = LoadBitmapImage(chm)
-                    chm = ""
-
-                    If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ1 & ".png") = True Then
-                        chm = _MonRepertoire & "\Images\Meteo\" & _dev.IconJ1 & ".png"
-                    Else
-                        chm = _MonRepertoire & "\Images\Meteo\na.png"
-                    End If
-                    IconJ2.Source = LoadBitmapImage(chm)
-                    chm = ""
-
-                    If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ2 & ".png") = True Then
-                        chm = _MonRepertoire & "\Images\Meteo\" & _dev.IconJ2 & ".png"
-                    Else
-                        chm = _MonRepertoire & "\Images\Meteo\na.png"
-                    End If
-                    IconJ3.Source = LoadBitmapImage(chm)
-                    chm = ""
-
-                    If File.Exists(_MonRepertoire & "\Images\Meteo\" & _dev.IconJ3 & ".png") = True Then
-                        chm = _MonRepertoire & "\Images\Meteo\" & _dev.IconJ3 & ".png"
-                    Else
-                        chm = _MonRepertoire & "\Images\Meteo\na.png"
-                    End If
-                    IconJ4.Source = LoadBitmapImage(chm)
-                    chm = ""
                 End If
             End If
         Catch ex As Exception
@@ -130,5 +118,17 @@ Public Class uWMeteo
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWMeteo_Unloaded: " & ex.ToString, "Erreur", "uWMeteo_Unloaded")
         End Try
+    End Sub
+
+    Public Sub New()
+
+        ' Cet appel est requis par le concepteur.
+        InitializeComponent()
+
+        ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
+        dt = New DispatcherTimer()
+        AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
+        dt.Interval = New TimeSpan(0, 0, 5)
+        dt.Start()
     End Sub
 End Class

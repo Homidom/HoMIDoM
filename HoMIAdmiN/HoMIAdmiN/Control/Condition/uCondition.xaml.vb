@@ -280,9 +280,7 @@ Public Class uCondition
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             CbDevice.ItemsSource = myService.GetAllDevices(IdSrv)
             CbDevice.DisplayMemberPath = "Name"
-            'For i As Integer = 0 To myservice.GetAllDevices(IdSrv).Count - 1
-            ' CbDevice.Items.Add(myService.GetAllDevices(IdSrv).Item(i).Name)
-            'Next
+
             For Each _dev As TemplateDevice In myService.GetAllDevices(IdSrv)
                 Dim x As New MenuItem
                 x.Header = _dev.Name
@@ -954,9 +952,13 @@ Public Class uCondition
                             End Try
                         Case "boolean"
                             Try
+                                If IsNumeric(TxtValue.Text) Then
+                                    If CInt(TxtValue.Text) <= 0 Then TxtValue.Text = 0
+                                    If CInt(TxtValue.Text) > 0 Then TxtValue.Text = 1
+                                End If
                                 _obj = CBool(TxtValue.Text)
                             Catch ex As Exception
-                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Boolean !!", "Erreur", "TxtValue.TextChanged")
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Boolean (0 pour False et 1 pour True)!!", "Erreur", "TxtValue.TextChanged")
                                 TxtValue.Text = 0
                                 _flag = True
                             End Try

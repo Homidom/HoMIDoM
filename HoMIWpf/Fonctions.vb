@@ -355,17 +355,25 @@ Module Fonctions
                     Case "SYSTEM_LONG_TIME"
                         Return Now.ToLongTimeString
                     Case "SYSTEM_CONDITION"
-                        For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In AllDevices
-                            If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True And ObjMeteo.Name.ToUpper = frmMere.Ville.ToUpper Then
-                                Return ObjMeteo.ConditionActuel
-                            End If
-                        Next
+                        If AllDevices IsNot Nothing And String.IsNullOrEmpty(frmMere.Ville) = False Then
+                            For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In AllDevices
+                                If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True And ObjMeteo.Name.ToUpper = frmMere.Ville.ToUpper Then
+                                    Return ObjMeteo.ConditionActuel
+                                End If
+                            Next
+                        Else
+                            Return ""
+                        End If
                     Case "SYSTEM_TEMP_ACTUELLE"
-                        For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In AllDevices
-                            If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True And ObjMeteo.Name.ToUpper = frmMere.Ville.ToUpper Then
-                                Return ObjMeteo.TemperatureActuel & " °C"
-                            End If
-                        Next
+                        If AllDevices IsNot Nothing And String.IsNullOrEmpty(frmMere.Ville) = False Then
+                            For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In AllDevices
+                                If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True And ObjMeteo.Name.ToUpper = frmMere.Ville.ToUpper Then
+                                    Return ObjMeteo.TemperatureActuel & " °C"
+                                End If
+                            Next
+                        Else
+                            Return "# °C"
+                        End If
                     Case Else
                         Return " "
                 End Select
@@ -381,14 +389,25 @@ Module Fonctions
     Public Sub Refresh()
         Try
             If IsConnect Then
-                Dim _tmpalldevices As New List(Of HoMIDom.HoMIDom.TemplateDevice)
-                _tmpalldevices = myService.GetAllDevices(IdSrv)
-                If IsDiff(AllDevices, _tmpalldevices) Then AllDevices = _tmpalldevices
-                _tmpalldevices = Nothing
+                AllDevices = myService.GetAllDevices(IdSrv)
             End If
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Fonctions.Thread_MAJ.Refresh: " & ex.ToString, "Erreur", " Fonctions.Thread_MAJ.Refresh")
         End Try
     End Sub
+
+    Public Function ReturnDeviceById(DeviceId As String) As TemplateDevice
+        Try
+            For Each _dev In AllDevices
+                If _dev.ID = DeviceId Then
+                    Return _dev
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Fonctions.ReturnDeviceById: " & ex.ToString, "Erreur", " Fonctions.ReturnDeviceById")
+            Return Nothing
+        End Try
+    End Function
 
 End Module

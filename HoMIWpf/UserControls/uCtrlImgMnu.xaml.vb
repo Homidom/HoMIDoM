@@ -80,7 +80,9 @@ Partial Public Class uCtrlImgMnu
 
     Private Sub Image_MouseLeftButtonUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Border.MouseLeftButtonUp
         Dim vDiff As TimeSpan = Now - vDown
-        If vDiff.Seconds < 1 Then RaiseEvent click(Me, e)
+        If vDiff.Seconds < 1 Then
+            RaiseEvent click(Me, e)
+        End If
     End Sub
 
     Public Property Type As TypeOfMnu

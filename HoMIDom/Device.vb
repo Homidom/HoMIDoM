@@ -1840,21 +1840,6 @@ Namespace HoMIDom
                 If _Enable = False Then Exit Sub
                 If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
 
-                'If _Enable = False Then
-                '   _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "le driver n'est pas activé pour le device " & Me.Name)
-                '   Exit Sub
-                'End If
-                'If Driver.IsConnect Then
-                '    If Server.Etat_server Then
-                '        _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "TEST EFFECTUE") '1234
-                '        Driver.Read(Me)
-                '    Else
-                '        _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "Le serveur n'est pas dans le bon état")
-                '    End If
-                'Else
-                '    _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "Read", "le driver n'est pas connecté pour le device" & Me.Name)
-                'End If
-
             End Sub
 
             'Contien l'avant derniere valeur
@@ -2132,7 +2117,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If MinJ1 <> value Then
                         _MinJ1 = value
-                        'RaiseEvent DeviceChanged(Me, "MinJ1", value)
+                        RaiseEvent DeviceChanged(Me, "MinJ1", value)
                     End If
                 End Set
             End Property
@@ -2144,7 +2129,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _MaxJ1 <> value Then
                         _MaxJ1 = value
-                        'RaiseEvent DeviceChanged(Me, "MaxJ1", value)
+                        RaiseEvent DeviceChanged(Me, "MaxJ1", value)
                     End If
                 End Set
             End Property
@@ -2165,7 +2150,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _ConditionJ1 <> value Then
                         _ConditionJ1 = value
-                        'RaiseEvent DeviceChanged(Me, "ConditionJ1", value)
+                        RaiseEvent DeviceChanged(Me, "ConditionJ1", value)
                     End If
                 End Set
             End Property
@@ -2177,7 +2162,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _JourJ2 <> value Then
                         _JourJ2 = value
-                        'RaiseEvent DeviceChanged(Me, "JourJ2", value)
+                        RaiseEvent DeviceChanged(Me, "JourJ2", value)
                     End If
                 End Set
             End Property
@@ -2189,7 +2174,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _MinJ2 <> value Then
                         _MinJ2 = value
-                        'RaiseEvent DeviceChanged(Me, "MinJ2", value)
+                        RaiseEvent DeviceChanged(Me, "MinJ2", value)
                     End If
                 End Set
             End Property
@@ -2201,7 +2186,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _MaxJ2 <> value Then
                         _MaxJ2 = value
-                        'RaiseEvent DeviceChanged(Me, "MaxJ2", value)
+                        RaiseEvent DeviceChanged(Me, "MaxJ2", value)
                     End If
                 End Set
             End Property
@@ -2222,7 +2207,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _ConditionJ2 <> value Then
                         _ConditionJ2 = value
-                        'RaiseEvent DeviceChanged(Me, "ConditionJ2", value)
+                        RaiseEvent DeviceChanged(Me, "ConditionJ2", value)
                     End If
                 End Set
             End Property
@@ -2234,7 +2219,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _JourJ3 <> value Then
                         _JourJ3 = value
-                        'RaiseEvent DeviceChanged(Me, "JourJ3", value)
+                        RaiseEvent DeviceChanged(Me, "JourJ3", value)
                     End If
                 End Set
             End Property
@@ -2246,7 +2231,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _MinJ3 <> value Then
                         _MinJ3 = value
-                        'RaiseEvent DeviceChanged(Me, "MinJ3", value)
+                        RaiseEvent DeviceChanged(Me, "MinJ3", value)
                     End If
                 End Set
             End Property
@@ -2258,7 +2243,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _MaxJ3 <> value Then
                         _MaxJ3 = value
-                        'RaiseEvent DeviceChanged(Me, "MaxJ3", value)
+                        RaiseEvent DeviceChanged(Me, "MaxJ3", value)
                     End If
                 End Set
             End Property
@@ -2279,7 +2264,7 @@ Namespace HoMIDom
                 Set(ByVal value As String)
                     If _ConditionJ3 <> value Then
                         _ConditionJ3 = value
-                        'RaiseEvent DeviceChanged(Me, "ConditionJ3", value)
+                        RaiseEvent DeviceChanged(Me, "ConditionJ3", value)
                     End If
                 End Set
             End Property
