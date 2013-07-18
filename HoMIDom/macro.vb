@@ -104,23 +104,15 @@ Namespace HoMIDom
         Public Sub Execute(ByVal Server As Server)
             _Server = Server
             Try
+                _ListThread.Clear()
+                Dim a As String = Me.Nom & "|" & Api.GenerateGUID
 
                 For i As Integer = 0 To _ListActions.Count - 1
-                    'If _ListActions.Item(i)._Action.TypeAction = Action.TypeAction.ActionStop Then
-                    If _ListActions.Item(i).TypeAction <> Action.TypeAction.ActionStop Then
-                        Dim _action As New ThreadAction(_Server, _ListActions.Item(i))
-                        Dim y As New Thread(AddressOf _action.Execute)
-                        y.Name = "Traitement du script"
-                        y.Start()
-                        _ListThread.Add(y)
-                        y = Nothing
-                    Else
-                        If _ListThread.Count > 0 Then
-                            For Each thr In _ListThread
-                                thr.Abort()
-                            Next
-                        End If
-                    End If
+                    Dim _action As New ThreadAction(_Server, _ListActions.Item(i), Me.Nom, a)
+                    Dim y As New Thread(AddressOf _action.Execute)
+                    y.Name = a
+                    y.Start()
+                    _ListThread.Add(y)
                 Next
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.SCRIPT, "Execute macro", ex.ToString)
