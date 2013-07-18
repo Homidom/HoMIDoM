@@ -97,7 +97,7 @@ Namespace HoMIDom
         <NonSerialized()> Shared _PortSrvWeb As Integer = 8080
         <NonSerialized()> Shared _SrvWeb As ServeurWeb = Nothing
         <NonSerialized()> Shared _ModeDecouverte As Boolean = False 'Mode découverte des nouveaux devices
-
+        <NonSerialized()> Shared _ListThread As New List(Of Thread)
 #End Region
 
 #Region "Event"
@@ -346,6 +346,15 @@ Namespace HoMIDom
 #Region "Fonctions/Sub propres au serveur"
 
 #Region "Serveur"
+        Public Function GetListThread() As List(Of Thread)
+            Try
+                Return _ListThread
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetListThread", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
         ''' <summary>Permet d'envoyer un message d'un client vers le server</summary>
         ''' <param name="Message"></param>
         ''' <remarks></remarks>
@@ -3355,14 +3364,21 @@ Namespace HoMIDom
         Private Sub Execute(ByVal Id As String)
             Try
                 Dim mymacro As New Macro
+
                 mymacro = ReturnMacroById(_IdSrv, Id)
                 If mymacro IsNot Nothing Then
                     Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Macro:Action", "Lancement de la macro " & mymacro.Nom)
+
+                    Dim a As String = Api.GenerateGUID
+
                     For i = 0 To mymacro.ListActions.Count - 1
-                        Dim _Action As New ThreadAction(Me, mymacro.ListActions.Item(i))
+                        Dim _Action As New ThreadAction(Me, mymacro.ListActions.Item(i), mymacro.Nom, a)
                         Dim x As New Thread(AddressOf _Action.Execute)
+                        x.Name = a
                         x.Start()
+                        _ListThread.Add(x)
                     Next
+
                     mymacro = Nothing
                 End If
             Catch ex As Exception

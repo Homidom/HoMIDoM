@@ -7,6 +7,7 @@ Imports System.IO
 Imports System.Xml
 Imports System.Reflection
 Imports System.CodeDom.Compiler
+Imports HoMIDom.HoMIDom.Server
 
 Namespace HoMIDom
 
@@ -17,6 +18,8 @@ Namespace HoMIDom
     Public Class ThreadAction
         Dim _Server As Server = Nothing
         Dim _Action As Object = Nothing
+        Dim _NameMacro As String = ""
+        Dim _ID As String = ""
 
         Public Sub Execute()
             Try
@@ -80,20 +83,20 @@ Namespace HoMIDom
                         Dim x As Action.ActionDriver = _Action
                         Dim y As New HoMIDom.DeviceAction
 
-                            'C'est une commande standard
-                            y.Nom = x.Method
+                        'C'est une commande standard
+                        y.Nom = x.Method
 
-                            If x.Parametres IsNot Nothing Then
-                                If x.Parametres.Count > 0 Then
-                                    If x.Parametres.Item(0) IsNot Nothing Then
-                                        If x.Parametres.Item(0) <> "" Then
-                                            Dim y2 As New HoMIDom.DeviceAction.Parametre
-                                            y2.Value = x.Parametres.Item(0)
-                                            y.Parametres.Add(y2)
-                                        End If
+                        If x.Parametres IsNot Nothing Then
+                            If x.Parametres.Count > 0 Then
+                                If x.Parametres.Item(0) IsNot Nothing Then
+                                    If x.Parametres.Item(0) <> "" Then
+                                        Dim y2 As New HoMIDom.DeviceAction.Parametre
+                                        y2.Value = x.Parametres.Item(0)
+                                        y.Parametres.Add(y2)
                                     End If
                                 End If
                             End If
+                        End If
 
                         If y.Nom.ToUpper = "START" Then _Server.StartDriver(_IdSrv, x.IdDriver)
                         If y.Nom.ToUpper = "STOP" Then _Server.StopDriver(_IdSrv, x.IdDriver)
@@ -352,18 +355,20 @@ Namespace HoMIDom
 
                         If flag = True Then
                             For i As Integer = 0 To x.ListTrue.Count - 1
-                                Dim _action As New ThreadAction(_Server, x.ListTrue.Item(i))
+                                Dim _action As New ThreadAction(_Server, x.ListTrue.Item(i), _NameMacro, _ID)
                                 Dim y As New Thread(AddressOf _action.Execute)
-                                y.Name = "Traitement du script"
+                                y.Name = _ID
                                 y.Start()
+                                _Server.GetListThread.Add(y)
                                 y = Nothing
                             Next
                         Else
                             For i As Integer = 0 To x.ListFalse.Count - 1
-                                Dim _action As New ThreadAction(_Server, x.ListFalse.Item(i))
+                                Dim _action As New ThreadAction(_Server, x.ListFalse.Item(i), _NameMacro, _ID)
                                 Dim y As New Thread(AddressOf _action.Execute)
-                                y.Name = "Traitement du script"
+                                y.Name = _ID
                                 y.Start()
+                                _Server.GetListThread.Add(y)
                                 y = Nothing
                             Next
                         End If
@@ -394,7 +399,23 @@ Namespace HoMIDom
                     Case Action.TypeAction.ActionVB
                         Dim x As Action.ActionVB = _Action
                         ExecuteScript(x.Script)
-
+                    Case Action.TypeAction.ActionStop
+                        _Server.Log(TypeLog.DEBUG, TypeSource.SCRIPT, "Arrêt de la macro", "Macro: " & _NameMacro)
+                        If _Server.GetListThread.Count > 0 Then
+                            For Each thr In _Server.GetListThread
+                                If thr.Name = _ID Then
+                                    Try
+                                        SyncLock thr
+                                            thr.Abort()
+                                            thr = Nothing
+                                        End SyncLock
+                                    Catch ex As Exception
+                                        'ça génère une erreur donc on fait rien
+                                        Dim b As String = ex.ToString
+                                    End Try
+                                End If
+                            Next
+                        End If
                     Case Action.TypeAction.ActionSpeech
                         Dim x As Action.ActionSpeech = _Action
                         Parler(x.Message)
@@ -423,14 +444,16 @@ Namespace HoMIDom
                         End Try
                 End Select
             Catch ex As Exception
-                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute", "Exception : " & ex.ToString)
+                If ex.ToString.Contains("ThreadAbortException") = False Then _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute", "Exception : " & ex.ToString)
             End Try
         End Sub
 
-        Public Sub New(ByVal Server As Server, ByVal Action As Object)
+        Public Sub New(ByVal Server As Server, ByVal Action As Object, NameMacro As String, ID As String)
             Try
                 _Server = Server
                 _Action = Action
+                _NameMacro = NameMacro
+                _ID = ID
             Catch ex As Exception
                 _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "New Execute", "Exception : " & ex.ToString)
             End Try
