@@ -17,6 +17,7 @@ Partial Public Class uMeteo
         End Get
         Set(ByVal value As String)
             _Id = value
+            GetMeteo2()
         End Set
     End Property
 
@@ -26,7 +27,7 @@ Partial Public Class uMeteo
         Try
             If IsConnect = True Then
                 If String.IsNullOrEmpty(_Id) = False Then
-                    x = myService.ReturnDeviceByID(IdSrv, _Id)
+                    x = ReturnDeviceById(_Id) 'myService.ReturnDeviceByID(IdSrv, _Id)
 
                     If x IsNot Nothing Then
                         If IsDiff(_dev, x) Then
@@ -117,13 +118,12 @@ Partial Public Class uMeteo
 
         ID = vID
 
+        ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
+        GetMeteo2()
+
         dt.Interval = New TimeSpan(0, 0, 5)
         AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
         dt.Start()
-
-        ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-        GetMeteo2()
-        GetMeteo2()
 
         Dim myDoubleAnimation As New DoubleAnimation()
         myDoubleAnimation.From = 0.0

@@ -542,9 +542,76 @@ Class Window1
 
     'Event lorsqu'un device change
     Private Sub DeviceChanged(deviceid As String, DeviceValue As String)
-        Dim x As New Thread(AddressOf Refresh)
-        x.Start()
-        x = Nothing
+        Try
+            If IsConnect Then
+                For Each _dev In AllDevices
+                    If _dev.ID = deviceid Then
+                        Dim mydev As TemplateDevice = myService.ReturnDeviceByID(IdSrv, deviceid)
+                        MaJ_Device(mydev, _dev)
+                        Exit For
+                    End If
+                Next
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Event DeviceChanged: " & ex.ToString, "Erreur", " Event DeviceChanged")
+        End Try
+    End Sub
+
+    Private Sub MaJ_Device(Source As TemplateDevice, Destination As TemplateDevice)
+        Destination.Name = Source.Name
+        Destination.Value = Source.Value
+        Destination.Adresse1 = Source.Adresse1
+        Destination.Adresse2 = Source.Adresse2
+        Destination.AllValue = Source.AllValue
+        Destination.ConditionActuel = Source.ConditionActuel
+        Destination.ConditionJ1 = Source.ConditionActuel
+        Destination.ConditionJ2 = Source.ConditionJ2
+        Destination.ConditionJ3 = Source.ConditionJ3
+        Destination.ConditionToday = Source.ConditionToday
+        Destination.Correction = Source.Correction
+        Destination.DateCreated = Source.DateCreated
+        Destination.Description = Source.Description
+        Destination.DeviceAction = Source.DeviceAction
+        Destination.DriverID = Source.DriverID
+        Destination.Enable = Source.Enable
+        Destination.Formatage = Source.Formatage
+        Destination.GetDeviceCommandePlus = Source.GetDeviceCommandePlus
+        Destination.HumiditeActuel = Source.HumiditeActuel
+        Destination.IconActuel = Source.IconActuel
+        Destination.IconJ1 = Source.IconJ1
+        Destination.IconJ2 = Source.IconJ2
+        Destination.IconJ3 = Source.IconJ3
+        Destination.IconToday = Source.IconToday
+        Destination.ID = Source.ID
+        Destination.JourJ1 = Source.JourJ1
+        Destination.JourJ2 = Source.JourJ2
+        Destination.JourJ3 = Source.JourJ3
+        Destination.JourToday = Source.JourToday
+        Destination.LastChange = Source.LastChange
+        Destination.LastChangeDuree = Source.LastChangeDuree
+        Destination.LastEtat = Source.LastEtat
+        Destination.MaxJ1 = Source.MaxJ1
+        Destination.MaxJ2 = Source.MaxJ2
+        Destination.MaxJ3 = Source.MaxJ3
+        Destination.MaxToday = Source.MaxToday
+        Destination.MinJ1 = Source.MinJ1
+        Destination.MinJ2 = Source.MinJ2
+        Destination.MinJ3 = Source.MinJ3
+        Destination.MinToday = Source.MinToday
+        Destination.Modele = Source.Modele
+        Destination.Picture = Source.Picture
+        Destination.Precision = Source.Precision
+        Destination.Puissance = Source.Puissance
+        Destination.Refresh = Source.Refresh
+        Destination.Solo = Source.Solo
+        Destination.TemperatureActuel = Source.TemperatureActuel
+        Destination.Type = Source.Type
+        Destination.Unit = Source.Unit
+        Destination.ValueDef = Source.ValueDef
+        Destination.ValueLast = Source.ValueLast
+        Destination.ValueMax = Source.ValueMax
+        Destination.ValueMin = Source.ValueMin
+        Destination.VentActuel = Source.VentActuel
     End Sub
 
     Private Sub NewLog(ByVal TypLog As HoMIDom.HoMIDom.Server.TypeLog, ByVal Source As HoMIDom.HoMIDom.Server.TypeSource, ByVal Fonction As String, ByVal Message As String) 'Evènement lorsqu'un nouveau log est écrit

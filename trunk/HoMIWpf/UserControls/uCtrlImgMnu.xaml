@@ -2,9 +2,9 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Margin="5">
         
-    <Border Name="Border" CornerRadius=" 5" BorderThickness="1" BorderBrush="DarkGray">
+    <Border Name="Border" CornerRadius=" 5" BorderThickness="2" BorderBrush="DarkGray">
             <StackPanel >
-                <Image Name="Image" Stretch="Fill" Height="60" VerticalAlignment="Top" Width="60" Source="/HoMIWpF;component/Images/vide-icone-128.png"  />
+                <Image Name="Image" Stretch="Fill" Height="60"  Width="60" Source="/HoMIWpF;component/Images/vide-icone-128.png"  />
                 <Label Name="Lbl" HorizontalContentAlignment="Center" VerticalContentAlignment="Top" FontSize="9" Foreground="White" MinWidth="100"/>
             </StackPanel>
         <Border.Background>
