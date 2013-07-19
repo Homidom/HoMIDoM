@@ -23,7 +23,7 @@
 
                         <TabControl Height="214" Name="Tab_simple" Width="350" Background="#535050" >
                             <TabItem Header="Mode Simple" Name="TabItem1" Background="#535050" Foreground="white">
-                                <StackPanel Orientation="Horizontal" >
+                                <StackPanel Orientation="Horizontal" Name="SP_modesimple">
                                     <StackPanel >
                                         <Label Content="Heure" HorizontalAlignment="Center" Margin="1" Name="LblH" VerticalAlignment="Top" Width="45" Foreground="White" HorizontalContentAlignment="Center" FontSize="10" />
                                         <Button HorizontalAlignment="Center" Margin="1" Name="BtnPHr" Width="35" Height="24" VerticalAlignment="Top" Template="{DynamicResource GlassButton}" Foreground="White" >
