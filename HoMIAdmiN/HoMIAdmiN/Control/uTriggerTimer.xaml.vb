@@ -72,6 +72,10 @@ Public Class uTriggerTimer
                             If InStr(c(5), "0") Then CheckBox7.IsChecked = True
                         Else
                             'on desactive le mode simple
+
+                            'SP_modesimple.
+
+
                         End If
 
                     End If
