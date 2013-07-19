@@ -244,14 +244,19 @@ Namespace HoMIDom
                 Return _ConditionTime
             End Get
             Set(ByVal value As String)
-                If _ConditionTime <> value Then
-                    If ConditionTime <> value Then
-                        _ConditionTime = value
-                        maj_cron()
+                Try
+                    If Not IsNothing(value) Then
+                        'correction ancienne valeur avec _cron en prefixe
+                        If value.Length > 5 Then If STRGS.Left(value, 5) = "_cron" Then value = Mid(value, 6, Len(value) - 5)
+
+                        If _ConditionTime <> value Then
+                            _ConditionTime = value
+                            'maj_cron()
+                        End If
                     End If
-                Else
-                    _ConditionTime = value
-                End If
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Trigger:ConditionTime", ex.ToString)
+                End Try
             End Set
         End Property
 
@@ -332,20 +337,33 @@ Namespace HoMIDom
             'convertit la condition au format cron "cron_ss#mm#hh#jj#MMM#JJJ" en dateTime
             Try
                 'on vérifie si la condition est un cron
-                If STRGS.Left(_ConditionTime, 5) = "_cron" Then
-                    Dim conditions() As String = STRGS.Split(_ConditionTime, "#")
-                    conditions(0) = Mid(conditions(0), 6, Len(conditions(0)) - 5)
-                    'ex: CrontabSchedule.Parse("0 17-19 * * *")
-                    Dim s = CrontabSchedule.Parse(conditions(1) & " " & conditions(2) & " " & conditions(3) & " " & conditions(4) & " " & conditions(5))
-                    'recupere le prochain shedule
-                    Dim nextcron = s.GetNextOccurrence(DateAndTime.Now)
-                    If (conditions(0) <> "*" And conditions(0) <> "") Then nextcron = nextcron.AddSeconds(conditions(0))
-                    Prochainedateheure = nextcron.ToString("yyyy-MM-dd HH:mm:ss")
-                Else
-                    'Prochainedateheure = Nothing 'on le laisse à vide car Trigger type Device
+                If Not IsNothing(_ConditionTime) And Not String.IsNullOrWhiteSpace(_ConditionTime) Then
+                    'If STRGS.Left(_ConditionTime, 5) = "_cron" Then
+                    If _ConditionTime.Length >= 11 Then 'on verifie si au moins = à "*#*#*#*#*#*"
+                        Dim conditions() As String = STRGS.Split(_ConditionTime, "#")
+                        If conditions.Count = 6 Then
+                            'conditions(0) = Mid(conditions(0), 6, Len(conditions(0)) - 5)
+                            '            'ex: CrontabSchedule.Parse("0 17-19 * * *")
+                            '            'Dim s = CrontabSchedule.Parse(conditions(1) & " " & conditions(2) & " " & conditions(3) & " " & conditions(4) & " " & conditions(5))
+                            '            ''recupere le prochain shedule
+                            '            'Dim nextcron = s.GetNextOccurrence(DateAndTime.Now)
+                            '            'If (conditions(0) <> "*" And conditions(0) <> "") Then nextcron = nextcron.AddSeconds(conditions(0))
+
+                            '_Server.Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Trigger:Maj_Cron", "conditions: " & conditions(0) & " " & conditions(1) & " " & conditions(2) & " " & conditions(3) & " " & conditions(4) & " " & conditions(5))
+
+                            Dim s = CrontabSchedule.Parse(conditions(0) & " " & conditions(1) & " " & conditions(2) & " " & conditions(3) & " " & conditions(4) & " " & conditions(5))
+                            _Prochainedateheure = s.GetNextOccurrence(DateAndTime.Now).ToString("yyyy-MM-dd HH:mm:ss")
+                            _Server.Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Trigger:Maj_Cron", _Nom & " : Prochaine execution : " & _Prochainedateheure)
+                        Else
+                            _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Trigger:Maj_Cron", "La condition TIME n'a pas un format correct : " & _ConditionTime)
+                        End If
+                    Else
+                        _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Trigger:Maj_Cron", "La condition TIME n'a pas un format correct : " & _ConditionTime)
+                    End If
                 End If
+
             Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Trigger:cron_convertendate", ex.ToString)
+                _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Trigger:Maj_Cron", ex.ToString)
             End Try
         End Sub
 

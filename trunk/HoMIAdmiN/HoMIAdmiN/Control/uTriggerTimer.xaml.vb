@@ -35,42 +35,45 @@ Public Class uTriggerTimer
                     _ListMacro = x.ListMacro
 
                     Dim cron As String = x.ConditionTime
-                    If cron.StartsWith("_cron") Then
-                        cron = Mid(cron, 6, Len(cron) - 5)
+                    If cron.Length > 10 Then
+                        'cron = Mid(cron, 6, Len(cron) - 5)
                         Dim c() As String = cron.Split("#")
-                        If c(0) = "*" Then
-                            TxtSc.Text = ""
+
+                        'mode avancé
+                        TxtSc_avance.Text = c(0)
+                        TxtMn_avance.Text = c(1)
+                        TxtHr_avance.Text = c(2)
+                        TxtJr_avance.Text = c(3)
+                        TxtMs_avance.Text = c(4)
+                        If InStr(c(5), "1") Then CheckBox1_avance.IsChecked = True
+                        If InStr(c(5), "2") Then CheckBox2_avance.IsChecked = True
+                        If InStr(c(5), "3") Then CheckBox3_avance.IsChecked = True
+                        If InStr(c(5), "4") Then CheckBox4_avance.IsChecked = True
+                        If InStr(c(5), "5") Then CheckBox5_avance.IsChecked = True
+                        If InStr(c(5), "6") Then CheckBox6_avance.IsChecked = True
+                        If InStr(c(5), "0") Then CheckBox7_avance.IsChecked = True
+
+                        'mode simple
+
+                        If InStr(c(0), "/") = 0 And InStr(c(1), "/") = 0 And InStr(c(2), "/") = 0 And InStr(c(3), "/") = 0 And InStr(c(4), "/") = 0 And _
+                           InStr(c(0), "-") = 0 And InStr(c(1), "-") = 0 And InStr(c(2), "-") = 0 And InStr(c(3), "-") = 0 And InStr(c(4), "-") = 0 And _
+                           InStr(c(0), ",") = 0 And InStr(c(1), ",") = 0 And InStr(c(2), ",") = 0 And InStr(c(3), ",") = 0 And InStr(c(4), ",") = 0 Then
+                            If c(0) = "*" Then TxtSc.Text = "" Else TxtSc.Text = c(0)
+                            If c(1) = "*" Then TxtMn.Text = "" Else TxtMn.Text = c(1)
+                            If c(2) = "*" Then TxtHr.Text = "" Else TxtHr.Text = c(2)
+                            If c(3) = "*" Then TxtJr.Text = "" Else TxtJr.Text = c(3)
+                            If c(4) = "*" Then TxtMs.Text = "" Else TxtMs.Text = c(4)
+                            If InStr(c(5), "1") Then CheckBox1.IsChecked = True
+                            If InStr(c(5), "2") Then CheckBox2.IsChecked = True
+                            If InStr(c(5), "3") Then CheckBox3.IsChecked = True
+                            If InStr(c(5), "4") Then CheckBox4.IsChecked = True
+                            If InStr(c(5), "5") Then CheckBox5.IsChecked = True
+                            If InStr(c(5), "6") Then CheckBox6.IsChecked = True
+                            If InStr(c(5), "0") Then CheckBox7.IsChecked = True
                         Else
-                            TxtSc.Text = c(0)
-                        End If
-                        If c(1) = "*" Then
-                            TxtMn.Text = ""
-                        Else
-                            TxtMn.Text = c(1)
-                        End If
-                        If c(2) = "*" Then
-                            TxtHr.Text = ""
-                        Else
-                            TxtHr.Text = c(2)
-                        End If
-                        If c(3) = "*" Then
-                            TxtJr.Text = ""
-                        Else
-                            TxtJr.Text = c(3)
-                        End If
-                        If c(4) = "*" Then
-                            TxtMs.Text = ""
-                        Else
-                            TxtMs.Text = c(4)
+                            'on desactive le mode simple
                         End If
 
-                        If InStr(c(5), "1") Then CheckBox1.IsChecked = True
-                        If InStr(c(5), "2") Then CheckBox2.IsChecked = True
-                        If InStr(c(5), "3") Then CheckBox3.IsChecked = True
-                        If InStr(c(5), "4") Then CheckBox4.IsChecked = True
-                        If InStr(c(5), "5") Then CheckBox5.IsChecked = True
-                        If InStr(c(5), "6") Then CheckBox6.IsChecked = True
-                        If InStr(c(5), "0") Then CheckBox7.IsChecked = True
                     End If
                 End If
 
@@ -88,32 +91,39 @@ Public Class uTriggerTimer
                 Exit Sub
             End If
 
-            Dim _myconditiontime As String = "_cron"
-            If TxtSc.Text = "" Then
-                _myconditiontime &= "*#"
-            Else
-                _myconditiontime &= CInt(TxtSc.Text) & "#"
-            End If
-            If TxtMn.Text = "" Then
-                _myconditiontime &= "*#"
-            Else
-                _myconditiontime &= CInt(TxtMn.Text) & "#"
-            End If
-            If TxtHr.Text = "" Then
-                _myconditiontime &= "*#"
-            Else
-                _myconditiontime &= CInt(TxtHr.Text) & "#"
-            End If
-            If TxtJr.Text = "" Then
-                _myconditiontime &= "*#"
-            Else
-                _myconditiontime &= CInt(TxtJr.Text) & "#"
-            End If
-            If TxtMs.Text = "" Then
-                _myconditiontime &= "*#"
-            Else
-                _myconditiontime &= CInt(TxtMs.Text) & "#"
-            End If
+            'Dim _myconditiontime As String = "_cron"
+            Dim _myconditiontime As String = ""
+            _myconditiontime &= TxtSc.Text & "#"
+            _myconditiontime &= TxtMn.Text & "#"
+            _myconditiontime &= TxtHr.Text & "#"
+            _myconditiontime &= TxtJr.Text & "#"
+            _myconditiontime &= TxtMs.Text & "#"
+
+            'If TxtSc.Text = "" Then
+            '    _myconditiontime &= "*#"
+            'Else
+            '    _myconditiontime &= CInt(TxtSc.Text) & "#"
+            'End If
+            'If TxtMn.Text = "" Then
+            '    _myconditiontime &= "*#"
+            'Else
+            '    _myconditiontime &= CInt(TxtMn.Text) & "#"
+            'End If
+            'If TxtHr.Text = "" Then
+            '    _myconditiontime &= "*#"
+            'Else
+            '    _myconditiontime &= CInt(TxtHr.Text) & "#"
+            'End If
+            'If TxtJr.Text = "" Then
+            '    _myconditiontime &= "*#"
+            'Else
+            '    _myconditiontime &= CInt(TxtJr.Text) & "#"
+            'End If
+            'If TxtMs.Text = "" Then
+            '    _myconditiontime &= "*#"
+            'Else
+            '    _myconditiontime &= CInt(TxtMs.Text) & "#"
+            'End If
 
             Dim _prepajr As String = ""
             If CheckBox7.IsChecked = True Then _prepajr = "0"
@@ -331,285 +341,285 @@ Public Class uTriggerTimer
     End Function
 
 #Region "Gestion Date/time"
-    Private Sub BtnPHr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPHr.Click
-        Try
-            Dim i As Integer
-            If TxtHr.Text = "" Then
-                i = 0
-                TxtHr.Text = Format(i, "00")
-            Else
-                i = TxtHr.Text
-                i += 1
-                If i > 23 Then
-                    TxtHr.Text = ""
-                Else
-                    TxtHr.Text = i
-                End If
+    'Private Sub BtnPHr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPHr.Click
+    '    Try
+    '        Dim i As Integer
+    '        If TxtHr.Text = "" Then
+    '            i = 0
+    '            TxtHr.Text = Format(i, "00")
+    '        Else
+    '            i = TxtHr.Text
+    '            i += 1
+    '            If i > 23 Then
+    '                TxtHr.Text = ""
+    '            Else
+    '                TxtHr.Text = i
+    '            End If
 
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnPHr_Click: " & ex.Message, "ERREUR", "")
-        End Try
-    End Sub
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnPHr_Click: " & ex.Message, "ERREUR", "")
+    '    End Try
+    'End Sub
 
-    Private Sub BtnPMn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPMn.Click
-        Try
-            Dim i As Integer
-            If TxtMn.Text = "" Then
-                i = 0
-                TxtMn.Text = Format(i, "00")
-            Else
-                i = TxtMn.Text
-                i += 1
-                If i > 59 Then
-                    TxtMn.Text = ""
-                Else
-                    TxtMn.Text = i
-                End If
+    'Private Sub BtnPMn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPMn.Click
+    '    Try
+    '        Dim i As Integer
+    '        If TxtMn.Text = "" Then
+    '            i = 0
+    '            TxtMn.Text = Format(i, "00")
+    '        Else
+    '            i = TxtMn.Text
+    '            i += 1
+    '            If i > 59 Then
+    '                TxtMn.Text = ""
+    '            Else
+    '                TxtMn.Text = i
+    '            End If
 
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnPMn_Click: " & ex.Message, "ERREUR", "")
-        End Try
-    End Sub
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnPMn_Click: " & ex.Message, "ERREUR", "")
+    '    End Try
+    'End Sub
 
-    Private Sub BtnPSc_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPSc.Click
-        Try
-            Dim i As Integer
-            If TxtSc.Text = "" Then
-                i = 0
-                TxtSc.Text = Format(i, "00")
-            Else
-                i = TxtSc.Text
-                i += 1
-                If i > 59 Then
-                    TxtSc.Text = ""
-                Else
-                    TxtSc.Text = i
-                End If
+    'Private Sub BtnPSc_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPSc.Click
+    '    Try
+    '        Dim i As Integer
+    '        If TxtSc.Text = "" Then
+    '            i = 0
+    '            TxtSc.Text = Format(i, "00")
+    '        Else
+    '            i = TxtSc.Text
+    '            i += 1
+    '            If i > 59 Then
+    '                TxtSc.Text = ""
+    '            Else
+    '                TxtSc.Text = i
+    '            End If
 
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnPSc_Click: " & ex.Message, "ERREUR", "")
-        End Try
-    End Sub
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnPSc_Click: " & ex.Message, "ERREUR", "")
+    '    End Try
+    'End Sub
 
-    Private Sub BtnMHr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMHr.Click
-        Try
-            Dim i As Integer
-            If TxtHr.Text = "" Then
-                i = 23
-                TxtHr.Text = Format(i, "00")
-            Else
-                i = TxtHr.Text
-                i -= 1
-                If i < 0 Then
-                    TxtHr.Text = ""
-                Else
-                    TxtHr.Text = i
-                End If
+    'Private Sub BtnMHr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMHr.Click
+    '    Try
+    '        Dim i As Integer
+    '        If TxtHr.Text = "" Then
+    '            i = 23
+    '            TxtHr.Text = Format(i, "00")
+    '        Else
+    '            i = TxtHr.Text
+    '            i -= 1
+    '            If i < 0 Then
+    '                TxtHr.Text = ""
+    '            Else
+    '                TxtHr.Text = i
+    '            End If
 
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnMHr_Click: " & ex.Message, "ERREUR", "")
-        End Try
-    End Sub
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnMHr_Click: " & ex.Message, "ERREUR", "")
+    '    End Try
+    'End Sub
 
-    Private Sub BtnMMn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMMn.Click
-        Try
-            Dim i As Integer
-            If TxtMn.Text = "" Then
-                i = 59
-                TxtMn.Text = Format(i, "00")
-            Else
-                i = TxtMn.Text
-                i -= 1
-                If i < 0 Then
-                    TxtMn.Text = ""
-                Else
-                    TxtMn.Text = i
-                End If
+    'Private Sub BtnMMn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMMn.Click
+    '    Try
+    '        Dim i As Integer
+    '        If TxtMn.Text = "" Then
+    '            i = 59
+    '            TxtMn.Text = Format(i, "00")
+    '        Else
+    '            i = TxtMn.Text
+    '            i -= 1
+    '            If i < 0 Then
+    '                TxtMn.Text = ""
+    '            Else
+    '                TxtMn.Text = i
+    '            End If
 
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnMMn_Click: " & ex.Message, "ERREUR", "")
-        End Try
-    End Sub
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnMMn_Click: " & ex.Message, "ERREUR", "")
+    '    End Try
+    'End Sub
 
-    Private Sub BtnMSec_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMSec.Click
-        Try
-            Dim i As Integer
-            If TxtSc.Text = "" Then
-                i = 59
-                TxtSc.Text = Format(i, "00")
-            Else
-                i = TxtSc.Text
-                i -= 1
-                If i < 0 Then
-                    TxtSc.Text = ""
-                Else
-                    TxtSc.Text = i
-                End If
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnMSec_Click: " & ex.Message, "ERREUR", "")
-        End Try
-    End Sub
+    'Private Sub BtnMSec_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMSec.Click
+    '    Try
+    '        Dim i As Integer
+    '        If TxtSc.Text = "" Then
+    '            i = 59
+    '            TxtSc.Text = Format(i, "00")
+    '        Else
+    '            i = TxtSc.Text
+    '            i -= 1
+    '            If i < 0 Then
+    '                TxtSc.Text = ""
+    '            Else
+    '                TxtSc.Text = i
+    '            End If
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnMSec_Click: " & ex.Message, "ERREUR", "")
+    '    End Try
+    'End Sub
 
-    Private Sub BtnPJr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPJr.Click
-        Try
-            Dim i As Integer
-            If TxtJr.Text = "" Then
-                i = 1
-                TxtJr.Text = Format(i, "00")
-            Else
-                i = TxtJr.Text
-                i += 1
-                If i > 31 Then
-                    TxtJr.Text = ""
-                Else
-                    TxtJr.Text = i
-                End If
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnPJr_Click: " & ex.Message, "ERREUR", "")
-        End Try
-    End Sub
+    'Private Sub BtnPJr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPJr.Click
+    '    Try
+    '        Dim i As Integer
+    '        If TxtJr.Text = "" Then
+    '            i = 1
+    '            TxtJr.Text = Format(i, "00")
+    '        Else
+    '            i = TxtJr.Text
+    '            i += 1
+    '            If i > 31 Then
+    '                TxtJr.Text = ""
+    '            Else
+    '                TxtJr.Text = i
+    '            End If
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnPJr_Click: " & ex.Message, "ERREUR", "")
+    '    End Try
+    'End Sub
 
-    Private Sub BtnPMs_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPMs.Click
-        Try
-            Dim i As Integer
-            If TxtMs.Text = "" Then
-                i = 1
-                TxtMs.Text = Format(i, "00")
-            Else
-                i = TxtMs.Text
-                i += 1
-                If i > 12 Then
-                    TxtMs.Text = ""
-                Else
-                    TxtMs.Text = i
-                End If
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnPMs_Click: " & ex.Message, "ERREUR", "")
-        End Try
-    End Sub
+    'Private Sub BtnPMs_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPMs.Click
+    '    Try
+    '        Dim i As Integer
+    '        If TxtMs.Text = "" Then
+    '            i = 1
+    '            TxtMs.Text = Format(i, "00")
+    '        Else
+    '            i = TxtMs.Text
+    '            i += 1
+    '            If i > 12 Then
+    '                TxtMs.Text = ""
+    '            Else
+    '                TxtMs.Text = i
+    '            End If
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnPMs_Click: " & ex.Message, "ERREUR", "")
+    '    End Try
+    'End Sub
 
-    Private Sub BtnMJr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMJr.Click
-        Try
-            Dim i As Integer
-            If TxtJr.Text = "" Then
-                i = 31
-                TxtJr.Text = Format(i, "00")
-            Else
-                i = TxtJr.Text
-                i -= 1
-                If i < 1 Then
-                    TxtJr.Text = ""
-                Else
-                    TxtJr.Text = i
-                End If
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnMJr_Click: " & ex.Message, "ERREUR", "")
-        End Try
-    End Sub
+    'Private Sub BtnMJr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMJr.Click
+    '    Try
+    '        Dim i As Integer
+    '        If TxtJr.Text = "" Then
+    '            i = 31
+    '            TxtJr.Text = Format(i, "00")
+    '        Else
+    '            i = TxtJr.Text
+    '            i -= 1
+    '            If i < 1 Then
+    '                TxtJr.Text = ""
+    '            Else
+    '                TxtJr.Text = i
+    '            End If
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnMJr_Click: " & ex.Message, "ERREUR", "")
+    '    End Try
+    'End Sub
 
-    Private Sub BtnMMs_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMMs.Click
-        Try
-            Dim i As Integer
-            If TxtMs.Text = "" Then
-                i = 12
-                TxtMs.Text = Format(i, "00")
-            Else
-                i = TxtMs.Text
-                i -= 1
-                If i < 1 Then
-                    TxtMs.Text = ""
-                Else
-                    TxtMs.Text = i
-                End If
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnMMs_Click: " & ex.Message, "ERREUR", "")
-        End Try
-    End Sub
+    'Private Sub BtnMMs_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnMMs.Click
+    '    Try
+    '        Dim i As Integer
+    '        If TxtMs.Text = "" Then
+    '            i = 12
+    '            TxtMs.Text = Format(i, "00")
+    '        Else
+    '            i = TxtMs.Text
+    '            i -= 1
+    '            If i < 1 Then
+    '                TxtMs.Text = ""
+    '            Else
+    '                TxtMs.Text = i
+    '            End If
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer BtnMMs_Click: " & ex.Message, "ERREUR", "")
+    '    End Try
+    'End Sub
 
-    Private Sub TxtHr_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtHr.TextChanged
-        Try
-            If TxtHr.Text <> "" Then
-                If IsNumeric(TxtHr.Text) = False Then
-                    TxtHr.Text = "0"
-                ElseIf TxtHr.Text <> "" Then
-                    If TxtHr.Text < 0 Then TxtHr.Text = ""
-                    If TxtHr.Text > 23 Then TxtHr.Text = ""
-                End If
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer TxtHr_TextChanged: " & ex.Message, "ERREUR", "")
-        End Try
-    End Sub
+    'Private Sub TxtHr_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtHr.TextChanged
+    '    Try
+    '        If TxtHr.Text <> "" Then
+    '            If IsNumeric(TxtHr.Text) = False Then
+    '                TxtHr.Text = "0"
+    '            ElseIf TxtHr.Text <> "" Then
+    '                If TxtHr.Text < 0 Then TxtHr.Text = ""
+    '                If TxtHr.Text > 23 Then TxtHr.Text = ""
+    '            End If
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer TxtHr_TextChanged: " & ex.Message, "ERREUR", "")
+    '    End Try
+    'End Sub
 
-    Private Sub TxtMn_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMn.TextChanged
-        Try
-            If TxtMn.Text <> "" Then
-                If IsNumeric(TxtMn.Text) = False Then
-                    TxtMn.Text = "0"
-                ElseIf TxtMn.Text <> "" Then
-                    If TxtMn.Text < 0 Then TxtMn.Text = ""
-                    If TxtMn.Text > 59 Then TxtMn.Text = ""
-                End If
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer TxtMn_TextChanged: " & ex.Message, "ERREUR", "")
-        End Try
-    End Sub
+    'Private Sub TxtMn_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMn.TextChanged
+    '    Try
+    '        If TxtMn.Text <> "" Then
+    '            If IsNumeric(TxtMn.Text) = False Then
+    '                TxtMn.Text = "0"
+    '            ElseIf TxtMn.Text <> "" Then
+    '                If TxtMn.Text < 0 Then TxtMn.Text = ""
+    '                If TxtMn.Text > 59 Then TxtMn.Text = ""
+    '            End If
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer TxtMn_TextChanged: " & ex.Message, "ERREUR", "")
+    '    End Try
+    'End Sub
 
-    Private Sub TxtSc_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtSc.TextChanged
-        Try
-            If TxtSc.Text <> "" Then
-                If IsNumeric(TxtSc.Text) = False Then
-                    TxtSc.Text = "0"
-                ElseIf TxtSc.Text <> "" Then
-                    If TxtSc.Text < 0 Then TxtSc.Text = ""
-                    If TxtSc.Text > 59 Then TxtSc.Text = ""
-                End If
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer TxtSc_TextChanged: " & ex.Message, "ERREUR", "")
-        End Try
-    End Sub
+    'Private Sub TxtSc_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtSc.TextChanged
+    '    Try
+    '        If TxtSc.Text <> "" Then
+    '            If IsNumeric(TxtSc.Text) = False Then
+    '                TxtSc.Text = "0"
+    '            ElseIf TxtSc.Text <> "" Then
+    '                If TxtSc.Text < 0 Then TxtSc.Text = ""
+    '                If TxtSc.Text > 59 Then TxtSc.Text = ""
+    '            End If
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer TxtSc_TextChanged: " & ex.Message, "ERREUR", "")
+    '    End Try
+    'End Sub
 
-    Private Sub TxtJr_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtJr.TextChanged
-        Try
-            If TxtJr.Text <> "" Then
-                If IsNumeric(TxtJr.Text) = False Then
-                    TxtJr.Text = "1"
-                ElseIf TxtJr.Text <> "" Then
-                    If TxtJr.Text < 0 Then TxtJr.Text = ""
-                    If TxtJr.Text > 31 Then TxtJr.Text = ""
-                End If
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer TxtJr_TextChanged: " & ex.Message, "ERREUR", "")
-        End Try
-    End Sub
+    'Private Sub TxtJr_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtJr.TextChanged
+    '    Try
+    '        If TxtJr.Text <> "" Then
+    '            If IsNumeric(TxtJr.Text) = False Then
+    '                TxtJr.Text = "1"
+    '            ElseIf TxtJr.Text <> "" Then
+    '                If TxtJr.Text < 0 Then TxtJr.Text = ""
+    '                If TxtJr.Text > 31 Then TxtJr.Text = ""
+    '            End If
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer TxtJr_TextChanged: " & ex.Message, "ERREUR", "")
+    '    End Try
+    'End Sub
 
-    Private Sub TxtMs_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMs.TextChanged
-        Try
-            If TxtMs.Text <> "" Then
-                If IsNumeric(TxtMs.Text) = False Then
-                    TxtMs.Text = "1"
-                ElseIf TxtMs.Text <> "" Then
-                    If TxtMs.Text < 0 Then TxtMs.Text = ""
-                    If TxtMs.Text > 12 Then TxtMs.Text = ""
-                End If
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer TxtMs_TextChanged: " & ex.Message, "ERREUR", "")
-        End Try
-    End Sub
+    'Private Sub TxtMs_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMs.TextChanged
+    '    Try
+    '        If TxtMs.Text <> "" Then
+    '            If IsNumeric(TxtMs.Text) = False Then
+    '                TxtMs.Text = "1"
+    '            ElseIf TxtMs.Text <> "" Then
+    '                If TxtMs.Text < 0 Then TxtMs.Text = ""
+    '                If TxtMs.Text > 12 Then TxtMs.Text = ""
+    '            End If
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer TxtMs_TextChanged: " & ex.Message, "ERREUR", "")
+    '    End Try
+    'End Sub
 #End Region
 
 

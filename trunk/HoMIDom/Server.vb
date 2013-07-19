@@ -1145,30 +1145,21 @@ Namespace HoMIDom
                                     x._Server = Me
                                     For j1 As Integer = 0 To list.Item(i).Attributes.Count - 1
                                         Select Case list.Item(i).Attributes.Item(j1).Name
-                                            Case "id"
-                                                x.ID = list.Item(i).Attributes.Item(j1).Value
-                                            Case "nom"
-                                                x.Nom = list.Item(i).Attributes.Item(j1).Value
-                                            Case "enable"
-                                                x.Enable = list.Item(i).Attributes.Item(j1).Value
+                                            Case "id" : x.ID = list.Item(i).Attributes.Item(j1).Value
+                                            Case "nom" : x.Nom = list.Item(i).Attributes.Item(j1).Value
+                                            Case "enable" : x.Enable = list.Item(i).Attributes.Item(j1).Value
                                             Case "type"
                                                 If list.Item(i).Attributes.Item(j1).Value = "0" Then
                                                     x.Type = Trigger.TypeTrigger.TIMER
                                                 Else
                                                     x.Type = Trigger.TypeTrigger.DEVICE
                                                 End If
-                                            Case "description"
-                                                If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Description = list.Item(i).Attributes.Item(j1).Value
-                                            Case "conditiontime"
-                                                If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionTime = list.Item(i).Attributes.Item(j1).Value
-                                            Case "conditiondeviceid"
-                                                If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionDeviceId = list.Item(i).Attributes.Item(j1).Value
-                                            Case "conditiondeviceproperty"
-                                                If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionDeviceProperty = list.Item(i).Attributes.Item(j1).Value
-                                            Case "prochainedateheure"
-                                                If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Prochainedateheure = list.Item(i).Attributes.Item(j1).Value
-                                            Case Else
-                                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant au trigger est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
+                                            Case "description" : If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Description = list.Item(i).Attributes.Item(j1).Value
+                                            Case "conditiontime" : If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionTime = list.Item(i).Attributes.Item(j1).Value
+                                            Case "conditiondeviceid" : If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionDeviceId = list.Item(i).Attributes.Item(j1).Value
+                                            Case "conditiondeviceproperty" : If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.ConditionDeviceProperty = list.Item(i).Attributes.Item(j1).Value
+                                            Case "prochainedateheure" : If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Prochainedateheure = list.Item(i).Attributes.Item(j1).Value
+                                            Case Else : Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant au trigger est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
                                         End Select
                                     Next
                                     If list.Item(i).HasChildNodes = True Then
@@ -1206,16 +1197,11 @@ Namespace HoMIDom
                                     Dim x As New Macro
                                     For j1 As Integer = 0 To list.Item(i).Attributes.Count - 1
                                         Select Case list.Item(i).Attributes.Item(j1).Name
-                                            Case "id"
-                                                x.ID = list.Item(i).Attributes.Item(j1).Value
-                                            Case "nom"
-                                                x.Nom = list.Item(i).Attributes.Item(j1).Value
-                                            Case "enable"
-                                                x.Enable = list.Item(i).Attributes.Item(j1).Value
-                                            Case "description"
-                                                If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Description = list.Item(0).Attributes.Item(j1).Value
-                                            Case Else
-                                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la macro est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
+                                            Case "id" : x.ID = list.Item(i).Attributes.Item(j1).Value
+                                            Case "nom" : x.Nom = list.Item(i).Attributes.Item(j1).Value
+                                            Case "enable" : x.Enable = list.Item(i).Attributes.Item(j1).Value
+                                            Case "description" : If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Description = list.Item(0).Attributes.Item(j1).Value
+                                            Case Else : Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la macro est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
                                         End Select
                                     Next
                                     LoadAction(list.Item(i), x.ListActions)
@@ -7643,16 +7629,21 @@ Namespace HoMIDom
                 For i As Integer = 0 To _ListTriggers.Count - 1
                     Dim x As New Trigger
                     With x
-                        .Nom = _ListTriggers.Item(i).Nom
-                        .ID = _ListTriggers.Item(i).ID
-                        .Description = _ListTriggers.Item(i).Description
-                        .Enable = _ListTriggers.Item(i).Enable
-                        .Prochainedateheure = _ListTriggers.Item(i).Prochainedateheure
-                        .Type = _ListTriggers.Item(i).Type
-                        .ConditionTime = _ListTriggers.Item(i).ConditionTime
-                        .ConditionDeviceId = _ListTriggers.Item(i).ConditionDeviceId
-                        .ConditionDeviceProperty = _ListTriggers.Item(i).ConditionDeviceProperty
-                        .ListMacro = _ListTriggers.Item(i).ListMacro
+                            .Nom = _ListTriggers.Item(i).Nom
+                            .ID = _ListTriggers.Item(i).ID
+                            .Description = _ListTriggers.Item(i).Description
+                            .Enable = _ListTriggers.Item(i).Enable
+                            .Type = _ListTriggers.Item(i).Type
+                            Try
+                                If Not IsNothing(_ListTriggers.Item(i).Prochainedateheure) Then .Prochainedateheure = _ListTriggers.Item(i).Prochainedateheure
+                            If Not IsNothing(_ListTriggers.Item(i).ConditionTime) Then .ConditionTime = _ListTriggers.Item(i).ConditionTime
+                                If Not IsNothing(_ListTriggers.Item(i).ConditionDeviceId) Then .ConditionDeviceId = _ListTriggers.Item(i).ConditionDeviceId
+                                If Not IsNothing(_ListTriggers.Item(i).ConditionDeviceProperty) Then .ConditionDeviceProperty = _ListTriggers.Item(i).ConditionDeviceProperty
+                                If Not IsNothing(_ListTriggers.Item(i).ListMacro) Then .ListMacro = _ListTriggers.Item(i).ListMacro
+                            Catch ex As Exception
+                                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllTriggers", "Exception part2 : " & .Nom & " ---" & ex.ToString)
+                            End Try
+
                     End With
                     _list.Add(x)
                 Next
@@ -7660,7 +7651,7 @@ Namespace HoMIDom
                 _list.Sort(AddressOf sortTrigger)
                 Return _list
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllTriggers", "Exception : " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllTriggers", "Exception : " & ex.ToString)
                 Return Nothing
             End Try
         End Function
