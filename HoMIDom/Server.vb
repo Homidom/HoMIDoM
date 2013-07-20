@@ -8239,12 +8239,12 @@ Namespace HoMIDom
             End Try
         End Function
 
+        '''' <param name="Fabricant"></param>
+        '''' <param name="Modele"></param>
+        '''' <param name="Driver"></param>
         ''' <summary>
         ''' Recupère la liste des commandes d'un template donné
         ''' </summary>
-        ''' <param name="Fabricant"></param>
-        ''' <param name="Modele"></param>
-        ''' <param name="Driver"></param>
         ''' <returns>Liste de commandes</returns>
         ''' <remarks></remarks>
         Public Function ReadTemplate(Name As String) As List(Of Telecommande.Commandes)
@@ -8335,12 +8335,12 @@ Namespace HoMIDom
             End Try
         End Function
 
+        '''' <param name="Commandes">Liste des commandes</param>
         ''' <summary>
         ''' Sauvegarde un template donné
         ''' </summary>
         ''' <param name="IdSrv">Id du Serveur</param>
         ''' <param name="Template">Nom du template</param>
-        ''' <param name="Commandes">Liste des commandes</param>
         ''' <returns>O si ok sinon message d'erreur</returns>
         ''' <remarks></remarks>
         Public Function SaveTemplate(ByVal IdSrv As String, Template As Telecommande.Template) As String Implements IHoMIDom.SaveTemplate
