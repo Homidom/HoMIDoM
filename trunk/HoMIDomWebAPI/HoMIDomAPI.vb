@@ -16,51 +16,71 @@ Public Class HoMIDomAPI
             Return homidom
         End Get
         Set(ByVal value As IHoMIDom)
-            If homidom IsNot Nothing Then
-                RemoveHandler homidom.DeviceChanged, AddressOf DeviceChanged
-                RemoveHandler homidom.DriverChanged, AddressOf DriverChanged
-                RemoveHandler homidom.NewLog, AddressOf NewLog
-                RemoveHandler homidom.ZoneChanged, AddressOf ZoneChanged
-                RemoveHandler homidom.DriverChanged, AddressOf DriverChanged
-                RemoveHandler homidom.MacroChanged, AddressOf MacroChanged
-                RemoveHandler homidom.HeureSoleilChanged, AddressOf HeureSoleilChanged
-            End If
-            homidom = value
-            AddHandler homidom.DeviceChanged, AddressOf DeviceChanged
-            AddHandler homidom.DriverChanged, AddressOf DriverChanged
-            AddHandler homidom.NewLog, AddressOf NewLog
-            AddHandler homidom.ZoneChanged, AddressOf ZoneChanged
-            AddHandler homidom.DriverChanged, AddressOf DriverChanged
-            AddHandler homidom.MacroChanged, AddressOf MacroChanged
-            AddHandler homidom.HeureSoleilChanged, AddressOf HeureSoleilChanged
+            Try
+                If homidom IsNot Nothing Then
+                    RemoveHandler homidom.DeviceChanged, AddressOf DeviceChanged
+                    RemoveHandler homidom.DriverChanged, AddressOf DriverChanged
+                    RemoveHandler homidom.NewLog, AddressOf NewLog
+                    RemoveHandler homidom.ZoneChanged, AddressOf ZoneChanged
+                    RemoveHandler homidom.DriverChanged, AddressOf DriverChanged
+                    RemoveHandler homidom.MacroChanged, AddressOf MacroChanged
+                    RemoveHandler homidom.HeureSoleilChanged, AddressOf HeureSoleilChanged
+                End If
+                homidom = value
+                AddHandler homidom.DeviceChanged, AddressOf DeviceChanged
+                AddHandler homidom.DriverChanged, AddressOf DriverChanged
+                AddHandler homidom.NewLog, AddressOf NewLog
+                AddHandler homidom.ZoneChanged, AddressOf ZoneChanged
+                AddHandler homidom.DriverChanged, AddressOf DriverChanged
+                AddHandler homidom.MacroChanged, AddressOf MacroChanged
+                AddHandler homidom.HeureSoleilChanged, AddressOf HeureSoleilChanged
+            Catch ex As Exception
+                If (Environment.UserInteractive) Then
+                    Console.WriteLine(Now & " ERROR   WEBAPI : CurrentServer ERROR : " & ex.ToString)
+                Else
+                    Dim myEventLog = New EventLog()
+                    myEventLog.Source = "HoMIServicE"
+                    myEventLog.WriteEntry("WEBAPI : CurrentServer ERROR : " & ex.ToString, EventLogEntryType.Error, 90)
+                End If
+            End Try
         End Set
     End Property
 
     Public Shared Property ServerKey() As String
 
     Public Shared Sub Start(url As String, key As String)
-        ServerKey = key
-        Dim webApiUrl As String = url + "api/"
-        Dim liveApiUrl As String = url + "live/"
-        Dim config = New HttpSelfHostConfiguration(webApiUrl)
+        Try
+            ServerKey = key
+            Dim webApiUrl As String = url + "api/"
+            Dim liveApiUrl As String = url + "live/"
+            Dim config = New HttpSelfHostConfiguration(webApiUrl)
 
-        config.Routes.MapHttpRoute("DefaultApi", "{key}/{controller}/{id}", New With { _
-         .id = RouteParameter.[Optional] _
-        })
-        config.Routes.MapHttpRoute("CommandApi", "{key}/command/{controller}/{id}/{command}", New With { _
-         .action = "ExecuteCommand" _
-        })
+            config.Routes.MapHttpRoute("DefaultApi", "{key}/{controller}/{id}", New With { _
+             .id = RouteParameter.[Optional] _
+            })
+            config.Routes.MapHttpRoute("CommandApi", "{key}/command/{controller}/{id}/{command}", New With { _
+             .action = "ExecuteCommand" _
+            })
 
-        ' Add jsonp formatter for cross domain call
-        config.Formatters(0) = New WebApiContrib.Formatting.Jsonp.JsonpMediaTypeFormatter() ' Replace default JSON by JSONP formatter
+            ' Add jsonp formatter for cross domain call
+            config.Formatters(0) = New WebApiContrib.Formatting.Jsonp.JsonpMediaTypeFormatter() ' Replace default JSON by JSONP formatter
 
-        Console.WriteLine(String.Format("{0} API Web démarrée sur l'adresse:  {1}", Now, webApiUrl))
-        server = New HttpSelfHostServer(config)
-        server.OpenAsync()
+            If (Environment.UserInteractive) Then Console.WriteLine(Now & " INFO    API Web démarrée sur l'adresse :  " & webApiUrl)
+            server = New HttpSelfHostServer(config)
+            server.OpenAsync()
 
-        ' Start SignalR notification hub
-        signalR = WebApp.Start(Of Startup)(liveApiUrl)
-        Console.WriteLine(String.Format("{0} API Live démarrée sur l'adresse:  {1}", Now, liveApiUrl))
+            ' Start SignalR notification hub
+            signalR = WebApp.Start(Of Startup)(liveApiUrl)
+            If (Environment.UserInteractive) Then Console.WriteLine(Now & " INFO    API Live démarrée sur l'adresse : " & liveApiUrl)
+        Catch ex As Exception
+            If (Environment.UserInteractive) Then
+                Console.WriteLine(Now & " ERROR   WEBAPI : Start ERROR : " & ex.ToString)
+            Else
+                Dim myEventLog = New EventLog()
+                myEventLog.Source = "HoMIServicE"
+                myEventLog.WriteEntry("WEBAPI : Start ERROR : " & ex.ToString, EventLogEntryType.Error, 90)
+            End If
+        End Try
     End Sub
 
     'Public Shared Sub Start(url As String, key As String)

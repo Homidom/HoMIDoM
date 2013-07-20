@@ -1352,8 +1352,8 @@ Imports System.Media
             '_PARAMMODE = _Parametres.Item(1).Valeur
             '_AUTODISCOVER = _Parametres.Item(2).Valeur
             'correction si valeur correspond à ancienne valeur parammode de type "20011111111111111011111111"
-            If CInt(_Parametres.Item(1).Valeur) > 10 Then
-                WriteLog("ERR: Anciens Paramétres avancés trouvés. Conversion de l'ancienne valeur au nouveau format. Veuillez")
+            If CStr(_Parametres.Item(1).Valeur).Length = 26 Then
+                WriteLog("ERR: Anciens Paramétres avancés trouvés. Conversion de l'ancienne valeur au nouveau format. Veuillez vérifier que les nouveaux paramétres sont corrects.")
                 _PARAMMODE_1_frequence = _Parametres.Item(1).Valeur.Substring(0, 1)
                 _PARAMMODE_2_undec = _Parametres.Item(1).Valeur.Substring(1, 1)
                 _PARAMMODE_3_novatis = _Parametres.Item(1).Valeur.Substring(2, 1)
@@ -1380,7 +1380,65 @@ Imports System.Media
                 _PARAMMODE_24_rubicson = _Parametres.Item(1).Valeur.Substring(23, 1)
                 _PARAMMODE_25_ae = _Parametres.Item(1).Valeur.Substring(24, 1)
                 _PARAMMODE_26_blindst1 = _Parametres.Item(1).Valeur.Substring(25, 1)
+
+                _Parametres.Item(1).Valeur = _PARAMMODE_1_frequence
+                _Parametres.Item(2).Valeur = _PARAMMODE_2_undec
+                _Parametres.Item(3).Valeur = _PARAMMODE_3_novatis
+                _Parametres.Item(4).Valeur = _PARAMMODE_4_proguard
+                _Parametres.Item(5).Valeur = _PARAMMODE_5_fs20
+                _Parametres.Item(6).Valeur = _PARAMMODE_6_lacrosse
+                _Parametres.Item(7).Valeur = _PARAMMODE_7_hideki
+                _Parametres.Item(8).Valeur = _PARAMMODE_8_ad
+                _Parametres.Item(9).Valeur = _PARAMMODE_9_mertik
+                _Parametres.Item(10).Valeur = _PARAMMODE_10_visonic
+                _Parametres.Item(11).Valeur = _PARAMMODE_11_ati
+                _Parametres.Item(12).Valeur = _PARAMMODE_12_oregon
+                _Parametres.Item(13).Valeur = _PARAMMODE_13_meiantech
+                _Parametres.Item(14).Valeur = _PARAMMODE_14_heeu
+                _Parametres.Item(15).Valeur = _PARAMMODE_15_ac
+                _Parametres.Item(16).Valeur = _PARAMMODE_16_arc
+                _Parametres.Item(17).Valeur = _PARAMMODE_17_x10
+                _Parametres.Item(18).Valeur = _PARAMMODE_18_blindst0
+                _Parametres.Item(19).Valeur = _PARAMMODE_19_rfu6
+                _Parametres.Item(20).Valeur = _PARAMMODE_20_rfu5
+                _Parametres.Item(21).Valeur = _PARAMMODE_21_rfu4
+                _Parametres.Item(22).Valeur = _PARAMMODE_22_lighting4
+                _Parametres.Item(23).Valeur = _PARAMMODE_23_fineoffset
+                _Parametres.Item(24).Valeur = _PARAMMODE_24_rubicson
+                _Parametres.Item(25).Valeur = _PARAMMODE_25_ae
+                _Parametres.Item(26).Valeur = _PARAMMODE_26_blindst1
+
+            ElseIf CStr(_Parametres.Item(1).Valeur).Length > 1 Then
+                WriteLog("ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut")
+                _Parametres.Item(1).Valeur = _PARAMMODE_1_frequence
+                _Parametres.Item(2).Valeur = _PARAMMODE_2_undec
+                _Parametres.Item(3).Valeur = _PARAMMODE_3_novatis
+                _Parametres.Item(4).Valeur = _PARAMMODE_4_proguard
+                _Parametres.Item(5).Valeur = _PARAMMODE_5_fs20
+                _Parametres.Item(6).Valeur = _PARAMMODE_6_lacrosse
+                _Parametres.Item(7).Valeur = _PARAMMODE_7_hideki
+                _Parametres.Item(8).Valeur = _PARAMMODE_8_ad
+                _Parametres.Item(9).Valeur = _PARAMMODE_9_mertik
+                _Parametres.Item(10).Valeur = _PARAMMODE_10_visonic
+                _Parametres.Item(11).Valeur = _PARAMMODE_11_ati
+                _Parametres.Item(12).Valeur = _PARAMMODE_12_oregon
+                _Parametres.Item(13).Valeur = _PARAMMODE_13_meiantech
+                _Parametres.Item(14).Valeur = _PARAMMODE_14_heeu
+                _Parametres.Item(15).Valeur = _PARAMMODE_15_ac
+                _Parametres.Item(16).Valeur = _PARAMMODE_16_arc
+                _Parametres.Item(17).Valeur = _PARAMMODE_17_x10
+                _Parametres.Item(18).Valeur = _PARAMMODE_18_blindst0
+                _Parametres.Item(19).Valeur = _PARAMMODE_19_rfu6
+                _Parametres.Item(20).Valeur = _PARAMMODE_20_rfu5
+                _Parametres.Item(21).Valeur = _PARAMMODE_21_rfu4
+                _Parametres.Item(22).Valeur = _PARAMMODE_22_lighting4
+                _Parametres.Item(23).Valeur = _PARAMMODE_23_fineoffset
+                _Parametres.Item(24).Valeur = _PARAMMODE_24_rubicson
+                _Parametres.Item(25).Valeur = _PARAMMODE_25_ae
+                _Parametres.Item(26).Valeur = _PARAMMODE_26_blindst1
+
             Else
+                'situation normale, on recupere chaque parametre
                 _PARAMMODE_1_frequence = _Parametres.Item(1).Valeur
                 _PARAMMODE_2_undec = _Parametres.Item(2).Valeur
                 _PARAMMODE_3_novatis = _Parametres.Item(3).Valeur
@@ -1410,7 +1468,7 @@ Imports System.Media
             End If
 
         Catch ex As Exception
-            WriteLog("ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+            WriteLog("ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut : " & ex.Message)
         End Try
 
         'ouverture du port suivant le Port Com ou IP

@@ -21,104 +21,175 @@
                     <StackPanel Margin="5,5,0,5">
                         <Label Content="Date - Heure:" FontSize="14" Foreground="Orange" />
 
-                        <TabControl Height="214" Name="Tab_simple" Width="350" Background="#535050" >
-                            <TabItem Header="Mode Simple" Name="TabItem1" Background="#535050" Foreground="white">
-                                <StackPanel Orientation="Horizontal" Name="SP_modesimple">
-                                    <StackPanel >
-                                        <Label Content="Heure" HorizontalAlignment="Center" Margin="1" Name="LblH" VerticalAlignment="Top" Width="45" Foreground="White" HorizontalContentAlignment="Center" FontSize="10" />
-                                        <Button HorizontalAlignment="Center" Margin="1" Name="BtnPHr" Width="35" Height="24" VerticalAlignment="Top" Template="{DynamicResource GlassButton}" Foreground="White" >
-                                            <Image Source="/HoMIAdmiN;component/Images/fleche_haut_32.png" />
-                                        </Button>
-                                        <TextBox FontSize="20" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="1" Name="TxtHr" Text="0" VerticalAlignment="Top" Width="35" Background="Black" Foreground="White" />
-                                        <Button Height="24" HorizontalAlignment="Center" Margin="1" Name="BtnMHr" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                                            <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
-                                        </Button>
-                                    </StackPanel>
-                                    <StackPanel >
-                                        <Label Content="Minute" Foreground="White" HorizontalAlignment="Center" Margin="1" Name="LBLM" VerticalAlignment="Top" Width="45" HorizontalContentAlignment="Center" FontSize="10" />
-                                        <Button Height="24" HorizontalAlignment="Center" Margin="1" Name="BtnPMn" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                                            <Image Source="/HoMIAdmiN;component/Images/fleche_haut_32.png" />
-                                        </Button>
-                                        <TextBox HorizontalAlignment="Center" Margin="1" Name="TxtMn" VerticalAlignment="Top" Width="35" Text="0" FontSize="20" HorizontalContentAlignment="Center" Background="Black" Foreground="White" />
-                                        <Button Height="24" HorizontalAlignment="Center" Margin="1" Name="BtnMMn" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                                            <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
-                                        </Button>
-                                    </StackPanel>
-                                    <StackPanel >
-                                        <Label Content="Seconde" Foreground="White" HorizontalAlignment="Center"  Margin="1" Name="LBLS" VerticalAlignment="Top" Width="45" HorizontalContentAlignment="Center" FontSize="10" />
-                                        <Button Height="24" HorizontalAlignment="Center" Margin="1" Name="BtnPSc" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                                            <Image Source="/HoMIAdmiN;component/Images/fleche_haut_32.png" />
-                                        </Button>
-                                        <TextBox FontSize="20" HorizontalAlignment="Center" Margin="1" Name="TxtSc" Text="0" VerticalAlignment="Top" Width="35" HorizontalContentAlignment="Center" Background="Black" Foreground="White" />
-                                        <Button Height="24" HorizontalAlignment="Center" Margin="1" Name="BtnMSec" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
-                                            <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
-                                        </Button>
-                                    </StackPanel>
+                        <TabControl Height="214" Name="Tab_simple" Width="350" Background="black" >
 
-                                    <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
+                            <TabControl.Resources>
+                                <Style TargetType="{x:Type TabItem}">
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="HeaderTemplate">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                                <Border x:Name="grid">
+                                                    <ContentPresenter>
+                                                        <ContentPresenter.Content>
+                                                            <TextBlock Margin="1,0,1,0" FontSize="11" Text="{TemplateBinding Content}" Foreground="white"/>
+                                                        </ContentPresenter.Content>
+                                                    </ContentPresenter>
+                                                </Border>
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type TabItem}">
+                                                <Grid>
+                                                    <Border Name="Border" Margin="1,1,1,0" Background="black" BorderBrush="gray" BorderThickness="2,2,2,0" CornerRadius="5,5,0,0" >
+                                                        <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Header" Margin="10,3,10,5" RecognizesAccessKey="True">
+                                                            <ContentPresenter.LayoutTransform>
+                                                                <RotateTransform Angle="0" />
+                                                            </ContentPresenter.LayoutTransform>
+                                                        </ContentPresenter>
+                                                    </Border>
+                                                </Grid>
+                                                <ControlTemplate.Triggers>
+                                                    <Trigger Property="IsSelected" Value="True">
+                                                        <Setter Property="Panel.ZIndex" Value="100" />
+                                                        <Setter TargetName="Border" Property="Background" Value="#FF615D5D" />
+                                                    </Trigger>
+                                                </ControlTemplate.Triggers>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+
+                                <Style TargetType="TreeView">
+                                    <Setter Property="OverridesDefaultStyle" Value="True" />
+                                    <Setter Property="SnapsToDevicePixels" Value="True" />
+                                    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+                                    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="TreeView">
+                                                <Border Name="Border" CornerRadius="0" BorderThickness="0">
+                                                    <Border.BorderBrush>
+                                                        <SolidColorBrush Color="{DynamicResource BorderMediumColor}" />
+                                                    </Border.BorderBrush>
+                                                    <Border.Background>
+                                                        <SolidColorBrush Color="#FF514D4D" />
+                                                    </Border.Background>
+                                                    <ScrollViewer Focusable="False" CanContentScroll="False" Padding="0">
+                                                        <ItemsPresenter />
+                                                    </ScrollViewer>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </TabControl.Resources>
+
+                            <TabItem Header="Mode Simple" Name="Tabitem_simple" Background="#535050" Foreground="white">
+                                <StackPanel Orientation="vertical" Name="SP_modesimple">
+                                    <StackPanel Orientation="Horizontal" Name="SP_modesimplecontenu">
                                         <StackPanel >
-                                            <Label Content="Jour" HorizontalAlignment="Center" Margin="1" Name="LblJour" VerticalAlignment="Top" Width="45" Foreground="White" HorizontalContentAlignment="Center" FontSize="10" />
-                                            <Button HorizontalAlignment="Center" Margin="1" Name="BtnPJr" Width="35" Height="24" VerticalAlignment="Top" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                            <Label Content="Heure" HorizontalAlignment="Center" Margin="1" Name="LblH" VerticalAlignment="Top" Width="45" Foreground="White" HorizontalContentAlignment="Center" FontSize="10" />
+                                            <Button HorizontalAlignment="Center" Margin="1" Name="BtnPHr" Width="35" Height="24" VerticalAlignment="Top" Template="{DynamicResource GlassButton}" Foreground="White" >
                                                 <Image Source="/HoMIAdmiN;component/Images/fleche_haut_32.png" />
                                             </Button>
-                                            <TextBox FontSize="20" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="1" Name="TxtJr" Text="" VerticalAlignment="Top" Width="35" Background="Black" Foreground="White" />
-                                            <Button Height="24" HorizontalAlignment="Center" Margin="1" Name="BtnMJr" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                            <TextBox FontSize="20" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="1" Name="TxtHr" Text="0" VerticalAlignment="Top" Width="35" Background="DarkGray" BorderBrush="gray" Foreground="White" />
+                                            <Button Height="24" HorizontalAlignment="Center" Margin="1" Name="BtnMHr" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
                                                 <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
                                             </Button>
                                         </StackPanel>
                                         <StackPanel >
-                                            <Label Content="Mois" Foreground="White" HorizontalAlignment="Center" Margin="1" Name="LblMois" VerticalAlignment="Top" Width="45" HorizontalContentAlignment="Center" FontSize="10" />
-                                            <Button Height="24" HorizontalAlignment="Center" Margin="1" Name="BtnPMs" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                            <Label Content="Minute" Foreground="White" HorizontalAlignment="Center" Margin="1" Name="LBLM" VerticalAlignment="Top" Width="45" HorizontalContentAlignment="Center" FontSize="10" />
+                                            <Button Height="24" HorizontalAlignment="Center" Margin="1" Name="BtnPMn" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
                                                 <Image Source="/HoMIAdmiN;component/Images/fleche_haut_32.png" />
                                             </Button>
-                                            <TextBox HorizontalAlignment="Center" Margin="1" Name="TxtMs" VerticalAlignment="Top" Width="35" Text="" FontSize="20" HorizontalContentAlignment="Center" Background="Black" Foreground="White" />
-                                            <Button Height="24" HorizontalAlignment="Center" Margin="1" Name="BtnMMs" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                            <TextBox HorizontalAlignment="Center" Margin="1" Name="TxtMn" VerticalAlignment="Top" Width="35" Text="0" FontSize="20" HorizontalContentAlignment="Center" Background="DarkGray" BorderBrush="gray" Foreground="White" />
+                                            <Button Height="24" HorizontalAlignment="Center" Margin="1" Name="BtnMMn" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                                <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
+                                            </Button>
+                                        </StackPanel>
+                                        <StackPanel >
+                                            <Label Content="Seconde" Foreground="White" HorizontalAlignment="Center"  Margin="1" Name="LBLS" VerticalAlignment="Top" Width="45" HorizontalContentAlignment="Center" FontSize="10" />
+                                            <Button Height="24" HorizontalAlignment="Center" Margin="1" Name="BtnPSc" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                                <Image Source="/HoMIAdmiN;component/Images/fleche_haut_32.png" />
+                                            </Button>
+                                            <TextBox FontSize="20" HorizontalAlignment="Center" Margin="1" Name="TxtSc" Text="0" VerticalAlignment="Top" Width="35" HorizontalContentAlignment="Center" Background="DarkGray" BorderBrush="gray" Foreground="White" />
+                                            <Button Height="24" HorizontalAlignment="Center" Margin="1" Name="BtnMSec" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
                                                 <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
                                             </Button>
                                         </StackPanel>
 
-                                    </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
+                                            <StackPanel >
+                                                <Label Content="Jour" HorizontalAlignment="Center" Margin="1" Name="LblJour" VerticalAlignment="Top" Width="45" Foreground="White" HorizontalContentAlignment="Center" FontSize="10" />
+                                                <Button HorizontalAlignment="Center" Margin="1" Name="BtnPJr" Width="35" Height="24" VerticalAlignment="Top" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                                    <Image Source="/HoMIAdmiN;component/Images/fleche_haut_32.png" />
+                                                </Button>
+                                                <TextBox FontSize="20" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="1" Name="TxtJr" Text="" VerticalAlignment="Top" Width="35" Background="DarkGray" BorderBrush="gray" Foreground="White" />
+                                                <Button Height="24" HorizontalAlignment="Center" Margin="1" Name="BtnMJr" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
+                                                </Button>
+                                            </StackPanel>
+                                            <StackPanel >
+                                                <Label Content="Mois" Foreground="White" HorizontalAlignment="Center" Margin="1" Name="LblMois" VerticalAlignment="Top" Width="45" HorizontalContentAlignment="Center" FontSize="10" />
+                                                <Button Height="24" HorizontalAlignment="Center" Margin="1" Name="BtnPMs" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                                    <Image Source="/HoMIAdmiN;component/Images/fleche_haut_32.png" />
+                                                </Button>
+                                                <TextBox HorizontalAlignment="Center" Margin="1" Name="TxtMs" VerticalAlignment="Top" Width="35" Text="" FontSize="20" HorizontalContentAlignment="Center" Background="DarkGray" BorderBrush="gray" Foreground="White" />
+                                                <Button Height="24" HorizontalAlignment="Center" Margin="1" Name="BtnMMs" VerticalAlignment="Top" Width="35" Template="{DynamicResource GlassButton}" Foreground="White" >
+                                                    <Image Source="/HoMIAdmiN;component/Images/bullet-fleche-vers-le-bas-32.png" />
+                                                </Button>
+                                            </StackPanel>
 
-                                    <StackPanel Margin="20,0,0,0">
-                                        <CheckBox Content="Lundi" Height="15" HorizontalAlignment="Left"  Name="CheckBox1" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                        <CheckBox Content="Mardi" Height="15" HorizontalAlignment="Left"  Name="CheckBox2" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                        <CheckBox Content="Mercredi" Height="15" HorizontalAlignment="Left"  Name="CheckBox3" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                        <CheckBox Content="Jeudi" Height="15" HorizontalAlignment="Left"  Name="CheckBox4" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                        <CheckBox Content="Vendredi" Height="15" HorizontalAlignment="Left"  Name="CheckBox5" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                        <CheckBox Content="Samedi" Height="15" HorizontalAlignment="Left"  Name="CheckBox6" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                        <CheckBox Content="Dimanche" Height="15" HorizontalAlignment="Left"  Name="CheckBox7" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                        </StackPanel>
+
+                                        <StackPanel Margin="15,0,0,0">
+                                            <CheckBox Content="Lundi" Height="15" HorizontalAlignment="Left"  Name="CheckBox1" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                            <CheckBox Content="Mardi" Height="15" HorizontalAlignment="Left"  Name="CheckBox2" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                            <CheckBox Content="Mercredi" Height="15" HorizontalAlignment="Left"  Name="CheckBox3" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                            <CheckBox Content="Jeudi" Height="15" HorizontalAlignment="Left"  Name="CheckBox4" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                            <CheckBox Content="Vendredi" Height="15" HorizontalAlignment="Left"  Name="CheckBox5" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                            <CheckBox Content="Samedi" Height="15" HorizontalAlignment="Left"  Name="CheckBox6" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                            <CheckBox Content="Dimanche" Height="15" HorizontalAlignment="Left"  Name="CheckBox7" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                    <StackPanel Name="SP_modesimplealerte">
+                                        <Label Foreground="white" FontSize="10">Le mode simple est désactivé car les champs contiennent "/ , -".</Label>
+                                        <Label Foreground="white" FontSize="10">Pour réactiver le mode simple, utilisez des chiffres ou champ vide</Label>
                                     </StackPanel>
                                 </StackPanel>
-
                             </TabItem>
-                            <TabItem Header="Mode Avancé" Name="Tab_avance" Background="#535050" Foreground="white">
+                            <TabItem Header="Mode Avancé" Name="Tabitem_avance" Background="#535050" Foreground="white">
 
                                 <StackPanel Orientation="Horizontal" >
                                     <StackPanel >
                                         <Label Content="Heure" HorizontalAlignment="Center" Margin="1" Name="LblH_avance" VerticalAlignment="Top" Width="45" Foreground="White" HorizontalContentAlignment="Center" FontSize="10" />
-                                        <TextBox FontSize="20" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="1" Name="TxtHr_avance" Text="*" VerticalAlignment="Top" Width="35" Background="Black" Foreground="White" />
+                                        <TextBox FontSize="20" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="1" Name="TxtHr_avance" Text="*" VerticalAlignment="Top" Width="35" Background="DarkGray" BorderBrush="gray" Foreground="White" />
                                     </StackPanel>
                                     <StackPanel >
                                         <Label Content="Minute" Foreground="White" HorizontalAlignment="Center" Margin="1" Name="LBLM_avance" VerticalAlignment="Top" Width="45" HorizontalContentAlignment="Center" FontSize="10" />
-                                        <TextBox HorizontalAlignment="Center" Margin="1" Name="TxtMn_avance" VerticalAlignment="Top" Width="35" Text="*" FontSize="20" HorizontalContentAlignment="Center" Background="Black" Foreground="White" />
+                                        <TextBox HorizontalAlignment="Center" Margin="1" Name="TxtMn_avance" VerticalAlignment="Top" Width="35" Text="*" FontSize="20" HorizontalContentAlignment="Center" Background="DarkGray" BorderBrush="gray" Foreground="White" />
                                     </StackPanel>
                                     <StackPanel >
                                         <Label Content="Seconde" Foreground="White" HorizontalAlignment="Center"  Margin="1" Name="LBLS_avance" VerticalAlignment="Top" Width="45" HorizontalContentAlignment="Center" FontSize="10" />
-                                        <TextBox FontSize="20" HorizontalAlignment="Center" Margin="1" Name="TxtSc_avance" Text="*" VerticalAlignment="Top" Width="35" HorizontalContentAlignment="Center" Background="Black" Foreground="White" />
+                                        <TextBox FontSize="20" HorizontalAlignment="Center" Margin="1" Name="TxtSc_avance" Text="*" VerticalAlignment="Top" Width="35" HorizontalContentAlignment="Center" Background="DarkGray" BorderBrush="gray" Foreground="White" />
                                     </StackPanel>
 
-                                    <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
+                                    <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
                                         <StackPanel >
                                             <Label Content="Jour" HorizontalAlignment="Center" Margin="1" Name="LblJour_avance" VerticalAlignment="Top" Width="45" Foreground="White" HorizontalContentAlignment="Center" FontSize="10" />
-                                            <TextBox FontSize="20" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="1" Name="TxtJr_avance" Text="*" VerticalAlignment="Top" Width="35" Background="Black" Foreground="White" />
+                                            <TextBox FontSize="20" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="1" Name="TxtJr_avance" Text="*" VerticalAlignment="Top" Width="35" Background="DarkGray" BorderBrush="gray" Foreground="White" />
                                         </StackPanel>
                                         <StackPanel >
                                             <Label Content="Mois" Foreground="White" HorizontalAlignment="Center" Margin="1" Name="LblMois_avance" VerticalAlignment="Top" Width="45" HorizontalContentAlignment="Center" FontSize="10" />
-                                            <TextBox HorizontalAlignment="Center" Margin="1" Name="TxtMs_avance" VerticalAlignment="Top" Width="35" Text="*" FontSize="20" HorizontalContentAlignment="Center" Background="Black" Foreground="White" />
+                                            <TextBox HorizontalAlignment="Center" Margin="1" Name="TxtMs_avance" VerticalAlignment="Top" Width="35" Text="*" FontSize="20" HorizontalContentAlignment="Center" Background="DarkGray" BorderBrush="gray" Foreground="White" />
                                         </StackPanel>
                                     </StackPanel>
 
-                                    <StackPanel Margin="20,0,0,0">
+                                    <StackPanel Margin="15,0,0,0">
                                         <CheckBox Content="Lundi" Height="15" HorizontalAlignment="Left"  Name="CheckBox1_avance" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
                                         <CheckBox Content="Mardi" Height="15" HorizontalAlignment="Left"  Name="CheckBox2_avance" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
                                         <CheckBox Content="Mercredi" Height="15" HorizontalAlignment="Left"  Name="CheckBox3_avance" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />

@@ -975,9 +975,23 @@ HoMIDom
  </summary>
 	<returns>List of Templates</returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.CreateNewTemplate(HoMIDom.HoMIDom.Telecommande.Template)">
+	<summary>
+ Crée un nouveau template dans le répertoire templates
+ </summary>
+	<returns>0 si ok, sinon message d'erreur</returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.StartLearning(System.String,System.String)">
 	<summary>Demander un apprentissage à un driver</summary>
 	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveTemplate(System.String,HoMIDom.HoMIDom.Telecommande.Template)">
+	<summary>
+ Sauvegarde les commandes dans un template donné
+ </summary>
+	<param name="IdSrv">Id du Serveur</param>
+	<param name="Template">Nom du template</param>
+	<returns>O si ok sinon message d'erreur</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.TelecommandeSendCommand(System.String,System.String,System.String)">
 	<summary>
@@ -1870,9 +1884,23 @@ HoMIDom
  </summary>
 	<returns>0 si ok, sinon message d'erreur</returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ReadTemplate(System.String)">
+	<summary>
+ Recupère la liste des commandes d'un template donné
+ </summary>
+	<returns>Liste de commandes</returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.StartLearning(System.String,System.String)">
 	<summary>Demander un apprentissage à un driver</summary>
 	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveTemplate(System.String,HoMIDom.HoMIDom.Telecommande.Template)">
+	<summary>
+ Sauvegarde un template donné
+ </summary>
+	<param name="IdSrv">Id du Serveur</param>
+	<param name="Template">Nom du template</param>
+	<returns>O si ok sinon message d'erreur</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.TelecommandeSendCommand(System.String,System.String,System.String)">
 	<summary>

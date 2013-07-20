@@ -1151,13 +1151,13 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         <OperationContract()> Function GetListOfTemplate() As List(Of Telecommande.Template)
 
+        '''' <param name="Fabricant">nom du fabricant</param>
+        '''' <param name="Modele">modele</param>
+        '''' <param name="Driver">driver</param>
+        '''' <param name="Type">Type de base, si différent de VIDE va mettre les commandes de bases par défaut</param>
         ''' <summary>
         ''' Crée un nouveau template dans le répertoire templates
         ''' </summary>
-        ''' <param name="Fabricant">nom du fabricant</param>
-        ''' <param name="Modele">modele</param>
-        ''' <param name="Driver">driver</param>
-        ''' <param name="Type">Type de base, si différent de VIDE va mettre les commandes de bases par défaut</param>
         ''' <returns>0 si ok, sinon message d'erreur</returns>
         ''' <remarks></remarks>
         <OperationContract()> Function CreateNewTemplate(Template As Telecommande.Template) As String
@@ -1167,12 +1167,12 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         <OperationContract()> Function StartLearning(ByVal IdSrv As String, ByVal DriverId As String) As String
 
+        '''' <param name="Commandes">Liste des commandes</param>
         ''' <summary>
         ''' Sauvegarde les commandes dans un template donné
         ''' </summary>
         ''' <param name="IdSrv">Id du Serveur</param>
         ''' <param name="Template">Nom du template</param>
-        ''' <param name="Commandes">Liste des commandes</param>
         ''' <returns>O si ok sinon message d'erreur</returns>
         ''' <remarks></remarks>
         <OperationContract()> Function SaveTemplate(ByVal IdSrv As String, Template As Telecommande.Template) As String

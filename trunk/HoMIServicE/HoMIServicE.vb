@@ -64,7 +64,7 @@ Public Class HoMIServicE
             'AddHandler host.UnknownMessageReceived, AddressOf HostUnknown
             host.Open()
             log("Service Web -> Démarré : http://" & _Addrip & ":" & PortSOAP & "/service")
-            Console.WriteLine("")
+            If (Environment.UserInteractive) Then Console.WriteLine("")
 
             'Connexion au serveur
             Dim myChannelFactory As ServiceModel.ChannelFactory(Of IHoMIDom) = Nothing
@@ -98,7 +98,7 @@ Public Class HoMIServicE
             Dim apiServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP)
             HoMIDomWebAPI.HoMIDomAPI.CurrentServer = Server.Instance
             HoMIDomWebAPI.HoMIDomAPI.Start(apiServerAddress.ToString(), _IdSrv)
-            log("API Web démarré : http://" & _Addrip & ":" & PortSOAP & "/api")
+            'log("API Web démarré : http://" & _Addrip & ":" & PortSOAP & "/api")
 
             'démarrage du serveur de fichier
             hostFileServer = New ServiceHost(GetType(FileServer), fileServerAddress)
@@ -106,10 +106,12 @@ Public Class HoMIServicE
             log("Serveur de fichiers démarré : http://" & _Addrip & ":" & PortSOAP & "/fileServer")
 
             'démarrage OK
-            Console.WriteLine(" ")
-            Console.WriteLine(Now & " INFO    ****   SERVEUR DEMARRE    ****")
-            Console.WriteLine(Now & " INFO    ******************************")
-            Console.WriteLine(" ")
+            If (Environment.UserInteractive) Then
+                Console.WriteLine(" ")
+                Console.WriteLine(Now & " INFO    ****   SERVEUR DEMARRE    ****")
+                Console.WriteLine(Now & " INFO    ******************************")
+                Console.WriteLine(" ")
+            End If
 
         Catch ex As Exception
             Dim message As String = ex.ToString
