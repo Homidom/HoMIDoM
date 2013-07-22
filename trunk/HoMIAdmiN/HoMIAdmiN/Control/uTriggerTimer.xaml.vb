@@ -97,6 +97,7 @@ Public Class uTriggerTimer
                 Exit Sub
             End If
 
+            'calcul du mode complexe
             Dim _myconditiontime_avance As String = ""
             _myconditiontime_avance &= TxtSc_avance.Text & "#"
             _myconditiontime_avance &= TxtMn_avance.Text & "#"
@@ -115,21 +116,27 @@ Public Class uTriggerTimer
             _myconditiontime_avance &= _prepajr_avance
 
             Dim _myconditiontime As String = ""
-            If TxtSc.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtSc.Text) & "#"
-            If TxtMn.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtMn.Text) & "#"
-            If TxtHr.Text = "" Then _myconditiontime &= "*#" Else  : _myconditiontime &= CInt(TxtHr.Text) & "#"
-            If TxtJr.Text = "" Then _myconditiontime &= "*#" Else  : _myconditiontime &= CInt(TxtJr.Text) & "#"
-            If TxtMs.Text = "" Then _myconditiontime &= "*#" Else  : _myconditiontime &= CInt(TxtMs.Text) & "#"
-            Dim _prepajr As String = ""
-            If CheckBox7.IsChecked = True Then _prepajr = "0"
-            If CheckBox1.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",1" Else _prepajr = "1"
-            If CheckBox2.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",2" Else _prepajr = "2"
-            If CheckBox3.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",3" Else _prepajr = "3"
-            If CheckBox4.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",4" Else  : _prepajr = "4"
-            If CheckBox5.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",5" Else  : _prepajr = "5"
-            If CheckBox6.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",6" Else _prepajr = "6"
-            If _prepajr = "" Then _prepajr = "*"
-            _myconditiontime &= _prepajr
+            'Si on a des caracteres spéciaux alors on utilise le mode avancé
+            If InStr(_myconditiontime_avance, "/") = 0 Or InStr(_myconditiontime_avance, "-") = 0 Or InStr(_myconditiontime_avance, ",") = 0 Then
+                _myconditiontime = _myconditiontime_avance
+            Else
+                'sinon on utilise les champs du mode simple
+                If TxtSc.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtSc.Text) & "#"
+                If TxtMn.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtMn.Text) & "#"
+                If TxtHr.Text = "" Then _myconditiontime &= "*#" Else  : _myconditiontime &= CInt(TxtHr.Text) & "#"
+                If TxtJr.Text = "" Then _myconditiontime &= "*#" Else  : _myconditiontime &= CInt(TxtJr.Text) & "#"
+                If TxtMs.Text = "" Then _myconditiontime &= "*#" Else  : _myconditiontime &= CInt(TxtMs.Text) & "#"
+                Dim _prepajr As String = ""
+                If CheckBox7.IsChecked = True Then _prepajr = "0"
+                If CheckBox1.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",1" Else _prepajr = "1"
+                If CheckBox2.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",2" Else _prepajr = "2"
+                If CheckBox3.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",3" Else _prepajr = "3"
+                If CheckBox4.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",4" Else  : _prepajr = "4"
+                If CheckBox5.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",5" Else  : _prepajr = "5"
+                If CheckBox6.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",6" Else _prepajr = "6"
+                If _prepajr = "" Then _prepajr = "*"
+                _myconditiontime &= _prepajr
+            End If
 
             _ListMacro.Clear()
             For i As Integer = 0 To ListBox1.Items.Count - 1
@@ -137,11 +144,6 @@ Public Class uTriggerTimer
                 Dim w As CheckBox = x.Children.Item(0)
                 If w.IsChecked = True Then _ListMacro.Add(ListBox1.Items.Item(i).uid)
             Next
-
-            'Si on a des caracteres spéciaux alors on utilise le mode avancé
-            If InStr(_myconditiontime_avance, "/") = 0 Or InStr(_myconditiontime_avance, "-") = 0 Or InStr(_myconditiontime_avance, ",") = 0 Then
-                _myconditiontime = _myconditiontime_avance
-            End If
 
             If _Action = EAction.Nouveau Then
                 myService.SaveTrigger(IdSrv, "", TxtNom.Text, ChkEnable.IsChecked, 0, TxtDescription.Text, _myconditiontime, "", "", _ListMacro)
