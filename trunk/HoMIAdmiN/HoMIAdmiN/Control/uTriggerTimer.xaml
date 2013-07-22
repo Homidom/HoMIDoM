@@ -167,25 +167,25 @@
                                 <StackPanel Orientation="Horizontal" >
                                     <StackPanel >
                                         <Label Content="Heure" HorizontalAlignment="Center" Margin="1" Name="LblH_avance" VerticalAlignment="Top" Width="45" Foreground="White" HorizontalContentAlignment="Center" FontSize="10" />
-                                        <TextBox FontSize="20" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="1" Name="TxtHr_avance" Text="*" VerticalAlignment="Top" Width="35" Background="DarkGray" BorderBrush="gray" Foreground="White" />
+                                        <TextBox FontSize="15" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="1" Name="TxtHr_avance" Text="*" VerticalAlignment="Top" Width="35" Background="DarkGray" BorderBrush="gray" Foreground="White" />
                                     </StackPanel>
                                     <StackPanel >
                                         <Label Content="Minute" Foreground="White" HorizontalAlignment="Center" Margin="1" Name="LBLM_avance" VerticalAlignment="Top" Width="45" HorizontalContentAlignment="Center" FontSize="10" />
-                                        <TextBox HorizontalAlignment="Center" Margin="1" Name="TxtMn_avance" VerticalAlignment="Top" Width="35" Text="*" FontSize="20" HorizontalContentAlignment="Center" Background="DarkGray" BorderBrush="gray" Foreground="White" />
+                                        <TextBox HorizontalAlignment="Center" Margin="1" Name="TxtMn_avance" VerticalAlignment="Top" Width="35" Text="*" FontSize="15" HorizontalContentAlignment="Center" Background="DarkGray" BorderBrush="gray" Foreground="White" />
                                     </StackPanel>
                                     <StackPanel >
                                         <Label Content="Seconde" Foreground="White" HorizontalAlignment="Center"  Margin="1" Name="LBLS_avance" VerticalAlignment="Top" Width="45" HorizontalContentAlignment="Center" FontSize="10" />
-                                        <TextBox FontSize="20" HorizontalAlignment="Center" Margin="1" Name="TxtSc_avance" Text="*" VerticalAlignment="Top" Width="35" HorizontalContentAlignment="Center" Background="DarkGray" BorderBrush="gray" Foreground="White" />
+                                        <TextBox FontSize="15" HorizontalAlignment="Center" Margin="1" Name="TxtSc_avance" Text="*" VerticalAlignment="Top" Width="35" HorizontalContentAlignment="Center" Background="DarkGray" BorderBrush="gray" Foreground="White" />
                                     </StackPanel>
 
                                     <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
                                         <StackPanel >
                                             <Label Content="Jour" HorizontalAlignment="Center" Margin="1" Name="LblJour_avance" VerticalAlignment="Top" Width="45" Foreground="White" HorizontalContentAlignment="Center" FontSize="10" />
-                                            <TextBox FontSize="20" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="1" Name="TxtJr_avance" Text="*" VerticalAlignment="Top" Width="35" Background="DarkGray" BorderBrush="gray" Foreground="White" />
+                                            <TextBox FontSize="15" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="1" Name="TxtJr_avance" Text="*" VerticalAlignment="Top" Width="35" Background="DarkGray" BorderBrush="gray" Foreground="White" />
                                         </StackPanel>
                                         <StackPanel >
                                             <Label Content="Mois" Foreground="White" HorizontalAlignment="Center" Margin="1" Name="LblMois_avance" VerticalAlignment="Top" Width="45" HorizontalContentAlignment="Center" FontSize="10" />
-                                            <TextBox HorizontalAlignment="Center" Margin="1" Name="TxtMs_avance" VerticalAlignment="Top" Width="35" Text="*" FontSize="20" HorizontalContentAlignment="Center" Background="DarkGray" BorderBrush="gray" Foreground="White" />
+                                            <TextBox HorizontalAlignment="Center" Margin="1" Name="TxtMs_avance" VerticalAlignment="Top" Width="35" Text="*" FontSize="15" HorizontalContentAlignment="Center" Background="DarkGray" BorderBrush="gray" Foreground="White" />
                                         </StackPanel>
                                     </StackPanel>
 
