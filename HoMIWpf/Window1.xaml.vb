@@ -516,7 +516,7 @@ Class Window1
             x.Start()
             x = Nothing
 
-            Dim mypush As New PushNotification("Http://localhost:7999/live", "123456789")
+            Dim mypush As New PushNotification("Http://" & IP & ":" & PortSOAP & "/live", "123456789")
             AddHandler mypush.DeviceChanged, AddressOf DeviceChanged
             mypush.Open()
 
