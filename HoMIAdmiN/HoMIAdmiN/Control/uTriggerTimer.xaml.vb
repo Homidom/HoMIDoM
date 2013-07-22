@@ -591,6 +591,7 @@ Public Class uTriggerTimer
 
 #Region "Gestion mode avancé"
     Private Sub TxtHr_avance_TextChanged(sender As System.Object, e As System.Windows.Controls.TextChangedEventArgs) Handles TxtHr_avance.TextChanged
+        If TxtHr_avance.Text = "" Or TxtHr_avance.Text = " " Then TxtHr_avance.Text = "*"
         If InStr(TxtHr_avance.Text, "/") Or InStr(TxtHr_avance.Text, ",") Or InStr(TxtHr_avance.Text, "-") Then
             SP_modesimplecontenu.Visibility = Windows.Visibility.Collapsed
             SP_modesimplealerte.Visibility = Windows.Visibility.Visible
@@ -600,6 +601,7 @@ Public Class uTriggerTimer
         End If
     End Sub
     Private Sub TxtMn_avance_TextChanged(sender As System.Object, e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMn_avance.TextChanged
+        If TxtMn_avance.Text = "" Or TxtMn_avance.Text = " " Then TxtMn_avance.Text = "*"
         If InStr(TxtMn_avance.Text, "/") Or InStr(TxtMn_avance.Text, ",") Or InStr(TxtMn_avance.Text, "-") Then
             SP_modesimplecontenu.Visibility = Windows.Visibility.Collapsed
             SP_modesimplealerte.Visibility = Windows.Visibility.Visible
@@ -609,6 +611,7 @@ Public Class uTriggerTimer
         End If
     End Sub
     Private Sub TxtSc_avance_TextChanged(sender As System.Object, e As System.Windows.Controls.TextChangedEventArgs) Handles TxtSc_avance.TextChanged
+        If TxtSc_avance.Text = "" Or TxtSc_avance.Text = " " Then TxtSc_avance.Text = "*"
         If InStr(TxtSc_avance.Text, "/") Or InStr(TxtSc_avance.Text, ",") Or InStr(TxtSc_avance.Text, "-") Then
             SP_modesimplecontenu.Visibility = Windows.Visibility.Collapsed
             SP_modesimplealerte.Visibility = Windows.Visibility.Visible
@@ -618,6 +621,7 @@ Public Class uTriggerTimer
         End If
     End Sub
     Private Sub TxtMs_avance_TextChanged(sender As System.Object, e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMs_avance.TextChanged
+        If TxtMs_avance.Text = "" Or TxtMs_avance.Text = " " Then TxtMs_avance.Text = "*"
         If InStr(TxtMs_avance.Text, "/") Or InStr(TxtMs_avance.Text, ",") Or InStr(TxtMs_avance.Text, "-") Then
             SP_modesimplecontenu.Visibility = Windows.Visibility.Collapsed
             SP_modesimplealerte.Visibility = Windows.Visibility.Visible
@@ -627,6 +631,7 @@ Public Class uTriggerTimer
         End If
     End Sub
     Private Sub TxtJr_avance_TextChanged(sender As System.Object, e As System.Windows.Controls.TextChangedEventArgs) Handles TxtJr_avance.TextChanged
+        If TxtJr_avance.Text = "" Or TxtJr_avance.Text = " " Then TxtJr_avance.Text = "*"
         If InStr(TxtJr_avance.Text, "/") Or InStr(TxtJr_avance.Text, ",") Or InStr(TxtJr_avance.Text, "-") Then
             SP_modesimplecontenu.Visibility = Windows.Visibility.Collapsed
             SP_modesimplealerte.Visibility = Windows.Visibility.Visible
