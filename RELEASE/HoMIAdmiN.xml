@@ -6,69 +6,13 @@ HoMIAdmiN
 </name>
 </assembly>
 <members>
-<member name="M:WpfApplication1.WTelecommande.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.WTelecommande">
-	<summary>
-WTelecommande
-</summary>
-</member><member name="M:WpfApplication1.WindowImg.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.WindowImg">
-	<summary>
-WindowImg
-</summary>
-</member><member name="M:WpfApplication1.uHisto.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uHisto">
-	<summary>
-uHisto
-</summary>
-</member><member name="M:WpfApplication1.uDevice.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uDevice">
-	<summary>
-uDevice
-</summary>
-</member><member name="M:WpfApplication1.uCondition.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uCondition">
-	<summary>
-uCondition
-</summary>
-</member><member name="M:WpfApplication1.uCtrlImgMnu.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uCtrlImgMnu">
-	<summary>
-uCtrlImgMnu
-</summary>
-</member><member name="M:WpfApplication1.uModuleSimple.InitializeComponent">
+<member name="M:WpfApplication1.uModuleSimple.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
 </member><member name="T:WpfApplication1.uModuleSimple">
 	<summary>
 uModuleSimple
-</summary>
-</member><member name="M:WpfApplication1.uNewDevice.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uNewDevice">
-	<summary>
-uNewDevice
 </summary>
 </member><member name="M:WpfApplication1.uConfigServer.InitializeComponent">
 	<summary>
@@ -78,29 +22,25 @@ InitializeComponent
 	<summary>
 uConfigServer
 </summary>
-</member><member name="M:WpfApplication1.Window2.InitializeComponent">
+</member><member name="M:WpfApplication1.Window1.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.Window2">
+</member><member name="T:WpfApplication1.Window1">
 	<summary>
-Window2
+Window1
 </summary>
-</member><member name="M:WpfApplication1.uReleve.InitializeComponent">
+</member><member name="M:WpfApplication1.Application.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uReleve">
+</member><member name="M:WpfApplication1.Application.Main">
 	<summary>
-uReleve
+Application Entry Point.
 </summary>
-</member><member name="M:WpfApplication1.uElement.InitializeComponent">
+</member><member name="T:WpfApplication1.Application">
 	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uElement">
-	<summary>
-uElement
+Application
 </summary>
 </member><member name="M:WpfApplication1.uAction.InitializeComponent">
 	<summary>
@@ -110,13 +50,29 @@ InitializeComponent
 	<summary>
 uAction
 </summary>
-</member><member name="M:WpfApplication1.Window3.InitializeComponent">
+</member><member name="M:WpfApplication1.uElement.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.Window3">
+</member><member name="T:WpfApplication1.uElement">
 	<summary>
-Window3
+uElement
+</summary>
+</member><member name="M:WpfApplication1.uZone.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uZone">
+	<summary>
+uZone
+</summary>
+</member><member name="M:WpfApplication1.WindowImg.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.WindowImg">
+	<summary>
+WindowImg
 </summary>
 </member><member name="M:WpfApplication1.uTriggerTimer.InitializeComponent">
 	<summary>
@@ -126,13 +82,141 @@ InitializeComponent
 	<summary>
 uTriggerTimer
 </summary>
-</member><member name="M:WpfApplication1.Window1.InitializeComponent">
+</member><member name="M:WpfApplication1.uTestDevice.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.Window1">
+</member><member name="T:WpfApplication1.uTestDevice">
 	<summary>
-Window1
+uTestDevice
+</summary>
+</member><member name="M:WpfApplication1.Window2.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.Window2">
+	<summary>
+Window2
+</summary>
+</member><member name="M:WpfApplication1.uScenario.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uScenario">
+	<summary>
+uScenario
+</summary>
+</member><member name="M:WpfApplication1.uDriver.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uDriver">
+	<summary>
+uDriver
+</summary>
+</member><member name="M:WpfApplication1.uMainMenu.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uMainMenu">
+	<summary>
+uMainMenu
+</summary>
+</member><member name="M:WpfApplication1.uTriggerDevice.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uTriggerDevice">
+	<summary>
+uTriggerDevice
+</summary>
+</member><member name="M:WpfApplication1.uMacro.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uMacro">
+	<summary>
+uMacro
+</summary>
+</member><member name="M:WpfApplication1.uLog.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uLog">
+	<summary>
+uLog
+</summary>
+</member><member name="M:WpfApplication1.uCondition.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uCondition">
+	<summary>
+uCondition
+</summary>
+</member><member name="M:WpfApplication1.WActionParametrage.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.WActionParametrage">
+	<summary>
+WActionParametrage
+</summary>
+</member><member name="M:WpfApplication1.uNewDevice.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uNewDevice">
+	<summary>
+uNewDevice
+</summary>
+</member><member name="M:WpfApplication1.uSelectElmt.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uSelectElmt">
+	<summary>
+uSelectElmt
+</summary>
+</member><member name="M:WpfApplication1.Window3.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.Window3">
+	<summary>
+Window3
+</summary>
+</member><member name="M:WpfApplication1.uDevice.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uDevice">
+	<summary>
+uDevice
+</summary>
+</member><member name="M:WpfApplication1.uHisto.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uHisto">
+	<summary>
+uHisto
+</summary>
+</member><member name="M:WpfApplication1.WTelecommande.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.WTelecommande">
+	<summary>
+WTelecommande
+</summary>
+</member><member name="M:WpfApplication1.WTelecommandeNew.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.WTelecommandeNew">
+	<summary>
+WTelecommandeNew
 </summary>
 </member><member name="M:WpfApplication1.uHelp.InitializeComponent">
 	<summary>
@@ -142,6 +226,14 @@ InitializeComponent
 	<summary>
 uHelp
 </summary>
+</member><member name="M:WpfApplication1.uCtrlImgMnu.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uCtrlImgMnu">
+	<summary>
+uCtrlImgMnu
+</summary>
 </member><member name="M:WpfApplication1.uUser.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -149,22 +241,6 @@ InitializeComponent
 </member><member name="T:WpfApplication1.uUser">
 	<summary>
 uUser
-</summary>
-</member><member name="M:WpfApplication1.uTestDevice.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uTestDevice">
-	<summary>
-uTestDevice
-</summary>
-</member><member name="M:WpfApplication1.uScenario.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uScenario">
-	<summary>
-uScenario
 </summary>
 </member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
 	<summary>
@@ -190,120 +266,40 @@ AddEventHandler
 	<summary>
 GeneratedInternalTypeHelper
 </summary>
-</member><member name="M:WpfApplication1.uDriver.InitializeComponent">
+</member><member name="M:WpfApplication1.uReleve.InitializeComponent">
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:WpfApplication1.uDriver">
+</member><member name="T:WpfApplication1.uReleve">
 	<summary>
-uDriver
+uReleve
 </summary>
-</member><member name="M:WpfApplication1.uMainMenu.InitializeComponent">
+</member><member name="P:WpfApplication1.ClServer.Nom">
 	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uMainMenu">
+ Nom du serveur
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:WpfApplication1.ClServer.Adresse">
 	<summary>
-uMainMenu
-</summary>
-</member><member name="M:WpfApplication1.uMacro.InitializeComponent">
+ Adresse du serveur
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:WpfApplication1.ClServer.Defaut">
 	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uMacro">
+ True si l'adresse est celle utilisée par défaut
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:WpfApplication1.ClServer">
 	<summary>
-uMacro
-</summary>
-</member><member name="M:WpfApplication1.Application.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="M:WpfApplication1.Application.Main">
-	<summary>
-Application Entry Point.
-</summary>
-</member><member name="T:WpfApplication1.Application">
-	<summary>
-Application
-</summary>
-</member><member name="M:WpfApplication1.WActionParametrage.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.WActionParametrage">
-	<summary>
-WActionParametrage
-</summary>
-</member><member name="M:WpfApplication1.uLog.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uLog">
-	<summary>
-uLog
-</summary>
-</member><member name="M:WpfApplication1.uTriggerDevice.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uTriggerDevice">
-	<summary>
-uTriggerDevice
-</summary>
-</member><member name="M:WpfApplication1.uSelectElmt.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uSelectElmt">
-	<summary>
-uSelectElmt
-</summary>
-</member><member name="M:WpfApplication1.uZone.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.uZone">
-	<summary>
-uZone
-</summary>
-</member><member name="M:WpfApplication1.WTelecommandeNew.InitializeComponent">
-	<summary>
-InitializeComponent
-</summary>
-</member><member name="T:WpfApplication1.WTelecommandeNew">
-	<summary>
-WTelecommandeNew
-</summary>
-</member><member name="P:WpfApplication1.My.Resources.Resources.ResourceManager">
-	<summary>
-  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
-</summary>
-</member><member name="P:WpfApplication1.My.Resources.Resources.Culture">
-	<summary>
-  Remplace la propriété CurrentUICulture du thread actuel pour toutes
-  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
-</summary>
-</member><member name="P:WpfApplication1.My.Resources.Resources.ExempleVBS">
-	<summary>
-  Recherche une chaîne localisée semblable à 'EXEMPLE *******************************************
-'***************************************************
-Imports System
-Imports System.IO
-Imports System.Windows.Forms
-Imports Microsoft.VisualBasic
-Imports Homidom                                                                  
-Namespace Dynam
- 'Ne pas supprimer cette class
- Public Class DynamicCode
-   
-  'Ne pas supprimer cette function 
-  Public Function ExecuteCode(paramarray prmParameters() as object) as object
-   Dim objTest as new TestCl [le reste de la chaîne a été tronqué]";.
-</summary>
-</member><member name="T:WpfApplication1.My.Resources.Resources">
-	<summary>
-  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
-</summary>
+ Classe utilisée dans la liste des serveurs 
+ </summary>
+	<remarks></remarks>
 </member><member name="P:WpfApplication1.My.MyWpfExtension.Application">
 	<summary>
  Retourne l'objet application pour l'application en cours d'exécution
@@ -330,32 +326,24 @@ Namespace Dynam
  Module utilisé pour définir les propriétés qui sont disponibles dans l'espace de noms My pour WPF
  </summary>
 	<remarks></remarks>
-</member><member name="M:WpfApplication1.Fonctions.AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog,System.String,System.String,System.String)">
+</member><member name="M:WpfApplication1.Window1.Connect_Srv(System.String,System.String,System.String)">
 	<summary>
- Affiche le message et connecté log dans le serveur
+ Sélection d'un serveur pour connexion dans le sous menu connexion ou au démarrage
  </summary>
-	<param name="Type"></param>
-	<param name="Message"></param>
-	<param name="Title"></param>
-	<param name="Fonction"></param>
+	<param name="Name"></param>
+	<param name="IP"></param>
+	<param name="Port"></param>
 	<remarks></remarks>
-</member><member name="M:WpfApplication1.Fonctions.Download(System.String,System.String,System.String)">
+</member><member name="M:WpfApplication1.Window1.PageConnexion">
 	<summary>
- Télécharge un fichier depuis le serveur
+ Affiche la fenêtre de connexion
  </summary>
-	<param name="IdServ">Id du serveur</param>
-	<param name="Fichier">Chemin local vers le fichier à envoyer, p.ex "C:\zik.mp3"</param>
-	<param name="Location">Endroit où stocker le fichier sur le serveur, p.ex. "Musique/zik.mp3"</param>
-	<returns>-1 en cas d'erreur, 0 en cas de réussite.</returns>
 	<remarks></remarks>
-</member><member name="M:WpfApplication1.Fonctions.Upload(System.String,System.String,System.String)">
+</member><member name="M:WpfApplication1.Window1.AffControlPage(System.Object)">
 	<summary>
- Envoi un fichier au serveur
+ Affiche le usercontrol et l'anime
  </summary>
-	<param name="IdServ">Id du serveur</param>
-	<param name="Fichier">Chemin local vers le fichier à envoyer, p.ex "C:\zik.mp3"</param>
-	<param name="Location">Endroit où stocker le fichier sur le serveur, p.ex. "Musique/zik.mp3"</param>
-	<returns>-1 en cas d'erreur, 0 en cas de réussite.</returns>
+	<param name="Objet"></param>
 	<remarks></remarks>
 </member><member name="M:WpfApplication1.WTelecommande.BtnNewCmd_Click(System.Object,System.Windows.RoutedEventArgs)">
 	<summary>
@@ -515,51 +503,63 @@ Namespace Dynam
 	<param name="sender"></param>
 	<param name="e"></param>
 	<remarks></remarks>
-</member><member name="P:WpfApplication1.ClServer.Nom">
+</member><member name="M:WpfApplication1.Fonctions.AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog,System.String,System.String,System.String)">
 	<summary>
- Nom du serveur
+ Affiche le message et connecté log dans le serveur
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="Type"></param>
+	<param name="Message"></param>
+	<param name="Title"></param>
+	<param name="Fonction"></param>
 	<remarks></remarks>
-</member><member name="P:WpfApplication1.ClServer.Adresse">
+</member><member name="M:WpfApplication1.Fonctions.Download(System.String,System.String,System.String)">
 	<summary>
- Adresse du serveur
+ Télécharge un fichier depuis le serveur
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdServ">Id du serveur</param>
+	<param name="Fichier">Chemin local vers le fichier à envoyer, p.ex "C:\zik.mp3"</param>
+	<param name="Location">Endroit où stocker le fichier sur le serveur, p.ex. "Musique/zik.mp3"</param>
+	<returns>-1 en cas d'erreur, 0 en cas de réussite.</returns>
 	<remarks></remarks>
-</member><member name="P:WpfApplication1.ClServer.Defaut">
+</member><member name="M:WpfApplication1.Fonctions.Upload(System.String,System.String,System.String)">
 	<summary>
- True si l'adresse est celle utilisée par défaut
+ Envoi un fichier au serveur
  </summary>
-	<value></value>
-	<returns></returns>
+	<param name="IdServ">Id du serveur</param>
+	<param name="Fichier">Chemin local vers le fichier à envoyer, p.ex "C:\zik.mp3"</param>
+	<param name="Location">Endroit où stocker le fichier sur le serveur, p.ex. "Musique/zik.mp3"</param>
+	<returns>-1 en cas d'erreur, 0 en cas de réussite.</returns>
 	<remarks></remarks>
-</member><member name="T:WpfApplication1.ClServer">
+</member><member name="P:WpfApplication1.My.Resources.Resources.ResourceManager">
 	<summary>
- Classe utilisée dans la liste des serveurs 
- </summary>
-	<remarks></remarks>
-</member><member name="M:WpfApplication1.Window1.Connect_Srv(System.String,System.String,System.String)">
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member><member name="P:WpfApplication1.My.Resources.Resources.Culture">
 	<summary>
- Sélection d'un serveur pour connexion dans le sous menu connexion ou au démarrage
- </summary>
-	<param name="Name"></param>
-	<param name="IP"></param>
-	<param name="Port"></param>
-	<remarks></remarks>
-</member><member name="M:WpfApplication1.Window1.PageConnexion">
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="P:WpfApplication1.My.Resources.Resources.ExempleVBS">
 	<summary>
- Affiche la fenêtre de connexion
- </summary>
-	<remarks></remarks>
-</member><member name="M:WpfApplication1.Window1.AffControlPage(System.Object)">
+  Recherche une chaîne localisée semblable à 'EXEMPLE *******************************************
+'***************************************************
+Imports System
+Imports System.IO
+Imports System.Windows.Forms
+Imports Microsoft.VisualBasic
+Imports Homidom                                                                  
+Namespace Dynam
+ 'Ne pas supprimer cette class
+ Public Class DynamicCode
+   
+  'Ne pas supprimer cette function 
+  Public Function ExecuteCode(paramarray prmParameters() as object) as object
+   Dim objTest as new TestCl [le reste de la chaîne a été tronqué]";.
+</summary>
+</member><member name="T:WpfApplication1.My.Resources.Resources">
 	<summary>
- Affiche le usercontrol et l'anime
- </summary>
-	<param name="Objet"></param>
-	<remarks></remarks>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
 </member>
 </members>
 </doc>
