@@ -163,43 +163,46 @@
                                 </StackPanel>
                             </TabItem>
                             <TabItem Header="Mode Avancé" Name="Tabitem_avance" Background="#535050" Foreground="white">
-
-                                <StackPanel Orientation="Horizontal" >
-                                    <StackPanel >
-                                        <Label Content="Heure" HorizontalAlignment="Center" Margin="1" Name="LblH_avance" VerticalAlignment="Top" Width="45" Foreground="White" HorizontalContentAlignment="Center" FontSize="10" />
-                                        <TextBox FontSize="15" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="1" Name="TxtHr_avance" Text="*" VerticalAlignment="Top" Width="35" Background="DarkGray" BorderBrush="gray" Foreground="White" />
-                                    </StackPanel>
-                                    <StackPanel >
-                                        <Label Content="Minute" Foreground="White" HorizontalAlignment="Center" Margin="1" Name="LBLM_avance" VerticalAlignment="Top" Width="45" HorizontalContentAlignment="Center" FontSize="10" />
-                                        <TextBox HorizontalAlignment="Center" Margin="1" Name="TxtMn_avance" VerticalAlignment="Top" Width="35" Text="*" FontSize="15" HorizontalContentAlignment="Center" Background="DarkGray" BorderBrush="gray" Foreground="White" />
-                                    </StackPanel>
-                                    <StackPanel >
-                                        <Label Content="Seconde" Foreground="White" HorizontalAlignment="Center"  Margin="1" Name="LBLS_avance" VerticalAlignment="Top" Width="45" HorizontalContentAlignment="Center" FontSize="10" />
-                                        <TextBox FontSize="15" HorizontalAlignment="Center" Margin="1" Name="TxtSc_avance" Text="*" VerticalAlignment="Top" Width="35" HorizontalContentAlignment="Center" Background="DarkGray" BorderBrush="gray" Foreground="White" />
-                                    </StackPanel>
-
-                                    <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
+                                <StackPanel Orientation="vertical" Name="SP_modeavance">
+                                    <StackPanel Orientation="Horizontal" >
                                         <StackPanel >
-                                            <Label Content="Jour" HorizontalAlignment="Center" Margin="1" Name="LblJour_avance" VerticalAlignment="Top" Width="45" Foreground="White" HorizontalContentAlignment="Center" FontSize="10" />
-                                            <TextBox FontSize="15" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="1" Name="TxtJr_avance" Text="*" VerticalAlignment="Top" Width="35" Background="DarkGray" BorderBrush="gray" Foreground="White" />
+                                            <Label Content="Heure" HorizontalAlignment="Center" Margin="1" Name="LblH_avance" VerticalAlignment="Top" Width="45" Foreground="White" HorizontalContentAlignment="Center" FontSize="10" />
+                                            <TextBox FontSize="13" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="1" Name="TxtHr_avance" Text="*" VerticalAlignment="Top" Width="40" Background="DarkGray" BorderBrush="gray" Foreground="White" />
                                         </StackPanel>
                                         <StackPanel >
-                                            <Label Content="Mois" Foreground="White" HorizontalAlignment="Center" Margin="1" Name="LblMois_avance" VerticalAlignment="Top" Width="45" HorizontalContentAlignment="Center" FontSize="10" />
-                                            <TextBox HorizontalAlignment="Center" Margin="1" Name="TxtMs_avance" VerticalAlignment="Top" Width="35" Text="*" FontSize="15" HorizontalContentAlignment="Center" Background="DarkGray" BorderBrush="gray" Foreground="White" />
+                                            <Label Content="Minute" Foreground="White" HorizontalAlignment="Center" Margin="1" Name="LBLM_avance" VerticalAlignment="Top" Width="45" HorizontalContentAlignment="Center" FontSize="10" />
+                                            <TextBox HorizontalAlignment="Center" Margin="1" Name="TxtMn_avance" VerticalAlignment="Top" Width="40" Text="*" FontSize="13" HorizontalContentAlignment="Center" Background="DarkGray" BorderBrush="gray" Foreground="White" />
+                                        </StackPanel>
+                                        <StackPanel >
+                                            <Label Content="Seconde" Foreground="White" HorizontalAlignment="Center"  Margin="1" Name="LBLS_avance" VerticalAlignment="Top" Width="45" HorizontalContentAlignment="Center" FontSize="10" />
+                                            <TextBox FontSize="13" HorizontalAlignment="Center" Margin="1" Name="TxtSc_avance" Text="*" VerticalAlignment="Top" Width="40" HorizontalContentAlignment="Center" Background="DarkGray" BorderBrush="gray" Foreground="White" />
+                                        </StackPanel>
+
+                                        <StackPanel Orientation="Horizontal" Margin="15,0,0,0">
+                                            <StackPanel >
+                                                <Label Content="Jour" HorizontalAlignment="Center" Margin="1" Name="LblJour_avance" VerticalAlignment="Top" Width="45" Foreground="White" HorizontalContentAlignment="Center" FontSize="10" />
+                                                <TextBox FontSize="13" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Margin="1" Name="TxtJr_avance" Text="*" VerticalAlignment="Top" Width="40" Background="DarkGray" BorderBrush="gray" Foreground="White" />
+                                            </StackPanel>
+                                            <StackPanel >
+                                                <Label Content="Mois" Foreground="White" HorizontalAlignment="Center" Margin="1" Name="LblMois_avance" VerticalAlignment="Top" Width="45" HorizontalContentAlignment="Center" FontSize="10" />
+                                                <TextBox HorizontalAlignment="Center" Margin="1" Name="TxtMs_avance" VerticalAlignment="Top" Width="40" Text="*" FontSize="13" HorizontalContentAlignment="Center" Background="DarkGray" BorderBrush="gray" Foreground="White" />
+                                            </StackPanel>
+                                        </StackPanel>
+
+                                        <StackPanel Margin="15,0,0,0">
+                                            <CheckBox Content="Lundi" Height="15" HorizontalAlignment="Left"  Name="CheckBox1_avance" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                            <CheckBox Content="Mardi" Height="15" HorizontalAlignment="Left"  Name="CheckBox2_avance" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                            <CheckBox Content="Mercredi" Height="15" HorizontalAlignment="Left"  Name="CheckBox3_avance" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                            <CheckBox Content="Jeudi" Height="15" HorizontalAlignment="Left"  Name="CheckBox4_avance" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                            <CheckBox Content="Vendredi" Height="15" HorizontalAlignment="Left"  Name="CheckBox5_avance" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                            <CheckBox Content="Samedi" Height="15" HorizontalAlignment="Left"  Name="CheckBox6_avance" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                            <CheckBox Content="Dimanche" Height="15" HorizontalAlignment="Left"  Name="CheckBox7_avance" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
                                         </StackPanel>
                                     </StackPanel>
-
-                                    <StackPanel Margin="15,0,0,0">
-                                        <CheckBox Content="Lundi" Height="15" HorizontalAlignment="Left"  Name="CheckBox1_avance" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                        <CheckBox Content="Mardi" Height="15" HorizontalAlignment="Left"  Name="CheckBox2_avance" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                        <CheckBox Content="Mercredi" Height="15" HorizontalAlignment="Left"  Name="CheckBox3_avance" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                        <CheckBox Content="Jeudi" Height="15" HorizontalAlignment="Left"  Name="CheckBox4_avance" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                        <CheckBox Content="Vendredi" Height="15" HorizontalAlignment="Left"  Name="CheckBox5_avance" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                        <CheckBox Content="Samedi" Height="15" HorizontalAlignment="Left"  Name="CheckBox6_avance" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                        <CheckBox Content="Dimanche" Height="15" HorizontalAlignment="Left"  Name="CheckBox7_avance" VerticalAlignment="Top" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                    <StackPanel Name="SP_exempleavance">
+                                        <ListBox Height="50" Width="300" HorizontalAlignment="Left" Margin="2" Foreground="white" FontSize="10" Name="LBL_cron_avance_ex1" ></ListBox>
                                     </StackPanel>
                                 </StackPanel>
-
                             </TabItem>
                         </TabControl>
                     </StackPanel>
