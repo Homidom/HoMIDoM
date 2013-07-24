@@ -516,10 +516,6 @@ Class Window1
             x.Start()
             x = Nothing
 
-            Dim mypush As New PushNotification("Http://" & IP & ":" & PortSOAP & "/live", "123456789")
-            AddHandler mypush.DeviceChanged, AddressOf DeviceChanged
-            mypush.Open()
-
             myxml = Nothing
             frmMere = Me
 
@@ -675,14 +671,7 @@ Class Window1
         End Try
 
         Try
-            'Dim dirInfo As New System.IO.DirectoryInfo(Fichier)
-            'Dim file As System.IO.FileInfo
-            'Dim files() As System.IO.FileInfo = dirInfo.GetFiles("HoMIWpF.xml")
             Dim myxml As XML
-
-            'If (files IsNot Nothing) Then
-            'For Each file In files
-            'Dim myfile As String = File.FullName
             Dim list As XmlNodeList
 
             myxml = New XML(Fichier)
@@ -1549,6 +1538,10 @@ Class Window1
                 Else
                     myService.GetServerVersion()
                     IsConnect = True
+
+                    Dim mypush As New PushNotification("Http://" & IP & ":" & PortSOAP & "/live", IdSrv)
+                    AddHandler mypush.DeviceChanged, AddressOf DeviceChanged
+                    mypush.Open()
 
                     MnuMacro.Items.Clear()
                     For Each _mac As Macro In myService.GetAllMacros(IdSrv)
@@ -2708,13 +2701,24 @@ Class Window1
 
             If x.DialogResult.HasValue And x.DialogResult.Value Then
                 imgStackPnl.Children.Clear()
-                For i As Integer = 0 To ListMnu.Count - 1
-                    If ListMnu.Item(i).Type = uCtrlImgMnu.TypeOfMnu.Zone Then
-                        If ListMnu.Item(i).Visible = True Then imgStackPnl.Children.Add(ListMnu.Item(i))
+                For Each mnu In ListMnu
+                    RemoveHandler mnu.click, AddressOf IconMnuDoubleClick
+
+                    If mnu.Type = uCtrlImgMnu.TypeOfMnu.Zone Then
+                        If mnu.Visible = True Then imgStackPnl.Children.Add(mnu)
                     Else
-                        imgStackPnl.Children.Add(ListMnu.Item(i))
+                        imgStackPnl.Children.Add(mnu)
                     End If
+
+                    AddHandler mnu.click, AddressOf IconMnuDoubleClick
                 Next
+                'For i As Integer = 0 To ListMnu.Count - 1
+                '    If ListMnu.Item(i).Type = uCtrlImgMnu.TypeOfMnu.Zone Then
+                '        If ListMnu.Item(i).Visible = True Then imgStackPnl.Children.Add(ListMnu.Item(i))
+                '    Else
+                '        imgStackPnl.Children.Add(ListMnu.Item(i))
+                '    End If
+                'Next
                 If x.ChkFullScreen.IsChecked = False Then
                     Me.WindowState = Windows.WindowState.Normal
                 Else
