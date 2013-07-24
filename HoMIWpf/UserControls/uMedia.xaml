@@ -10,7 +10,7 @@
         <MediaElement Height="300" Name="MediaElement1" VerticalAlignment="Stretch" Width="300" />
         <StackPanel Name="Toolbar" Background=" Gray">
             <StackPanel Name="StkInfo" Orientation="Horizontal" >
-                <Image Name="ImgThumb" Height="80" Width="80" />
+                <Image Name="ImgThumb" Height="80" Width="80" Source="/HoMIWpF;component/Images/multimedia_128.png" />
                 <StackPanel >
                 <StackPanel Orientation="Horizontal" >
                     <Label Content="Titre:" Foreground=" White" FontSize="10" />

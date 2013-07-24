@@ -317,15 +317,15 @@ Public Class uMedia
             SliderSeek.Value = 0
         End If
 
-        LblTitle.Content = ""
-        LblArtiste.Content = ""
-        LblAlbum.Content = ""
-        LblComment.Content = ""
-        LblGenre.Content = ""
-        LblDuree.Content = ""
-        LblAnnee.Content = ""
+        'LblTitle.Content = ""
+        'LblArtiste.Content = ""
+        'LblAlbum.Content = ""
+        'LblComment.Content = ""
+        'LblGenre.Content = ""
+        'LblDuree.Content = ""
+        'LblAnnee.Content = ""
 
-        ImgThumb.Source = Nothing
+        'ImgThumb.Source = Nothing
     End Sub
 
     Private Sub BtnRecul_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles BtnRecul.MouseDown
@@ -384,7 +384,7 @@ Public Class uMedia
                     bImg.EndInit()
                     ImgThumb.Source = bImg
                 Else
-                    ImgThumb.Visibility = Windows.Visibility.Collapsed
+                    'ImgThumb.Visibility = Windows.Visibility.Collapsed
                 End If
 
                 X = Nothing
