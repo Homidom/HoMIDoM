@@ -354,6 +354,18 @@ Module Fonctions
                         Return Now.ToShortTimeString
                     Case "SYSTEM_LONG_TIME"
                         Return Now.ToLongTimeString
+                    Case "SYSTEM_SOLEIL_COUCHE"
+                        If IsConnect Then
+                            Return myService.GetHeureCoucherSoleil
+                        Else
+                            Return ""
+                        End If
+                    Case "SYSTEM_SOLEIL_LEVE"
+                        If IsConnect Then
+                            Return myService.GetHeureLeverSoleil
+                        Else
+                            Return ""
+                        End If
                     Case "SYSTEM_CONDITION"
                         If AllDevices IsNot Nothing And String.IsNullOrEmpty(frmMere.Ville) = False Then
                             For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In AllDevices

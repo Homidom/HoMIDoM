@@ -21,7 +21,18 @@
                             <StackPanel Orientation="Horizontal" >
                                 <Label Width="120" Content="Etiquette:" Foreground="White"/>
                                  <TextBox Name="TxtEtiq" Width="150" />
-                            </StackPanel>
+                                    <ComboBox Name="cbBalise" Margin="5,0,0,0" Width="25" IsEditable="False" ToolTip=" Balise Système" SelectedIndex=" 0">
+                                        <ComboBoxItem Content="Date Courte" Tag="SYSTEM_DATE" />
+                                        <ComboBoxItem Content="Date Long" Tag="SYSTEM_LONG_DATE" />
+                                        <ComboBoxItem Content="Heure Courte" Tag="SYSTEM_TIME" />
+                                        <ComboBoxItem Content="Heure Long" Tag="SYSTEM_LONG_TIME" />
+                                        <ComboBoxItem Content="Heure couché soleil" Tag="SYSTEM_SOLEIL_COUCHE" />
+                                        <ComboBoxItem Content="Heure levé soleil" Tag="SYSTEM_SOLEIL_LEVE" />
+                                        <ComboBoxItem Content="Condition météo de ma ville" Tag="SYSTEM_CONDITION" />
+                                        <ComboBoxItem Content="Température actuelle de ma ville" Tag="SYSTEM_TEMP_ACTUELLE" />
+                                        <ComboBoxItem Content="Image météo de ma ville" Tag="SYSTEM_ICO_METEO" />
+                                    </ComboBox>
+                                </StackPanel>
                             <StackPanel Orientation="Horizontal" >
                                 <Label Width="120" Content="Size Etiquette:" Foreground="White"/>
                                 <TextBox Name="TxtSizeEtiq" Width="50" />
@@ -80,8 +91,9 @@
                             <StackPanel Orientation="Horizontal" >
                                 <CheckBox Name="ChkEditValue" Content="Valeur Editable" Foreground=" White" Background="DarkGray" BorderBrush="Black"/>
                         </StackPanel>
-
-                        <StackPanel Name="StkPicture"  >
+                            <Expander Foreground=" White" Header="Picture">
+                                <StackPanel >
+                                <StackPanel Name="StkPicture"  >
                                 <CheckBox Name="ChkPicture" Content="Picture Visible" Foreground=" White" Background="DarkGray" BorderBrush="Black"/>
                             <StackPanel Orientation="Horizontal" >
                                 <Label Width="120" Content="Picture:" Foreground="White"/>
@@ -95,6 +107,8 @@
                                 </StackPanel> 
                             </StackPanel>
                           </StackPanel>
+                                    </StackPanel> 
+                                </Expander> 
                         <StackPanel Name="StkStatus">
             <StackPanel  Orientation="Horizontal" >
             <Label Width="120" Content="Defaut Status:" Foreground="White"/>
