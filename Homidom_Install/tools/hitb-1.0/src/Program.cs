@@ -194,6 +194,7 @@ namespace hitb
         {
             try
             {
+                KillProcess("HoMIGuI");
                 KillProcess("HomiWpf");
                 KillProcess("HomiAdmin");
                 KillProcess("HomidomService");
