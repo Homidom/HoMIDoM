@@ -374,6 +374,16 @@ Module Fonctions
                         Else
                             Return "# °C"
                         End If
+                    Case "SYSTEM_ICO_METEO"
+                        If AllDevices IsNot Nothing And String.IsNullOrEmpty(frmMere.Ville) = False Then
+                            For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In AllDevices
+                                If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True And ObjMeteo.Name.ToUpper = frmMere.Ville.ToUpper Then
+                                    Return ObjMeteo.IconActuel
+                                End If
+                            Next
+                        Else
+                            Return ""
+                        End If
                     Case Else
                         Return " "
                 End Select

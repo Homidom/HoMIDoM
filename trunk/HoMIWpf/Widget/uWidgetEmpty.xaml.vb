@@ -3,6 +3,7 @@ Imports System.Reflection
 Imports System.Threading
 Imports WpfAnimatedGif
 Imports System.Windows.Media.Animation
+Imports System.IO
 
 Public Class uWidgetEmpty
     Public Enum TypeOfWidget
@@ -1075,9 +1076,23 @@ Public Class uWidgetEmpty
                 End If
             End If
 
-            Lbl.Content = TraiteBalise(Etiquette)
+            If Etiquette.ToUpper <> "<SYSTEM_ICO_METEO>" Then
+                Lbl.Content = TraiteBalise(Etiquette)
+            Else
+                Dim chm As String = ""
+                If File.Exists(_MonRepertoire & "\Images\Meteo\" & TraiteBalise(Etiquette) & ".png") = True Then
+                    chm = _MonRepertoire & "\Images\Meteo\" & TraiteBalise(Etiquette) & ".png"
+                Else
+                    chm = _MonRepertoire & "\Images\Meteo\na.png"
+                End If
+                If Image.Tag <> chm Then
+                    ImageBehavior.SetAnimatedSource(Image, New BitmapImage(New Uri(chm)))
+                    Image.Tag = chm
+                End If
+                Lbl.Content = frmMere.Ville
+            End If
 
-            Me.UpdateLayout()
+                Me.UpdateLayout()
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Refresh: " & ex.Message, "Erreur", " uWidgetEmpty.Refresh")
             _dt.Stop()
