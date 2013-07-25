@@ -105,20 +105,21 @@ Public Class uTriggerTimer
             _myconditiontime_avance &= TxtHr_avance.Text & "#"
             _myconditiontime_avance &= TxtJr_avance.Text & "#"
             _myconditiontime_avance &= TxtMs_avance.Text & "#"
-            Dim _prepajr_avance As String = ""
-            If CheckBox7_avance.IsChecked = True Then _prepajr_avance = "0"
-            If CheckBox1_avance.IsChecked = True Then If _prepajr_avance <> "" Then _prepajr_avance &= ",1" Else _prepajr_avance = "1"
-            If CheckBox2_avance.IsChecked = True Then If _prepajr_avance <> "" Then _prepajr_avance &= ",2" Else _prepajr_avance = "2"
-            If CheckBox3_avance.IsChecked = True Then If _prepajr_avance <> "" Then _prepajr_avance &= ",3" Else _prepajr_avance = "3"
-            If CheckBox4_avance.IsChecked = True Then If _prepajr_avance <> "" Then _prepajr_avance &= ",4" Else _prepajr_avance = "4"
-            If CheckBox5_avance.IsChecked = True Then If _prepajr_avance <> "" Then _prepajr_avance &= ",5" Else _prepajr_avance = "5"
-            If CheckBox6_avance.IsChecked = True Then If _prepajr_avance <> "" Then _prepajr_avance &= ",6" Else _prepajr_avance = "6"
-            If _prepajr_avance = "" Then _prepajr_avance = "*"
-            _myconditiontime_avance &= _prepajr_avance
 
             Dim _myconditiontime As String = ""
             'Si on a des caracteres spéciaux alors on utilise le mode avancé
             If InStr(_myconditiontime_avance, "/") = 0 Or InStr(_myconditiontime_avance, "-") = 0 Or InStr(_myconditiontime_avance, ",") = 0 Then
+                'on ajoute les jours
+                Dim _prepajr_avance As String = ""
+                If CheckBox7_avance.IsChecked = True Then _prepajr_avance = "0"
+                If CheckBox1_avance.IsChecked = True Then If _prepajr_avance <> "" Then _prepajr_avance &= ",1" Else _prepajr_avance = "1"
+                If CheckBox2_avance.IsChecked = True Then If _prepajr_avance <> "" Then _prepajr_avance &= ",2" Else _prepajr_avance = "2"
+                If CheckBox3_avance.IsChecked = True Then If _prepajr_avance <> "" Then _prepajr_avance &= ",3" Else _prepajr_avance = "3"
+                If CheckBox4_avance.IsChecked = True Then If _prepajr_avance <> "" Then _prepajr_avance &= ",4" Else _prepajr_avance = "4"
+                If CheckBox5_avance.IsChecked = True Then If _prepajr_avance <> "" Then _prepajr_avance &= ",5" Else _prepajr_avance = "5"
+                If CheckBox6_avance.IsChecked = True Then If _prepajr_avance <> "" Then _prepajr_avance &= ",6" Else _prepajr_avance = "6"
+                If _prepajr_avance = "" Then _prepajr_avance = "*"
+                _myconditiontime_avance &= _prepajr_avance
                 _myconditiontime = _myconditiontime_avance
             Else
                 'sinon on utilise les champs du mode simple
@@ -307,7 +308,7 @@ Public Class uTriggerTimer
         End Try
     End Function
 
-#Region "Gestion Date/time"
+#Region "Gestion Date/time mode simple"
     Private Sub BtnPHr_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnPHr.Click
         Try
             Dim i As Integer
@@ -659,33 +660,107 @@ Public Class uTriggerTimer
         End Try
     End Sub
     Private Sub CheckBox1_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CheckBox1.Click
-        If CheckBox1.IsChecked Then CheckBox1_avance.IsChecked = True Else CheckBox1_avance.IsChecked = False
-        simulate_cron_simple()
+        Try
+            If CheckBox1.IsChecked Then CheckBox1_avance.IsChecked = True Else CheckBox1_avance.IsChecked = False
+            simulate_cron_simple()
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer CheckBox1_Checked: " & ex.Message, "ERREUR", "")
+        End Try
     End Sub
     Private Sub CheckBox2_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CheckBox2.Click
-        If CheckBox2.IsChecked Then CheckBox2_avance.IsChecked = True Else CheckBox2_avance.IsChecked = False
-        simulate_cron_simple()
+        Try
+            If CheckBox2.IsChecked Then CheckBox2_avance.IsChecked = True Else CheckBox2_avance.IsChecked = False
+            simulate_cron_simple()
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer CheckBox2_Checked: " & ex.Message, "ERREUR", "")
+        End Try
     End Sub
     Private Sub CheckBox3_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CheckBox3.Click
-        If CheckBox3.IsChecked Then CheckBox3_avance.IsChecked = True Else CheckBox3_avance.IsChecked = False
-        simulate_cron_simple()
+        Try
+            If CheckBox3.IsChecked Then CheckBox3_avance.IsChecked = True Else CheckBox3_avance.IsChecked = False
+            simulate_cron_simple()
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer CheckBox3_Checked: " & ex.Message, "ERREUR", "")
+        End Try
     End Sub
     Private Sub CheckBox4_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CheckBox4.Click
-        If CheckBox4.IsChecked Then CheckBox4_avance.IsChecked = True Else CheckBox4_avance.IsChecked = False
-        simulate_cron_simple()
+        Try
+            If CheckBox4.IsChecked Then CheckBox4_avance.IsChecked = True Else CheckBox4_avance.IsChecked = False
+            simulate_cron_simple()
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer CheckBox4_Checked: " & ex.Message, "ERREUR", "")
+        End Try
     End Sub
     Private Sub CheckBox5_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CheckBox5.Click
-        If CheckBox5.IsChecked Then CheckBox5_avance.IsChecked = True Else CheckBox5_avance.IsChecked = False
-        simulate_cron_simple()
+        Try
+            If CheckBox5.IsChecked Then CheckBox5_avance.IsChecked = True Else CheckBox5_avance.IsChecked = False
+            simulate_cron_simple()
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer CheckBox5_Checked: " & ex.Message, "ERREUR", "")
+        End Try
     End Sub
     Private Sub CheckBox6_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CheckBox6.Click
-        If CheckBox6.IsChecked Then CheckBox6_avance.IsChecked = True Else CheckBox6_avance.IsChecked = False
-        simulate_cron_simple()
+        Try
+            If CheckBox6.IsChecked Then CheckBox6_avance.IsChecked = True Else CheckBox6_avance.IsChecked = False
+            simulate_cron_simple()
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer CheckBox6_Checked: " & ex.Message, "ERREUR", "")
+        End Try
+    End Sub
+    Private Sub CheckBox7_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CheckBox7.Click
+        Try
+            If CheckBox7.IsChecked Then CheckBox7_avance.IsChecked = True Else CheckBox7_avance.IsChecked = False
+            simulate_cron_simple()
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer CheckBox7_Checked: " & ex.Message, "ERREUR", "")
+        End Try
+    End Sub
+
+    Private Sub simulate_cron_simple()
+        Try
+            'on formate le cron avec les données
+            Dim _myconditiontime As String = ""
+            Try
+                If TxtSc.Text = "" Then _myconditiontime &= "* " Else _myconditiontime &= TxtSc.Text & " "
+                If TxtMn.Text = "" Then _myconditiontime &= "* " Else _myconditiontime &= TxtMn.Text & " "
+                If TxtHr.Text = "" Then _myconditiontime &= "* " Else _myconditiontime &= TxtHr.Text & " "
+                If TxtJr.Text = "" Then _myconditiontime &= "* " Else _myconditiontime &= TxtJr.Text & " "
+                If TxtMs.Text = "" Then _myconditiontime &= "* " Else _myconditiontime &= TxtMs.Text & " "
+                Dim _prepajr As String = ""
+                If CheckBox7.IsChecked = True Then _prepajr = "0"
+                If CheckBox1.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",1" Else _prepajr = "1"
+                If CheckBox2.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",2" Else _prepajr = "2"
+                If CheckBox3.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",3" Else _prepajr = "3"
+                If CheckBox4.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",4" Else _prepajr = "4"
+                If CheckBox5.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",5" Else _prepajr = "5"
+                If CheckBox6.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",6" Else _prepajr = "6"
+                If _prepajr = "" Then _prepajr = "*"
+                _myconditiontime &= _prepajr
+            Catch ex As Exception
+                Exit Sub
+            End Try
+
+            'on essaye de recuperer les prochaines occurences
+            Try
+                Dim nextcron As Date
+                listeprochainscronssimple.Text = ""
+                nextcron = CrontabSchedule.Parse(_myconditiontime).GetNextOccurrence(DateAndTime.Now)
+                listeprochainscronssimple.Text &= nextcron.ToString("yyyy-MM-dd HH:mm:ss") & vbCrLf
+                For i As Integer = 1 To 7
+                    nextcron = CrontabSchedule.Parse(_myconditiontime).GetNextOccurrence(nextcron)
+                    listeprochainscronssimple.Text &= nextcron.ToString("yyyy-MM-dd HH:mm:ss") & vbCrLf
+                Next
+            Catch ex As Exception
+                listeprochainscronssimple.Text = "Erreur... "
+            End Try
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer simulate_cron_simple: " & ex.ToString, "ERREUR", "")
+        End Try
     End Sub
 
 #End Region
 
-#Region "Gestion mode avancé"
+#Region "Gestion Date/time mode avancé"
     Private Sub TxtHr_avance_TextChanged(sender As System.Object, e As System.Windows.Controls.TextChangedEventArgs) Handles TxtHr_avance.TextChanged
         Try
             If TxtHr_avance.Text = "" Or TxtHr_avance.Text = " " Then TxtHr_avance.Text = "*"
@@ -787,30 +862,61 @@ Public Class uTriggerTimer
         End Try
     End Sub
     Private Sub CheckBox1_avance_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CheckBox1_avance.Click
-        If CheckBox1_avance.IsChecked Then CheckBox1.IsChecked = True Else CheckBox1.IsChecked = False
-        simulate_cron_avance()
+        Try
+            If CheckBox1_avance.IsChecked Then CheckBox1.IsChecked = True Else CheckBox1.IsChecked = False
+            simulate_cron_avance()
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer CheckBox1_avance_Checked: " & ex.Message, "ERREUR", "")
+        End Try
     End Sub
     Private Sub CheckBox2_avance_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CheckBox2_avance.Click
-        If CheckBox2_avance.IsChecked Then CheckBox2.IsChecked = True Else CheckBox2.IsChecked = False
-        simulate_cron_avance()
+        Try
+            If CheckBox2_avance.IsChecked Then CheckBox2.IsChecked = True Else CheckBox2.IsChecked = False
+            simulate_cron_avance()
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer CheckBox2_avance_Checked: " & ex.Message, "ERREUR", "")
+        End Try
     End Sub
     Private Sub CheckBox3_avance_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CheckBox3_avance.Click
-        If CheckBox3_avance.IsChecked Then CheckBox3.IsChecked = True Else CheckBox3.IsChecked = False
-        simulate_cron_avance()
+        Try
+            If CheckBox3_avance.IsChecked Then CheckBox3.IsChecked = True Else CheckBox3.IsChecked = False
+            simulate_cron_avance()
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer CheckBox3_avance_Checked: " & ex.Message, "ERREUR", "")
+        End Try
     End Sub
     Private Sub CheckBox4_avance_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CheckBox4_avance.Click
-        If CheckBox4_avance.IsChecked Then CheckBox4.IsChecked = True Else CheckBox4.IsChecked = False
-        simulate_cron_avance()
+        Try
+            If CheckBox4_avance.IsChecked Then CheckBox4.IsChecked = True Else CheckBox4.IsChecked = False
+            simulate_cron_avance()
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer CheckBox4_avance_Checked: " & ex.Message, "ERREUR", "")
+        End Try
     End Sub
     Private Sub CheckBox5_avance_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CheckBox5_avance.Click
-        If CheckBox5_avance.IsChecked Then CheckBox5.IsChecked = True Else CheckBox5.IsChecked = False
-        simulate_cron_avance()
+        Try
+            If CheckBox5_avance.IsChecked Then CheckBox5.IsChecked = True Else CheckBox5.IsChecked = False
+            simulate_cron_avance()
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer CheckBox5_avance_Checked: " & ex.Message, "ERREUR", "")
+        End Try
     End Sub
     Private Sub CheckBox6_avance_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CheckBox6_avance.Click
-        If CheckBox6_avance.IsChecked Then CheckBox6.IsChecked = True Else CheckBox6.IsChecked = False
-        simulate_cron_avance()
+        Try
+            If CheckBox6_avance.IsChecked Then CheckBox6.IsChecked = True Else CheckBox6.IsChecked = False
+            simulate_cron_avance()
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer CheckBox6_avance_Checked: " & ex.Message, "ERREUR", "")
+        End Try
     End Sub
-#End Region
+    Private Sub CheckBox7_avance_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CheckBox7_avance.Click
+        Try
+            If CheckBox7_avance.IsChecked Then CheckBox7.IsChecked = True Else CheckBox7.IsChecked = False
+            simulate_cron_avance()
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer CheckBox7_avance_Checked: " & ex.Message, "ERREUR", "")
+        End Try
+    End Sub
 
     Private Sub simulate_cron_avance()
         Try
@@ -857,47 +963,8 @@ Public Class uTriggerTimer
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer simulate_cron_avance: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
-    Private Sub simulate_cron_simple()
-        Try
-            'on formate le cron avec les données
-            Dim _myconditiontime As String = ""
-            Try
-                If TxtSc.Text = "" Then _myconditiontime &= "* " Else _myconditiontime &= TxtSc.Text & " "
-                If TxtMn.Text = "" Then _myconditiontime &= "* " Else _myconditiontime &= TxtMn.Text & " "
-                If TxtHr.Text = "" Then _myconditiontime &= "* " Else _myconditiontime &= TxtHr.Text & " "
-                If TxtJr.Text = "" Then _myconditiontime &= "* " Else _myconditiontime &= TxtJr.Text & " "
-                If TxtMs.Text = "" Then _myconditiontime &= "* " Else _myconditiontime &= TxtMs.Text & " "
-                Dim _prepajr As String = ""
-                If CheckBox7.IsChecked = True Then _prepajr = "0"
-                If CheckBox1.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",1" Else _prepajr = "1"
-                If CheckBox2.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",2" Else _prepajr = "2"
-                If CheckBox3.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",3" Else _prepajr = "3"
-                If CheckBox4.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",4" Else _prepajr = "4"
-                If CheckBox5.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",5" Else _prepajr = "5"
-                If CheckBox6.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",6" Else _prepajr = "6"
-                If _prepajr = "" Then _prepajr = "*"
-                _myconditiontime &= _prepajr
-            Catch ex As Exception
-                Exit Sub
-            End Try
 
-            'on essaye de recuperer les prochaines occurences
-            Try
-                Dim nextcron As Date
-                listeprochainscronssimple.Text = ""
-                nextcron = CrontabSchedule.Parse(_myconditiontime).GetNextOccurrence(DateAndTime.Now)
-                listeprochainscronssimple.Text &= nextcron.ToString("yyyy-MM-dd HH:mm:ss") & vbCrLf
-                For i As Integer = 1 To 7
-                    nextcron = CrontabSchedule.Parse(_myconditiontime).GetNextOccurrence(nextcron)
-                    listeprochainscronssimple.Text &= nextcron.ToString("yyyy-MM-dd HH:mm:ss") & vbCrLf
-                Next
-            Catch ex As Exception
-                listeprochainscronssimple.Text = "Erreur... "
-            End Try
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer simulate_cron_simple: " & ex.ToString, "ERREUR", "")
-        End Try
-    End Sub
+#End Region
 
 
 End Class
