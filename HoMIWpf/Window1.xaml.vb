@@ -931,6 +931,8 @@ Class Window1
                                 x.TailleStatus = list.Item(j).Attributes.Item(k).Value
                             Case "tailleetiquette"
                                 x.TailleEtiquette = list.Item(j).Attributes.Item(k).Value
+                            Case "alignementetiquette"
+                                x.EtiquetteAlignement = list.Item(j).Attributes.Item(k).Value
                             Case "colorbackground"
                                 If String.IsNullOrEmpty(list.Item(j).Attributes.Item(k).Value) = False Then
                                     Dim a As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 2, 2))
@@ -1302,6 +1304,9 @@ Class Window1
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("tailleetiquette")
                 writer.WriteValue(_ListElement.Item(i).TailleEtiquette)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("alignementetiquette")
+                writer.WriteValue(_ListElement.Item(i).EtiquetteAlignement)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("colorbackground")
                 'writer.WriteValue(_ListElement.Item(i).ColorBackGround.ToString)
@@ -1932,6 +1937,7 @@ Class Window1
                             y.ShowPicture = _ListElement.Item(j).ShowPicture
                             y.Picture = _ListElement.Item(j).Picture
                             y.Etiquette = _ListElement.Item(j).Etiquette
+                            y.EtiquetteAlignement = _ListElement.Item(j).EtiquetteAlignement
                             y.DefautLabelStatus = _ListElement.Item(j).DefautLabelStatus
                             y.TailleStatus = _ListElement.Item(j).TailleStatus
                             y.TailleEtiquette = _ListElement.Item(j).TailleEtiquette
@@ -2044,6 +2050,7 @@ Class Window1
                     y.DefautLabelStatus = _ListElement.Item(i).DefautLabelStatus
                     y.TailleStatus = _ListElement.Item(i).TailleStatus
                     y.TailleEtiquette = _ListElement.Item(i).TailleEtiquette
+                    y.EtiquetteAlignement = _ListElement.Item(i).EtiquetteAlignement
                     y.MaJEtiquetteFromServeur = _ListElement.Item(i).MaJEtiquetteFromServeur
                     y.ColorBackGround = _ListElement.Item(i).ColorBackGround
                     y.ColorEtiquette = _ListElement.Item(i).ColorEtiquette

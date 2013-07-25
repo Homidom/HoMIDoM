@@ -32,15 +32,26 @@
                                 <TextBox Name="TxtColorEtiquette" Width="0" Text="" Background="{Binding ElementName=ColorPicker3, Path=SelectedColor}" Visibility="Collapsed" />
                                 <my:Colorpicker x:Name="ColorPicker3" Width="177" />
                             </StackPanel>
-                            </StackPanel>
+                                <StackPanel Orientation="Horizontal" >
+                                    <Label Content="Alignement:" Foreground=" White"/>
+                                    <ComboBox IsEditable="False" Width="90" Name="CbEtiqAlign" SelectedIndex=" 0">
+                                        <ComboBoxItem Content="Gauche" />
+                                        <ComboBoxItem Content="Centré" />
+                                        <ComboBoxItem Content="Droite" />
+                                        <ComboBoxItem Content="Etiré" />
+                                    </ComboBox>
+                                </StackPanel>
+                                </StackPanel>
                             <CheckBox Name="ChkShowStatus" Content="Afficher Status" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                             <CheckBox  Name="ChkFondu" Content="Fondu" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                             <CheckBox  Name="ChkIsCommun" Content="Commun à toutes les pages" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
-                            <StackPanel Orientation="Horizontal" >
+                            <Expander Name="Exp1" Foreground=" White" Header="Taille et Position">
+                                <StackPanel >
+                                    <StackPanel Orientation="Horizontal" >
                                 <Label Width="120" Content="X:" Foreground="White"/>
                                 <TextBox Name="TxtX" Width="150" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" >
+                            </StackPanel>
+                                <StackPanel Orientation="Horizontal" >
             <Label Width="120" Content="Y:" Foreground="White"/>
                 <TextBox Name="TxtY" Width="150" />
             </StackPanel>
@@ -64,7 +75,9 @@
                             <Label Width="120" Content="RotationY:" Foreground="White"/>
                             <TextBox Name="TxtRotationY" Width="150" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" >
+                                </StackPanel>
+                            </Expander>
+                            <StackPanel Orientation="Horizontal" >
                                 <CheckBox Name="ChkEditValue" Content="Valeur Editable" Foreground=" White" Background="DarkGray" BorderBrush="Black"/>
                         </StackPanel>
 
