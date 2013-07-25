@@ -1241,4 +1241,8 @@ Public Class WWidgetProperty
         GrpPropertyKeyPad.Visibility = Windows.Visibility.Collapsed
     End Sub
 #End Region
+
+    Private Sub cbBalise_SelectionChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles cbBalise.SelectionChanged
+        TxtEtiq.Text = "<" & cbBalise.SelectedItem.Tag & ">"
+    End Sub
 End Class
