@@ -31,6 +31,7 @@ Public Class uWidgetEmpty
     Dim _Etiquette As String = "" 'Etiquette
     Dim _TailleEtiquette As Double = 9
     Dim _ColorEtiquette As SolidColorBrush = Brushes.White
+    Dim _EtiquetteAlignement As Windows.HorizontalAlignment = Windows.HorizontalAlignment.Center
     Dim _MaJEtiqFromServer As Boolean = True
     Dim _X As Double = 0
     Dim _Y As Double = 0
@@ -477,6 +478,21 @@ Public Class uWidgetEmpty
             _ColorEtiquette = value
             If _Show = False Then Exit Property
             Lbl.Foreground = value
+        End Set
+    End Property
+
+    Public Property EtiquetteAlignement As Windows.HorizontalAlignment
+        Get
+            Return _EtiquetteAlignement
+        End Get
+        Set(value As Windows.HorizontalAlignment)
+            Try
+                _EtiquetteAlignement = value
+                Lbl.HorizontalContentAlignment = _EtiquetteAlignement
+            Catch ex As Exception
+                _EtiquetteAlignement = Windows.HorizontalAlignment.Center
+                Lbl.HorizontalContentAlignment = _EtiquetteAlignement
+            End Try
         End Set
     End Property
 

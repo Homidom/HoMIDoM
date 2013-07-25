@@ -38,6 +38,7 @@ Public Class WWidgetProperty
                 lblColor.Background = Obj.ColorBackGround
                 lblColorStatus.Background = Obj.ColorStatus
                 lblColorEtiquette.Background = Obj.ColorEtiquette
+                CbEtiqAlign.SelectedIndex = Obj.EtiquetteAlignement
                 ColorPicker1.SelectedColor = Obj.ColorBackGround
                 ColorPicker2.SelectedColor = Obj.ColorStatus
                 ColorPicker3.SelectedColor = Obj.ColorEtiquette
@@ -240,6 +241,7 @@ Public Class WWidgetProperty
             Obj.CanEditValue = ChkEditValue.IsChecked
             Obj.MaJEtiquetteFromServeur = ChkMajEtiq.IsChecked
             Obj.Etiquette = TxtEtiq.Text
+            Obj.EtiquetteAlignement = CbEtiqAlign.SelectedIndex
             Obj.X = TxtX.Text
             Obj.Y = TxtY.Text
             Obj.Width = TxtWidth.Text
