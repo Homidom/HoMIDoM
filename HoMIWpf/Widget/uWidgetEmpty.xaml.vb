@@ -963,11 +963,16 @@ Public Class uWidgetEmpty
                 If _Visuel.Count > 0 Then
                     For Each _ElmtVisu As cWidget.Visu In _Visuel
                         _dev = ReturnDeviceById(_ElmtVisu.IdObject)
+
                         If _dev IsNot Nothing Then
-                            If _dev.Value = _ElmtVisu.Value Then
-                                If Image.Tag <> _ElmtVisu.Image Then
-                                    Picture = _ElmtVisu.Image
+                            If _dev.Type <> HoMIDom.HoMIDom.Device.ListeDevices.METEO Then
+                                If _dev.Value = _ElmtVisu.Value Then
+                                    If Image.Tag <> _ElmtVisu.Image Then
+                                        Picture = _ElmtVisu.Image
+                                    End If
                                 End If
+                            Else
+
                             End If
                         End If
                     Next
