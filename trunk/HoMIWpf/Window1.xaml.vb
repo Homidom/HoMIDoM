@@ -496,7 +496,6 @@ Class Window1
             'Mise en forme du scrollviewer
             ScrollViewer1.Content = imgStackPnl
 
-
             'Timer pour afficher la date & heure et levé/couché soleil
             Dim dt As DispatcherTimer = New DispatcherTimer()
             AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
@@ -554,16 +553,39 @@ Class Window1
     End Sub
 
     Private Sub MaJ_Device(Source As TemplateDevice, Destination As TemplateDevice)
+        Destination.Type = Source.Type
+        If Source.Type = Device.ListeDevices.METEO Then
+            Destination.ConditionActuel = Source.ConditionActuel
+            Destination.ConditionJ1 = Source.ConditionActuel
+            Destination.ConditionJ2 = Source.ConditionJ2
+            Destination.ConditionJ3 = Source.ConditionJ3
+            Destination.ConditionToday = Source.ConditionToday
+            Destination.IconJ1 = Source.IconJ1
+            Destination.IconJ2 = Source.IconJ2
+            Destination.IconJ3 = Source.IconJ3
+            Destination.IconToday = Source.IconToday
+            Destination.JourJ1 = Source.JourJ1
+            Destination.JourJ2 = Source.JourJ2
+            Destination.JourJ3 = Source.JourJ3
+            Destination.JourToday = Source.JourToday
+            Destination.MaxJ1 = Source.MaxJ1
+            Destination.MaxJ2 = Source.MaxJ2
+            Destination.MaxJ3 = Source.MaxJ3
+            Destination.MaxToday = Source.MaxToday
+            Destination.MinJ1 = Source.MinJ1
+            Destination.MinJ2 = Source.MinJ2
+            Destination.MinJ3 = Source.MinJ3
+            Destination.MinToday = Source.MinToday
+            Destination.TemperatureActuel = Source.TemperatureActuel
+            Destination.VentActuel = Source.VentActuel
+            Destination.HumiditeActuel = Source.HumiditeActuel
+            Destination.IconActuel = Source.IconActuel
+        End If
         Destination.Name = Source.Name
         Destination.Value = Source.Value
         Destination.Adresse1 = Source.Adresse1
         Destination.Adresse2 = Source.Adresse2
         Destination.AllValue = Source.AllValue
-        Destination.ConditionActuel = Source.ConditionActuel
-        Destination.ConditionJ1 = Source.ConditionActuel
-        Destination.ConditionJ2 = Source.ConditionJ2
-        Destination.ConditionJ3 = Source.ConditionJ3
-        Destination.ConditionToday = Source.ConditionToday
         Destination.Correction = Source.Correction
         Destination.DateCreated = Source.DateCreated
         Destination.Description = Source.Description
@@ -572,42 +594,22 @@ Class Window1
         Destination.Enable = Source.Enable
         Destination.Formatage = Source.Formatage
         Destination.GetDeviceCommandePlus = Source.GetDeviceCommandePlus
-        Destination.HumiditeActuel = Source.HumiditeActuel
-        Destination.IconActuel = Source.IconActuel
-        Destination.IconJ1 = Source.IconJ1
-        Destination.IconJ2 = Source.IconJ2
-        Destination.IconJ3 = Source.IconJ3
-        Destination.IconToday = Source.IconToday
         Destination.ID = Source.ID
-        Destination.JourJ1 = Source.JourJ1
-        Destination.JourJ2 = Source.JourJ2
-        Destination.JourJ3 = Source.JourJ3
-        Destination.JourToday = Source.JourToday
         Destination.LastChange = Source.LastChange
         Destination.LastChangeDuree = Source.LastChangeDuree
         Destination.LastEtat = Source.LastEtat
-        Destination.MaxJ1 = Source.MaxJ1
-        Destination.MaxJ2 = Source.MaxJ2
-        Destination.MaxJ3 = Source.MaxJ3
-        Destination.MaxToday = Source.MaxToday
-        Destination.MinJ1 = Source.MinJ1
-        Destination.MinJ2 = Source.MinJ2
-        Destination.MinJ3 = Source.MinJ3
-        Destination.MinToday = Source.MinToday
         Destination.Modele = Source.Modele
         Destination.Picture = Source.Picture
         Destination.Precision = Source.Precision
         Destination.Puissance = Source.Puissance
         Destination.Refresh = Source.Refresh
         Destination.Solo = Source.Solo
-        Destination.TemperatureActuel = Source.TemperatureActuel
-        Destination.Type = Source.Type
         Destination.Unit = Source.Unit
         Destination.ValueDef = Source.ValueDef
         Destination.ValueLast = Source.ValueLast
         Destination.ValueMax = Source.ValueMax
         Destination.ValueMin = Source.ValueMin
-        Destination.VentActuel = Source.VentActuel
+
     End Sub
 
     Private Sub NewLog(ByVal TypLog As HoMIDom.HoMIDom.Server.TypeLog, ByVal Source As HoMIDom.HoMIDom.Server.TypeSource, ByVal Fonction As String, ByVal Message As String) 'Evènement lorsqu'un nouveau log est écrit
@@ -1621,15 +1623,7 @@ Class Window1
         Try
 
             If IsConnect Then
-
                 LblTime.Content = Now.ToLongDateString & " " & myService.GetTime
-
-                'If Now.Second = 0 Then
-                '    Dim x As New Thread(AddressOf Refresh)
-                '    x.Start()
-                '    x = Nothing
-                'End If
-
             Else
                 LblTime.Content = Now.ToLongDateString & " " & Now.ToLongTimeString
             End If
@@ -1651,6 +1645,13 @@ Class Window1
                 End If
             End If
 
+            If Now.Second = 0 Then
+                'MaJ Liste des devices au moins toutes les minutes
+                Dim x As New Thread(AddressOf Refresh)
+                x.Priority = ThreadPriority.Highest
+                x.Start()
+                x = Nothing
+            End If
         Catch ex As Exception
             IsConnect = False
 

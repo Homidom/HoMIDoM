@@ -1108,7 +1108,7 @@ Public Class uWidgetEmpty
                 Lbl.Content = frmMere.Ville
             End If
 
-                Me.UpdateLayout()
+            Me.UpdateLayout()
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Refresh: " & ex.Message, "Erreur", " uWidgetEmpty.Refresh")
             _dt.Stop()
