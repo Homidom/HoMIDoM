@@ -938,4 +938,13 @@ Partial Public Class uDevice
     End Sub
 
 #End Region
+
+    'gestion des options non compatibles entre elle
+    Private Sub ChKAllValue_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ChKAllValue.Click
+        If ChKAllValue.IsChecked Then ChKLastEtat.IsChecked = False
+    End Sub
+    Private Sub ChKLastEtat_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ChKLastEtat.Click
+        If ChKLastEtat.IsChecked Then ChKAllValue.IsChecked = False
+    End Sub
+
 End Class

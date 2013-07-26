@@ -12,10 +12,10 @@
                     <Label Name="Label2" Foreground="White">Nom:</Label>
                     <StackPanel Orientation="Horizontal" >
                             <TextBox Height="22" Name="TxtNom" Width="215" Foreground="White" Background="DarkGray" BorderBrush="Black" ToolTip="Obligatoire: Nom du composant"/>
-                            <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Name="ChkEnable" IsChecked="True">Enable</CheckBox>
+                            <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Name="ChkEnable" IsChecked="True" ToolTip="Si non coché, le composant n'est pas utilisé dans HoMIDoM">Enable</CheckBox>
                             <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Name="ChKSolo" IsChecked="True" ToolTip="Utiliser dans certains drivers pour permettre de mettre à jour plusieurs composants d'un seul coup si décoché.">Solo</CheckBox>
-                            <CheckBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Name="ChKLastEtat" IsChecked="False" ToolTip="Prendre en compte l'avant dernier etat d'un device">Dernier Etat</CheckBox>
-                            <CheckBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Name="ChKAllValue" IsChecked="False" ToolTip="Prendre en compte tous les changements d'état d'un device">Toutes les Valeurs</CheckBox>
+                            <CheckBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Name="ChKLastEtat" IsChecked="False" ToolTip="Ne pas prendre en compte la valeur si egale à l'avant derniere">Dernier Etat</CheckBox>
+                            <CheckBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Name="ChKAllValue" IsChecked="False" ToolTip="Prendre en compte tous les changements d'état du composant">Toutes les Valeurs</CheckBox>
                             <StackPanel Name="StkUnit" Orientation="Horizontal" >
                                 <Label Name="LblUnit" Content="Unité:"  Foreground="White"/>
                                 <TextBox Text="" Name="TxtUnit" Width="40" Height="22" Foreground="White" Background="DarkGray" BorderBrush="Black" ToolTip="Unité du composant (ex: °C, km/h, Watt..)"/>
@@ -26,7 +26,7 @@
                             </StackPanel>
                         </StackPanel>
                     <Label Foreground="White" Name="LabelDescription">Description:</Label>
-                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtDescript" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="440" />
+                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtDescript" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="440" />
                     <StackPanel Orientation="Horizontal" >
                             <StackPanel >
                                 <Label Foreground="White" Name="LabelDriver"  Width="215">Driver:</Label>
@@ -35,7 +35,7 @@
                             
                             <StackPanel Margin="10,0,0,0">
                                 <Label Foreground="White" Name="LabelType">Type:</Label>
-                                <ComboBox HorizontalAlignment="Left" Name="CbType" Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" IsReadOnly="True" />
+                                <ComboBox HorizontalAlignment="Left" Name="CbType" Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" IsReadOnly="True" ToolTip="IMPORTANT : Le type défini le type de valeur qu'il pourra stocker et les actions possibles."/>
                             </StackPanel>
                         </StackPanel>
                     <StackPanel Orientation="Horizontal" >
