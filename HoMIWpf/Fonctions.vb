@@ -356,13 +356,15 @@ Module Fonctions
                         Return Now.ToLongTimeString
                     Case "SYSTEM_SOLEIL_COUCHE"
                         If IsConnect Then
-                            Return myService.GetHeureCoucherSoleil
+                            Dim _date As Date = myService.GetHeureCoucherSoleil
+                            Return _date.ToShortTimeString
                         Else
                             Return ""
                         End If
                     Case "SYSTEM_SOLEIL_LEVE"
                         If IsConnect Then
-                            Return myService.GetHeureLeverSoleil
+                            Dim _date As Date = myService.GetHeureLeverSoleil
+                            Return _date.ToShortTimeString
                         Else
                             Return ""
                         End If
