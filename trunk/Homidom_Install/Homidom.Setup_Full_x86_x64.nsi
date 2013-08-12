@@ -354,7 +354,8 @@ SectionGroup "HoMIDoM Service" HoMIDoM_SERVICE_GRP
     File "..\RELEASE\HoMIGuI.exe"
     File "..\RELEASE\HoMIGuI.exe.config"
 
-  
+    WriteRegStr HKLM "Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\layers" "$INSTDIR\HoMIGuI.exe" "RUNASADMIN"
+
   SectionEnd
   
   SectionGroup "Drivers" DRIVERS_GRP
@@ -393,11 +394,11 @@ Section "" HoMIDoM_SHORTCUTS
   
   ; Création du raccourçi pour HomiAdmin
   ${If} ${SectionIsSelected} ${HoMIDoM_ADMIN}
-    CreateShortCut $SMPROGRAMS\${PRODUCT_NAME}\HoMIAdmin.lnk $INSTDIR\HoMIAdmin.exe
+    CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\HoMIDoM Administration.lnk" "$INSTDIR\HoMIAdmin.exe"
   ${EndIf}
   
   ${If} ${SectionIsSelected} ${HoMIDoM_SVCGUI}
-    CreateShortCut $SMPROGRAMS\${PRODUCT_NAME}\HoMIDoMServiceGUI.lnk $INSTDIR\HoMIGuI.exe
+    CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\HoMIDoM Service GUI.lnk" "$INSTDIR\HoMIGuI.exe"
   ${EndIf}
   
   ${If} $optStartServiceGUI == "1"
@@ -497,8 +498,8 @@ Section "Uninstall"
   RMDir "$INSTDIR\Drivers\KNX"
   RMDir "$INSTDIR\Drivers"
 
-  Delete "$SMPROGRAMS\${PRODUCT_NAME}\HoMIAdmin.lnk"
-  Delete "$SMPROGRAMS\${PRODUCT_NAME}\HoMIDoMService.lnk"
+  Delete "$SMPROGRAMS\${PRODUCT_NAME}\HoMIDoM Administration.lnk"
+  Delete "$SMPROGRAMS\${PRODUCT_NAME}\HoMIDoM Service GUI.lnk"
   Delete "$SMPROGRAMS\${PRODUCT_NAME}"
   
   ; Remove files and uninstaller
