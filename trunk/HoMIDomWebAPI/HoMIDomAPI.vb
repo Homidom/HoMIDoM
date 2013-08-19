@@ -51,8 +51,9 @@ Public Class HoMIDomAPI
     Public Shared Sub Start(url As String, key As String)
         Try
             ServerKey = key
+            Dim configUrl = New Uri(url)
             Dim webApiUrl As String = url + "api/"
-            Dim liveApiUrl As String = url + "live/"
+            Dim liveApiUrl As String = String.Format("http://*:{0}/live/", configUrl.Port)
             Dim config = New HttpSelfHostConfiguration(webApiUrl)
 
             config.Routes.MapHttpRoute("DefaultApi", "{key}/{controller}/{id}", New With { _
