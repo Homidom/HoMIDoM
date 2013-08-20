@@ -23,6 +23,7 @@ Partial Public Class uCtrlImgMnu
     Dim _Defaut As Boolean
     Dim _Idelement As String
     Dim _Visible As Boolean
+    Dim _IsSelect As Boolean
 
     Public Property Id As String
         Get
@@ -130,6 +131,20 @@ Partial Public Class uCtrlImgMnu
         End Get
         Set(ByVal value As Boolean)
             _Defaut = value
+        End Set
+    End Property
+
+    Public Property IsSelect As Boolean
+        Get
+            Return _IsSelect
+        End Get
+        Set(value As Boolean)
+            _IsSelect = value
+            If value Then
+                Border.BorderBrush = Brushes.Red
+            Else
+                Border.BorderBrush = Brushes.DarkGray
+            End If
         End Set
     End Property
 

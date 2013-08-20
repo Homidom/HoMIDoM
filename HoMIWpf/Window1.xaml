@@ -84,7 +84,8 @@
                                 <MenuItem Name="NewWidgetKeyPad" Header="Nouveau Widget KeyPad" FontSize="10" />
                                 <MenuItem Name="NewWidgetLabel" Header="Nouveau Widget Label" FontSize="10" />
                                 <MenuItem Name="NewWidgetCamera" Header="Nouveau Widget Camera" FontSize="10" />
-                            </MenuItem>
+                                    <MenuItem Name="NewWidgetVolet" Header="Nouveau Widget Volet" FontSize="10" />
+                                </MenuItem>
                             <MenuItem Name="ViewLog" Header="Consulter les logs" FontSize="10" >
                                 <MenuItem.Icon>
                                     <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Log_32.png" />
@@ -159,6 +160,7 @@
                 </local:AniScrollViewer> 
                 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        
                     <my:keyboard Foreground="{x:Null}" x:Name="Keyboard1" />
                 </StackPanel>
             </StackPanel>    

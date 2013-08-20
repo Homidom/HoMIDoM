@@ -49,11 +49,22 @@
         End Sub
     End Class
 
+    Public Enum Operateur
+        Equal = 0
+        Diff = 1
+        Inferieur = 2
+        Superieur = 3
+        InferieurEqual = 4
+        SuperieurEqual = 5
+    End Enum
+
     Public Class Visu
         Dim _IdObject As String
         Dim _Propriete As String
+        Dim _Op As Operateur = Operateur.Equal
         Dim _Value As Object
         Dim _Image As String
+        Dim _Txt As String
 
         Public Property IdObject As String
             Get
@@ -70,6 +81,15 @@
             End Get
             Set(ByVal value As String)
                 _Propriete = value
+            End Set
+        End Property
+
+        Public Property Operateur As Operateur
+            Get
+                Return _Op
+            End Get
+            Set(value As Operateur)
+                _Op = value
             End Set
         End Property
 
@@ -91,11 +111,22 @@
             End Set
         End Property
 
-        Sub New(Optional ByVal vIdObject As String = "", Optional ByVal vPropriete As String = "", Optional ByVal vValue As Object = Nothing, Optional ByVal vImage As String = "")
+        Public Property Text As String
+            Get
+                Return _Txt
+            End Get
+            Set(value As String)
+                _Txt = value
+            End Set
+        End Property
+
+        Sub New(Optional ByVal vIdObject As String = "", Optional ByVal vPropriete As String = "", Optional ByVal vValue As Object = Nothing, Optional ByVal vImage As String = "", Optional vOperateur As Operateur = cWidget.Operateur.Equal, Optional vText As String = "")
             _IdObject = vIdObject
             _Propriete = vPropriete
             _Value = vValue
             _Image = vImage
+            _Propriete = vPropriete
+            _Txt = vText
         End Sub
 
     End Class

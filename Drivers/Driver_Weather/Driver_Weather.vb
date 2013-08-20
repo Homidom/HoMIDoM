@@ -747,6 +747,8 @@ Imports System.Threading
 
     Private Function Traduire(ByVal txt As String) As String
         Try
+            Return Traduct(txt)
+
             Dim _txt As String = Trim(txt).ToLower.Replace("  ", " ")
 
             If _txt = "a few clouds" Then
@@ -1187,7 +1189,7 @@ Imports System.Threading
             If _txt = "light rain snow" Then
                 Return "Légères pluie Neige"
             End If
-            If _txt = "light rain with Thunder" Then
+            If _txt = "light rain with thunder" Then
                 Return "Légère Pluie avec tonnerre"
             End If
             If _txt = "light showers rain" Then
@@ -1276,6 +1278,9 @@ Imports System.Threading
             End If
             If _txt = "mostly clear" Then
                 Return "Ciel plutôt dégagé"
+            End If
+            If _txt = "mist" Then
+                Return "Brume"
             End If
             If _txt = "mostly cloudy" Then
                 Return "Plutôt nuageux"
@@ -1583,6 +1588,9 @@ Imports System.Threading
             If _txt = "thunder in the vicinity" Then
                 Return "Tonnerre dans les environs"
             End If
+            If _txt = "t-storm" Then
+                Return "Orage"
+            End If
             If _txt = "t-storms" Then
                 Return "Orages"
             End If
@@ -1715,6 +1723,61 @@ Imports System.Threading
         End Try
     End Function
 
+
+    Public Function Traduct(Txt As String) As String
+        Try
+            Dim _txt As String = Trim(Txt).ToLower.Replace("  ", " ")
+            Dim _return As String = ""
+            Dim xReader As XmlReader
+            Dim xDoc As XElement
+
+            If System.IO.File.Exists(Server.GetRepertoireOfServer & "\Fichiers\Traduc_FR.xml") = False Then
+                Dim xmlName2 As String = ".Traduc_FR.xml"
+                ' get the current executing assembly, and append the resources name
+                Dim strResources2 As String = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name & xmlName2
+                ' use stream to load up the resources
+                Using s As IO.Stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(strResources2)
+
+                    'use xmlreader to create in-memory xml structured
+                    xReader = XmlReader.Create(s)
+
+                    xDoc = XElement.Load(xReader)
+                    xDoc.Save(Server.GetRepertoireOfServer & "\Fichiers\Traduc_FR.xml")
+                    xReader.Close()
+                End Using
+            Else
+                xReader = XmlReader.Create(Server.GetRepertoireOfServer & "\Fichiers\Traduc_FR.xml")
+                xDoc = XElement.Load(xReader)
+                xReader.Close()
+            End If
+
+
+            'Dim xmlName As String = ".Traduc_FR.xml"
+            '' get the current executing assembly, and append the resources name
+            'Dim strResources As String = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name & xmlName
+            '' use stream to load up the resources
+            'Using s As IO.Stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(strResources)
+
+            'use xmlreader to create in-memory xml structured
+
+
+            'xDoc = XElement.Load(xReader)
+            Dim employees As IEnumerable(Of XElement) = xDoc.Elements()
+
+            For Each employee In employees
+                If employee.Element("eng").Value.ToLower = _txt Then
+                    _return = employee.Element("fr").Value
+                    Exit For
+                End If
+            Next employee
+
+            'End Using
+            Return _return
+        Catch ex As Exception
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEOWeather", "Erreur Traduct: " & ex.ToString)
+            Return ""
+        End Try
+    End Function
 #End Region
 
 End Class

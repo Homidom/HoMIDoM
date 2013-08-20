@@ -1,7 +1,7 @@
 ﻿<Window x:Class="WConfig"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="Configurer le client" MinHeight="550" MinWidth="400" Topmost="False" >
+    Title="Configurer le client" MinHeight="560" MinWidth="400" Topmost="False" >
    
     <StackPanel Margin="5" Background="DarkGray">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
@@ -96,6 +96,7 @@
                         <GroupBox Header="Sauvegarde" Margin="2" Foreground="White">
                             <StackPanel HorizontalAlignment="Left">
                                 <CheckBox Name="ChkSaveAuto" Foreground="White" Content="Sauvegarder automatiquement en quittant"/>
+                                <CheckBox Name="ChKDiffSave" Foreground=" White" Content="Sauvegader les backups et sauvegardes suivant différents fichiers" />
                             </StackPanel>
                         </GroupBox>
 

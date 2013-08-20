@@ -174,6 +174,9 @@
     <Compile Include="CtrlDevice\uKeyPad.xaml.vb">
       <DependentUpon>uKeyPad.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CtrlDevice\uVolet.xaml.vb">
+      <DependentUpon>uVolet.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CtrlDevice\uWMeteo.xaml.vb">
       <DependentUpon>uWMeteo.xaml</DependentUpon>
     </Compile>
@@ -230,6 +233,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CtrlDevice\uKeyPad.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CtrlDevice\uVolet.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -723,6 +730,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\preferences-system.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\cadre.png" />
+    <Resource Include="Images\lames.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>

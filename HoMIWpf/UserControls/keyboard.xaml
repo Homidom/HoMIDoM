@@ -11,7 +11,7 @@
             <Button Height="20" Width=" 20" Name="BtnClose" Content="▼" Template="{DynamicResource GlassButton}" Foreground="White" Margin="1" FontSize="13" />
         </StackPanel>
         <StackPanel >
-            <my:OnScreenKeyboard Height="170" Width="438" />
+            <!--<my:OnScreenKeyboard Height="170" Width="438" />-->
         </StackPanel> 
     </StackPanel>
 </UserControl>

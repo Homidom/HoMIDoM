@@ -67,6 +67,7 @@ Class Window1
     Public _CurrentIdZone As String = ""
     Dim RandomNumber As New Random
     Dim _ShowQuitter As Boolean = True
+    Dim _SaveDiffBack As Boolean 'True si on veut créer un fichier de backup différent géré avec dateheure
     Dim _PassWord As String = ""
     Dim _WithPassword As Boolean = False
     Dim _AffLastError As Boolean = False
@@ -82,6 +83,15 @@ Class Window1
 #End Region
 
 #Region "Property"
+    Public Property SaveDiffBackup As Boolean
+        Get
+            Return _SaveDiffBack
+        End Get
+        Set(value As Boolean)
+            _SaveDiffBack = value
+        End Set
+    End Property
+
     Public Property FlagSave As Boolean
         Get
             Return _flagSave
@@ -427,7 +437,7 @@ Class Window1
             'Affiche splash Screen
             Dim spl As Window2 = New Window2
             spl.Show()
-            
+
 
             Dim mystyles As New ResourceDictionary()
             mystyles.Source = New Uri("/HoMIWpF;component/Resources/DesignerItem.xaml",
@@ -449,6 +459,7 @@ Class Window1
             If Not System.IO.Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData) & "\HoMIWpF") Then
                 System.IO.Directory.CreateDirectory(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData) & "\HoMIWpF")
             End If
+
             _MonRepertoireAppData = System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData) & "\HoMIWpF"
             If Not System.IO.Directory.Exists(_MonRepertoireAppData & "\Config") Then
                 System.IO.Directory.CreateDirectory(_MonRepertoireAppData & "\Config")
@@ -518,7 +529,7 @@ Class Window1
             myxml = Nothing
             frmMere = Me
 
-            If _AffLastError Then
+            If _AffLastError And IsConnect Then
                 Dim _string As String = ""
                 For Each logerror As String In myService.GetLastLogsError
                     If String.IsNullOrEmpty(logerror) = False Then
@@ -623,6 +634,7 @@ Class Window1
             Next
         End If
     End Sub
+
     Private Sub MessageFromServeur(Id As String, Time As DateTime, Message As String) 'Message provenant du serveur
 
     End Sub
@@ -659,9 +671,17 @@ Class Window1
 
         'Copy du fichier de config avant chargement
         Try
-            If File.Exists(Fichier.Replace(".xml", ".bak")) = True Then File.Delete(Fichier.Replace(".xml", ".bak"))
+            If SaveDiffBackup = False Then
+                If File.Exists(Fichier.Replace(".xml", ".bak")) = True Then File.Delete(Fichier.Replace(".xml", ".bak"))
+            End If
             If File.Exists(Fichier) = True Then
-                File.Copy(Fichier, Fichier.Replace(".xml", ".bak"))
+                If SaveDiffBackup = False Then
+                    File.Copy(Fichier, Fichier.Replace(".xml", ".bak"))
+                Else
+                    Dim fich As String = Fichier.Replace(".xml", ".bak")
+                    fich = fich.Replace(".", Now.Year & Now.Month & Now.Day & Now.Hour & Now.Minute & Now.Second & ".")
+                    File.Copy(Fichier, fich)
+                End If
                 Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Création du backup (.bak) du fichier de config avant chargement")
             Else
                 ' Le fichier de config est inexistant. Premier lancement de WPF.
@@ -742,6 +762,8 @@ Class Window1
             If list.Count > 0 Then 'présence des paramètres du server
                 For j As Integer = 0 To list.Item(0).Attributes.Count - 1
                     Select Case list.Item(0).Attributes.Item(j).Name
+                        Case "savediffback"
+                            SaveDiffBackup = list.Item(0).Attributes.Item(j).Value
                         Case "flagsave"
                             FlagSave = list.Item(0).Attributes.Item(j).Value
                         Case "autosave"
@@ -884,6 +906,8 @@ Class Window1
                                         x.Type = uWidgetEmpty.TypeOfWidget.Web
                                     Case uWidgetEmpty.TypeOfWidget.Camera.ToString
                                         x.Type = uWidgetEmpty.TypeOfWidget.Camera
+                                    Case uWidgetEmpty.TypeOfWidget.Volet.ToString
+                                        x.Type = uWidgetEmpty.TypeOfWidget.Volet
                                     Case uWidgetEmpty.TypeOfWidget.Rss.ToString
                                         x.Type = uWidgetEmpty.TypeOfWidget.Rss
                                     Case uWidgetEmpty.TypeOfWidget.Meteo.ToString
@@ -913,6 +937,8 @@ Class Window1
                                 x.RotationX = list.Item(j).Attributes.Item(k).Value.Replace(".", ",")
                             Case "angley"
                                 x.RotationY = list.Item(j).Attributes.Item(k).Value.Replace(".", ",")
+                            Case "zindex"
+                                x.ZIndex = list.Item(j).Attributes.Item(k).Value
                             Case "showetiquette"
                                 x.ShowEtiquette = list.Item(j).Attributes.Item(k).Value
                             Case "majetiquettefromsrv"
@@ -1011,6 +1037,12 @@ Class Window1
                                         .Propriete = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(1).Value
                                         If list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(2).Value IsNot Nothing Then .Value = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(2).Value
                                         If list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(3).Value IsNot Nothing Then .Image = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(3).Value
+                                        If list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Count >= 5 Then
+                                            If list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(4).Value IsNot Nothing Then .Operateur = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(4).Value
+                                        End If
+                                        If list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Count >= 6 Then
+                                            If list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(5).Value IsNot Nothing Then .Text = list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(5).Value
+                                        End If
                                     End With
 
                                     x.Visuel.Add(_act)
@@ -1043,6 +1075,8 @@ Class Window1
                                     _ListElement.Add(x)
                                 End If
                             End If
+                        Else
+                            _ListElement.Add(x)
                         End If
                     Else
                         _ListElement.Add(x)
@@ -1079,8 +1113,14 @@ Class Window1
 
             ''Copy du fichier de config avant sauvegarde
             Try
-                If File.Exists(Fichier.Replace(".xml", ".sav")) = True Then File.Delete(Fichier.Replace(".xml", ".sav"))
-                File.Copy(Fichier, Fichier.Replace(".xml", ".sav"))
+                If SaveDiffBackup = False Then
+                    If File.Exists(Fichier.Replace(".xml", ".sav")) = True Then File.Delete(Fichier.Replace(".xml", ".sav"))
+                    File.Copy(Fichier, Fichier.Replace(".xml", ".sav"))
+                Else
+                    Dim fich As String = Fichier.Replace(".xml", ".sav")
+                    fich = fich.Replace(".", Now.Year & Now.Month & Now.Day & Now.Hour & Now.Minute & Now.Second & ".")
+                    File.Copy(Fichier, fich)
+                End If
                 Log(TypeLog.INFO, TypeSource.CLIENT, "SaveConfig", "Création de sauvegarde (.sav) du fichier de config avant sauvegarde")
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.CLIENT, "SaveConfig", "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
@@ -1124,6 +1164,9 @@ Class Window1
             ''Sauvegarde des parametres d'interface
             ''------------
             writer.WriteStartElement("interface")
+            writer.WriteStartAttribute("savediffback")
+            writer.WriteValue(SaveDiffBackup)
+            writer.WriteEndAttribute()
             writer.WriteStartAttribute("flagsave")
             writer.WriteValue(FlagSave)
             writer.WriteEndAttribute()
@@ -1167,7 +1210,7 @@ Class Window1
             writer.WriteValue(_WithPassword)
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("password")
-            writer.WriteValue(_Password)
+            writer.WriteValue(_PassWord)
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("afflasterror")
             writer.WriteValue(_AffLastError)
@@ -1233,6 +1276,7 @@ Class Window1
             ''------------
             writer.WriteStartElement("elements")
             For i As Integer = 0 To _ListElement.Count - 1
+                'If (_ListElement.Item(i).IsEmpty = False And IsConnect = True) Or _ListElement.Item(i).IsEmpty = True Then
 
                 writer.WriteStartElement("element")
                 writer.WriteStartAttribute("uid") 'ID du widget
@@ -1276,6 +1320,9 @@ Class Window1
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("angley")
                 writer.WriteValue(_ListElement.Item(i).RotationY)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("zindex")
+                writer.WriteValue(_ListElement.Item(i).ZIndex)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("majetiquettefromsrv")
                 writer.WriteValue(_ListElement.Item(i).MaJEtiquetteFromServeur)
@@ -1497,13 +1544,20 @@ Class Window1
                     writer.WriteStartAttribute("value")
                     writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).Value)
                     writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("image") 'methode
+                    writer.WriteStartAttribute("image") 'image
                     writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).Image)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("operateur") 'operateur
+                    writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).Operateur)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("text") 'text
+                    writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).Text)
                     writer.WriteEndAttribute()
                     writer.WriteEndElement()
                 Next
                 writer.WriteEndElement()
                 writer.WriteEndElement()
+                'End If
             Next
             writer.WriteEndElement()
             ''FIN DES ELEMENTS------------
@@ -1659,6 +1713,7 @@ Class Window1
                 AfficheMessageAndLog(Fonctions.TypeLog.INFO, "La communication a été perdue avec le serveur, veuillez vérifier que celui-ci est toujours actif et redémarrer le client", "Erreur")
                 FlagMsgDeconnect = True
             End If
+
             Log(TypeLog.INFO, TypeSource.CLIENT, "DispatcherTimer", "DispatcherTimer: " & ex.Message)
             LblTime.Content = Now.ToLongDateString & " " & Now.ToShortTimeString
             LblLeve.Content = "?"
@@ -1674,10 +1729,14 @@ Class Window1
             Me.Cursor = Cursors.Wait
 
             DesAff_TaskMnu()
-
             _TimeMouseDown = Now
-
             LblZone.Content = sender.Text
+
+            For Each _ctl In _ListMnu
+                _ctl.IsSelect = False
+            Next
+
+            sender.IsSelect = True
 
             If sender.type <> uCtrlImgMnu.TypeOfMnu.LecteurMedia Then
                 Canvas1.Children.Clear()
@@ -1929,10 +1988,11 @@ Class Window1
                             y.Rotation = _ListElement.Item(j).Rotation
                             y.RotationX = _ListElement.Item(j).RotationX
                             y.RotationY = _ListElement.Item(j).RotationY
+                            y.ZIndex = _ListElement.Item(j).ZIndex
                             y.IsEmpty = _ListElement.Item(j).IsEmpty
                             y.ShowEtiquette = _ListElement.Item(j).ShowEtiquette
                             y.MaJEtiquetteFromServeur = _ListElement.Item(j).MaJEtiquetteFromServeur
-                            y.IsCommun = _ListElement.Item(i).IsCommun
+                            y.IsCommun = _ListElement.Item(j).IsCommun
                             y.Fondu = _ListElement.Item(j).Fondu
                             y.ShowStatus = _ListElement.Item(j).ShowStatus
                             y.ShowPicture = _ListElement.Item(j).ShowPicture
@@ -1951,6 +2011,7 @@ Class Window1
                             Canvas1.Children.Add(x)
                             Canvas.SetLeft(x, _ListElement.Item(j).X)
                             Canvas.SetTop(x, _ListElement.Item(j).Y)
+                            Canvas.SetZIndex(x, _ListElement.Item(j).ZIndex)
 
                             _flagTrouv = True
                             x = Nothing
@@ -2030,6 +2091,7 @@ Class Window1
                     Dim y As New uWidgetEmpty
                     y.Show = True
                     y.Uid = _ListElement.Item(i).Uid
+                    y.Id = _ListElement.Item(i).Id
                     y.ZoneId = _ListElement.Item(i).ZoneId
                     y.Width = x.Width
                     y.Height = x.Height
@@ -2038,6 +2100,7 @@ Class Window1
                     y.Rotation = _ListElement.Item(i).Rotation
                     y.RotationX = _ListElement.Item(i).RotationX
                     y.RotationY = _ListElement.Item(i).RotationY
+                    y.ZIndex = _ListElement.Item(i).ZIndex
                     y.IsEmpty = _ListElement.Item(i).IsEmpty
                     y.Type = _ListElement.Item(i).Type
                     y.CanEditValue = _ListElement.Item(i).CanEditValue
@@ -2079,6 +2142,7 @@ Class Window1
                     Canvas1.Children.Add(x)
                     Canvas.SetLeft(x, _ListElement.Item(i).X)
                     Canvas.SetTop(x, _ListElement.Item(i).Y)
+                    Canvas.SetZIndex(x, _ListElement.Item(i).ZIndex)
 
                     x = Nothing
                     y = Nothing
@@ -2185,9 +2249,9 @@ Class Window1
 
                 'On a finit le déplacement
                 Design = False
-                Dim a As String = ""
                 Chk2.IsChecked = True
                 Dim child As ContentControl
+
                 For Each child In Canvas1.Children
                     Dim obj As uWidgetEmpty = child.Content
                     obj.IsHitTestVisible = False
@@ -2254,6 +2318,7 @@ Class Window1
         Try
             Dim a As String = ""
             Dim child As ContentControl
+
             For Each child In Canvas1.Children
                 Dim obj As uWidgetEmpty = child.Content
                 If Objet IsNot Nothing Then
@@ -2613,6 +2678,48 @@ Class Window1
         End Try
     End Sub
 
+    Private Sub NewWidgetVolet_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetVolet.Click
+        Try
+            ' Remettre à zéro les modes édition + déplacement
+            Chk1.IsChecked = False
+            Chk2.IsChecked = False
+            Deplacement_Click(Me, e)
+
+            'Ajouter un nouveau Control
+            Dim x As New ContentControl
+            x.Width = 270
+            x.Height = 195
+            x.Style = mybuttonstyle
+            x.Tag = True
+            x.Uid = System.Guid.NewGuid.ToString()
+
+            'Ajoute l'élément dans la liste
+            Dim elmt As New uWidgetEmpty
+            elmt.Show = True
+            elmt.Uid = x.Uid
+            elmt.ZoneId = _CurrentIdZone
+            elmt.Width = 270
+            elmt.Height = 195
+            elmt.Rotation = 0
+            elmt.X = 300
+            elmt.Y = 300
+            elmt.IsEmpty = True
+            elmt.Type = uWidgetEmpty.TypeOfWidget.Volet
+            elmt.ShowStatus = False
+            elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
+            elmt.ColorBackGround = New SolidColorBrush(Color.FromArgb(255, 0, 0, 0))
+            _ListElement.Add(elmt)
+
+            elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
+            x.Content = elmt
+            Canvas1.Children.Add(x)
+            Canvas.SetLeft(x, 300)
+            Canvas.SetTop(x, 300)
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetVolet: " & ex.Message, "Erreur", "NewWidgetVolet")
+        End Try
+    End Sub
+
 #Region "Menu"
 
     Private Sub ViewLog_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ViewLogClient.Click, ViewLogSrv.Click
@@ -2775,7 +2882,7 @@ Class Window1
         Try
             If VerifPassword() = False Then Exit Sub
             If AutoSave Or FlagSave Then SaveConfig(_ConfigFile)
-            Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermture de l'application")
+            Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermeture de l'application")
             End
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Quitter: " & ex.Message, "Erreur", "Quitter")
@@ -2802,6 +2909,7 @@ Class Window1
     End Function
 #End Region
 
+
     Private Sub Window1_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Me.MouseDown
         If _flagIsShowScroll Then
             DesAff_TaskMnu()
@@ -2817,10 +2925,6 @@ Class Window1
                 _MousePosition = e.GetPosition(Me)
             End If
         End If
-    End Sub
-
-    Private Sub Keyboard1_MouseEnter(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Keyboard1.MouseEnter
-        Aff_TaskMnu()
     End Sub
 
     Private Sub Menu1_MouseDown(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Menu1.MouseDown
@@ -2889,4 +2993,5 @@ Class Window1
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur MnuSave_Click: " & ex.Message, "Erreur", "MnuSave_Click")
         End Try
     End Sub
+
 End Class

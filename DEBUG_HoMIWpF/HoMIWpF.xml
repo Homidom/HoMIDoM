@@ -150,6 +150,14 @@ InitializeComponent
 	<summary>
 uVariateur
 </summary>
+</member><member name="M:HoMIWpF.uVolet.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIWpF.uVolet">
+	<summary>
+uVolet
+</summary>
 </member><member name="M:HoMIWpF.uRSS.InitializeComponent">
 	<summary>
 InitializeComponent

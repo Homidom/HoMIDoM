@@ -15,6 +15,7 @@ Public Class uWidgetEmpty
         KeyPad = 5
         Label = 6
         Camera = 7
+        Volet = 8
         Device = 99
     End Enum
 
@@ -65,6 +66,7 @@ Public Class uWidgetEmpty
     Dim _CanEditValue As Boolean = False
     Dim _Fondu As Boolean = True
     Dim _IsCommun As Boolean = False 'indique si le widget est commun à toutes les pages
+    Dim _Zindex As Integer = 0
 
     'Variables Widget Web/Camera
     Dim _URL As String = ""
@@ -80,6 +82,9 @@ Public Class uWidgetEmpty
     'Variables Widget Meteo
     Dim _IDMeteo As String = ""
     Dim _METEO As uWMeteo = Nothing
+
+    'Variables Widget Volet
+    Dim _VOLET As uVolet = Nothing
 
     'Variables Widget KeyPad
     Dim _IDKeyPad As String = ""
@@ -101,6 +106,15 @@ Public Class uWidgetEmpty
     Private myStoryboard As Storyboard
 
 #Region "Property"
+    Public Property ZIndex As Integer
+        Get
+            Return _Zindex
+        End Get
+        Set(value As Integer)
+            _Zindex = value
+        End Set
+    End Property
+
     Public Property IsCommun As Boolean
         Get
             Return _IsCommun
@@ -233,6 +247,7 @@ Public Class uWidgetEmpty
                             AddHandler x.ClickOn, AddressOf ClickOn
                             AddHandler x.ClickOff, AddressOf ClickOff
                             StkPopup.Children.Add(x)
+
                         Case HoMIDom.HoMIDom.Device.ListeDevices.TELECOMMANDE
                             _ShowValue = False
                         Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE
@@ -243,7 +258,6 @@ Public Class uWidgetEmpty
 
                         Case HoMIDom.HoMIDom.Device.ListeDevices.VITESSEVENT
                         Case HoMIDom.HoMIDom.Device.ListeDevices.VOLET
-
                             Dim x As New uOnOff
                             x.ContentOn = "OUVRIR"
                             x.ContentOff = "FERMER"
@@ -253,6 +267,7 @@ Public Class uWidgetEmpty
                             Dim x2 As New uVariateur
                             AddHandler x2.ValueChange, AddressOf ValueChange
                             StkPopup.Children.Add(x2)
+
                         Case HoMIDom.HoMIDom.Device.ListeDevices.UV
                         Case HoMIDom.HoMIDom.Device.ListeDevices.FREEBOX
                             _ShowValue = False
@@ -344,6 +359,11 @@ Public Class uWidgetEmpty
                         StkTool.Visibility = Windows.Visibility.Visible
                         _Camera = New uCamera
                         StkTool.Children.Add(_Camera)
+                    Case TypeOfWidget.Volet
+                        StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
+                        StkTool.Visibility = Windows.Visibility.Visible
+                        _VOLET = New uVolet
+                        StkTool.Children.Add(_VOLET)
                     Case TypeOfWidget.Rss
                         StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
                         StkTool.Visibility = Windows.Visibility.Visible
@@ -946,10 +966,6 @@ Public Class uWidgetEmpty
     End Property
 #End Region
 
-    Public Sub Update()
-
-    End Sub
-
 
     Public Sub New()
 
@@ -976,21 +992,67 @@ Public Class uWidgetEmpty
 
     Private Sub TraiteRefresh()
         Try
+            Dim FlagVisu As Boolean = False
+
             If _ModeEdition = False And IsConnect Then
                 If _Visuel.Count > 0 Then
                     For Each _ElmtVisu As cWidget.Visu In _Visuel
                         _dev = ReturnDeviceById(_ElmtVisu.IdObject)
 
                         If _dev IsNot Nothing Then
-                            If _dev.Type <> HoMIDom.HoMIDom.Device.ListeDevices.METEO Then
-                                If _dev.Value = _ElmtVisu.Value Then
-                                    If Image.Tag <> _ElmtVisu.Image Then
-                                        Picture = _ElmtVisu.Image
-                                    End If
-                                End If
-                            Else
+                            Dim retour As Object = CallByName(_dev, _ElmtVisu.Propriete, CallType.Get)
 
-                            End If
+                            'If _dev.Type <> HoMIDom.HoMIDom.Device.ListeDevices.METEO Then
+                            Select Case _ElmtVisu.Operateur
+                                Case cWidget.Operateur.Diff
+                                    If retour <> _ElmtVisu.Value Then
+                                        If String.IsNullOrEmpty(_ElmtVisu.Text) = False Then Etiquette = _ElmtVisu.Text
+                                        If Image.Tag <> _ElmtVisu.Image Then
+                                            Picture = _ElmtVisu.Image
+                                            FlagVisu = True
+                                        End If
+                                    End If
+                                Case cWidget.Operateur.Equal
+                                    If retour = _ElmtVisu.Value Then
+                                        If String.IsNullOrEmpty(_ElmtVisu.Text) = False Then Etiquette = _ElmtVisu.Text
+                                        If Image.Tag <> _ElmtVisu.Image Then
+                                            Picture = _ElmtVisu.Image
+                                            FlagVisu = True
+                                        End If
+                                    End If
+                                Case cWidget.Operateur.Inferieur
+                                    If retour < _ElmtVisu.Value Then
+                                        If String.IsNullOrEmpty(_ElmtVisu.Text) = False Then Etiquette = _ElmtVisu.Text
+                                        If Image.Tag <> _ElmtVisu.Image Then
+                                            Picture = _ElmtVisu.Image
+                                            FlagVisu = True
+                                        End If
+                                    End If
+                                Case cWidget.Operateur.InferieurEqual
+                                    If retour <= _ElmtVisu.Value Then
+                                        If String.IsNullOrEmpty(_ElmtVisu.Text) = False Then Etiquette = _ElmtVisu.Text
+                                        If Image.Tag <> _ElmtVisu.Image Then
+                                            Picture = _ElmtVisu.Image
+                                            FlagVisu = True
+                                        End If
+                                    End If
+                                Case cWidget.Operateur.Superieur
+                                    If retour > _ElmtVisu.Value Then
+                                        If String.IsNullOrEmpty(_ElmtVisu.Text) = False Then Etiquette = _ElmtVisu.Text
+                                        If Image.Tag <> _ElmtVisu.Image Then
+                                            Picture = _ElmtVisu.Image
+                                            FlagVisu = True
+                                        End If
+                                    End If
+                                Case cWidget.Operateur.SuperieurEqual
+                                    If retour >= _ElmtVisu.Value Then
+                                        If String.IsNullOrEmpty(_ElmtVisu.Text) = False Then Etiquette = _ElmtVisu.Text
+                                        If Image.Tag <> _ElmtVisu.Image Then
+                                            Picture = _ElmtVisu.Image
+                                            FlagVisu = True
+                                        End If
+                                    End If
+                            End Select
                         End If
                     Next
                 End If
@@ -1062,11 +1124,15 @@ Public Class uWidgetEmpty
 
                         End Select
 
+                        If Me.Type = TypeOfWidget.Volet And _VOLET IsNot Nothing Then
+                            _VOLET.Value = _dev.Value
+                        End If
+
                         If _ShowValue Then
                             If _CurrentValue <> _dev.Value Then
                                 LblStatus.Content = _dev.Value & _dev.Unit
                                 _CurrentValue = _dev.Value
-                                LoadPicture()
+                                If FlagVisu = False Then LoadPicture()
 
                                 If _IsVariation Then
                                     If StkPopup.Children.Count = 2 Then
@@ -1076,6 +1142,7 @@ Public Class uWidgetEmpty
                                 End If
                             End If
                         End If
+
                     ElseIf _zone IsNot Nothing Then
                         If ShowEtiquette And _zone.Name <> Etiquette Then
                             If MaJEtiquetteFromServeur Then Etiquette = _zone.Name
@@ -1133,6 +1200,9 @@ Public Class uWidgetEmpty
                 Case TypeOfWidget.Camera
                     _Camera.Width = Me.ActualWidth
                     _Camera.Height = Me.ActualHeight
+                Case TypeOfWidget.Volet
+                    _VOLET.Width = Me.ActualWidth
+                    _VOLET.Height = Me.ActualHeight - 30
                 Case TypeOfWidget.Meteo
                     _METEO.Width = Double.NaN
                     _METEO.Height = Double.NaN
@@ -1982,7 +2052,15 @@ Public Class uWidgetEmpty
                                 End If
                         End Select
                     End If
-                End If
+                Else
+                    If StkPopup.Children.Count > 0 Then
+                        If Popup1.IsOpen = False Then
+                            Popup1.IsOpen = True
+                        Else
+                            Popup1.IsOpen = False
+                        End If
+                    End If
+                    End If
             End If
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Stk1_MouseDown: " & ex.Message, "Erreur", " uWidgetEmpty.Stk1_MouseDown")
@@ -2000,6 +2078,9 @@ Public Class uWidgetEmpty
                 Case TypeOfWidget.Camera
                     _Camera.Width = Me.ActualWidth
                     _Camera.Height = Me.ActualHeight - 2
+                Case TypeOfWidget.Volet
+                    _VOLET.Width = Me.ActualWidth
+                    _VOLET.Height = Me.ActualHeight - 30
                 Case TypeOfWidget.Rss
                     _RSS.Width = Me.ActualWidth
                     _RSS.Height = Me.ActualHeight - 20
@@ -2236,6 +2317,16 @@ Public Class uWidgetEmpty
                 End If
             End If
 
+            If (_type = TypeOfWidget.Empty Or _type = TypeOfWidget.Device) And _Visuel.Count > 0 And String.IsNullOrEmpty(_Picture) = False Then
+                ' Affichage de l'image pour un widget empty s'il une visualisation
+                If IO.File.Exists(_Picture) Then
+                    ' L'image existe en local
+                    ImageBehavior.SetAnimatedSource(Image, New BitmapImage(New Uri(_Picture)))
+                Else
+                    ' L'image n'a pas été trouvée en local, on la reprend du serveur
+                    ImageBehavior.SetAnimatedSource(Image, ConvertArrayToImage(myService.GetByteFromImage(_Picture)))
+                End If
+            End If
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.LoadPicture: " & ex.Message, "Erreur", " uWidgetEmpty.LoadPicture")
         End Try
