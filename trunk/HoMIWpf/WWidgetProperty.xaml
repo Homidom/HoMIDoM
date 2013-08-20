@@ -86,6 +86,10 @@
                             <Label Width="120" Content="RotationY:" Foreground="White"/>
                             <TextBox Name="TxtRotationY" Width="150" />
                         </StackPanel>
+                                    <StackPanel Orientation="Horizontal" >
+                                        <Label Width="120" Content="ZOrder:" Foreground="White"/>
+                                        <TextBox Name="TxtZOrder" Width="50" />
+                                    </StackPanel>
                                 </StackPanel>
                             </Expander>
                             <StackPanel Orientation="Horizontal" >
@@ -229,12 +233,26 @@
                         <Label Name="LblProperty" Foreground=" White" Content="Propriété:" Width="65" Visibility="Collapsed" />
                         <ComboBox Name="CbPropertyVisu" Width="150" SelectedIndex="0" Visibility="Collapsed" />
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal" Height="25" Margin="2">
+                        <StackPanel Orientation="Horizontal" Height="25" Margin="2">
+                            <Label Name="LblOperateur" Foreground=" White" Content="Operateur:" Width="65" Visibility="Collapsed" />
+                            <ComboBox Name="CbOperateurVisu" Width="150" SelectedIndex="0" Visibility="Collapsed">
+                                <ComboBoxItem Content="=" />
+                                <ComboBoxItem Content="&lt;&gt;" />
+                                <ComboBoxItem Content="&lt;" />
+                                <ComboBoxItem Content="&gt;" />
+                                <ComboBoxItem Content="&lt;=" />
+                                <ComboBoxItem Content="&gt;=" />
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Height="25" Margin="2">
                         <Label Name="LblVisuValue" Foreground=" White" Content="Valeur:" Width="65" Visibility="Collapsed" />
                         <TextBox Name="TxtValueVisu" Width="150" Visibility="Collapsed" />
                     </StackPanel>
-
-                    <StackPanel Orientation="Horizontal" Margin="2">
+                        <StackPanel Orientation="Horizontal" >
+                            <Label Name="LblText" Content="Texte:" Foreground=" White" Visibility="Collapsed" />
+                            <TextBox Name="TxtText" Width="100" Visibility="Collapsed" /> 
+                        </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="2">
                         <Label Name="LblPicture" Foreground=" White" Content="Picture:" Visibility="Collapsed" />
                         <Border Name="BorderVisu" BorderThickness="1" BorderBrush="Black">
                             <Image Name="ImgVisu" Width="60" Height="60" Visibility="Collapsed" />
@@ -314,8 +332,6 @@
                         <CheckBox Name="ChKClearAfterEnter" Content="Effacer la valeur après validation" Foreground=" White" IsChecked=" False" Background="DarkGray" BorderBrush="Black"/>
                     </StackPanel>
                 </GroupBox>
-
-
             </StackPanel>
         
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="5">

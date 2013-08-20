@@ -33,6 +33,7 @@ Public Class WWidgetProperty
                 TxtRotation.Text = Obj.Rotation
                 TxtRotationX.Text = Obj.RotationX
                 TxtRotationY.Text = Obj.RotationY
+                TxtZOrder.Text = Obj.ZIndex
                 TxtDefStatus.Text = Obj.DefautLabelStatus
                 TxtTailleStatus.Text = Obj.TailleStatus
                 lblColor.Background = Obj.ColorBackGround
@@ -207,6 +208,33 @@ Public Class WWidgetProperty
                                 CbDeviceKeyPad.SelectedIndex = idx
 
                             End If
+                        Case uWidgetEmpty.TypeOfWidget.Volet
+                            StkPicture.Visibility = Visibility.Collapsed
+                            StkStatus.Visibility = Visibility.Collapsed
+                            StkRss.Visibility = Windows.Visibility.Collapsed
+                            StkMeteo.Visibility = Windows.Visibility.Collapsed
+                            StkKeyPad.Visibility = Windows.Visibility.Visible
+                            BtnEditAction.Visibility = Windows.Visibility.Collapsed
+                            BtnEditVisu.Visibility = Windows.Visibility.Collapsed
+                            BtnDelete.Visibility = Windows.Visibility.Visible
+
+                            If IsConnect Then
+                                CbDeviceKeyPad.Items.Clear()
+                                Dim idx As Integer = -1
+                                For Each _devk As TemplateDevice In AllDevices
+                                    If _devk.Type = Device.ListeDevices.GENERIQUEVALUE Or _devk.Type = Device.ListeDevices.VOLET Then
+                                        Dim x As New ComboBoxItem
+                                        x.Content = _devk.Name
+                                        x.Tag = _devk.ID
+                                        CbDeviceKeyPad.Items.Add(x)
+
+                                        If _devk.ID = Obj.Id Then idx = CbDeviceKeyPad.Items.Count - 1
+                                    End If
+                                Next
+
+                                CbDeviceKeyPad.SelectedIndex = idx
+
+                            End If
                         Case uWidgetEmpty.TypeOfWidget.Label
                             StkPicture.Visibility = Visibility.Collapsed
                             StkStatus.Visibility = Visibility.Collapsed
@@ -249,6 +277,7 @@ Public Class WWidgetProperty
             Obj.Rotation = TxtRotation.Text
             Obj.RotationX = TxtRotationX.Text
             Obj.RotationY = TxtRotationY.Text
+            Obj.ZIndex = TxtZOrder.Text
             Obj.DefautLabelStatus = TxtDefStatus.Text
             Obj.Picture = ImgPicture.Tag
             Obj.ListHttpButton = _listhttpbtn
@@ -282,9 +311,13 @@ Public Class WWidgetProperty
                 Dim x As ComboBoxItem = CbVilleMeteo.Items(CbVilleMeteo.SelectedIndex)
                 Obj.IDMeteo = x.Tag
             End If
-            If CbDeviceKeyPad.SelectedIndex >= 0 Then
+            If CbDeviceKeyPad.SelectedIndex >= 0 And Obj.Type = uWidgetEmpty.TypeOfWidget.KeyPad Then
                 Dim x As ComboBoxItem = CbDeviceKeyPad.Items(CbDeviceKeyPad.SelectedIndex)
                 Obj.IDKeyPad = x.Tag
+            End If
+            If CbDeviceKeyPad.SelectedIndex >= 0 And Obj.Type = uWidgetEmpty.TypeOfWidget.Volet Then
+                Dim x As ComboBoxItem = CbDeviceKeyPad.Items(CbDeviceKeyPad.SelectedIndex)
+                Obj.Id = x.Tag
             End If
 
             DialogResult = True
@@ -697,6 +730,8 @@ Public Class WWidgetProperty
 
     Private Sub Refresh_LstObjetVisu()
         LstObjetVisu.Items.Clear()
+        TxtText.Text = ""
+        TxtValueVisu.Text = ""
 
         For Each Visu As cWidget.Visu In Obj.Visuel
             Dim x As New ListBoxItem
@@ -724,12 +759,15 @@ Public Class WWidgetProperty
 
             _idx = -1
             CbPropertyVisu.SelectedValue = _act.Propriete
+            CbOperateurVisu.SelectedIndex = _act.Operateur
 
             TxtValueVisu.Text = _act.Value.ToString
             If _act.Image IsNot Nothing Then
                 ImgVisu.Source = ConvertArrayToImage(myService.GetByteFromImage(_act.Image))
                 ImgVisu.Tag = _act.Image
             End If
+
+            TxtText.Text = _act.Text
 
             BtnOkVisu.Visibility = Windows.Visibility.Visible
             LblProperty.Visibility = Windows.Visibility.Visible
@@ -739,6 +777,10 @@ Public Class WWidgetProperty
             LblPicture.Visibility = Windows.Visibility.Visible
             ImgVisu.Visibility = Windows.Visibility.Visible
             BtnImgVisu.Visibility = Windows.Visibility.Visible
+            LblOperateur.Visibility = Windows.Visibility.Visible
+            CbOperateurVisu.Visibility = Windows.Visibility.Visible
+            LblText.Visibility = Windows.Visibility.Visible
+            TxtText.Visibility = Windows.Visibility.Visible
         End If
     End Sub
 
@@ -753,6 +795,10 @@ Public Class WWidgetProperty
         LblPicture.Visibility = Windows.Visibility.Visible
         ImgVisu.Visibility = Windows.Visibility.Visible
         BtnImgVisu.Visibility = Windows.Visibility.Visible
+        LblOperateur.Visibility = Windows.Visibility.Visible
+        CbOperateurVisu.Visibility = Windows.Visibility.Visible
+        LblText.Visibility = Windows.Visibility.Visible
+        TxtText.Visibility = Windows.Visibility.Visible
         _FlagNewVisu = True
     End Sub
 
@@ -786,6 +832,8 @@ Public Class WWidgetProperty
             .Propriete = CbPropertyVisu.Text
             .Value = TxtValueVisu.Text
             .Image = ImgVisu.Tag
+            .Operateur = CbOperateurVisu.SelectedIndex
+            .Text = TxtText.Text
         End With
 
         If _FlagNewVisu = False Then
@@ -795,6 +843,7 @@ Public Class WWidgetProperty
         End If
 
         TxtValueVisu.Text = ""
+        TxtText.Text = ""
         Refresh_LstObjetVisu()
         _FlagNewVisu = False
         LstObjetVisu.SelectedIndex = -1
@@ -808,6 +857,10 @@ Public Class WWidgetProperty
         LblPicture.Visibility = Windows.Visibility.Collapsed
         ImgVisu.Visibility = Windows.Visibility.Collapsed
         BtnImgVisu.Visibility = Windows.Visibility.Collapsed
+        LblOperateur.Visibility = Windows.Visibility.Collapsed
+        CbOperateurVisu.Visibility = Windows.Visibility.Collapsed
+        LblText.Visibility = Windows.Visibility.Collapsed
+        TxtText.Visibility = Windows.Visibility.Collapsed
     End Sub
 
     Private Sub ImgVisu_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgVisu.MouseDown, BorderVisu.MouseDown

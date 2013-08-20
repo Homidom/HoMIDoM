@@ -15,6 +15,7 @@ Public Class WConfig
             End If
         End If
 
+        Frm.SaveDiffBackup = ChKDiffSave.IsChecked
         Frm.AutoSave = ChkSaveAuto.IsChecked
         Frm.ShowQuitter = ChkShowBtnQuit.IsChecked
         Frm.Password = TxtPassword.Text
@@ -50,6 +51,7 @@ Public Class WConfig
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         Frm = FrmMere
+        ChKDiffSave.IsChecked = Frm.SaveDiffBackup
         ChkSaveAuto.IsChecked = Frm.AutoSave
         ChkDateTime.IsChecked = Frm.ShowDateTime
         ChkShowBtnQuit.IsChecked = Frm.ShowQuitter

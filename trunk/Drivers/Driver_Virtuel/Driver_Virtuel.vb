@@ -506,6 +506,11 @@ Imports HoMIDom.HoMIDom.Device
                     Objet.Value = Parametre1
                 End If
             End If
+            If UCase(Command) = "OUVERTURE" Then
+                If Parametre1 IsNot Nothing Then
+                    Objet.Value = Parametre1
+                End If
+            End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", ex.Message)
         End Try
@@ -620,7 +625,7 @@ Imports HoMIDom.HoMIDom.Device
             _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE)
             _DeviceSupport.Add(ListeDevices.TEMPERATURE)
             _DeviceSupport.Add(ListeDevices.VITESSEVENT)
-
+            _DeviceSupport.Add(ListeDevices.VOLET)
 
             'Parametres avancés
             'add_paramavance("nom", "Description", valeupardefaut)
