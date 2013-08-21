@@ -80,9 +80,36 @@ Class Window1
     Dim _TaskMnuTransp As Byte = 99
     Dim _ShowLabelMnu As Boolean = False 'si true affiche le nom du menu sélectionné dans la barre du haut
     Dim _ShowDateTime As Boolean = True 'si true affiche l'heure du menu sélectionné dans la barre du haut
+    Dim _TranspBarHaut As Integer = 58
+    Dim _TranspBarBas As Integer = 153
+
 #End Region
 
 #Region "Property"
+    Public Property TransparenceHaut As Integer
+        Get
+            Return _TranspBarHaut
+        End Get
+        Set(value As Integer)
+            If value < 0 Then value = 0
+            If value > 255 Then value = 255
+            _TranspBarHaut = value
+            StkTop.Background = New SolidColorBrush(Color.FromArgb(_TranspBarHaut, 0, 0, 0))
+        End Set
+    End Property
+
+    Public Property TransparenceBas As Integer
+        Get
+            Return _TranspBarBas
+        End Get
+        Set(value As Integer)
+            If value < 0 Then value = 0
+            If value > 255 Then value = 255
+            _TranspBarBas = value
+            ScrollViewer1.Background = New SolidColorBrush(Color.FromArgb(_TranspBarBas, 0, 0, 0))
+        End Set
+    End Property
+
     Public Property SaveDiffBackup As Boolean
         Get
             Return _SaveDiffBack
@@ -762,6 +789,10 @@ Class Window1
             If list.Count > 0 Then 'présence des paramètres du server
                 For j As Integer = 0 To list.Item(0).Attributes.Count - 1
                     Select Case list.Item(0).Attributes.Item(j).Name
+                        Case "transparencebarhaut"
+                            TransparenceHaut = list.Item(0).Attributes.Item(j).Value
+                        Case "transparencebarbas"
+                            TransparenceBas = list.Item(0).Attributes.Item(j).Value
                         Case "savediffback"
                             SaveDiffBackup = list.Item(0).Attributes.Item(j).Value
                         Case "flagsave"
@@ -1164,6 +1195,12 @@ Class Window1
             ''Sauvegarde des parametres d'interface
             ''------------
             writer.WriteStartElement("interface")
+            writer.WriteStartAttribute("transparencebarhaut")
+            writer.WriteValue(TransparenceHaut)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("transparencebarbas")
+            writer.WriteValue(TransparenceBas)
+            writer.WriteEndAttribute()
             writer.WriteStartAttribute("savediffback")
             writer.WriteValue(SaveDiffBackup)
             writer.WriteEndAttribute()

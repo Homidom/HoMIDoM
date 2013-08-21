@@ -138,10 +138,6 @@ uReleve
 	<summary>
 InitializeComponent
 </summary>
-</member><member name="T:HoMIWpF.Customcontrols.Colorpicker">
-	<summary>
-Colorpicker
-</summary>
 </member><member name="M:HoMIWpF.uVariateur.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -209,6 +205,14 @@ InitializeComponent
 </member><member name="T:HoMIWpF.uFreeBox">
 	<summary>
 uFreeBox
+</summary>
+</member><member name="M:HoMIWpF.uMoteur.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIWpF.uMoteur">
+	<summary>
+uMoteur
 </summary>
 </member><member name="M:HoMIWpF.Window2.InitializeComponent">
 	<summary>

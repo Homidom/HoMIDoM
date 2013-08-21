@@ -42,23 +42,41 @@
                     <StackPanel >
                 <GroupBox Header="Affichage" Margin="2" Foreground="White">
                         <StackPanel >
-                            <CheckBox Name="ChkDateTime" Content="Afficher Date et Heure" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
-                            <CheckBox Name="ChkSoleil" Content="Afficher heure Lever/Coucher Soleil" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
-                            <CheckBox Name="ChkShowlblMnu" Content="Afficher le nom du menu ou de la zone sélectionnée dans la barre du haut" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
-                            <StackPanel Orientation="Horizontal">
+                                <Expander Header="Menu du Haut" Foreground="White" BorderBrush="#FF373737" Margin="1">
+                                    <StackPanel >
+                                        <CheckBox Name="ChkDateTime" Content="Afficher Date et Heure" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
+                                        <CheckBox Name="ChkSoleil" Content="Afficher heure Lever/Coucher Soleil" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
+                                        <CheckBox Name="ChkShowlblMnu" Content="Afficher le nom du menu ou de la zone sélectionnée dans la barre du haut" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
+                                        <CheckBox Name="ChkShowBtnQuit" Content="Afficher Bouton Quitter" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
+                                        <CheckBox Name="ChkAffLastError" Foreground="White" Content="Afficher Message"/>
+                                        <StackPanel Orientation="Horizontal" >
+                                            <Label Content="Transparence:" Foreground=" White" />
+                                            <Slider Name="SliderTranspHaut" SmallChange="1" Maximum="255" Width="200" />
+                                            <Label Name="LblvalTransHaut" Foreground="White" Content="0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Expander>
+                                <Expander Header="Menu du Bas" Foreground="White" BorderBrush="#FF373737" Margin="1">
+                                    <StackPanel >
+                                        <CheckBox Name="ChkMaskTaskMnu" Foreground="White" Content="Masquer automatiquement la barre de menu"/>
+                                        <StackPanel Orientation="Horizontal" >
+                                            <Label Content="Transparence:" Foreground=" White" />
+                                            <Slider Name="SliderTranspBas" SmallChange="1" Maximum="255" Width="200" />
+                                            <Label Name="LblvalTransBas" Foreground="White" Content="0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Expander>
+                                    <StackPanel Orientation="Horizontal">
 
                             <Label Content="File Image Background: " Foreground="White" />
                             <TextBox Name="TxtImgBack" Width="200" />
                             <Button Height="25" Width="25 "  Name="BtnFileImgBack" Content="..." Template="{DynamicResource GlassButton}" Foreground=" White"/>
                         </StackPanel>
                         <CheckBox Name="ChkFullScreen" Content="Plein écran" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
-                        <CheckBox Name="ChkShowBtnQuit" Content="Afficher Bouton Quitter" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                         <StackPanel Orientation="Horizontal" >
                             <CheckBox Name="ChkWidthPass" Content="Demander Mot de passe pour fonctions critiques" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                             <TextBox Name="TxtPassword" Margin="5,0,0,0" Width="100" MaxLength="12" />
                         </StackPanel>
-                        <CheckBox Name="ChkAffLastError" Foreground="White" Content="Afficher Message"/>
-                        <CheckBox Name="ChkMaskTaskMnu" Foreground="White" Content="Masquer automatiquement la barre de menu"/>
 
                         <StackPanel Orientation="Horizontal" >
                             <CheckBox Name="ChkTimeOutPage" Foreground="White" Content="Gérer TimeOut des Pages"/>
