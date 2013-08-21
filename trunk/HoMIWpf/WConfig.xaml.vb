@@ -6,38 +6,44 @@ Public Class WConfig
     Dim MyListMnu As New List(Of uCtrlImgMnu)
 
     Private Sub BtnOk_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOk.Click
-        Frm.WithPassword = ChkWidthPass.IsChecked
+        Try
 
-        If Frm.WithPassword Then
-            If String.IsNullOrEmpty(TxtPassword.Text) = True Then
-                MessageBox.Show("Veuillez saisir un mot de passe pour accéder aux fonctions critiques!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-                Exit Sub
+            Frm.WithPassword = ChkWidthPass.IsChecked
+
+            If Frm.WithPassword Then
+                If String.IsNullOrEmpty(TxtPassword.Text) = True Then
+                    MessageBox.Show("Veuillez saisir un mot de passe pour accéder aux fonctions critiques!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                    Exit Sub
+                End If
             End If
-        End If
 
-        Frm.SaveDiffBackup = ChKDiffSave.IsChecked
-        Frm.AutoSave = ChkSaveAuto.IsChecked
-        Frm.ShowQuitter = ChkShowBtnQuit.IsChecked
-        Frm.Password = TxtPassword.Text
-        Frm.AffLastError = ChkAffLastError.IsChecked
-        Frm.ShowDateTime = ChkDateTime.IsChecked
-        Frm.ShowSoleil = ChkSoleil.IsChecked
-        Frm.ShowLabelMnu = ChkShowlblMnu.IsChecked
-        Frm.FullScreen = ChkFullScreen.IsChecked
-        Frm.Friction = SliderFriction.Value.ToString("0.00")
-        Frm.ImageBackGround = TxtImgBack.Text
-        Frm.SpeedTouch = SliderSpeed.Value.ToString("0.00")
-        Frm.IP = TxtIP.Text
-        Frm.PortSOAP = TxtPort.Text
-        Frm.ListMnu = MyListMnu
-        IdSrv = TxtID.Text
-        Frm.AsTimeOutPage = ChkTimeOutPage.IsChecked
-        Frm.TimeOutPage = CInt(CbTimeOutPage.Text)
-        Frm.DefautPage = CbPageDefaut.Text
-        Frm.MaskTaskMnu = ChkMaskTaskMnu.IsChecked
-        Frm.Ville = CbVille.Text
-
-        DialogResult = True
+            Frm.SaveDiffBackup = ChKDiffSave.IsChecked
+            Frm.AutoSave = ChkSaveAuto.IsChecked
+            Frm.ShowQuitter = ChkShowBtnQuit.IsChecked
+            Frm.Password = TxtPassword.Text
+            Frm.AffLastError = ChkAffLastError.IsChecked
+            Frm.ShowDateTime = ChkDateTime.IsChecked
+            Frm.ShowSoleil = ChkSoleil.IsChecked
+            Frm.ShowLabelMnu = ChkShowlblMnu.IsChecked
+            Frm.FullScreen = ChkFullScreen.IsChecked
+            Frm.Friction = SliderFriction.Value.ToString("0.00")
+            Frm.ImageBackGround = TxtImgBack.Text
+            Frm.SpeedTouch = SliderSpeed.Value.ToString("0.00")
+            Frm.IP = TxtIP.Text
+            Frm.PortSOAP = TxtPort.Text
+            Frm.ListMnu = MyListMnu
+            IdSrv = TxtID.Text
+            Frm.AsTimeOutPage = ChkTimeOutPage.IsChecked
+            Frm.TimeOutPage = CInt(CbTimeOutPage.Text)
+            Frm.DefautPage = CbPageDefaut.Text
+            Frm.MaskTaskMnu = ChkMaskTaskMnu.IsChecked
+            Frm.Ville = CbVille.Text
+            Frm.TransparenceBas = SliderTranspBas.Value
+            Frm.TransparenceHaut = SliderTranspHaut.Value
+            DialogResult = True
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur WConfig.BtnOk: " & ex.ToString, "Erreur", "WConfig_New")
+        End Try
     End Sub
 
     Private Sub BtnCancel_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnCancel.Click
@@ -70,6 +76,11 @@ Public Class WConfig
         ChkAffLastError.IsChecked = Frm.AffLastError
         ChkTimeOutPage.IsChecked = Frm.AsTimeOutPage
         ChkMaskTaskMnu.IsChecked = Frm.MaskTaskMnu
+        SliderTranspBas.Value = Frm.TransparenceBas
+        SliderTranspHaut.Value = Frm.TransparenceHaut
+        LblvalTransBas.Content = Frm.TransparenceBas
+        LblvalTransHaut.Content = Frm.TransparenceHaut
+
         If Frm.TimeOutPage >= 0 Then CbTimeOutPage.Text = Frm.TimeOutPage
 
         ListMnu.Items.Clear()
@@ -108,7 +119,7 @@ Public Class WConfig
             listesversionsprogrammes.Text &= " Répertoire utilisé par le client WPF: " & My.Application.Info.DirectoryPath.ToString & vbCrLf
             listesversionsprogrammes.Text &= " Fichier de configuration chargé : " & Frm.ConfigFile & vbCrLf
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur New lors de l'affichage des programmes: " & ex.ToString, "Erreur", "WConfig_New")
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur New WConfig: " & ex.ToString, "Erreur", "WConfig_New")
         End Try
     End Sub
 
@@ -446,5 +457,13 @@ Public Class WConfig
 
     Private Sub WConfig_Closing(sender As Object, e As System.ComponentModel.CancelEventArgs) Handles Me.Closing
         Frm = Nothing
+    End Sub
+
+    Private Sub SliderTranspHaut_ValueChanged(sender As System.Object, e As System.Windows.RoutedPropertyChangedEventArgs(Of System.Double)) Handles SliderTranspHaut.ValueChanged
+        LblvalTransHaut.Content = Format(sender.Value, "0")
+    End Sub
+
+    Private Sub SliderTranspBas_ValueChanged(sender As System.Object, e As System.Windows.RoutedPropertyChangedEventArgs(Of System.Double)) Handles SliderTranspBas.ValueChanged
+        LblvalTransBas.Content = Format(sender.Value, "0")
     End Sub
 End Class
