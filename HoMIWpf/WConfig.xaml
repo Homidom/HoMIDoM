@@ -19,15 +19,15 @@
                 <GroupBox Header="Serveur" Margin="2" Foreground="White">
                     <StackPanel >
                         <StackPanel Orientation="Horizontal" >
-                            <Label Content="IP:" MinWidth=" 35" Foreground="White"/>
+                            <Label Content="Adresse IP:" MinWidth=" 85" Foreground="White"/>
                             <TextBox Name="TxtIP" Width="191" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
-                            <Label Content="Port:" MinWidth=" 35" Foreground="White"/>
+                            <Label Content="Port:" MinWidth=" 85" Foreground="White"/>
                             <TextBox Name="TxtPort" Width="191" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
-                            <Label Content="ID:" MinWidth=" 35" Foreground="White"/>
+                            <Label Content="ID du serveur:" MinWidth=" 85" Foreground="White"/>
                             <TextBox Name="TxtID" Width="191" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" ></StackPanel>
@@ -42,7 +42,48 @@
                     <StackPanel >
                 <GroupBox Header="Affichage" Margin="2" Foreground="White">
                         <StackPanel >
-                                <Expander Header="Menu du Haut" Foreground="White" BorderBrush="#FF373737" Margin="1">
+                                <Expander Header="Général" Foreground="White" BorderBrush="#FF373737" Margin="1">
+                                    <StackPanel >
+                                        <StackPanel Orientation="Horizontal">
+
+                                            <Label Content="File Image Background: " Foreground="White" />
+                                            <TextBox Name="TxtImgBack" Width="200" />
+                                            <Button Height="25" Width="25 "  Name="BtnFileImgBack" Content="..." Template="{DynamicResource GlassButton}" Foreground=" White"/>
+                                        </StackPanel>
+                                        <CheckBox Name="ChkFullScreen" Content="Plein écran" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
+                                        <StackPanel Orientation="Horizontal" >
+                                            <CheckBox Name="ChkWidthPass" Content="Demander Mot de passe pour fonctions critiques" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
+                                            <TextBox Name="TxtPassword" Margin="5,0,0,0" Width="100" MaxLength="12" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" >
+                                            <CheckBox Name="ChkTimeOutPage" Foreground="White" Content="Gérer TimeOut des Pages"/>
+                                            <Label Margin="15,0,0,0" Content="Timeout:" Foreground="White" />
+                                            <ComboBox Name="CbTimeOutPage" Width="50" SelectedIndex="0">
+                                                <ComboBoxItem Content="1" />
+                                                <ComboBoxItem Content="5" />
+                                                <ComboBoxItem Content="10" />
+                                                <ComboBoxItem Content="15" />
+                                                <ComboBoxItem Content="20" />
+                                                <ComboBoxItem Content="25" />
+                                                <ComboBoxItem Content="30" />
+                                                <ComboBoxItem Content="35" />
+                                                <ComboBoxItem Content="40" />
+                                                <ComboBoxItem Content="45" />
+                                                <ComboBoxItem Content="50" />
+                                                <ComboBoxItem Content="55" />
+                                            </ComboBox>
+                                            <Label Margin="5,0,0,0" Content="Page:" Foreground="White" />
+                                            <ComboBox Name="CbPageDefaut" Width="150" SelectedIndex="0">
+                                                <ComboBoxItem Content="Aucune" />
+                                            </ComboBox>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" >
+                                            <Label Content="Ville du client:" Foreground="White" />
+                                            <ComboBox Name="CbVille" Width="150" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Expander>
+                                    <Expander Header="Menu du Haut" Foreground="White" BorderBrush="#FF373737" Margin="1">
                                     <StackPanel >
                                         <CheckBox Name="ChkDateTime" Content="Afficher Date et Heure" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                                         <CheckBox Name="ChkSoleil" Content="Afficher heure Lever/Coucher Soleil" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
@@ -66,44 +107,7 @@
                                         </StackPanel>
                                     </StackPanel>
                                 </Expander>
-                                    <StackPanel Orientation="Horizontal">
 
-                            <Label Content="File Image Background: " Foreground="White" />
-                            <TextBox Name="TxtImgBack" Width="200" />
-                            <Button Height="25" Width="25 "  Name="BtnFileImgBack" Content="..." Template="{DynamicResource GlassButton}" Foreground=" White"/>
-                        </StackPanel>
-                        <CheckBox Name="ChkFullScreen" Content="Plein écran" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
-                        <StackPanel Orientation="Horizontal" >
-                            <CheckBox Name="ChkWidthPass" Content="Demander Mot de passe pour fonctions critiques" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
-                            <TextBox Name="TxtPassword" Margin="5,0,0,0" Width="100" MaxLength="12" />
-                        </StackPanel>
-
-                        <StackPanel Orientation="Horizontal" >
-                            <CheckBox Name="ChkTimeOutPage" Foreground="White" Content="Gérer TimeOut des Pages"/>
-                            <Label Margin="15,0,0,0" Content="Timeout:" Foreground="White" />
-                            <ComboBox Name="CbTimeOutPage" Width="50" SelectedIndex="0">
-                                <ComboBoxItem Content="1" />
-                                <ComboBoxItem Content="5" />
-                                <ComboBoxItem Content="10" />
-                                <ComboBoxItem Content="15" />
-                                <ComboBoxItem Content="20" />
-                                <ComboBoxItem Content="25" />
-                                <ComboBoxItem Content="30" />
-                                <ComboBoxItem Content="35" />
-                                <ComboBoxItem Content="40" />
-                                <ComboBoxItem Content="45" />
-                                <ComboBoxItem Content="50" />
-                                <ComboBoxItem Content="55" />
-                            </ComboBox>
-                            <Label Margin="5,0,0,0" Content="Page:" Foreground="White" />
-                            <ComboBox Name="CbPageDefaut" Width="150" SelectedIndex="0">
-                                <ComboBoxItem Content="Aucune" />
-                            </ComboBox>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" >
-                            <Label Content="Ville du client:" Foreground="White" />
-                            <ComboBox Name="CbVille" Width="150" />
-                        </StackPanel>
                     </StackPanel>
                 </GroupBox >
                 <GroupBox Header="Cache" Margin="2" Foreground="White">

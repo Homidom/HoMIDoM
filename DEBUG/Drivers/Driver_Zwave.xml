@@ -1,0 +1,133 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Driver_Zwave
+</name>
+</assembly>
+<members>
+<member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.GetCommandPlus">
+	<summary>
+ Retourne la liste des Commandes avancées
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.ExecuteCommand(System.Object,System.String,System.Object[])">
+	<summary>Execute une commande avancée</summary>
+	<param name="MyDevice">Objet représentant le Device </param>
+	<param name="Command">Nom de la commande avancée à éxécuter</param>
+	<param name="Param">tableau de paramétres</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.VerifChamp(System.String,System.Object)">
+	<summary>
+ Permet de vérifier si un champ est valide
+ </summary>
+	<param name="Champ"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.Start">
+	<summary>Démarrer le driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.Stop">
+	<summary>Arrêter le driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.Restart">
+	<summary>Re-Démarrer le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.Read(System.Object)">
+	<summary>Intérroger un device</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<remarks>pas utilisé</remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.Write(System.Object,System.String,System.Object,System.Object)">
+	<summary>Commander un device</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<param name="Commande">La commande à passer</param>
+	<param name="Parametre1"></param>
+	<param name="Parametre2"></param>
+	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.DeleteDevice(System.String)">
+	<summary>Fonction lancée lors de la suppression d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.NewDevice(System.String)">
+	<summary>Fonction lancée lors de l'ajout d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.Add_DeviceCommande(System.String,System.String,System.Int32)">
+	<summary>ajout des commandes avancées pour les devices</summary>
+	<param name="nom">Nom de la commande avancée</param>
+	<param name="description">Description qui sera affichée dans l'admin</param>
+	<param name="nbparam">Nombre de parametres attendus</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.Add_LibelleDriver(System.String,System.String,System.String,System.String)">
+	<summary>ajout Libellé pour le Driver</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.Add_LibelleDevice(System.String,System.String,System.String,System.String)">
+	<summary>Ajout Libellé pour les Devices</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.Add_ParamAvance(System.String,System.String,System.Object)">
+	<summary>ajout de parametre avancés</summary>
+	<param name="nom">Nom du parametre (sans espace)</param>
+	<param name="description">Description du parametre</param>
+	<param name="valeur">Sa valeur</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.#ctor">
+	<summary>Creation d'un objet de type</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.TimerTick(System.Object,System.Timers.ElapsedEventArgs)">
+	<summary>Si refresh &gt;0 gestion du timer</summary>
+	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.ouvrir(System.String)">
+	<summary>Ouvrir le port Z-Wave</summary>
+	<param name="numero">Nom/Numero du port COM: COM2</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.fermer">
+	<summary>Fermer le port Z-Wave</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.ResetControler">
+	<summary>Reset le controleur Z-Wave avec les parametres d'Usine</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.NotificationHandler(OpenZWaveDotNet.ZWNotification)">
+	<summary>Handler lors d'une reception d'une trame</summary>
+	<param name="m_notification"></param>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.GetNode(System.UInt32,System.Byte)">
+	<summary>Gets a node based on the homeId and the nodeId</summary>
+	<param name="homeId"></param>
+	<param name="nodeId"></param>
+	<returns>Node</returns>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.GetValueID(Driver_Zwave.Driver_ZWave.Driver_ZWave.Node,System.String,System.Byte)">
+	<summary>Gets a Node value ID</summary>
+	<param name="node"></param>
+	<param name="valueLabel"></param>
+	<returns>ValueId</returns>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.traiteValeur(OpenZWaveDotNet.ZWNotification)">
+	<summary>processing the received value</summary>
+	<param name="m_notification"></param>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.SimulNode">
+	<summary>Simulate a Node</summary>
+</member><member name="T:Driver_Zwave.Driver_ZWave.Driver_ZWave">
+	<summary>Class Driver_ZWave, permet de communiquer avec le controleur Z-Wave</summary>
+	<remarks>Nécessite l'installation des pilotes fournis sur le site </remarks>
+</member><member name="P:Driver_Zwave.My.Resources.Resources.ResourceManager">
+	<summary>
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member><member name="P:Driver_Zwave.My.Resources.Resources.Culture">
+	<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="T:Driver_Zwave.My.Resources.Resources">
+	<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
+</member>
+</members>
+</doc>
