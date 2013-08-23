@@ -1,0 +1,122 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Driver_Arduino
+</name>
+</assembly>
+<members>
+<member name="M:Driver_Arduino.Driver_Arduino.Read(System.Object)">
+	<summary>
+ Aller lire une entrée
+ </summary>
+	<param name="Objet">Device</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Driver_Arduino.GetCommandPlus">
+	<summary>
+ Retourne la liste des Commandes avancées
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Driver_Arduino.ExecuteCommand(System.Object,System.String,System.Object[])">
+	<summary>Execute une commande avancée</summary>
+	<param name="MyDevice">Objet représentant le Device </param>
+	<param name="Command">Nom de la commande avancée à éxécuter</param>
+	<param name="Param">tableau de paramétres</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Driver_Arduino.VerifChamp(System.String,System.Object)">
+	<summary>
+ Permet de vérifier si un champ est valide
+ </summary>
+	<param name="Champ"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Driver_Arduino.Start">
+	<summary>
+ Démarrer le driver
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Driver_Arduino.Stop">
+	<summary>
+ Arrêter le driver
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Driver_Arduino.Write(System.Object,System.String,System.Object,System.Object)">
+	<summary>
+ Activer une sortie
+ </summary>
+	<param name="Objet"></param>
+	<param name="Commande"></param>
+	<param name="Parametre1"></param>
+	<param name="Parametre2"></param>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Driver_Arduino.Add_DeviceCommande(System.String,System.String,System.Int32)">
+	<summary>ajout des commandes avancées pour les devices</summary>
+	<param name="nom">Nom de la commande avancée</param>
+	<param name="description">Description qui sera affichée dans l'admin</param>
+	<param name="nbparam">Nombre de parametres attendus</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Driver_Arduino.Add_LibelleDriver(System.String,System.String,System.String,System.String)">
+	<summary>ajout Libellé pour le Driver</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Driver_Arduino.Add_LibelleDevice(System.String,System.String,System.String,System.String)">
+	<summary>Ajout Libellé pour les Devices</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Driver_Arduino.Add_ParamAvance(System.String,System.String,System.Object)">
+	<summary>ajout de parametre avancés</summary>
+	<param name="nom">Nom du parametre (sans espace)</param>
+	<param name="description">Description du parametre</param>
+	<param name="valeur">Sa valeur</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Driver_Arduino.#ctor">
+	<summary>
+ Déclaration du driver
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Driver_Arduino.FirmataVB1_DigitalMessageReceieved(System.Int32,System.Int32)">
+	<summary>
+ Message envoyé par la carte (évènement) lorsqu'un port binaire a changée
+ </summary>
+	<param name="portNumber">N° du port où la pin se situe (sera =0 pour les pins 0 à 7 et =1 pour les pins suivantes)</param>
+	<param name="portData">Valeur représentant la valeur du port (ex: si pin 0=1 et pin1= 1 donc 11 en binaire donne 3 en dec, la valeur de portData sera 3)</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Driver_Arduino.FirmataVB1_VersionInfoReceieved(System.Int32,System.Int32)">
+	<summary>
+ Retourne la version de la carte (fonction fournie par la dll)
+ </summary>
+	<param name="majorVersion">version majeure</param>
+	<param name="minorVersion">version mineure</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Driver_Arduino.FirmataVB1_AnalogMessageReceieved(System.Int32,System.Int32)">
+	<summary>
+ Message envoyé par la carte (évènement) lorsqu'une pin analogique a changée
+ </summary>
+	<param name="pin">numéro de la pin</param>
+	<param name="value">valeur lue</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Arduino.Driver_Arduino.traitement(System.Int32,System.String,System.Int32)">
+	<summary>Va écrire les valeurs dans Homidom</summary>
+	<remarks></remarks>
+</member><member name="P:Driver_Arduino.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_Arduino.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_Arduino.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+</members>
+</doc>

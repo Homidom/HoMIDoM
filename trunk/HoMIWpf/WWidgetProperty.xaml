@@ -21,7 +21,7 @@
                             <StackPanel Orientation="Horizontal" >
                                 <Label Width="120" Content="Etiquette:" Foreground="White"/>
                                  <TextBox Name="TxtEtiq" Width="150" />
-                                    <ComboBox Name="cbBalise" Margin="5,0,0,0" Width="25" IsEditable="False" ToolTip=" Balise Système" SelectedIndex=" 0">
+                                    <ComboBox Name="cbBalise" Margin="5,0,0,0" Width="25" IsEditable="False" ToolTip="Balise Système" SelectedIndex=" 0">
                                         <ComboBoxItem Content="Date Courte" Tag="SYSTEM_DATE" />
                                         <ComboBoxItem Content="Date Long" Tag="SYSTEM_LONG_DATE" />
                                         <ComboBoxItem Content="Heure Courte" Tag="SYSTEM_TIME" />
@@ -56,7 +56,7 @@
                             <CheckBox Name="ChkShowStatus" Content="Afficher Status" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                             <CheckBox  Name="ChkFondu" Content="Fondu" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                             <CheckBox  Name="ChkIsCommun" Content="Commun à toutes les pages" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
-                            <Expander Name="Exp1" Foreground=" White" Header="Taille et Position">
+                            <Expander Name="Exp1" Foreground=" White" Header="Taille et Position" BorderBrush="#FF373737" Margin="1">
                                 <StackPanel >
                                     <StackPanel Orientation="Horizontal" >
                                 <Label Width="120" Content="X:" Foreground="White"/>
@@ -95,7 +95,7 @@
                             <StackPanel Orientation="Horizontal" >
                                 <CheckBox Name="ChkEditValue" Content="Valeur Editable" Foreground=" White" Background="DarkGray" BorderBrush="Black"/>
                         </StackPanel>
-                            <Expander Foreground=" White" Header="Picture">
+                            <Expander Foreground=" White" Header="Picture" BorderBrush="#FF373737" Margin="1">
                                 <StackPanel >
                                 <StackPanel Name="StkPicture"  >
                                 <CheckBox Name="ChkPicture" Content="Picture Visible" Foreground=" White" Background="DarkGray" BorderBrush="Black"/>
@@ -112,10 +112,11 @@
                             </StackPanel>
                           </StackPanel>
                                     </StackPanel> 
-                                </Expander> 
-                        <StackPanel Name="StkStatus">
+                                </Expander>
+                            <Expander Foreground=" White" Header="Status" BorderBrush="#FF373737" Margin="1">
+                                <StackPanel Name="StkStatus">
             <StackPanel  Orientation="Horizontal" >
-            <Label Width="120" Content="Defaut Status:" Foreground="White"/>
+                            <Label Width="120" Content="Defaut Status:" Foreground="White"/>
                 <TextBox Name="TxtDefStatus" Width="150" Text="?"/>
             </StackPanel>
                             <StackPanel  Orientation="Horizontal" >
@@ -129,20 +130,26 @@
                                 <my:Colorpicker x:Name="ColorPicker2" Width="177" />
                         </StackPanel>
                         </StackPanel>
-
-      <StackPanel Orientation="Horizontal" >
+</Expander>
+                            <Expander Foreground=" White" Header="BackGround" BorderBrush="#FF373737" Margin="1">
+                            <StackPanel >
+                                <StackPanel Orientation="Horizontal" >
                              <Label Width="120" Content="Color BackGround:" Foreground="White"/>
                             <StackPanel Orientation="Horizontal" >
                 <Label Name="lblColor" Height="20" Width="20 "/>
                 <TextBox Name="TxtColorBack" Width="0" Text="" Background="{Binding ElementName=ColorPicker1, Path=SelectedColor}" Visibility="Collapsed" />
                 <my:Colorpicker x:Name="ColorPicker1" Width="177" />
+                     
             </StackPanel>
+                                   
     </StackPanel>
-                        <StackPanel Orientation="Horizontal" >
+                                <StackPanel Orientation="Horizontal" >
                             <Label Width="142" Content="Transparence:" Foreground="White"/>
                             <StackPanel Orientation="Horizontal" />
                             <Slider x:Name="Slider1" Width="177" Maximum="255" ValueChanged="Slider1_ValueChanged"/>
                         </StackPanel>
+                            </StackPanel>
+                                </Expander> 
                         <StackPanel Orientation="Horizontal" Name="StkRss" Visibility="Collapsed" >
                             <Label Width="120" Content="URL Rss:" Foreground="White"/>
                             <TextBox Name="TxtURLRss" Width="150" Text=""/>
