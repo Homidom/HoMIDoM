@@ -67,7 +67,7 @@ Imports System.Net.Sockets
         LogLevel_Internal
     End Enum
 
-    Private Const NbControls As Integer = 26
+    Private Const NbControls As Integer = 38
     Dim ControlType(NbControls) As String
     Dim ValueType(NbControls) As String
 
@@ -406,16 +406,143 @@ Imports System.Net.Sockets
     End Function
 
     ''' <summary>Execute une commande avancée</summary>
-    ''' <param name="MyDevice">Objet représentant le Device </param>
+    ''' <param name="Objet">Objet représentant le Device </param>
     ''' <param name="Command">Nom de la commande avancée à éxécuter</param>
     ''' <param name="Param">tableau de paramétres</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function ExecuteCommand(ByVal MyDevice As Object, ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
+    Public Function ExecuteCommand(ByVal Objet As Object, ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
         Dim retour As Boolean = False
         Try
-            If MyDevice IsNot Nothing Then
-                ' Code
+            If Objet IsNot Nothing Then
+
+                Dim myHost As String = Objet.Adresse1.ToString
+                Dim myPort As String = Objet.Adresse2.ToString
+                Dim myControl As String = Objet.Modele.ToString
+                Dim myControlNum As Integer = 0
+
+                If (myHost = "") Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ExecuteCommand ", "Erreur: l'adresse IP du device (Adresse2) n'est pas définie.")
+                    ExecuteCommand = False
+                    Exit Function
+                End If
+                If (myPort = "") Then
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " ExecuteCommand ", "Info: port SNMP du device non spécifié (Adresse2), utilisation du port TCP 161.")
+                End If
+
+                Select Case Command
+                    Case "SET"
+                        For i As Integer = 1 To NbControls
+                            If myControl = ControlType(i) Then
+                                myControlNum = i
+                                Exit For
+                            End If
+                        Next
+                        If (myControlNum = 0) Then
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ExecuteCommand ", "Erreur: le composant n'est pas d'un type défini!")
+                            ExecuteCommand = False
+                            Exit Function
+                        End If
+
+                        Dim myTCW As Teracom_TCW
+                        myTCW = New Teracom_TCW
+                        myTCW.Host = myHost
+                        myTCW.Port = myPort
+                        myTCW.Control = myControlNum
+
+                        Select Case myControlNum
+                            Case 27
+                                'ControlType(27) = "TCW12x_TEMP1_MIN"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_TEMPERATURE_1
+                                myTCW.Min = Param(0)
+                                myTCW.SetMinMaxHyst(True, False, False)
+                            Case 28
+                                'ControlType(28) = "TCW12x_TEMP1_MAX"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_TEMPERATURE_1
+                                myTCW.Max = Param(0)
+                                myTCW.SetMinMaxHyst(False, True, False)
+                            Case 29
+                                'ControlType(29) = "TCW12x_TEMP1_HYST"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_TEMPERATURE_1
+                                myTCW.Hyst = Param(0)
+                                myTCW.SetMinMaxHyst(False, False, True)
+                            Case 30
+                                'ControlType(30) = "TCW12x_HUMID1_MIN"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_HUMIDITY_1
+                                myTCW.Min = Param(0)
+                                myTCW.SetMinMaxHyst(True, False, False)
+                            Case 31
+                                'ControlType(31) = "TCW12x_HUMID1_MAX"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_HUMIDITY_1
+                                myTCW.Max = Param(0)
+                                myTCW.SetMinMaxHyst(False, True, False)
+                            Case 32
+                                'ControlType(32) = "TCW12x_HUMID1_HYST"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_HUMIDITY_1
+                                myTCW.Hyst = Param(0)
+                                myTCW.SetMinMaxHyst(False, False, True)
+                            Case 33
+                                'ControlType(33) = "TCW12x_TEMP2_MIN"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_TEMPERATURE_2
+                                myTCW.Min = Param(0)
+                                myTCW.SetMinMaxHyst(True, False, False)
+                            Case 34
+                                'ControlType(34) = "TCW12x_TEMP2_MAX"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_TEMPERATURE_2
+                                myTCW.Max = Param(0)
+                                myTCW.SetMinMaxHyst(False, True, False)
+                            Case 35
+                                'ControlType(35) = "TCW12x_TEMP2_HYST"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_TEMPERATURE_2
+                                myTCW.Hyst = Param(0)
+                                myTCW.SetMinMaxHyst(False, False, True)
+                            Case 36
+                                'ControlType(36) = "TCW12x_HUMID2_MIN"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_HUMIDITY_2
+                                myTCW.Min = Param(0)
+                                myTCW.SetMinMaxHyst(True, False, False)
+                            Case 37
+                                'ControlType(37) = "TCW12x_HUMID2_MAX"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_HUMIDITY_2
+                                myTCW.Max = Param(0)
+                                myTCW.SetMinMaxHyst(False, True, False)
+                            Case 38
+                                'ControlType(38) = "TCW12x_HUMID2_HYST"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_HUMIDITY_2
+                                myTCW.Hyst = Param(0)
+                                myTCW.SetMinMaxHyst(False, False, True)
+                            Case Else
+                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & "ExecuteCommand ", "Commande impossible pour ce type de contrôle.")
+                                ExecuteCommand = False
+                                Exit Function
+                        End Select
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ExecuteCommand ", "Commande SET exécutée pour " & ControlType(myControlNum) & " avec paramètre: " & Param(0).ToString)
+                        myTCW = Nothing
+                        ' Mise à jour de la valeur par relecture du device
+                        Read(Objet)
+                    Case "SAVE_SETTINGS"
+                        For i As Integer = 1 To NbControls
+                            If myControl = ControlType(i) Then
+                                myControlNum = i
+                                Exit For
+                            End If
+                        Next
+                        If (myControlNum = 0) Then
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ExecuteCommand ", "Erreur: le composant n'est pas d'un type défini!")
+                            ExecuteCommand = False
+                            Exit Function
+                        End If
+
+                        Dim myTCW As Teracom_TCW
+                        myTCW = New Teracom_TCW
+                        myTCW.Host = myHost
+                        myTCW.Port = myPort
+                        myTCW.Control = myControlNum
+                        myTCW.SaveSettings()
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ExecuteCommand ", "Commande SAVE_SETTINGS exécutée pour " & ControlType(myControlNum))
+                    Case Else
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ExecuteCommand ", "La commande " & Command & " n'existe pas")
+                End Select
                 Return True
             Else
                 Return False
@@ -532,7 +659,71 @@ Imports System.Net.Sockets
                 myTCW.Control = myControlNum
 
                 Dim result As String
-                result = myTCW.GetValue()
+                Select Case myControlNum
+                    Case 27
+                        'ControlType(27) = "TCW12x_TEMP1_MIN"
+                        myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_TEMPERATURE_1
+                        myTCW.GetMinMaxHyst(True, False, False)
+                        result = myTCW.Min
+                    Case 28
+                        'ControlType(28) = "TCW12x_TEMP1_MAX"
+                        myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_TEMPERATURE_1
+                        myTCW.GetMinMaxHyst(False, True, False)
+                        result = myTCW.Max
+                    Case 29
+                        'ControlType(29) = "TCW12x_TEMP1_HYST"
+                        myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_TEMPERATURE_1
+                        myTCW.GetMinMaxHyst(False, False, True)
+                        result = myTCW.Hyst
+                    Case 30
+                        'ControlType(30) = "TCW12x_HUMID1_MIN"
+                        myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_HUMIDITY_1
+                        myTCW.GetMinMaxHyst(True, False, False)
+                        result = myTCW.Min
+                    Case 31
+                        'ControlType(31) = "TCW12x_HUMID1_MAX"
+                        myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_HUMIDITY_1
+                        myTCW.GetMinMaxHyst(False, True, False)
+                        result = myTCW.Max
+                    Case 32
+                        'ControlType(32) = "TCW12x_HUMID1_HYST"
+                        myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_HUMIDITY_1
+                        myTCW.GetMinMaxHyst(False, False, True)
+                        result = myTCW.Hyst
+                    Case 33
+                        'ControlType(33) = "TCW12x_TEMP2_MIN"
+                        myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_TEMPERATURE_2
+                        myTCW.GetMinMaxHyst(True, False, False)
+                        result = myTCW.Min
+                    Case 34
+                        'ControlType(34) = "TCW12x_TEMP2_MAX"
+                        myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_TEMPERATURE_2
+                        myTCW.GetMinMaxHyst(False, True, False)
+                        result = myTCW.Max
+                    Case 35
+                        'ControlType(35) = "TCW12x_TEMP2_HYST"
+                        myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_TEMPERATURE_2
+                        myTCW.GetMinMaxHyst(False, False, True)
+                        result = myTCW.Hyst
+                    Case 36
+                        'ControlType(36) = "TCW12x_HUMID2_MIN"
+                        myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_HUMIDITY_2
+                        myTCW.GetMinMaxHyst(True, False, False)
+                        result = myTCW.Min
+                    Case 37
+                        'ControlType(37) = "TCW12x_HUMID2_MAX"
+                        myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_HUMIDITY_2
+                        myTCW.GetMinMaxHyst(False, True, False)
+                        result = myTCW.Max
+                    Case 38
+                        'ControlType(38) = "TCW12x_HUMID2_HYST"
+                        myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_HUMIDITY_2
+                        myTCW.GetMinMaxHyst(False, False, True)
+                        result = myTCW.Hyst
+                    Case Else
+                        result = myTCW.GetValue()
+                End Select
+
                 If InStr(result, "timeout") > 0 Then
                     If _DEBUG Then
                         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read ", "Le périphérique n'a pas répondu pour " & Objet.modele)
@@ -632,9 +823,75 @@ Imports System.Net.Sockets
                             End If
                             Exit Sub
                         End If
-                        myTCW.SaveSettings()
+                    Case "Single"
+                        Select Case myControlNum
+                            Case 27
+                                'ControlType(27) = "TCW12x_TEMP1_MIN"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_TEMPERATURE_1
+                                myTCW.Min = Parametre1
+                                myTCW.SetMinMaxHyst(True, False, False)
+                            Case 28
+                                'ControlType(28) = "TCW12x_TEMP1_MAX"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_TEMPERATURE_1
+                                myTCW.Max = Parametre1
+                                myTCW.SetMinMaxHyst(False, True, False)
+                            Case 29
+                                'ControlType(29) = "TCW12x_TEMP1_HYST"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_TEMPERATURE_1
+                                myTCW.Hyst = Parametre1
+                                myTCW.SetMinMaxHyst(False, False, True)
+                            Case 30
+                                'ControlType(30) = "TCW12x_HUMID1_MIN"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_HUMIDITY_1
+                                myTCW.Min = Parametre1
+                                myTCW.SetMinMaxHyst(True, False, False)
+                            Case 31
+                                'ControlType(31) = "TCW12x_HUMID1_MAX"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_HUMIDITY_1
+                                myTCW.Max = Parametre1
+                                myTCW.SetMinMaxHyst(False, True, False)
+                            Case 32
+                                'ControlType(32) = "TCW12x_HUMID1_HYST"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_HUMIDITY_1
+                                myTCW.Hyst = Parametre1
+                                myTCW.SetMinMaxHyst(False, False, True)
+                            Case 33
+                                'ControlType(33) = "TCW12x_TEMP2_MIN"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_TEMPERATURE_2
+                                myTCW.Min = Parametre1
+                                myTCW.SetMinMaxHyst(True, False, False)
+                            Case 34
+                                'ControlType(34) = "TCW12x_TEMP2_MAX"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_TEMPERATURE_2
+                                myTCW.Max = Parametre1
+                                myTCW.SetMinMaxHyst(False, True, False)
+                            Case 35
+                                'ControlType(35) = "TCW12x_TEMP2_HYST"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_TEMPERATURE_2
+                                myTCW.Hyst = Parametre1
+                                myTCW.SetMinMaxHyst(False, False, True)
+                            Case 36
+                                'ControlType(36) = "TCW12x_HUMID2_MIN"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_HUMIDITY_2
+                                myTCW.Min = Parametre1
+                                myTCW.SetMinMaxHyst(True, False, False)
+                            Case 37
+                                'ControlType(37) = "TCW12x_HUMID2_MAX"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_HUMIDITY_2
+                                myTCW.Max = Parametre1
+                                myTCW.SetMinMaxHyst(False, True, False)
+                            Case 38
+                                'ControlType(38) = "TCW12x_HUMID2_HYST"
+                                myTCW.Control = Teracom_TCW.ControlTypes.TYPE_TCW12x_HUMIDITY_2
+                                myTCW.Hyst = Parametre1
+                                myTCW.SetMinMaxHyst(False, False, True)
+                            Case Else
+                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write ", "Commande impossible pour ce type de contrôle.")
+                                Exit Sub
+                        End Select
+                        'myTCW.SaveSettings()
                     Case Else
-                        result = "Erreur: le composant n'est pas un relais commandable."
+                        result = "Erreur: le composant n'est pas commandable."
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write ", "Erreur: le composant n'est pas un relais commandable!")
                 End Select
                 myTCW = Nothing
@@ -754,6 +1011,11 @@ Imports System.Net.Sockets
             _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE)
             _DeviceSupport.Add(ListeDevices.TEMPERATURE)
             _DeviceSupport.Add(ListeDevices.HUMIDITE)
+            _DeviceSupport.Add(ListeDevices.DETECTEUR)
+            _DeviceSupport.Add(ListeDevices.CONTACT)
+            _DeviceSupport.Add(ListeDevices.APPAREIL)
+            _DeviceSupport.Add(ListeDevices.LAMPE)
+            _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE)
 
             'Paramétres avancés
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
@@ -761,6 +1023,8 @@ Imports System.Net.Sockets
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
+            Add_DeviceCommande("SET", "Paramètre: valeur Min/Max/Hyst à envoyer", 1)
+            Add_DeviceCommande("SAVE_SETTINGS", "Sauvegarde des réglages résistante au reboot du boîtier", 0)
 
             'Libellé Driver
             Add_LibelleDriver("HELP", "Aide...", "Ce module permet de contrôler un composant d'un boîtier Teracom. Attention, le mode SNMP doit être activé dans le boîtier!")
@@ -769,7 +1033,7 @@ Imports System.Net.Sockets
             Add_LibelleDevice("ADRESSE1", "Adresse IP", "Adresse IP ou nom d'hôte du boîtier Teracom")
             Add_LibelleDevice("ADRESSE2", "Port SNMP", "Port SNMP utilisé pour accéder au boîtier")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "Contrôle", "Composant du boîtier à interroger", "TCW12x_TEMPERATURE_1|TCW12x_TEMPERATURE_2|TCW12x_HUMIDITY_1|TCW12x_HUMIDITY_2|TCW12x_DIGITAL_IN_1|TCW12x_DIGITAL_IN_2|TCW12x_ANALOG_IN_1|TCW12x_ANALOG_IN_2|TCW12x_RELAY_1|TCW12x_RELAY_2|TCW18x_RELAY_1|TCW18x_RELAY_2|TCW18x_RELAY_3|TCW18x_RELAY_4|TCW18x_RELAY_5|TCW18x_RELAY_6|TCW18x_RELAY_7|TCW18x_RELAY_8|TCW18x_DIGITAL_IN|TCW120_TEMPERATURE|TCW120_DIGITAL_IN_1|TCW120_DIGITAL_IN_2|TCW120_ANALOG_IN_1|TCW120_ANALOG_IN_2|TCW120_RELAY_1|TCW120_RELAY_2")
+            Add_LibelleDevice("MODELE", "Contrôle", "Composant du boîtier à interroger", "TCW12x_TEMPERATURE_1|TCW12x_TEMPERATURE_2|TCW12x_HUMIDITY_1|TCW12x_HUMIDITY_2|TCW12x_DIGITAL_IN_1|TCW12x_DIGITAL_IN_2|TCW12x_ANALOG_IN_1|TCW12x_ANALOG_IN_2|TCW12x_RELAY_1|TCW12x_RELAY_2|TCW18x_RELAY_1|TCW18x_RELAY_2|TCW18x_RELAY_3|TCW18x_RELAY_4|TCW18x_RELAY_5|TCW18x_RELAY_6|TCW18x_RELAY_7|TCW18x_RELAY_8|TCW18x_DIGITAL_IN|TCW120_TEMPERATURE|TCW120_DIGITAL_IN_1|TCW120_DIGITAL_IN_2|TCW120_ANALOG_IN_1|TCW120_ANALOG_IN_2|TCW120_RELAY_1|TCW120_RELAY_2|TCW12x_TEMP1_MIN|TCW12x_TEMP1_MAX|TCW12x_TEMP1_HYST|TCW12x_HUMID1_MIN|TCW12x_HUMID1_MAX|TCW12x_HUMID1_HYST|TCW12x_TEMP2_MIN|TCW12x_TEMP2_MAX|TCW12x_TEMP2_HYST|TCW12x_HUMID2_MIN|TCW12x_HUMID2_MAX|TCW12x_HUMID2_HYST")
             Add_LibelleDevice("REFRESH", "Refresh", "Intervalle de rafraîchissement des données")
             Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
@@ -800,6 +1064,18 @@ Imports System.Net.Sockets
             ControlType(24) = "TCW120_ANALOG_IN_2"
             ControlType(25) = "TCW120_RELAY_1"
             ControlType(26) = "TCW120_RELAY_2"
+            ControlType(27) = "TCW12x_TEMP1_MIN"
+            ControlType(28) = "TCW12x_TEMP1_MAX"
+            ControlType(29) = "TCW12x_TEMP1_HYST"
+            ControlType(30) = "TCW12x_HUMID1_MIN"
+            ControlType(31) = "TCW12x_HUMID1_MAX"
+            ControlType(32) = "TCW12x_HUMID1_HYST"
+            ControlType(33) = "TCW12x_TEMP2_MIN"
+            ControlType(34) = "TCW12x_TEMP2_MAX"
+            ControlType(35) = "TCW12x_TEMP2_HYST"
+            ControlType(36) = "TCW12x_HUMID2_MIN"
+            ControlType(37) = "TCW12x_HUMID2_MAX"
+            ControlType(38) = "TCW12x_HUMID2_HYST"
 
             ValueType(0) = "Boolean"
             ValueType(1) = "Single"
@@ -828,6 +1104,18 @@ Imports System.Net.Sockets
             ValueType(24) = "Single"
             ValueType(25) = "Boolean"
             ValueType(26) = "Boolean"
+            ValueType(27) = "Single"
+            ValueType(28) = "Single"
+            ValueType(29) = "Single"
+            ValueType(30) = "Single"
+            ValueType(31) = "Single"
+            ValueType(32) = "Single"
+            ValueType(33) = "Single"
+            ValueType(34) = "Single"
+            ValueType(35) = "Single"
+            ValueType(36) = "Single"
+            ValueType(37) = "Single"
+            ValueType(38) = "Single"
 
 
         Catch ex As Exception
@@ -1071,6 +1359,8 @@ Friend Class Teracom_TCW
         myDesc(25) = "TCW120 Relay 1"
         myDesc(26) = "TCW120 Relay 2"
 
+
+
     End Sub
 
     Public Function GetValue() As String
@@ -1257,33 +1547,32 @@ Friend Class Teracom_TCW
         myMax = String.Empty
         myHyst = String.Empty
 
-        If SetMin = True Then
-            result = GetSnmp(myHost, BaseOID & MIBMin(myControl))
-            If Val(result) <> 0 Then
+        Try
+            If SetMin = True Then
+                result = GetSnmp(myHost, BaseOID & MIBMin(myControl))
                 myMin = Format$(Val(result) / 10, "0.0")
+                If Val(result) <> Val(myMin) Then
+                    result = "Error (min)"
+                End If
             End If
-            If Val(result) <> Val(myMin) Then
-                result = "Error (min)"
-            End If
-        End If
-        If SetMax = True Then
-            result = GetSnmp(myHost, BaseOID & MIBMax(myControl))
-            If Val(result) <> 0 Then
+            If SetMax = True Then
+                result = GetSnmp(myHost, BaseOID & MIBMax(myControl))
                 myMax = Format$(Val(result) / 10, "0.0")
+                If Val(result) <> Val(myMin) Then
+                    result = "Error (max)"
+                End If
             End If
-            If Val(result) <> Val(myMin) Then
-                result = "Error (max)"
-            End If
-        End If
-        If setHyst = True Then
-            result = GetSnmp(myHost, BaseOID & MIBHyst(myControl))
-            If Val(result) <> 0 Then
+            If setHyst = True Then
+                result = GetSnmp(myHost, BaseOID & MIBHyst(myControl))
                 myHyst = Format$(Val(result) / 10, "0.0")
+                If Val(result) <> Val(myMin) Then
+                    result = "Error (hyst)"
+                End If
             End If
-            If Val(result) <> Val(myMin) Then
-                result = "Error (hyst)"
-            End If
-        End If
+
+        Catch ex As Exception
+            result = "Error"
+        End Try
 
     End Sub
 
