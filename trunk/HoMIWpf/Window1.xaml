@@ -59,8 +59,8 @@
     </DockPanel>
         <DockPanel >
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top"  Name="StkTop" Margin="0,0,1,0" Background="#3A000000">
-                <StackPanel Background="#FF5F5F5F">
-                    <Image Name="Menu1" Height="40" Width="40" Margin="3" Source="/HoMIWpF;component/Images/Rond_32x32.png" >
+                <StackPanel Background="#00000000">
+                    <Image Name="Menu1" Height="40" Width="40" Margin="3" Source="Images/Rond_64x64.png" >
                         <Image.ContextMenu >
                             <ContextMenu Name="CtxMnuBtn"> 
                             <MenuItem Name="Chk1" Header="Déplacer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" FontSize="10">
