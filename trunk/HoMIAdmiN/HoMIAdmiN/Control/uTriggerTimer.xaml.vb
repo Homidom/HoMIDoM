@@ -77,8 +77,6 @@ Public Class uTriggerTimer
                             'on desactive le mode simple
                             SP_modesimplecontenu.Visibility = Windows.Visibility.Collapsed
                             SP_modesimplealerte.Visibility = Windows.Visibility.Visible
-
-
                         End If
 
                     End If

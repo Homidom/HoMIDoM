@@ -20,7 +20,7 @@ Public Class keyboard
                 If Me.oskProcess IsNot Nothing AndAlso Me.oskProcess.HasExited Then
                     oskProcess.Close()
                 End If
-                oskProcess = Process.Start("osk")
+                If String.IsNullOrEmpty(frmMere.KeyboardPath) = False Then oskProcess = Process.Start(frmMere.KeyboardPath)
                 'BtnClose.Content = "▼"
             End If
         Catch ex As Exception

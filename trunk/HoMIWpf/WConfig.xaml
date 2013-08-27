@@ -19,20 +19,21 @@
                 <GroupBox Header="Serveur" Margin="2" Foreground="White">
                     <StackPanel >
                         <StackPanel Orientation="Horizontal" >
-                            <Label Content="Adresse IP:" MinWidth=" 85" Foreground="White"/>
+                            <Label Content="Adresse IP:" MinWidth="145" Foreground="White"/>
                             <TextBox Name="TxtIP" Width="191" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
-                            <Label Content="Port:" MinWidth=" 85" Foreground="White"/>
+                            <Label Content="Port:" MinWidth="145" Foreground="White"/>
                             <TextBox Name="TxtPort" Width="191" />
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
-                            <Label Content="ID du serveur:" MinWidth=" 85" Foreground="White"/>
+                            <Label Content="ID du serveur:" MinWidth="145" Foreground="White"/>
                             <TextBox Name="TxtID" Width="191" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" ></StackPanel>
-                        <StackPanel Orientation="Horizontal" ></StackPanel>
-                        <StackPanel Orientation="Horizontal" ></StackPanel>
+                        <StackPanel Orientation="Horizontal" >
+                            <Label Content="TimeOut du serveur Live:" MinWidth="145" Foreground="White"/>
+                            <TextBox Name="TxtTimeOutSrvLive" Width="50" />
+                        </StackPanel>
                     </StackPanel>
                 </GroupBox >
 
@@ -80,6 +81,10 @@
                                         <StackPanel Orientation="Horizontal" >
                                             <Label Content="Ville du client:" Foreground="White" />
                                             <ComboBox Name="CbVille" Width="150" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" >
+                                            <Label Content="Processus Keyboard Virtuel:" Foreground="White" />
+                                            <TextBox Name="TxtKeyboardPath" Width="150" />
                                         </StackPanel>
                                     </StackPanel>
                                 </Expander>
