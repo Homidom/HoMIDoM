@@ -90,14 +90,19 @@ Namespace HoMIDom
         Private Shared lock_logwrite As New Object
         <NonSerialized()> Shared _SaveRealTime As Boolean = True 'True si on enregistre en temps réel
         <NonSerialized()> Shared _Devise As String = "€"
-        <NonSerialized()> Shared _GererEnergie As Boolean = False
-        <NonSerialized()> Shared _TarifJour As Double = 0
-        <NonSerialized()> Shared _TarifNuit As Double = 0
+
         <NonSerialized()> Shared _EnableSrvWeb As Boolean = False
         <NonSerialized()> Shared _PortSrvWeb As Integer = 8080
         <NonSerialized()> Shared _SrvWeb As ServeurWeb = Nothing
         <NonSerialized()> Shared _ModeDecouverte As Boolean = False 'Mode découverte des nouveaux devices
         <NonSerialized()> Shared _ListThread As New List(Of Thread)
+
+        'Variables Energie
+        <NonSerialized()> Shared _PuissanceTotaleActuel As Integer = 0
+        <NonSerialized()> Shared _PuissanceMini As Integer = 0 'Puissance mini par défaut pour connaitre la puissance de base de la maison pour les composants non gérés par le serveur
+        <NonSerialized()> Shared _GererEnergie As Boolean = False
+        <NonSerialized()> Shared _TarifJour As Double = 0
+        <NonSerialized()> Shared _TarifNuit As Double = 0
 #End Region
 
 #Region "Event"
@@ -134,10 +139,55 @@ Namespace HoMIDom
         Public Sub DeviceChange(ByVal Device As Object, ByVal [Property] As String, ByVal Parametres As Object)
             Dim retour As String = ""
             Dim valeurString As String = String.Empty
+            Dim genericDevice As HoMIDom.Device.DeviceGenerique = Device
+
             If Parametres IsNot Nothing Then
                 valeurString = Parametres.ToString()
             End If
-            Dim genericDevice As HoMIDom.Device.DeviceGenerique = Device
+
+            'Gestion Energies
+            Try
+                If genericDevice.Type = "ENERGIEINSTANTANEE" Then
+                    PuissanceTotaleActuel = CInt(Device.value)
+                End If
+                If genericDevice.Puissance > 0 Then
+                    Dim _CalculVariation As Boolean = False 'True si le calcul doit prendre en compte la variation ou la suivant la valeur du device
+
+                    Select Case genericDevice.Type
+                        Case "APPAREIL"
+                        Case "AUDIO"
+                        Case "BAROMETRE"
+                        Case "BATTERIE"
+                        Case "COMPTEUR"
+                        Case "CONTACT"
+                        Case "DETECTEUR"
+                        Case "DIRECTIONVENT"
+                        Case "ENERGIEINSTANTANEE"
+                        Case "ENERGIETOTALE"
+                        Case "FREEBOX"
+                        Case "GENERIQUEBOOLEEN"
+                        Case "GENERIQUESTRING"
+                        Case "GENERIQUEVALUE"
+                        Case "HUMIDITE"
+                        Case "LAMPE"
+                        Case "METEO"
+                        Case "MULTIMEDIA"
+                        Case "PLUIECOURANT"
+                        Case "PLUIETOTAL"
+                        Case "SWITCH"
+                        Case "TELECOMMANDE"
+                        Case "TEMPERATURE"
+                        Case "TEMPERATURECONSIGNE"
+                        Case "UV"
+                        Case "VITESSEVENT"
+                        Case "VOLET"
+
+                    End Select
+                End If
+            Catch ex As Exception
+
+            End Try
+
             RaiseEvent DeviceChanged(genericDevice.ID, valeurString)
 
             Try
@@ -593,7 +643,7 @@ Namespace HoMIDom
                                         Case "devise"
                                             _Devise = list.Item(0).Attributes.Item(j).Value
                                         Case "gererenergie"
-                                            _GererEnergie = list.Item(0).Attributes.Item(j).Value
+                                            GererEnergie = list.Item(0).Attributes.Item(j).Value
                                         Case "tarifjour"
                                             _TarifJour = list.Item(0).Attributes.Item(j).Value
                                         Case "tarifnuit"
@@ -1549,7 +1599,7 @@ Namespace HoMIDom
                 writer.WriteValue(_Devise)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("gererenergie")
-                writer.WriteValue(_GererEnergie)
+                writer.WriteValue(GererEnergie)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("tarifjour")
                 writer.WriteValue(_TarifJour)
@@ -3878,7 +3928,27 @@ Namespace HoMIDom
 #End Region
 
 #Region "Energie"
+        'ajouter la gestion save/load/param _Puissancemini
+        Public Property GererEnergie As Boolean
+            Get
+                Return _GererEnergie
+            End Get
+            Set(value As Boolean)
+                If value And _GererEnergie = False Then
+                    PuissanceTotaleActuel = _PuissanceMini
+                End If
+                _GererEnergie = value
+            End Set
+        End Property
 
+        Public Property PuissanceTotaleActuel As Integer
+            Get
+                Return _PuissanceTotaleActuel
+            End Get
+            Set(value As Integer)
+                _PuissanceTotaleActuel = value
+            End Set
+        End Property
 #End Region
 
 #Region "Serveur Web"

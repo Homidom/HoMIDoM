@@ -3,6 +3,7 @@
 Public Class PushNotification
     Dim _Url As String
     Dim _Key As String
+    Dim _Wait As Integer = 30000
     Dim _Connection As HubConnection
 
     Public Event DeviceChanged(ByVal DeviceId As String, ByVal DeviceValue As String)
@@ -18,7 +19,7 @@ Public Class PushNotification
         Dim hub = _Connection.CreateHubProxy("NotificationHub")
         hub.On(Of String, String)("DeviceChanged", AddressOf Me.OnDeviceChanged)
 
-        Return _Connection.Start().Wait(5000)
+        Return _Connection.Start().Wait(_Wait)
     End Function
 
     Public Function Close()
@@ -29,8 +30,9 @@ Public Class PushNotification
         RaiseEvent DeviceChanged(id, val)
     End Function
 
-    Public Sub New(ByVal url As String, ByVal serverKey As String)
+    Public Sub New(ByVal url As String, ByVal serverKey As String, Optional Wait As Integer = 30000)
         Me._Url = url
         Me._Key = serverKey
+        Me._Wait = Wait
     End Sub
 End Class

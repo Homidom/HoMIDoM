@@ -410,11 +410,11 @@ Namespace HoMIDom
             End Property
 
             'Puissance du composant
-            Public Property Puissance As String
+            Public Property Puissance As Integer
                 Get
                     Return _Puiss
                 End Get
-                Set(ByVal value As String)
+                Set(ByVal value As Integer)
                     _Puiss = value
                 End Set
             End Property
@@ -1787,6 +1787,7 @@ Namespace HoMIDom
 
         <Serializable()> Class METEO
             Inherits DeviceGenerique
+
             Dim _Value As String = "#"
             Dim _ValueLast As String = "#"
             Dim _ConditionActuel As String = "#"

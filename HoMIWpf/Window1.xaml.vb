@@ -45,6 +45,7 @@ Class Window1
     Dim _PasswordHS As String = ""
     Dim _PortSOAP As String = "7999"
     Dim _IP As String = "localhost"
+    Dim _TimeoutSrvlive As Integer = 30000
 
     'XML
     Dim myxml As HoMIDom.HoMIDom.XML
@@ -82,10 +83,18 @@ Class Window1
     Dim _ShowDateTime As Boolean = True 'si true affiche l'heure du menu sélectionné dans la barre du haut
     Dim _TranspBarHaut As Integer = 58
     Dim _TranspBarBas As Integer = 153
-
+    Dim _KeyBoardPath As String = "osk"
 #End Region
 
 #Region "Property"
+    Public Property KeyboardPath As String
+        Get
+            Return _KeyBoardPath
+        End Get
+        Set(value As String)
+            _KeyBoardPath = value
+        End Set
+    End Property
     Public Property TransparenceHaut As Integer
         Get
             Return _TranspBarHaut
@@ -340,6 +349,15 @@ Class Window1
         End Set
     End Property
 
+    Public Property TimeOutServerLive As Integer
+        Get
+            Return _TimeoutSrvlive
+        End Get
+        Set(value As Integer)
+            _TimeoutSrvlive = value
+        End Set
+    End Property
+
     Public Property HSAdresse As String
         Get
             Return _Serveur
@@ -548,10 +566,12 @@ Class Window1
                 LblCouche.Content = mydate.ToShortTimeString
             End If
 
+            If IsConnect Then Refresh()
             'MaJ Liste des devices
-            Dim x As New Thread(AddressOf Refresh)
-            x.Start()
-            x = Nothing
+            'Dim x As New Thread(AddressOf Refresh)
+            'x.Priority = ThreadPriority.Highest
+            'x.Start()
+            'x = Nothing
 
             myxml = Nothing
             frmMere = Me
@@ -581,9 +601,11 @@ Class Window1
                     If _dev.ID = deviceid Then
                         Dim mydev As TemplateDevice = myService.ReturnDeviceByID(IdSrv, deviceid)
                         MaJ_Device(mydev, _dev)
-                        Exit For
+                        Exit Sub
                     End If
                 Next
+
+                AllDevices.Add(myService.ReturnDeviceByID(IdSrv, deviceid))
             End If
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Event DeviceChanged: " & ex.ToString, "Erreur", " Event DeviceChanged")
@@ -647,7 +669,6 @@ Class Window1
         Destination.ValueLast = Source.ValueLast
         Destination.ValueMax = Source.ValueMax
         Destination.ValueMin = Source.ValueMin
-
     End Sub
 
     Private Sub NewLog(ByVal TypLog As HoMIDom.HoMIDom.Server.TypeLog, ByVal Source As HoMIDom.HoMIDom.Server.TypeSource, ByVal Fonction As String, ByVal Message As String) 'Evènement lorsqu'un nouveau log est écrit
@@ -742,6 +763,8 @@ Class Window1
                             _IP = list.Item(0).Attributes.Item(j).Value
                         Case "id"
                             IdSrv = list.Item(0).Attributes.Item(j).Value
+                        Case "timeoutsrvlive"
+                            TimeOutServerLive = list.Item(0).Attributes.Item(j).Value
                         Case Else
                             Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                     End Select
@@ -789,6 +812,8 @@ Class Window1
             If list.Count > 0 Then 'présence des paramètres du server
                 For j As Integer = 0 To list.Item(0).Attributes.Count - 1
                     Select Case list.Item(0).Attributes.Item(j).Name
+                        Case "keyboardpath"
+                            KeyboardPath = list.Item(0).Attributes.Item(j).Value
                         Case "transparencebarhaut"
                             TransparenceHaut = list.Item(0).Attributes.Item(j).Value
                         Case "transparencebarbas"
@@ -1177,6 +1202,9 @@ Class Window1
             writer.WriteStartAttribute("id")
             writer.WriteValue(IdSrv)
             writer.WriteEndAttribute()
+            writer.WriteStartAttribute("timeoutsrvlive")
+            writer.WriteValue(TimeOutServerLive)
+            writer.WriteEndAttribute()
             writer.WriteEndElement()
 
             ''-------------------
@@ -1195,6 +1223,9 @@ Class Window1
             ''Sauvegarde des parametres d'interface
             ''------------
             writer.WriteStartElement("interface")
+            writer.WriteStartAttribute("keyboardpath")
+            writer.WriteValue(KeyboardPath)
+            writer.WriteEndAttribute()
             writer.WriteStartAttribute("transparencebarhaut")
             writer.WriteValue(TransparenceHaut)
             writer.WriteEndAttribute()
@@ -1629,15 +1660,16 @@ Class Window1
 
             myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
             myService = myChannelFactory.CreateChannel()
+
             Try
                 If myService.GetIdServer(IdSrv) = "99" Then
                     AfficheMessageAndLog(Fonctions.TypeLog.MESSAGE, "L'ID du serveur est erroné, impossible de communiquer avec celui-ci", "Erreur", "ConnectToHomidom")
                     IsConnect = False
                 Else
-                    myService.GetServerVersion()
+                    myService.GetTime()
                     IsConnect = True
 
-                    Dim mypush As New PushNotification("Http://" & IP & ":" & PortSOAP & "/live", IdSrv)
+                    Dim mypush As New PushNotification("http://" & IP & ":" & PortSOAP & "/live", IdSrv, TimeOutServerLive)
                     AddHandler mypush.DeviceChanged, AddressOf DeviceChanged
                     mypush.Open()
 
@@ -1736,13 +1768,13 @@ Class Window1
                 End If
             End If
 
-            If Now.Second = 0 Then
-                'MaJ Liste des devices au moins toutes les minutes
-                Dim x As New Thread(AddressOf Refresh)
-                x.Priority = ThreadPriority.Highest
-                x.Start()
-                x = Nothing
-            End If
+            'If Now.Second = 0 Then
+            '    'MaJ Liste des devices au moins toutes les minutes
+            '    Dim x As New Thread(AddressOf Refresh)
+            '    x.Priority = ThreadPriority.Highest
+            '    x.Start()
+            '    x = Nothing
+            'End If
         Catch ex As Exception
             IsConnect = False
 
@@ -1850,6 +1882,8 @@ Class Window1
             GC.Collect()
 
             Me.UpdateLayout()
+
+            ShowZone(Zoneid)
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ElementShowZone: " & ex.Message, "Erreur", "ElementShowZone")
         End Try

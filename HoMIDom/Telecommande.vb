@@ -1,6 +1,4 @@
-﻿'Imports System.Windows.Media
-
-Namespace HoMIDom
+﻿Namespace HoMIDom
     ''' <summary>
     ''' Class pour gérer les télécommandes
     ''' </summary>
@@ -14,12 +12,12 @@ Namespace HoMIDom
         Public Class Template
 
 #Region "Variables"
-            Dim _ID As String = ""
-            Dim _Name As String = ""
-            Dim _Fabricant As String = ""
-            Dim _Modele As String = ""
-            Dim _Driver As String = ""
-            Dim _File As String = ""
+            Dim _ID As String
+            Dim _Name As String
+            Dim _Fabricant As String
+            Dim _Modele As String
+            Dim _Driver As String
+            Dim _File As String
             Dim _Type As Integer = 0 '0:http 1:ir 2:rs232
             Dim _Colonne As Integer = 4
             Dim _Ligne As Integer = 8
@@ -29,13 +27,7 @@ Namespace HoMIDom
             Dim _Port As Integer 'Port IP
             Dim _Cmd As New List(Of Commandes)
             Dim _Var As New List(Of TemplateVar)
-
-            'Variables graphiques
-            Dim _Width As Double = 200
-            Dim _Height As Double = 570
-            Dim _BackgroundPicture As String = ""
-            Dim _ColorBackGround As Double 'SolidColorBrush = Brushes.Black
-
+            Dim _GraficTemplate As GraficTemplate
 #End Region
 
 #Region "Property"
@@ -276,45 +268,17 @@ Namespace HoMIDom
                     IP = _IP
                 End Set
             End Property
-#End Region
 
-#Region "Property Graphic"
-            Public Property Width As Double
+            Public Property GraphicTemplate As GraficTemplate
                 Get
-                    Return _Width
+                    Return _GraficTemplate
                 End Get
-                Set(ByVal value As Double)
-                    _Width = value
-                End Set
-            End Property
-
-            Public Property Height As Double
-                Get
-                    Return _Height
-                End Get
-                Set(ByVal value As Double)
-                    _Height = value
-                End Set
-            End Property
-
-            Public Property BackGroundPicture As String
-                Get
-                    Return _BackgroundPicture
-                End Get
-                Set(ByVal value As String)
-                    _BackgroundPicture = value
-                End Set
-            End Property
-
-            Public Property ColorBackGround As Double 'SolidColorBrush
-                Get
-                    Return _ColorBackGround
-                End Get
-                Set(ByVal value As Double) 'SolidColorBrush)
-                    _ColorBackGround = value
+                Set(value As GraficTemplate)
+                    _GraficTemplate = value
                 End Set
             End Property
 #End Region
+
 
             Public Sub New()
                 'Création des variables par défaut
@@ -627,5 +591,68 @@ Namespace HoMIDom
                 End Set
             End Property
         End Class
+
+#Region "Template Graphique"
+        Public Class GraficTemplate
+
+#Region "Variables"
+            'Variables graphiques du template
+            Dim _Width As Double = 200
+            Dim _Height As Double = 570
+            Dim _BackgroundPicture As String = ""
+            Dim _ColorBackGround As Double 'SolidColorBrush = Brushes.Black
+            Dim _Widgets As New List(Of Widget)
+#End Region
+
+#Region "Property Graphic"
+            Public Property Width As Double
+                Get
+                    Return _Width
+                End Get
+                Set(ByVal value As Double)
+                    _Width = value
+                End Set
+            End Property
+
+            Public Property Height As Double
+                Get
+                    Return _Height
+                End Get
+                Set(ByVal value As Double)
+                    _Height = value
+                End Set
+            End Property
+
+            Public Property BackGroundPicture As String
+                Get
+                    Return _BackgroundPicture
+                End Get
+                Set(ByVal value As String)
+                    _BackgroundPicture = value
+                End Set
+            End Property
+
+            Public Property ColorBackGround As Double 'SolidColorBrush
+                Get
+                    Return _ColorBackGround
+                End Get
+                Set(ByVal value As Double) 'SolidColorBrush)
+                    _ColorBackGround = value
+                End Set
+            End Property
+
+            Public Property Widgets As List(Of Widget)
+                Get
+                    Return _Widgets
+                End Get
+                Set(value As List(Of Widget))
+                    _Widgets = Widgets
+                End Set
+            End Property
+#End Region
+
+        End Class
+
+#End Region
     End Class
 End Namespace

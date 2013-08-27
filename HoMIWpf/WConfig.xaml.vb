@@ -17,6 +17,7 @@ Public Class WConfig
                 End If
             End If
 
+            Frm.KeyboardPath = TxtKeyboardPath.Text
             Frm.SaveDiffBackup = ChKDiffSave.IsChecked
             Frm.AutoSave = ChkSaveAuto.IsChecked
             Frm.ShowQuitter = ChkShowBtnQuit.IsChecked
@@ -31,13 +32,14 @@ Public Class WConfig
             Frm.SpeedTouch = SliderSpeed.Value.ToString("0.00")
             Frm.IP = TxtIP.Text
             Frm.PortSOAP = TxtPort.Text
+            If IsNumeric(TxtTimeOutSrvLive.Text) Then Frm.TimeOutServerLive = TxtTimeOutSrvLive.Text
             Frm.ListMnu = MyListMnu
             IdSrv = TxtID.Text
             Frm.AsTimeOutPage = ChkTimeOutPage.IsChecked
             Frm.TimeOutPage = CInt(CbTimeOutPage.Text)
             Frm.DefautPage = CbPageDefaut.Text
             Frm.MaskTaskMnu = ChkMaskTaskMnu.IsChecked
-            Frm.Ville = CbVille.Text
+            If String.IsNullOrEmpty(CbVille.Text) = False Then Frm.Ville = CbVille.Text
             Frm.TransparenceBas = SliderTranspBas.Value
             Frm.TransparenceHaut = SliderTranspHaut.Value
             DialogResult = True
@@ -72,6 +74,7 @@ Public Class WConfig
         LblSpeed.Content = Frm.SpeedTouch.ToString("0.00")
         TxtIP.Text = Frm.IP
         TxtPort.Text = Frm.PortSOAP
+        TxtTimeOutSrvLive.Text = Frm.TimeOutServerLive
         TxtID.Text = IdSrv
         ChkAffLastError.IsChecked = Frm.AffLastError
         ChkTimeOutPage.IsChecked = Frm.AsTimeOutPage
@@ -80,6 +83,7 @@ Public Class WConfig
         SliderTranspHaut.Value = Frm.TransparenceHaut
         LblvalTransBas.Content = Frm.TransparenceBas
         LblvalTransHaut.Content = Frm.TransparenceHaut
+        TxtKeyboardPath.Text = Frm.KeyboardPath
 
         If Frm.TimeOutPage >= 0 Then CbTimeOutPage.Text = Frm.TimeOutPage
 
@@ -390,7 +394,6 @@ Public Class WConfig
             TxtPassword.Visibility = Windows.Visibility.Collapsed
         End If
     End Sub
-
 
     Private Sub ChkTimeOutPage_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ChkTimeOutPage.Click
         If ChkTimeOutPage.IsChecked Then
