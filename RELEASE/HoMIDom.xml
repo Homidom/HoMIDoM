@@ -3102,7 +3102,7 @@ HoMIDom
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Trigger.maj_cron">
-	<summary>convertit la condition au format cron "cron_ss#mm#hh#jj#MMM#JJJ" en dateTime dans le champ prochainedateheure</summary>
+	<summary>convertit la condition au format cron "ss#mm#hh#jj#MMM#JJJ" en dateTime dans le champ prochainedateheure</summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Trigger">
 	<summary>Class trigger, Défini le type pour les triggers Device/timers</summary>

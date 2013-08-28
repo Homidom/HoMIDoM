@@ -1,0 +1,1295 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Weather>
+  <label>
+    <eng>a few clouds</eng>
+    <fr>Quelques nuages</fr>
+  </label>
+  <label>
+    <eng>a few clouds and breezy</eng>
+    <fr>Quelques nuages et Frais</fr>
+  </label>
+  <label>
+    <eng>a few clouds and windy</eng>
+    <fr>Quelques nuages Grand vent</fr>
+  </label>
+  <label>
+    <eng>a few clouds and windy</eng>
+    <fr>Quelques nuages Grand vent</fr>
+  </label>
+  <label>
+    <eng>a few clouds with haze</eng>
+    <fr>Quelques nuages et brume</fr>
+  </label>
+  <label>
+    <eng>am clouds / pm sun</eng>
+    <fr>Matin nuages / Apres-Midi Soleil</fr>
+  </label>
+  <label>
+    <eng>am fog / pm sun</eng>
+    <fr>Matin Brouillard / Apres-Midi Soleil</fr>
+  </label>
+  <label>
+    <eng>am rain / snow showers</eng>
+    <fr>Matin pluie / averses neigeuses</fr>
+  </label>
+  <label>
+    <eng>am showers</eng>
+    <fr>Averses matinales</fr>
+  </label>
+  <label>
+    <eng>am showers</eng>
+    <fr>Averses matinales</fr>
+  </label>
+  <label>
+    <eng>am snow showers</eng>
+    <fr>Averses de neige le matin</fr>
+  </label>
+  <label>
+    <eng>am t-storms</eng>
+    <fr>Orages le matin</fr>
+  </label>
+  <label>
+    <eng>blowing dust</eng>
+    <fr>Vent de poussiere</fr>
+  </label>
+  <label>
+    <eng>blowing sand</eng>
+    <fr>Vent de sable</fr>
+  </label>
+  <label>
+    <eng>blowing snow</eng>
+    <fr>Vent de neige</fr>
+  </label>
+  <label>
+    <eng>blowing snow in vicinity</eng>
+    <fr>Vent de neige dans les environs</fr>
+  </label>
+  <label>
+    <eng>clear</eng>
+    <fr>Clair</fr>
+  </label>
+  <label>
+    <eng>clear / wind</eng>
+    <fr>Clair / vent</fr>
+  </label>
+  <label>
+    <eng>clear and breezy</eng>
+    <fr>Clair et frais</fr>
+  </label>
+  <label>
+    <eng>clear with haze</eng>
+    <fr>Clair avec brume legere</fr>
+  </label>
+  <label>
+    <eng>clear and windy</eng>
+    <fr>Clair et venteux</fr>
+  </label>
+  <label>
+    <eng>cloudy clair</eng>
+    <fr>Nuageux clair</fr>
+  </label>
+  <label>
+    <eng>clouds early / clearing kate</eng>
+    <fr>Nuages matinaux suivis d'eclaircies</fr>
+  </label>
+  <label>
+    <eng>cloudy</eng>
+    <fr>Nuageux</fr>
+  </label>
+  <label>
+    <eng>cloudy / wind</eng>
+    <fr>Nuageux / Vent</fr>
+  </label>
+  <label>
+    <eng>cloudy / windy</eng>
+    <fr>Nuageux et venteux</fr>
+  </label>
+  <label>
+    <eng>drifting snow</eng>
+    <fr>Amoncellement de neige</fr>
+  </label>
+  <label>
+    <eng>drizzle</eng>
+    <fr>crachin</fr>
+  </label>
+  <label>
+    <eng>drizzle fog/mist</eng>
+    <fr>Crachin brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>drizzle fog</eng>
+    <fr>Crachin brouillard</fr>
+  </label>
+  <label>
+    <eng>drizzle fog</eng>
+    <fr>Crachin brouillard</fr>
+  </label>
+  <label>
+    <eng>drizzle ice pellets</eng>
+    <fr>Crachin grelons</fr>
+  </label>
+  <label>
+    <eng>drizzle snow</eng>
+    <fr>Crachin neige</fr>
+  </label>
+  <label>
+    <eng>dust</eng>
+    <fr>Poussiere</fr>
+  </label>
+  <label>
+    <eng>dust storm in vicinity</eng>
+    <fr>Tempete de poussiere dans les environs</fr>
+  </label>
+  <label>
+    <eng>dust storm</eng>
+    <fr>Tempete de poussiere</fr>
+  </label>
+  <label>
+    <eng>dust/sand whirls</eng>
+    <fr>Tourbillons de poussiere/sable</fr>
+  </label>
+  <label>
+    <eng>dust/sand whirls in vicinity</eng>
+    <fr>Tourbillons de poussiere/sable dans les environs</fr>
+  </label>
+  <label>
+    <eng>fair</eng>
+    <fr>Ciel degage</fr>
+  </label>
+  <label>
+    <eng>fair/ windy</eng>
+    <fr>Ciel degage / grand vent</fr>
+  </label>
+  <label>
+    <eng>fair and breezy</eng>
+    <fr>Ciel degage et frais</fr>
+  </label>
+  <label>
+    <eng>fair and windy</eng>
+    <fr>Ciel degage et grand vent</fr>
+  </label>
+  <label>
+    <eng>fair with haze</eng>
+    <fr>Ciel degage avec brume legere</fr>
+  </label>
+  <label>
+    <eng>few showers</eng>
+    <fr>Quelques averses</fr>
+  </label>
+  <label>
+    <eng>few snow showers</eng>
+    <fr>Quelques averses de neige</fr>
+  </label>
+  <label>
+    <eng>few snow showers / wind</eng>
+    <fr>Quelques averses de neige / Vent</fr>
+  </label>
+  <label>
+    <eng>fog</eng>
+    <fr>Brouillard</fr>
+  </label>
+  <label>
+    <eng>fog in vicinity</eng>
+    <fr>Brouillard dans les environs</fr>
+  </label>
+  <label>
+    <eng>fog/mist</eng>
+    <fr>Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>freezing drizzle</eng>
+    <fr>Crachin givrant</fr>
+  </label>
+  <label>
+    <eng>freezing drizzle in vicinity</eng>
+    <fr>Crachin givrant dans les environs</fr>
+  </label>
+  <label>
+    <eng>freezing drizzle rain</eng>
+    <fr>Crachin pluie givrant </fr>
+  </label>
+  <label>
+    <eng>freezing drizzle snow</eng>
+    <fr>Crachin neige givrant</fr>
+  </label>
+  <label>
+    <eng>freezing fog</eng>
+    <fr>Brouillard givrant</fr>
+  </label>
+  <label>
+    <eng>freezing fog in vicinity</eng>
+    <fr>Brouillard givrant dans les environs</fr>
+  </label>
+  <label>
+    <eng>freezing rain</eng>
+    <fr>Pluie givrante</fr>
+  </label>
+  <label>
+    <eng>freezing rain in vicinity</eng>
+    <fr>Pluie givrante dans les environs</fr>
+  </label>
+  <label>
+    <eng>freezing rain snow</eng>
+    <fr>Pluie neige givrante dans les environs</fr>
+  </label>
+  <label>
+    <eng>frigid</eng>
+    <fr>Grand froid</fr>
+  </label>
+  <label>
+    <eng>funnel cloud in vicinity</eng>
+    <fr>Nuage en entonnoir dans les environs</fr>
+  </label>
+  <label>
+    <eng>funnel cloud</eng>
+    <fr>Nuage en entonnoir</fr>
+  </label>
+  <label>
+    <eng>hail</eng>
+    <fr>Grele</fr>
+  </label>
+  <label>
+    <eng>hail showers</eng>
+    <fr>Averses de grele</fr>
+  </label>
+  <label>
+    <eng>haze</eng>
+    <fr>Brume legere</fr>
+  </label>
+  <label>
+    <eng>heavy drizzle</eng>
+    <fr>Gros Crachin </fr>
+  </label>
+  <label>
+    <eng>heavy drizzle gog/mist</eng>
+    <fr>Gros Crachin Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>heavy drizzle fog</eng>
+    <fr>Gros Crachin Brouillard</fr>
+  </label>
+  <label>
+    <eng>heavy drizzle ice pellets</eng>
+    <fr>Gros Crachin Grelons</fr>
+  </label>
+  <label>
+    <eng>heavy drizzle snow</eng>
+    <fr>Gros Crachin Neige</fr>
+  </label>
+  <label>
+    <eng>heavy Dust storm</eng>
+    <fr>Grosse tempete de poussiere</fr>
+  </label>
+  <label>
+    <eng>heavy freezing drizzle rain</eng>
+    <fr>Gros Crachin verglassant Pluie</fr>
+  </label>
+  <label>
+    <eng>heavy freezing drizzle snow</eng>
+    <fr>Gros Crachin verglassant Neige</fr>
+  </label>
+  <label>
+    <eng>heavy freezing drizzle</eng>
+    <fr>Gros Crachin verglassant</fr>
+  </label>
+  <label>
+    <eng>heavy freezing fog</eng>
+    <fr>Gros brouillard verglassant</fr>
+  </label>
+  <label>
+    <eng>heavy freezing rain snow</eng>
+    <fr>Grosse pluie verglassante Neige</fr>
+  </label>
+  <label>
+    <eng>heavy freezing rain</eng>
+    <fr>Grosse pluie verglassante</fr>
+  </label>
+  <label>
+    <eng>heavy ice pellets</eng>
+    <fr>Gros Grelons</fr>
+  </label>
+  <label>
+    <eng>heavy ice pellets drizzle</eng>
+    <fr>Gros Grelons Crachin</fr>
+  </label>
+  <label>
+    <eng>heavy ice pellets rain</eng>
+    <fr>Gros Grelons Pluie</fr>
+  </label>
+  <label>
+    <eng>heavy rain</eng>
+    <fr>Grosse pluie</fr>
+  </label>
+  <label>
+    <eng>heavy rain fog/mist</eng>
+    <fr>Grosse pluie Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>heavy rain fog</eng>
+    <fr>Grosse pluie Brouillard</fr>
+  </label>
+  <label>
+    <eng>heavy rain freezing drizzle</eng>
+    <fr>Grosse pluie Crachin verglassant</fr>
+  </label>
+  <label>
+    <eng>heavy rain freezing rain</eng>
+    <fr>Grosse pluie Pluie verglassante</fr>
+  </label>
+  <label>
+    <eng>heavy rain ice pellets</eng>
+    <fr>Grosse pluie Grelons</fr>
+  </label>
+  <label>
+    <eng>heavy rain icy</eng>
+    <fr>Grosse pluie verglassante</fr>
+  </label>
+  <label>
+    <eng>heavy rain showers fog/mist</eng>
+    <fr>Grosse pluie Averses Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>heavy rain showers</eng>
+    <fr>Grosse pluie Averses</fr>
+  </label>
+  <label>
+    <eng>heavy rain snow</eng>
+    <fr>Grosse pluie Neige</fr>
+  </label>
+  <label>
+    <eng>heavy Sand storm</eng>
+    <fr>Grosse tempete de sable </fr>
+  </label>
+  <label>
+    <eng>heavy showers rain fog/mist</eng>
+    <fr>Grosses averses Pluie Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>heavy showers rain</eng>
+    <fr>Grosses averses Pluie</fr>
+  </label>
+  <label>
+    <eng>heavy showers snow fog/mist</eng>
+    <fr>Grosses Neige Pluie Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>heavy showers snow fog</eng>
+    <fr>Grosses averses Neige Brouillard</fr>
+  </label>
+  <label>
+    <eng>heavy showers snow</eng>
+    <fr>Grosses averses Neige</fr>
+  </label>
+  <label>
+    <eng>heavy snow</eng>
+    <fr>Beaucoup de neige</fr>
+  </label>
+  <label>
+    <eng>heavy snow drizzle</eng>
+    <fr>Beaucoup de neige Crachin</fr>
+  </label>
+  <label>
+    <eng>heavy snow fog/mist</eng>
+    <fr>Beaucoup de neige Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>heavy snow fog</eng>
+    <fr>Beaucoup de neige Brouillard</fr>
+  </label>
+  <label>
+    <eng>heavy snow freezing drizzle</eng>
+    <fr>Beaucoup de neige Crachin verglassant</fr>
+  </label>
+  <label>
+    <eng>heavy snow freezing rain</eng>
+    <fr>Beaucoup de neige Pluie verglassante</fr>
+  </label>
+  <label>
+    <eng>heavy snow rain</eng>
+    <fr>Beaucoup de neige Pluie</fr>
+  </label>
+  <label>
+    <eng>heavy snow showers fog/mist</eng>
+    <fr>Beaucoup de neige Averses Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>heavy snow showers fog</eng>
+    <fr>Beaucoup de neige Averses Brouillard</fr>
+  </label>
+  <label>
+    <eng>heavy snow showers</eng>
+    <fr>Beaucoup de neige Averses</fr>
+  </label>
+  <label>
+    <eng>heavy t-storm</eng>
+    <fr>Gros orage</fr>
+  </label>
+  <label>
+    <eng>heavy t-storms rain fog/mist</eng>
+    <fr>Gros orage Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>heavy t-storms rain fog</eng>
+    <fr>Gros orage Brouillard</fr>
+  </label>
+  <label>
+    <eng>heavy t-storms rain hail fog/mist</eng>
+    <fr>Gros orage Grele Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>heavy t-storms rain hail fog</eng>
+    <fr>Gros orage Grele  Brouillard</fr>
+  </label>
+  <label>
+    <eng>heavy t-storms rain hail haze</eng>
+    <fr>Gros orage Grele Brume legere</fr>
+  </label>
+  <label>
+    <eng>heavy t-storms rain hail</eng>
+    <fr>Gros orage Grele</fr>
+  </label>
+  <label>
+    <eng>heavy t-storms rain haze</eng>
+    <fr>Gros orage Brume legere</fr>
+  </label>
+  <label>
+    <eng>heavy t-storms rain</eng>
+    <fr>Gros orage Pluie</fr>
+  </label>
+  <label>
+    <eng>heavy t-storms snow</eng>
+    <fr>Gros orage Neige</fr>
+  </label>
+  <label>
+    <eng>ice crystals</eng>
+    <fr>Cristaux de glace</fr>
+  </label>
+  <label>
+    <eng>ice pellets drizzle</eng>
+    <fr>Grelons Crachin</fr>
+  </label>
+  <label>
+    <eng>ice pellets in vicinity</eng>
+    <fr>Grelons dans les environs </fr>
+  </label>
+  <label>
+    <eng>ice pellets rain</eng>
+    <fr>Grelons Pluie</fr>
+  </label>
+  <label>
+    <eng>ice pellets</eng>
+    <fr>Grelons</fr>
+  </label>
+  <label>
+    <eng>Isokated t-storms</eng>
+    <fr>Orages isoles</fr>
+  </label>
+  <label>
+    <eng>light drizzle</eng>
+    <fr>Leger crachin</fr>
+  </label>
+  <label>
+    <eng>light drizzle fog/mist</eng>
+    <fr>Leger crachin Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>light drizzle fog</eng>
+    <fr>Leger crachin Brouillard</fr>
+  </label>
+  <label>
+    <eng>light drizzle ice pellets</eng>
+    <fr>Leger crachin Grelons</fr>
+  </label>
+  <label>
+    <eng>light drizzle snow</eng>
+    <fr>Leger crachin Neige</fr>
+  </label>
+  <label>
+    <eng>light freezing drizzle</eng>
+    <fr>Leger crachin verglassant</fr>
+  </label>
+  <label>
+    <eng>light freezing drizzle rain</eng>
+    <fr>Leger crachin verglassant Pluie</fr>
+  </label>
+  <label>
+    <eng>light freezing drizzle snow</eng>
+    <fr>Leger crachin verglassant Neige</fr>
+  </label>
+  <label>
+    <eng>light freezing fog</eng>
+    <fr>Leger brouillard verglassant</fr>
+  </label>
+  <label>
+    <eng>light freezing rain</eng>
+    <fr>Legere pluie verglassante</fr>
+  </label>
+  <label>
+    <eng>light freezing rain snow</eng>
+    <fr>Legere pluie verglassante Neige</fr>
+  </label>
+  <label>
+    <eng>light ice pellets drizzle</eng>
+    <fr>Petit Grelons Crachin</fr>
+  </label>
+  <label>
+    <eng>light ice pellets rain</eng>
+    <fr>Petit Grelons Pluie</fr>
+  </label>
+  <label>
+    <eng>light ice pellets</eng>
+    <fr>Petit Grelons</fr>
+  </label>
+  <label>
+    <eng>light rain</eng>
+    <fr>Legere Pluie</fr>
+  </label>
+  <label>
+    <eng>light rain Early</eng>
+    <fr>Legere Pluie matinal</fr>
+  </label>
+  <label>
+    <eng>light rain fog/mist</eng>
+    <fr>Legere Pluie Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>light rain fog</eng>
+    <fr>Legere Pluie Brouillard</fr>
+  </label>
+  <label>
+    <eng>light rain freezing drizzle</eng>
+    <fr>Legere Pluie Crachin verglassant</fr>
+  </label>
+  <label>
+    <eng>light rain freezing rain</eng>
+    <fr>Legere Pluie Pluie verglassante</fr>
+  </label>
+  <label>
+    <eng>light rain ice pellets</eng>
+    <fr>Legere Pluie Grelons</fr>
+  </label>
+  <label>
+    <eng>light rain icy</eng>
+    <fr>Legere pluie verglassante</fr>
+  </label>
+  <label>
+    <eng>light rain kate</eng>
+    <fr>Legere Pluie tardive</fr>
+  </label>
+  <label>
+    <eng>light rain shower</eng>
+    <fr>Legere pluie Averse</fr>
+  </label>
+  <label>
+    <eng>light rain shower and windy</eng>
+    <fr>Legere pluie Averses et Vent</fr>
+  </label>
+  <label>
+    <eng>light rain showers</eng>
+    <fr>Legeres pluie Averses</fr>
+  </label>
+  <label>
+    <eng>light rain snow</eng>
+    <fr>Legeres pluie Neige</fr>
+  </label>
+  <label>
+    <eng>light rain with Thunder</eng>
+    <fr>Legere Pluie avec tonnerre</fr>
+  </label>
+  <label>
+    <eng>light showers rain</eng>
+    <fr>Legere averses Pluie</fr>
+  </label>
+  <label>
+    <eng>light showers rain fog/mist</eng>
+    <fr>Legere averses Pluie Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>light showers snow</eng>
+    <fr>Legere averses Neige</fr>
+  </label>
+  <label>
+    <eng>light showers snow fog</eng>
+    <fr>Legere averses Neige Brouillard</fr>
+  </label>
+  <label>
+    <eng>light showers snow fog/mist</eng>
+    <fr>Legere averses Neige Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>light snow</eng>
+    <fr>Peu de neige</fr>
+  </label>
+  <label>
+    <eng>light snow drizzle</eng>
+    <fr>Peu de neige Crachin</fr>
+  </label>
+  <label>
+    <eng>light snow Fall</eng>
+    <fr>Legere chutes de neige</fr>
+  </label>
+  <label>
+    <eng>light snow fog/mist</eng>
+    <fr>Peu de neige Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>light snow fog</eng>
+    <fr>Peu de neige Brouillard</fr>
+  </label>
+  <label>
+    <eng>light snow freezing drizzle</eng>
+    <fr>Peu de neige Crachin verglassant</fr>
+  </label>
+  <label>
+    <eng>light snow freezing rain</eng>
+    <fr>Peu de neige Pluie Verglassante</fr>
+  </label>
+  <label>
+    <eng>light snow grains</eng>
+    <fr>Quelques flocons de neige</fr>
+  </label>
+  <label>
+    <eng>light snow rain</eng>
+    <fr>Peu de neige Pluie</fr>
+  </label>
+  <label>
+    <eng>light snow shower</eng>
+    <fr>Legere averse de neige</fr>
+  </label>
+  <label>
+    <eng>light snow showers fog/mist</eng>
+    <fr>Legere averses de neige Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>light snow showers fog</eng>
+    <fr>Legere averses de neige Brouillard</fr>
+  </label>
+  <label>
+    <eng>light t-storms rain fog/mist</eng>
+    <fr>Leger orages Pluie Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>light t-storms rain fog</eng>
+    <fr>Leger orages Pluie Brouillard</fr>
+  </label>
+  <label>
+    <eng>light t-storms rain hail fog/mist</eng>
+    <fr>Leger orages Pluie Grele Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>light t-storms rain hail fog</eng>
+    <fr>Leger orages Pluie Grele Brouillard</fr>
+  </label>
+  <label>
+    <eng>light t-storms rain hail haze</eng>
+    <fr>Leger orages Pluie Grele Brume legere</fr>
+  </label>
+  <label>
+    <eng>light t-storms rain hail</eng>
+    <fr>Leger orages Pluie Grele</fr>
+  </label>
+  <label>
+    <eng>light t-storms rain haze</eng>
+    <fr>Leger orages Pluie Brume legere</fr>
+  </label>
+  <label>
+    <eng>light t-storms rain</eng>
+    <fr>Leger orages Pluie</fr>
+  </label>
+  <label>
+    <eng>light t-storms snow</eng>
+    <fr>Leger orages Neige</fr>
+  </label>
+  <label>
+    <eng>lightening</eng>
+    <fr>Eclairs</fr>
+  </label>
+  <label>
+    <eng>lightenings</eng>
+    <fr>Eclairs</fr>
+  </label>
+  <label>
+    <eng>mostly clear</eng>
+    <fr>Ciel plutot degage</fr>
+  </label>
+  <label>
+    <eng>mostly cloudy</eng>
+    <fr>Plutot nuageux</fr>
+  </label>
+  <label>
+    <eng>mostly cloudy and breezy</eng>
+    <fr>Plutot nuageux et Venteux</fr>
+  </label>
+  <label>
+    <eng>mostly cloudy and windy</eng>
+    <fr>Plutot nuageux et Grand vent</fr>
+  </label>
+  <label>
+    <eng>mostly cloudy/wind</eng>
+    <fr>Plutot nuageux et Grand vent</fr>
+  </label>
+  <label>
+    <eng>mostly cloudy with haze</eng>
+    <fr>Plutot nuageux avec Legere Brume</fr>
+  </label>
+  <label>
+    <eng>mostly sunny</eng>
+    <fr>Plutot ensoleille</fr>
+  </label>
+  <label>
+    <eng>mostly sunny / wind</eng>
+    <fr>Plutot ensoleille / vent</fr>
+  </label>
+  <label>
+    <eng>overcast</eng>
+    <fr>Couvert</fr>
+  </label>
+  <label>
+    <eng>overcast and Breezy</eng>
+    <fr>Couvert et Venteux</fr>
+  </label>
+  <label>
+    <eng>overcast and windy</eng>
+    <fr>Couvert et Grand vent</fr>
+  </label>
+  <label>
+    <eng>overcast with haze</eng>
+    <fr>Couvert avec legere brume</fr>
+  </label>
+  <label>
+    <eng>partial fog</eng>
+    <fr>Banc de Brouillard</fr>
+  </label>
+  <label>
+    <eng>partial fog in vicinity</eng>
+    <fr>Banc de Brouillard dans les environs</fr>
+  </label>
+  <label>
+    <eng>p cloudy</eng>
+    <fr>Partiellement nuageux</fr>
+  </label>
+  <label>
+    <eng>partly cloudy</eng>
+    <fr>Partiellement nuageux</fr>
+  </label>
+  <label>
+    <eng>partly cloudy and breezy</eng>
+    <fr>Partiellement nuageux et Venteux</fr>
+  </label>
+  <label>
+    <eng>partly cloudy and windy</eng>
+    <fr>Partiellement nuageux et Grand vent</fr>
+  </label>
+  <label>
+    <eng>partly cloudy / wind</eng>
+    <fr>Partiellement nuageux / Vent</fr>
+  </label>
+  <label>
+    <eng>partly cloudy/ windy</eng>
+    <fr>Partiellement nuageux / Venteux</fr>
+  </label>
+  <label>
+    <eng>partly cloudy/wind</eng>
+    <fr>Partiellement nuageux / Venteux</fr>
+  </label>
+  <label>
+    <eng>partly cloudy with haze</eng>
+    <fr>Partiellement nuageux avec legere brume</fr>
+  </label>
+  <label>
+    <eng>partly sunny</eng>
+    <fr>Partiellement ensoleille</fr>
+  </label>
+  <label>
+    <eng>patches of fog</eng>
+    <fr>Nappes de Brouillard</fr>
+  </label>
+  <label>
+    <eng>patches of fog in vicinity</eng>
+    <fr>Nappes de Brouillard dans les environs</fr>
+  </label>
+  <label>
+    <eng>pm light rain</eng>
+    <fr>PM Legere Pluie</fr>
+  </label>
+  <label>
+    <eng>pm rain / snow</eng>
+    <fr>PM Pluie / Neige</fr>
+  </label>
+  <label>
+    <eng>pm rain / wind</eng>
+    <fr>PM Pluie / Vent</fr>
+  </label>
+  <label>
+    <eng>pm showers</eng>
+    <fr>PM Averses</fr>
+  </label>
+  <label>
+    <eng>pm snow showers</eng>
+    <fr>PM averses neigeuses</fr>
+  </label>
+  <label>
+    <eng>pm t-storms</eng>
+    <fr>Orages l apres-midi</fr>
+  </label>
+  <label>
+    <eng>rain</eng>
+    <fr>Pluie</fr>
+  </label>
+  <label>
+    <eng>rain / snow</eng>
+    <fr>Pluie / neige</fr>
+  </label>
+  <label>
+    <eng>rain / snow showers</eng>
+    <fr>Pluie / averses neigeuses</fr>
+  </label>
+  <label>
+    <eng>rain / snow showers early</eng>
+    <fr>Pluie / averses neigeuses matinales</fr>
+  </label>
+  <label>
+    <eng>rain / thunder</eng>
+    <fr>Pluie / Tonnerre</fr>
+  </label>
+  <label>
+    <eng>rain / wind</eng>
+    <fr>Pluie / Vent</fr>
+  </label>
+  <label>
+    <eng>rain and snow</eng>
+    <fr>Pluie et Neige</fr>
+  </label>
+  <label>
+    <eng>rain early</eng>
+    <fr>Pluie matinale</fr>
+  </label>
+  <label>
+    <eng>rain fog/mist</eng>
+    <fr>Pluie Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>rain fog</eng>
+    <fr>Pluie Brouillard</fr>
+  </label>
+  <label>
+    <eng>rain freezing drizzle</eng>
+    <fr>Pluie Crachin verglassant</fr>
+  </label>
+  <label>
+    <eng>rain freezing rain</eng>
+    <fr>Pluie Pluie Verglassante</fr>
+  </label>
+  <label>
+    <eng>rain ice pellets</eng>
+    <fr>Pluie Grelons</fr>
+  </label>
+  <label>
+    <eng>rain shower</eng>
+    <fr>Pluie Averses</fr>
+  </label>
+  <label>
+    <eng>rain showers fog/mist</eng>
+    <fr>Pluie Averses Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>rain showers in vicinity fog/mist</eng>
+    <fr>Pluie Averses dans les environs Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>rain showers in vicinity</eng>
+    <fr>Pluie Averses dans les environs</fr>
+  </label>
+  <label>
+    <eng>rain snow</eng>
+    <fr>Pluie Neige</fr>
+  </label>
+  <label>
+    <eng>rain to snow</eng>
+    <fr>Pluie vers Neige</fr>
+  </label>
+  <label>
+    <eng>sand storm</eng>
+    <fr>Tempete de Sable</fr>
+  </label>
+  <label>
+    <eng>sand storm in vicinity</eng>
+    <fr>Tempete de Sable dans les environs</fr>
+  </label>
+  <label>
+    <eng>sand</eng>
+    <fr>Sable</fr>
+  </label>
+  <label>
+    <eng>shallow fog</eng>
+    <fr>Brouillard superficiel</fr>
+  </label>
+  <label>
+    <eng>shallow fog in vicinity</eng>
+    <fr>Brouillard superficiel dans les environs</fr>
+  </label>
+  <label>
+    <eng>scattered showers</eng>
+    <fr>Averses eparses</fr>
+  </label>
+  <label>
+    <eng>scattered showers / wind</eng>
+    <fr>Averses eparses / Vent</fr>
+  </label>
+  <label>
+    <eng>scattered snow showers</eng>
+    <fr>Averses neigeuses eparses</fr>
+  </label>
+  <label>
+    <eng>scattered snow showers / wind</eng>
+    <fr>Averses neigeuses eparses / Vent</fr>
+  </label>
+  <label>
+    <eng>scattered strong storms</eng>
+    <fr>Violents orages locals</fr>
+  </label>
+  <label>
+    <eng>scattered t-storms</eng>
+    <fr>Orages eparses</fr>
+  </label>
+  <label>
+    <eng>showers</eng>
+    <fr>Averses</fr>
+  </label>
+  <label>
+    <eng>showers / wind</eng>
+    <fr>Averses / Vent</fr>
+  </label>
+  <label>
+    <eng>showers hail</eng>
+    <fr>Averses Grele</fr>
+  </label>
+  <label>
+    <eng>showers ice pellets</eng>
+    <fr>Averses Grelons</fr>
+  </label>
+  <label>
+    <eng>showers in the vicinity</eng>
+    <fr>Averses dans les environs</fr>
+  </label>
+  <label>
+    <eng>showers in vicinity fog/mist</eng>
+    <fr>Averses dans les environs Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>showers in vicinity fog</eng>
+    <fr>Averses dans les environs Brouillard</fr>
+  </label>
+  <label>
+    <eng>showers in vicinity haze</eng>
+    <fr>Averses dans les environs Brume legere</fr>
+  </label>
+  <label>
+    <eng>showers in vicinity snow</eng>
+    <fr>Averses dans les environs Neige</fr>
+  </label>
+  <label>
+    <eng>showers Early</eng>
+    <fr>Averses matinales</fr>
+  </label>
+  <label>
+    <eng>showers kate</eng>
+    <fr>Averses tardives</fr>
+  </label>
+  <label>
+    <eng>showers rain</eng>
+    <fr>Averses Pluie</fr>
+  </label>
+  <label>
+    <eng>showers rain fog/mist</eng>
+    <fr>Averses Pluie Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>showers rain in vicinity</eng>
+    <fr>Averses Pluie dans les environs</fr>
+  </label>
+  <label>
+    <eng>showers rain in vicinity fog/mist</eng>
+    <fr>Averses Pluie dans les environs Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>showers snow</eng>
+    <fr>Averses Neige</fr>
+  </label>
+  <label>
+    <eng>showers snow fog</eng>
+    <fr>Averses Neige Brouillard</fr>
+  </label>
+  <label>
+    <eng>showers snow fog/mist</eng>
+    <fr>Averses Neige Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>smoke</eng>
+    <fr>fumee</fr>
+  </label>
+  <label>
+    <eng>snow</eng>
+    <fr>Neige</fr>
+  </label>
+  <label>
+    <eng>snow / rain icy mix</eng>
+    <fr>Melange Neige / Pluie Verglassante</fr>
+  </label>
+  <label>
+    <eng>snow and fog</eng>
+    <fr>Neige et Brouillard</fr>
+  </label>
+  <label>
+    <eng>snow drizzle</eng>
+    <fr>Neige Crachin</fr>
+  </label>
+  <label>
+    <eng>snow fog/mist</eng>
+    <fr>Neige Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>snow freezing drizzle</eng>
+    <fr>Neige Crachin verglassant</fr>
+  </label>
+  <label>
+    <eng>snow freezing rain</eng>
+    <fr>Neige Pluie verglassante</fr>
+  </label>
+  <label>
+    <eng>snow rain</eng>
+    <fr>Neige Pluie</fr>
+  </label>
+  <label>
+    <eng>snow shower</eng>
+    <fr>Averses de neige</fr>
+  </label>
+  <label>
+    <eng>snow shower / wind</eng>
+    <fr>Averses de neige / vent</fr>
+  </label>
+  <label>
+    <eng>snow shower early</eng>
+    <fr>Averses de neige matinales</fr>
+  </label>
+  <label>
+    <eng>snow showers fog/mist</eng>
+    <fr>Averses de neige Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>snow showers fog</eng>
+    <fr>Averses de neige Brouillard</fr>
+  </label>
+  <label>
+    <eng>snow showers in vicinity</eng>
+    <fr>Averses de neige dans les environs</fr>
+  </label>
+  <label>
+    <eng>snow showers in vicinity fog</eng>
+    <fr>Averses de neige dans les environs Brouillard</fr>
+  </label>
+  <label>
+    <eng>snow showers in vicinity fog/mist</eng>
+    <fr>Averses de neige dans les environs Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>snow showers kate</eng>
+    <fr>Averses de neige tardives</fr>
+  </label>
+  <label>
+    <eng>snow to rain</eng>
+    <fr>Neige vers Pluie</fr>
+  </label>
+  <label>
+    <eng>snowflakes</eng>
+    <fr>Flocons de neige</fr>
+  </label>
+  <label>
+    <eng>sunny</eng>
+    <fr>Ensoleille</fr>
+  </label>
+  <label>
+    <eng>sunny and widy</eng>
+    <fr>Ensoleille et vent</fr>
+  </label>
+  <label>
+    <eng>sunny / wind</eng>
+    <fr>Ensoleille / Vent</fr>
+  </label>
+  <label>
+    <eng>sunny day</eng>
+    <fr>Journee ensoleille</fr>
+  </label>
+  <label>
+    <eng>thunder</eng>
+    <fr>Tonnerre</fr>
+  </label>
+  <label>
+    <eng>thunder in the vicinity</eng>
+    <fr>Tonnerre dans les environs</fr>
+  </label>
+  <label>
+    <eng>t-storms</eng>
+    <fr>Orages</fr>
+  </label>
+  <label>
+    <eng>t-storms early</eng>
+    <fr>Orages matinaux</fr>
+  </label>
+  <label>
+    <eng>t-storms fog</eng>
+    <fr>Orages Brouillard</fr>
+  </label>
+  <label>
+    <eng>t-storms hail fog</eng>
+    <fr>Orages Grele Brouillard</fr>
+  </label>
+  <label>
+    <eng>t-storms hail</eng>
+    <fr>Orages Grele</fr>
+  </label>
+  <label>
+    <eng>t-storms haze in vicinity hail</eng>
+    <fr>Orages brume dans les environs Grele</fr>
+  </label>
+  <label>
+    <eng>t-storms haze in vicinity</eng>
+    <fr>Orages brume dans les environs</fr>
+  </label>
+  <label>
+    <eng>t-storms heavy rain</eng>
+    <fr>Orages Grosse Pluie</fr>
+  </label>
+  <label>
+    <eng>t-storms heavy rain fog</eng>
+    <fr>Orages Grosse Pluie Brouillard</fr>
+  </label>
+  <label>
+    <eng>t-storms heavy rain fog/mist</eng>
+    <fr>Orages Grosse pluie Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>t-storms heavy rain hail fog</eng>
+    <fr>Orages Grosse Pluie Grele Brouillard</fr>
+  </label>
+  <label>
+    <eng>t-storms heavy rain hail fog/mist</eng>
+    <fr>Orages Grosse Pluie Grele Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>t-storms heavy rain hail haze</eng>
+    <fr>Orages Grosse Pluie Grele Brume legere</fr>
+  </label>
+  <label>
+    <eng>t-storms heavy rain hail</eng>
+    <fr>Orages Grosse Pluie Grele</fr>
+  </label>
+  <label>
+    <eng>t-storms heavy rain haze</eng>
+    <fr>Orages Grosse Pluie Brume legere</fr>
+  </label>
+  <label>
+    <eng>t-storms ice pellets</eng>
+    <fr>Orages Grelons</fr>
+  </label>
+  <label>
+    <eng>t-storms in vicinity</eng>
+    <fr>Orages dans les environs</fr>
+  </label>
+  <label>
+    <eng>t-storms in vicinity fog</eng>
+    <fr>Orages dans les environs Brouillard</fr>
+  </label>
+  <label>
+    <eng>t-storms in vicinity fog/mist</eng>
+    <fr>Orages dans les environs Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>t-storms in vicinity hail fog/mist</eng>
+    <fr>Orages dans les environs Grele Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>t-storms in vicinity hail haze</eng>
+    <fr>Orages dans les environs Grele Brume legere</fr>
+  </label>
+  <label>
+    <eng>t-storms in vicinity hail</eng>
+    <fr>Orages dans les environs Grele</fr>
+  </label>
+  <label>
+    <eng>t-storms in vicinity haze</eng>
+    <fr>Orages dans les environs Brume legere</fr>
+  </label>
+  <label>
+    <eng>t-storms light rain</eng>
+    <fr>Orages Legere pluie</fr>
+  </label>
+  <label>
+    <eng>t-storms light rain fog</eng>
+    <fr>Orages Legere pluie Brouillard</fr>
+  </label>
+  <label>
+    <eng>t-storms light rain fog/mist</eng>
+    <fr>Orages Legere pluie Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>t-storms light rain hail</eng>
+    <fr>Orages Legere pluie Grele</fr>
+  </label>
+  <label>
+    <eng>t-storms light rain hail fog</eng>
+    <fr>Orages Legere pluie Grele Brouillard</fr>
+  </label>
+  <label>
+    <eng>t-storms light rain hail fog/mist</eng>
+    <fr>Orages Legere pluie Grele Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>t-storms light rain hail haze</eng>
+    <fr>Orages Legere pluie Grele Brume legere</fr>
+  </label>
+  <label>
+    <eng>t-storms light rain haze</eng>
+    <fr>Orages Legere pluie Brume legere</fr>
+  </label>
+  <label>
+    <eng>t-storms rain fog/mist</eng>
+    <fr>Orages Pluie Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>t-storms rain hail fog/mist</eng>
+    <fr>Orages Pluie Grele Brouillard/brume</fr>
+  </label>
+  <label>
+    <eng>t-storms showers in vicinity</eng>
+    <fr>Orages Averses dans les environs</fr>
+    </label>
+  <label>
+    <eng>t-storms showers in vicinity hail</eng>
+    <fr>Orages Averses dans les environs Grele</fr>
+  </label>
+  <label>
+    <eng>t-storms snow</eng>
+    <fr>Orages Neige</fr>
+  </label>
+  <label>
+    <eng>windy</eng>
+    <fr>Grand vent</fr>
+  </label>
+  <label>
+    <eng>windy / snowy</eng>
+    <fr>Grand vent / neigeux</fr>
+  </label>
+  <label>
+    <eng>windy rain</eng>
+    <fr>giboulees</fr>
+  </label>
+  <label>
+    <eng>wintry mix</eng>
+    <fr>Melanges pluie/neige</fr>
+  </label>
+  <label>
+    <eng>wintry mix / wind</eng>
+    <fr>Melanges pluie/neige / vent</fr>
+  </label>
+</Weather>
