@@ -212,4 +212,7 @@ Public Class HoMIGuI
         End Try
     End Sub
 
+    Private Sub DriversToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles DriversToolStripMenuItem.Click
+        MsgBox("Non implémenté", MsgBoxStyle.Information, "Information")
+    End Sub
 End Class
