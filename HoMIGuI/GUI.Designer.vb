@@ -36,8 +36,8 @@ Partial Class HoMIGuI
         Me.DossierHomidomStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DossierLogsStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DossierConfigUtilisateurStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DriversToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.homiguiContextMenuStrip.SuspendLayout()
         Me.SuspendLayout()
@@ -57,6 +57,7 @@ Partial Class HoMIGuI
         '
         'ConfigurationToolStripMenuItem
         '
+        Me.ConfigurationToolStripMenuItem.Enabled = False
         Me.ConfigurationToolStripMenuItem.Image = Global.HoMIGuI.My.Resources.Resources.settings
         Me.ConfigurationToolStripMenuItem.Name = "ConfigurationToolStripMenuItem"
         Me.ConfigurationToolStripMenuItem.Size = New System.Drawing.Size(158, 22)
@@ -135,14 +136,6 @@ Partial Class HoMIGuI
         Me.DossierConfigUtilisateurStripMenuItem.Text = "Configuration Utilisateur"
         Me.DossierConfigUtilisateurStripMenuItem.ToolTipText = "Dossier contenant la configuration coté Utilisateur"
         '
-        'ExitToolStripMenuItem
-        '
-        Me.ExitToolStripMenuItem.Image = Global.HoMIGuI.My.Resources.Resources.delete
-        Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(158, 22)
-        Me.ExitToolStripMenuItem.Text = "Exit"
-        Me.ExitToolStripMenuItem.ToolTipText = "Quitter HoMIGuI (le serveur reste actif)"
-        '
         'DriversToolStripMenuItem
         '
         Me.DriversToolStripMenuItem.Image = Global.HoMIGuI.My.Resources.Resources.Driver_32
@@ -150,6 +143,14 @@ Partial Class HoMIGuI
         Me.DriversToolStripMenuItem.Size = New System.Drawing.Size(158, 22)
         Me.DriversToolStripMenuItem.Text = "Drivers"
         Me.DriversToolStripMenuItem.ToolTipText = "Configurer la connexion SOAP du GUI"
+        '
+        'ExitToolStripMenuItem
+        '
+        Me.ExitToolStripMenuItem.Image = Global.HoMIGuI.My.Resources.Resources.delete
+        Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(158, 22)
+        Me.ExitToolStripMenuItem.Text = "Exit"
+        Me.ExitToolStripMenuItem.ToolTipText = "Quitter HoMIGuI (le serveur reste actif)"
         '
         'NotifyIcon1
         '
