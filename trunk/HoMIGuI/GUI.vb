@@ -35,7 +35,7 @@ Public Class HoMIGuI
     End Sub
 
     Private Sub ConfigurationToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles ConfigurationToolStripMenuItem.Click
-
+        MsgBox("Non implémenté", MsgBoxStyle.Information, "Information")
     End Sub
 
     Private Sub ServiceStartToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles ServiceStartToolStripMenuItem.Click
@@ -95,28 +95,58 @@ Public Class HoMIGuI
     End Sub
 
     Private Sub LogsToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles LogsToolStripMenuItem.Click
-        Dim Chemin As String = My.Application.Info.DirectoryPath & "\logs"
-        If Directory.Exists(Chemin) Then
-            System.Diagnostics.Process.Start(Chemin)
-        Else
-            MsgBox("Chemin non trouvé : " & Chemin, MsgBoxStyle.Information, "Ouvrir le dossier Logs")
-        End If
-
+        Dim Chemin As String = ""
+        Try
+            Chemin = My.Application.Info.DirectoryPath & "\logs"
+            If Directory.Exists(Chemin) Then
+                System.Diagnostics.Process.Start(Chemin)
+            Else
+                MsgBox("Chemin non trouvé : " & Chemin, MsgBoxStyle.Information, "Ouvrir le dossier Logs")
+            End If
+        Catch ex As Exception
+            MsgBox("Error While opening : " & Chemin, MsgBoxStyle.Critical, "ERROR")
+        End Try
     End Sub
 
     Private Sub DossierHomidomStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles DossierHomidomStripMenuItem.Click
-        MsgBox("Pas encore implémenté", MsgBoxStyle.Information, "Ouvrir le dossier HoMIDoM")
+        Dim Chemin As String = ""
+        Try
+            Chemin = My.Application.Info.DirectoryPath
+            If Directory.Exists(Chemin) Then
+                System.Diagnostics.Process.Start(Chemin)
+            Else
+                MsgBox("Chemin non trouvé : " & Chemin, MsgBoxStyle.Information, "Ouvrir le dossier HoMIDoM")
+            End If
+        Catch ex As Exception
+            MsgBox("Error While opening : " & Chemin, MsgBoxStyle.Critical, "ERROR")
+        End Try
     End Sub
 
     Private Sub DossierLogsStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles DossierLogsStripMenuItem.Click
-        MsgBox("Pas encore implémenté", MsgBoxStyle.Information, "Ouvrir le dossier Logs")
+        Dim Chemin As String = ""
+        Try
+            Chemin = My.Application.Info.DirectoryPath & "\logs"
+            If Directory.Exists(Chemin) Then
+                System.Diagnostics.Process.Start(Chemin)
+            Else
+                MsgBox("Chemin non trouvé : " & Chemin, MsgBoxStyle.Information, "Ouvrir le dossier Logs")
+            End If
+        Catch ex As Exception
+            MsgBox("Error While opening : " & Chemin, MsgBoxStyle.Critical, "ERROR")
+        End Try
     End Sub
 
     Private Sub DossierConfigUtilisateurStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles DossierConfigUtilisateurStripMenuItem.Click
+        Dim Chemin As String = ""
         Try
-            System.Diagnostics.Process.Start(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData))
+            Chemin = System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData)
+            If Directory.Exists(Chemin) Then
+                System.Diagnostics.Process.Start(Chemin)
+            Else
+                MsgBox("Chemin non trouvé : " & Chemin, MsgBoxStyle.Information, "Ouvrir le dossier Logs")
+            End If
         Catch ex As Exception
-            MsgBox("Error While opening : " & System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData), MsgBoxStyle.Critical, "ERROR")
+            MsgBox("Error While opening : " & Chemin, MsgBoxStyle.Critical, "ERROR")
         End Try
     End Sub
 
