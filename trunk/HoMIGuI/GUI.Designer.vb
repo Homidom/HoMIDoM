@@ -142,7 +142,7 @@ Partial Class HoMIGuI
         Me.DriversToolStripMenuItem.Name = "DriversToolStripMenuItem"
         Me.DriversToolStripMenuItem.Size = New System.Drawing.Size(158, 22)
         Me.DriversToolStripMenuItem.Text = "Drivers"
-        Me.DriversToolStripMenuItem.ToolTipText = "Configurer la connexion SOAP du GUI"
+        Me.DriversToolStripMenuItem.ToolTipText = "Afficher la liste des drivers"
         '
         'ExitToolStripMenuItem
         '
