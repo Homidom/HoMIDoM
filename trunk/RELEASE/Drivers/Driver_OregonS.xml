@@ -6,7 +6,20 @@ Driver_OregonS
 </name>
 </assembly>
 <members>
-<member name="M:Driver_OregonS.Driver_OregonS.VerifChamp(System.String,System.Object)">
+<member name="P:Driver_OregonS.My.Resources.Resources.ResourceManager">
+	<summary>
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member><member name="P:Driver_OregonS.My.Resources.Resources.Culture">
+	<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="T:Driver_OregonS.My.Resources.Resources">
+	<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
+</member><member name="M:Driver_OregonS.Driver_OregonS.VerifChamp(System.String,System.Object)">
 	<summary>
  Permet de vérifier si un champ est valide
  </summary>
@@ -69,19 +82,6 @@ Driver_OregonS
 	<param name="adresse">adresse de l'equipement</param>
 	<param name="type">type d'info</param>
 	<remarks></remarks>
-</member><member name="P:Driver_OregonS.My.Resources.Resources.ResourceManager">
-	<summary>
-  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
-</summary>
-</member><member name="P:Driver_OregonS.My.Resources.Resources.Culture">
-	<summary>
-  Remplace la propriété CurrentUICulture du thread actuel pour toutes
-  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
-</summary>
-</member><member name="T:Driver_OregonS.My.Resources.Resources">
-	<summary>
-  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
-</summary>
 </member>
 </members>
 </doc>

@@ -165,7 +165,7 @@ Driver_Teracom
 	<remarks></remarks>
 </member><member name="M:Driver_Teracom.Driver_Teracom.ExecuteCommand(System.Object,System.String,System.Object[])">
 	<summary>Execute une commande avancée</summary>
-	<param name="MyDevice">Objet représentant le Device </param>
+	<param name="Objet">Objet représentant le Device </param>
 	<param name="Command">Nom de la commande avancée à éxécuter</param>
 	<param name="Param">tableau de paramétres</param>
 	<returns></returns>
