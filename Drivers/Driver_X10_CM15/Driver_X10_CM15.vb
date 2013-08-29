@@ -24,7 +24,7 @@ Public Class Driver_X10_CM15
     Dim _Refresh As Integer = 0
     Dim _Modele As String = "CM15"
     Dim _Version As String = My.Application.Info.Version.ToString
-    Dim _OsPlatform As String = "32"
+    Dim _OsPlatform As String = "3264"
     Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _Device As HoMIDom.HoMIDom.Device
