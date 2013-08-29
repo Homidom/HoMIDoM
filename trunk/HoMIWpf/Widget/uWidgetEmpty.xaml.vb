@@ -151,7 +151,7 @@ Public Class uWidgetEmpty
             If _Show = False Then Exit Property
 
             If IsConnect = True And String.IsNullOrEmpty(value) = False Then
-                _dev = ReturnDeviceById(_Id)
+                _dev = myService.ReturnDeviceByID(IdSrv, _Id)
                 _macro = myService.ReturnMacroById(IdSrv, _Id)
                 _zone = myService.ReturnZoneByID(IdSrv, _Id)
 
@@ -714,9 +714,11 @@ Public Class uWidgetEmpty
             If _Show = False Then
                 Exit Property
             Else
-                _dt.Stop()
-                _dt.Interval = New TimeSpan(0, 0, _Refresh)
-                _dt.Start()
+                If _dt IsNot Nothing Then
+                    _dt.Stop()
+                    _dt.Interval = New TimeSpan(0, 0, _Refresh)
+                    _dt.Start()
+                End If
             End If
         End Set
     End Property
@@ -997,7 +999,11 @@ Public Class uWidgetEmpty
             If _ModeEdition = False And IsConnect Then
                 If _Visuel.Count > 0 Then
                     For Each _ElmtVisu As cWidget.Visu In _Visuel
-                        _dev = ReturnDeviceById(_ElmtVisu.IdObject)
+                        If frmMere.MaJWidgetFromServer Then
+                            _dev = myService.ReturnDeviceByID(IdSrv, _ElmtVisu.IdObject)
+                        Else
+                            _dev = ReturnDeviceById(_ElmtVisu.IdObject)
+                        End If
 
                         If _dev IsNot Nothing Then
                             Dim retour As Object = CallByName(_dev, _ElmtVisu.Propriete, CallType.Get)
@@ -1058,8 +1064,11 @@ Public Class uWidgetEmpty
                 End If
 
                 If String.IsNullOrEmpty(_Id) = False Then
-
-                    _dev = ReturnDeviceById(_Id)
+                    If frmMere.MaJWidgetFromServer Then
+                        _dev = myService.ReturnDeviceByID(IdSrv, _Id)
+                    Else
+                        _dev = ReturnDeviceById(_Id)
+                    End If
 
                     If _dev IsNot Nothing Then
                         If ShowEtiquette And _dev.Name <> Etiquette Then

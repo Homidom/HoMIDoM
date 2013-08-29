@@ -3410,7 +3410,12 @@ Namespace HoMIDom
                     For i = 0 To mymacro.ListActions.Count - 1
                         Dim _Action As New ThreadAction(Me, mymacro.ListActions.Item(i), mymacro.Nom, a)
                         Dim x As New Thread(AddressOf _Action.Execute)
-                        x.Name = a
+
+                        If mymacro.ListActions.Item(i).typeaction = Action.TypeAction.ActionStop Then
+                            x.Name &= ".STOP"
+                        Else
+                            x.Name = a
+                        End If
                         x.Start()
                         _ListThread.Add(x)
                     Next

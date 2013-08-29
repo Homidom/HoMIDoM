@@ -401,20 +401,46 @@ Namespace HoMIDom
                         ExecuteScript(x.Script)
                     Case Action.TypeAction.ActionStop
                         _Server.Log(TypeLog.DEBUG, TypeSource.SCRIPT, "Arrêt de la macro", "Macro: " & _NameMacro)
+                        ' _Server.Log(TypeLog.DEBUG, TypeSource.SCRIPT, "Arrêt de la macro", "Macro: " & _Server.GetListThread.Count)
+                        Dim _listthrstop As New List(Of Thread)
+
                         If _Server.GetListThread.Count > 0 Then
+
                             For Each thr In _Server.GetListThread
-                                If thr.Name = _ID Then
+                                If thr.Name.EndsWith(".STOP") Then
+                                    If thr.Name.Replace(".STOP", "") = _ID Then _listthrstop.Add(thr)
+                                Else
+                                    If thr.Name = _ID Then
+                                        Try
+                                            SyncLock thr
+                                                thr.Abort()
+                                                thr = Nothing
+                                                _Server.GetListThread.Remove(thr)
+                                            End SyncLock
+                                        Catch ex As Exception
+                                            'ça génère une erreur donc on fait rien
+                                            Dim b As String = ex.ToString
+                                            '_Server.Log(TypeLog.DEBUG, TypeSource.SCRIPT, "Arrêt de la macro", "Erreur: " & ex.ToString)
+                                        End Try
+                                    End If
+                                End If
+
+                            Next
+
+                            If _listthrstop.Count > 0 Then
+                                For Each thr In _listthrstop
                                     Try
                                         SyncLock thr
                                             thr.Abort()
                                             thr = Nothing
                                         End SyncLock
                                     Catch ex As Exception
-                                        'ça génère une erreur donc on fait rien
                                         Dim b As String = ex.ToString
                                     End Try
-                                End If
-                            Next
+
+                                Next
+                            End If
+                            _listthrstop = Nothing
                         End If
                     Case Action.TypeAction.ActionSpeech
                         Dim x As Action.ActionSpeech = _Action

@@ -17,6 +17,7 @@ Public Class WConfig
                 End If
             End If
 
+            Frm.MaJWidgetFromServer = ChkMaJWidgetFromSrv.IsChecked
             Frm.KeyboardPath = TxtKeyboardPath.Text
             Frm.SaveDiffBackup = ChKDiffSave.IsChecked
             Frm.AutoSave = ChkSaveAuto.IsChecked
@@ -59,6 +60,7 @@ Public Class WConfig
 
         ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
         Frm = FrmMere
+        ChkMaJWidgetFromSrv.IsChecked = Frm.MaJWidgetFromServer
         ChKDiffSave.IsChecked = Frm.SaveDiffBackup
         ChkSaveAuto.IsChecked = Frm.AutoSave
         ChkDateTime.IsChecked = Frm.ShowDateTime

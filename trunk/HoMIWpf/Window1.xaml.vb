@@ -84,9 +84,19 @@ Class Window1
     Dim _TranspBarHaut As Integer = 58
     Dim _TranspBarBas As Integer = 153
     Dim _KeyBoardPath As String = "osk"
+    Dim _MaJWidgetFromServer As Boolean = False
 #End Region
 
 #Region "Property"
+    Public Property MaJWidgetFromServer As Boolean
+        Get
+            Return _MaJWidgetFromServer
+        End Get
+        Set(value As Boolean)
+            _MaJWidgetFromServer = value
+        End Set
+    End Property
+
     Public Property KeyboardPath As String
         Get
             Return _KeyBoardPath
@@ -812,6 +822,8 @@ Class Window1
             If list.Count > 0 Then 'présence des paramètres du server
                 For j As Integer = 0 To list.Item(0).Attributes.Count - 1
                     Select Case list.Item(0).Attributes.Item(j).Name
+                        Case "majwidgetfromsrv"
+                            MaJWidgetFromServer = list.Item(0).Attributes.Item(j).Value
                         Case "keyboardpath"
                             KeyboardPath = list.Item(0).Attributes.Item(j).Value
                         Case "transparencebarhaut"
@@ -979,6 +991,8 @@ Class Window1
                                 x.ZoneId = list.Item(j).Attributes.Item(k).Value
                             Case "iscommun"
                                 x.IsCommun = list.Item(j).Attributes.Item(k).Value
+                            Case "refresh"
+                                x.Refresh = list.Item(j).Attributes.Item(k).Value
                             Case "x"
                                 x.X = list.Item(j).Attributes.Item(k).Value
                             Case "y"
@@ -1223,6 +1237,9 @@ Class Window1
             ''Sauvegarde des parametres d'interface
             ''------------
             writer.WriteStartElement("interface")
+            writer.WriteStartAttribute("majwidgetfromsrv")
+            writer.WriteValue(MaJWidgetFromServer)
+            writer.WriteEndAttribute()
             writer.WriteStartAttribute("keyboardpath")
             writer.WriteValue(KeyboardPath)
             writer.WriteEndAttribute()
@@ -1434,6 +1451,9 @@ Class Window1
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("coloretiquette")
                 writer.WriteValue(_ListElement.Item(i).ColorEtiquette.ToString)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("refresh")
+                writer.WriteValue(_ListElement.Item(i).Refresh)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("url")
                 writer.WriteValue(_ListElement.Item(i).URL)
@@ -1685,8 +1705,6 @@ Class Window1
                     MnuLastError.Items.Clear()
                     Dim list As List(Of String) = myService.GetLastLogsError
                     If list.Count > 0 Then
-                        Dim _tool As String = ""
-
                         For Each logerror As String In list
                             If String.IsNullOrEmpty(logerror) = False Then
                                 Dim mnu As New MenuItem
@@ -1705,6 +1723,7 @@ Class Window1
         Catch ex As Exception
             myChannelFactory.Abort()
             IsConnect = False
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur lors de la connexion au Serveur (ConnectToHomidom): " & ex.Message, "Erreur", "ConnectToHomidom")
         End Try
     End Sub
 #End Region
@@ -1744,11 +1763,11 @@ Class Window1
     'Affiche la date et heure, heures levé et couché du soleil
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
         Try
-
+            LblTime.Content = Now.ToLongDateString & " "
             If IsConnect Then
-                LblTime.Content = Now.ToLongDateString & " " & myService.GetTime
+                LblTime.Content &= myService.GetTime
             Else
-                LblTime.Content = Now.ToLongDateString & " " & Now.ToLongTimeString
+                LblTime.Content &= Now.ToLongTimeString
             End If
 
             If _AsTimeOutPage Then
@@ -2052,6 +2071,7 @@ Class Window1
                             y.Type = uWidgetEmpty.TypeOfWidget.Device
                             y.CanEditValue = _ListElement.Item(j).CanEditValue
                             y.ZoneId = _ListElement.Item(j).ZoneId
+                            y.Refresh = _ListElement.Item(j).Refresh
                             y.Width = x.Width
                             y.Height = x.Height
                             y.X = _ListElement.Item(j).X
@@ -2174,6 +2194,7 @@ Class Window1
                     y.ZIndex = _ListElement.Item(i).ZIndex
                     y.IsEmpty = _ListElement.Item(i).IsEmpty
                     y.Type = _ListElement.Item(i).Type
+                    y.Refresh = _ListElement.Item(i).Refresh
                     y.CanEditValue = _ListElement.Item(i).CanEditValue
                     y.Picture = _ListElement.Item(i).Picture
                     y.ShowPicture = _ListElement.Item(i).ShowPicture
