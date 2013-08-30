@@ -86,6 +86,8 @@
                                             <Label Content="Processus Keyboard Virtuel:" Foreground="White" />
                                             <TextBox Name="TxtKeyboardPath" Width="150" />
                                         </StackPanel>
+                                        <CheckBox Name="ChkMaJWidgetFromSrv" Content="Mise à jour des widgets depuis le serveur sans prendre en compte les events (Serveur Live)" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
+
                                     </StackPanel>
                                 </Expander>
                                     <Expander Header="Menu du Haut" Foreground="White" BorderBrush="#FF373737" Margin="1">
