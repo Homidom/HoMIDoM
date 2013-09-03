@@ -606,16 +606,26 @@ Class Window1
     'Event lorsqu'un device change
     Private Sub DeviceChanged(deviceid As String, DeviceValue As String)
         Try
+            Dim _devTrv As Boolean 'Flag si on a trouvé le device dans la liste
+
             If IsConnect Then
+                Do While lock_dev
+                    Thread.Sleep(100)
+                Loop
+
+                lock_dev = True
                 For Each _dev In AllDevices
                     If _dev.ID = deviceid Then
                         Dim mydev As TemplateDevice = myService.ReturnDeviceByID(IdSrv, deviceid)
                         MaJ_Device(mydev, _dev)
-                        Exit Sub
+                        _devTrv = True
+                        Exit For
                     End If
                 Next
 
-                AllDevices.Add(myService.ReturnDeviceByID(IdSrv, deviceid))
+                If _devTrv = False Then AllDevices.Add(myService.ReturnDeviceByID(IdSrv, deviceid))
+
+                lock_dev = False
             End If
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Event DeviceChanged: " & ex.ToString, "Erreur", " Event DeviceChanged")
@@ -623,74 +633,83 @@ Class Window1
     End Sub
 
     Private Sub MaJ_Device(Source As TemplateDevice, Destination As TemplateDevice)
-        Destination.Type = Source.Type
-        If Source.Type = Device.ListeDevices.METEO Then
-            Destination.ConditionActuel = Source.ConditionActuel
-            Destination.ConditionJ1 = Source.ConditionActuel
-            Destination.ConditionJ2 = Source.ConditionJ2
-            Destination.ConditionJ3 = Source.ConditionJ3
-            Destination.ConditionToday = Source.ConditionToday
-            Destination.IconJ1 = Source.IconJ1
-            Destination.IconJ2 = Source.IconJ2
-            Destination.IconJ3 = Source.IconJ3
-            Destination.IconToday = Source.IconToday
-            Destination.JourJ1 = Source.JourJ1
-            Destination.JourJ2 = Source.JourJ2
-            Destination.JourJ3 = Source.JourJ3
-            Destination.JourToday = Source.JourToday
-            Destination.MaxJ1 = Source.MaxJ1
-            Destination.MaxJ2 = Source.MaxJ2
-            Destination.MaxJ3 = Source.MaxJ3
-            Destination.MaxToday = Source.MaxToday
-            Destination.MinJ1 = Source.MinJ1
-            Destination.MinJ2 = Source.MinJ2
-            Destination.MinJ3 = Source.MinJ3
-            Destination.MinToday = Source.MinToday
-            Destination.TemperatureActuel = Source.TemperatureActuel
-            Destination.VentActuel = Source.VentActuel
-            Destination.HumiditeActuel = Source.HumiditeActuel
-            Destination.IconActuel = Source.IconActuel
-        End If
-        Destination.Name = Source.Name
-        Destination.Value = Source.Value
-        Destination.Adresse1 = Source.Adresse1
-        Destination.Adresse2 = Source.Adresse2
-        Destination.AllValue = Source.AllValue
-        Destination.Correction = Source.Correction
-        Destination.DateCreated = Source.DateCreated
-        Destination.Description = Source.Description
-        Destination.DeviceAction = Source.DeviceAction
-        Destination.DriverID = Source.DriverID
-        Destination.Enable = Source.Enable
-        Destination.Formatage = Source.Formatage
-        Destination.GetDeviceCommandePlus = Source.GetDeviceCommandePlus
-        Destination.ID = Source.ID
-        Destination.LastChange = Source.LastChange
-        Destination.LastChangeDuree = Source.LastChangeDuree
-        Destination.LastEtat = Source.LastEtat
-        Destination.Modele = Source.Modele
-        Destination.Picture = Source.Picture
-        Destination.Precision = Source.Precision
-        Destination.Puissance = Source.Puissance
-        Destination.Refresh = Source.Refresh
-        Destination.Solo = Source.Solo
-        Destination.Unit = Source.Unit
-        Destination.ValueDef = Source.ValueDef
-        Destination.ValueLast = Source.ValueLast
-        Destination.ValueMax = Source.ValueMax
-        Destination.ValueMin = Source.ValueMin
+        Try
+            Destination.Type = Source.Type
+            If Source.Type = Device.ListeDevices.METEO Then
+                Destination.ConditionActuel = Source.ConditionActuel
+                Destination.ConditionJ1 = Source.ConditionActuel
+                Destination.ConditionJ2 = Source.ConditionJ2
+                Destination.ConditionJ3 = Source.ConditionJ3
+                Destination.ConditionToday = Source.ConditionToday
+                Destination.IconJ1 = Source.IconJ1
+                Destination.IconJ2 = Source.IconJ2
+                Destination.IconJ3 = Source.IconJ3
+                Destination.IconToday = Source.IconToday
+                Destination.JourJ1 = Source.JourJ1
+                Destination.JourJ2 = Source.JourJ2
+                Destination.JourJ3 = Source.JourJ3
+                Destination.JourToday = Source.JourToday
+                Destination.MaxJ1 = Source.MaxJ1
+                Destination.MaxJ2 = Source.MaxJ2
+                Destination.MaxJ3 = Source.MaxJ3
+                Destination.MaxToday = Source.MaxToday
+                Destination.MinJ1 = Source.MinJ1
+                Destination.MinJ2 = Source.MinJ2
+                Destination.MinJ3 = Source.MinJ3
+                Destination.MinToday = Source.MinToday
+                Destination.TemperatureActuel = Source.TemperatureActuel
+                Destination.VentActuel = Source.VentActuel
+                Destination.HumiditeActuel = Source.HumiditeActuel
+                Destination.IconActuel = Source.IconActuel
+            End If
+            Destination.Name = Source.Name
+            Destination.Value = Source.Value
+            Destination.Adresse1 = Source.Adresse1
+            Destination.Adresse2 = Source.Adresse2
+            Destination.AllValue = Source.AllValue
+            Destination.Correction = Source.Correction
+            Destination.DateCreated = Source.DateCreated
+            Destination.Description = Source.Description
+            Destination.DeviceAction = Source.DeviceAction
+            Destination.DriverID = Source.DriverID
+            Destination.Enable = Source.Enable
+            Destination.Formatage = Source.Formatage
+            Destination.GetDeviceCommandePlus = Source.GetDeviceCommandePlus
+            Destination.ID = Source.ID
+            Destination.LastChange = Source.LastChange
+            Destination.LastChangeDuree = Source.LastChangeDuree
+            Destination.LastEtat = Source.LastEtat
+            Destination.Modele = Source.Modele
+            Destination.Picture = Source.Picture
+            Destination.Precision = Source.Precision
+            Destination.Puissance = Source.Puissance
+            Destination.Refresh = Source.Refresh
+            Destination.Solo = Source.Solo
+            Destination.Unit = Source.Unit
+            Destination.ValueDef = Source.ValueDef
+            Destination.ValueLast = Source.ValueLast
+            Destination.ValueMax = Source.ValueMax
+            Destination.ValueMin = Source.ValueMin
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Sub MaJ_Device: " & ex.ToString, "Erreur", " Sub MaJ_Device")
+        End Try
     End Sub
 
     Private Sub NewLog(ByVal TypLog As HoMIDom.HoMIDom.Server.TypeLog, ByVal Source As HoMIDom.HoMIDom.Server.TypeSource, ByVal Fonction As String, ByVal Message As String) 'Evènement lorsqu'un nouveau log est écrit
-        If _AffLastError Then
-            Dim _string As String = ""
-            For Each logerror As String In myService.GetLastLogsError
-                If String.IsNullOrEmpty(logerror) = False Then
-                    _string &= logerror & vbCrLf
-                    ImgMess.ToolTip = _string
-                End If
-            Next
-        End If
+        Try
+
+            If _AffLastError Then
+                Dim _string As String = ""
+                For Each logerror As String In myService.GetLastLogsError
+                    If String.IsNullOrEmpty(logerror) = False Then
+                        _string &= logerror & vbCrLf
+                        ImgMess.ToolTip = _string
+                    End If
+                Next
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Sub NewLog: " & ex.ToString, "Erreur", " Sub NewLog")
+        End Try
     End Sub
 
     Private Sub MessageFromServeur(Id As String, Time As DateTime, Message As String) 'Message provenant du serveur
@@ -706,13 +725,17 @@ Class Window1
 
     End Sub
     Private Sub HeureSoleilChanged() 'Evènement lorsque l'heure de lever/couché du soleil est modifié
-        If ShowSoleil = True Then
-            Dim mydate As Date = myService.GetHeureLeverSoleil
-            LblLeve.Content = mydate.ToShortTimeString
-            mydate = myService.GetHeureCoucherSoleil
-            LblCouche.Content = mydate.ToShortTimeString
-            mydate = Nothing
-        End If
+        Try
+            If ShowSoleil = True Then
+                Dim mydate As Date = myService.GetHeureLeverSoleil
+                LblLeve.Content = mydate.ToShortTimeString
+                mydate = myService.GetHeureCoucherSoleil
+                LblCouche.Content = mydate.ToShortTimeString
+                mydate = Nothing
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Sub HeureSoleilChanged: " & ex.ToString, "Erreur", " Sub HeureSoleilChanged")
+        End Try
     End Sub
 
 

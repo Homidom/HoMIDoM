@@ -4,10 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="50" d:DesignWidth="50">
+             d:DesignHeight="55" d:DesignWidth="55">
     <Grid>
+        <Image Height="55" Width="55" Name="ImgFond" Source="/HoMIWpF;component/Images/VMC_fond.png" />
         <Image  
-                   Height="55" Canvas.Left="53" Canvas.Top="59" RenderTransformOrigin=".5,.5">
+                Name="Img"   Height="55" Width="55" RenderTransformOrigin=".5,.5" Source="/HoMIWpF;component/Images/VMC_Pales.png">
             <Image.RenderTransform>
                 <RotateTransform x:Name="AnimatedRotateTransform" Angle="0" />
             </Image.RenderTransform>

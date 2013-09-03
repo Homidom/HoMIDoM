@@ -27,7 +27,11 @@ Partial Public Class uMeteo
         Try
             If IsConnect = True Then
                 If String.IsNullOrEmpty(_Id) = False Then
-                    _dev = ReturnDeviceById(_Id) 'myService.ReturnDeviceByID(IdSrv, _Id)
+                    If frmMere.MaJWidgetFromServer Then
+                        _dev = myService.ReturnDeviceByID(IdSrv, _Id)
+                    Else
+                        _dev = ReturnDeviceById(_Id)
+                    End If
 
                     If _dev IsNot Nothing Then
                         'If IsDiff(_dev, x) Then
