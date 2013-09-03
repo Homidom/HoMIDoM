@@ -5,6 +5,7 @@ Imports System.Xml
 Imports System.Xml.XPath
 Imports HoMIDom.HoMIDom
 Imports System.Reflection
+Imports System.Threading
 
 Module Fonctions
     ''' <summary>
@@ -413,7 +414,13 @@ Module Fonctions
     Public Sub Refresh()
         Try
             If IsConnect Then
+                Do While lock_dev
+                    Thread.Sleep(100)
+                Loop
+
+                lock_dev = True
                 AllDevices = myService.GetAllDevices(IdSrv)
+                lock_dev = False
             End If
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Fonctions.Thread_MAJ.Refresh: " & ex.ToString, "Erreur", " Fonctions.Thread_MAJ.Refresh")
@@ -422,12 +429,24 @@ Module Fonctions
 
     Public Function ReturnDeviceById(DeviceId As String) As TemplateDevice
         Try
-            For Each _dev In AllDevices
-                If _dev.ID = DeviceId Then
-                    Return _dev
-                    Exit For
-                End If
-            Next
+            If AllDevices IsNot Nothing Then
+                Dim retour As TemplateDevice = Nothing
+
+                Do While lock_dev
+                    Thread.Sleep(100)
+                Loop
+
+                lock_dev = True
+                For Each _dev In AllDevices
+                    If _dev.ID = DeviceId Then
+                        retour = _dev
+                        Exit For
+                    End If
+                Next
+
+                lock_dev = False
+                Return retour
+            End If
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Fonctions.ReturnDeviceById: " & ex.ToString, "Erreur", " Fonctions.ReturnDeviceById")
             Return Nothing

@@ -151,7 +151,12 @@ Public Class uWidgetEmpty
             If _Show = False Then Exit Property
 
             If IsConnect = True And String.IsNullOrEmpty(value) = False Then
-                _dev = myService.ReturnDeviceByID(IdSrv, _Id)
+                If frmMere.MaJWidgetFromServer Then
+                    _dev = myService.ReturnDeviceByID(IdSrv, _Id)
+                Else
+                    _dev = ReturnDeviceById(_Id)
+                End If
+                '_dev = myService.ReturnDeviceByID(IdSrv, _Id)
                 _macro = myService.ReturnMacroById(IdSrv, _Id)
                 _zone = myService.ReturnZoneByID(IdSrv, _Id)
 
@@ -1355,7 +1360,13 @@ Public Class uWidgetEmpty
             If _Show = False Then Exit Sub
 
             For Each _act As cWidget.Action In _Action_On_Click
-                Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+                Dim _dev As HoMIDom.HoMIDom.TemplateDevice
+                If frmMere.MaJWidgetFromServer Then
+                    _dev = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+                Else
+                    _dev = ReturnDeviceById(_act.IdObject)
+                End If
+
                 If _dev IsNot Nothing Then
                     Dim x As New HoMIDom.HoMIDom.DeviceAction
                     x.Nom = _act.Methode
@@ -1400,7 +1411,13 @@ Public Class uWidgetEmpty
             If _Show = False Then Exit Sub
 
             For Each _act As cWidget.Action In _Action_On_LongClick
-                Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+                Dim _dev As HoMIDom.HoMIDom.TemplateDevice
+                If frmMere.MaJWidgetFromServer Then
+                    _dev = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+                Else
+                    _dev = ReturnDeviceById(_act.IdObject)
+                End If
+
                 If _dev IsNot Nothing Then
                     Dim x As New HoMIDom.HoMIDom.DeviceAction
                     x.Nom = _act.Methode
@@ -1440,7 +1457,13 @@ Public Class uWidgetEmpty
             If _Show = False Then Exit Sub
 
             For Each _act As cWidget.Action In _Action_GestureHautBas
-                Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+                Dim _dev As HoMIDom.HoMIDom.TemplateDevice
+                If frmMere.MaJWidgetFromServer Then
+                    _dev = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+                Else
+                    _dev = ReturnDeviceById(_act.IdObject)
+                End If
+
                 If _dev IsNot Nothing Then
                     Dim x As New HoMIDom.HoMIDom.DeviceAction
                     x.Nom = _act.Methode
@@ -1483,7 +1506,13 @@ Public Class uWidgetEmpty
             If _Show = False Then Exit Sub
 
             For Each _act As cWidget.Action In _Action_GestureBasHaut
-                Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+                Dim _dev As HoMIDom.HoMIDom.TemplateDevice
+                If frmMere.MaJWidgetFromServer Then
+                    _dev = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+                Else
+                    _dev = ReturnDeviceById(_act.IdObject)
+                End If
+
                 If _dev IsNot Nothing Then
                     Dim x As New HoMIDom.HoMIDom.DeviceAction
                     x.Nom = _act.Methode
@@ -1526,7 +1555,13 @@ Public Class uWidgetEmpty
             If _Show = False Then Exit Sub
 
             For Each _act As cWidget.Action In _Action_GestureGaucheDroite
-                Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+                Dim _dev As HoMIDom.HoMIDom.TemplateDevice
+                If frmMere.MaJWidgetFromServer Then
+                    _dev = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+                Else
+                    _dev = ReturnDeviceById(_act.IdObject)
+                End If
+
                 If _dev IsNot Nothing Then
                     Dim x As New HoMIDom.HoMIDom.DeviceAction
                     x.Nom = _act.Methode
@@ -1569,7 +1604,13 @@ Public Class uWidgetEmpty
             If _Show = False Then Exit Sub
 
             For Each _act As cWidget.Action In _Action_GestureDroiteGauche
-                Dim _dev As HoMIDom.HoMIDom.TemplateDevice = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+                Dim _dev As HoMIDom.HoMIDom.TemplateDevice
+                If frmMere.MaJWidgetFromServer Then
+                    _dev = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
+                Else
+                    _dev = ReturnDeviceById(_act.IdObject)
+                End If
+
                 If _dev IsNot Nothing Then
                     Dim x As New HoMIDom.HoMIDom.DeviceAction
                     x.Nom = _act.Methode

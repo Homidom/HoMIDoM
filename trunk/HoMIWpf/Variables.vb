@@ -8,14 +8,24 @@
     Public _MonRepertoire As String = System.Environment.CurrentDirectory
     Public _MonRepertoireAppData As String = System.Environment.CurrentDirectory
     Public lock_logwrite As New Object
+    Public lock_dev As Boolean
     Public _ListServer As New List(Of ClServer)
     Public Media As WMedia = Nothing
 
     'Ecriture dans le fichier log
     Public _Debug As Boolean
-    Public AllDevices As New List(Of HoMIDom.HoMIDom.TemplateDevice)
+    Private _AllDevices As New List(Of HoMIDom.HoMIDom.TemplateDevice)
 
     'Animation des ScrollViewer
     Public m_friction As Double = 0.75
     Public m_SpeedTouch As Double = 600
+
+    Public Property AllDevices As List(Of HoMIDom.HoMIDom.TemplateDevice)
+        Get
+            Return _AllDevices
+        End Get
+        Set(value As List(Of HoMIDom.HoMIDom.TemplateDevice))
+            _AllDevices = value
+        End Set
+    End Property
 End Module
