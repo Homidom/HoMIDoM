@@ -28,6 +28,22 @@ Public Class HoMIGuI
             'Application.Exit()
         End Try
 
+        'Liste des drivers Installés
+        Dim Chemin As String = ""
+        Try
+            Chemin = My.Application.Info.DirectoryPath & "\Drivers"
+            If Directory.Exists(Chemin) Then
+                Dim fichiersTrouvé = Directory.GetFiles(Chemin, "Driver_*.dll", SearchOption.TopDirectoryOnly)
+                For Each DriverFichier In fichiersTrouvé
+                    DriversToolStripMenuItem.DropDownItems.Add(Mid(System.IO.Path.GetFileName(DriverFichier), 8, Len(System.IO.Path.GetFileName(DriverFichier)) - 11))
+                Next
+            Else
+                MsgBox("Chemin non trouvé : " & Chemin, MsgBoxStyle.Information, "MLoad: Liste des Drivers Installés")
+            End If
+        Catch ex As Exception
+            MsgBox("Error While opening : " & Chemin, MsgBoxStyle.Critical, "ERROR")
+        End Try
+
     End Sub
 
     Private Sub AboutToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles AboutToolStripMenuItem.Click
@@ -213,6 +229,20 @@ Public Class HoMIGuI
     End Sub
 
     Private Sub DriversToolStripMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles DriversToolStripMenuItem.Click
-        MsgBox("Non implémenté", MsgBoxStyle.Information, "Information")
+        'MsgBox("Non implémenté", MsgBoxStyle.Information, "Information")
+    End Sub
+
+    Private Sub ServiceConsoleToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ServiceConsoleToolStripMenuItem.Click
+        Dim Chemin As String = ""
+        Try
+            Chemin = My.Application.Info.DirectoryPath & "\Homiservice.exe"
+            If Directory.Exists(Chemin) Then
+                System.Diagnostics.Process.Start(Chemin)
+            Else
+                MsgBox("Chemin non trouvé : " & Chemin, MsgBoxStyle.Information, "Lancer le Service en mode console")
+            End If
+        Catch ex As Exception
+            MsgBox("Error While opening : " & Chemin, MsgBoxStyle.Critical, "ERROR")
+        End Try
     End Sub
 End Class
