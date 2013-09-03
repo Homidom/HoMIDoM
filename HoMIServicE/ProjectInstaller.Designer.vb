@@ -35,6 +35,7 @@
         Me.ServiceInstaller1.Description = "Serveur HoMIDoM"
         Me.ServiceInstaller1.DisplayName = "HoMIServicE"
         Me.ServiceInstaller1.ServiceName = "HoMIServicE"
+        Me.ServiceInstaller1.StartType = System.ServiceProcess.ServiceStartMode.Automatic
         '
         'ProjectInstaller
         '
