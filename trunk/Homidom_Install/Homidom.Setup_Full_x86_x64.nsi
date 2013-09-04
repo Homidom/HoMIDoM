@@ -13,12 +13,15 @@
 !define PRODUCT_DIR_REGKEY "Software\${PRODUCT_NAME}"
 !define PRODUCT_UNINSTALL_REGKEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 
+!define DEFAULT_CFG_IPSOAP "localhost"
+!define DEFAULT_CFG_PORTSOAP "7999"
+!define DEFAULT_CFG_IDSRV "123456789"
+
 ; --- Version du Framework .NET requis et URL de téléchargement
 !define DOT_MAJOR "4"
 !define DOT_MINOR "0"
 !define URL_DOTNET "http://download.microsoft.com/download/9/5/A/95A9616B-7A37-4AF6-BC36-D6EA96C8DAAE/dotNetFx40_Full_x86_x64.exe"
-; --- inclusion du code de détection et de téléchargement du Framework .NET
-!include "includes\CheckDotNetInstalled.nsh"
+
 
 ; --- Dossier racine contenant les sources (relatif à l'emplacement du script NSIS)
 !define ROOT_DIR ".."
@@ -44,6 +47,10 @@ VIAddVersionKey "FileVersion" "${PRODUCT_VERSION}.${PRODUCT_BUILD}.${PRODUCT_REV
 !include "includes\x64.nsh"
 !include "nsDialogs.nsh"
 !include "includes\CustomLog.nsh"
+
+; --- inclusion du code de détection et de téléchargement du Framework .NET
+!include "includes\CheckDotNetInstalled.nsh"
+!include "includes\Redist.VC2010.nsh"
 
 ; MUI Settings
 !define MUI_ABORTWARNING
@@ -101,6 +108,8 @@ Var optCreateStartMenuShortcuts
 ; Request application privileges for Windows Vista
 RequestExecutionLevel admin
 
+Var platform
+
 ; --- définition des variables personalisées
 Var IsHomidomInstalled ;indique si HoMIDom est déja installé
 Var IsHomidomInstalledAsService ;indique si HoMIDoMService est installé en tant que service windows
@@ -111,6 +120,10 @@ Var HomidomInstalledVersion ;Numéro de version Homidom.dll
 Var IsPreviousInstallIsDeprecated ;Indique si la précedente installation a été faite avec l'ancien installeur (msi)
 ;Var HomidomServiceVersion ;Indique le type de service installé : 1=> HomidomSvc via NSSM, 2=> HomiService
 Var HomiServiceName
+
+Var cfg_ipsoap
+Var cfg_portsoap
+Var cfg_idsrv
 
 !define Unicode2Ansi "!insertmacro Unicode2Ansi"
 !macro Unicode2Ansi String outVar
@@ -146,6 +159,9 @@ Function .onInit
   ; --- Vérification de la version du Framework .NET
   Call CheckDotNetInstalled
   
+  ; -- Vérification de la présence des runtimes VC2010
+  Call CheckVC2010Redist
+  
   ; --- détection de l'OS (32bits/64bits) & pré-configuration du dossier de destination
   StrCpy $INSTDIR "$programfiles32\${PRODUCT_NAME}"
   
@@ -153,9 +169,11 @@ Function .onInit
     !insertmacro Log_String "Architecture 64-bit detectée."
     StrCpy $INSTDIR "$programfiles64\${PRODUCT_NAME}"
     SetRegView 64
+    StrCpy $platform "x64"
   ${Else}
     !insertmacro Log_String "Architecture 32-bit detectée."
     SetRegView 32
+    StrCpy $platform "x86"
   ${EndIf}
   
   !insertmacro Log_String "Les dossier d'installation par défaut est '$instdir'."
@@ -218,6 +236,8 @@ Function .onInit
     !insertmacro Log_String "Une version du service HoMIDoM installée avec InstallUtil a été trouvée."
   ${EndIf}
 
+  Call LoadConfig
+
   !insertmacro Log_String "IsHomidomInstalled: $IsHomidomInstalled"
   !insertmacro Log_String "HomidomInstalledVersion: $HomidomInstalledVersion"
   !insertmacro Log_String "IsHomidomInstalledAsServiceNSSM: $IsHomidomInstalledAsServiceNSSM"
@@ -225,7 +245,50 @@ Function .onInit
     
 FunctionEnd
 
+Function LoadConfig
 
+  StrCpy $cfg_ipsoap ${DEFAULT_CFG_IPSOAP}
+  StrCpy $cfg_portsoap ${DEFAULT_CFG_PORTSOAP}
+  StrCpy $cfg_idsrv ${DEFAULT_CFG_IDSRV}
+
+  ; Vérification de la présence du fichier de configuration
+  !insertmacro Log_String "Recherche du fichier de configuration."
+  ${If} ${FileExists} "$INSTDIR\Config\HoMIDom.xml"
+    nsisXML::create
+    nsisXML::load "$INSTDIR\Config\HoMIDom.xml"
+    ; récupération du noeud /homidom/server
+    nsisXML::select '/homidom/server'
+    ${If} $2 != 0
+      nsisXML::getAttribute "ipsoap"
+      ${If} $3 != ""
+        StrCpy $cfg_ipsoap $3
+      ${EndIf}
+      nsisXML::getAttribute "portsoap"
+      ${If} $3 != ""
+        StrCpy $cfg_portsoap $3
+      ${EndIf}
+      nsisXML::getAttribute "idsrv"
+      ${If} $3 != ""
+        StrCpy $cfg_idsrv $3
+      ${EndIf}
+    ${EndIf}
+  ${EndIf}
+
+FunctionEnd
+
+Function SaveConfig
+
+    nsisXML::create
+    nsisXML::load "$INSTDIR\Config\HoMIDom.xml"
+    nsisXML::select '/homidom/server'
+    ${If} $2 != 0
+      nsisXML::setAttribute "ipsoap" $cfg_ipsoap
+      nsisXML::setAttribute "portsoap" $cfg_portsoap
+      nsisXML::setAttribute "idsrv" $cfg_idsrv
+    ${EndIf}
+    nsisXML::save "$INSTDIR\Config\HoMIDom.xml"
+  
+FunctionEnd
 
 ; **********************************************************************
 ; Success - code exécuté à la fin de l'installation (en cas de success)
@@ -233,6 +296,8 @@ FunctionEnd
 Function .onInstSuccess
 
   Call WriteUnInstaller
+  Call AddFirewallRules
+  Call InstallHomidomService
   Call StartHomidomService
 
 FunctionEnd
@@ -461,10 +526,7 @@ Section "Uninstall"
     Pop $0 ; return value - process exit code or error or STILL_ACTIVE (0x103).
     !insertmacro Log_String "Desintallation du service V1: $0"
 
-    ; desinstallation du service existant V2
-    ExecCmd::exec /TIMEOUT=5000 '$PLUGINSDIR\InstallUtil.exe /u HoMIService.exe'
-    Pop $0 ; return value - process exit code or error or STILL_ACTIVE (0x103).
-    !insertmacro Log_String "Desintallation du service V2: $0"
+    Call un.UnInstallHomidomService
     
   Banner::destroy
 
@@ -528,11 +590,11 @@ FunctionEnd
 ; **********************************************************************
 ; dé-installation du service windows via InstallUtil
 ; **********************************************************************
-Function UnInstallHomidomService
+Function un.UnInstallHomidomService
   ${If} $IsHomidomInstalledAsService == "1"
     Banner::show /NOUNLOAD ""
     ; desinstallation du service existant V2
-    ExecCmd::exec /TIMEOUT=5000 '$PLUGINSDIR\InstallUtil.exe /u HoMIService.exe'
+    ExecCmd::exec /TIMEOUT=5000 '"$WINDIR\Microsoft.NET\Framework\v4.0.30319\installUtil.Exe" /u "$INSTDIR\HoMIService.exe"'
     Pop $0 ; return value - process exit code or error or STILL_ACTIVE (0x103).
     !insertmacro Log_String "Desintallation du service V2: $0"
     Banner::destroy
@@ -544,13 +606,15 @@ FunctionEnd
 ; **********************************************************************
 Function InstallHomidomService
 
+${If} $optInstallAsService == "1"
+
   Banner::show /NOUNLOAD "Installation du Service"
   !insertmacro Log_String "Installation du service via InstallUtil"
 
   SetOutpath "$INSTDIR"
-  File "tools\InstallUtil.exe"
+  ;File "tools\InstallUtil.exe"
   ; installation du service
-  ExecWait '"$INSTDIR\installUtil.Exe" "$INSTDIR\HoMIService.exe"'
+  ExecWait '"$WINDIR\Microsoft.NET\Framework\v4.0.30319\installUtil.Exe" "$INSTDIR\HoMIService.exe"'
 
   ; Arret du Service V2
   SimpleSC::ExistsService "$HomiServiceName"
@@ -563,6 +627,8 @@ Function InstallHomidomService
   ${EndIf}
 
   Banner::destroy
+
+${EndIf}
 
 FunctionEnd
 
@@ -596,6 +662,21 @@ Function StartHomidomService
   ${EndIf}
 
   Banner::destroy
+
+FunctionEnd
+
+Function AddFirewallRules
+
+  ${If} $optInstallAsService == "1"
+
+    Banner::show /NOUNLOAD "Configuration du pare-feu..."
+    !insertmacro Log_String "Configuration du pare-feu."
+
+
+
+    Banner::destroy
+    
+  ${EndIf}
 
 FunctionEnd
 
@@ -644,47 +725,62 @@ Function KillAllHomidomServices
 FunctionEnd
 
 Function nsDialogsPage
-	nsDialogs::Create 1018
-	Pop $Dialog
 
-	${If} $Dialog == error
-		Abort
-	${EndIf}
+!insertmacro MUI_HEADER_TEXT "Options d'installation" "Configurer les options"
 
-        ;StrCpy $optInstallAsService "0"
-        StrCpy $optCreateStartMenuShortcuts "1"
-        ;StrCpy $optStartService "0"
+  nsDialogs::Create 1018
+  Pop $Dialog
 
-        ${NSD_CreateCheckbox} 0 10u 100% 10u "Créer les raccourçis dans le menu Démarrer"
-	Pop $chkCreateStartMenuShortcuts_Handle
-	${If} $optCreateStartMenuShortcuts == ${BST_CHECKED}
-		${NSD_Check} $chkCreateStartMenuShortcuts_Handle
-	${EndIf}
+  ${If} $Dialog == error
+    Abort
+  ${EndIf}
+
+  ;StrCpy $optInstallAsService "0"
+  StrCpy $optCreateStartMenuShortcuts "1"
+  ;StrCpy $optStartService "0"
+
+  ${NSD_CreateCheckbox} 0 0u 100% 10u "Créer les raccourçis dans le menu Démarrer"
+  Pop $chkCreateStartMenuShortcuts_Handle
+  ${If} $optCreateStartMenuShortcuts == ${BST_CHECKED}
+    ${NSD_Check} $chkCreateStartMenuShortcuts_Handle
+  ${EndIf}
 
   ${If} ${SectionIsSelected} ${HoMIDoM_SERVICE}
 
-        ${NSD_CreateCheckbox} 0 30u 100% 10u "Installer HoMIDoM Server en tant que Service Windows"
-	Pop $chkInstallAsService_Handle
-	${If} $optInstallAsService == ${BST_CHECKED}
-		${NSD_Check} $chkInstallAsService_Handle
-	${EndIf}
+    ${NSD_CreateHLine} 0 15u 100% 0u ""
+    ; ---------------------------------------------------------------
+    ${NSD_CreateCheckbox} 0 20u 100% 10u "Installer HoMIDoM Server en tant que Service Windows"
+    Pop $chkInstallAsService_Handle
+    ${If} $optInstallAsService == ${BST_CHECKED}
+      ${NSD_Check} $chkInstallAsService_Handle
+    ${EndIf}
 
-        ${NSD_CreateCheckbox} 0 50u 100% 10u "Demarrer le Service HoMIDoM à la fin de l'installation"
-	Pop $chkStartService_Handle
-	${If} $optStartService == ${BST_CHECKED}
-		${NSD_Check} $chkStartService_Handle
-	${EndIf}
+    ${NSD_CreateCheckbox} 0 35u 100% 10u "Demarrer le Service HoMIDoM à la fin de l'installation"
+    Pop $chkStartService_Handle
+    ${If} $optStartService == ${BST_CHECKED}
+      ${NSD_Check} $chkStartService_Handle
+    ${EndIf}
+    ; ---------------------------------------------------------------
+    ${NSD_CreateHLine} 0 50u 100% 0u ""
 
-        ${NSD_CreateCheckbox} 0 70u 100% 10u "Demarrer automatiquement HoMIDoM GUI à la fin de l'installation"
-	Pop $chkStartServiceGUI_Handle
-	${If} $optStartServiceGUI == ${BST_CHECKED}
-		${NSD_Check} $chkStartServiceGUI_Handle
-	${EndIf}
-	
+    ${NSD_CreateLabel} 10u 55u 50u 10u "IP/Nom d'hôte : "
+    ${NSD_CreateText} 75u 55u 30% 10u $cfg_ipsoap
+        
+    ${NSD_CreateLabel} 10u 70u 50u 10u "Port : "
+    ${NSD_CreateText} 75u 70u 30% 10u $cfg_portsoap
+        
+    ${NSD_CreateLabel} 10u 85u 50u 10u "ID serveur : "
+    ${NSD_CreateText} 75u 85u 30% 10u $cfg_idsrv
+
+    ${NSD_CreateCheckbox} 0 110u 100% 10u "Demarrer automatiquement HoMIDoM GUI à la fin de l'installation"
+    Pop $chkStartServiceGUI_Handle
+    ${If} $optStartServiceGUI == ${BST_CHECKED}
+      ${NSD_Check} $chkStartServiceGUI_Handle
+    ${EndIf}
+
   ${EndIf}
-
-
-	nsDialogs::Show
+  nsDialogs::Show
+  
 FunctionEnd
 
 Function nsDialogsPageLeave
