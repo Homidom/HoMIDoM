@@ -33,7 +33,7 @@ Imports System.Threading
 ' Date : 09/09/2012
 '-------------------------------------------------------------------------------------
 ' Updated : 04/03/2013 ajout d'envoide sms en mode Texte
-' a lire pour optimiser : http://grafikm.developpez.com/portcomm/ ( non implémenté a ce jour )
+' a lire pour optimiser : http://grafikm.developpez.com/portcomm/ ( )
 '-------------------------------------------------------------------------------------
 
 ' Driver GSM
@@ -772,6 +772,7 @@ Imports System.Threading
                 Try
 
                     'recupere le manufacturer
+
                     sIncomming = ""
                     Dim MyIncomingIndex As Integer = 0
                     Dim mystring(MyIncomingIndex) As String
@@ -787,6 +788,9 @@ Imports System.Threading
                     Dim phonemanufacturer = mystring(mystring.Length - 3)
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * AT+CGMI ( manufacturer )")
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> " & phonemanufacturer)
+
+
+                    Thread.Sleep(200)
                     sIncomming = ""
                     '         
                     MyIncomingIndex = 0
@@ -802,17 +806,20 @@ Imports System.Threading
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * AT+CGMM ( model )")
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> " & phonemodel)
 
+                    ''''''''''''
+                    ' suppresion de la verification des commandes supporté ( trop peu de model supporte cette commande )
+                    ''''''''''''
 
-                    If Not ((phonemanufacturer = "NOKIA") Or (phonemanufacturer = " WAVECOM MODEM")) Then
-                        ' Si ce n'est pas un Nokia
-                        ' regardons ce que votre modem a dans le ventre ! 
-                        ' 
-                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * AT+CLAC Start listes des commandes du modem :")
-                        ATport.WriteLine("AT+CLAC" & vbCrLf) ' vbcrlf
-                        Thread.Sleep(100)
-                        sIncomming = ATport.ReadLine()
-                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
-                    End If
+                    '                   If Not ((phonemanufacturer = "NOKIA") Or (phonemanufacturer = " WAVECOM MODEM") Or (phonemanufacturer = "huawei")) Then
+                    '' Si ce n'est pas un Nokia
+                    '                   ' regardons ce que votre modem a dans le ventre ! 
+                    '                  ' 
+                    '                  _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * AT+CLAC Start listes des commandes du modem :")
+                    '                   ATport.WriteLine("AT+CLAC" & vbCrLf) ' vbcrlf
+                    '                  Thread.Sleep(100)
+                    '                 sIncomming = ATport.ReadLine()
+                    '                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> " & sIncomming.Replace(vbCr, "").Replace(vbLf, ""))
+                    '               End If
 
 
 
@@ -850,7 +857,7 @@ Imports System.Threading
                     '                    End If
 
 
-
+                    Thread.Sleep(200)
                     sIncomming = ""
                     '    'quel heure est  il ?
 
@@ -867,6 +874,7 @@ Imports System.Threading
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * AT+CCLK? ( horaire )")
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> " & Modemhoraire)
 
+                    Thread.Sleep(200)
                     sIncomming = ""
                     'AT+CMFG=?  lister les mode supporté
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * Lecture des mode Supportés")
@@ -879,6 +887,7 @@ Imports System.Threading
                         mystring4(MyIncomingIndex) = sIncomming.Replace(vbCr, "").Replace(vbLf, "")
                         MyIncomingIndex = MyIncomingIndex + 1
                     Loop
+
                     Dim Modemmodem = mystring4(mystring4.Length - 3)
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * AT+CMGF=? ( mode )")
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "    -> " & Modemmodem)
@@ -914,6 +923,7 @@ Imports System.Threading
                     '  Loop
 
                     'AT+CPMS=?  stokage supporté
+                    Thread.Sleep(200)
                     sIncomming = ""
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Mode", "   * Lecture des mode Supportés")
                     MyIncomingIndex = 0
@@ -1120,6 +1130,7 @@ Imports System.Threading
                         ATport.WriteTimeout = 300
                         ATport.Open()
 
+                        Thread.Sleep(200)
                         If IsSimpinOk() = True Then
 
                             sIncomming = ""
@@ -1145,7 +1156,7 @@ Imports System.Threading
                             '     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "AT+CMMS=2 : " & sIncomming)
                             '     Loop
 
-
+                            Thread.Sleep(200)
                             sIncomming = ""
                             ' SMSPort.WriteLine("AT+CSCA=""+33689004000""" & vbCrLf) 
 
@@ -1157,6 +1168,7 @@ Imports System.Threading
                             'MsgBox(sIncomming)
                             _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "AT+CMEE=1 : " & sIncomming)
 
+                            Thread.Sleep(200)
                             sIncomming = ""
                             ' A GSM/GPRS modem or mobile phone uses +CMTI ( AT+CNMI=X,2,X,X,X ) 
                             'to forward a newly received SMS message to the computer / PC.
