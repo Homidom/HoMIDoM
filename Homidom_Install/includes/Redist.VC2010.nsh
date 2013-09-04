@@ -12,18 +12,7 @@ Var VC2010RedistRegKeyValue
 Var IsVC2010RedistInstalled
 
 Function DownloadVC2010Redist
-
-  ${If} ${RunningX64}
-    StrCpy $URL_VC2010 "${URL_VC2010_X64}"
-    StrCpy $VC2010_Package "vcredist_x64.exe"
-    StrCpy $VC2010_RegKey "SOFTWARE\Microsoft\VisualStudio\10.0\VC\VCRedist\x64"
-  ${Else}
-    StrCpy $URL_VC2010 "${URL_VC2010_X86}"
-    StrCpy $VC2010_Package "vcredist_x86.exe"
-   StrCpy $VC2010_RegKey "SOFTWARE\Microsoft\VisualStudio\10.0\VC\VCRedist\x86"    
-  ${EndIf}
-
-  
+ 
 
       ; the following Goto and Label is for consistencey.
       Goto lbl_DownloadRequired
@@ -57,11 +46,25 @@ FunctionEnd
 
 Function CheckVC2010Redist
 
+
+  ${If} ${RunningX64}
+    StrCpy $URL_VC2010 "${URL_VC2010_X64}"
+    StrCpy $VC2010_Package "vcredist_x64.exe"
+    StrCpy $VC2010_RegKey "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\10.0\VC\VCRedist\x64"
+  ${Else}
+    StrCpy $URL_VC2010 "${URL_VC2010_X86}"
+    StrCpy $VC2010_Package "vcredist_x86.exe"
+   StrCpy $VC2010_RegKey "SOFTWARE\Microsoft\VisualStudio\10.0\VC\VCRedist\x86"    
+  ${EndIf}
+
          ; Registry: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\10.0\VC\VCRedist\x86
 
          ClearErrors
          ; Read  from Registry
          ReadRegDWORD $VC2010RedistRegKeyValue HKLM "$VC2010_RegKey" "Installed"
+
+          !insertmacro Log_String "Microsoft Visual C++ 2010 Redistributable : $VC2010RedistRegKeyValue"
+           !insertmacro Log_String "$VC2010_RegKey"
          IfErrors noVC2010Redist
 
          StrCpy $IsVC2010RedistInstalled "$VC2010RedistRegKeyValue"
@@ -69,7 +72,7 @@ Function CheckVC2010Redist
 
 noVC2010Redist:
          StrCpy $IsVC2010RedistInstalled "0"
-         !insertmacro Log_String "Microsoft Visual C++ 2010 Redistributable  introuvable !"
+      
 
 exitVC2010RedistCheck:
 
