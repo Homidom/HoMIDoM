@@ -21,3 +21,6 @@ LangString DESC_DOTNET_TIMEOUT ${LANG_FRENCH} "The installation of the $(DESC_SH
 LangString ERROR_DOTNET_INVALID_PATH ${LANG_FRENCH} "The $(DESC_SHORTDOTNET) Installation$\n was not found in the following location:$\n"
 LangString ERROR_DOTNET_FATAL ${LANG_FRENCH} "A fatal error occurred during the installation$\n of the $(DESC_SHORTDOTNET)."
 LangString FAILED_DOTNET_INSTALL ${LANG_FRENCH} "The installation of ${PRODUCT_NAME} will$\n continue. However, it may not function properly$\nuntil $(DESC_SHORTDOTNET)$\nis installed."
+
+LangString DESC_VC2010_LABEL ${LANG_FRENCH} "Microsoft Visual C++ 2010"
+LangString DESC_VC2010_DECISION ${LANG_FRENCH} "$(DESC_VC2010_LABEL) est requis.$\nVoulez-vous télécharger et installer $(DESC_VC2010_LABEL) maintenant ?."
