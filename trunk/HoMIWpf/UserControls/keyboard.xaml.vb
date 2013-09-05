@@ -10,15 +10,17 @@ Public Class keyboard
 
         Try
             If oskProcess IsNot Nothing Then
-                If Not Me.oskProcess.HasExited Then
-                    'CloseMainWindow would generally be preferred but the OSK doesn't respond.
-                    Me.oskProcess.Kill()
-                End If
-                oskProcess.Close()
+                'If Not Me.oskProcess.HasExited Then
+                '    'CloseMainWindow would generally be preferred but the OSK doesn't respond.
+                '    Me.oskProcess.Kill()
+                'End If
+                Me.oskProcess.Kill()
+                'oskProcess.Close()
                 oskProcess = Nothing
             ElseIf oskProcess Is Nothing OrElse Me.oskProcess.HasExited Then
                 If Me.oskProcess IsNot Nothing AndAlso Me.oskProcess.HasExited Then
-                    oskProcess.Close()
+                    Me.oskProcess.Kill()
+                    'oskProcess.Close()
                 End If
                 If String.IsNullOrEmpty(frmMere.KeyboardPath) = False Then oskProcess = Process.Start(frmMere.KeyboardPath)
                 'BtnClose.Content = "▼"
