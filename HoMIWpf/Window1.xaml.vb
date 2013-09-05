@@ -616,10 +616,13 @@ Class Window1
                 lock_dev = True
                 For Each _dev In AllDevices
                     If _dev.ID = deviceid Then
-                        Dim mydev As TemplateDevice = myService.ReturnDeviceByID(IdSrv, deviceid)
-                        MaJ_Device(mydev, _dev)
-                        _devTrv = True
-                        Exit For
+                        Dim mydev As TemplateDevice = Nothing
+                        mydev = myService.ReturnDeviceByID(IdSrv, deviceid)
+                        If mydev IsNot Nothing Then
+                            MaJ_Device(mydev, _dev)
+                            _devTrv = True
+                            Exit For
+                        End If
                     End If
                 Next
 
@@ -797,7 +800,7 @@ Class Window1
                         Case "id"
                             IdSrv = list.Item(0).Attributes.Item(j).Value
                         Case "timeoutsrvlive"
-                            TimeOutServerLive = list.Item(0).Attributes.Item(j).Value
+                            TimeOutServerLive = CInt(list.Item(0).Attributes.Item(j).Value)
                         Case Else
                             Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                     End Select
@@ -846,27 +849,27 @@ Class Window1
                 For j As Integer = 0 To list.Item(0).Attributes.Count - 1
                     Select Case list.Item(0).Attributes.Item(j).Name
                         Case "majwidgetfromsrv"
-                            MaJWidgetFromServer = list.Item(0).Attributes.Item(j).Value
+                            MaJWidgetFromServer = CBool(list.Item(0).Attributes.Item(j).Value)
                         Case "keyboardpath"
                             KeyboardPath = list.Item(0).Attributes.Item(j).Value
                         Case "transparencebarhaut"
-                            TransparenceHaut = list.Item(0).Attributes.Item(j).Value
+                            TransparenceHaut = CInt(list.Item(0).Attributes.Item(j).Value)
                         Case "transparencebarbas"
-                            TransparenceBas = list.Item(0).Attributes.Item(j).Value
+                            TransparenceBas = CInt(list.Item(0).Attributes.Item(j).Value)
                         Case "savediffback"
-                            SaveDiffBackup = list.Item(0).Attributes.Item(j).Value
+                            SaveDiffBackup = CBool(list.Item(0).Attributes.Item(j).Value)
                         Case "flagsave"
-                            FlagSave = list.Item(0).Attributes.Item(j).Value
+                            FlagSave = CBool(list.Item(0).Attributes.Item(j).Value)
                         Case "autosave"
-                            AutoSave = list.Item(0).Attributes.Item(j).Value
+                            AutoSave = CBool(list.Item(0).Attributes.Item(j).Value)
                         Case "showlbltime"
-                            ShowDateTime = list.Item(0).Attributes.Item(j).Value
+                            ShowDateTime = CBool(list.Item(0).Attributes.Item(j).Value)
                         Case "showsoleil"
-                            ShowSoleil = list.Item(0).Attributes.Item(j).Value
+                            ShowSoleil = CBool(list.Item(0).Attributes.Item(j).Value)
                         Case "showtemperature"
-                            ShowTemperature = list.Item(0).Attributes.Item(j).Value
+                            ShowTemperature = CBool(list.Item(0).Attributes.Item(j).Value)
                         Case "showlblzone"
-                            ShowLabelMnu = list.Item(0).Attributes.Item(j).Value
+                            ShowLabelMnu = CBool(list.Item(0).Attributes.Item(j).Value)
                         Case "imgbackground"
                             ImageBackGround = list.Item(0).Attributes.Item(j).Value
                         Case "fullscreen"
@@ -878,15 +881,15 @@ Class Window1
                                 Me.WindowState = Windows.WindowState.Maximized
                             End If
                         Case "showquitter"
-                            ShowQuitter = list.Item(0).Attributes.Item(j).Value
+                            ShowQuitter = CBool(list.Item(0).Attributes.Item(j).Value)
                         Case "widthpassword"
-                            _WithPassword = list.Item(0).Attributes.Item(j).Value
+                            _WithPassword = CBool(list.Item(0).Attributes.Item(j).Value)
                         Case "password"
                             _PassWord = list.Item(0).Attributes.Item(j).Value
                         Case "left"
-                            Me.Left = list.Item(0).Attributes.Item(j).Value
+                            Me.Left = CDbl(list.Item(0).Attributes.Item(j).Value)
                         Case "top"
-                            Me.Top = list.Item(0).Attributes.Item(j).Value
+                            Me.Top =CDbl( list.Item(0).Attributes.Item(j).Value)
                         Case "width"
                             Me.Width = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
                         Case "height"
@@ -1218,6 +1221,9 @@ Class Window1
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.CLIENT, "SaveConfig", "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
             End Try
+
+            If ChkEdit.IsChecked Then ChkEdit.IsChecked = False
+            If ChkMove.IsChecked Then ChkMove.IsChecked = False
 
             ''Creation du fichier XML
             Dim writer As New XmlTextWriter(Fichier, System.Text.Encoding.UTF8)
@@ -1860,8 +1866,8 @@ Class Window1
 
             Me.UpdateLayout()
 
-            Chk1.Visibility = Windows.Visibility.Collapsed
-            Chk2.Visibility = Windows.Visibility.Collapsed
+            ChkMove.Visibility = Windows.Visibility.Collapsed
+            ChkEdit.Visibility = Windows.Visibility.Collapsed
             Chk3.Visibility = Windows.Visibility.Collapsed
 
             Dim y As uCtrlImgMnu = sender
@@ -2057,11 +2063,11 @@ Class Window1
             End If
 
             'Desgin
-            Chk1.Visibility = Windows.Visibility.Visible
-            Chk2.Visibility = Windows.Visibility.Visible
+            ChkMove.Visibility = Windows.Visibility.Visible
+            ChkEdit.Visibility = Windows.Visibility.Visible
             Chk3.Visibility = Windows.Visibility.Visible
-            If Chk1.IsChecked = True Then Chk1.IsChecked = False
-            If Chk2.IsChecked = True Then Chk2.IsChecked = False
+            If ChkMove.IsChecked = True Then ChkMove.IsChecked = False
+            If ChkEdit.IsChecked = True Then ChkEdit.IsChecked = False
 
             'On parcours tous les éléments de la zone (hors widgets empty)
             For i As Integer = 0 To _zone.ListElement.Count - 1
@@ -2269,11 +2275,11 @@ Class Window1
         End Try
     End Sub
 
-    Private Sub Deplacement_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk1.Click
+    Private Sub Deplacement_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ChkMove.Click
         Try
             'Mode déplacement
-            If Chk1.IsChecked = True Then
-                Chk2.IsChecked = False
+            If ChkMove.IsChecked = True Then
+                ChkEdit.IsChecked = False
                 Design = True
                 Dim child As ContentControl
                 For Each child In Canvas1.Children
@@ -2356,15 +2362,15 @@ Class Window1
         End Try
     End Sub
 
-    Private Sub ModeEdition_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Chk2.Click
+    Private Sub ModeEdition_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ChkEdit.Click
         Try
 
-            If Chk2.IsChecked = True Then
-                Chk1.IsChecked = False
+            If ChkEdit.IsChecked = True Then
+                ChkMove.IsChecked = False
 
                 'On a finit le déplacement
                 Design = False
-                Chk2.IsChecked = True
+                ChkEdit.IsChecked = True
                 Dim child As ContentControl
 
                 For Each child In Canvas1.Children
@@ -2419,7 +2425,7 @@ Class Window1
             Dim child2 As ContentControl
             For Each child2 In Canvas1.Children
                 Dim obj As uWidgetEmpty = child2.Content
-                obj.ModeEdition = Chk2.IsChecked
+                obj.ModeEdition = ChkEdit.IsChecked
                 obj = Nothing
             Next
 
@@ -2491,8 +2497,8 @@ Class Window1
     Private Sub NewWidgetEmpty_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetEmpty.Click
         Try
             ' Remettre à zéro les modes édition + déplacement
-            Chk1.IsChecked = False
-            Chk2.IsChecked = False
+            ChkMove.IsChecked = False
+            ChkEdit.IsChecked = False
             Deplacement_Click(Me, e)
 
             'Ajouter un nouveau Control
@@ -2537,8 +2543,8 @@ Class Window1
     Private Sub NewWidgetWeb_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetWeb.Click
         Try
             ' Remettre à zéro les modes édition + déplacement
-            Chk1.IsChecked = False
-            Chk2.IsChecked = False
+            ChkMove.IsChecked = False
+            ChkEdit.IsChecked = False
             Deplacement_Click(Me, e)
 
             'Ajouter un nouveau Control
@@ -2579,8 +2585,8 @@ Class Window1
     Private Sub NewWidgetRss_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetRss.Click
         Try
             ' Remettre à zéro les modes édition + déplacement
-            Chk1.IsChecked = False
-            Chk2.IsChecked = False
+            ChkMove.IsChecked = False
+            ChkEdit.IsChecked = False
             Deplacement_Click(Me, e)
 
             'Ajouter un nouveau Control
@@ -2622,8 +2628,8 @@ Class Window1
     Private Sub NewWidgetMeteo_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetMeteo.Click
         Try
             ' Remettre à zéro les modes édition + déplacement
-            Chk1.IsChecked = False
-            Chk2.IsChecked = False
+            ChkMove.IsChecked = False
+            ChkEdit.IsChecked = False
             Deplacement_Click(Me, e)
 
             'Ajouter un nouveau Control
@@ -2666,8 +2672,8 @@ Class Window1
     Private Sub NewWidgetKeyPad_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetKeyPad.Click
         Try
             ' Remettre à zéro les modes édition + déplacement
-            Chk1.IsChecked = False
-            Chk2.IsChecked = False
+            ChkMove.IsChecked = False
+            ChkEdit.IsChecked = False
             Deplacement_Click(Me, e)
 
             'Ajouter un nouveau Control
@@ -2709,8 +2715,8 @@ Class Window1
     Private Sub NewWidgetLabel_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetLabel.Click
         Try
             ' Remettre à zéro les modes édition + déplacement
-            Chk1.IsChecked = False
-            Chk2.IsChecked = False
+            ChkMove.IsChecked = False
+            ChkEdit.IsChecked = False
             Deplacement_Click(Me, e)
 
             'Ajouter un nouveau Control
@@ -2754,8 +2760,8 @@ Class Window1
     Private Sub NewWidgetCamera_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetCamera.Click
         Try
             ' Remettre à zéro les modes édition + déplacement
-            Chk1.IsChecked = False
-            Chk2.IsChecked = False
+            ChkMove.IsChecked = False
+            ChkEdit.IsChecked = False
             Deplacement_Click(Me, e)
 
             'Ajouter un nouveau Control
@@ -2796,8 +2802,8 @@ Class Window1
     Private Sub NewWidgetVolet_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetVolet.Click
         Try
             ' Remettre à zéro les modes édition + déplacement
-            Chk1.IsChecked = False
-            Chk2.IsChecked = False
+            ChkMove.IsChecked = False
+            ChkEdit.IsChecked = False
             Deplacement_Click(Me, e)
 
             'Ajouter un nouveau Control
@@ -2845,8 +2851,8 @@ Class Window1
                 Me.UpdateLayout()
             End If
 
-            Chk1.Visibility = Windows.Visibility.Collapsed
-            Chk2.Visibility = Windows.Visibility.Collapsed
+            ChkMove.Visibility = Windows.Visibility.Collapsed
+            ChkEdit.Visibility = Windows.Visibility.Collapsed
             Chk3.Visibility = Windows.Visibility.Collapsed
 
             Dim x As New uLog(sender.tag)

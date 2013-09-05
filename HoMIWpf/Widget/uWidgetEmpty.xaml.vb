@@ -2113,7 +2113,7 @@ Public Class uWidgetEmpty
                     End If
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Stk1_MouseDown: " & ex.Message, "Erreur", " uWidgetEmpty.Stk1_MouseDown")
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Stk1_MouseDown: " & ex.ToString, "Erreur", " uWidgetEmpty.Stk1_MouseDown")
         End Try
     End Sub
 

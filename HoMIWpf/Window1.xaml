@@ -63,12 +63,12 @@
                     <Image Name="Menu1" Height="40" Width="40" Margin="3" Source="Images/Rond_64x64.png" >
                         <Image.ContextMenu >
                             <ContextMenu Name="CtxMnuBtn"> 
-                            <MenuItem Name="Chk1" Header="Déplacer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" FontSize="10">
+                            <MenuItem Name="ChkMove" Header="Déplacer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" FontSize="10">
                                 <MenuItem.Icon>
                                     <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/move.png" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                                <MenuItem Name="Chk2" Header="Editer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" FontSize="10" >
+                                <MenuItem Name="ChkEdit" Header="Editer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" FontSize="10" >
                                 <MenuItem.Icon>
                                     <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Modifier_32.png" />
                                 </MenuItem.Icon>

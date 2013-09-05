@@ -729,59 +729,68 @@ Public Class WWidgetProperty
     End Sub
 
     Private Sub Refresh_LstObjetVisu()
-        LstObjetVisu.Items.Clear()
-        TxtText.Text = ""
-        TxtValueVisu.Text = ""
+        Try
+            LstObjetVisu.Items.Clear()
+            TxtText.Text = ""
+            TxtValueVisu.Text = ""
 
-        For Each Visu As cWidget.Visu In Obj.Visuel
-            Dim x As New ListBoxItem
-            x.Uid = Visu.IdObject
-            Dim _dev As TemplateDevice = myService.ReturnDeviceByID(IdSrv, Visu.IdObject)
-            If _dev IsNot Nothing Then
-                x.Content = _dev.Name
-                LstObjetVisu.Items.Add(x)
-            End If
-        Next
+            For Each Visu As cWidget.Visu In Obj.Visuel
+                Dim x As New ListBoxItem
+                x.Uid = Visu.IdObject
+                Dim _dev As TemplateDevice = myService.ReturnDeviceByID(IdSrv, Visu.IdObject)
+                If _dev IsNot Nothing Then
+                    x.Content = _dev.Name
+                    LstObjetVisu.Items.Add(x)
+                End If
+            Next
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Refresh_LstObjetVisu: " & ex.Message, "Erreur", "Refresh_LstObjetVisu")
+        End Try
     End Sub
 
     Private Sub LstObjetVisu_SelectionChanged(ByVal sender As System.Object, ByVal e As Object) Handles LstObjetVisu.SelectionChanged, LstObjetVisu.MouseLeftButtonDown
-        If LstObjetVisu.SelectedIndex >= 0 Then
-            Dim _act As cWidget.Visu = Obj.Visuel.Item(LstObjetVisu.SelectedIndex)
+        Try
+            If LstObjetVisu.SelectedIndex >= 0 Then
+                Dim _act As cWidget.Visu = Obj.Visuel.Item(LstObjetVisu.SelectedIndex)
 
-            Dim _idx As Integer = -1
-            For i As Integer = 0 To CbObjetVisu.Items.Count - 1
-                If CbObjetVisu.Items(i).uid = _act.IdObject Then
-                    _idx = i
-                    Exit For
+                Dim _idx As Integer = -1
+                For i As Integer = 0 To CbObjetVisu.Items.Count - 1
+                    If CbObjetVisu.Items(i).uid = _act.IdObject Then
+                        _idx = i
+                        Exit For
+                    End If
+                Next
+                CbObjetVisu.SelectedIndex = _idx
+
+                _idx = -1
+                CbPropertyVisu.SelectedValue = _act.Propriete
+                CbOperateurVisu.SelectedIndex = _act.Operateur
+
+                TxtValueVisu.Text = _act.Value.ToString
+                If _act.Image IsNot Nothing Then
+                    ImgVisu.Source = ConvertArrayToImage(myService.GetByteFromImage(_act.Image))
+                    ImgVisu.Tag = _act.Image
                 End If
-            Next
-            CbObjetVisu.SelectedIndex = _idx
 
-            _idx = -1
-            CbPropertyVisu.SelectedValue = _act.Propriete
-            CbOperateurVisu.SelectedIndex = _act.Operateur
+                TxtText.Text = _act.Text
 
-            TxtValueVisu.Text = _act.Value.ToString
-            If _act.Image IsNot Nothing Then
-                ImgVisu.Source = ConvertArrayToImage(myService.GetByteFromImage(_act.Image))
-                ImgVisu.Tag = _act.Image
+                BtnOkVisu.Visibility = Windows.Visibility.Visible
+                LblProperty.Visibility = Windows.Visibility.Visible
+                CbPropertyVisu.Visibility = Windows.Visibility.Visible
+                LblVisuValue.Visibility = Windows.Visibility.Visible
+                TxtValueVisu.Visibility = Windows.Visibility.Visible
+                LblPicture.Visibility = Windows.Visibility.Visible
+                ImgVisu.Visibility = Windows.Visibility.Visible
+                BtnImgVisu.Visibility = Windows.Visibility.Visible
+                LblOperateur.Visibility = Windows.Visibility.Visible
+                CbOperateurVisu.Visibility = Windows.Visibility.Visible
+                LblText.Visibility = Windows.Visibility.Visible
+                TxtText.Visibility = Windows.Visibility.Visible
             End If
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur LstObjetVisu_SelectionChanged: " & ex.ToString, "Erreur", "LstObjetVisu_SelectionChanged")
+        End Try
 
-            TxtText.Text = _act.Text
-
-            BtnOkVisu.Visibility = Windows.Visibility.Visible
-            LblProperty.Visibility = Windows.Visibility.Visible
-            CbPropertyVisu.Visibility = Windows.Visibility.Visible
-            LblVisuValue.Visibility = Windows.Visibility.Visible
-            TxtValueVisu.Visibility = Windows.Visibility.Visible
-            LblPicture.Visibility = Windows.Visibility.Visible
-            ImgVisu.Visibility = Windows.Visibility.Visible
-            BtnImgVisu.Visibility = Windows.Visibility.Visible
-            LblOperateur.Visibility = Windows.Visibility.Visible
-            CbOperateurVisu.Visibility = Windows.Visibility.Visible
-            LblText.Visibility = Windows.Visibility.Visible
-            TxtText.Visibility = Windows.Visibility.Visible
-        End If
     End Sub
 
     Private Sub BtnNewVisu_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewVisu.Click
@@ -813,54 +822,58 @@ Public Class WWidgetProperty
     End Sub
 
     Private Sub BtnOkVisu_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOkVisu.Click
-        If CbObjetVisu.Text = "" Or CbObjetVisu.SelectedIndex < 0 Then
-            MessageBox.Show("Veuillez sélectionner un Objet!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            Exit Sub
-        End If
-        If CbPropertyVisu.Text = "" Or CbPropertyVisu.SelectedIndex < 0 Then
-            MessageBox.Show("Veuillez sélectionner une propriété!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            Exit Sub
-        End If
-        If TxtValueVisu.Text = "" Then
-            MessageBox.Show("Veuillez saisir une valeur!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            Exit Sub
-        End If
+        Try
+            If CbObjetVisu.Text = "" Or CbObjetVisu.SelectedIndex < 0 Then
+                MessageBox.Show("Veuillez sélectionner un Objet!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            End If
+            If CbPropertyVisu.Text = "" Or CbPropertyVisu.SelectedIndex < 0 Then
+                MessageBox.Show("Veuillez sélectionner une propriété!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            End If
+            If TxtValueVisu.Text = "" Then
+                MessageBox.Show("Veuillez saisir une valeur!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            End If
 
-        Dim _act As New cWidget.Visu
-        With _act
-            .IdObject = CbObjetVisu.SelectedItem.uid
-            .Propriete = CbPropertyVisu.Text
-            .Value = TxtValueVisu.Text
-            .Image = ImgVisu.Tag
-            .Operateur = CbOperateurVisu.SelectedIndex
-            .Text = TxtText.Text
-        End With
+            Dim _act As New cWidget.Visu
+            With _act
+                .IdObject = CbObjetVisu.SelectedItem.uid
+                .Propriete = CbPropertyVisu.Text
+                .Value = TxtValueVisu.Text
+                .Image = ImgVisu.Tag
+                .Operateur = CbOperateurVisu.SelectedIndex
+                .Text = TxtText.Text
+            End With
 
-        If _FlagNewVisu = False Then
-            Obj.Visuel.Item(LstObjetVisu.SelectedIndex) = _act
-        Else
-            Obj.Visuel.Add(_act)
-        End If
+            If _FlagNewVisu = False Then
+                Obj.Visuel.Item(LstObjetVisu.SelectedIndex) = _act
+            Else
+                Obj.Visuel.Add(_act)
+            End If
 
-        TxtValueVisu.Text = ""
-        TxtText.Text = ""
-        Refresh_LstObjetVisu()
-        _FlagNewVisu = False
-        LstObjetVisu.SelectedIndex = -1
-        BtnOkVisu.Visibility = Windows.Visibility.Collapsed
-        LblObjetVisu.Visibility = Windows.Visibility.Collapsed
-        CbObjetVisu.Visibility = Windows.Visibility.Collapsed
-        LblProperty.Visibility = Windows.Visibility.Collapsed
-        CbPropertyVisu.Visibility = Windows.Visibility.Collapsed
-        TxtValueVisu.Visibility = Windows.Visibility.Collapsed
-        LblVisuValue.Visibility = Windows.Visibility.Collapsed
-        LblPicture.Visibility = Windows.Visibility.Collapsed
-        ImgVisu.Visibility = Windows.Visibility.Collapsed
-        BtnImgVisu.Visibility = Windows.Visibility.Collapsed
-        LblOperateur.Visibility = Windows.Visibility.Collapsed
-        CbOperateurVisu.Visibility = Windows.Visibility.Collapsed
-        LblText.Visibility = Windows.Visibility.Collapsed
-        TxtText.Visibility = Windows.Visibility.Collapsed
+            TxtValueVisu.Text = ""
+            TxtText.Text = ""
+            Refresh_LstObjetVisu()
+            _FlagNewVisu = False
+            LstObjetVisu.SelectedIndex = -1
+            BtnOkVisu.Visibility = Windows.Visibility.Collapsed
+            LblObjetVisu.Visibility = Windows.Visibility.Collapsed
+            CbObjetVisu.Visibility = Windows.Visibility.Collapsed
+            LblProperty.Visibility = Windows.Visibility.Collapsed
+            CbPropertyVisu.Visibility = Windows.Visibility.Collapsed
+            TxtValueVisu.Visibility = Windows.Visibility.Collapsed
+            LblVisuValue.Visibility = Windows.Visibility.Collapsed
+            LblPicture.Visibility = Windows.Visibility.Collapsed
+            ImgVisu.Visibility = Windows.Visibility.Collapsed
+            BtnImgVisu.Visibility = Windows.Visibility.Collapsed
+            LblOperateur.Visibility = Windows.Visibility.Collapsed
+            CbOperateurVisu.Visibility = Windows.Visibility.Collapsed
+            LblText.Visibility = Windows.Visibility.Collapsed
+            TxtText.Visibility = Windows.Visibility.Collapsed
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur BtnOkVisu_Click: " & ex.Message, "Erreur", "LstObjetVisu_SelectionChanged")
+        End Try
     End Sub
 
     Private Sub ImgVisu_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgVisu.MouseDown, BorderVisu.MouseDown
@@ -1136,9 +1149,12 @@ Public Class WWidgetProperty
 
     Private Sub TxtValueVisu_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtValueVisu.TextChanged
         Dim _flag As Boolean = False
+
         Try
             If String.IsNullOrEmpty(CbObjetVisu.Text) = False And String.IsNullOrEmpty(CbPropertyVisu.Text) = False And String.IsNullOrEmpty(TxtValueVisu.Text) = False Then
                 Dim _ID As String = AllDevices.Item(CbObjetVisu.SelectedIndex).ID
+                If String.IsNullOrEmpty(_ID) Then Exit Sub
+
                 Dim _type As String = myService.TypeOfPropertyOfDevice(_ID, CbPropertyVisu.Text)
                 Dim _obj As Object = Nothing
 
@@ -1252,7 +1268,7 @@ Public Class WWidgetProperty
                 End If
             End If
         Catch ex As Exception
-            If _flag = False Then AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCondition TxtValue_TextChanged: " & ex.Message, "Erreur", "uCondition TxtValue_TextChanged")
+            If _flag = False Then AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur TxtValue_TextChanged: " & ex.Message, "Erreur", "TxtValueVisu_TextChanged")
         End Try
     End Sub
 
@@ -1298,4 +1314,6 @@ Public Class WWidgetProperty
     Private Sub cbBalise_SelectionChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles cbBalise.SelectionChanged
         TxtEtiq.Text = "<" & cbBalise.SelectedItem.Tag & ">"
     End Sub
+
+
 End Class
