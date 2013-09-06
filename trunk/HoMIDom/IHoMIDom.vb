@@ -1195,6 +1195,17 @@ Namespace HoMIDom
         <OperationContract()> Function GetTarifJour() As Double
         <OperationContract()> Sub SetTarifNuit(ByVal Value As Double)
         <OperationContract()> Function GetTarifNuit() As Double
+        ''' <summary>
+        ''' Set Puissance mini
+        ''' </summary>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetPuissanceMini(ByVal Value As Integer)
+        ''' <summary>
+        ''' Get Puissance Mini
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetPuissanceMini() As Integer
 #End Region
 
 #Region "Decouverte"

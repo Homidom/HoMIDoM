@@ -1785,7 +1785,7 @@ Class Window1
 
             ctrl = Nothing
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur lors de la création du bouton menu: " & ex.ToString, "Erreur", "NewBtnMnu")
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur lors de la création du bouton menu: " & ex.Message, "Erreur", "NewBtnMnu")
         End Try
     End Sub
 

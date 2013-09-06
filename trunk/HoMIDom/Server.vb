@@ -146,47 +146,65 @@ Namespace HoMIDom
             End If
 
             'Gestion Energies
-            Try
-                If genericDevice.Type = "ENERGIEINSTANTANEE" Then
-                    PuissanceTotaleActuel = CInt(Device.value)
-                End If
-                If genericDevice.Puissance > 0 Then
-                    Dim _CalculVariation As Boolean = False 'True si le calcul doit prendre en compte la variation ou la suivant la valeur du device
+            If _GererEnergie Then
+                Try
+                    'Si le composant permet de donner la puissance instantanée totale ou une partie on la récupère 
+                    If genericDevice.Type = "ENERGIEINSTANTANEE" Then
+                        PuissanceTotaleActuel = CInt(Device.Value)
+                    End If
+                    If genericDevice.Puissance > 0 Then
+                        Dim _CalculVariation As Boolean = False 'True si le calcul doit prendre en compte la variation ou la suivant la valeur du device
 
-                    Select Case genericDevice.Type
-                        Case "APPAREIL"
-                        Case "AUDIO"
-                        Case "BAROMETRE"
-                        Case "BATTERIE"
-                        Case "COMPTEUR"
-                        Case "CONTACT"
-                        Case "DETECTEUR"
-                        Case "DIRECTIONVENT"
-                        Case "ENERGIEINSTANTANEE"
-                        Case "ENERGIETOTALE"
-                        Case "FREEBOX"
-                        Case "GENERIQUEBOOLEEN"
-                        Case "GENERIQUESTRING"
-                        Case "GENERIQUEVALUE"
-                        Case "HUMIDITE"
-                        Case "LAMPE"
-                        Case "METEO"
-                        Case "MULTIMEDIA"
-                        Case "PLUIECOURANT"
-                        Case "PLUIETOTAL"
-                        Case "SWITCH"
-                        Case "TELECOMMANDE"
-                        Case "TEMPERATURE"
-                        Case "TEMPERATURECONSIGNE"
-                        Case "UV"
-                        Case "VITESSEVENT"
-                        Case "VOLET"
+                        Select Case genericDevice.Type
+                            Case "APPAREIL"
+                            Case "AUDIO"
+                            Case "BAROMETRE"
+                            Case "BATTERIE"
+                            Case "COMPTEUR"
+                            Case "CONTACT"
+                            Case "DETECTEUR"
+                            Case "DIRECTIONVENT"
+                            Case "ENERGIEINSTANTANEE"
+                            Case "ENERGIETOTALE"
+                            Case "FREEBOX"
+                            Case "GENERIQUEBOOLEEN"
+                            Case "GENERIQUESTRING"
+                            Case "GENERIQUEVALUE"
+                            Case "HUMIDITE"
+                            Case "LAMPE"
+                                _CalculVariation = True
+                            Case "METEO"
+                            Case "MULTIMEDIA"
+                            Case "PLUIECOURANT"
+                            Case "PLUIETOTAL"
+                            Case "SWITCH"
+                            Case "TELECOMMANDE"
+                            Case "TEMPERATURE"
+                            Case "TEMPERATURECONSIGNE"
+                            Case "UV"
+                            Case "VITESSEVENT"
+                            Case "VOLET"
 
-                    End Select
-                End If
-            Catch ex As Exception
+                        End Select
 
-            End Try
+                        If IsNumeric(Device.value) And IsNumeric(genericDevice.Puissance) Then
+                            If CInt(Device.Value) = 0 Then
+                                PuissanceTotaleActuel -= CInt(genericDevice.Puissance)
+                            Else
+                                'Si prise en compte du calcul de variation
+                                If _CalculVariation Then
+                                    PuissanceTotaleActuel += ((CInt(genericDevice.Puissance) * Device.Value) / 100)
+                                Else
+                                    PuissanceTotaleActuel += CInt(genericDevice.Puissance)
+                                End If
+                            End If
+                        End If
+
+                    End If
+                Catch ex As Exception
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Calcul Energie Exception : " & ex.Message)
+                End Try
+            End If
 
             RaiseEvent DeviceChanged(genericDevice.ID, valeurString)
 
@@ -642,6 +660,8 @@ Namespace HoMIDom
                                             _SaveRealTime = list.Item(0).Attributes.Item(j).Value
                                         Case "devise"
                                             _Devise = list.Item(0).Attributes.Item(j).Value
+                                        Case "puissancemini"
+                                            PuissanceMini = list.Item(0).Attributes.Item(j).Value
                                         Case "gererenergie"
                                             GererEnergie = list.Item(0).Attributes.Item(j).Value
                                         Case "tarifjour"
@@ -915,6 +935,7 @@ Namespace HoMIDom
 
                             Dim trvSoleil As Boolean = False
                             Dim trvStartSrv As Boolean = False
+                            Dim trvnrjtot As Boolean = False
 
                             If list.Count > 0 Then 'présence d'un composant
                                 For j As Integer = 0 To list.Count - 1
@@ -1139,6 +1160,9 @@ Namespace HoMIDom
                                             If .ID = "startsrv01" Then
                                                 trvStartSrv = True
                                             End If
+                                            If .ID = "energietotale01" Then
+                                                trvnrjtot = True
+                                            End If
                                         Else
                                             _Dev.Enable = False
                                             Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", " -> Erreur lors du chargement du composant (information incomplete -> Disable) " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
@@ -1168,6 +1192,19 @@ Namespace HoMIDom
                                     _Devs.Adresse1 = "N/A"
                                     _Devs.AllValue = True
                                     _Devs.Description = "Serveur Démarré"
+                                    _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
+                                    _ListDevices.Add(_Devs)
+                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
+                                    _Devs = Nothing
+                                End If
+                                If trvnrjtot = False Then
+                                    Dim _Devs As New Device.GENERIQUEVALUE(Me)
+                                    _Devs.ID = "energietotale01"
+                                    _Devs.Name = "HOMI_EnergieTotaleInstantanee"
+                                    _Devs.Enable = True
+                                    _Devs.Adresse1 = "N/A"
+                                    _Devs.AllValue = True
+                                    _Devs.Description = "Energie Totale instantanee"
                                     _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
                                     _ListDevices.Add(_Devs)
                                     Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
@@ -1597,6 +1634,9 @@ Namespace HoMIDom
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("devise")
                 writer.WriteValue(_Devise)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("puissancemini")
+                writer.WriteValue(PuissanceMini)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("gererenergie")
                 writer.WriteValue(GererEnergie)
@@ -3946,12 +3986,32 @@ Namespace HoMIDom
             End Set
         End Property
 
+        Public Property PuissanceMini As Integer
+            Get
+                Return _PuissanceMini
+            End Get
+            Set(value As Integer)
+                If _PuissanceMini <> value Then
+                    _PuissanceMini = value
+                    PuissanceTotaleActuel = _PuissanceMini
+                End If
+            End Set
+        End Property
+
         Public Property PuissanceTotaleActuel As Integer
             Get
                 Return _PuissanceTotaleActuel
             End Get
             Set(value As Integer)
                 _PuissanceTotaleActuel = value
+
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    If _ListDevices.Item(i).id = "energietotale01" Then
+                        If _ListDevices.Item(i).value = _PuissanceTotaleActuel Then
+                            Exit For
+                        End If
+                    End If
+                Next
             End Set
         End Property
 #End Region
@@ -8908,7 +8968,7 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub SetGererEnergie(ByVal Value As Boolean) Implements IHoMIDom.SetGererEnergie
             Try
-                _GererEnergie = Value
+                GererEnergie = Value
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetGererEnergie", "Erreur: " & ex.Message)
             End Try
@@ -8921,7 +8981,7 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Function GetGererEnergie() As Boolean Implements IHoMIDom.GetGererEnergie
             Try
-                Return _GererEnergie
+                Return GererEnergie
             Catch ex As Exception
                 Return False
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetGererEnergie", "Erreur: " & ex.Message)
@@ -8977,6 +9037,32 @@ Namespace HoMIDom
             Catch ex As Exception
                 Return 0
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetTarifNuit", "Erreur: " & ex.Message)
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Set Puissance mini
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub SetPuissanceMini(ByVal Value As Integer) Implements IHoMIDom.SetPuissanceMini
+            Try
+                PuissanceMini = Value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetPuissanceMini", "Erreur: " & ex.Message)
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' Get Puissance Mini
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetPuissanceMini() As Integer Implements IHoMIDom.GetPuissanceMini
+            Try
+                Return PuissanceMini
+            Catch ex As Exception
+                Return 0
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetPuissanceMini", "Erreur: " & ex.Message)
             End Try
         End Function
 #End Region
