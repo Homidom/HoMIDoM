@@ -111,7 +111,13 @@ Partial Public Class uCtrlImgMnu
         Set(ByVal value As String)
             _Idelement = value
             If _type = TypeOfMnu.Zone And IsConnect = True And String.IsNullOrEmpty(_Idelement) = False Then
-                Image.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.ReturnZoneByID(IdSrv, _Idelement).Icon))
+                Dim file As String = myService.ReturnZoneByID(IdSrv, _Idelement).Icon
+                Dim tab As Byte()
+                If String.IsNullOrEmpty(file) = False Then
+                    tab = myService.GetByteFromImage(file)
+                    If tab IsNot Nothing Then Image.Source = ConvertArrayToImage(tab)
+                End If
+
             End If
         End Set
     End Property
