@@ -164,12 +164,8 @@ Public Class uCondition
         Set(ByVal value As String)
             Try
                 _IdDevice = value
-                For i As Integer = 0 To myService.GetAllDevices(IdSrv).Count - 1
-                    If myService.GetAllDevices(IdSrv).Item(i).ID = _IdDevice Then
-                        CbDevice.SelectedIndex = i
-                        Exit For
-                    End If
-                Next
+                CbDevice.Text = myService.ReturnDeviceByID(IdSrv, _IdDevice).Name
+
             Catch ex As Exception
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCondition IdDevice: " & ex.ToString, "ERREUR", "")
             End Try
