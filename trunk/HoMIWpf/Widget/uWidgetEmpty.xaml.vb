@@ -1191,7 +1191,7 @@ Public Class uWidgetEmpty
 
             Me.UpdateLayout()
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Refresh: " & ex.Message, "Erreur", " uWidgetEmpty.Refresh")
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.TraiteRefresh: " & ex.Message, "Erreur", " uWidgetEmpty.TraiteRefresh")
             _dt.Stop()
         End Try
     End Sub

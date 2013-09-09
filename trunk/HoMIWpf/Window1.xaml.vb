@@ -84,7 +84,7 @@ Class Window1
     Dim _TranspBarHaut As Integer = 58
     Dim _TranspBarBas As Integer = 153
     Dim _KeyBoardPath As String = "osk"
-    Dim _MaJWidgetFromServer As Boolean = False
+    Dim _MaJWidgetFromServer As Boolean = True
 #End Region
 
 #Region "Property"
@@ -153,11 +153,11 @@ Class Window1
         End Get
         Set(value As Boolean)
             _AutoSave = value
-            If _AutoSave Then
-                MnuSave.Visibility = Windows.Visibility.Collapsed
-            Else
-                MnuSave.Visibility = Windows.Visibility.Visible
-            End If
+            'If _AutoSave Then
+            '    MnuSave.Visibility = Windows.Visibility.Collapsed
+            'Else
+            MnuSave.Visibility = Windows.Visibility.Visible
+            'End If
         End Set
     End Property
     Public Property ShowLabelMnu As Boolean
@@ -606,6 +606,8 @@ Class Window1
     'Event lorsqu'un device change
     Private Sub DeviceChanged(deviceid As String, DeviceValue As String)
         Try
+            If MaJWidgetFromServer Then Exit Sub
+
             Dim _devTrv As Boolean 'Flag si on a trouvé le device dans la liste
 
             If IsConnect Then
@@ -889,11 +891,11 @@ Class Window1
                         Case "left"
                             Me.Left = CDbl(list.Item(0).Attributes.Item(j).Value)
                         Case "top"
-                            Me.Top =CDbl( list.Item(0).Attributes.Item(j).Value)
+                            Me.Top = CDbl(list.Item(0).Attributes.Item(j).Value)
                         Case "width"
-                            Me.Width = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
+                            Me.Width = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", ","))
                         Case "height"
-                            Me.Height = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
+                            Me.Height = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", ","))
                         Case "afflasterror"
                             If IsBoolean(list.Item(0).Attributes.Item(j).Value) Then AffLastError = list.Item(0).Attributes.Item(j).Value
                         Case "astimeoutpage"
