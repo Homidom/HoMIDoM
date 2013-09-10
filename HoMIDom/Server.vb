@@ -146,13 +146,15 @@ Namespace HoMIDom
             End If
 
             'Gestion Energies
-            If _GererEnergie Then
+            If GererEnergie Then
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", "Calcul Energie ")
                 Try
                     'Si le composant permet de donner la puissance instantanée totale ou une partie on la récupère 
                     If genericDevice.Type = "ENERGIEINSTANTANEE" Then
                         PuissanceTotaleActuel = CInt(Device.Value)
                     End If
-                    If genericDevice.Puissance > 0 Then
+
+                    If CInt(genericDevice.Puissance) > 0 Then
                         Dim _CalculVariation As Boolean = False 'True si le calcul doit prendre en compte la variation ou la suivant la valeur du device
 
                         Select Case genericDevice.Type
@@ -191,11 +193,13 @@ Namespace HoMIDom
                             If CInt(Device.Value) = 0 Then
                                 PuissanceTotaleActuel -= CInt(genericDevice.Puissance)
                             Else
+                                Dim _puissance As Integer = CInt(genericDevice.Puissance)
+                                If _puissance < 0 Then _puissance = _puissance * -1
                                 'Si prise en compte du calcul de variation
                                 If _CalculVariation Then
-                                    PuissanceTotaleActuel += ((CInt(genericDevice.Puissance) * Device.Value) / 100)
+                                    PuissanceTotaleActuel += ((_puissance * Device.Value) / 100)
                                 Else
-                                    PuissanceTotaleActuel += CInt(genericDevice.Puissance)
+                                    PuissanceTotaleActuel += _puissance
                                 End If
                             End If
                         End If
@@ -3983,6 +3987,7 @@ Namespace HoMIDom
                     PuissanceTotaleActuel = _PuissanceMini
                 End If
                 _GererEnergie = value
+                Log(TypeLog.DEBUG ,TypeSource.SERVEUR ,"GererEnergie","Activation=" & value)
             End Set
         End Property
 
@@ -4007,11 +4012,11 @@ Namespace HoMIDom
 
                 For i As Integer = 0 To _ListDevices.Count - 1
                     If _ListDevices.Item(i).id = "energietotale01" Then
-                        If _ListDevices.Item(i).value = _PuissanceTotaleActuel Then
-                            Exit For
-                        End If
+                        _ListDevices.Item(i).Value = value
+                        Exit For
                     End If
                 Next
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "PuissanceTotaleActuelle", "Puissance Totale Actuelle=" & _PuissanceTotaleActuel)
             End Set
         End Property
 #End Region

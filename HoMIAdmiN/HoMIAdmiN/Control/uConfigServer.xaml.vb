@@ -47,6 +47,10 @@ Partial Public Class uConfigServer
                     AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez saisir un numérique et positif pour la taille max du fichier de log!", "Admin", "")
                     Exit Sub
                 End If
+                If IsNumeric(TxtPuissMini.Text) = False Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez saisir un numérique pour la puissance minimale!", "Admin", "")
+                    Exit Sub
+                End If
 
                 myService.SetIdServer(IdSrv, TxtIdSrv.Text)
                 IdSrv = TxtIdSrv.Text
@@ -75,6 +79,7 @@ Partial Public Class uConfigServer
                 myService.SetSaveRealTime(ChKSaveRealTime.IsChecked)
                 myService.SetDevise(TxtDevise.Text)
                 myService.SetGererEnergie(ChkEnergie.IsChecked)
+                myService.SetPuissanceMini(TxtPuissMini.Text)
                 myService.SetTarifJour(CDbl(TxtTarifJour.Text.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)))
                 myService.SetTarifNuit(CDbl(TxtTarifNuit.Text.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)))
 
@@ -210,6 +215,7 @@ Partial Public Class uConfigServer
                 ChkEnergie.IsChecked = myService.GetGererEnergie
                 TxtTarifJour.Text = myService.GetTarifJour
                 TxtTarifNuit.Text = myService.GetTarifNuit
+                TxtPuissMini.Text = myService.GetPuissanceMini
 
                 TxtPortSrvWeb.Text = myService.GetPortServeurWeb
                 ChKEnableSrvWeb.IsChecked = myService.GetEnableServeurWeb
