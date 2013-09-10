@@ -208,6 +208,10 @@
                                         <TextBox Name="TxtDevise" Width="40" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20"/>
                                     </StackPanel>
                                     <CheckBox Name="ChkEnergie" Content="Gérer Energie" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
+                                    <StackPanel Orientation="Horizontal" >
+                                        <Label Content="Puissance Minimale (par défaut):" Foreground="White" />
+                                        <TextBox Name="TxtPuissMini" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="80"/>
+                                    </StackPanel>
                                     <StackPanel Name="StkTarifEnergie">
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Content="Tarif Jour:" Foreground="White"/>
