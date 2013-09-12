@@ -47,6 +47,9 @@ Public Class WWidgetProperty
                 TxtURL.Text = Obj.URL
                 TxtURLRss.Text = Obj.UrlRss
                 TxtRefresh.Text = Obj.HttpRefresh
+                TxtValueMin.Text = Obj.Min
+                TxtValueMax.Text = Obj.Max
+
                 ChKShowPassWord.IsChecked = Obj.ShowPassWord
                 ChKShowClavier.IsChecked = Obj.ShowClavier
                 ChKClearAfterEnter.IsChecked = Obj.ClearAfterEnter
@@ -235,6 +238,34 @@ Public Class WWidgetProperty
                                 CbDeviceKeyPad.SelectedIndex = idx
 
                             End If
+                        Case uWidgetEmpty.TypeOfWidget.Moteur
+                            StkPicture.Visibility = Visibility.Visible
+                            StkStatus.Visibility = Visibility.Visible
+                            StkRss.Visibility = Windows.Visibility.Collapsed
+                            StkMeteo.Visibility = Windows.Visibility.Collapsed
+                            StkKeyPad.Visibility = Windows.Visibility.Visible
+                            BtnEditAction.Visibility = Windows.Visibility.Collapsed
+                            BtnEditVisu.Visibility = Windows.Visibility.Collapsed
+                            BtnDelete.Visibility = Windows.Visibility.Visible
+                            StkMinMax.Visibility = Windows.Visibility.Visible
+
+                            If IsConnect Then
+                                CbDeviceKeyPad.Items.Clear()
+                                Dim idx As Integer = -1
+                                For Each _devk As TemplateDevice In AllDevices
+                                    If _devk.Type = Device.ListeDevices.GENERIQUEVALUE Or _devk.Type = Device.ListeDevices.APPAREIL Or _devk.Type = Device.ListeDevices.GENERIQUEBOOLEEN Or _devk.Type = Device.ListeDevices.SWITCH Then
+                                        Dim x As New ComboBoxItem
+                                        x.Content = _devk.Name
+                                        x.Tag = _devk.ID
+                                        CbDeviceKeyPad.Items.Add(x)
+
+                                        If _devk.ID = Obj.Id Then idx = CbDeviceKeyPad.Items.Count - 1
+                                    End If
+                                Next
+
+                                CbDeviceKeyPad.SelectedIndex = idx
+
+                            End If
                         Case uWidgetEmpty.TypeOfWidget.Label
                             StkPicture.Visibility = Visibility.Collapsed
                             StkStatus.Visibility = Visibility.Collapsed
@@ -286,6 +317,8 @@ Public Class WWidgetProperty
             Obj.ShowClavier = ChKShowClavier.IsChecked
             Obj.ClearAfterEnter = ChKClearAfterEnter.IsChecked
             Obj.Fondu = ChkFondu.IsChecked
+            Obj.Min = TxtValueMin.Text
+            Obj.Max = TxtValueMax.Text
 
             Try
                 Obj.TailleStatus = TxtTailleStatus.Text
@@ -315,7 +348,7 @@ Public Class WWidgetProperty
                 Dim x As ComboBoxItem = CbDeviceKeyPad.Items(CbDeviceKeyPad.SelectedIndex)
                 Obj.IDKeyPad = x.Tag
             End If
-            If CbDeviceKeyPad.SelectedIndex >= 0 And Obj.Type = uWidgetEmpty.TypeOfWidget.Volet Then
+            If CbDeviceKeyPad.SelectedIndex >= 0 And (Obj.Type = uWidgetEmpty.TypeOfWidget.Volet Or Obj.Type = uWidgetEmpty.TypeOfWidget.Moteur) Then
                 Dim x As ComboBoxItem = CbDeviceKeyPad.Items(CbDeviceKeyPad.SelectedIndex)
                 Obj.Id = x.Tag
             End If

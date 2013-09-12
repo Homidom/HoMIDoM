@@ -74,9 +74,12 @@
             Else
                 rt = TxtSaisiePwd.Password
             End If
-            _Value = CInt(rt)
 
-            RaiseEvent KeyPadOk(_Value)
+            If String.IsNullOrEmpty(rt) = False Then
+                _Value = CInt(rt)
+
+                RaiseEvent KeyPadOk(_Value)
+            End If
 
             If _ClearAfterEnter Then
                 TxtSaisie.Text = ""
@@ -92,8 +95,6 @@
         MyBase.Finalize()
     End Sub
 
-
-   
     Private Sub TxtEnter_PreviewKeyUp(ByVal sender As Object, ByVal e As System.Windows.Input.KeyEventArgs) Handles TxtSaisie.PreviewKeyUp, TxtSaisiePwd.PreviewKeyUp
         Try
             If e.Key = Input.Key.Enter Then
@@ -104,9 +105,12 @@
                 Else
                     rt = TxtSaisiePwd.Password
                 End If
-                _Value = CInt(rt)
 
-                RaiseEvent KeyPadOk(_Value)
+                If String.IsNullOrEmpty(rt) = False Then
+                    _Value = CInt(rt)
+
+                    RaiseEvent KeyPadOk(_Value)
+                End If
 
                 If _ClearAfterEnter Then
                     TxtSaisie.Text = ""

@@ -1004,6 +1004,8 @@ Class Window1
                                         x.Type = uWidgetEmpty.TypeOfWidget.Camera
                                     Case uWidgetEmpty.TypeOfWidget.Volet.ToString
                                         x.Type = uWidgetEmpty.TypeOfWidget.Volet
+                                    Case uWidgetEmpty.TypeOfWidget.Moteur.ToString
+                                        x.Type = uWidgetEmpty.TypeOfWidget.Moteur
                                     Case uWidgetEmpty.TypeOfWidget.Rss.ToString
                                         x.Type = uWidgetEmpty.TypeOfWidget.Rss
                                     Case uWidgetEmpty.TypeOfWidget.Meteo.ToString
@@ -1037,6 +1039,10 @@ Class Window1
                                 x.RotationY = list.Item(j).Attributes.Item(k).Value.Replace(".", ",")
                             Case "zindex"
                                 x.ZIndex = list.Item(j).Attributes.Item(k).Value
+                            Case "min"
+                                x.Min = list.Item(j).Attributes.Item(k).Value
+                            Case "max"
+                                x.Max = list.Item(j).Attributes.Item(k).Value
                             Case "showetiquette"
                                 x.ShowEtiquette = list.Item(j).Attributes.Item(k).Value
                             Case "majetiquettefromsrv"
@@ -1495,6 +1501,12 @@ Class Window1
                 writer.WriteStartAttribute("idmeteo")
                 writer.WriteValue(_ListElement.Item(i).IDMeteo)
                 writer.WriteEndAttribute()
+                writer.WriteStartAttribute("min")
+                writer.WriteValue(_ListElement.Item(i).Min)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("max")
+                writer.WriteValue(_ListElement.Item(i).Max)
+                writer.WriteEndAttribute()
                 If _ListElement.Item(i).Type = uWidgetEmpty.TypeOfWidget.KeyPad Then
                     writer.WriteStartAttribute("idkeypad")
                     writer.WriteValue(_ListElement.Item(i).IDKeyPad)
@@ -1729,6 +1741,7 @@ Class Window1
                         Dim mnu As New MenuItem
                         mnu.Tag = _mac.ID
                         mnu.Header = _mac.Nom
+                        mnu.FontSize = 14
                         AddHandler mnu.Click, AddressOf MnuExecuteMacro
                         MnuMacro.Items.Add(mnu)
                     Next
@@ -2127,6 +2140,8 @@ Class Window1
                             y.ColorBackGround = _ListElement.Item(j).ColorBackGround
                             y.ColorStatus = _ListElement.Item(j).ColorStatus
                             y.ColorEtiquette = _ListElement.Item(j).ColorEtiquette
+                            y.Min = _ListElement.Item(j).Min
+                            y.Max = _ListElement.Item(j).Max
                             y.IsHitTestVisible = True 'True:bouge pas False:Bouge
                             AddHandler y.ShowZone, AddressOf ElementShowZone
                             x.Content = y
@@ -2259,6 +2274,8 @@ Class Window1
                     y.ShowPassWord = _ListElement.Item(i).ShowPassWord
                     y.ClearAfterEnter = _ListElement.Item(i).ClearAfterEnter
                     y.ShowClavier = _ListElement.Item(i).ShowClavier
+                    y.Min = _ListElement.Item(i).Min
+                    y.Max = _ListElement.Item(i).Max
 
                     AddHandler y.ShowZone, AddressOf ElementShowZone
                     x.Content = y
@@ -2843,6 +2860,55 @@ Class Window1
         End Try
     End Sub
 
+    ''' <summary>
+    ''' 
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub NewWidgetMoteur_Click(sender As Object, e As System.Windows.RoutedEventArgs) Handles NewWidgetMoteur.Click
+        Try
+            ' Remettre à zéro les modes édition + déplacement
+            ChkMove.IsChecked = False
+            ChkEdit.IsChecked = False
+            Deplacement_Click(Me, e)
+
+            'Ajouter un nouveau Control
+            Dim x As New ContentControl
+            x.Width = 200
+            x.Height = 120
+            x.Style = mybuttonstyle
+            x.Tag = True
+            x.Uid = System.Guid.NewGuid.ToString()
+
+            'Ajoute l'élément dans la liste
+            Dim elmt As New uWidgetEmpty
+            elmt.Show = True
+            elmt.Uid = x.Uid
+            elmt.ZoneId = _CurrentIdZone
+            elmt.Width = 270
+            elmt.Height = 195
+            elmt.Rotation = 0
+            elmt.X = 300
+            elmt.Y = 300
+            elmt.IsEmpty = True
+            elmt.Type = uWidgetEmpty.TypeOfWidget.Moteur
+            elmt.ShowStatus = True
+            elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
+            elmt.ColorBackGround = New SolidColorBrush(Color.FromArgb(255, 0, 0, 0))
+            _ListElement.Add(elmt)
+
+            elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
+            x.Content = elmt
+            Canvas1.Children.Add(x)
+            Canvas.SetLeft(x, 300)
+            Canvas.SetTop(x, 300)
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetVolet: " & ex.Message, "Erreur", "NewWidgetVolet")
+        End Try
+    End Sub
+
+
 #Region "Menu"
 
     Private Sub ViewLog_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ViewLogClient.Click, ViewLogSrv.Click
@@ -2912,10 +2978,12 @@ Class Window1
                 Dim mnu As New MenuItem
                 mnu.Tag = _mac.ID
                 mnu.Header = _mac.Nom
-                mnu.FontSize = 18
+                mnu.FontSize = 14
                 AddHandler mnu.Click, AddressOf MnuExecuteMacro
                 MnuMacro.Items.Add(mnu)
             Next
+
+            MnuMacro.UpdateLayout()
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur MnuMacro_MouseDown: " & ex.Message, "Erreur", "MnuMacro_MouseDown")
         End Try
@@ -3063,7 +3131,7 @@ Class Window1
                     If String.IsNullOrEmpty(logerror) = False Then
                         Dim mnu As New MenuItem
                         mnu.Header = logerror
-                        mnu.FontSize = 10
+                        mnu.FontSize = 12
                         MnuLastError.Items.Add(mnu)
                     End If
                 Next
@@ -3116,5 +3184,6 @@ Class Window1
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur MnuSave_Click: " & ex.Message, "Erreur", "MnuSave_Click")
         End Try
     End Sub
+
 
 End Class
