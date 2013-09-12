@@ -162,8 +162,17 @@
                             <Label Width="120" Content="Composant:" Foreground="White"/>
                             <ComboBox Name="CbDeviceKeyPad" Width="200" />
                         </StackPanel>
-
-                    </StackPanel>
+                            <StackPanel Orientation="Horizontal" Name="StkMinMax" Visibility="Collapsed" >
+                                <StackPanel Orientation="Horizontal" >
+                                    <Label Content="Min:" Foreground="White"/>
+                                    <TextBox  Name="TxtValueMin" Width="100" Text="0"/>
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" >
+                                    <Label Content="Max:" Foreground="White"/>
+                                    <TextBox  Name="TxtValueMax" Width="100" Text="1"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </StackPanel>
                     </ScrollViewer>
                 </GroupBox>
 

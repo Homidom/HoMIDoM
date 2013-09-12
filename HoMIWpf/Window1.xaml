@@ -77,14 +77,15 @@
                                 <MenuItem.Icon>
                                     <Image Width="40" Height="40"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
                                 </MenuItem.Icon>
-                                <MenuItem Name="NewWidgetEmpty" Header="Nouveau Widget Vide" FontSize="10" />
-                                <MenuItem Name="NewWidgetWeb" Header="Nouveau Widget Web" FontSize="10" />
-                                <MenuItem Name="NewWidgetRss" Header="Nouveau Widget Rss" FontSize="10" />
-                                <MenuItem Name="NewWidgetMeteo" Header="Nouveau Widget Meteo" FontSize="10" />
-                                <MenuItem Name="NewWidgetKeyPad" Header="Nouveau Widget KeyPad" FontSize="10" />
-                                <MenuItem Name="NewWidgetLabel" Header="Nouveau Widget Label" FontSize="10" />
-                                <MenuItem Name="NewWidgetCamera" Header="Nouveau Widget Camera" FontSize="10" />
-                                    <MenuItem Name="NewWidgetVolet" Header="Nouveau Widget Volet" FontSize="10" />
+                                    <MenuItem Name="NewWidgetEmpty" Header="Nouveau Widget Vide" FontSize="14" />
+                                    <MenuItem Name="NewWidgetWeb" Header="Nouveau Widget Web" FontSize="14" />
+                                    <MenuItem Name="NewWidgetRss" Header="Nouveau Widget Rss" FontSize="14" />
+                                    <MenuItem Name="NewWidgetMeteo" Header="Nouveau Widget Meteo" FontSize="14" />
+                                    <MenuItem Name="NewWidgetKeyPad" Header="Nouveau Widget KeyPad" FontSize="14" />
+                                    <MenuItem Name="NewWidgetLabel" Header="Nouveau Widget Label" FontSize="14" />
+                                    <MenuItem Name="NewWidgetCamera" Header="Nouveau Widget Camera" FontSize="14" />
+                                    <MenuItem Name="NewWidgetVolet" Header="Nouveau Widget Volet" FontSize="14" />
+                                    <MenuItem Name="NewWidgetMoteur" Header="Nouveau Widget Moteur" FontSize="14" />
                                 </MenuItem>
                             <MenuItem Name="ViewLog" Header="Consulter les logs" FontSize="10" >
                                 <MenuItem.Icon>
