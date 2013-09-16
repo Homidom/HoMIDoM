@@ -373,7 +373,11 @@ Module Fonctions
                         If AllDevices IsNot Nothing And String.IsNullOrEmpty(frmMere.Ville) = False Then
                             For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In AllDevices
                                 If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True And ObjMeteo.Name.ToUpper = frmMere.Ville.ToUpper Then
-                                    Return ObjMeteo.ConditionActuel
+                                    If frmMere.MaJWidgetFromServer Then
+                                        Return myService.ReturnDeviceByID(IdSrv, ObjMeteo.ID).ConditionActuel
+                                    Else
+                                        Return ObjMeteo.ConditionActuel
+                                    End If
                                 End If
                             Next
                         Else
@@ -383,7 +387,11 @@ Module Fonctions
                         If AllDevices IsNot Nothing And String.IsNullOrEmpty(frmMere.Ville) = False Then
                             For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In AllDevices
                                 If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True And ObjMeteo.Name.ToUpper = frmMere.Ville.ToUpper Then
-                                    Return ObjMeteo.TemperatureActuel & " °C"
+                                    If frmMere.MaJWidgetFromServer Then
+                                        Return myService.ReturnDeviceByID(IdSrv, ObjMeteo.ID).TemperatureActuel & " °C"
+                                    Else
+                                        Return ObjMeteo.TemperatureActuel & " °C"
+                                    End If
                                 End If
                             Next
                         Else
@@ -393,7 +401,11 @@ Module Fonctions
                         If AllDevices IsNot Nothing And String.IsNullOrEmpty(frmMere.Ville) = False Then
                             For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In AllDevices
                                 If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True And ObjMeteo.Name.ToUpper = frmMere.Ville.ToUpper Then
-                                    Return ObjMeteo.IconActuel
+                                    If frmMere.MaJWidgetFromServer Then
+                                        Return myService.ReturnDeviceByID(IdSrv, ObjMeteo.ID).IconActuel
+                                    Else
+                                        Return ObjMeteo.IconActuel
+                                    End If
                                 End If
                             Next
                         Else
