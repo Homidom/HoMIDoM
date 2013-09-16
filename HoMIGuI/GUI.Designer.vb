@@ -26,7 +26,7 @@ Partial Class HoMIGuI
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(HoMIGuI))
         Me.homiguiContextMenuStrip = New System.Windows.Forms.ContextMenuStrip(Me.components)
         Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
-        Me.ConfigurationToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
+        Me.CheckUpdateToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ServiceStartToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ServiceStopToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ServiceRestartToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -45,7 +45,7 @@ Partial Class HoMIGuI
         '
         'homiguiContextMenuStrip
         '
-        Me.homiguiContextMenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AboutToolStripMenuItem, Me.ConfigurationToolStripMenuItem, Me.ServiceStartToolStripMenuItem, Me.ServiceStopToolStripMenuItem, Me.ServiceRestartToolStripMenuItem, Me.ServiceEtatToolStripMenuItem, Me.ServiceConsoleToolStripMenuItem, Me.LogsToolStripMenuItem, Me.DossiersToolStripMenuItem, Me.DriversToolStripMenuItem, Me.ExitToolStripMenuItem})
+        Me.homiguiContextMenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AboutToolStripMenuItem, Me.CheckUpdateToolStripMenuItem, Me.ServiceStartToolStripMenuItem, Me.ServiceStopToolStripMenuItem, Me.ServiceRestartToolStripMenuItem, Me.ServiceEtatToolStripMenuItem, Me.ServiceConsoleToolStripMenuItem, Me.LogsToolStripMenuItem, Me.DossiersToolStripMenuItem, Me.DriversToolStripMenuItem, Me.ExitToolStripMenuItem})
         Me.homiguiContextMenuStrip.Name = "ContextMenuStrip1"
         Me.homiguiContextMenuStrip.Size = New System.Drawing.Size(200, 268)
         '
@@ -56,13 +56,13 @@ Partial Class HoMIGuI
         Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
         Me.AboutToolStripMenuItem.Text = "About"
         '
-        'ConfigurationToolStripMenuItem
+        'CheckUpdateToolStripMenuItem
         '
-        Me.ConfigurationToolStripMenuItem.Enabled = False
-        Me.ConfigurationToolStripMenuItem.Image = Global.HoMIGuI.My.Resources.Resources.settings
-        Me.ConfigurationToolStripMenuItem.Name = "ConfigurationToolStripMenuItem"
-        Me.ConfigurationToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
-        Me.ConfigurationToolStripMenuItem.Text = "Configuration"
+        Me.CheckUpdateToolStripMenuItem.Enabled = False
+        Me.CheckUpdateToolStripMenuItem.Image = Global.HoMIGuI.My.Resources.Resources.settings
+        Me.CheckUpdateToolStripMenuItem.Name = "CheckUpdateToolStripMenuItem"
+        Me.CheckUpdateToolStripMenuItem.Size = New System.Drawing.Size(199, 22)
+        Me.CheckUpdateToolStripMenuItem.Text = "Vérifier les mises à jour"
         '
         'ServiceStartToolStripMenuItem
         '
@@ -183,7 +183,7 @@ Partial Class HoMIGuI
     End Sub
     Friend WithEvents homiguiContextMenuStrip As System.Windows.Forms.ContextMenuStrip
     Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents ConfigurationToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents CheckUpdateToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ServiceStartToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ServiceStopToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ServiceRestartToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
