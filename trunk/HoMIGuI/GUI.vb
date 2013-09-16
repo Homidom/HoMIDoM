@@ -288,10 +288,14 @@ Public Class HoMIGuI
     Private Sub ServiceStartToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ServiceStartToolStripMenuItem.Click
         Try
             controller.Refresh()
-            If controller.Status.Equals(ServiceControllerStatus.StopPending) Or controller.Status.Equals(ServiceControllerStatus.PausePending) Then
-                MsgBox("Wait that HoMIServicE to be completely stopped/paused before starting i !t")
+            If controller.Status.Equals(ServiceControllerStatus.StopPending) Then
+                MessageBox.Show("Le service est en train de s'arrêter, veuillez patienter", "HoMIGuI - ServiceStartToolStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ElseIf controller.Status.Equals(ServiceControllerStatus.PausePending) Then
+                MessageBox.Show("Le service est en train de se mettre en pause, veuillez patienter", "HoMIGuI - ServiceStartToolStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ElseIf controller.Status.Equals(ServiceControllerStatus.StartPending) Then
+                MessageBox.Show("Le service est en cours de démarrage, veuillez patienter", "HoMIGuI - ServiceStartToolStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Information)
             ElseIf controller.Status.Equals(ServiceControllerStatus.Running) Then
-                MsgBox("HoMIServicE is already started !")
+                MessageBox.Show("Le service est déjà démarré", "HoMIGuI - ServiceStartToolStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Information)
             ElseIf controller.Status.Equals(ServiceControllerStatus.Paused) Then
                 controller.Continue()
             ElseIf controller.Status.Equals(ServiceControllerStatus.Stopped) Then
@@ -305,10 +309,14 @@ Public Class HoMIGuI
     Private Sub ServiceStopToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ServiceStopToolStripMenuItem.Click
         Try
             controller.Refresh()
-            If controller.Status.Equals(ServiceControllerStatus.StartPending) Or controller.Status.Equals(ServiceControllerStatus.PausePending) Then
-                MsgBox("Wait that HoMIServicE to be completely started/paused before stoping it !")
-            ElseIf controller.Status.Equals(ServiceControllerStatus.Stopped) Or controller.Status.Equals(ServiceControllerStatus.StopPending) Then
-                MsgBox("HoMIServicE is already stopped/stoping !")
+            If controller.Status.Equals(ServiceControllerStatus.StartPending) Then
+                MessageBox.Show("Le service est en train de démarrer, veuillez patienter", "HoMIGuI - ServiceStopToolStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ElseIf controller.Status.Equals(ServiceControllerStatus.PausePending) Then
+                MessageBox.Show("Le service est en train de se mettre en pause, veuillez patienter", "HoMIGuI - ServiceStopToolStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ElseIf controller.Status.Equals(ServiceControllerStatus.StopPending) Then
+                MessageBox.Show("Le service est en cours d'arrêt, veuillez patienter", "HoMIGuI - ServiceStopToolStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ElseIf controller.Status.Equals(ServiceControllerStatus.Stopped) Then
+                MessageBox.Show("Le service est déja arrêté", "HoMIGuI - ServiceStopToolStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Information)
             ElseIf controller.Status.Equals(ServiceControllerStatus.Running) Or controller.Status.Equals(ServiceControllerStatus.Paused) Then
                 controller.Stop()
             End If
@@ -320,10 +328,12 @@ Public Class HoMIGuI
     Private Sub ServiceRestartToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ServiceRestartToolStripMenuItem.Click
         Try
             controller.Refresh()
-            If controller.Status.Equals(ServiceControllerStatus.StartPending) Or controller.Status.Equals(ServiceControllerStatus.PausePending) Then
-                MsgBox("Wait that HoMIServicE to be completely started/paused before restarting it")
+            If controller.Status.Equals(ServiceControllerStatus.StartPending) Then
+                MessageBox.Show("Le service est en train de démarrer, veuillez patienter", "HoMIGuI - ServiceRestartToolStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            ElseIf controller.Status.Equals(ServiceControllerStatus.PausePending) Then
+                MessageBox.Show("Le service est en train de se mettre en pause, veuillez patienter", "HoMIGuI - ServiceRestartToolStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Information)
             ElseIf controller.Status.Equals(ServiceControllerStatus.StopPending) Then
-                MsgBox("Wait that HoMIServicE to be completely stoped before restarting it")
+                MessageBox.Show("Le service est en train de s'arrêter, veuillez patienter", "HoMIGuI - ServiceRestartToolStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Information)
             ElseIf controller.Status.Equals(ServiceControllerStatus.Running) Or controller.Status.Equals(ServiceControllerStatus.Paused) Then
                 controller.Stop()
                 controller.Refresh()
