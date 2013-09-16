@@ -401,17 +401,20 @@ Public Class Driver_GoogleCalendar
 
                         'Parcourt toutes les entrees 
                         For Each feedEntry In calFeed.Entries
-                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Il est : " & feedEntry.Title.Text & vbTab & feedEntry.Content.Content & vbTab & feedEntry.Authors.FirstOrDefault.Name _
-                                              & vbTab & "#" & feedEntry.Times.Item(0).StartTime & "#" & vbCrLf & feedEntry.Times.Item(0).AllDay)
 
+                            For Each Times In feedEntry.Times
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.Title.Text & " Compte: " & feedEntry.Authors.FirstOrDefault.Name _
+                                    & vbCrLf & "Start: " & Times.StartTime & " End: " & Times.EndTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
 
-                            If ((feedEntry.Title.Text.ToUpper = Objet.Adresse1.ToString.ToUpper) Or (Objet.Adresse1.ToString.ToUpper = "FERIE")) And feedEntry.Times.Item(0).StartTime = System.DateTime.Today.ToShortDateString Then
-                                ' Un element etre trouvé 
-                                elementFound = True
-                                EntryFind = feedEntry
-                                Exit For
-                            End If
-
+                                If ((feedEntry.Title.Text.ToUpper = Objet.Adresse1.ToString.ToUpper) Or (Objet.Adresse1.ToString.ToUpper = "FERIE")) And _
+                                   Times.StartTime < System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString And _
+                                   Times.EndTime > System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString Then
+                                    ' Un element etre trouvé 
+                                    elementFound = True
+                                    EntryFind = feedEntry
+                                    Exit For
+                                End If
+                            Next
                         Next
 
                         Select Case Objet.Type
@@ -614,6 +617,9 @@ Public Class Driver_GoogleCalendar
 
 
 #End Region
+
+
+
         Public Sub CreateEvent(ByVal Objet As Object, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing)
 
             Dim entryNew As New EventEntry()
