@@ -6,7 +6,14 @@ HoMIServicE
 </name>
 </assembly>
 <members>
-<member name="P:HoMIServicE.My.Resources.Resources.ResourceManager">
+<member name="M:HoMIServicE.HoMIServicE.DelRep(System.String)">
+	<summary>
+ Supprime le répertoire du développeur
+ </summary>
+	<param name="Message"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIServicE.My.Resources.Resources.ResourceManager">
 	<summary>
   Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
 </summary>
@@ -19,13 +26,6 @@ HoMIServicE
 	<summary>
   Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
 </summary>
-</member><member name="M:HoMIServicE.HoMIServicE.DelRep(System.String)">
-	<summary>
- Supprime le répertoire du développeur
- </summary>
-	<param name="Message"></param>
-	<returns></returns>
-	<remarks></remarks>
 </member>
 </members>
 </doc>
