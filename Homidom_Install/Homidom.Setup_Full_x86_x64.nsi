@@ -22,7 +22,6 @@
 !define DOT_MINOR "0"
 !define URL_DOTNET "http://download.microsoft.com/download/9/5/A/95A9616B-7A37-4AF6-BC36-D6EA96C8DAAE/dotNetFx40_Full_x86_x64.exe"
 
-
 ; --- Dossier racine contenant les sources (relatif à l'emplacement du script NSIS)
 !define ROOT_DIR ".."
 ; --- Dossier de publication => dossier contenant les binaires
@@ -74,7 +73,7 @@ Page custom nsDialogsPage nsDialogsPageLeave
 ; Instfiles page
 !insertmacro MUI_PAGE_INSTFILES
 ; Finish page
-!insertmacro MUI_PAGE_FINISH
+;!insertmacro MUI_PAGE_FINISH
 
 
 ;!insertmacro MUI_UNPAGE_CONFIRM
@@ -104,6 +103,9 @@ var chkStartServiceGUI_Handle
 Var optStartServiceGUI
 Var chkCreateStartMenuShortcuts_Handle
 Var optCreateStartMenuShortcuts
+Var txtCfgIpSoap_Handle
+Var txtCfgPortSoap_Handle
+Var txtCfgIdSrv_Handle
 
 ; Request application privileges for Windows Vista
 RequestExecutionLevel admin
@@ -120,6 +122,8 @@ Var HomidomInstalledVersion ;Numéro de version Homidom.dll
 Var IsPreviousInstallIsDeprecated ;Indique si la précedente installation a été faite avec l'ancien installeur (msi)
 ;Var HomidomServiceVersion ;Indique le type de service installé : 1=> HomidomSvc via NSSM, 2=> HomiService
 Var HomiServiceName
+
+Var IsWindowsFirewallEnabled
 
 Var cfg_ipsoap
 Var cfg_portsoap
@@ -138,7 +142,7 @@ Function .onInit
 
   !insertmacro Log_Init "$EXEDIR\$EXEFILE.log"
   !insertmacro Log_String "================================================================================"
-  !insertmacro Log_String "  ${PRODUCT_NAME} v${PRODUCT_VERSION}.${PRODUCT_BUILD}.${PRODUCT_REVISION}"
+  !insertmacro Log_String " ${PRODUCT_NAME} v${PRODUCT_VERSION}.${PRODUCT_BUILD}.${PRODUCT_REVISION}"
   !insertmacro Log_String "================================================================================"
   
   ; -- Création du dossier temporaires nécessaires à l'installeur (%TEMP%\ns*****)
@@ -158,10 +162,7 @@ Function .onInit
 
   ; --- Vérification de la version du Framework .NET
   Call CheckDotNetInstalled
-  
-  ; -- Vérification de la présence des runtimes VC2010
-  Call CheckVC2010Redist
-  
+
   ; --- détection de l'OS (32bits/64bits) & pré-configuration du dossier de destination
   StrCpy $INSTDIR "$programfiles32\${PRODUCT_NAME}"
   
@@ -175,16 +176,20 @@ Function .onInit
     SetRegView 32
     StrCpy $platform "x86"
   ${EndIf}
+
+  ; -- Vérification de la présence des runtimes VC2010
+  Call CheckVC2010Redist
   
-  !insertmacro Log_String "Les dossier d'installation par défaut est '$instdir'."
+  !insertmacro Log_String "Les dossier d'installation par défaut est '$INSTDIR'."
   
   ; --- Initialisation des variables
   StrCpy $IsHomidomInstalled "0"
   StrCpy $IsPreviousInstallIsDeprecated "0"
   StrCpy $HomiServiceName "HoMIServicE"
+  StrCpy $IsWindowsFirewallEnabled "0"
 
   ; --- Recherche d'une installation faite avec l'ancien installeur
-  !insertmacro Log_String "Recherche des installation existante en base de registre."
+  ;!insertmacro Log_String "Recherche des installation existante en base de registre."
   StrCpy $0 0
   ${Do}
     ; parcours de chaque entrée 'Uninstall" du registre
@@ -206,7 +211,7 @@ Function .onInit
   ${LoopUntil} $1 == ""
 
   ; --- Détection basée sur la présence de la DLL principale dans le dossier d'install par défaut -ou- spécifié en BdR si déja installé
-  !insertmacro Log_String "Recherche d'une installation exitante dans le dossier '$INSTDIR'."
+  ;!insertmacro Log_String "Recherche d'une installation exitante dans le dossier '$INSTDIR'."
   ${If} ${FileExists} "$INSTDIR\HoMIDom.dll"
     ; --- Installation existante détectée !
     StrCpy $IsHomidomInstalled "1"
@@ -214,8 +219,8 @@ Function .onInit
     ${GetFileVersion} "$INSTDIR\HoMIDom.dll" $HomidomInstalledVersion
     !insertmacro Log_String "Une installation existante a été trouvé dans le dossier '$INSTDIR'. Le numéro de version est '$HomidomInstalledVersion'"
   ${EndIf}
-  
-  !insertmacro Log_String "Recherche des services HoMIDoM."
+
+  ;!insertmacro Log_String "Recherche des services HoMIDoM..."
   ; Vérification de l'existance du service V1
   SimpleSC::ExistsService "HoMIDoM"
   Pop $0
@@ -236,12 +241,29 @@ Function .onInit
     !insertmacro Log_String "Une version du service HoMIDoM installée avec InstallUtil a été trouvée."
   ${EndIf}
 
+
+  ; Check if the firewall is enabled
+  SimpleFC::IsFirewallEnabled
+  Pop $0 ; return error(1)/success(0)
+  Pop $1 ; return 1=Enabled/0=Disabled
+  ${If} $0 == 0
+    StrCpy $IsWindowsFirewallEnabled "$1"
+    ${If} $IsWindowsFirewallEnabled == 1
+      !insertmacro Log_String "Le pare-feux Windows est activé."
+    ${Else}
+      !insertmacro Log_String "Le pare-feux Windows n'est pas activé."
+    ${EndIf}
+  ${EndIf}
+
   Call LoadConfig
 
   !insertmacro Log_String "IsHomidomInstalled: $IsHomidomInstalled"
   !insertmacro Log_String "HomidomInstalledVersion: $HomidomInstalledVersion"
   !insertmacro Log_String "IsHomidomInstalledAsServiceNSSM: $IsHomidomInstalledAsServiceNSSM"
   !insertmacro Log_String "IsHomidomInstalledAsService: $IsHomidomInstalledAsService"
+    
+  !insertmacro Log_String "================================================================================"
+  !insertmacro Log_String "Début de l'installation."
     
 FunctionEnd
 
@@ -278,15 +300,35 @@ FunctionEnd
 
 Function SaveConfig
 
-    nsisXML::create
-    nsisXML::load "$INSTDIR\Config\HoMIDom.xml"
-    nsisXML::select '/homidom/server'
-    ${If} $2 != 0
-      nsisXML::setAttribute "ipsoap" $cfg_ipsoap
-      nsisXML::setAttribute "portsoap" $cfg_portsoap
-      nsisXML::setAttribute "idsrv" $cfg_idsrv
-    ${EndIf}
-    nsisXML::save "$INSTDIR\Config\HoMIDom.xml"
+  !insertmacro Log_String "Sauvegarde de la configuration."
+
+  nsisXML::create
+  nsisXML::load "$INSTDIR\Config\HoMIDom.xml"
+  nsisXML::select '/homidom/server'
+  ${If} $2 != 0
+    nsisXML::setAttribute "ipsoap" $cfg_ipsoap
+    nsisXML::setAttribute "portsoap" $cfg_portsoap
+    nsisXML::setAttribute "idsrv" $cfg_idsrv
+  ${EndIf}
+  nsisXML::save "$INSTDIR\Config\HoMIDom.xml"
+  
+  nsisXML::create
+  nsisXML::load "$INSTDIR\Config\HoMIAdmiN.xml"
+  nsisXML::select '/ArrayOfClServer/ClServer/Adresse'
+  ${If} $2 != 0
+    nsisXML::setText "$cfg_ipsoap"
+  ${EndIf}
+  nsisXML::select '/ArrayOfClServer/ClServer/Port'
+  ${If} $2 != 0
+    nsisXML::setText "$cfg_portsoap"
+  ${EndIf}
+  nsisXML::select '/ArrayOfClServer/ClServer/Id'
+  ${If} $2 != 0
+    nsisXML::setText "$cfg_portsoap"
+  ${EndIf}
+  nsisXML::save "$INSTDIR\Config\HoMIAdmiN.xml"
+  
+  
   
 FunctionEnd
 
@@ -295,10 +337,8 @@ FunctionEnd
 ; **********************************************************************
 Function .onInstSuccess
 
-  Call WriteUnInstaller
-  Call AddFirewallRules
-  Call InstallHomidomService
-  Call StartHomidomService
+  !insertmacro Log_String "Installation terminée avec succès."
+
 
 FunctionEnd
 
@@ -456,14 +496,21 @@ Section "" HoMIDoM_SHORTCUTS
 
   SetOutPath "$INSTDIR"
   CreateDirectory $SMPROGRAMS\${PRODUCT_NAME}
+  ; suppression de tous les raccourcis existant
+  Delete "$SMPROGRAMS\${PRODUCT_NAME}\*.*"
   
   ; Création du raccourçi pour HomiAdmin
   ${If} ${SectionIsSelected} ${HoMIDoM_ADMIN}
     CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\HoMIDoM Administration.lnk" "$INSTDIR\HoMIAdmin.exe"
   ${EndIf}
   
+  ; Création du raccourci vers HomiService mode console
+  ${If} ${SectionIsSelected} ${HoMIDoM_SERVICE}
+    CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\HoMIDoM Service (Mode Console).lnk" "$INSTDIR\HoMIService.exe"
+  ${EndIf}
+  
   ${If} ${SectionIsSelected} ${HoMIDoM_SVCGUI}
-    CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\HoMIDoM Service GUI.lnk" "$INSTDIR\HoMIGuI.exe"
+    CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\HoMIDoM Service Agent (GUI).lnk" "$INSTDIR\HoMIGuI.exe"
   ${EndIf}
   
   ${If} $optStartServiceGUI == "1"
@@ -471,8 +518,19 @@ Section "" HoMIDoM_SHORTCUTS
     CreateShortCut "$SMSTARTUP\HoMIDoM Service GUI.lnk" "$INSTDIR\HoMIGuI.exe"
   ${EndIf}
   
+  WriteINIStr "$SMPROGRAMS\${PRODUCT_NAME}\Visitez le site Web HoMIDoM.URL" "InternetShortcut" "URL" "http://www.homidom.com"
+  
 SectionEnd
 
+Section "" HoMIDoM_POST
+
+  Call WriteUnInstaller
+  Call AddFirewallRules
+  Call SaveConfig
+  Call InstallHomidomService
+  Call StartHomidomService
+
+SectionEnd
 
 
 ; **********************************************************************
@@ -572,7 +630,6 @@ Section "Uninstall"
 
 SectionEnd
 
-
 ; **********************************************************************
 ; dé-installation du service windows via NSSM
 ; **********************************************************************
@@ -651,7 +708,7 @@ Function StartHomidomService
 
     ${Else}
       SetOutPath "$INSTDIR"
-      Exec '"$INSTDIR\HomidomService.exe"'
+      Exec '"$INSTDIR\HoMIServicE.exe"'
     ${EndIf}
   ${EndIf}
 
@@ -668,14 +725,36 @@ FunctionEnd
 Function AddFirewallRules
 
   ${If} $optInstallAsService == "1"
+  
 
-    Banner::show /NOUNLOAD "Configuration du pare-feu..."
-    !insertmacro Log_String "Configuration du pare-feu."
-
-
-
-    Banner::destroy
+  
+  
+    ; Check if the port 7999/TCP is enabled/disabled
+    ;SimpleFC::IsPortEnabled $cfg_portsoap 6
     
+    SimpleFC::IsApplicationAdded "$INSTDIR\HoMIServicE.exe"
+    Pop $0 ; return error(1)/success(0)
+    Pop $1 ; return 1=Enabled/0=Not enabled
+    ${If} $0 == 0
+      ${If} $1 == 0
+        Banner::show /NOUNLOAD "Configuration du pare-feu..."
+        
+        ; Add the port xxxxx/TCP to the firewall exception list - All Networks - All IP Version - Enabled
+        ;SimpleFC::AddPort $cfg_portsoap "HoMIDoM Service" 6 0 2 "" 1
+        ; Add an application to the firewall exception list - All Networks - All IP Version - Enabled
+        SimpleFC::AddApplication "HoMIDoM Service" "$INSTDIR\HoMIServicE.exe" 0 2 "" 1
+        Pop $0 ; return error(1)/success(0)
+        
+        ;!insertmacro Log_String "Configuration du pare-feu. Ouverture du Port TCP $cfg_portsoap : $0"
+        !insertmacro Log_String "Configuration du pare-feu. Ajout de l'application $INSTDIR\HoMIServicE.exe : $0"
+        Banner::destroy
+        
+      ${Else}
+        !insertmacro Log_String "Le pare-feu est déja configuré correctement."
+      ${EndIf}
+
+
+    ${EndIf}
   ${EndIf}
 
 FunctionEnd
@@ -739,6 +818,7 @@ Function nsDialogsPage
   StrCpy $optCreateStartMenuShortcuts "1"
   ;StrCpy $optStartService "0"
 
+  ; CreateStartMenuShortcuts
   ${NSD_CreateCheckbox} 0 0u 100% 10u "Créer les raccourçis dans le menu Démarrer"
   Pop $chkCreateStartMenuShortcuts_Handle
   ${If} $optCreateStartMenuShortcuts == ${BST_CHECKED}
@@ -765,14 +845,17 @@ Function nsDialogsPage
 
     ${NSD_CreateLabel} 10u 55u 50u 10u "IP/Nom d'hôte : "
     ${NSD_CreateText} 75u 55u 30% 10u $cfg_ipsoap
-        
+    Pop $txtCfgIpSoap_Handle
+    
     ${NSD_CreateLabel} 10u 70u 50u 10u "Port : "
     ${NSD_CreateText} 75u 70u 30% 10u $cfg_portsoap
-        
+    Pop $txtCfgPortSoap_Handle
+    
     ${NSD_CreateLabel} 10u 85u 50u 10u "ID serveur : "
     ${NSD_CreateText} 75u 85u 30% 10u $cfg_idsrv
+    Pop $txtCfgIdSrv_Handle
 
-    ${NSD_CreateCheckbox} 0 110u 100% 10u "Demarrer automatiquement HoMIDoM GUI à la fin de l'installation"
+    ${NSD_CreateCheckbox} 0 110u 100% 10u "Demarrer automatiquement HoMIDoM GUI au démarrage du PC"
     Pop $chkStartServiceGUI_Handle
     ${If} $optStartServiceGUI == ${BST_CHECKED}
       ${NSD_Check} $chkStartServiceGUI_Handle
@@ -788,6 +871,14 @@ Function nsDialogsPageLeave
          ${NSD_GetState} $chkStartService_Handle $optStartService
          ${NSD_GetState} $chkCreateStartMenuShortcuts_Handle $optCreateStartMenuShortcuts
          ${NSD_GetState} $chkStartServiceGUI_Handle $optStartServiceGUI
+         
+         ${NSD_GetText} $txtCfgIpSoap_Handle $cfg_ipsoap
+         !insertmacro Log_String "IPSOAP=$cfg_ipsoap"
+         ${NSD_GetText} $txtCfgPortSoap_Handle $cfg_portsoap
+         !insertmacro Log_String "PORTSOAP=$cfg_ipsoap"
+         ${NSD_GetText} $txtCfgIdSrv_Handle $cfg_ipsoap
+         !insertmacro Log_String "IDSRV=$cfg_idsrv"
+         
 FunctionEnd
 
 Function WriteUnInstaller

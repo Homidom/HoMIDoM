@@ -63,8 +63,7 @@ Function CheckVC2010Redist
          ; Read  from Registry
          ReadRegDWORD $VC2010RedistRegKeyValue HKLM "$VC2010_RegKey" "Installed"
 
-          !insertmacro Log_String "Microsoft Visual C++ 2010 Redistributable : $VC2010RedistRegKeyValue"
-           !insertmacro Log_String "$VC2010_RegKey"
+         !insertmacro Log_String "Microsoft Visual C++ 2010 Redistributable : $VC2010RedistRegKeyValue"
          IfErrors noVC2010Redist
 
          StrCpy $IsVC2010RedistInstalled "$VC2010RedistRegKeyValue"
