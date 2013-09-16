@@ -60,6 +60,7 @@ Public Class uTriggerTimer
                            InStr(c(0), ",") = 0 And InStr(c(1), ",") = 0 And InStr(c(2), ",") = 0 And InStr(c(3), ",") = 0 And InStr(c(4), ",") = 0 Then
                             SP_modesimplecontenu.Visibility = Windows.Visibility.Visible
                             SP_modesimplealerte.Visibility = Windows.Visibility.Collapsed
+                            SP_exemplesimple.Visibility = Windows.Visibility.Visible
                             'les champs sont remplis automatiquement car on change la valeur du champ avancé
                             'If c(0) = "*" Then TxtSc.Text = "" Else TxtSc.Text = c(0)
                             'If c(1) = "*" Then TxtMn.Text = "" Else TxtMn.Text = c(1)
@@ -77,6 +78,7 @@ Public Class uTriggerTimer
                             'on desactive le mode simple
                             SP_modesimplecontenu.Visibility = Windows.Visibility.Collapsed
                             SP_modesimplealerte.Visibility = Windows.Visibility.Visible
+                            SP_exemplesimple.Visibility = Windows.Visibility.Collapsed
                         End If
 
                     End If
@@ -106,7 +108,7 @@ Public Class uTriggerTimer
 
             Dim _myconditiontime As String = ""
             'Si on a des caracteres spéciaux alors on utilise le mode avancé
-            If InStr(_myconditiontime_avance, "/") = 0 Or InStr(_myconditiontime_avance, "-") = 0 Or InStr(_myconditiontime_avance, ",") = 0 Then
+            If InStr(_myconditiontime_avance, "/") > 0 Or InStr(_myconditiontime_avance, "-") > 0 Or InStr(_myconditiontime_avance, ",") > 0 Then
                 'on ajoute les jours
                 Dim _prepajr_avance As String = ""
                 If CheckBox7_avance.IsChecked = True Then _prepajr_avance = "0"
@@ -765,6 +767,7 @@ Public Class uTriggerTimer
             If InStr(TxtHr_avance.Text, "/") Or InStr(TxtHr_avance.Text, ",") Or InStr(TxtHr_avance.Text, "-") Then
                 SP_modesimplecontenu.Visibility = Windows.Visibility.Collapsed
                 SP_modesimplealerte.Visibility = Windows.Visibility.Visible
+                SP_exemplesimple.Visibility = Windows.Visibility.Collapsed
             Else
                 If TxtHr_avance.Text = "*" Then
                     TxtHr.Text = ""
@@ -773,6 +776,7 @@ Public Class uTriggerTimer
                 End If
                 SP_modesimplecontenu.Visibility = Windows.Visibility.Visible
                 SP_modesimplealerte.Visibility = Windows.Visibility.Collapsed
+                SP_exemplesimple.Visibility = Windows.Visibility.Visible
             End If
             simulate_cron_avance()
         Catch ex As Exception
@@ -785,6 +789,7 @@ Public Class uTriggerTimer
             If InStr(TxtMn_avance.Text, "/") Or InStr(TxtMn_avance.Text, ",") Or InStr(TxtMn_avance.Text, "-") Then
                 SP_modesimplecontenu.Visibility = Windows.Visibility.Collapsed
                 SP_modesimplealerte.Visibility = Windows.Visibility.Visible
+                SP_exemplesimple.Visibility = Windows.Visibility.Collapsed
             Else
                 If TxtMn_avance.Text = "*" Then
                     TxtMn.Text = ""
@@ -793,6 +798,7 @@ Public Class uTriggerTimer
                 End If
                 SP_modesimplecontenu.Visibility = Windows.Visibility.Visible
                 SP_modesimplealerte.Visibility = Windows.Visibility.Collapsed
+                SP_exemplesimple.Visibility = Windows.Visibility.Visible
             End If
             simulate_cron_avance()
         Catch ex As Exception
@@ -805,6 +811,7 @@ Public Class uTriggerTimer
             If InStr(TxtSc_avance.Text, "/") Or InStr(TxtSc_avance.Text, ",") Or InStr(TxtSc_avance.Text, "-") Then
                 SP_modesimplecontenu.Visibility = Windows.Visibility.Collapsed
                 SP_modesimplealerte.Visibility = Windows.Visibility.Visible
+                SP_exemplesimple.Visibility = Windows.Visibility.Collapsed
             Else
                 If TxtSc_avance.Text = "*" Then
                     TxtSc.Text = ""
@@ -813,6 +820,7 @@ Public Class uTriggerTimer
                 End If
                 SP_modesimplecontenu.Visibility = Windows.Visibility.Visible
                 SP_modesimplealerte.Visibility = Windows.Visibility.Collapsed
+                SP_exemplesimple.Visibility = Windows.Visibility.Visible
             End If
             simulate_cron_avance()
         Catch ex As Exception
@@ -825,6 +833,7 @@ Public Class uTriggerTimer
             If InStr(TxtMs_avance.Text, "/") Or InStr(TxtMs_avance.Text, ",") Or InStr(TxtMs_avance.Text, "-") Then
                 SP_modesimplecontenu.Visibility = Windows.Visibility.Collapsed
                 SP_modesimplealerte.Visibility = Windows.Visibility.Visible
+                SP_exemplesimple.Visibility = Windows.Visibility.Collapsed
             Else
                 If TxtMs_avance.Text = "*" Then
                     TxtMs.Text = ""
@@ -833,6 +842,7 @@ Public Class uTriggerTimer
                 End If
                 SP_modesimplecontenu.Visibility = Windows.Visibility.Visible
                 SP_modesimplealerte.Visibility = Windows.Visibility.Collapsed
+                SP_exemplesimple.Visibility = Windows.Visibility.Visible
             End If
             simulate_cron_avance()
         Catch ex As Exception
@@ -845,6 +855,7 @@ Public Class uTriggerTimer
             If InStr(TxtJr_avance.Text, "/") Or InStr(TxtJr_avance.Text, ",") Or InStr(TxtJr_avance.Text, "-") Then
                 SP_modesimplecontenu.Visibility = Windows.Visibility.Collapsed
                 SP_modesimplealerte.Visibility = Windows.Visibility.Visible
+                SP_exemplesimple.Visibility = Windows.Visibility.Collapsed
             Else
                 If TxtJr_avance.Text = "*" Then
                     TxtJr.Text = ""
@@ -853,6 +864,7 @@ Public Class uTriggerTimer
                 End If
                 SP_modesimplecontenu.Visibility = Windows.Visibility.Visible
                 SP_modesimplealerte.Visibility = Windows.Visibility.Collapsed
+                SP_exemplesimple.Visibility = Windows.Visibility.Visible
             End If
             simulate_cron_avance()
         Catch ex As Exception
