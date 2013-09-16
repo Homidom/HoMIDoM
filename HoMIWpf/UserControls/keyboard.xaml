@@ -8,7 +8,7 @@
     
     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Background="#00000000">
         <StackPanel Margin="3" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Height="20" Width=" 20" Name="BtnClose" Content="▼" Template="{DynamicResource GlassButton}" Foreground="White" Margin="1" FontSize="13" />
+            <Button Height="30" Width="30" Name="BtnClose" Content="▼" Template="{DynamicResource GlassButton}" Foreground="White" Margin="1" FontSize="13" />
         </StackPanel>
         <StackPanel >
             <!--<my:OnScreenKeyboard Height="170" Width="438" />-->

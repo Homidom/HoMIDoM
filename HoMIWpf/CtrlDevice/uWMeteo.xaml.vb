@@ -25,7 +25,12 @@ Public Class uWMeteo
         Try
             If IsConnect = True Then
                 If String.IsNullOrEmpty(_Id) = False Then
-                    Dim x As HoMIDom.HoMIDom.TemplateDevice = ReturnDeviceById(_Id)
+                    Dim x As HoMIDom.HoMIDom.TemplateDevice
+                    If frmMere.MaJWidgetFromServer Then
+                        x = myService.ReturnDeviceByID(IdSrv, _Id)
+                    Else
+                        x = ReturnDeviceById(_Id)
+                    End If
 
                     If x IsNot Nothing Then
 

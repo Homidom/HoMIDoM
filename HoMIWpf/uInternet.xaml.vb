@@ -7,7 +7,7 @@ Partial Public Class uInternet
 
     Private Sub uInternet_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         Try
-            If UrlIsValid(_Url) = False Then Exit Sub
+            If String.IsNullOrEmpty(_Url) = True Then Exit Sub
             If _Url.ToLower().StartsWith("www.") Then _Url = "http://" & _Url
             If My.Computer.Network.IsAvailable = True And String.IsNullOrEmpty(_Url) = False Then
                 x.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() x.Navigate(New Uri(_Url)), ThreadStart))
@@ -61,6 +61,7 @@ Partial Public Class uInternet
         Else
             Image2.Visibility = Windows.Visibility.Hidden
         End If
+
     End Sub
 
     Private Sub x_Navigated(ByVal sender As Object, ByVal e As System.Windows.Navigation.NavigationEventArgs) Handles x.Navigated
