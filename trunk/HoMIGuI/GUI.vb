@@ -121,13 +121,6 @@ Public Class HoMIGuI
             Serviceinstalled = True
         Catch ex As Exception
             Serviceinstalled = False
-            ServiceEtatToolStripMenuItem.Text = "Service : non installé"
-            ServiceStartToolStripMenuItem.Visible = False
-            ServiceStartToolStripMenuItem.Enabled = False
-            ServiceStopToolStripMenuItem.Visible = False
-            ServiceStopToolStripMenuItem.Enabled = False
-            ServiceRestartToolStripMenuItem.Visible = False
-            ServiceRestartToolStripMenuItem.Enabled = False
         End Try
 
         'Affiche les bons menus suivant l'etat du service
@@ -169,17 +162,40 @@ Public Class HoMIGuI
                     ServiceRestartToolStripMenuItem.Visible = False
                     ServiceRestartToolStripMenuItem.Enabled = False
                 End If
+            Else
+                ServiceEtatToolStripMenuItem.Text = "Service : non installé"
+                ServiceStartToolStripMenuItem.Visible = False
+                ServiceStartToolStripMenuItem.Enabled = False
+                ServiceStopToolStripMenuItem.Visible = False
+                ServiceStopToolStripMenuItem.Enabled = False
+                ServiceRestartToolStripMenuItem.Visible = False
+                ServiceRestartToolStripMenuItem.Enabled = False
             End If
         Catch ex As Exception
             MessageBox.Show("Erreur lors de l'affichage des menus Service :" & vbCrLf & ex.ToString, "HoMIGuI - ConTextMenu Opening", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
 
-        'recherche des drivers en SOAP
+        'Check si le service Windows ou Console Répond
         Try
-            getdrivers()
+            Dim ServiceRunning As Boolean = False
+            For Each clsProcess As Process In Process.GetProcesses()
+                If clsProcess.ProcessName.StartsWith("homiservice") Then
+                    ServiceRunning = True
+                    Exit For
+                End If
+            Next
+            If ServiceRunning Then
+                ServiceConsoleToolStripMenuItem.Enabled = False
+                ServiceConsoleToolStripMenuItem.ToolTipText = "Démarrer le service en mode Console"
+            Else
+                ServiceConsoleToolStripMenuItem.Enabled = False
+                ServiceConsoleToolStripMenuItem.ToolTipText = "Non disponible : HoMIService est déja démarré"
+            End If
+
         Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'affichage des Drivers :" & vbCrLf & ex.ToString, "HoMIGuI - ConTextMenu Opening", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            MessageBox.Show("Erreur lors de l'affichage du menu CONSOLE :" & vbCrLf & ex.ToString, "HoMIGuI - ConTextMenu Opening", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
+
     End Sub
 
     'Gestion de la connexion SOAP
@@ -189,8 +205,6 @@ Public Class HoMIGuI
                 If IsConnect Then myService.GetTime()
             Catch ex As Exception
                 IsConnect = False
-                ServiceConsoleToolStripMenuItem.Visible = True
-                ServiceConsoleToolStripMenuItem.ToolTipText = "Démarrer Homiservice en mode Console"
                 myChannelFactory.Abort()
             End Try
 
@@ -256,7 +270,7 @@ Public Class HoMIGuI
                     Exit Sub
                 End If
 
-                ServiceConsoleToolStripMenuItem.Visible = False
+                ServiceConsoleToolStripMenuItem.Enabled = False
                 ServiceConsoleToolStripMenuItem.ToolTipText = "Non disponible : HoMIService est déja démarré"
                 IsConnect = True
             End If
@@ -285,7 +299,7 @@ Public Class HoMIGuI
             End If
             'controller.Refresh()
         Catch ex As Exception
-            MsgBox("Error while starting HoMIServicE" & Chr(10) & Chr(10) & ex.ToString, MsgBoxStyle.Critical, "Start HoMIServicE")
+            MessageBox.Show("Erreur lors du démarrage du service" & vbCrLf & ex.ToString, "HoMIGuI - ServiceStartToolStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
     End Sub
     Private Sub ServiceStopToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ServiceStopToolStripMenuItem.Click
@@ -300,7 +314,7 @@ Public Class HoMIGuI
             End If
             'controller.Refresh()
         Catch ex As Exception
-            MsgBox("Error while stopping HoMIServicE" & Chr(10) & Chr(10) & ex.ToString, MsgBoxStyle.Critical, "Stop HoMIServicE")
+            MessageBox.Show("Erreur lors de l'arrêt du service" & vbCrLf & ex.ToString, "HoMIGuI - ServiceStopToolStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
     End Sub
     Private Sub ServiceRestartToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ServiceRestartToolStripMenuItem.Click
@@ -321,7 +335,20 @@ Public Class HoMIGuI
             End If
             'controller.Refresh()
         Catch ex As Exception
-            MsgBox("Error while restarting HoMIServicE" & Chr(10) & Chr(10) & ex.ToString, MsgBoxStyle.Critical, "Restart HoMIServicE")
+            MessageBox.Show("Erreur lors du redémarrage du service" & vbCrLf & ex.ToString, "HoMIGuI - ServiceRestartToolStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End Try
+    End Sub
+    Private Sub ServiceConsoleToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ServiceConsoleToolStripMenuItem.Click
+        Dim Chemin As String = ""
+        Try
+            Chemin = My.Application.Info.DirectoryPath & "\Homiservice.exe"
+            If File.Exists(Chemin) Then
+                System.Diagnostics.Process.Start(Chemin)
+            Else
+                MessageBox.Show("Erreur lors du démarrage du service en mode console : chemin non trouve : " & Chemin, "HoMIGuI - ServiceConsoleToolStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur lors du démarrage du service en mode console" & vbCrLf & ex.ToString, "HoMIGuI - ServiceConsoleToolStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
     End Sub
 
@@ -333,10 +360,10 @@ Public Class HoMIGuI
             If Directory.Exists(Chemin) Then
                 System.Diagnostics.Process.Start(Chemin)
             Else
-                MsgBox("Chemin non trouvé : " & Chemin, MsgBoxStyle.Information, "Ouvrir le dossier HoMIDoM")
+                MessageBox.Show("Erreur lors de l'ouverture du dossier Homidom : chemin non trouve : " & Chemin, "HoMIGuI - DossierHomidomStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             End If
         Catch ex As Exception
-            MsgBox("Error While opening : " & Chemin, MsgBoxStyle.Critical, "ERROR")
+            MessageBox.Show("Erreur lors de l'ouverture du dossier Homidom" & vbCrLf & ex.ToString, "HoMIGuI - DossierHomidomStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
     End Sub
     Private Sub DossierLogsStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DossierLogsStripMenuItem.Click
@@ -346,10 +373,10 @@ Public Class HoMIGuI
             If Directory.Exists(Chemin) Then
                 System.Diagnostics.Process.Start(Chemin)
             Else
-                MsgBox("Chemin non trouvé : " & Chemin, MsgBoxStyle.Information, "Ouvrir le dossier Logs")
+                MessageBox.Show("Erreur lors de l'ouverture du dossier des logs : chemin non trouve : " & Chemin, "HoMIGuI - DossierLogsStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             End If
         Catch ex As Exception
-            MsgBox("Error While opening : " & Chemin, MsgBoxStyle.Critical, "ERROR")
+            MessageBox.Show("Erreur lors de l'ouverture du dossier des logs" & vbCrLf & ex.ToString, "HoMIGuI - DossierLogsStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
     End Sub
     Private Sub DossierConfigUtilisateurStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DossierConfigUtilisateurStripMenuItem.Click
@@ -359,48 +386,10 @@ Public Class HoMIGuI
             If Directory.Exists(Chemin) Then
                 System.Diagnostics.Process.Start(Chemin)
             Else
-                MsgBox("Chemin non trouvé : " & Chemin, MsgBoxStyle.Information, "Ouvrir le dossier Logs")
+                MessageBox.Show("Erreur lors de l'ouverture du dossier de configuration Utilisateur : chemin non trouve : " & Chemin, "HoMIGuI - DossierConfigUtilisateurStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             End If
         Catch ex As Exception
-            MsgBox("Error While opening : " & Chemin, MsgBoxStyle.Critical, "ERROR")
-        End Try
-    End Sub
-
-    'Gestion des autres menus
-    Private Sub AboutToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AboutToolStripMenuItem.Click
-        AboutForm.Show()
-    End Sub
-    Private Sub ConfigurationToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ConfigurationToolStripMenuItem.Click
-        MsgBox("Non implémenté", MsgBoxStyle.Information, "Information")
-    End Sub
-    Private Sub LogsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LogsToolStripMenuItem.Click
-        LogsForm.Show()
-    End Sub
-    Private Sub ExitToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExitToolStripMenuItem.Click
-        Try
-            If IsConnect Then myChannelFactory.Abort()
-            Application.Exit()
-        Catch ex As Exception
-            MsgBox("Erreur lors de la fermeture")
-        End Try
-    End Sub
-
-
-    Private Sub DriversToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DriversToolStripMenuItem.DropDownOpening, DriversToolStripMenuItem.Click, DriversToolStripMenuItem.DoubleClick
-        getdrivers()
-    End Sub
-
-    Private Sub ServiceConsoleToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ServiceConsoleToolStripMenuItem.Click
-        Dim Chemin As String = ""
-        Try
-            Chemin = My.Application.Info.DirectoryPath & "\Homiservice.exe"
-            If File.Exists(Chemin) Then
-                System.Diagnostics.Process.Start(Chemin)
-            Else
-                MsgBox("Chemin non trouvé : " & Chemin, MsgBoxStyle.Information, "Lancer le Service en mode console")
-            End If
-        Catch ex As Exception
-            MsgBox("Error While opening : " & Chemin, MsgBoxStyle.Critical, "ERROR")
+            MessageBox.Show("Erreur lors de l'ouverture du dossier de configuration Utilisateur" & vbCrLf & ex.ToString, "HoMIGuI - DossierConfigUtilisateurStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
     End Sub
 
@@ -456,6 +445,9 @@ Public Class HoMIGuI
             MessageBox.Show("Erreur lors de la récupération des drivers en SOAP" & vbCrLf & ex.ToString, "HoMIGuI - GetDrivers", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
     End Sub
+    Private Sub DriversToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DriversToolStripMenuItem.DropDownOpening, DriversToolStripMenuItem.Click, DriversToolStripMenuItem.DoubleClick
+        getdrivers()
+    End Sub
     Public Sub Driver_Stop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Try
             If IsConnect Then
@@ -504,4 +496,29 @@ Public Class HoMIGuI
             MessageBox.Show("Erreur lors du démarrage du driver en SOAP" & vbCrLf & ex.ToString, "HoMIGuI - DriverStart", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
     End Sub
+
+    'Gestion des Updates
+    Private Sub CheckUpdateToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles CheckUpdateToolStripMenuItem.Click
+        MessageBox.Show("Non disponible pour le moment", "HoMIGuI - CheckUpdateToolStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Information)
+    End Sub
+    Public Sub CheckUpdate()
+
+    End Sub
+
+    'Gestion des autres menus
+    Private Sub AboutToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AboutToolStripMenuItem.Click
+        AboutForm.Show()
+    End Sub
+    Private Sub LogsToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles LogsToolStripMenuItem.Click
+        LogsForm.Show()
+    End Sub
+    Private Sub ExitToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExitToolStripMenuItem.Click
+        Try
+            If IsConnect Then myChannelFactory.Abort()
+            Application.Exit()
+        Catch ex As Exception
+            MessageBox.Show("Erreur lors de la fermeture" & vbCrLf & ex.ToString, "HoMIGuI - ExitToolStripMenuItem", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End Try
+    End Sub
+
 End Class
