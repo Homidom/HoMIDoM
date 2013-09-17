@@ -44,6 +44,7 @@ Public Class uWidgetEmpty
     Dim _ShowPicture As Boolean = True
     Dim _Picture As String = ""
     Dim _ImageBackGround As String
+    Dim _GarderProportionImage As Boolean = True 'True si on veut garder proportion Width=Height de l'image
     Dim _LabelStatus As String
     Dim _DefautLabelStatus As String = "?"
     Dim _TailleStatus As Double = 9
@@ -658,6 +659,22 @@ Public Class uWidgetEmpty
                 Image.Visibility = Windows.Visibility.Visible
             Else
                 Image.Visibility = Windows.Visibility.Collapsed
+            End If
+        End Set
+    End Property
+
+    Public Property GarderProportionImage As Boolean
+        Get
+            Return _GarderProportionImage
+        End Get
+        Set(value As Boolean)
+            _GarderProportionImage = value
+
+            If _GarderProportionImage Then
+                If ShowPicture Then If Image.Width < Image.Height Then Image.Height = Image.Width
+                If ShowPicture Then If Image.Height < Image.Width Then Image.Width = Image.Height
+                If _MOTEUR IsNot Nothing Then If _MOTEUR.Width < _MOTEUR.Height Then _MOTEUR.Height = _MOTEUR.Width
+                If _MOTEUR IsNot Nothing Then If _MOTEUR.Height < _MOTEUR.Width Then _MOTEUR.Width = _MOTEUR.Height
             End If
         End Set
     End Property
@@ -2214,7 +2231,7 @@ Public Class uWidgetEmpty
                 If ShowPicture Then Image.Width = Me.ActualWidth
                 If _MOTEUR IsNot Nothing Then _MOTEUR.Width = Me.ActualWidth
             End If
-            If (ShowPicture Or _type = TypeOfWidget.Moteur) Then
+            If (ShowPicture Or _type = TypeOfWidget.Moteur) And _GarderProportionImage Then
                 If ShowPicture Then If Image.Width < Image.Height Then Image.Height = Image.Width
                 If ShowPicture Then If Image.Height < Image.Width Then Image.Width = Image.Height
                 If _MOTEUR IsNot Nothing Then If _MOTEUR.Width < _MOTEUR.Height Then _MOTEUR.Height = _MOTEUR.Width
