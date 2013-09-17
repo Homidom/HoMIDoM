@@ -162,8 +162,10 @@ Public Class HoMIGuI
                     ServiceRestartToolStripMenuItem.Visible = False
                     ServiceRestartToolStripMenuItem.Enabled = False
                 End If
+                ServiceEtatToolStripMenuItem.Text = "Etat du service Windows"
             Else
                 ServiceEtatToolStripMenuItem.Text = "Service : non installé"
+                ServiceEtatToolStripMenuItem.ToolTipText = "HoMIServicE n'est pas installé en tant que service Windows"
                 ServiceStartToolStripMenuItem.Visible = False
                 ServiceStartToolStripMenuItem.Enabled = False
                 ServiceStopToolStripMenuItem.Visible = False
@@ -179,22 +181,36 @@ Public Class HoMIGuI
         Try
             Dim ServiceRunning As Boolean = False
             For Each clsProcess As Process In Process.GetProcesses()
-                If clsProcess.ProcessName.StartsWith("homiservice") Then
+                If clsProcess.ProcessName.ToUpper = "HOMISERVICE" Then
                     ServiceRunning = True
                     Exit For
                 End If
             Next
             If ServiceRunning Then
                 ServiceConsoleToolStripMenuItem.Enabled = False
-                ServiceConsoleToolStripMenuItem.ToolTipText = "Démarrer le service en mode Console"
-            Else
-                ServiceConsoleToolStripMenuItem.Enabled = False
                 ServiceConsoleToolStripMenuItem.ToolTipText = "Non disponible : HoMIService est déja démarré"
+            Else
+                ServiceConsoleToolStripMenuItem.Enabled = True
+                ServiceConsoleToolStripMenuItem.ToolTipText = "Démarrer le service en mode Console"
             End If
 
         Catch ex As Exception
             MessageBox.Show("Erreur lors de l'affichage du menu CONSOLE :" & vbCrLf & ex.ToString, "HoMIGuI - ConTextMenu Opening", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
+
+        'Check si connecté en SOAP pour afficher les logsLive et Drivers
+        If IsConnect Then
+            LogsToolStripMenuItem.Enabled = True
+            LogsToolStripMenuItem.ToolTipText = "Visualiser les logs en temps réel"
+            DriversToolStripMenuItem.Enabled = True
+            LogsToolStripMenuItem.ToolTipText = "Afficher la liste des drivers en temps réel"
+        Else
+            LogsToolStripMenuItem.Enabled = False
+            LogsToolStripMenuItem.ToolTipText = "Non disponible : Non connecté en SOAP au serveur"
+            DriversToolStripMenuItem.Enabled = False
+            DriversToolStripMenuItem.ToolTipText = "Non disponible : Non connecté en SOAP au serveur"
+        End If
+        getdrivers()
 
     End Sub
 
@@ -406,7 +422,6 @@ Public Class HoMIGuI
     'Gestion des Drivers
     Private Sub getdrivers()
         Try
-            DriversToolStripMenuItem.DropDownItems.Clear()
             If IsConnect Then
                 'Recuperation des Drivers
                 Dim ListeDrivers As List(Of TemplateDriver) = Nothing
@@ -414,11 +429,13 @@ Public Class HoMIGuI
                     ListeDrivers = myService.GetAllDrivers(_IdSrv)
                 Catch ex As Exception
                     IsConnect = False
+                    DriversToolStripMenuItem.DropDownItems.Clear()
                     DriversToolStripMenuItem.DropDownItems.Add("Non disponible : Non connecté au serveur SOAP")
                     Exit Sub
                 End Try
 
                 'Affichage de la liste des drivers
+                DriversToolStripMenuItem.DropDownItems.Clear()
                 For Each drv In ListeDrivers
                     Dim newdriveritem As New ToolStripMenuItem
                     newdriveritem.Text = drv.Nom
@@ -447,6 +464,7 @@ Public Class HoMIGuI
                     DriversToolStripMenuItem.DropDownItems.Add(newdriveritem)
                 Next
             Else
+                DriversToolStripMenuItem.DropDownItems.Clear()
                 DriversToolStripMenuItem.DropDownItems.Add("Non disponible : Non connecté au serveur SOAP")
             End If
         Catch ex As Exception
@@ -456,7 +474,7 @@ Public Class HoMIGuI
         End Try
     End Sub
     Private Sub DriversToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles DriversToolStripMenuItem.DropDownOpening, DriversToolStripMenuItem.Click, DriversToolStripMenuItem.DoubleClick
-        getdrivers()
+        'getdrivers()
     End Sub
     Public Sub Driver_Stop_Click(ByVal sender As System.Object, ByVal e As System.EventArgs)
         Try
