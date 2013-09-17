@@ -1747,6 +1747,7 @@ Class Window1
                         mnu.Tag = _mac.ID
                         mnu.Header = _mac.Nom
                         mnu.FontSize = 14
+                        mnu.Foreground = Brushes.Black
                         AddHandler mnu.Click, AddressOf MnuExecuteMacro
                         MnuMacro.Items.Add(mnu)
                     Next
@@ -1759,6 +1760,7 @@ Class Window1
                                 Dim mnu As New MenuItem
                                 mnu.Header = logerror
                                 mnu.FontSize = 10
+                                mnu.Foreground = Brushes.Black
                                 MnuLastError.Items.Add(mnu)
                             End If
                         Next
@@ -2986,6 +2988,7 @@ Class Window1
                 mnu.Tag = _mac.ID
                 mnu.Header = _mac.Nom
                 mnu.FontSize = 14
+                mnu.Foreground = Brushes.Black
                 AddHandler mnu.Click, AddressOf MnuExecuteMacro
                 MnuMacro.Items.Add(mnu)
             Next
@@ -3139,6 +3142,7 @@ Class Window1
                         Dim mnu As New MenuItem
                         mnu.Header = logerror
                         mnu.FontSize = 12
+                        mnu.Foreground = Brushes.Black
                         MnuLastError.Items.Add(mnu)
                     End If
                 Next
@@ -3191,6 +3195,5 @@ Class Window1
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur MnuSave_Click: " & ex.Message, "Erreur", "MnuSave_Click")
         End Try
     End Sub
-
 
 End Class
