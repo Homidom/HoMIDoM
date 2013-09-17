@@ -24,6 +24,7 @@ Public Class WWidgetProperty
                 ChkShowEtiq.IsChecked = Obj.ShowEtiquette
                 ChkEditValue.IsChecked = Obj.CanEditValue
                 ChkPicture.IsChecked = Obj.ShowPicture
+                ChkSaveProportionPicture.IsChecked = Obj.GarderProportionImage
                 TxtEtiq.Text = Obj.Etiquette
                 TxtSizeEtiq.Text = Obj.TailleEtiquette
                 TxtX.Text = Obj.X
@@ -311,6 +312,7 @@ Public Class WWidgetProperty
             Obj.ZIndex = TxtZOrder.Text
             Obj.DefautLabelStatus = TxtDefStatus.Text
             Obj.Picture = ImgPicture.Tag
+            Obj.GarderProportionImage = ChkSaveProportionPicture.IsChecked
             Obj.ListHttpButton = _listhttpbtn
             Obj.HttpRefresh = TxtRefresh.Text
             Obj.ShowPassWord = ChKShowPassWord.IsChecked

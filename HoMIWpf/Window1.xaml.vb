@@ -1057,6 +1057,8 @@ Class Window1
                                 x.Picture = list.Item(j).Attributes.Item(k).Value
                             Case "showpicture"
                                 x.ShowPicture = list.Item(j).Attributes.Item(k).Value
+                            Case "savepictureproportion"
+                                x.GarderProportionImage = list.Item(j).Attributes.Item(k).Value
                             Case "defautlabelstatus"
                                 x.DefautLabelStatus = list.Item(j).Attributes.Item(k).Value
                             Case "taillestatus"
@@ -1460,6 +1462,9 @@ Class Window1
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("showpicture")
                 writer.WriteValue(_ListElement.Item(i).ShowPicture)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("savepictureproportion")
+                writer.WriteValue(_ListElement.Item(i).GarderProportionImage)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("picture")
                 writer.WriteValue(_ListElement.Item(i).Picture)
@@ -2132,6 +2137,7 @@ Class Window1
                             y.ShowStatus = _ListElement.Item(j).ShowStatus
                             y.ShowPicture = _ListElement.Item(j).ShowPicture
                             y.Picture = _ListElement.Item(j).Picture
+                            y.GarderProportionImage = _ListElement.Item(j).GarderProportionImage
                             y.Etiquette = _ListElement.Item(j).Etiquette
                             y.EtiquetteAlignement = _ListElement.Item(j).EtiquetteAlignement
                             y.DefautLabelStatus = _ListElement.Item(j).DefautLabelStatus
@@ -2244,6 +2250,7 @@ Class Window1
                     y.CanEditValue = _ListElement.Item(i).CanEditValue
                     y.Picture = _ListElement.Item(i).Picture
                     y.ShowPicture = _ListElement.Item(i).ShowPicture
+                    y.GarderProportionImage = _ListElement.Item(i).GarderProportionImage
                     y.ShowEtiquette = _ListElement.Item(i).ShowEtiquette
                     y.IsCommun = _ListElement.Item(i).IsCommun
                     y.Fondu = _ListElement.Item(i).Fondu
