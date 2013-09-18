@@ -18,6 +18,7 @@ Public Class WConfig
             End If
 
             Frm.MaJWidgetFromServer = ChkMaJWidgetFromSrv.IsChecked
+            Frm.ShowKeyboard = ChkShowKeyboard.IsChecked
             Frm.KeyboardPath = TxtKeyboardPath.Text
             Frm.SaveDiffBackup = ChKDiffSave.IsChecked
             Frm.AutoSave = ChkSaveAuto.IsChecked
@@ -85,6 +86,7 @@ Public Class WConfig
         SliderTranspHaut.Value = Frm.TransparenceHaut
         LblvalTransBas.Content = Frm.TransparenceBas
         LblvalTransHaut.Content = Frm.TransparenceHaut
+        ChkShowKeyboard.IsChecked = Frm.ShowKeyboard
         TxtKeyboardPath.Text = Frm.KeyboardPath
 
         If Frm.TimeOutPage >= 0 Then CbTimeOutPage.Text = Frm.TimeOutPage

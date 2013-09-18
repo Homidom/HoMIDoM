@@ -81,6 +81,7 @@ Class Window1
     Dim _TaskMnuTransp As Byte = 99
     Dim _ShowLabelMnu As Boolean = False 'si true affiche le nom du menu sélectionné dans la barre du haut
     Dim _ShowDateTime As Boolean = True 'si true affiche l'heure du menu sélectionné dans la barre du haut
+    Dim _ShowKeyBoard As Boolean = True 'True si on affiche le bouton clavier virtuel
     Dim _TranspBarHaut As Integer = 58
     Dim _TranspBarBas As Integer = 153
     Dim _KeyBoardPath As String = "osk"
@@ -105,6 +106,7 @@ Class Window1
             _KeyBoardPath = value
         End Set
     End Property
+
     Public Property TransparenceHaut As Integer
         Get
             Return _TranspBarHaut
@@ -160,6 +162,7 @@ Class Window1
             'End If
         End Set
     End Property
+
     Public Property ShowLabelMnu As Boolean
         Get
             Return _ShowLabelMnu
@@ -438,6 +441,21 @@ Class Window1
         End Get
         Set(ByVal value As Integer)
             _TimeOutPage = value
+        End Set
+    End Property
+
+    Public Property ShowKeyboard As Boolean
+        Get
+            Return _ShowKeyBoard
+        End Get
+        Set(value As Boolean)
+            _ShowKeyBoard = value
+
+            If _ShowKeyBoard Then
+                StkKeyboard.Visibility = Windows.Visibility.Visible
+            Else
+                StkKeyboard.Visibility = Windows.Visibility.Collapsed
+            End If
         End Set
     End Property
 #End Region
@@ -872,6 +890,8 @@ Class Window1
                             ShowTemperature = CBool(list.Item(0).Attributes.Item(j).Value)
                         Case "showlblzone"
                             ShowLabelMnu = CBool(list.Item(0).Attributes.Item(j).Value)
+                        Case "showkeyboard"
+                            ShowKeyboard = CBool(list.Item(0).Attributes.Item(j).Value)
                         Case "imgbackground"
                             ImageBackGround = list.Item(0).Attributes.Item(j).Value
                         Case "fullscreen"
@@ -1308,6 +1328,9 @@ Class Window1
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("showtemperature")
             writer.WriteValue(ShowTemperature)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("showkeyboard")
+            writer.WriteValue(ShowKeyboard)
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("imgbackground")
             writer.WriteValue(ImageBackGround)

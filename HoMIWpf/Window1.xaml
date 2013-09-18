@@ -295,7 +295,7 @@
                         </Image.ContextMenu>
                     </Image> 
                 </StackPanel>
-                <Label Margin="1" Name="LblTime" FontSize="10" Foreground="White" FlowDirection="RightToLeft">#####</Label>
+                <Label Margin="1" Height="25" Name="LblTime" FontSize="10" Foreground="White" FlowDirection="RightToLeft" VerticalContentAlignment="Center">#####</Label>
                 <Rectangle Width="100" Margin="0,-1,0,1" />
                 <Image Margin="1" Name="ImageLeve" Stretch="Fill" Tag="Soleil" HorizontalAlignment="Right" Width="20"  Height="20" Source="/HoMIWpF;component/Images/01.png" />
                 <Label Margin="1" Name="LblLeve" HorizontalAlignment="Right" Tag="Soleil" Foreground="White" FontSize="10" VerticalContentAlignment="Center">?</Label>
@@ -304,7 +304,7 @@
                 <Image HorizontalAlignment="Left" Margin="30,1,1,1" Name="ImgMess" Stretch="Fill" Width="20"  Height="20" Source="/HoMIWpF;component/Images/Warning.png" Visibility="Collapsed" />
                 <Label Foreground="White" HorizontalAlignment="Left" Margin="140,1,1,1" Name="LblZone" Tag="Zone" FontSize="16" VerticalContentAlignment="Center" FontStretch="ExtraCondensed" FontWeight="ExtraBlack"/>
             </StackPanel>
-            <StackPanel DockPanel.Dock="Bottom" Name="StkBottom">
+            <StackPanel DockPanel.Dock="Bottom" Name="StkBottom" >
                 <local:AniScrollViewer  x:Name="ScrollViewer1" Margin="2" VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden" VerticalAlignment="Bottom" BorderBrush="DarkGray" Background="#99000000" >
 
                     <local:AniScrollViewer.RenderTransform>
@@ -314,14 +314,14 @@
                     </local:AniScrollViewer.RenderTransform>
                 </local:AniScrollViewer> 
                 
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        
-                    <my:keyboard Foreground="{x:Null}" x:Name="Keyboard1" />
-                </StackPanel>
+
             </StackPanel>    
             <Canvas Margin="1" Name="Canvas1" ClipToBounds="True" SnapsToDevicePixels="True"/>
         </DockPanel>
-        <Button DockPanel.Dock="right" Height="30" Margin="2,2,5,2" x:Name="BtnQuit"  Width="30"  VerticalAlignment="Top"  Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" >
+        <StackPanel Name="StkKeyboard" Orientation="Horizontal" Height="40" DockPanel.Dock="right" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="2,2,75,2">
+            <my:keyboard Foreground="{x:Null}" x:Name="Keyboard1" Height="40"/>
+        </StackPanel>
+        <Button DockPanel.Dock="right" Height="40" Margin="2,2,5,2" x:Name="BtnQuit"  Width="40"  VerticalAlignment="Top"  Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" >
             <Image Source="/HoMIWpF;component/Images/btnQuitter_32.png" />
         </Button>
     </Grid> 

@@ -7,8 +7,10 @@
              >
     
     <StackPanel HorizontalAlignment="Left" VerticalAlignment="Top" Background="#00000000">
-        <StackPanel Margin="3" Orientation="Horizontal" HorizontalAlignment="Center">
-            <Button Height="30" Width="30" Name="BtnClose" Content="▼" Template="{DynamicResource GlassButton}" Foreground="White" Margin="1" FontSize="13" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Height="40" Width="40" Name="BtnClose" Template="{DynamicResource GlassButton}" Foreground="White" FontSize="14" >
+                <Image Source="/HoMIWpF;component/Images/12.png" />
+            </Button> 
         </StackPanel>
         <StackPanel >
             <!--<my:OnScreenKeyboard Height="170" Width="438" />-->
