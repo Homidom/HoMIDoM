@@ -17,10 +17,11 @@ Public Class HoMIGuI
     Dim myfile As String = My.Application.Info.DirectoryPath & "\Config\Homidom.xml"
     Dim myChannelFactory As ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom) = Nothing
     Dim myService As HoMIDom.HoMIDom.IHoMIDom
-    Dim IsConnect As Boolean = False 'True si connecté au serveur
+    Dim IsConnect As Boolean = False 'True si connecté au serveur en soap
     Dim _IPSOAP, _PortSOAP, _IdSrv, _PortSrvWeb, _EnableSrvWeb As String
     Dim errorloop As Integer = 0 'utilisé pour vérifier si on entre pas dans une boucle dans getdrivers/timertick
     Dim Serviceinstalled As Boolean = False
+    Dim ServiceRunning As Boolean = False 'true si le process homiservice tourne
     Dim TimerConnexionSOAP As DispatcherTimer = New DispatcherTimer()
 
 
@@ -123,63 +124,9 @@ Public Class HoMIGuI
             Serviceinstalled = False
         End Try
 
-        'Affiche les bons menus suivant l'etat du service
-        Try
-            If Serviceinstalled Then
-                If controller.Status.Equals(ServiceControllerStatus.Running) Then
-                    ServiceStartToolStripMenuItem.Visible = False
-                    ServiceStartToolStripMenuItem.Enabled = False
-                    ServiceStopToolStripMenuItem.Visible = True
-                    ServiceStopToolStripMenuItem.Enabled = True
-                    ServiceRestartToolStripMenuItem.Visible = True
-                    ServiceRestartToolStripMenuItem.Enabled = True
-                ElseIf controller.Status.Equals(ServiceControllerStatus.Stopped) Then
-                    ServiceStartToolStripMenuItem.Visible = True
-                    ServiceStartToolStripMenuItem.Enabled = True
-                    ServiceStopToolStripMenuItem.Visible = False
-                    ServiceStopToolStripMenuItem.Enabled = False
-                    ServiceRestartToolStripMenuItem.Visible = False
-                    ServiceRestartToolStripMenuItem.Enabled = False
-                ElseIf controller.Status.Equals(ServiceControllerStatus.Paused) Then
-                    ServiceStartToolStripMenuItem.Visible = True
-                    ServiceStartToolStripMenuItem.Enabled = True
-                    ServiceStopToolStripMenuItem.Visible = True
-                    ServiceStopToolStripMenuItem.Enabled = True
-                    ServiceRestartToolStripMenuItem.Visible = True
-                    ServiceRestartToolStripMenuItem.Enabled = True
-                ElseIf controller.Status.Equals(ServiceControllerStatus.StopPending) Or controller.Status.Equals(ServiceControllerStatus.PausePending) Or controller.Status.Equals(ServiceControllerStatus.StartPending) Or controller.Status.Equals(ServiceControllerStatus.ContinuePending) Then
-                    ServiceStartToolStripMenuItem.Visible = False
-                    ServiceStartToolStripMenuItem.Enabled = False
-                    ServiceStopToolStripMenuItem.Visible = False
-                    ServiceStopToolStripMenuItem.Enabled = False
-                    ServiceRestartToolStripMenuItem.Visible = False
-                    ServiceRestartToolStripMenuItem.Enabled = False
-                Else
-                    ServiceStartToolStripMenuItem.Visible = False
-                    ServiceStartToolStripMenuItem.Enabled = False
-                    ServiceStopToolStripMenuItem.Visible = False
-                    ServiceStopToolStripMenuItem.Enabled = False
-                    ServiceRestartToolStripMenuItem.Visible = False
-                    ServiceRestartToolStripMenuItem.Enabled = False
-                End If
-                ServiceEtatToolStripMenuItem.Text = "Etat du service Windows"
-            Else
-                ServiceEtatToolStripMenuItem.Text = "Service : non installé"
-                ServiceEtatToolStripMenuItem.ToolTipText = "HoMIServicE n'est pas installé en tant que service Windows"
-                ServiceStartToolStripMenuItem.Visible = False
-                ServiceStartToolStripMenuItem.Enabled = False
-                ServiceStopToolStripMenuItem.Visible = False
-                ServiceStopToolStripMenuItem.Enabled = False
-                ServiceRestartToolStripMenuItem.Visible = False
-                ServiceRestartToolStripMenuItem.Enabled = False
-            End If
-        Catch ex As Exception
-            MessageBox.Show("Erreur lors de l'affichage des menus Service :" & vbCrLf & ex.ToString, "HoMIGuI - ConTextMenu Opening", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End Try
-
         'Check si le service Windows ou Console Répond
         Try
-            Dim ServiceRunning As Boolean = False
+            ServiceRunning = False
             For Each clsProcess As Process In Process.GetProcesses()
                 If clsProcess.ProcessName.ToUpper = "HOMISERVICE" Then
                     ServiceRunning = True
@@ -196,6 +143,74 @@ Public Class HoMIGuI
 
         Catch ex As Exception
             MessageBox.Show("Erreur lors de l'affichage du menu CONSOLE :" & vbCrLf & ex.ToString, "HoMIGuI - ConTextMenu Opening", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End Try
+
+        'Affiche les bons menus suivant l'etat du service
+        Try
+            If Serviceinstalled Then
+                If (ServiceRunning And (controller.Status.Equals(ServiceControllerStatus.Stopped) Or controller.Status.Equals(ServiceControllerStatus.Paused))) Then
+                    'le service tourne en mode console : servicewindows STOP but process tourne
+                    ServiceStartToolStripMenuItem.Visible = False
+                    ServiceStartToolStripMenuItem.Enabled = False
+                    ServiceStopToolStripMenuItem.Visible = False
+                    ServiceStopToolStripMenuItem.Enabled = False
+                    ServiceRestartToolStripMenuItem.Visible = False
+                    ServiceRestartToolStripMenuItem.Enabled = False
+                    ServiceEtatToolStripMenuItem.ToolTipText = "Etat du service Windows"
+                    ServiceEtatToolStripMenuItem.Text = "Service: Lancé en mode console"
+                Else
+                    If controller.Status.Equals(ServiceControllerStatus.Running) Then
+                        ServiceStartToolStripMenuItem.Visible = False
+                        ServiceStartToolStripMenuItem.Enabled = False
+                        ServiceStopToolStripMenuItem.Visible = True
+                        ServiceStopToolStripMenuItem.Enabled = True
+                        ServiceRestartToolStripMenuItem.Visible = True
+                        ServiceRestartToolStripMenuItem.Enabled = True
+                    ElseIf controller.Status.Equals(ServiceControllerStatus.Stopped) Then
+                        ServiceStartToolStripMenuItem.Visible = True
+                        ServiceStartToolStripMenuItem.Enabled = True
+                        ServiceStopToolStripMenuItem.Visible = False
+                        ServiceStopToolStripMenuItem.Enabled = False
+                        ServiceRestartToolStripMenuItem.Visible = False
+                        ServiceRestartToolStripMenuItem.Enabled = False
+                    ElseIf controller.Status.Equals(ServiceControllerStatus.Paused) Then
+                        ServiceStartToolStripMenuItem.Visible = True
+                        ServiceStartToolStripMenuItem.Enabled = True
+                        ServiceStopToolStripMenuItem.Visible = True
+                        ServiceStopToolStripMenuItem.Enabled = True
+                        ServiceRestartToolStripMenuItem.Visible = True
+                        ServiceRestartToolStripMenuItem.Enabled = True
+                    ElseIf controller.Status.Equals(ServiceControllerStatus.StopPending) Or controller.Status.Equals(ServiceControllerStatus.PausePending) Or controller.Status.Equals(ServiceControllerStatus.StartPending) Or controller.Status.Equals(ServiceControllerStatus.ContinuePending) Then
+                        ServiceStartToolStripMenuItem.Visible = False
+                        ServiceStartToolStripMenuItem.Enabled = False
+                        ServiceStopToolStripMenuItem.Visible = False
+                        ServiceStopToolStripMenuItem.Enabled = False
+                        ServiceRestartToolStripMenuItem.Visible = False
+                        ServiceRestartToolStripMenuItem.Enabled = False
+                    Else
+                        ServiceStartToolStripMenuItem.Visible = False
+                        ServiceStartToolStripMenuItem.Enabled = False
+                        ServiceStopToolStripMenuItem.Visible = False
+                        ServiceStopToolStripMenuItem.Enabled = False
+                        ServiceRestartToolStripMenuItem.Visible = False
+                        ServiceRestartToolStripMenuItem.Enabled = False
+                    End If
+                    ServiceEtatToolStripMenuItem.ToolTipText = "Etat du service Windows"
+                    ServiceEtatToolStripMenuItem.Text = "Service: " & controller.Status.ToString
+                End If
+                
+            Else
+                ServiceEtatToolStripMenuItem.Text = "Service : non installé"
+                ServiceEtatToolStripMenuItem.ToolTipText = "HoMIServicE n'est pas installé en tant que service Windows"
+                ServiceStartToolStripMenuItem.Visible = False
+                ServiceStartToolStripMenuItem.Enabled = False
+                ServiceStopToolStripMenuItem.Visible = False
+                ServiceStopToolStripMenuItem.Enabled = False
+                ServiceRestartToolStripMenuItem.Visible = False
+                ServiceRestartToolStripMenuItem.Enabled = False
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur lors de l'affichage des menus Service :" & vbCrLf & ex.ToString, "HoMIGuI - ConTextMenu Opening", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
         End Try
 
         'Check si connecté en SOAP pour afficher les logsLive et Drivers

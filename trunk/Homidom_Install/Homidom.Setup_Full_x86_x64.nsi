@@ -9,7 +9,7 @@
 !define PRODUCT_REVISION "#PRODUCT_REVISION#"
 !define PRODUCT_RELEASE "RELEASE"
 !define PRODUCT_PUBLISHER "HoMIDoM"
-!define PRODUCT_WEB_SITE "http://www.homidom.fr"
+!define PRODUCT_WEB_SITE "http://www.homidom.com"
 !define PRODUCT_DIR_REGKEY "Software\${PRODUCT_NAME}"
 !define PRODUCT_UNINSTALL_REGKEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 
@@ -88,7 +88,7 @@ Page custom nsDialogsPage nsDialogsPageLeave
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}.${PRODUCT_BUILD} (${PRODUCT_REVISION})"
 OutFile "${PACKAGES_DIR}\${PRODUCT_NAME}.Setup.${PRODUCT_VERSION}.${PRODUCT_BUILD}.${PRODUCT_REVISION}_Full_x86_x64.exe"
 InstallDir $PROGRAMFILES\HoMIDoM
-BrandingText "HoMIDoM Installer v1.0"
+BrandingText "HoMIDoM Installer v1.1"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" "InstallDir"
 ShowInstDetails show
 ShowUnInstDetails show
@@ -114,9 +114,9 @@ Var platform
 
 ; --- définition des variables personalisées
 Var IsHomidomInstalled ;indique si HoMIDom est déja installé
-Var IsHomidomInstalledAsService ;indique si HoMIDoMService est installé en tant que service windows
+Var IsHomidomInstalledAsService ;indique si HoMIServicE est installé en tant que service windows
 Var IsHomidomInstalledAsServiceNSSM
-;Var IsHomidomServiceRunning ;indique si le service HoMIDoMService est démarré
+;Var IsHomidomServiceRunning ;indique si le service HoMIServicE est démarré
 ;Var IsHomidomAppRunning ;indique si une app Homidom est en cours d'execution (Admin,WPF, )
 Var HomidomInstalledVersion ;Numéro de version Homidom.dll
 Var IsPreviousInstallIsDeprecated ;Indique si la précedente installation a été faite avec l'ancien installeur (msi)
@@ -814,9 +814,10 @@ Function nsDialogsPage
     Abort
   ${EndIf}
 
-  ;StrCpy $optInstallAsService "0"
+  StrCpy $optInstallAsService "1"
   StrCpy $optCreateStartMenuShortcuts "1"
-  ;StrCpy $optStartService "0"
+  StrCpy $optStartService "1"
+  StrCpy $optStartServiceGUI "1"
 
   ; CreateStartMenuShortcuts
   ${NSD_CreateCheckbox} 0 0u 100% 10u "Créer les raccourçis dans le menu Démarrer"
@@ -829,7 +830,7 @@ Function nsDialogsPage
 
     ${NSD_CreateHLine} 0 15u 100% 0u ""
     ; ---------------------------------------------------------------
-    ${NSD_CreateCheckbox} 0 20u 100% 10u "Installer HoMIDoM Server en tant que Service Windows"
+    ${NSD_CreateCheckbox} 0 20u 100% 10u "Installer HoMIDoM Service en tant que Service Windows"
     Pop $chkInstallAsService_Handle
     ${If} $optInstallAsService == ${BST_CHECKED}
       ${NSD_Check} $chkInstallAsService_Handle
@@ -875,8 +876,8 @@ Function nsDialogsPageLeave
          ${NSD_GetText} $txtCfgIpSoap_Handle $cfg_ipsoap
          !insertmacro Log_String "IPSOAP=$cfg_ipsoap"
          ${NSD_GetText} $txtCfgPortSoap_Handle $cfg_portsoap
-         !insertmacro Log_String "PORTSOAP=$cfg_ipsoap"
-         ${NSD_GetText} $txtCfgIdSrv_Handle $cfg_ipsoap
+         !insertmacro Log_String "PORTSOAP=$cfg_portsoap"
+         ${NSD_GetText} $txtCfgIdSrv_Handle $cfg_idsrv
          !insertmacro Log_String "IDSRV=$cfg_idsrv"
          
 FunctionEnd
