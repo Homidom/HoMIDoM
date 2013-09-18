@@ -30,6 +30,8 @@
     <Value type="byte" genre="config" instance="1" index="9" label="9. Time of MANUALLY moving between the extreme dimming values" units="ms" min="1" max="255" value="5">
       <Help>Options for changing parameter 1-255 (10ms - 2,5s)</Help>
     </Value>
+    <!-- Version 1.9 has a bug that requires this value be set to 0 or the
+	 dimmer gets stuck and won't respond to switch presses -->
     <Value type="byte" genre="config" instance="1" index="10" label="10. Time of AUTOMATIC moving between the extreme dimming values" min="0" max="255" units="ms" value="1">
       <Help>Options for changing parameter 1-255 (10ms - 2,5s) - 0: this value disables the smooth change in light intensity. NOTE: value 0 is required for inductive and capacitive devices unsuitable for dimming (e.g. fluorescent lamps, motors, etc...)</Help>
     </Value>
@@ -85,17 +87,17 @@
       <Item label="ALARM DIMMER OFF - device will turn OFF upon receipt of alarm frame" value="2"/>
       <Item label="ALARM FLASHING - device will turn ON and OFF periodically (see param.39)" value="3"/>
     </Value>
-    <Value type="byte" genre="config" instance="1" index="39" label="39. ALARM FLASHING alarm time" min="1" max="65535" units="ms" value="600">
-      <Help>Amount of time (ms) the device keeps on flashing after receipt of Alarm Frame [1-65535][ms]</Help>
+    <Value type="short" genre="config" instance="1" index="39" label="39. ALARM FLASHING alarm time" min="1" max="65535" units="s" value="600">
+      <Help>Amount of time the device keeps on flashing after receipt of Alarm Frame (1s-65535s)</Help>
     </Value>
   </CommandClass>
 
   <!-- Association Groups -->
   <CommandClass id="133">
     <Associations num_groups="3">
-      <Group index="1" max_associations="16" label="Group 1" auto="true"/>
-      <Group index="2" max_associations="16" label="Group 2" auto="false" />
-      <Group index="3" max_associations="1" label="Send updates" auto="false"/>
+      <Group index="1" max_associations="5" label="Group 1" auto="true"/>
+      <Group index="2" max_associations="5" label="Group 2" auto="true" />
+      <Group index="3" max_associations="1" label="Controller Updates" auto="true"/>
     </Associations>
   </CommandClass>
 
