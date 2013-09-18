@@ -1519,6 +1519,13 @@ Namespace HoMIDom
                     Driver.Write(Me, "ON")
                 End If
             End Sub
+
+            'Force la valeur
+            Public Sub SetValue(ByVal Value As Boolean)
+                If _Enable = False Then Exit Sub
+
+                Me.Value = Value
+            End Sub
         End Class
 
         <Serializable()> Class GENERIQUESTRING
@@ -1531,6 +1538,12 @@ Namespace HoMIDom
                 AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
+            'Force la valeur
+            Public Sub SetValue(ByVal Value As String)
+                If _Enable = False Then Exit Sub
+
+                Me.Value = Value
+            End Sub
         End Class
 
         <Serializable()> Class GENERIQUEVALUE
@@ -1543,6 +1556,12 @@ Namespace HoMIDom
                 AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
+            'Force la valeur
+            Public Sub SetValue(ByVal Value As Double)
+                If _Enable = False Then Exit Sub
+
+                Me.Value = Value
+            End Sub
         End Class
 
         <Serializable()> Class FREEBOX
