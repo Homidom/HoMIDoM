@@ -50,20 +50,36 @@ Function CheckVC2010Redist
   ${If} ${RunningX64}
     StrCpy $URL_VC2010 "${URL_VC2010_X64}"
     StrCpy $VC2010_Package "vcredist_x64.exe"
-    StrCpy $VC2010_RegKey "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\10.0\VC\VCRedist\x64"
-  ${Else}
-    StrCpy $URL_VC2010 "${URL_VC2010_X86}"
-    StrCpy $VC2010_Package "vcredist_x86.exe"
-   StrCpy $VC2010_RegKey "SOFTWARE\Microsoft\VisualStudio\10.0\VC\VCRedist\x86"    
-  ${EndIf}
-
-         ; Registry: HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\VisualStudio\10.0\VC\VCRedist\x86
+    StrCpy $VC2010_RegKey "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\10.0\VC\Runtimes\x64"
 
          ClearErrors
          ; Read  from Registry
          ReadRegDWORD $VC2010RedistRegKeyValue HKLM "$VC2010_RegKey" "Installed"
+        ${If} ${Errors}
+          StrCpy $VC2010_RegKey "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\10.0\VC\VCRedist\x64"
+                   ClearErrors
+                  ; Read  from Registry
+                  ReadRegDWORD $VC2010RedistRegKeyValue HKLM "$VC2010_RegKey" "Installed"
+        ${EndIf}
+  ${Else}
+    StrCpy $URL_VC2010 "${URL_VC2010_X86}"
+    StrCpy $VC2010_Package "vcredist_x86.exe"
+    StrCpy $VC2010_RegKey "SOFTWARE\Microsoft\VisualStudio\10.0\VC\Runtimes\x86"    
 
-         !insertmacro Log_String "Microsoft Visual C++ 2010 Redistributable : $VC2010RedistRegKeyValue"
+         ; Read  from Registry
+         ReadRegDWORD $VC2010RedistRegKeyValue HKLM "$VC2010_RegKey" "Installed"
+        ${If} ${Errors}
+          StrCpy $VC2010_RegKey "SOFTWARE\Microsoft\VisualStudio\10.0\VC\VCRedist\x86"
+                   ClearErrors
+                  ; Read  from Registry
+                  ReadRegDWORD $VC2010RedistRegKeyValue HKLM "$VC2010_RegKey" "Installed"
+        ${EndIf}
+
+
+  ${EndIf}
+
+
+         !insertmacro Log_String "Microsoft Visual C++ 2010 Redistributable : $VC2010_RegKey = $VC2010RedistRegKeyValue"
          IfErrors noVC2010Redist
 
          StrCpy $IsVC2010RedistInstalled "$VC2010RedistRegKeyValue"
