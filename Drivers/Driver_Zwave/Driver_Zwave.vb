@@ -74,7 +74,7 @@ Public Class Driver_ZWave
         ' Variables de gestion du port COM
         Private WithEvents port As New System.IO.Ports.SerialPort
         Private port_name As String = ""
-        Dim MyRep As String = System.Environment.CurrentDirectory
+        Dim MyRep As String = System.IO.Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location)
 
         ' -----------------   Ajout des declarations pour OpenZWave
         Private g_initFailed As Boolean = False
@@ -221,7 +221,7 @@ Public Class Driver_ZWave
                 m_values.Remove(valueID)
             End Sub
 
-             Sub SetValue(ByVal valueID As ZWValueID)
+            Sub SetValue(ByVal valueID As ZWValueID)
                 Dim valueIndex As Integer = 0
                 Dim index As Integer = 0
 
@@ -955,18 +955,21 @@ Public Class Driver_ZWave
                 'ouverture du port
                 If Not _IsConnect Then
                     Try
+
+
                         ' Test d'ouveture du port Com du controleur 
                         port.PortName = numero
                         port.Open()
                         ' Le port existe ==> le controleur est present
                         If port.IsOpen() Then
                             port.Close()
+
                             ' Creation du controleur ZWave
                             m_options = New ZWOptions()
                             m_manager = New ZWManager()
 
-                            m_options.Create(MyRep & "\Drivers\Zwave\", MyRep & "\Drivers\Zwave\", "")  ' repertoire de sauvegarde de la log et config 
-                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Ouvrir ", "Le nom du repertoire de config est : " & MyRep & "\drivers\Zwave\")
+                            m_options.Create(System.IO.Path.Combine(MyRep, "Zwave\"), System.IO.Path.Combine(MyRep, "Zwave\"), "")  ' repertoire de sauvegarde de la log et config 
+                            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Ouvrir ", "Le nom du repertoire de config est : " & System.IO.Path.Combine(MyRep, "Zwave\"))
 
                             If _DEBUG Then
                                 m_options.AddOptionInt("SaveLogLevel", LogLevel.LogLevel_Internal)      ' Configure le niveau de sauvegarde des messages (Disque)
