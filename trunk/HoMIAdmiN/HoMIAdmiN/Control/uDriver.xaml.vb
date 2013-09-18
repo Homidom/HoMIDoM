@@ -3,6 +3,7 @@ Imports HoMIDom.HoMIDom.Api
 Imports System.IO
 Imports System.IO.Ports
 Imports System.Text.RegularExpressions
+Imports System.Net
 
 Partial Public Class uDriver
     '--- Variables ------------------
@@ -19,7 +20,7 @@ Partial Public Class uDriver
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             _DriverId = DriverId
 
-            x = myservice.ReturnDriverByID(IdSrv, DriverId) 'Window1.Obj.ReturnDeviceByID(DeviceId)
+            x = myService.ReturnDriverByID(IdSrv, DriverId) 'Window1.Obj.ReturnDeviceByID(DeviceId)
 
             If x IsNot Nothing Then 'on a trouvé le driver
                 'on cache certains champs si leur valeur est @
@@ -317,7 +318,7 @@ Partial Public Class uDriver
                 a.Parametres.Add(y)
             End If
 
-            myservice.ExecuteDriverCommand(IdSrv, _DriverId, a)
+            myService.ExecuteDriverCommand(IdSrv, _DriverId, a)
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors du test: " & ex.Message, "Erreur", "")
         End Try
@@ -347,7 +348,16 @@ Partial Public Class uDriver
     End Sub
 
     Private Sub BtnHelp_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnHelp.Click
-        MessageBox.Show(BtnHelp.ToolTip, "Aide", MessageBoxButton.OK, MessageBoxImage.Question)
+        'MessageBox.Show(BtnHelp.ToolTip, "Aide", MessageBoxButton.OK, MessageBoxImage.Question)
+        Try
+            Dim startInfo As ProcessStartInfo = New ProcessStartInfo()
+            startInfo.UseShellExecute = False
+            'startInfo.FileName = "http://www.homidom.com/drivers-c44.html"
+            startInfo.FileName = "http://www.homidom.com/upload/documentation/HoMIDoM-Driver-" & TxtNom.Text & ".pdf"
+            Process.Start(startInfo)
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDriver BtnHelp_Click: " & ex.ToString, "ERREUR", "")
+        End Try
     End Sub
 
     Private Function IsValidIP(ByVal addr As String) As Boolean

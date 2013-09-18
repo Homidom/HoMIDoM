@@ -166,30 +166,6 @@ InitializeComponent
 	<summary>
 uScenario
 </summary>
-</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
-	<summary>
-CreateInstance
-</summary>
-</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
-	<summary>
-GetPropertyValue
-</summary>
-</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
-	<summary>
-SetPropertyValue
-</summary>
-</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
-	<summary>
-CreateDelegate
-</summary>
-</member><member name="M:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
-	<summary>
-AddEventHandler
-</summary>
-</member><member name="T:WpfApplication1.XamlGeneratedNamespace.GeneratedInternalTypeHelper">
-	<summary>
-GeneratedInternalTypeHelper
-</summary>
 </member><member name="M:WpfApplication1.uDriver.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -476,13 +452,6 @@ Namespace Dynam
 	<param name="sender"></param>
 	<param name="e"></param>
 	<remarks></remarks>
-</member><member name="M:WpfApplication1.WTelecommandeNew.ImgCommande_MouseLeftButtonDown(System.Object,System.Windows.Input.MouseButtonEventArgs)">
-	<summary>
- Clic sur image de la commande
- </summary>
-	<param name="sender"></param>
-	<param name="e"></param>
-	<remarks></remarks>
 </member><member name="M:WpfApplication1.WTelecommandeNew.BtnNewTemplate_Click(System.Object,System.Windows.RoutedEventArgs)">
 	<summary>
  Nouveau template
@@ -502,11 +471,6 @@ Namespace Dynam
 	</summary>
 	<param name="TemplateName">Nom du template à afficher</param>
 	<param name="HaveDevice">Si le template est associé à un device (si oui on peut tester ou apprendre des commandes sinon non)</param>
-	<remarks></remarks>
-</member><member name="M:WpfApplication1.WTelecommandeNew.AfficheGrilleOfCurrentTemplate">
-	<summary>
- Affiche les boutons (commandes) du template dans la grille
- </summary>
 	<remarks></remarks>
 </member><member name="M:WpfApplication1.WTelecommandeNew.cbTemplate_SelectionChanged(System.Object,System.Windows.Controls.SelectionChangedEventArgs)">
 	<summary>
