@@ -22,7 +22,7 @@ Public Class Driver_ZWave
         '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
         'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
         Dim _ID As String = "57BCAA20-5CD2-11E1-AA83-88244824019B"
-        Dim _Nom As String = "ZWave"
+        Dim _Nom As String = "Z-Wave"
         Dim _Enable As Boolean = False
         Dim _Description As String = "Controleur Z-Wave"
         Dim _StartAuto As Boolean = False
@@ -63,6 +63,7 @@ Public Class Driver_ZWave
         'parametres avancés
         Dim _DEBUG As Boolean = False
         Dim _AFFICHELOG As Boolean = False
+        Dim _STARTIDLETIME As Integer = 10
 
         'Ajoutés dans les ppt avancés dans New()
 
@@ -97,6 +98,8 @@ Public Class Driver_ZWave
             COMMAND_CLASS_BASIC = 32                ' 0X20
             COMMAND_CLASS_SWITCH_BINARY = 37        ' 0x25 
             COMMAND_CLASS_SWITCH_MULTILEVEL = 38    ' 0x26
+            COMMAND_CLASS_CONFIGURATION = 132
+            COMMAND_CLASS_VERSION = 134
         End Enum
 
 
@@ -555,10 +558,12 @@ Public Class Driver_ZWave
             Try
                 _DEBUG = _Parametres.Item(0).Valeur
                 _AFFICHELOG = Parametres.Item(1).Valeur
+                If (Parametres.Count > 2) Then _STARTIDLETIME = Parametres.Item(2).Valeur
 
             Catch ex As Exception
                 _DEBUG = False
                 _AFFICHELOG = False
+                _STARTIDLETIME = 10
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom, "Erreur dans les paramétres avancés. utilisation des valeurs par défaut" & ex.Message)
             End Try
 
@@ -613,7 +618,9 @@ Public Class Driver_ZWave
                 Else
                     retour = "ERR: Port Com non défini. Impossible d'ouvrir le port !"
                 End If
-
+                If (_STARTIDLETIME > 0) Then
+                    Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Les messages ne seront pas traité pendant " & _STARTIDLETIME & " secondes.")
+                End If
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", ex.Message)
                 _IsConnect = False
@@ -902,6 +909,7 @@ Public Class Driver_ZWave
                 'Paramétres avancés
                 Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
                 Add_ParamAvance("AfficheLog", "Afficher Log OpenZwave à l'écran (True/False)", True)
+                Add_ParamAvance("StartIdleTime", "Durée durant laquelle le driver ne traite aucun message lors de son démarrage (en secondes).", 10)
 
                 'ajout des commandes avancées pour les devices
                 Add_DeviceCommande("ALL_LIGHT_ON", "", 0)
@@ -919,7 +927,7 @@ Public Class Driver_ZWave
 
                 'Libellé Device
                 Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant de Z-Wave")
-                Add_LibelleDevice("ADRESSE2", "Label de la donnée:Index", "Temperature, Relative Humidity, Battery Level suivi de l'index (si necessaire)")
+                Add_LibelleDevice("ADRESSE2", "Label de la donnée:Index", "'Temperature', 'Relative Humidity', 'Battery Level' suivi de l'index (si necessaire)")
                 Add_LibelleDevice("SOLO", "@", "")
                 Add_LibelleDevice("MODELE", "@", "")
 
@@ -1043,6 +1051,8 @@ Public Class Driver_ZWave
             End Try
         End Function
 
+
+
         ''' <summary>Reset le controleur Z-Wave avec les parametres d'Usine</summary>
         ''' <remarks></remarks>
         Sub ResetControler()
@@ -1065,8 +1075,35 @@ Public Class Driver_ZWave
             End Try
         End Sub
 
+        ''' <summary>
+        ''' Place le controller en mode "inclusion" *** experimental ***
+        ''' </summary>
+        ''' <remarks></remarks>
+        Sub StartInclusionMode()
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Début de la séquence d'association.")
+            m_manager.BeginControllerCommand(m_homeId, ZWControllerCommand.AddDevice, False, 1)
+        End Sub
+        ''' <summary>
+        ''' Place le controller en mode "exclusion" *** experimental ***
+        ''' </summary>
+        ''' <remarks></remarks>
+        Sub StartExclusionMode()
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Début de la séquence désassociation.")
+            m_manager.BeginControllerCommand(m_homeId, ZWControllerCommand.RemoveDevice, False, 1)
+
+        End Sub
+        ''' <summary>
+        ''' Annule la commande en cours : permet de sortir du mode "inclusion/exclusion" *** experimental ***
+        ''' </summary>
+        ''' <remarks></remarks>
+        Sub StopAssociation()
+            m_manager.CancelControllerCommand(m_homeId)
+        End Sub
+
+
+
         Sub ManagedControllerStateChangedHandler(ByVal m_controllerState As ZWControllerState)
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " ManagedControllerState ", "Passage par le changement d'etat du controleur")
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Controller State Change", m_controllerState.ToString())
         End Sub
 
         ''' <summary>Handler lors d'une reception d'une trame</summary>
@@ -1074,7 +1111,7 @@ Public Class Driver_ZWave
         Sub NotificationHandler(ByVal m_notification As ZWNotification)
             Try
                 If m_notification Is Nothing Then Exit Sub
-                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Une notification a été reçue : " & m_notification.[GetType]())
+
 
                 Select Case m_notification.[GetType]()
 
@@ -1130,9 +1167,9 @@ Public Class Driver_ZWave
                             Dim Assoc() As Byte = Nothing
                             RetGet = m_manager.GetAssociations(m_homeId, node.ID, m_notification.GetGroupIdx(), Assoc)
                             If RetGet Then
-                                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " Des groupes ont été trouvés avec : " & RetGet & " elements")
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " Des groupes ont été trouvés avec : " & RetGet & " elements")
                                 For Each Tempval As Byte In Assoc
-                                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Les elements du groupe n° " & cpt & " sont " & Tempval.ToString)
+                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Les elements du groupe n° " & cpt & " sont " & Tempval.ToString)
                                 Next
                             End If
                         End If
@@ -1145,7 +1182,7 @@ Public Class Driver_ZWave
                         Dim node As New Node
                         ' Si ce n'est pas le controleur 
                         If m_notification.GetNodeId() <> m_manager.GetControllerNodeId(m_homeId) Then
-                            If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Ajout d'un nouveau noeud  " & m_notification.GetNodeId())
+                            '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Ajout d'un nouveau noeud  " & m_notification.GetNodeId())
                             node.ID = m_notification.GetNodeId()
                             node.HomeID = m_notification.GetHomeId()
                             m_nodeList.Add(node)
@@ -1230,7 +1267,8 @@ Public Class Driver_ZWave
 
                     Case ZWNotification.Type.AwakeNodesQueried
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " - AwakeNodesQueried")
-
+                    Case Else
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Une notification a été reçue : " & m_notification.[GetType]())
                 End Select
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Exception: " & ex.Message)
@@ -1283,61 +1321,152 @@ Public Class Driver_ZWave
         ''' <param name="m_notification"></param>
         Private Sub traiteValeur(ByVal m_notification As ZWNotification) ', Optional ByVal FromEvent As Boolean = False)
 
-            Dim TempLabel As String = ""
-            Dim TempInstance As Integer = 0
-            Dim TempNode As Integer = 0
-            Dim TempValeur As ZWValueID
-            Dim TempValeurString As String = ""
-            Dim tempString As String = ""
-            Dim listedevices As New ArrayList()
+            Dim m_valueLabel As String = ""
+            Dim m_instance As Integer = 0
+            Dim m_nodeId As Integer = 0
+            Dim m_valueID As ZWValueID
+            Dim m_valueString As String = ""
+            Dim m_tempString As String = ""
+            Dim m_devices As New ArrayList()
 
 
-            TempLabel = m_manager.GetValueLabel(m_notification.GetValueID())
-            TempNode = m_notification.GetNodeId()
-            TempInstance = m_notification.GetValueID.GetInstance()
-            TempValeur = m_notification.GetValueID()
-            m_manager.GetValueAsString(TempValeur, TempValeurString)
+            m_valueLabel = m_manager.GetValueLabel(m_notification.GetValueID())
+            m_nodeId = m_notification.GetNodeId()
+            m_instance = m_notification.GetValueID.GetInstance()
+            m_valueID = m_notification.GetValueID()
+            m_manager.GetValueAsString(m_valueID, m_valueString)
             Dim ValeurRecue As Object = Nothing
 
             Try
                 ' Log tous les informations en mode debug
-                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " traiteValeur", " Receive from " & TempNode & ":" & TempInstance & " -> " & TempLabel & "=" & TempValeurString)
+                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " traiteValeur", " Receive from " & m_nodeId & ":" & m_instance & " -> " & m_valueLabel & "=" & m_valueString)
                 If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
-                If DateTime.Now < DateAdd(DateInterval.Second, 10, dateheurelancement) Then Exit Sub 'on ne traite rien pendant les 10 premieres secondes
+
+                If (_STARTIDLETIME > 0) Then
+                    If DateTime.Now < DateAdd(DateInterval.Second, _STARTIDLETIME, dateheurelancement) Then Exit Sub 'on ne traite rien pendant les 10 premieres secondes
+                End If
+
 
                 'Recherche si un device affecté
-                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, TempNode, "", Me._ID, True)
+                m_devices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, m_nodeId, "", Me._ID, True)
+
+                ' Pas de composant => ajout automatique dans la liste des nouveaux composants
+                If (m_devices.Count = 0 And _AutoDiscover) Then
+
+
+                    ' Ne traite pas les notifications COMMAND_CLASS_CONFIGURATION & COMMAND_CLASS_VERSION
+                    If (m_valueID.GetCommandClassId() = 132 Or m_valueID.GetCommandClassId() = 134) Then Exit Sub
+
+                    ' Contrôles
+                    Dim m_manufacturerName As String = m_manager.GetNodeManufacturerName(m_notification.GetHomeId(), m_nodeId)
+                    Dim m_productName As String = m_manager.GetNodeProductName(m_notification.GetHomeId(), m_nodeId)
+
+                    If (String.IsNullOrEmpty(m_manufacturerName) And String.IsNullOrEmpty(m_productName)) Then
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom, "Impossible de déterminé le nom et le fabriquant de l'équipement !")
+                    End If
+                    If (String.IsNullOrEmpty(m_manufacturerName)) Then m_manufacturerName = "Unknown"
+                    If (String.IsNullOrEmpty(m_productName)) Then m_productName = "Unknown"
+
+
+                    'Génération du nom : ZWaveDevice (<controllerId>:<nodeId>:<instance>) <manufacturerName> <productName> - <valueLabel> (<commandClassId>.<index>)
+                    'Ex. ZWaveDevice (1:7:1) Everspring ST814 Temperature and Humidity Sensor - Battery Level (128.0)
+                    '    ZWaveDevice (1:12:1) Aeon Labs Multi Sensor - Temperature (49.1)
+                    '    ZWaveDevice (1:2:1) Everspring SM103 Door/Window Sensor - Sensor (48.0)
+                    Dim m_deviceName As String = String.Format("ZWaveDevice ({0}:{1}:{2}) {3} {4} - {5} ({6}.{7})",
+                                                               m_manager.GetControllerNodeId(m_notification.GetHomeId()),
+                                                               m_nodeId,
+                                                               m_instance,
+                                                               m_manufacturerName,
+                                                               m_productName,
+                                                               m_valueLabel, m_valueID.GetCommandClassId, m_valueID.GetIndex())
+
+                    ' Vérifie que le composant n'a pas déja été ajouté à la liste des nouveaux composants.
+                    Dim m_newDevice As HoMIDom.HoMIDom.NewDevice =
+                        (From dev In _Server.GetAllNewDevice() _
+                            Where dev.IdDriver = Me.ID _
+                            And dev.Adresse1 = m_nodeId _
+                            And dev.Adresse2 = m_valueLabel).FirstOrDefault()
+
+                    ' Non trouvé :Création du composant
+                    If (m_newDevice Is Nothing) Then
+
+                        Dim m_device As New HoMIDom.HoMIDom.NewDevice
+                        m_device.ID = System.Guid.NewGuid.ToString() 'génération d'un nouveau GUID
+                        m_device.Adresse1 = m_nodeId 'ID du node
+                        m_device.Adresse2 = m_valueLabel 'type de composant
+                        m_device.IdDriver = Me.ID
+                        m_device.Type = String.Empty 'TEMPERATURE, HUMIDITE, ... 
+                        m_device.Ignore = False
+                        m_device.DateTetect = Now
+                        m_device.Value = m_valueString
+                        m_device.Name = m_deviceName
+
+                        Select Case m_device.Adresse2.ToLower().Trim()
+                            Case "Battery Level".ToLower()
+                                m_device.Type = ListeDevices.BATTERIE.ToString()
+                            Case "Temperature".ToLower()
+                                m_device.Type = ListeDevices.TEMPERATURE.ToString()
+                            Case "Sensor".ToLower()
+                                m_device.Type = ListeDevices.CONTACT.ToString()
+                            Case "Relative Humidity".ToString()
+                                m_device.Type = ListeDevices.HUMIDITE.ToString()
+                        End Select
+
+                        'Vérification que le driver supporte bien ce type de composant
+                        If (Not _DeviceSupport.Contains(m_device.Adresse2)) Then
+                            m_device.Type = String.Empty
+                        End If
+
+
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & ":NewDevice",
+                            String.Format("{0} (CommandClassId={1},Genre={2},Index={3},Type={4}, Units={5})", _
+                                            m_deviceName, _
+                                            m_valueID.GetCommandClassId(), m_valueID.GetGenre(), m_valueID.GetIndex(), m_valueID.GetType(), m_manager.GetValueUnits(m_valueID)))
+
+
+                        _Server.GetAllNewDevice().Add(m_device)
+
+                    Else
+
+                        'Composant déja détecté, maj de la valeur.
+                        ' *** TODO ***
+
+
+                    End If
+
+
+                End If
 
                 ' Il existe au moins un composant utilisé avec cet Id
-                If listedevices.Count > 0 Then
+                If m_devices.Count > 0 Then
 
                     ' Recherche du composant en fonction de l'adresse1
-                    For Each LocalDevice As Object In listedevices
+                    For Each LocalDevice As Object In m_devices
 
                         ' Le numéro du noeud est passé en Adresse1.
                         ' L'adresse2 correspond au label de la valeur recherchée
                         ' L'adresse2 peut aussi être vide (pour les notifications de noeud sans label, p.ex. détecteur de mouvement)
                         ' En option, l'adresse2 peut contenir l'instance sous le format label:instance
-                        If (IsNothing(LocalDevice.adresse2) Or (LocalDevice.adresse2 = TempLabel) Or (LocalDevice.adresse2 = TempLabel & ":" & TempInstance)) Then
+                        If (IsNothing(LocalDevice.adresse2) Or (LocalDevice.adresse2 = m_valueLabel) Or (LocalDevice.adresse2 = m_valueLabel & ":" & m_instance)) Then
 
                             'on maj la value si la durée entre les deux receptions est > à 1.5s
                             If (DateTime.Now - Date.Parse(LocalDevice.LastChange)).TotalMilliseconds > 1500 Then
                                 ' Recuperation de la valeur en fonction du type
 
 
-                                Select Case TempValeur.GetType()
-                                    Case 0 : m_manager.GetValueAsBool(TempValeur, ValeurRecue) 'm_manager.GetValueAsBool(TempValeur, LocalDevice.value)
-                                    Case 1 : m_manager.GetValueAsByte(TempValeur, ValeurRecue) ' GetValueAsByte(TempValeur, LocalDevice.value)
-                                    Case 2 : m_manager.GetValueAsDecimal(TempValeur, ValeurRecue) ' GetValueAsDecimal(TempValeur, LocalDevice.value)
-                                    Case 3 : m_manager.GetValueAsInt(TempValeur, ValeurRecue) ' m_manager.GetValueAsInt(TempValeur, LocalDevice.value)
+                                Select Case m_valueID.GetType()
+                                    Case 0 : m_manager.GetValueAsBool(m_valueID, ValeurRecue) 'm_manager.GetValueAsBool(TempValeur, LocalDevice.value)
+                                    Case 1 : m_manager.GetValueAsByte(m_valueID, ValeurRecue) ' GetValueAsByte(TempValeur, LocalDevice.value)
+                                    Case 2 : m_manager.GetValueAsDecimal(m_valueID, ValeurRecue) ' GetValueAsDecimal(TempValeur, LocalDevice.value)
+                                    Case 3 : m_manager.GetValueAsInt(m_valueID, ValeurRecue) ' m_manager.GetValueAsInt(TempValeur, LocalDevice.value)
                                         '  Case 4 : m_manager.GetValueListItems(NodeTemp.Values(IndexTemp), LocalDevice.value) ; A voir + tard
-                                    Case 6 : m_manager.GetValueAsShort(TempValeur, ValeurRecue) ' m_manager.GetValueAsShort(TempValeur, LocalDevice.value)
-                                    Case 7 : m_manager.GetValueAsString(TempValeur, ValeurRecue) ' m_manager.GetValueAsString(TempValeur, LocalDevice.value)
+                                    Case 6 : m_manager.GetValueAsShort(m_valueID, ValeurRecue) ' m_manager.GetValueAsShort(TempValeur, LocalDevice.value)
+                                    Case 7 : m_manager.GetValueAsString(m_valueID, ValeurRecue) ' m_manager.GetValueAsString(TempValeur, LocalDevice.value)
                                 End Select
 
                                 ' Traitement particulier pour les temperatures
                                 If LocalDevice.type = "TEMPERATURE" Or LocalDevice.type = "CONSIGNETEMPERATURE" Then
-                                    Select Case m_manager.GetValueUnits(TempValeur)
+                                    Select Case m_manager.GetValueUnits(m_valueID)
                                         Case "F"
                                             If LocalDevice.unit = "°C" Then
                                                 Dim myValue As Single = Math.Round(CDec(Int((ValeurRecue - 32) * 5) / 9), 1)
@@ -1349,7 +1478,7 @@ Public Class Driver_ZWave
                                                 ValeurRecue = myValue.ToString
                                             End If
                                         Case Else
-                                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traiteValeur", " Exception : Unité non traitée " & m_manager.GetValueUnits(TempValeur))
+                                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traiteValeur", " Exception : Unité non traitée " & m_manager.GetValueUnits(m_valueID))
                                     End Select
                                     ' Traitement particulier pour les Appareils
                                 ElseIf LocalDevice.type = "APPAREIL" Then
@@ -1366,33 +1495,33 @@ Public Class Driver_ZWave
                                 LocalDevice.value = ValeurRecue
 
                                 'gestion de l'information de Batterie
-                                If TempLabel = "Battery Level" Then
-                                    If TempValeurString <= 10 Then _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traiteValeur ", LocalDevice.nom & " : Battery vide")
+                                If m_valueLabel = "Battery Level" Then
+                                    If m_valueString <= 10 Then _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traiteValeur ", LocalDevice.nom & " : Battery vide")
                                 End If
 
 
                                 'Affichage d'information pour le debugage
                                 If _DEBUG Then
-                                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " traiteValeur", "Z-Wave NodeID: " & TempNode)
-                                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " traiteValeur", "Z-Wave Label: " & TempLabel)
+                                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " traiteValeur", "Z-Wave NodeID: " & m_nodeId)
+                                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " traiteValeur", "Z-Wave Label: " & m_valueLabel)
                                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " traiteValeur", "Z-Wave ValueUnit: " & m_manager.GetValueUnits(m_notification.GetValueID()))
                                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " traiteValeur", "Valeur Homidom relevée: " & LocalDevice.value & " de type " & LocalDevice.GetType.Name)
                                 End If
 
                             Else
-                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " traiteValeur", " Reception < 1.5s de deux valeurs pour le meme composant : " & TempNode & ":" & TempInstance & " -> " & TempLabel & "=" & TempValeurString)
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " traiteValeur", " Reception < 1.5s de deux valeurs pour le meme composant : " & m_nodeId & ":" & m_instance & " -> " & m_valueLabel & "=" & m_valueString)
                             End If
                         End If
 
                     Next
-                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " traiteValeur ", "Mise à jour de la valeur à l'adresse : " & TempNode & ":" & TempInstance & " -> " & TempLabel & "=" & TempValeurString)
+                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " traiteValeur ", "Mise à jour de la valeur à l'adresse : " & m_nodeId & ":" & m_instance & " -> " & m_valueLabel & "=" & m_valueString)
 
                 Else
                     ' Une valeur recue sans correspondance 
-                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " traiteValeur", " Receive from " & TempNode & ":" & TempInstance & " -> " & TempLabel & "=" & TempValeurString & " without correspondance")
+                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " traiteValeur", " Receive from " & m_nodeId & ":" & m_instance & " -> " & m_valueLabel & "=" & m_valueString & " without correspondance")
                 End If
 
-                listedevices = Nothing
+                m_devices = Nothing
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traiteValeur", " Exception : " & ex.Message)
             End Try
