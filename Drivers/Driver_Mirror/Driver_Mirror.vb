@@ -19,7 +19,7 @@ Imports UsbLibrary
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "30E229A2-34F1-11E0-BDFE-9FD3DED72085"
-    Dim _Nom As String = "RFID"
+    Dim _Nom As String = "RFID-Mirror"
     Dim _Enable As Boolean = False
     Dim _Description As String = "Récepteur Rfid mir:ror"
     Dim _StartAuto As Boolean = False

@@ -22,7 +22,7 @@ Public Class Driver_ZWave
         '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
         'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
         Dim _ID As String = "57BCAA20-5CD2-11E1-AA83-88244824019B"
-        Dim _Nom As String = "Z-Wave"
+        Dim _Nom As String = "ZWave"
         Dim _Enable As Boolean = False
         Dim _Description As String = "Controleur Z-Wave"
         Dim _StartAuto As Boolean = False
