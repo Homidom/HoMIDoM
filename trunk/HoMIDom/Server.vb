@@ -4012,7 +4012,7 @@ Namespace HoMIDom
 
                 For i As Integer = 0 To _ListDevices.Count - 1
                     If _ListDevices.Item(i).id = "energietotale01" Then
-                        _ListDevices.Item(i).Value = value
+                        If _ListDevices.Item(i).Value <> value Then _ListDevices.Item(i).Value = value
                         Exit For
                     End If
                 Next
@@ -8243,8 +8243,8 @@ Namespace HoMIDom
                                                 If _child2.Name = "var" Then
                                                     Dim _var As New Telecommande.TemplateVar
                                                     If Not IsNothing(_child2.Attributes.GetNamedItem("name")) Then _var.Name = _child2.Attributes.GetNamedItem("name").Value
-                                                    If Not IsNothing(_child2.Attributes.GetNamedItem("type")) Then _var.Type = _child2.Attributes.GetNamedItem("code").Value
-                                                    If Not IsNothing(_child2.Attributes.GetNamedItem("value")) Then _var.Value = _child2.Attributes.GetNamedItem("repeat").Value
+                                                    If Not IsNothing(_child2.Attributes.GetNamedItem("type")) Then _var.Type = _child2.Attributes.GetNamedItem("type").Value
+                                                    If Not IsNothing(_child2.Attributes.GetNamedItem("value")) Then _var.Value = _child2.Attributes.GetNamedItem("value").Value
                                                     x.Variables.Add(_var)
                                                 End If
                                             Next
@@ -8264,7 +8264,6 @@ Namespace HoMIDom
 
                 Return Tabl
             Catch ex As Exception
-                MsgBox(ex.ToString)
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetListOfTemplate", "Erreur : " & ex.Message)
                 Return Nothing
             End Try
@@ -8570,7 +8569,7 @@ Namespace HoMIDom
                             writer.WriteValue(Template.Variables(i).Name)
                             writer.WriteEndAttribute()
                             writer.WriteStartAttribute("type")
-                            writer.WriteValue(HtmlEncode(Template.Variables(i).Type))
+                            writer.WriteValue(Template.Variables(i).Type)
                             writer.WriteEndAttribute()
                             writer.WriteStartAttribute("value")
                             writer.WriteValue(Template.Variables(i).Value)

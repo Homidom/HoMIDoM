@@ -293,6 +293,12 @@
                 y.Name = "ip"
                 y.Type = TypeOfVar.String
                 _Var.Add(y)
+
+                'variable "trame" qui contient l'adresse ip du template
+                Dim z As New TemplateVar
+                z.Name = "trame"
+                z.Type = TypeOfVar.String
+                _Var.Add(z)
             End Sub
 
             Public Function AddNewVar(ByVal Var As TemplateVar) As Integer

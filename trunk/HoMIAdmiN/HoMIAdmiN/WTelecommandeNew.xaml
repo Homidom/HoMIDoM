@@ -684,10 +684,10 @@
                             <Label Content="Caractère de fin de trame:" Foreground=" White"/>
                             <TextBox Name="TxtCharEndReceive" Width="40" Background="DarkGray" BorderBrush="Black" Foreground=" White" IsReadOnly="True" />
                         </StackPanel>
-                        <TextBlock Height="20" TextWrapping="Wrap" Foreground="White"><Run Language="fr-fr" Text="Nombre de lignes :"/></TextBlock>
+                        <!--<TextBlock Height="20" TextWrapping="Wrap" Foreground="White"><Run Language="fr-fr" Text="Nombre de lignes :"/></TextBlock>-->
                                     </StackPanel>
                 </Expander>
-                <Expander Name="ExpdGraph" Header="Graphisme" Foreground=" White">
+                <!--<Expander Name="ExpdGraph" Header="Graphisme" Foreground=" White">
                     <StackPanel >
                         <StackPanel Height="27" Orientation="Horizontal" >
                             <Slider x:Name="slider_Row" Height="27" VerticalAlignment="Top" Width="150" Cursor="Hand" Maximum="10" Interval="1" IsSnapToTickEnabled="True" OpacityMask="Black" Style="{DynamicResource SliderStyle1}" TickPlacement="TopLeft"  Minimum="1"/>
@@ -699,7 +699,7 @@
                             <Label Content="{Binding Value, ElementName=slider_Column}" Foreground="White" Width="44"/>
                         </StackPanel>
                     </StackPanel>
-                    </Expander> 
+                    </Expander>--> 
                 <Expander Name="ExpdCmd" Header="Commandes" Foreground=" White">
                 <StackPanel Name="StkCmd" Visibility="Collapsed" >
                     <ListBox HorizontalAlignment="Left" Margin="1" Height="100" Name="ListCmd" Width="145" Background="DarkGray" BorderBrush="Black" Foreground=" White"/>
@@ -721,20 +721,20 @@
                                 <TextBox Width="200" Height="41" Name="TxtCmdData" ToolTip="Code à envoyer" Background="DarkGray" BorderBrush="Black" Foreground=" White" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
                             </StackPanel>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" >
+                        <!--<StackPanel Orientation="Horizontal" >
                         <Label Foreground="White" HorizontalAlignment="Right" Name="Label38" Content="Picture:" />
                         <Canvas  Name="Canvas2" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center">
                             <Canvas.Background>
                                 <ImageBrush ImageSource="/HoMIAdmiN;component/Images/tpbtn.png"  >
                                 </ImageBrush>
                             </Canvas.Background>
-                            <!--<Image Margin="5" Name="ImgCommande" Width="40" Height="40" />-->
-                                <my:ImageButton Margin="5" x:Name="ImgCommande2" Width="40" Height="40" />
+                            <Image Margin="5" Name="ImgCommande" Width="40" Height="40" />-->
+                                <!--<my:ImageButton Margin="5" x:Name="ImgCommande2" Width="40" Height="40" />
                             </Canvas>
                             
                             <Button Height="26.664" Margin="2" Name="BtnImg" Width="26" Foreground="White" Template="{DynamicResource GlassButton}">...</Button>
 
-                    </StackPanel>
+                    </StackPanel>-->
                     <StackPanel Orientation="Horizontal" >
                         <Button Height="26.664" Margin="2" Name="BtnNewCmd" Width="67" Foreground="White" Template="{DynamicResource GlassButton}">Nouveau</Button>
                         <Button Height="26.664" Margin="2" Name="BtnSaveCmd" Width="67" Foreground="White" Template="{DynamicResource GlassButton}">Enregistrer</Button>
@@ -775,12 +775,16 @@
                                 <ComboBoxItem Content="Tableau" />
                             </ComboBox>
                         </StackPanel>
+                            <StackPanel  Orientation="Horizontal" >
+                                <Label Content="Valeur:" Foreground=" White" />
+                                <TextBox Name="TxtVarVal" Width="120" />
+                            </StackPanel>
                         </StackPanel>
                     </StackPanel>
                 </Expander>
          </StackPanel>
             
-            <Canvas x:Name="Caneva_grid" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" MinWidth="270" MinHeight="500" Background="#33FFFFFF">
+            <!--<Canvas x:Name="Caneva_grid" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" MinWidth="270" MinHeight="500" Background="#33FFFFFF">
             <Rectangle x:Name="rectangle" Stroke="Black" RadiusX="20" RadiusY="20" RenderTransformOrigin="0.5,0.5" Width="70" d:LayoutOverrides="Margin" Height="70" >
                     <Rectangle.Fill>
                         <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
@@ -805,7 +809,7 @@
 
                 <Grid x:Name="grid_Telecommande" Width="50" Margin="10" ShowGridLines="True" UseLayoutRounding="True" Height="50"  />
 
-            </Canvas>
+            </Canvas>-->
 
             <StackPanel>
                 <Button x:Name="buttonOk" Content="Ok" RenderTransformOrigin="0.5,0.5" Width="60" Height="30.5" Margin="3" Template="{DynamicResource GlassButton}" Foreground="White" />
