@@ -82,6 +82,7 @@
                                             <Label Content="Ville du client:" Foreground="White" />
                                             <ComboBox Name="CbVille" Width="150" />
                                         </StackPanel>
+                                        <CheckBox Name="ChkShowKeyboard" Foreground=" White" Content="Clavier Virtuel" />
                                         <StackPanel Orientation="Horizontal" >
                                             <Label Content="Processus Keyboard Virtuel:" Foreground="White" />
                                             <TextBox Name="TxtKeyboardPath" Width="150" />
@@ -106,6 +107,7 @@
                                 </Expander>
                                 <Expander Header="Menu du Bas" Foreground="White" BorderBrush="#FF373737" Margin="1">
                                     <StackPanel >
+                                        
                                         <CheckBox Name="ChkMaskTaskMnu" Foreground="White" Content="Masquer automatiquement la barre de menu"/>
                                         <StackPanel Orientation="Horizontal" >
                                             <Label Content="Transparence:" Foreground=" White" />

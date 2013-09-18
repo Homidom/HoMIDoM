@@ -40,7 +40,7 @@ Public Class keyboard
 
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
-        BtnClose.Content = "▒"
+        'BtnClose.Content = "▒"
 
         dt = New DispatcherTimer()
         AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
