@@ -94,6 +94,7 @@
                                     <Expander Header="Menu du Haut" Foreground="White" BorderBrush="#FF373737" Margin="1">
                                     <StackPanel >
                                         <CheckBox Name="ChkDateTime" Content="Afficher Date et Heure" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
+                                        <CheckBox Name="ChkTimeFromServer" Content="Afficher Date et Heure depuis le serveur" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                                         <CheckBox Name="ChkSoleil" Content="Afficher heure Lever/Coucher Soleil" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                                         <CheckBox Name="ChkShowlblMnu" Content="Afficher le nom du menu ou de la zone sélectionnée dans la barre du haut" Foreground="White" Background="DarkGray" BorderBrush="Black"/>
                                         <CheckBox Name="ChkShowBtnQuit" Content="Afficher Bouton Quitter" Foreground="White" Background="DarkGray" BorderBrush="Black"/>

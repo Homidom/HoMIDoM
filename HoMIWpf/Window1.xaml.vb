@@ -86,9 +86,19 @@ Class Window1
     Dim _TranspBarBas As Integer = 153
     Dim _KeyBoardPath As String = "osk"
     Dim _MaJWidgetFromServer As Boolean = True
+    Dim _ShowTimeFromServer As Boolean = True 'Afficher l'heure du serveur ou si non celle du client
 #End Region
 
 #Region "Property"
+    Public Property ShowTimeFromServer As Boolean
+        Get
+            Return _ShowTimeFromServer
+        End Get
+        Set(value As Boolean)
+            _ShowTimeFromServer = False
+        End Set
+    End Property
+
     Public Property MaJWidgetFromServer As Boolean
         Get
             Return _MaJWidgetFromServer
@@ -868,6 +878,8 @@ Class Window1
             If list.Count > 0 Then 'présence des paramètres du server
                 For j As Integer = 0 To list.Item(0).Attributes.Count - 1
                     Select Case list.Item(0).Attributes.Item(j).Name
+                        Case "showtimefromsrv"
+                            ShowTimeFromServer = CBool(list.Item(0).Attributes.Item(j).Value)
                         Case "majwidgetfromsrv"
                             MaJWidgetFromServer = CBool(list.Item(0).Attributes.Item(j).Value)
                         Case "keyboardpath"
@@ -1296,6 +1308,9 @@ Class Window1
             ''Sauvegarde des parametres d'interface
             ''------------
             writer.WriteStartElement("interface")
+            writer.WriteStartAttribute("showtimefromsrv")
+            writer.WriteValue(ShowTimeFromServer)
+            writer.WriteEndAttribute()
             writer.WriteStartAttribute("majwidgetfromsrv")
             writer.WriteValue(MaJWidgetFromServer)
             writer.WriteEndAttribute()
@@ -1838,7 +1853,7 @@ Class Window1
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
         Try
             LblTime.Content = Now.ToLongDateString & " "
-            If IsConnect Then
+            If IsConnect And ShowTimeFromServer Then
                 LblTime.Content &= myService.GetTime
             Else
                 LblTime.Content &= Now.ToLongTimeString
@@ -1924,7 +1939,7 @@ Class Window1
                         Dim x As New uInternet(y.Parametres(0))
                         Canvas1.Children.Add(x)
                         x.Width = Canvas1.ActualWidth
-                        x.Height = Canvas1.ActualHeight
+                        x.Height = Canvas1.ActualHeight - 30
                     Case uCtrlImgMnu.TypeOfMnu.Config
                     Case uCtrlImgMnu.TypeOfMnu.LecteurMedia
                         If Media IsNot Nothing Then

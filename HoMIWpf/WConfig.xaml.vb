@@ -26,6 +26,7 @@ Public Class WConfig
             Frm.Password = TxtPassword.Text
             Frm.AffLastError = ChkAffLastError.IsChecked
             Frm.ShowDateTime = ChkDateTime.IsChecked
+            Frm.ShowTimeFromServer = ChkTimeFromServer.IsChecked
             Frm.ShowSoleil = ChkSoleil.IsChecked
             Frm.ShowLabelMnu = ChkShowlblMnu.IsChecked
             Frm.FullScreen = ChkFullScreen.IsChecked
@@ -65,6 +66,7 @@ Public Class WConfig
         ChKDiffSave.IsChecked = Frm.SaveDiffBackup
         ChkSaveAuto.IsChecked = Frm.AutoSave
         ChkDateTime.IsChecked = Frm.ShowDateTime
+        ChkTimeFromServer.IsChecked = Frm.ShowTimeFromServer
         ChkShowBtnQuit.IsChecked = Frm.ShowQuitter
         ChkWidthPass.IsChecked = Frm.WithPassword
         ChkSoleil.IsChecked = Frm.ShowSoleil
@@ -472,5 +474,14 @@ Public Class WConfig
 
     Private Sub SliderTranspBas_ValueChanged(sender As System.Object, e As System.Windows.RoutedPropertyChangedEventArgs(Of System.Double)) Handles SliderTranspBas.ValueChanged
         LblvalTransBas.Content = Format(sender.Value, "0")
+    End Sub
+
+    Private Sub ChkDateTime_Checked(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles ChkDateTime.Checked, ChkDateTime.Unchecked
+        If ChkDateTime.IsChecked Then
+            ChkTimeFromServer.Visibility = Windows.Visibility.Visible
+        Else
+            ChkTimeFromServer.IsChecked = False
+            ChkTimeFromServer.Visibility = Windows.Visibility.Collapsed
+        End If
     End Sub
 End Class
