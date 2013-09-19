@@ -125,9 +125,9 @@ Public Class uTriggerTimer
                 'sinon on utilise les champs du mode simple
                 If TxtSc.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtSc.Text) & "#"
                 If TxtMn.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtMn.Text) & "#"
-                If TxtHr.Text = "" Then _myconditiontime &= "*#" Else  : _myconditiontime &= CInt(TxtHr.Text) & "#"
-                If TxtJr.Text = "" Then _myconditiontime &= "*#" Else  : _myconditiontime &= CInt(TxtJr.Text) & "#"
-                If TxtMs.Text = "" Then _myconditiontime &= "*#" Else  : _myconditiontime &= CInt(TxtMs.Text) & "#"
+                If TxtHr.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtHr.Text) & "#"
+                If TxtJr.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtJr.Text) & "#"
+                If TxtMs.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtMs.Text) & "#"
                 Dim _prepajr As String = ""
                 If CheckBox7.IsChecked = True Then _prepajr = "0"
                 If CheckBox1.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",1" Else _prepajr = "1"

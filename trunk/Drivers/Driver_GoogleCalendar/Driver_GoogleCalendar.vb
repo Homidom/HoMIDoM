@@ -204,11 +204,6 @@ Public Class Driver_GoogleCalendar
             End Get
             Set(ByVal value As Integer)
                 _Refresh = value
-                If _Refresh > 0 Then
-                    MyTimer.Interval = _Refresh
-                    MyTimer.Enabled = True
-                    AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                End If
             End Set
         End Property
 
@@ -348,6 +343,12 @@ Public Class Driver_GoogleCalendar
                     _IsConnect = False
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar", "Calendrier HoMIDoM non trouvé dans le compte " & _UserName)
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar", "Driver " & Me.Nom & " non démarré")
+                End If
+
+                If _Refresh > 0 Then
+                    MyTimer.Interval = Refresh
+                    MyTimer.Enabled = True
+                    AddHandler MyTimer.Elapsed, AddressOf TimerTick
                 End If
 
             Catch ex As Exception
@@ -609,7 +610,7 @@ Public Class Driver_GoogleCalendar
         ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
         Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
             ' Attente de 3s pour eviter le relancement de la procedure dans le laps de temps
-            System.Threading.Thread.Sleep(3000)
+            'System.Threading.Thread.Sleep(3000)
             ScanCalendar()
         End Sub
 
