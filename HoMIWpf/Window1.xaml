@@ -62,20 +62,22 @@
                 <StackPanel Background="#00000000">
                     <Image Name="Menu1" Height="40" Width="40" Margin="3" Source="Images/Rond_64x64.png" >
                         <Image.ContextMenu >
-                            <ContextMenu Name="CtxMnuBtn"> 
-                                
-                            <MenuItem Name="ChkMove" Header="Déplacer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" FontSize="10" Foreground="White">
+                            <ContextMenu Name="CtxMnuBtn">
+                                <ContextMenu.Background>
+                                    <SolidColorBrush />
+                                </ContextMenu.Background>
+                                <MenuItem Name="ChkMove" Header="Déplacer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" FontSize="12" Foreground="White">
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
-                                            <GradientStop Color="DarkGray" Offset="0.663" />
+                                            <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                         </LinearGradientBrush>
                                     </MenuItem.Background>
                                     <MenuItem.Icon>
                                     <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/move.png" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                                <MenuItem Name="ChkEdit" Header="Editer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" FontSize="10" Foreground="White">
+                                <MenuItem Name="ChkEdit" Header="Editer Widget" IsCheckable="True" IsChecked="False" Visibility="Collapsed" FontSize="12" Foreground="White">
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
@@ -87,7 +89,7 @@
                                     <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Modifier_32.png" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                                <MenuItem Name="Chk3" Header="Ajouter" Visibility="Collapsed" FontSize="10" Foreground="White">
+                                <MenuItem Name="Chk3" Header="Ajouter" Visibility="Collapsed" FontSize="12" Foreground="White">
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
@@ -171,7 +173,7 @@
                                         </MenuItem.Background>
                                     </MenuItem>
                                 </MenuItem>
-                                <MenuItem Name="ViewLog" Header="Consulter les logs" FontSize="10" Foreground="White">
+                                <MenuItem Name="ViewLog" Header="Consulter les logs" FontSize="12" Foreground="White">
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
@@ -182,7 +184,7 @@
                                     <MenuItem.Icon>
                                     <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Log_32.png" />
                                 </MenuItem.Icon>
-                                    <MenuItem Name="ViewLogClient" Header="Client" FontSize="10" Tag="1" Foreground="White" >
+                                    <MenuItem Name="ViewLogClient" Header="Client" FontSize="12" Tag="1" Foreground="White" >
                                         <MenuItem.Background>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                 <GradientStop Color="Black" Offset="0" />
@@ -194,7 +196,7 @@
                                         <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/pc.png" />
                                     </MenuItem.Icon>
                                 </MenuItem>
-                                    <MenuItem Name="ViewLogSrv" Header="Serveur" FontSize="10" Tag="0" Foreground="White">
+                                    <MenuItem Name="ViewLogSrv" Header="Serveur" FontSize="12" Tag="0" Foreground="White">
                                         <MenuItem.Background>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                 <GradientStop Color="Black" Offset="0" />
@@ -207,7 +209,7 @@
                                     </MenuItem.Icon>
                                 </MenuItem>
                             </MenuItem>
-                                <MenuItem Name="ViewCalendar" Header="Calendrier" FontSize="10" Foreground="White">
+                                <MenuItem Name="ViewCalendar" Header="Calendrier" FontSize="12" Foreground="White">
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
@@ -219,7 +221,7 @@
                                     <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Calendar.png" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                                <MenuItem Name="MnuHisto" Header="Historique" FontSize="10" Foreground="White">
+                                <MenuItem Name="MnuHisto" Header="Historique" FontSize="12" Foreground="White">
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
@@ -231,19 +233,18 @@
                                     <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Courbe_32.png" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                                <MenuItem Name="MnuMacro" Header="Macros" FontSize="10" Foreground="White">
+                                <MenuItem Name="MnuMacro" Header="Macros" FontSize="12" Foreground="White">
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
                                             <GradientStop Color="DarkGray" Offset="0.663" />
                                         </LinearGradientBrush>
                                     </MenuItem.Background>
-
                                     <MenuItem.Icon>
-                                    <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/script-128.png" />
-                                </MenuItem.Icon>
-                            </MenuItem>
-                                <MenuItem Name="MnuConfig" Header="Configurer" FontSize="10" Foreground="White">
+                                        <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Macro_64.png" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Name="MnuConfig" Header="Configurer" FontSize="12" Foreground="White">
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
@@ -255,7 +256,7 @@
                                     <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Configurer_64.png" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                                <MenuItem Name="MnuLastError" Header="Dernières erreurs" FontSize="10" Foreground="White">
+                                <MenuItem Name="MnuLastError" Header="Dernières erreurs" FontSize="12" Foreground="White">
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
@@ -267,7 +268,7 @@
                                     <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Error.png" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                                <MenuItem Name="MnuSave" Header="Sauvegarder" FontSize="10" Visibility="Collapsed" Foreground="White">
+                                <MenuItem Name="MnuSave" Header="Sauvegarder" FontSize="12" Visibility="Collapsed" Foreground="White">
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
@@ -279,7 +280,7 @@
                                         <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/save_32.png" />
                                     </MenuItem.Icon>
                                 </MenuItem>
-                                <MenuItem Name="MnuQuitter" Header="Quitter" FontSize="10" Foreground="White">
+                                <MenuItem Name="MnuQuitter" Header="Quitter" FontSize="12" Foreground="White">
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
