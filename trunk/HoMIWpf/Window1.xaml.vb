@@ -1785,7 +1785,9 @@ Class Window1
                         mnu.Tag = _mac.ID
                         mnu.Header = _mac.Nom
                         mnu.FontSize = 14
-                        mnu.Foreground = Brushes.Black
+                        mnu.Height = 40
+                        mnu.Foreground = Brushes.White
+                        mnu.Background = MnuMacro.Background
                         AddHandler mnu.Click, AddressOf MnuExecuteMacro
                         MnuMacro.Items.Add(mnu)
                     Next
@@ -3026,7 +3028,10 @@ Class Window1
                 mnu.Tag = _mac.ID
                 mnu.Header = _mac.Nom
                 mnu.FontSize = 14
-                mnu.Foreground = Brushes.Black
+                mnu.Foreground = Brushes.White
+                mnu.Height = 40
+                mnu.Background = MnuMacro.Background
+
                 AddHandler mnu.Click, AddressOf MnuExecuteMacro
                 MnuMacro.Items.Add(mnu)
             Next
