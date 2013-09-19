@@ -1,5 +1,6 @@
 ﻿'Option Strict On
 Imports HoMIDom
+Imports HoMIDom.HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 Imports System.Threading
@@ -7,6 +8,7 @@ Imports System.Threading
 Imports Google.GData.Client
 Imports Google.GData.Extensions
 Imports Google.GData.Calendar
+
 
 
 Public Class Driver_GoogleCalendar
@@ -607,8 +609,8 @@ Public Class Driver_GoogleCalendar
         ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
         Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
             ' Attente de 3s pour eviter le relancement de la procedure dans le laps de temps
-            ' System.Threading.Thread.Sleep(3000)
-            ' ScanCalendar()
+            System.Threading.Thread.Sleep(3000)
+            ScanCalendar()
         End Sub
 
 #End Region
@@ -677,6 +679,52 @@ Public Class Driver_GoogleCalendar
                 For Each feedEntry In calFeed.Entries
                     If feedEntry.Times.Item(0).StartTime.ToShortTimeString = Now.ToShortTimeString Then
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", feedEntry.Title.Text & ":" & feedEntry.Summary.Text & " - " & feedEntry.Times.Item(0).StartTime)
+                        If InStr(feedEntry.Title.Text, ":") Then
+                            Dim ParaAdr2 = Split(feedEntry.Title.Text, ":")
+
+                            Select Case ParaAdr2(0).ToUpper
+                                Case "COMPOSANT"
+                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Passage par la partie composant d'ID : " & ParaAdr2(1) & " L'action     est : " & ParaAdr2(2))
+                                    Dim TempDevice As TemplateDevice = _Server.ReturnDeviceById(_IdSrv, ParaAdr2(1))
+                                    If TempDevice IsNot Nothing Then
+                                        If TempDevice.Type = ListeDevices.LAMPE Or TempDevice.Type = ListeDevices.APPAREIL Then
+
+                                            ' Analyse de la commande 
+                                            Select Case ParaAdr2(2).ToUpper
+                                                Case "ON", "OFF"
+                                                    Dim x As DeviceAction = New DeviceAction
+                                                    x.Nom = ParaAdr2(2)
+                                                    _Server.ExecuteDeviceCommand(_IdSrv, ParaAdr2(1), x)
+
+                                                Case "DIM"
+                                                    Dim x As DeviceActionSimple = New DeviceActionSimple
+                                                    x.Nom = ParaAdr2(2)
+                                                    x.Param1 = ParaAdr2(3)
+                                                    _Server.ExecuteDeviceCommandSimple(_IdSrv, ParaAdr2(1), x)
+                                            End Select
+                                        End If
+                                    End If
+
+                                Case "MACRO"
+                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Passage par la partie Macro d'ID : " & ParaAdr2(1))
+                                    Dim TempMacro As Macro = _Server.ReturnMacroById(_IdSrv, ParaAdr2(1))
+                                    If TempMacro IsNot Nothing And TempMacro.Enable = True Then
+                                        ' Analyse de la commande 
+                                        Select Case ParaAdr2(2).ToUpper
+                                            Case "START"
+                                                _Server.RunMacro(_IdSrv, ParaAdr2(1))
+											Case "STOP"
+
+                                        End Select
+                                    End If
+
+
+                                Case Else
+                                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Commande non non trouvée : " & ParaAdr2(2).ToUpper)
+                            End Select
+                        Else
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & "ScanCalendar - Le nombre de parametre n'est pas correct", feedEntry.Title.Text)
+                        End If
                     Else
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Evenement non retenu : " & feedEntry.Title.Text)
                     End If
