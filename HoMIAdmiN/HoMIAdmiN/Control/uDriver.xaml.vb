@@ -351,8 +351,7 @@ Partial Public Class uDriver
         'MessageBox.Show(BtnHelp.ToolTip, "Aide", MessageBoxButton.OK, MessageBoxImage.Question)
         Try
             Dim startInfo As ProcessStartInfo = New ProcessStartInfo()
-            startInfo.UseShellExecute = False
-            'startInfo.FileName = "http://www.homidom.com/drivers-c44.html"
+            startInfo.UseShellExecute = True
             startInfo.FileName = "http://www.homidom.com/upload/documentation/HoMIDoM-Driver-" & TxtNom.Text & ".pdf"
             Process.Start(startInfo)
         Catch ex As Exception
