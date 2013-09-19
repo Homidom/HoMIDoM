@@ -11,6 +11,8 @@ Partial Public Class uInternet
             If _Url.ToLower().StartsWith("www.") Then _Url = "http://" & _Url
             If My.Computer.Network.IsAvailable = True And String.IsNullOrEmpty(_Url) = False Then
                 x.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() x.Navigate(New Uri(_Url)), ThreadStart))
+                Image1.Visibility = Windows.Visibility.Hidden
+                Image2.Visibility = Windows.Visibility.Hidden
             End If
             x.Height = Me.Height - 30
         Catch ex As Exception
@@ -74,11 +76,19 @@ Partial Public Class uInternet
     End Sub
 
     Private Sub uInternet_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
-        x.Dispose()
+        Try
+            x.Dispose()
+        Catch ex As Exception
+            MessageBox.Show("Erreur uInternet.uInternet_Unloaded: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
     End Sub
 
     Protected Overrides Sub Finalize()
+        'Try
+        '    If x IsNot Nothing Then x.Dispose()
+        'Catch ex As Exception
+        '    MessageBox.Show("Erreur uInternet.Finalize: " & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        'End Try
         MyBase.Finalize()
-        x.Dispose()
     End Sub
 End Class

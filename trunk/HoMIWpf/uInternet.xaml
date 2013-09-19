@@ -4,8 +4,8 @@
     
         <StackPanel >
             <StackPanel Orientation="Horizontal">
-            <Image Height="27" Margin="3" Name="Image1" Stretch="Fill" Width="27" Source="/HoMIWpF;component/Images/BtnG.png"  />
-            <Image Height="27" Margin="3" Name="Image2" Source="/HoMIWpF;component/Images/btnD.png" Stretch="Fill" Width="27"  />
+            <Image Height="40" Margin="3" Name="Image1" Stretch="Fill" Width="40" Source="/HoMIWpF;component/Images/BtnG.png"  />
+            <Image Height="40" Margin="3" Name="Image2" Source="/HoMIWpF;component/Images/btnD.png" Stretch="Fill" Width="40"  />
             </StackPanel>
             <StackPanel Name="Stk">
                     <WebBrowser Name="x" />
