@@ -19,7 +19,7 @@ Imports System.Data.SQLite
 Imports System.Net
 Imports System.Net.Sockets
 Imports System.Net.Mail
-Imports taglib
+Imports TagLib
 #End Region
 
 Namespace HoMIDom
@@ -7020,6 +7020,71 @@ Namespace HoMIDom
                 Return Nothing
             End Try
         End Function
+
+        ''' <summary>Retourne une liste de device par sa Zone et/ou type et/ou son driver, ex: "Salle" "Volet" </summary>
+        ''' <param name="ZoneID"></param>
+        ''' <param name="DeviceType"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnDeviceByZoneType(ByVal IdSrv As String, ByVal ZoneID As String, ByVal DeviceType As String, ByVal Enable As Boolean) As ArrayList Implements IHoMIDom.ReturnDeviceByZoneType
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                End If
+
+                Dim listresultat As New ArrayList
+                Dim TypeDevice As Device.ListeDevices
+
+                For i As Integer = 0 To _ListZones.Count - 1
+                    If _ListZones.Item(i).ID = ZoneID Or (String.IsNullOrEmpty(ZoneID)) Then
+                        For j As Integer = 0 To _ListDevices.Count - 1
+                            For k As Integer = 0 To _ListZones.Item(i).ListElement.Count - 1
+                                Select Case UCase(_ListDevices.Item(i).type)
+                                    Case "APPAREIL" : TypeDevice = Device.ListeDevices.APPAREIL  'modules pour diriger un appareil  ON/OFF
+                                    Case "AUDIO" : TypeDevice = Device.ListeDevices.AUDIO
+                                    Case "BAROMETRE" : TypeDevice = Device.ListeDevices.BAROMETRE  'pour stocker les valeur issu d'un barometre meteo ou web
+                                    Case "BATTERIE" : TypeDevice = Device.ListeDevices.BATTERIE
+                                    Case "COMPTEUR" : TypeDevice = Device.ListeDevices.COMPTEUR  'compteur DS2423, RFXPower...
+                                    Case "CONTACT" : TypeDevice = Device.ListeDevices.CONTACT  'detecteur de contact : switch 1-wire
+                                    Case "DETECTEUR" : TypeDevice = Device.ListeDevices.DETECTEUR  'tous detecteurs : mouvement, obscurite...
+                                    Case "DIRECTIONVENT" : TypeDevice = Device.ListeDevices.DIRECTIONVENT
+                                    Case "ENERGIEINSTANTANEE" : TypeDevice = Device.ListeDevices.ENERGIEINSTANTANEE
+                                    Case "ENERGIETOTALE" : TypeDevice = Device.ListeDevices.ENERGIETOTALE
+                                    Case "FREEBOX" : TypeDevice = Device.ListeDevices.FREEBOX
+                                    Case "GENERIQUEBOOLEEN" : TypeDevice = Device.ListeDevices.GENERIQUEBOOLEEN
+                                    Case "GENERIQUESTRING" : TypeDevice = Device.ListeDevices.GENERIQUESTRING
+                                    Case "GENERIQUEVALUE" : TypeDevice = Device.ListeDevices.GENERIQUEVALUE
+                                    Case "HUMIDITE" : TypeDevice = Device.ListeDevices.HUMIDITE
+                                    Case "LAMPE" : TypeDevice = Device.ListeDevices.LAMPE
+                                    Case "METEO" : TypeDevice = Device.ListeDevices.METEO
+                                    Case "MULTIMEDIA" : TypeDevice = Device.ListeDevices.MULTIMEDIA
+                                    Case "PLUIECOURANT" : TypeDevice = Device.ListeDevices.PLUIECOURANT
+                                    Case "PLUIETOTAL" : TypeDevice = Device.ListeDevices.PLUIETOTAL
+                                    Case "SWITCH" : TypeDevice = Device.ListeDevices.SWITCH
+                                    Case "TELECOMMANDE" : TypeDevice = Device.ListeDevices.TELECOMMANDE
+                                    Case "TEMPERATURE" : TypeDevice = Device.ListeDevices.TEMPERATURE
+                                    Case "TEMPERATURECONSIGNE" : TypeDevice = Device.ListeDevices.TEMPERATURECONSIGNE
+                                    Case "UV" : TypeDevice = Device.ListeDevices.UV
+                                    Case "VITESSEVENT" : TypeDevice = Device.ListeDevices.VITESSEVENT
+                                    Case "VOLET" : TypeDevice = Device.ListeDevices.VOLET
+                                End Select
+                                If _ListDevices.Item(j).ID = _ListZones.Item(i).ListElement.Item(k).ElementID And _
+                                    (DeviceType = "" Or _ListDevices.Item(i).type = DeviceType.ToUpper() Or TypeDevice = DeviceType.ToUpper()) And _
+                                    _ListDevices.Item(j).Enable = Enable Then
+                                    listresultat.Add(_ListDevices.Item(j))
+                                End If
+                            Next
+                        Next
+                    End If
+                Next
+
+                Return listresultat
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDeviceByZoneTypeDriver", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
 
         ''' <summary>Permet d'exécuter une commande Sub d'un Device</summary>
         ''' <param name="DeviceId"></param>
