@@ -198,17 +198,20 @@ Public Class uCondition
         Set(ByVal value As Object)
             Try
                 _Value = value
-                If value.ToString.StartsWith("[") And value.ToString.EndsWith("]") Then
+
+                If value.ToString.StartsWith("<") And value.ToString.EndsWith(">") Then
                     Dim a() As String = value.ToString.Split("|")
                     If a.Length = 3 Then
-                        TxtValue.Text = a(1) & "." & Mid(a(2), 1, Len(a(2)) - 1)
                         TxtValue.Tag = value
+                        TxtValue.Text = a(1) & "." & Mid(a(2), 1, Len(a(2)) - 1)
                         TxtValue.ToolTip = "Veuillez passer par le menu via le clic droit pour changer le device ou sa propriété"
                     Else
                         TxtValue.Text = value
+                        TxtValue.Tag = ""
                     End If
                 Else
                     TxtValue.Text = value
+                    TxtValue.Tag = ""
                 End If
             Catch ex As Exception
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCondition Value: " & ex.ToString, "ERREUR", "")
@@ -421,7 +424,7 @@ Public Class uCondition
                 TxtValue.ToolTip = ""
             Else
                 TxtValue.Text = sender.parent.header & "." & sender.header
-                TxtValue.Tag = "[" & sender.uid & "|" & sender.parent.header & "|" & sender.header & "]"
+                TxtValue.Tag = "<" & sender.uid & "|" & sender.parent.header & "|" & sender.header & ">"
                 TxtValue.ToolTip = "Veuillez passer par le menu via le clic droit pour changer le device ou sa propriété"
             End If
         Catch ex As Exception
@@ -536,7 +539,7 @@ Public Class uCondition
                     _IdDevice = myService.GetAllDevices(IdSrv).Item(CbDevice.SelectedIndex).ID
                     _PropertyDevice = CbPropertyDevice.Text
                     _Signe = CbSigne2.SelectedIndex
-                    If String.IsNullOrEmpty(TxtValue.Tag) = True Then
+                    If String.IsNullOrEmpty(TxtValue.Tag.ToString) = True Then
                         _Value = TxtValue.Text
                     Else
                         _Value = TxtValue.Tag
@@ -927,14 +930,20 @@ Public Class uCondition
         End Try
     End Sub
 
-    Private Sub TxtValue_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtValue.TextChanged
+    Private Sub TxtValue_MouseLeave(sender As Object, e As System.Windows.Input.MouseEventArgs) Handles TxtValue.MouseLeave
         Dim _flag As Boolean = False
+
         Try
             If String.IsNullOrEmpty(CbDevice.Text) = False And String.IsNullOrEmpty(CbPropertyDevice.Text) = False And String.IsNullOrEmpty(TxtValue.Text) = False Then
                 Dim _ID As String = myService.GetAllDevices(IdSrv).Item(CbDevice.SelectedIndex).ID
                 Dim _type As String = myService.TypeOfPropertyOfDevice(_ID, CbPropertyDevice.Text)
                 Dim _obj As Object = Nothing
 
+                If String.IsNullOrEmpty(TxtValue.Tag.ToString) = False Then
+                    If TxtValue.Tag.ToString.StartsWith("<") And TxtValue.Tag.ToString.EndsWith(">") And (TxtValue.Tag.ToString.Replace("|", ".").Contains(TxtValue.Text) Or TxtValue.Text.Contains(".")) Then
+                        Exit Sub
+                    End If
+                End If
 
                 If String.IsNullOrEmpty(_type) = False Then
                     Select Case _type
@@ -1039,6 +1048,7 @@ Public Class uCondition
                                 _flag = True
                             End Try
                     End Select
+                    TxtValue.Tag = ""
                 End If
             End If
         Catch ex As Exception
@@ -1046,4 +1056,9 @@ Public Class uCondition
         End Try
     End Sub
 
+    Private Sub BtnDeleteBalise_MouseDown(sender As System.Object, e As System.Windows.Input.MouseButtonEventArgs) Handles BtnDeleteBalise.MouseDown
+        TxtValue.Text = ""
+        TxtValue.Tag = ""
+        TxtValue.ToolTip = ""
+    End Sub
 End Class

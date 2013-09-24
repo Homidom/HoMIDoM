@@ -19,6 +19,9 @@
                 </DockPanel>
                 
                 <StackPanel Margin="5,10,0,0">
+                    <TabControl>
+                        <TabItem Header="1" />
+                    </TabControl>
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Margin="0,0,3,0">
                             <GroupBox Name="GroupBox1" Margin="2">
@@ -211,6 +214,7 @@
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Content="Puissance Minimale (par défaut):" Foreground="White" />
                                         <TextBox Name="TxtPuissMini" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="80"/>
+                                        <Label Content="Watt" Foreground="White" />
                                     </StackPanel>
                                     <StackPanel Name="StkTarifEnergie">
                                     <StackPanel Orientation="Horizontal" >

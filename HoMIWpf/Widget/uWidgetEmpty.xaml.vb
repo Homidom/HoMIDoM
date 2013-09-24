@@ -1212,13 +1212,13 @@ Public Class uWidgetEmpty
                                 LblStatus.Content = _dev.Value & _dev.Unit
                                 _CurrentValue = _dev.Value
                                 If FlagVisu = False Then LoadPicture()
+                            End If
+                        End If
 
-                                If _IsVariation Then
-                                    If StkPopup.Children.Count = 2 Then
-                                        Dim x2 As uVariateur = StkPopup.Children.Item(1)
-                                        x2.Value = _dev.Value
-                                    End If
-                                End If
+                        If _IsVariation Then
+                            If StkPopup.Children.Count = 2 Then
+                                Dim x2 As uVariateur = StkPopup.Children.Item(1)
+                                x2.Value = _dev.Value
                             End If
                         End If
 

@@ -74,7 +74,15 @@ Public Class uAction
                             Label1.Content = "Composant"
                             If x.IdDevice IsNot Nothing Then
                                 If myService.ReturnDeviceByID(IdSrv, x.IdDevice) IsNot Nothing Then
-                                    Label1.Content = myService.ReturnDeviceByID(IdSrv, x.IdDevice).Name
+                                    Dim _dev As TemplateDevice = myService.ReturnDeviceByID(IdSrv, x.IdDevice)
+                                    Label1.Content = _dev.Name
+                                    If String.IsNullOrEmpty(_dev.Picture) = False Then
+                                        Image1.Source = ConvertArrayToImage(myService.GetByteFromImage(_dev.Picture), Image1.Height)
+                                        Image1.Visibility = Windows.Visibility.Visible
+                                    Else
+                                        Image1.Source = New BitmapImage(New Uri("/HoMIAdmiN;component/Images/composant_32.png", UriKind.RelativeOrAbsolute))
+                                        Image1.Visibility = Windows.Visibility.Visible
+                                    End If
                                 End If
                             End If
                             If x.Method IsNot Nothing Then Label2.Content = x.Method
@@ -83,7 +91,15 @@ Public Class uAction
                             Label1.Content = "Driver"
                             If x.IdDriver IsNot Nothing Then
                                 If myService.ReturnDriverByID(IdSrv, x.IdDriver) IsNot Nothing Then
-                                    Label1.Content = myService.ReturnDriverByID(IdSrv, x.IdDriver).Nom
+                                    Dim _drv As TemplateDriver = myService.ReturnDriverByID(IdSrv, x.IdDriver)
+                                    Label1.Content = _drv.Nom
+                                    If String.IsNullOrEmpty(_drv.Picture) = False Then
+                                        Image1.Source = ConvertArrayToImage(myService.GetByteFromImage(_drv.Picture), Image1.Height)
+                                        Image1.Visibility = Windows.Visibility.Visible
+                                    Else
+                                        Image1.Source = New BitmapImage(New Uri("/HoMIAdmiN;component/Images/Driver_32.png", UriKind.RelativeOrAbsolute))
+                                        Image1.Visibility = Windows.Visibility.Visible
+                                    End If
                                 End If
                             End If
                             If x.Method IsNot Nothing Then Label2.Content = x.Method
@@ -92,18 +108,30 @@ Public Class uAction
                             Label1.Content = "Mail "
                             If x.UserId IsNot Nothing Then Label1.Content = Label1.Content & "{" & myService.ReturnUserById(IdSrv, x.UserId).UserName & "}"
                             If x.Sujet IsNot Nothing Then Label2.Content = x.Sujet
+
+                            Image1.Source = New BitmapImage(New Uri("/HoMIAdmiN;component/Images/email_32.png", UriKind.RelativeOrAbsolute))
+                            Image1.Visibility = Windows.Visibility.Visible
                         Case Action.TypeAction.ActionSpeech
                             Dim x As Action.ActionSpeech = _ObjAction
                             Label1.Content = "Parler "
                             If x.Message IsNot Nothing Then Label2.Content = x.Message
+
+                            Image1.Source = New BitmapImage(New Uri("/HoMIAdmiN;component/Images/Speech_128.png", UriKind.RelativeOrAbsolute))
+                            Image1.Visibility = Windows.Visibility.Visible
                         Case Action.TypeAction.ActionHttp
                             Dim x As Action.ActionHttp = _ObjAction
                             Label1.Content = "Commande Http"
                             If x.Commande IsNot Nothing Then Label2.Content = x.Commande
+
+                            Image1.Source = New BitmapImage(New Uri("/HoMIAdmiN;component/Images/Cmd_Http_128.png", UriKind.RelativeOrAbsolute))
+                            Image1.Visibility = Windows.Visibility.Visible
                         Case Action.TypeAction.ActionIf
                             Dim x As Action.ActionIf = _ObjAction
                             Label1.Content = "If"
                             Label2.Content = ""
+
+                            Image1.Source = New BitmapImage(New Uri("/HoMIAdmiN;component/Images/workflow_32.png", UriKind.RelativeOrAbsolute))
+                            Image1.Visibility = Windows.Visibility.Visible
                         Case Action.TypeAction.ActionMacro
                             Dim x As Action.ActionMacro = _ObjAction
                             Label1.Content = "Macro"
@@ -111,26 +139,46 @@ Public Class uAction
                                 Dim _macro As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, x.IdMacro)
                                 If _macro IsNot Nothing Then Label2.Content = _macro.Nom
                             End If
+
+                            Image1.Source = New BitmapImage(New Uri("/HoMIAdmiN;component/Images/script_32.png", UriKind.RelativeOrAbsolute))
+                            Image1.Visibility = Windows.Visibility.Visible
                         Case Action.TypeAction.ActionLogEvent
                             Dim x As Action.ActionLogEvent = _ObjAction
                             Label1.Content = "Log Windows"
+
                             If x.Message IsNot Nothing Then Label2.Content = x.Message
+
+                            Image1.Source = New BitmapImage(New Uri("/HoMIAdmiN;component/Images/Log_Windows.png", UriKind.RelativeOrAbsolute))
+                            Image1.Visibility = Windows.Visibility.Visible
                         Case Action.TypeAction.ActionLogEventHomidom
                             Dim x As Action.ActionLogEventHomidom = _ObjAction
                             Label1.Content = "Log Homidom"
                             If x.Message IsNot Nothing Then Label2.Content = x.Message
+
+                            Image1.Source = New BitmapImage(New Uri("/HoMIAdmiN;component/Images/Log_Homidom.png", UriKind.RelativeOrAbsolute))
+                            Image1.Visibility = Windows.Visibility.Visible
                         Case Action.TypeAction.ActionDOS
                             Dim x As Action.ActionDos = _ObjAction
                             Label1.Content = "Commande Dos"
                             If x.Fichier IsNot Nothing Then Label2.Content = x.Fichier
                             If x.Arguments IsNot Nothing Then Label2.Content &= " " & x.Arguments
+
+                            Image1.Source = New BitmapImage(New Uri("/HoMIAdmiN;component/Images/command_prompt_64.png", UriKind.RelativeOrAbsolute))
+                            Image1.Visibility = Windows.Visibility.Visible
                         Case Action.TypeAction.ActionVB
                             Dim x As Action.ActionVB = _ObjAction
                             Label1.Content = "Script VB"
                             If x.Label IsNot Nothing Then Label2.Content = x.Label
+
+                            Image1.Source = New BitmapImage(New Uri("/HoMIAdmiN;component/Images/VBS.png", UriKind.RelativeOrAbsolute))
+                            Image1.Visibility = Windows.Visibility.Visible
                         Case Action.TypeAction.ActionStop
                             Dim x As Action.ActionSTOP = _ObjAction
                             Label1.Content = "STOP"
+                            Label2.Content = ""
+
+                            Image1.Source = New BitmapImage(New Uri("/HoMIAdmiN;component/Images/Signal_stop.png", UriKind.RelativeOrAbsolute))
+                            Image1.Visibility = Windows.Visibility.Visible
                     End Select
                     Refresh_Position()
                 End If
