@@ -132,6 +132,7 @@
                     <ComboBoxItem Content="&lt;&gt;" />
                 </ComboBox>
                 <TextBox Name="TxtValue" Width="113" Height="20" Background="White" />
+                <Image Name="BtnDeleteBalise" Height="20" Width="20" Source="/HoMIAdmiN;component/Images/clear-left.png" ToolTip="Effacer" />
             </StackPanel> 
         </StackPanel>
     </Grid>
