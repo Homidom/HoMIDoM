@@ -637,19 +637,19 @@ Partial Public Class uDevice
                 Exit Sub
             End If
             If String.IsNullOrEmpty(TxtNom.Text) = True Then
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du device est obligatoire !!", "Erreur", "")
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du composant est obligatoire !!", "Erreur", "")
                 Exit Sub
             End If
             If String.IsNullOrEmpty(CbType.Text) = True Then
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le type du device est obligatoire !!", "Erreur", "")
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le type du composant est obligatoire !!", "Erreur", "")
                 Exit Sub
             End If
             If String.IsNullOrEmpty(CbDriver.Text) = True Then
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le driver du device est obligatoire !!", "Erreur", "")
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le driver du composant est obligatoire !!", "Erreur", "")
                 Exit Sub
             End If
             If String.IsNullOrEmpty(TxtAdresse1.Text) = True Then
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'adresse de base du device est obligatoire !!", "Erreur", "")
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'adresse de base du composant est obligatoire !!", "Erreur", "")
                 Exit Sub
             End If
             retour = myService.VerifChamp(IdSrv, _driverid, "ADRESSE1", TxtAdresse1.Text)
