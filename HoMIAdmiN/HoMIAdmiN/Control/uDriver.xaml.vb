@@ -91,15 +91,17 @@ Partial Public Class uDriver
                 TxtVersion.Text = x.Version
                 TxtModele.Text = x.Modele
 
-                If x.LabelsDriver.Count > 0 Then
-                    For k As Integer = 0 To x.LabelsDriver.Count - 1
-                        Select Case x.LabelsDriver.Item(k).NomChamp
-                            Case "HELP"
-                                BtnHelp.Visibility = Windows.Visibility.Visible
-                                BtnHelp.ToolTip = x.LabelsDriver.Item(k).Tooltip
-                        End Select
-                    Next
-                End If
+                BtnHelp.Visibility = Windows.Visibility.Visible
+                BtnHelp.ToolTip = "Afficher l'aide en ligne au format PDF"
+                'If x.LabelsDriver.Count > 0 Then
+                '    For k As Integer = 0 To x.LabelsDriver.Count - 1
+                '        Select Case x.LabelsDriver.Item(k).NomChamp
+                '            Case "HELP"
+                '                BtnHelp.Visibility = Windows.Visibility.Visible
+                '                BtnHelp.ToolTip = x.LabelsDriver.Item(k).Tooltip
+                '        End Select
+                '    Next
+                'End If
 
                 'Fonctions avancées
                 If x.DeviceAction.Count = 0 Then

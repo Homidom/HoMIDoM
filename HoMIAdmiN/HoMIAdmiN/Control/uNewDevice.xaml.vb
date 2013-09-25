@@ -2,6 +2,7 @@
 Imports System.IO
 Imports System.Collections.ObjectModel
 Imports HoMIDom.HoMIDom
+Imports HoMIDom.HoMIDom.Api
 
 Public Class uNewDevice
     Public Event CloseMe(ByVal MyObject As Object)
@@ -83,13 +84,11 @@ Public Class uNewDevice
                     End If
                     FlagChange = True
                 End If
-
             End If
         Catch ex As Exception
-
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnDelete_Click: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
-
 
     Private Sub BtnUpdate_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnUpdate.Click
         Try
@@ -142,12 +141,6 @@ Public Class uNewDevice
         Refresh_Grid(CheckBox1.IsChecked)
     End Sub
 
-    Protected Overrides Sub Finalize()
-        MyBase.Finalize()
-
-        _list.Clear()
-    End Sub
-
     Private Sub BtnCreate_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnCreate.Click
         Try
             If String.IsNullOrEmpty(txtID.Text) Then
@@ -168,4 +161,235 @@ Public Class uNewDevice
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnCreate_Click: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
+
+    'Mettre à jour les champs adresse1 et adresse2 du composant selectionné avec le nouveau composant et le supprimer
+    Private Sub BtnUpdateComposant_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles BtnUpdateComposant.Click
+        Try
+            Dim retour As String = ""
+
+            'verif des champs
+            If String.IsNullOrEmpty(txtID.Text) Then
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez sélectionner un composant dans la grille!", "ERREUR", "")
+                Exit Sub
+            End If
+            If String.IsNullOrEmpty(txtAdresse1.Text) = True Then
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'adresse 1 du composant est obligatoire !!", "Erreur", "")
+                Exit Sub
+            End If
+
+            'mise à jour du composant
+            Dim x As HoMIDom.HoMIDom.TemplateDevice = Nothing
+            x = myService.ReturnDeviceByID(IdSrv, CbComposants.SelectedItem.ID)
+            If x IsNot Nothing Then 'on a trouvé le device
+                retour = myService.SaveDevice(IdSrv, x.ID, x.Name, txtAdresse1.Text, x.Enable, x.Solo, x.DriverID, x.Type, x.Refresh, txtAdresse2.Text, x.Picture, x.Modele, x.Description, x.LastChangeDuree, x.LastEtat, x.Correction, x.Formatage, x.Precision, x.ValueMax, x.ValueMin, x.ValueDef, x.Commandes, x.Unit, x.Puissance, x.AllValue)
+
+                'suppression du nouveau composant
+                Dim retour2 As Integer = myService.DeleteNewDevice(IdSrv, txtID.Text)
+                If retour2 <> 0 Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Une erreur s'est produite, veuillez consulter le log pour en connaître la raison", "Erreur Admin", "")
+                Else
+                    Refresh_Grid()
+                    If DGW.Columns.Count > 2 Then
+                        Dim y As DataGridColumn = DGW.Columns(0)
+                        y.Width = 0
+                        y.Visibility = Windows.Visibility.Collapsed
+                        Dim z As DataGridColumn = DGW.Columns(1)
+                        z.Width = 0
+                        z.Visibility = Windows.Visibility.Collapsed
+                    End If
+                    FlagChange = True
+                End If
+            Else
+                MessageBox.Show("Le composant selectionné n'a pas été trouvé sur le serveur")
+            End If
+
+
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnUpdateComposant_Click: " & ex.ToString, "ERREUR", "")
+        End Try
+    End Sub
+
+    Protected Overrides Sub Finalize()
+        MyBase.Finalize()
+
+        _list.Clear()
+    End Sub
+
+    'quand la selection dans la liste change, on met à jour la liste des composants existants pouvant correspondre (driver, type, adresse1 et adresse2)
+    Private Sub DGW_SelectionChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles DGW.SelectionChanged
+        Try
+            'CbComposants.ItemsSource = myService.ReturnDeviceByAdresse1TypeDriver(IdSrv, "", "", txtDriver.Text, True)
+
+            CbComposants.ItemsSource = myService.GetAllDevices(IdSrv)
+            CbComposants.DisplayMemberPath = "Name"
+
+
+
+
+            'Dim _ListDevices = myService.ReturnDeviceByAdresse1TypeDriver(IdSrv, "", "", txtDriver.Text, True)
+            'Dim _list As New List(Of TemplateDevice)
+
+            'For i As Integer = 0 To _ListDevices.Count - 1
+            '    Dim x As New TemplateDevice
+            '    Dim _listact As New List(Of String)
+
+            '    With x
+            '        .Name = _ListDevices.Item(i).name
+            '        .ID = _ListDevices.Item(i).id
+            '        .Enable = _ListDevices.Item(i).enable
+            '        .LastEtat = _ListDevices.Item(i).LastEtat
+            '        Select Case UCase(_ListDevices.Item(i).type)
+            '            Case "APPAREIL" : .Type = Device.ListeDevices.APPAREIL  'modules pour diriger un appareil  ON/OFF
+            '            Case "AUDIO" : .Type = Device.ListeDevices.AUDIO
+            '            Case "BAROMETRE" : .Type = Device.ListeDevices.BAROMETRE  'pour stocker les valeur issu d'un barometre meteo ou web
+            '            Case "BATTERIE" : .Type = Device.ListeDevices.BATTERIE
+            '            Case "COMPTEUR" : .Type = Device.ListeDevices.COMPTEUR  'compteur DS2423, RFXPower...
+            '            Case "CONTACT" : .Type = Device.ListeDevices.CONTACT  'detecteur de contact : switch 1-wire
+            '            Case "DETECTEUR" : .Type = Device.ListeDevices.DETECTEUR  'tous detecteurs : mouvement, obscurite...
+            '            Case "DIRECTIONVENT" : .Type = Device.ListeDevices.DIRECTIONVENT
+            '            Case "ENERGIEINSTANTANEE" : .Type = Device.ListeDevices.ENERGIEINSTANTANEE
+            '            Case "ENERGIETOTALE" : .Type = Device.ListeDevices.ENERGIETOTALE
+            '            Case "FREEBOX" : .Type = Device.ListeDevices.FREEBOX
+            '            Case "GENERIQUEBOOLEEN" : .Type = Device.ListeDevices.GENERIQUEBOOLEEN
+            '            Case "GENERIQUESTRING" : .Type = Device.ListeDevices.GENERIQUESTRING
+            '            Case "GENERIQUEVALUE" : .Type = Device.ListeDevices.GENERIQUEVALUE
+            '            Case "HUMIDITE" : .Type = Device.ListeDevices.HUMIDITE
+            '            Case "LAMPE" : .Type = Device.ListeDevices.LAMPE
+            '            Case "METEO" : .Type = Device.ListeDevices.METEO
+            '            Case "MULTIMEDIA" : .Type = Device.ListeDevices.MULTIMEDIA
+            '            Case "PLUIECOURANT" : .Type = Device.ListeDevices.PLUIECOURANT
+            '            Case "PLUIETOTAL" : .Type = Device.ListeDevices.PLUIETOTAL
+            '            Case "SWITCH" : .Type = Device.ListeDevices.SWITCH
+            '            Case "TELECOMMANDE" : .Type = Device.ListeDevices.TELECOMMANDE
+            '            Case "TEMPERATURE" : .Type = Device.ListeDevices.TEMPERATURE
+            '            Case "TEMPERATURECONSIGNE" : .Type = Device.ListeDevices.TEMPERATURECONSIGNE
+            '            Case "UV" : .Type = Device.ListeDevices.UV
+            '            Case "VITESSEVENT" : .Type = Device.ListeDevices.VITESSEVENT
+            '            Case "VOLET" : .Type = Device.ListeDevices.VOLET
+            '        End Select
+
+            '        .Description = _ListDevices.Item(i).description
+            '        .Adresse1 = _ListDevices.Item(i).adresse1
+            '        .Adresse2 = _ListDevices.Item(i).adresse2
+            '        .DriverID = _ListDevices.Item(i).driverid
+            '        .Picture = _ListDevices.Item(i).picture
+            '        .Solo = _ListDevices.Item(i).solo
+            '        .Refresh = _ListDevices.Item(i).refresh
+            '        .Modele = _ListDevices.Item(i).modele
+            '        .GetDeviceCommandePlus = _ListDevices.Item(i).GetCommandPlus
+            '        .Value = _ListDevices.Item(i).value
+            '        .DateCreated = _ListDevices.Item(i).DateCreated
+            '        .LastChange = _ListDevices.Item(i).LastChange
+            '        .LastChangeDuree = _ListDevices.Item(i).LastChangeDuree
+            '        .Unit = _ListDevices.Item(i).Unit
+            '        .AllValue = _ListDevices.Item(i).AllValue
+
+            '        If IsNumeric(_ListDevices.Item(i).valuelast) Then .ValueLast = _ListDevices.Item(i).valuelast
+
+            '        '_listact = ListMethod(_ListDevices.Item(i).id)
+            '        'If _listact.Count > 0 Then
+            '        '    For Each n In _listact
+            '        '        Dim a() As String = n.Split("|")
+            '        '        Dim p As New DeviceAction
+            '        '        With p
+            '        '            .Nom = a(0)
+            '        '            If a.Length > 1 Then
+            '        '                For t As Integer = 1 To a.Length - 1
+            '        '                    Dim pr As New DeviceAction.Parametre
+            '        '                    Dim b() As String = a(t).Split(":")
+            '        '                    With pr
+            '        '                        .Nom = b(0)
+            '        '                        .Type = b(1)
+            '        '                    End With
+            '        '                    p.Parametres.Add(pr)
+            '        '                Next
+            '        '            End If
+            '        '        End With
+            '        '        .DeviceAction.Add(p)
+            '        '        a = Nothing
+            '        '        p = Nothing
+            '        '    Next
+            '        'End If
+            '        '_listact = Nothing
+
+            '        Dim _flag As Boolean = True
+            '        Select Case .Type
+            '            Case Device.ListeDevices.BAROMETRE
+            '            Case Device.ListeDevices.COMPTEUR
+            '            Case Device.ListeDevices.ENERGIEINSTANTANEE
+            '            Case Device.ListeDevices.ENERGIETOTALE
+            '            Case Device.ListeDevices.GENERIQUEVALUE
+            '            Case Device.ListeDevices.HUMIDITE
+            '            Case Device.ListeDevices.PLUIECOURANT
+            '            Case Device.ListeDevices.PLUIETOTAL
+            '            Case Device.ListeDevices.TEMPERATURE
+            '            Case Device.ListeDevices.TEMPERATURECONSIGNE
+            '            Case Device.ListeDevices.VITESSEVENT
+            '            Case Device.ListeDevices.UV
+            '            Case Device.ListeDevices.VITESSEVENT
+            '            Case Device.ListeDevices.METEO
+            '                .ConditionActuel = _ListDevices.Item(i).ConditionActuel
+            '                .ConditionJ1 = _ListDevices.Item(i).ConditionJ1
+            '                .ConditionJ2 = _ListDevices.Item(i).ConditionActuel
+            '                .ConditionJ3 = _ListDevices.Item(i).ConditionJ3
+            '                .ConditionToday = _ListDevices.Item(i).ConditionToday
+            '                .HumiditeActuel = _ListDevices.Item(i).HumiditeActuel
+            '                .IconActuel = _ListDevices.Item(i).IconActuel
+            '                .IconJ1 = _ListDevices.Item(i).IconJ1
+            '                .IconJ2 = _ListDevices.Item(i).IconJ2
+            '                .IconJ3 = _ListDevices.Item(i).IconJ3
+            '                .IconToday = _ListDevices.Item(i).IconToday
+            '                .JourJ1 = _ListDevices.Item(i).JourJ1
+            '                .JourJ2 = _ListDevices.Item(i).JourJ2
+            '                .JourJ3 = _ListDevices.Item(i).JourJ3
+            '                .JourToday = _ListDevices.Item(i).JourToday
+            '                .MaxJ1 = _ListDevices.Item(i).MaxJ1
+            '                .MaxJ2 = _ListDevices.Item(i).MaxJ2
+            '                .MaxJ3 = _ListDevices.Item(i).MaxJ3
+            '                .MaxToday = _ListDevices.Item(i).MaxToday
+            '                .MinJ1 = _ListDevices.Item(i).MinJ1
+            '                .MinJ2 = _ListDevices.Item(i).MinJ2
+            '                .MinJ3 = _ListDevices.Item(i).MinJ3
+            '                .MinToday = _ListDevices.Item(i).MinToday
+            '                .TemperatureActuel = _ListDevices.Item(i).TemperatureActuel
+            '                .VentActuel = _ListDevices.Item(i).VentActuel
+            '                _flag = False
+            '            Case Device.ListeDevices.MULTIMEDIA
+            '                .Commandes = _ListDevices.Item(i).Commandes
+            '                _flag = False
+            '            Case Else
+            '                _flag = False
+            '        End Select
+
+            '        If _flag Then
+            '            .Correction = _ListDevices.Item(i).correction
+            '            .Precision = _ListDevices.Item(i).precision
+            '            .Formatage = _ListDevices.Item(i).formatage
+            '            .ValueDef = _ListDevices.Item(i).valuedef
+            '            .ValueMax = _ListDevices.Item(i).valuemax
+            '            .ValueMin = _ListDevices.Item(i).valuemin
+            '        End If
+            '    End With
+
+            '    _list.Add(x)
+            '    x = Nothing
+            'Next
+            '_list.Sort(AddressOf sortDevice)
+
+            'CbComposants.ItemsSource = _list
+            'CbComposants.DisplayMemberPath = "Name"
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur DGW_SelectionChanged: " & ex.ToString, "ERREUR", "")
+        End Try
+
+    End Sub
+    Private Function sortDevice(ByVal x As TemplateDevice, ByVal y As TemplateDevice) As Integer
+        Try
+            Return x.Name.CompareTo(y.Name)
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur sortDevice: " & ex.ToString, "ERREUR", "")
+            Return 0
+        End Try
+    End Function
+
 End Class

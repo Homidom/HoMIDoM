@@ -564,4 +564,17 @@ Public Class HoMIGuI
         End Try
     End Sub
 
+    Private Sub adminMenuItem_Click(sender As System.Object, e As System.EventArgs) Handles adminMenuItem.Click
+        Dim Chemin As String = ""
+        Try
+            Chemin = My.Application.Info.DirectoryPath & "\HoMIAdmiN.exe"
+            If File.Exists(Chemin) Then
+                System.Diagnostics.Process.Start(Chemin)
+            Else
+                MessageBox.Show("Erreur lors du démarrage de l'interface d'administration : chemin non trouve : " & Chemin, "HoMIGuI - adminMenuItem_Click", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Erreur lors de l'ouverture de l'interface d'administration " & vbCrLf & ex.ToString, "HoMIGuI - adminMenuItem_Click", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+        End Try
+    End Sub
 End Class

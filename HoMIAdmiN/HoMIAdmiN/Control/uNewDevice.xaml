@@ -26,7 +26,7 @@
                 </DockPanel>
                 
                 <StackPanel Orientation="Horizontal" >
-                    <DataGrid Name="DGW" MinWidth="200" MaxWidth="550" IsReadOnly="True" BorderBrush="Black" Margin="5" Padding="2" />
+                    <DataGrid Name="DGW" MinWidth="200" MaxWidth="550" IsReadOnly="True" BorderBrush="Black" Margin="5" Padding="2" SelectionMode="Single" />
                     <StackPanel >
 
                         <!--show the selected item-->
@@ -77,13 +77,22 @@
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
 
-                            <Button  Content="Enregistrer" Width="65" Height="30" Margin="2" Name="BtnUpdate" Template="{DynamicResource GlassButton}" Foreground=" white"/>
-                            <Button  Content="Supprimer"  Width="65" Height="30" Margin="2" Name="BtnDelete" Template="{DynamicResource GlassButton}" Foreground=" white"/>
-                            <Button  Content="Créer"  Width="65" Height="30" Margin="2" Name="BtnCreate" Template="{DynamicResource GlassButton}" Foreground=" white"/>
+                            <Button  Content="Enregistrer" Width="65" Height="30" Margin="2" Name="BtnUpdate" Template="{DynamicResource GlassButton}" Foreground=" white" ToolTip="Enregistrer les modifications de ce nouveau composant" />
+                            <Button  Content="Supprimer"  Width="65" Height="30" Margin="2" Name="BtnDelete" Template="{DynamicResource GlassButton}" Foreground=" white" ToolTip="Supprimer ce Nouveau composant" />
+                            <Rectangle Width="30" />
+                            <Button  Content="Créer"  Width="65" Height="30" Margin="2" Name="BtnCreate" Template="{DynamicResource GlassButton}" Foreground=" white" ToolTip="Créer un composant" />
 
+                            
                         </StackPanel>
-
-
+                        <GroupBox Margin="2">
+                                <GroupBox.Header>
+                                    <Label Foreground="White" FontWeight="Bold">Mettre à jour un composant existant</Label>
+                                </GroupBox.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <ComboBox Margin="8" Name="CbComposants" Width="150" Foreground="White" Background="DarkGray" BorderBrush="Black" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" BorderThickness="2"/>
+                                <Button  Content="Mettre à jour"  Width="80" Height="30" Margin="2" Name="BtnUpdateComposant" Template="{DynamicResource GlassButton}" Foreground=" white" ToolTip="Mettre à jour un composant existant depuis ce nouveau composant" />
+                            </StackPanel>
+                        </GroupBox>
 
                     </StackPanel>
 

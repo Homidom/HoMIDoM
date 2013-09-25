@@ -123,11 +123,16 @@ Public Class uTriggerTimer
                 _myconditiontime = _myconditiontime_avance
             Else
                 'sinon on utilise les champs du mode simple
-                If TxtSc.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtSc.Text) & "#"
-                If TxtMn.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtMn.Text) & "#"
-                If TxtHr.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtHr.Text) & "#"
-                If TxtJr.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtJr.Text) & "#"
-                If TxtMs.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtMs.Text) & "#"
+                If Not IsNumeric(TxtSc.Text) Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtSc.Text) & "#"
+                If Not IsNumeric(TxtMn.Text) Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtMn.Text) & "#"
+                If Not IsNumeric(TxtHr.Text) Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtHr.Text) & "#"
+                If Not IsNumeric(TxtJr.Text) Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtJr.Text) & "#"
+                If Not IsNumeric(TxtMs.Text) Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtMs.Text) & "#"
+                'If TxtSc.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtSc.Text) & "#"
+                'If TxtMn.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtMn.Text) & "#"
+                'If TxtHr.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtHr.Text) & "#"
+                'If TxtJr.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtJr.Text) & "#"
+                'If TxtMs.Text = "" Then _myconditiontime &= "*#" Else _myconditiontime &= CInt(TxtMs.Text) & "#"
                 Dim _prepajr As String = ""
                 If CheckBox7.IsChecked = True Then _prepajr = "0"
                 If CheckBox1.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",1" Else _prepajr = "1"
