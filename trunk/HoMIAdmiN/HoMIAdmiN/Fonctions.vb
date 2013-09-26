@@ -18,12 +18,10 @@ Module Fonctions
         Dim Icon As MessageBoxImage = MessageBoxImage.Error
 
         Select Case Type
-            Case HoMIDom.HoMIDom.Server.TypeLog.INFO
-                Icon = MessageBoxImage.Information
-            Case HoMIDom.HoMIDom.Server.TypeLog.MESSAGE
-                Icon = MessageBoxImage.Exclamation
-            Case Else
-                Icon = MessageBoxImage.Error
+            Case HoMIDom.HoMIDom.Server.TypeLog.MESSAGE : Icon = MessageBoxImage.Information
+            Case HoMIDom.HoMIDom.Server.TypeLog.INFO : Icon = MessageBoxImage.Information
+            Case HoMIDom.HoMIDom.Server.TypeLog.DEBUG : Icon = MessageBoxImage.Warning
+            Case Else : Icon = MessageBoxImage.Error
         End Select
         MessageBox.Show(Message, Title, MessageBoxButton.OK, Icon)
 

@@ -41,7 +41,7 @@ Public Class DynamicImageButton
                                                                                                                                                                                                            Catch ex As Exception
                                                                                                                                                                                                                Throw ex
                                                                                                                                                                                                            End Try
-
+                                                                                                                                                                                                           Return ""
                                                                                                                                                                                                        End Function))
 
 

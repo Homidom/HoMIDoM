@@ -131,7 +131,8 @@ Public Class WTelecommandeNew
     Private Sub BtnTstCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTstCmd.Click
         Try
             If String.IsNullOrEmpty(TxtCmdName.Text) = False Then
-                _CurrentTemplate.ExecuteCommand(IdSrv, TxtCmdName.Text, myService)
+                '_CurrentTemplate.ExecuteCommand(IdSrv, TxtCmdName.Text, myService)
+                _CurrentTemplate.ExecuteCommand(IdSrv, TxtCmdName.Text)
             End If
             'Dim retour As String = myService.TelecommandeSendCommand(IdSrv, _DeviceId, TxtCmdName.Text)
             'If retour <> 0 Then
@@ -231,12 +232,12 @@ Public Class WTelecommandeNew
         BtnTstCmd.Visibility = Windows.Visibility.Visible
     End Sub
 
-    ''' <summary>
-    ''' Clic sur image de la commande
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    ''' <remarks></remarks>
+    '''' <summary>
+    '''' Clic sur image de la commande
+    '''' </summary>
+    '''' <param name="sender"></param>
+    '''' <param name="e"></param>
+    '''' <remarks></remarks>
     'Private Sub ImgCommande_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgCommande2.MouseLeftButtonDown ', Canvas2.MouseLeftButtonDown
     '    For i As Integer = 0 To grid_Telecommande.Children.Count - 1
     '        Dim cvs As Canvas = grid_Telecommande.Children.Item(i)
@@ -727,10 +728,10 @@ Public Class WTelecommandeNew
         End Try
     End Sub
 
-    ''' <summary>
-    ''' Affiche les boutons (commandes) du template dans la grille
-    ''' </summary>
-    ''' <remarks></remarks>
+    '''' <summary>
+    '''' Affiche les boutons (commandes) du template dans la grille
+    '''' </summary>
+    '''' <remarks></remarks>
     'Private Sub AfficheGrilleOfCurrentTemplate()
     '    Try
     '        If _CurrentTemplate IsNot Nothing Then

@@ -58,7 +58,7 @@
     <DefineTrace>true</DefineTrace>
     <IncrementalBuild>false</IncrementalBuild>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
+    <OutputPath>..\RELEASE_HoMIWpF\</OutputPath>
     <DocumentationFile>HoMIWpF.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314,42353,42354,42355</NoWarn>
   </PropertyGroup>
@@ -90,12 +90,15 @@
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Client">
       <HintPath>..\Dll_externes\HoMIWpF\Microsoft.AspNet.SignalR.Client.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="MjpegProcessor">
       <HintPath>..\Dll_externes\Homidom-32bits\MjpegProcessor.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\Dll_externes\HoMIWpF\Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -147,6 +150,7 @@
     </Reference>
     <Reference Include="WpfAnimatedGif">
       <HintPath>..\Dll_externes\HoMIWpF\WpfAnimatedGif.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="WpfKb">
       <HintPath>..\Dll_externes\HoMIWpF\WpfKb.dll</HintPath>
@@ -758,7 +762,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="False" />
+      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
