@@ -921,13 +921,13 @@ Class Window1
                         Case "password"
                             _PassWord = list.Item(0).Attributes.Item(j).Value
                         Case "left"
-                            Me.Left = CDbl(list.Item(0).Attributes.Item(j).Value)
+                            Me.Left = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                         Case "top"
-                            Me.Top = CDbl(list.Item(0).Attributes.Item(j).Value)
+                            Me.Top = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                         Case "width"
-                            Me.Width = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", ","))
+                            Me.Width = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                         Case "height"
-                            Me.Height = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", ","))
+                            Me.Height = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                         Case "afflasterror"
                             If IsBoolean(list.Item(0).Attributes.Item(j).Value) Then AffLastError = list.Item(0).Attributes.Item(j).Value
                         Case "astimeoutpage"

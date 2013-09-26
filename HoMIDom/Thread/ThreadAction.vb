@@ -115,7 +115,7 @@ Namespace HoMIDom
 
                             If x.Conditions.Item(i).Type = Action.TypeCondition.Device Then
                                 Dim retour As Object = CallByName(_Server.ReturnRealDeviceById(x.Conditions.Item(i).IdDevice), x.Conditions.Item(i).PropertyDevice, CallType.Get)
-                                Dim retour2 As Object
+                                Dim retour2 As Object = Nothing
                                 If x.Conditions.Item(i).Value.ToString.StartsWith("<") And x.Conditions.Item(i).Value.ToString.EndsWith(">") Then
                                     Dim a() As String = x.Conditions.Item(i).Value.ToString.Split("|")
                                     If a.Length = 3 Then

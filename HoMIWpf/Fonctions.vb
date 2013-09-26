@@ -334,7 +334,7 @@ Module Fonctions
     End Function
 
     ''' <summary>
-    ''' Retourne la valeur d'une variable entourée par des balises "<" ">"
+    ''' Retourne la valeur d'une variable entourée par des balises inferieur et superieur
     ''' </summary>
     ''' <param name="ValueTxt"></param>
     ''' <returns></returns>
@@ -417,6 +417,7 @@ Module Fonctions
             Else
                 Return ValueTxt
             End If
+            Return ""
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Fonctions.TraiteBalise: " & ex.ToString, "Erreur", " Fonctions.TraiteBalise")
             Return "Erreur"
@@ -459,6 +460,7 @@ Module Fonctions
                 lock_dev = False
                 Return retour
             End If
+            Return Nothing
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Fonctions.ReturnDeviceById: " & ex.ToString, "Erreur", " Fonctions.ReturnDeviceById")
             Return Nothing

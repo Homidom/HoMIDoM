@@ -9179,14 +9179,15 @@ Namespace HoMIDom
 
                 'check si le composant existe déjà (meme adresse1, adresse2 et driver_id)
                 For Each _dev As NewDevice In _ListNewDevices
-                    If _dev.Adresse1 = Adresse1 And _dev.IdDriver = DriverId And _dev.Adresse2 = Adresse2 Then
+                    If _dev.Adresse1 = Adresse1 And _dev.IdDriver = DriverId And _dev.Adresse2 = Adresse2 And (Type = "" Or Type = _dev.Type) Then
                         _dev.DateTetect = Now
                         _dev.Value = Value
-                        If (Type = "" Or _dev.Type = Type) Then
-                            Log(TypeLog.DEBUG, TypeSource.SERVEUR, "AddDetectNewDevice", "Le composant (" & Adresse1 & ":" & Adresse2 & ") du driver (" & DriverId & "), existe déjà")
-                        End If
+                        'If (Type = "" Or _dev.Type = Type) Then
+                        Log(TypeLog.DEBUG, TypeSource.SERVEUR, "AddDetectNewDevice", "Le composant (" & Adresse1 & ":" & Adresse2 & ") du driver (" & DriverId & "), existe déjà")
+                        'End If
                         flag = True
                         _return = "Message: Composant déjà existant"
+                        Exit For
                     End If
                 Next
 

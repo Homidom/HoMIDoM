@@ -22,9 +22,9 @@ Public Class PushNotification
         Return _Connection.Start().Wait(_Wait)
     End Function
 
-    Public Function Close()
+    Public Sub Close()
         _Connection.Stop()
-    End Function
+    End Sub
 
     Protected Function OnDeviceChanged(ByVal id As String, ByVal val As String) As Boolean
         RaiseEvent DeviceChanged(id, val)

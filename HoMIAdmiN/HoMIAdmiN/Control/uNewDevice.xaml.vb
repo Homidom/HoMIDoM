@@ -8,6 +8,7 @@ Public Class uNewDevice
     Public Event CloseMe(ByVal MyObject As Object)
     Public Event CreateNewDevice(ByVal MyObject As Object)
     Dim _list As New List(Of NewDevice)
+    Dim _Listdevices As New List(Of TemplateDevice)
 
     Private Sub BtnClose_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClose.Click
         RaiseEvent CloseMe(Me)
@@ -28,6 +29,8 @@ Public Class uNewDevice
             Refresh_Grid(CheckBox1.IsChecked)
             AddHandler DGW.Loaded, AddressOf GridOk
 
+            'recupération de la liste des composants existants
+            _Listdevices = myService.GetAllDevices(IdSrv)
 
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors sur la fonction New de uNewDevice: " & ex.ToString, "ERREUR", "")
@@ -218,166 +221,22 @@ Public Class uNewDevice
     'quand la selection dans la liste change, on met à jour la liste des composants existants pouvant correspondre (driver, type, adresse1 et adresse2)
     Private Sub DGW_SelectionChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles DGW.SelectionChanged
         Try
-            'CbComposants.ItemsSource = myService.ReturnDeviceByAdresse1TypeDriver(IdSrv, "", "", txtDriver.Text, True)
-
-            CbComposants.ItemsSource = myService.GetAllDevices(IdSrv)
-            CbComposants.DisplayMemberPath = "Name"
-
-
-
-
-            'Dim _ListDevices = myService.ReturnDeviceByAdresse1TypeDriver(IdSrv, "", "", txtDriver.Text, True)
-            'Dim _list As New List(Of TemplateDevice)
-
-            'For i As Integer = 0 To _ListDevices.Count - 1
-            '    Dim x As New TemplateDevice
-            '    Dim _listact As New List(Of String)
-
-            '    With x
-            '        .Name = _ListDevices.Item(i).name
-            '        .ID = _ListDevices.Item(i).id
-            '        .Enable = _ListDevices.Item(i).enable
-            '        .LastEtat = _ListDevices.Item(i).LastEtat
-            '        Select Case UCase(_ListDevices.Item(i).type)
-            '            Case "APPAREIL" : .Type = Device.ListeDevices.APPAREIL  'modules pour diriger un appareil  ON/OFF
-            '            Case "AUDIO" : .Type = Device.ListeDevices.AUDIO
-            '            Case "BAROMETRE" : .Type = Device.ListeDevices.BAROMETRE  'pour stocker les valeur issu d'un barometre meteo ou web
-            '            Case "BATTERIE" : .Type = Device.ListeDevices.BATTERIE
-            '            Case "COMPTEUR" : .Type = Device.ListeDevices.COMPTEUR  'compteur DS2423, RFXPower...
-            '            Case "CONTACT" : .Type = Device.ListeDevices.CONTACT  'detecteur de contact : switch 1-wire
-            '            Case "DETECTEUR" : .Type = Device.ListeDevices.DETECTEUR  'tous detecteurs : mouvement, obscurite...
-            '            Case "DIRECTIONVENT" : .Type = Device.ListeDevices.DIRECTIONVENT
-            '            Case "ENERGIEINSTANTANEE" : .Type = Device.ListeDevices.ENERGIEINSTANTANEE
-            '            Case "ENERGIETOTALE" : .Type = Device.ListeDevices.ENERGIETOTALE
-            '            Case "FREEBOX" : .Type = Device.ListeDevices.FREEBOX
-            '            Case "GENERIQUEBOOLEEN" : .Type = Device.ListeDevices.GENERIQUEBOOLEEN
-            '            Case "GENERIQUESTRING" : .Type = Device.ListeDevices.GENERIQUESTRING
-            '            Case "GENERIQUEVALUE" : .Type = Device.ListeDevices.GENERIQUEVALUE
-            '            Case "HUMIDITE" : .Type = Device.ListeDevices.HUMIDITE
-            '            Case "LAMPE" : .Type = Device.ListeDevices.LAMPE
-            '            Case "METEO" : .Type = Device.ListeDevices.METEO
-            '            Case "MULTIMEDIA" : .Type = Device.ListeDevices.MULTIMEDIA
-            '            Case "PLUIECOURANT" : .Type = Device.ListeDevices.PLUIECOURANT
-            '            Case "PLUIETOTAL" : .Type = Device.ListeDevices.PLUIETOTAL
-            '            Case "SWITCH" : .Type = Device.ListeDevices.SWITCH
-            '            Case "TELECOMMANDE" : .Type = Device.ListeDevices.TELECOMMANDE
-            '            Case "TEMPERATURE" : .Type = Device.ListeDevices.TEMPERATURE
-            '            Case "TEMPERATURECONSIGNE" : .Type = Device.ListeDevices.TEMPERATURECONSIGNE
-            '            Case "UV" : .Type = Device.ListeDevices.UV
-            '            Case "VITESSEVENT" : .Type = Device.ListeDevices.VITESSEVENT
-            '            Case "VOLET" : .Type = Device.ListeDevices.VOLET
-            '        End Select
-
-            '        .Description = _ListDevices.Item(i).description
-            '        .Adresse1 = _ListDevices.Item(i).adresse1
-            '        .Adresse2 = _ListDevices.Item(i).adresse2
-            '        .DriverID = _ListDevices.Item(i).driverid
-            '        .Picture = _ListDevices.Item(i).picture
-            '        .Solo = _ListDevices.Item(i).solo
-            '        .Refresh = _ListDevices.Item(i).refresh
-            '        .Modele = _ListDevices.Item(i).modele
-            '        .GetDeviceCommandePlus = _ListDevices.Item(i).GetCommandPlus
-            '        .Value = _ListDevices.Item(i).value
-            '        .DateCreated = _ListDevices.Item(i).DateCreated
-            '        .LastChange = _ListDevices.Item(i).LastChange
-            '        .LastChangeDuree = _ListDevices.Item(i).LastChangeDuree
-            '        .Unit = _ListDevices.Item(i).Unit
-            '        .AllValue = _ListDevices.Item(i).AllValue
-
-            '        If IsNumeric(_ListDevices.Item(i).valuelast) Then .ValueLast = _ListDevices.Item(i).valuelast
-
-            '        '_listact = ListMethod(_ListDevices.Item(i).id)
-            '        'If _listact.Count > 0 Then
-            '        '    For Each n In _listact
-            '        '        Dim a() As String = n.Split("|")
-            '        '        Dim p As New DeviceAction
-            '        '        With p
-            '        '            .Nom = a(0)
-            '        '            If a.Length > 1 Then
-            '        '                For t As Integer = 1 To a.Length - 1
-            '        '                    Dim pr As New DeviceAction.Parametre
-            '        '                    Dim b() As String = a(t).Split(":")
-            '        '                    With pr
-            '        '                        .Nom = b(0)
-            '        '                        .Type = b(1)
-            '        '                    End With
-            '        '                    p.Parametres.Add(pr)
-            '        '                Next
-            '        '            End If
-            '        '        End With
-            '        '        .DeviceAction.Add(p)
-            '        '        a = Nothing
-            '        '        p = Nothing
-            '        '    Next
-            '        'End If
-            '        '_listact = Nothing
-
-            '        Dim _flag As Boolean = True
-            '        Select Case .Type
-            '            Case Device.ListeDevices.BAROMETRE
-            '            Case Device.ListeDevices.COMPTEUR
-            '            Case Device.ListeDevices.ENERGIEINSTANTANEE
-            '            Case Device.ListeDevices.ENERGIETOTALE
-            '            Case Device.ListeDevices.GENERIQUEVALUE
-            '            Case Device.ListeDevices.HUMIDITE
-            '            Case Device.ListeDevices.PLUIECOURANT
-            '            Case Device.ListeDevices.PLUIETOTAL
-            '            Case Device.ListeDevices.TEMPERATURE
-            '            Case Device.ListeDevices.TEMPERATURECONSIGNE
-            '            Case Device.ListeDevices.VITESSEVENT
-            '            Case Device.ListeDevices.UV
-            '            Case Device.ListeDevices.VITESSEVENT
-            '            Case Device.ListeDevices.METEO
-            '                .ConditionActuel = _ListDevices.Item(i).ConditionActuel
-            '                .ConditionJ1 = _ListDevices.Item(i).ConditionJ1
-            '                .ConditionJ2 = _ListDevices.Item(i).ConditionActuel
-            '                .ConditionJ3 = _ListDevices.Item(i).ConditionJ3
-            '                .ConditionToday = _ListDevices.Item(i).ConditionToday
-            '                .HumiditeActuel = _ListDevices.Item(i).HumiditeActuel
-            '                .IconActuel = _ListDevices.Item(i).IconActuel
-            '                .IconJ1 = _ListDevices.Item(i).IconJ1
-            '                .IconJ2 = _ListDevices.Item(i).IconJ2
-            '                .IconJ3 = _ListDevices.Item(i).IconJ3
-            '                .IconToday = _ListDevices.Item(i).IconToday
-            '                .JourJ1 = _ListDevices.Item(i).JourJ1
-            '                .JourJ2 = _ListDevices.Item(i).JourJ2
-            '                .JourJ3 = _ListDevices.Item(i).JourJ3
-            '                .JourToday = _ListDevices.Item(i).JourToday
-            '                .MaxJ1 = _ListDevices.Item(i).MaxJ1
-            '                .MaxJ2 = _ListDevices.Item(i).MaxJ2
-            '                .MaxJ3 = _ListDevices.Item(i).MaxJ3
-            '                .MaxToday = _ListDevices.Item(i).MaxToday
-            '                .MinJ1 = _ListDevices.Item(i).MinJ1
-            '                .MinJ2 = _ListDevices.Item(i).MinJ2
-            '                .MinJ3 = _ListDevices.Item(i).MinJ3
-            '                .MinToday = _ListDevices.Item(i).MinToday
-            '                .TemperatureActuel = _ListDevices.Item(i).TemperatureActuel
-            '                .VentActuel = _ListDevices.Item(i).VentActuel
-            '                _flag = False
-            '            Case Device.ListeDevices.MULTIMEDIA
-            '                .Commandes = _ListDevices.Item(i).Commandes
-            '                _flag = False
-            '            Case Else
-            '                _flag = False
-            '        End Select
-
-            '        If _flag Then
-            '            .Correction = _ListDevices.Item(i).correction
-            '            .Precision = _ListDevices.Item(i).precision
-            '            .Formatage = _ListDevices.Item(i).formatage
-            '            .ValueDef = _ListDevices.Item(i).valuedef
-            '            .ValueMax = _ListDevices.Item(i).valuemax
-            '            .ValueMin = _ListDevices.Item(i).valuemin
-            '        End If
-            '    End With
-
-            '    _list.Add(x)
-            '    x = Nothing
-            'Next
-            '_list.Sort(AddressOf sortDevice)
-
-            'CbComposants.ItemsSource = _list
+            'CbComposants.ItemsSource = myService.GetAllDevices(IdSrv)
             'CbComposants.DisplayMemberPath = "Name"
+
+            Dim _listdevicestemp As New List(Of TemplateDevice)
+            For Each Device As TemplateDevice In _Listdevices
+                If Device.DriverID = txtDriver.Text Then
+                    _listdevicestemp.Add(Device)
+                End If
+            Next
+            _listdevicestemp.Sort(AddressOf sortDevice)
+
+            
+
+
+            CbComposants.ItemsSource = _listdevicestemp
+            CbComposants.DisplayMemberPath = "Name"
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur DGW_SelectionChanged: " & ex.ToString, "ERREUR", "")
         End Try
