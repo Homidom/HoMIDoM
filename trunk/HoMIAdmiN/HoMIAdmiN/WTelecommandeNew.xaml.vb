@@ -131,8 +131,7 @@ Public Class WTelecommandeNew
     Private Sub BtnTstCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTstCmd.Click
         Try
             If String.IsNullOrEmpty(TxtCmdName.Text) = False Then
-                '_CurrentTemplate.ExecuteCommand(IdSrv, TxtCmdName.Text, myService)
-                _CurrentTemplate.ExecuteCommand(IdSrv, TxtCmdName.Text)
+                _CurrentTemplate.ExecuteCommand(IdSrv, TxtCmdName.Text, myService)
             End If
             'Dim retour As String = myService.TelecommandeSendCommand(IdSrv, _DeviceId, TxtCmdName.Text)
             'If retour <> 0 Then
