@@ -100,8 +100,8 @@ Public Class WConfig
         'charger les pages
         CbPageDefaut.Items.Add("Aucune")
         For Each icmnu In Frm.ListMnu
-            ListMnu.Items.Add(icmnu.Text)
-            CbPageDefaut.Items.Add(icmnu.Text)
+            ListMnu.Items.Add(icmnu.Label)
+            CbPageDefaut.Items.Add(icmnu.Label)
         Next
         MyListMnu = Frm.ListMnu
 
@@ -177,7 +177,7 @@ Public Class WConfig
 
             If MyListMnu.Item(ListMnu.SelectedIndex).Defaut = True Then
                 BtnNewMnu.ContextMenu.Items(1).isenabled = False
-                TxtName.Text = MyListMnu.Item(ListMnu.SelectedIndex).Text
+                TxtName.Text = MyListMnu.Item(ListMnu.SelectedIndex).Label
                 LblType.Content = MyListMnu.Item(ListMnu.SelectedIndex).Type.ToString
                 TxtImage.Text = MyListMnu.Item(ListMnu.SelectedIndex).Icon
                 StkProperty.Visibility = Windows.Visibility.Visible
@@ -191,7 +191,7 @@ Public Class WConfig
 
             Else
                 BtnNewMnu.ContextMenu.Items(1).isenabled = True
-                TxtName.Text = MyListMnu.Item(ListMnu.SelectedIndex).Text
+                TxtName.Text = MyListMnu.Item(ListMnu.SelectedIndex).Label
                 LblType.Content = MyListMnu.Item(ListMnu.SelectedIndex).Type.ToString
                 If Frm.ListMnu.Item(ListMnu.SelectedIndex).Type <> uCtrlImgMnu.TypeOfMnu.Zone Then
                     StkImage.Visibility = Windows.Visibility.Visible
@@ -250,7 +250,7 @@ Public Class WConfig
             Select Case FlagNewMnu
                 Case -1
                     If ListMnu.SelectedIndex < 0 Then Exit Sub
-                    MyListMnu.Item(ListMnu.SelectedIndex).Text = TxtName.Text
+                    MyListMnu.Item(ListMnu.SelectedIndex).Label = TxtName.Text
                     If MyListMnu.Item(ListMnu.SelectedIndex).Type <> uCtrlImgMnu.TypeOfMnu.Zone Then
                         MyListMnu.Item(ListMnu.SelectedIndex).Icon = TxtImage.Text
                     End If
@@ -266,7 +266,7 @@ Public Class WConfig
                         Exit Sub
                     End If
                     Dim x As New uCtrlImgMnu
-                    x.Text = TxtName.Text
+                    x.Label = TxtName.Text
                     x.Type = uCtrlImgMnu.TypeOfMnu.Internet
                     x.Icon = TxtImage.Text
                     x.Parametres.Add(TxtParam.Text)
@@ -275,14 +275,14 @@ Public Class WConfig
                     ListMnu.Items.Add(TxtName.Text)
                 Case 2 'New Meteo
                     Dim x As New uCtrlImgMnu
-                    x.Text = TxtName.Text
+                    x.Label = TxtName.Text
                     x.Type = uCtrlImgMnu.TypeOfMnu.Meteo
                     x.Icon = TxtImage.Text
                     MyListMnu.Add(x)
                     ListMnu.Items.Add(TxtName.Text)
                 Case 4 'New Media
                     Dim x As New uCtrlImgMnu
-                    x.Text = TxtName.Text
+                    x.Label = TxtName.Text
                     x.Type = uCtrlImgMnu.TypeOfMnu.LecteurMedia
                     x.Icon = TxtImage.Text
                     MyListMnu.Add(x)
@@ -363,7 +363,7 @@ Public Class WConfig
 
         ListMnu.Items.Clear()
         For i As Integer = 0 To MyListMnu.Count - 1
-            ListMnu.Items.Add(MyListMnu.Item(i).Text)
+            ListMnu.Items.Add(MyListMnu.Item(i).Label)
         Next
 
         If ListMnu.SelectedIndex - 1 = 0 Then BtnUP.IsEnabled = False
@@ -384,7 +384,7 @@ Public Class WConfig
 
         ListMnu.Items.Clear()
         For i As Integer = 0 To MyListMnu.Count - 1
-            ListMnu.Items.Add(MyListMnu.Item(i).Text)
+            ListMnu.Items.Add(MyListMnu.Item(i).Label)
         Next
 
         If ListMnu.SelectedIndex + 1 = ListMnu.Items.Count Then BtnDown.IsEnabled = False

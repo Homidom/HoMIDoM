@@ -9,8 +9,8 @@
             </StackPanel>
         <Border.Background>
             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                <GradientStop Color="#BFFFFFFF" Offset="0.052" />
-                <GradientStop Color="#6D000000" Offset="0.517" />
+                <GradientStop Color="#BDDDDDDD" Offset="0.052" />
+                <GradientStop Color="#97000000" Offset="0.517" />
             </LinearGradientBrush>
         </Border.Background>
     </Border>

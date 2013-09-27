@@ -156,6 +156,14 @@
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
                                     </MenuItem>
+                                    <MenuItem Name="NewWidgetImage" Header="Nouveau Widget Image" FontSize="14" Foreground="White">
+                                        <MenuItem.Background>
+                                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                <GradientStop Color="Black" Offset="0" />
+                                                <GradientStop Color="DarkGray" Offset="0.663" />
+                                            </LinearGradientBrush>
+                                        </MenuItem.Background>
+                                    </MenuItem>
                                     <MenuItem Name="NewWidgetVolet" Header="Nouveau Widget Volet" FontSize="14" Foreground="White">
                                         <MenuItem.Background>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">

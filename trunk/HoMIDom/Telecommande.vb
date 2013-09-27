@@ -362,7 +362,7 @@
             ''' <param name="Name"></param>
             ''' <returns></returns>
             ''' <remarks></remarks>
-            Public Function ExecuteCommand(ByVal idsrv As String, ByVal Name As String) As String
+            Public Function ExecuteCommand(ByVal idsrv As String, ByVal Name As String, Server As Server) As String
                 Try
                     'on verifie l'id du serveur pour la sécurité
                     If idsrv <> _IdSrv Then
@@ -372,19 +372,32 @@
 
                     For Each cmd In _Cmd
                         If cmd.Name.ToLower = Name.ToLower Then 'on a trouvé la commande
-                            Dim code As String = cmd.Code.ToLower
+                            Dim code As String = cmd.Code
 
                             'on remplace les variables mis en accolades par leur valeur
                             For Each var In _Var
                                 If var.Type = TypeOfVar.String Or var.Type = TypeOfVar.Double Then
-                                    Dim _var As String = "{" & var.Name & "}"
-                                    If code.Contains(_var) Then
+                                    Dim _var As String = "{" & var.Name.ToLower & "}"
+                                    If code.ToLower.Contains(_var) Then
                                         code = code.Replace(_var, var.Value)
                                     End If
                                 End If
                             Next
 
                             'Executer la commande...
+                            If cmd.IsScript Then
+
+                            End If
+
+                            'On envoi la commande
+                            Select Case _Type
+                                Case 0 'Template de type http
+
+                                Case 1 'Template de type IR
+
+                                Case 2 'Template de type rs232
+
+                            End Select
                         End If
                     Next
 

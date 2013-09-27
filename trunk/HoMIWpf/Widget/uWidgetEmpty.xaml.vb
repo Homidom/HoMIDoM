@@ -17,6 +17,7 @@ Public Class uWidgetEmpty
         Camera = 7
         Volet = 8
         Moteur = 9
+        Image = 10
         Device = 99
     End Enum
 
@@ -415,6 +416,13 @@ Public Class uWidgetEmpty
                         StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
                         StkTool.Visibility = Windows.Visibility.Collapsed
                         ShowPicture = False
+                    Case TypeOfWidget.Image
+                        MaJEtiquetteFromServeur = False
+                        ColorBackGround = Brushes.Transparent
+                        StkTool.Visibility = Windows.Visibility.Collapsed
+                        ShowStatus = False
+                        ShowPicture = True
+                        ShowEtiquette = False
                     Case Else
 
                 End Select
@@ -636,10 +644,10 @@ Public Class uWidgetEmpty
             _Picture = value
             Try
                 If _Show = True Then
-                    If Image.Tag <> _Picture Then
-                        Image.Tag = _Picture
-                        LoadPicture()
-                    End If
+                    'If Image.Tag <> _Picture Then
+                    Image.Tag = _Picture
+                    LoadPicture()
+                    'End If
                 End If
             Catch ex As Exception
                 AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Set Picture: " & ex.Message, "Erreur", " uWidgetEmpty.Set Picture")
@@ -1324,6 +1332,10 @@ Public Class uWidgetEmpty
 
             If e.LeftButton = MouseButtonState.Released Then Exit Sub
 
+            If Popup1.IsOpen = True Then
+                Popup1.IsOpen = False
+            End If
+
             Dim _NewPos As Point = e.GetPosition(Me)
             Dim _DiffY As Double = _oldposition.Y - _NewPos.Y
             Dim _DiffX As Double = _oldposition.X - _NewPos.X
@@ -1721,10 +1733,6 @@ Public Class uWidgetEmpty
     Private Sub Image_PreviewMouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Me.PreviewMouseDown
         _Down = Now
         _oldposition = e.GetPosition(Me)
-    End Sub
-
-    Private Sub ClosePopup()
-        Popup1.IsOpen = False
     End Sub
 
 #Region "Gestion des evenements provenant des popup"
@@ -2435,7 +2443,7 @@ Public Class uWidgetEmpty
                     ' L'image n'a pas été trouvée en local, on la reprend du serveur
                     ImageBehavior.SetAnimatedSource(Image, ConvertArrayToImage(myService.GetByteFromImage(DisplayPictureFileName)))
                 End If
-            ElseIf (_type = TypeOfWidget.Empty Or _type = TypeOfWidget.Device) And _Visuel.Count = 0 And String.IsNullOrEmpty(_Picture) = False Then
+            ElseIf (_type = TypeOfWidget.Empty Or _type = TypeOfWidget.Device Or Type = TypeOfWidget.Image) And _Visuel.Count = 0 And String.IsNullOrEmpty(_Picture) = False Then
                 ' Affichage de l'image pour un widget empty s'il n'existe aucune visualisation
                 If IO.File.Exists(_Picture) Then
                     ' L'image existe en local
@@ -2446,7 +2454,7 @@ Public Class uWidgetEmpty
                 End If
             End If
 
-            If (_type = TypeOfWidget.Empty Or _type = TypeOfWidget.Device) And _Visuel.Count > 0 And String.IsNullOrEmpty(_Picture) = False Then
+            If (_type = TypeOfWidget.Empty Or _type = TypeOfWidget.Device Or Type = TypeOfWidget.Image) And _Visuel.Count > 0 And String.IsNullOrEmpty(_Picture) = False Then
                 ' Affichage de l'image pour un widget empty s'il une visualisation
                 If IO.File.Exists(_Picture) Then
                     ' L'image existe en local
@@ -2483,5 +2491,9 @@ Public Class uWidgetEmpty
 
     Private Sub Popup1_MouseLeave(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Popup1.MouseLeave
         Popup1.IsOpen = False
+    End Sub
+
+    Private Sub uWidgetEmpty_LostMouseCapture(sender As Object, e As System.Windows.Input.MouseEventArgs) Handles Me.LostMouseCapture
+
     End Sub
 End Class
