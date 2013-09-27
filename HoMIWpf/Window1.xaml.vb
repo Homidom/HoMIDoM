@@ -1046,6 +1046,8 @@ Class Window1
                                         x.Type = uWidgetEmpty.TypeOfWidget.KeyPad
                                     Case uWidgetEmpty.TypeOfWidget.Label.ToString
                                         x.Type = uWidgetEmpty.TypeOfWidget.Label
+                                    Case uWidgetEmpty.TypeOfWidget.Image.ToString
+                                        x.Type = uWidgetEmpty.TypeOfWidget.Image
                                 End Select
                             Case "caneditvalue"
                                 x.CanEditValue = list.Item(j).Attributes.Item(k).Value
@@ -1401,7 +1403,7 @@ Class Window1
             For i As Integer = 0 To ListMnu.Count - 1
                 writer.WriteStartElement("menu")
                 writer.WriteStartAttribute("nom")
-                writer.WriteValue(ListMnu.Item(i).Text)
+                writer.WriteValue(ListMnu.Item(i).Label)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("defaut")
                 writer.WriteValue(ListMnu.Item(i).Defaut)
@@ -1830,7 +1832,7 @@ Class Window1
             ctrl.Type = type
             ctrl.Defaut = Defaut
             ctrl.Id = System.Guid.NewGuid.ToString()
-            ctrl.Text = Label
+            ctrl.Label = Label
             ctrl.Tag = Tag
             ctrl.Icon = Icon
             ctrl.Parametres = Parametres
@@ -1869,7 +1871,7 @@ Class Window1
                     ImageBackGround = _ImageBackGroundDefault
                     If _DefautPage IsNot Nothing Then 'si la page par defaut est pas null on l'affiche sinon on affiche rien
                         For Each icmnu In ListMnu
-                            If icmnu.Text = _DefautPage Then
+                            If icmnu.Label = _DefautPage Then
                                 IconMnuDoubleClick(icmnu, Nothing)
                                 Exit For
                             End If
@@ -1909,7 +1911,7 @@ Class Window1
 
             DesAff_TaskMnu()
             _TimeMouseDown = Now
-            LblZone.Content = sender.Text
+            LblZone.Content = sender.Label
 
             For Each _ctl In _ListMnu
                 _ctl.IsSelect = False
@@ -2562,6 +2564,9 @@ Class Window1
         End Try
     End Sub
 
+#Region "Nouveau Widget"
+
+
     Private Sub NewWidgetEmpty_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetEmpty.Click
         Try
             ' Remettre à zéro les modes édition + déplacement
@@ -2825,6 +2830,50 @@ Class Window1
         End Try
     End Sub
 
+    Private Sub NewWidgetImage_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetImage.Click
+        Try
+            ' Remettre à zéro les modes édition + déplacement
+            ChkMove.IsChecked = False
+            ChkEdit.IsChecked = False
+            Deplacement_Click(Me, e)
+
+            'Ajouter un nouveau Control
+            Dim x As New ContentControl
+            x.Width = 100
+            x.Height = 100
+            x.Style = mybuttonstyle
+            x.Tag = True
+            x.Uid = System.Guid.NewGuid.ToString()
+
+            'Ajoute l'élément dans la liste
+            Dim elmt As New uWidgetEmpty
+            elmt.Show = True
+            elmt.Uid = x.Uid
+            elmt.ZoneId = _CurrentIdZone
+            elmt.Width = 100
+            elmt.Height = 25
+            elmt.Rotation = 0
+            elmt.X = 300
+            elmt.Y = 300
+            elmt.IsEmpty = True
+            elmt.Type = uWidgetEmpty.TypeOfWidget.Image
+            elmt.ShowStatus = False
+            _ListElement.Add(elmt)
+
+            elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
+            x.Content = elmt
+            Canvas1.Children.Add(x)
+            Canvas.SetLeft(x, 300)
+            Canvas.SetTop(x, 300)
+            Canvas.SetZIndex(x, 0)
+
+            elmt = Nothing
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetLabel_Click: " & ex.Message, "Erreur", "NewWidgetLabel_Click")
+        End Try
+    End Sub
+
+
     Private Sub NewWidgetCamera_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetCamera.Click
         Try
             ' Remettre à zéro les modes édition + déplacement
@@ -2909,12 +2958,6 @@ Class Window1
         End Try
     End Sub
 
-    ''' <summary>
-    ''' 
-    ''' </summary>
-    ''' <param name="sender"></param>
-    ''' <param name="e"></param>
-    ''' <remarks></remarks>
     Private Sub NewWidgetMoteur_Click(sender As Object, e As System.Windows.RoutedEventArgs) Handles NewWidgetMoteur.Click
         Try
             ' Remettre à zéro les modes édition + déplacement
@@ -2957,6 +3000,7 @@ Class Window1
         End Try
     End Sub
 
+#End Region
 
 #Region "Menu"
 

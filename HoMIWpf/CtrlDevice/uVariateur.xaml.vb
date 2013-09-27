@@ -13,7 +13,6 @@
         End Set
     End Property
 
-
     Private Sub BtnUp_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnUp.Click
         _Value += 10
         If _Value > 100 Then _Value = 100

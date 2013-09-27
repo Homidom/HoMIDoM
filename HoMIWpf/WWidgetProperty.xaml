@@ -9,7 +9,7 @@
         <Label Content="Editer" FontSize="24" FontStretch="Normal" FontWeight="Medium" FontStyle="Italic" Foreground="DarkOrange" HorizontalContentAlignment="Center" />
        
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-            <GroupBox Margin="2" Height="559" >
+            <GroupBox Margin="2" Height="559" MinWidth="300" >
                 <GroupBox.Header>
                     <Label Foreground="White" FontWeight="Bold">Propriétés</Label>
                 </GroupBox.Header>

@@ -8,9 +8,10 @@
             
             <StackPanel Name="Stk1">
                 <Popup Margin="2" Name="Popup1" HorizontalAlignment="Left" VerticalAlignment="Top"  
-                       IsOpen="False">
-                    <StackPanel Name="StkPopup" Background="#44312D2D" MaxWidth="300" MinHeight="50"/>
-           
+                       IsOpen="False" AllowsTransparency="True">
+                    <Border CornerRadius="5" Background="#42A9A9A9">
+                        <StackPanel Name="StkPopup" MaxWidth="300" MinHeight="50" ></StackPanel>
+                    </Border>
                 </Popup>
                 
                 <Label Name="Lbl" HorizontalContentAlignment="Left" VerticalContentAlignment="Top" FontSize="9" Foreground="White" >?</Label>

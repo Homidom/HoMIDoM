@@ -9,8 +9,8 @@
       
     <Grid>
         <StackPanel Orientation="Horizontal" Background="#20000000">
-            <Button Name="BtnOn" Margin="5" Template="{DynamicResource GlassButton}" Content="ON" Width="50" Height="25" Foreground="White" />
-            <Button Name="BtnOff" Margin="5" Template="{DynamicResource GlassButton}" Content="OFF" Width="50" Height="25" Foreground="White" />
+            <Button Name="BtnOn" Margin="5" Template="{DynamicResource GlassButton}" Content="ON" Width="60" Height="35" Foreground="White" />
+            <Button Name="BtnOff" Margin="5" Template="{DynamicResource GlassButton}" Content="OFF" Width="60" Height="35" Foreground="White" />
         </StackPanel>
     </Grid>
 </UserControl>

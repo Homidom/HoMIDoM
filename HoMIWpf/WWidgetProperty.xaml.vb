@@ -270,11 +270,24 @@ Public Class WWidgetProperty
                         Case uWidgetEmpty.TypeOfWidget.Label
                             StkPicture.Visibility = Visibility.Collapsed
                             StkStatus.Visibility = Visibility.Collapsed
+                            ChkMajEtiq.Visibility = Visibility.Collapsed
                             ChkShowStatus.Visibility = Visibility.Collapsed
                             ChkShowEtiq.Visibility = Visibility.Collapsed
                             BtnEditAction.Visibility = Windows.Visibility.Collapsed
                             ChkEditValue.Visibility = Windows.Visibility.Collapsed
                             BtnEditVisu.Visibility = Windows.Visibility.Collapsed
+                            BtnDelete.Visibility = Windows.Visibility.Visible
+
+                        Case uWidgetEmpty.TypeOfWidget.Image
+                            StkPicture.Visibility = Visibility.Visible
+                            StkStatus.Visibility = Visibility.Collapsed
+                            StkEtiq.Visibility = Windows.Visibility.Collapsed
+                            ChkMajEtiq.Visibility = Windows.Visibility.Hidden
+                            ChkShowStatus.Visibility = Visibility.Collapsed
+                            ChkShowEtiq.Visibility = Visibility.Collapsed
+                            BtnEditAction.Visibility = Windows.Visibility.Visible
+                            ChkEditValue.Visibility = Windows.Visibility.Collapsed
+                            BtnEditVisu.Visibility = Windows.Visibility.Visible
                             BtnDelete.Visibility = Windows.Visibility.Visible
                     End Select
 
@@ -284,13 +297,6 @@ Public Class WWidgetProperty
             End Try
         End Set
     End Property
-
-    Public Sub New()
-
-        ' Cet appel est requis par le concepteur.
-        InitializeComponent()
-
-    End Sub
 
     Private Sub BtnOk_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOk.Click
         Try

@@ -4010,9 +4010,11 @@ Namespace HoMIDom
             Set(value As Integer)
                 _PuissanceTotaleActuel = value
 
+                If _PuissanceTotaleActuel <= 0 Then _PuissanceTotaleActuel = 0
+
                 For i As Integer = 0 To _ListDevices.Count - 1
                     If _ListDevices.Item(i).id = "energietotale01" Then
-                        If _ListDevices.Item(i).Value <> value Then _ListDevices.Item(i).Value = value
+                        If _ListDevices.Item(i).Value <> _PuissanceTotaleActuel Then _ListDevices.Item(i).Value = _PuissanceTotaleActuel
                         Exit For
                     End If
                 Next
@@ -8643,6 +8645,73 @@ Namespace HoMIDom
                         End If
                     Next
                 End If
+                writer.WriteEndElement()
+
+                'ecriture des grahiques
+                writer.WriteStartElement("templategraphique")
+                writer.WriteStartAttribute("width")
+                writer.WriteValue(Template.GraphicTemplate.Width)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("height")
+                writer.WriteValue(Template.GraphicTemplate.Height)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("backgroundpicture")
+                writer.WriteValue(Template.GraphicTemplate.BackGroundPicture)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("colorbackground")
+                writer.WriteValue(Template.GraphicTemplate.ColorBackGround)
+                writer.WriteEndAttribute()
+                writer.WriteStartElement("widgets")
+                If Template.GraphicTemplate.Widgets IsNot Nothing Then
+                    For Each _widget In Template.GraphicTemplate.Widgets
+                        writer.WriteStartElement("widget")
+                        writer.WriteStartAttribute("label")
+                        writer.WriteValue(_widget.Label)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("width")
+                        writer.WriteValue(_widget.Width)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("height")
+                        writer.WriteValue(_widget.Height)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("x")
+                        writer.WriteValue(_widget.X)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("y")
+                        writer.WriteValue(_widget.Y)
+                        writer.WriteEndAttribute()
+
+                        writer.WriteStartElement("pictures")
+                        If _widget.Pictures IsNot Nothing Then
+                            For Each _picture In _widget.Pictures
+                                writer.WriteStartElement("picture")
+                                writer.WriteStartAttribute("path")
+                                writer.WriteValue(_picture.Path)
+                                writer.WriteEndAttribute()
+                                writer.WriteEndElement()
+                            Next
+                        End If
+                        writer.WriteEndElement()
+
+                        writer.WriteStartElement("outputs")
+                        If _widget.Outputs IsNot Nothing Then
+                            For Each _output In _widget.Outputs
+                                writer.WriteStartElement("output")
+                                writer.WriteStartAttribute("templateid")
+                                writer.WriteValue(_output.TemplateID)
+                                writer.WriteEndAttribute()
+                                writer.WriteStartAttribute("command")
+                                writer.WriteValue(_output.Commande)
+                                writer.WriteEndAttribute()
+                                writer.WriteEndElement()
+                            Next
+                        End If
+                        writer.WriteEndElement()
+
+                        writer.WriteEndElement()
+                    Next
+                End If
+                writer.WriteEndElement()
                 writer.WriteEndElement()
 
                 writer.WriteEndElement()

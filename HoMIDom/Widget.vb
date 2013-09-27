@@ -92,8 +92,8 @@
         End Class
 
         Public Class Output
-            Dim _TemplateID As String
-            Dim _Commande As String
+            Dim _TemplateID As String 'ID du template concerné
+            Dim _Commande As String 'Commande à envoyer
 
             Public Property TemplateID As String
                 Get

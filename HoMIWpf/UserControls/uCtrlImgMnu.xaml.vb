@@ -22,8 +22,41 @@ Partial Public Class uCtrlImgMnu
     Dim _Parametres As New List(Of String)
     Dim _Defaut As Boolean
     Dim _Idelement As String
-    Dim _Visible As Boolean
+    Dim _Visible As Boolean 'en désactivant cette propriété la page n’est plus accessible depuis le bandeau de navigation ou par navigation avec le doigt (glissement vers la gauche ou la droite). La page n’est alors accessible que par "jump" depuis le "What I Do" des widgets. Cela permet de créer des pages cachées ou annexes.
     Dim _IsSelect As Boolean
+    Dim _IsDefaut As Boolean 'page par defaut
+    Dim _Statique 'une page statique est visible en permanence à l’écran. Elle est donc retirée automatiquement de la navigation. Cela permet de placer widgets communs ou un fond commun à toutes les pages.
+    Dim _ShowBackground As Boolean
+
+    'cette propriété permet d’afficher ou non l’image de fond de la page. Sans image de fond vous verrez apparaitre le fond noir de l’application.
+    Public Property ShowBackground As Boolean
+        Get
+            Return _ShowBackground
+        End Get
+        Set(value As Boolean)
+            _ShowBackground = value
+        End Set
+    End Property
+
+    'une page statique est visible en permanence à l’écran. Elle est donc retirée automatiquement de la navigation. Cela permet de placer widgets communs ou un fond commun à toutes les pages.
+    Public Property Statique As Boolean
+        Get
+            Return _Statique
+        End Get
+        Set(value As Boolean)
+            _Statique = value
+        End Set
+    End Property
+
+    'Page par défaut
+    Public Property IsDefaut As Boolean
+        Get
+            Return _IsDefaut
+        End Get
+        Set(value As Boolean)
+            _IsDefaut = value
+        End Set
+    End Property
 
     Public Property Id As String
         Get
@@ -59,7 +92,7 @@ Partial Public Class uCtrlImgMnu
         End Set
     End Property
 
-    Public Property Text() As String
+    Public Property Label As String
         Get
             Return vText
         End Get
