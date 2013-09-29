@@ -416,9 +416,9 @@ Public Class Driver_GoogleCalendar
                                         Minut = CInt(Adr2(1))
                                     End If
                                 End If
-                                If ((feedEntry.Title.Text.ToUpper = Objet.Adresse1.ToString.ToUpper) Or (Objet.Adresse1.ToString.ToUpper = "FERIE")) And _
-                                   Times.StartTime < System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString And _
-                                   Times.EndTime > System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.ToShortTimeString Then
+                                If ((feedEntry.Title.Text.ToUpper = Objet.Adresse1.ToString.ToUpper) Or (feedEntry.Title.Text.ToUpper = "Jours fériés en France")) And _
+                                   Times.StartTime < System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString And _
+                                   Times.EndTime > System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString Then
                                     ' Un element etre trouvé 
                                     elementFound = True
                                     EntryFind = feedEntry
@@ -432,23 +432,23 @@ Public Class Driver_GoogleCalendar
                                 If elementFound Then
                                     Select Case Objet.adresse2.ToString.ToUpper
                                         Case "TITRE"
-                                            Objet.Value = EntryFind.Title.Text
+                                            Objet.setValue(EntryFind.Title.Text)
 
                                         Case "DESCRIPTION"
-                                            Objet.Value = EntryFind.Content.Content.ToString
+                                            Objet.setValue(EntryFind.Content.Content.ToString)
 
                                         Case "LIEU"
-                                            Objet.Value = EntryFind.Locations.Item(0).ValueString
+                                            Objet.setValue(EntryFind.Locations.Item(0).ValueString)
 
                                     End Select
 
                                 Else
-                                    Objet.Value = "Evénement non trouvé"
+                                    Objet.setValue("Evénement non trouvé")
                                 End If
 
 
                             Case "GENERIQUEBOOLEEN"
-                                Objet.Value = elementFound
+                                Objet.setValue(elementFound)
 
                             Case Else
                                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur du type du composant de " & Objet.Adresse1)

@@ -483,7 +483,7 @@ Public Class Driver_Teleinfo
                 Select Case _Modele.ToUpper
                     Case "XBEE_2_COMPTEURS_CARTELECTRONIC"
                         Ftdi = New ftdi_cpt.Ftdi_cpt
-                        Ftdi.Start("Interface XBEE -> Compteur")
+                        Ftdi.Start(False, "Interface XBEE -> Compteur")
                         If _SecondPort.ToLower <> "nothing" And TabCom.Contains(_SecondPort) Then
                             MyTimer.Interval = _Parametres.Item(2).Valeur
                             MyTimer.Enabled = True
@@ -493,7 +493,7 @@ Public Class Driver_Teleinfo
 
                     Case "2_COMPTEURS_CARTELECTRONIC"
                         Ftdi = New ftdi_cpt.Ftdi_cpt
-                        Ftdi.Start("Interface USB -> Compteur")
+                        Ftdi.Start(False, "Interface USB -> Compteur")
                         If _SecondPort.ToLower <> "nothing" And TabCom.Contains(_SecondPort) Then
                             MyTimer.Interval = _Parametres.Item(2).Valeur
                             MyTimer.Enabled = True
@@ -503,7 +503,7 @@ Public Class Driver_Teleinfo
 
                     Case "USBTIC_CARTELECTRONIC"
                         Ftdi = New ftdi_cpt.Ftdi_cpt
-                        Ftdi.Start("Interface USB 1 TIC")
+                        Ftdi.Start(False, "Interface USB 1 TIC")
                         Ftdi.cpt(1)
                 End Select
 
