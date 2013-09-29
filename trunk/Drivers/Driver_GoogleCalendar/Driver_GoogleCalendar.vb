@@ -409,9 +409,16 @@ Public Class Driver_GoogleCalendar
                                 If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.Title.Text & " Compte: " & feedEntry.Authors.FirstOrDefault.Name _
                                     & vbCrLf & "Start: " & Times.StartTime & " End: " & Times.EndTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
 
+                                Dim Minut As Integer = 0
+                                If InStr(Objet.Adresse2, ":") Then
+                                    Dim Adr2 = Split(Objet.Adresse2, ":")
+                                    If Adr2(1) <> "" Then
+                                        Minut = CInt(Adr2(1))
+                                    End If
+                                End If
                                 If ((feedEntry.Title.Text.ToUpper = Objet.Adresse1.ToString.ToUpper) Or (Objet.Adresse1.ToString.ToUpper = "FERIE")) And _
                                    Times.StartTime < System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString And _
-                                   Times.EndTime > System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString Then
+                                   Times.EndTime > System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.ToShortTimeString Then
                                     ' Un element etre trouvé 
                                     elementFound = True
                                     EntryFind = feedEntry
