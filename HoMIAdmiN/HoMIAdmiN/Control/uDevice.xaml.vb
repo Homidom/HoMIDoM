@@ -3,6 +3,7 @@ Imports HoMIDom.HoMIDom.Device
 Imports HoMIDom.HoMIDom.Api
 Imports System.IO
 Imports System.Threading
+Imports System.Text.RegularExpressions
 
 
 Partial Public Class uDevice
@@ -597,18 +598,18 @@ Partial Public Class uDevice
 
             'on corrige certains valeurs
             'TxtRefresh.Text = Replace(TxtRefresh.Text, ".", ",")
-            TxtRefresh.Text = Replace(TxtRefresh.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtRefresh.Text = Replace(TxtRefresh.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtPrecision.Text = Replace(TxtPrecision.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtPrecision.Text = Replace(TxtPrecision.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtCorrection.Text = Replace(TxtCorrection.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtCorrection.Text = Replace(TxtCorrection.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtValDef.Text = Replace(TxtValDef.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtValDef.Text = Replace(TxtValDef.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtValueMax.Text = Replace(TxtValueMax.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtValueMax.Text = Replace(TxtValueMax.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtValueMin.Text = Replace(TxtValueMin.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtValueMin.Text = Replace(TxtValueMin.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtRefresh.Text = Regex.Replace(TxtRefresh.Text, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            'TxtRefresh.Text = Replace(TxtRefresh.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtPrecision.Text = Regex.Replace(TxtPrecision.Text, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            'TxtPrecision.Text = Replace(TxtPrecision.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtCorrection.Text = Regex.Replace(TxtCorrection.Text, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            'TxtCorrection.Text = Replace(TxtCorrection.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtValDef.Text = Regex.Replace(TxtValDef.Text, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            'TxtValDef.Text = Replace(TxtValDef.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtValueMax.Text = Regex.Replace(TxtValueMax.Text, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            'TxtValueMax.Text = Replace(TxtValueMax.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtValueMin.Text = Regex.Replace(TxtValueMin.Text, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            'TxtValueMin.Text = Replace(TxtValueMin.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
 
             'on check les valeurs renseignés
             If Left(TxtNom.Text, 5) <> "HOMI_" Then
@@ -750,18 +751,18 @@ Partial Public Class uDevice
 
             'on corrige certains valeurs
             'TxtRefresh.Text = Replace(TxtRefresh.Text, ".", ",")
-            TxtRefresh.Text = Replace(TxtRefresh.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtRefresh.Text = Replace(TxtRefresh.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtPrecision.Text = Replace(TxtPrecision.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtPrecision.Text = Replace(TxtPrecision.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtCorrection.Text = Replace(TxtCorrection.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtCorrection.Text = Replace(TxtCorrection.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtValDef.Text = Replace(TxtValDef.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtValDef.Text = Replace(TxtValDef.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtValueMax.Text = Replace(TxtValueMax.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtValueMax.Text = Replace(TxtValueMax.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtValueMin.Text = Replace(TxtValueMin.Text, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-            TxtValueMin.Text = Replace(TxtValueMin.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtRefresh.Text = Regex.Replace(TxtRefresh.Text, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            'TxtRefresh.Text = Replace(TxtRefresh.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtPrecision.Text = Regex.Replace(TxtPrecision.Text, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            'TxtPrecision.Text = Replace(TxtPrecision.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtCorrection.Text = Regex.Replace(TxtCorrection.Text, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            'TxtCorrection.Text = Replace(TxtCorrection.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtValDef.Text = Regex.Replace(TxtValDef.Text, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            'TxtValDef.Text = Replace(TxtValDef.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtValueMax.Text = Regex.Replace(TxtValueMax.Text, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            'TxtValueMax.Text = Replace(TxtValueMax.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            TxtValueMin.Text = Regex.Replace(TxtValueMin.Text, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            'TxtValueMin.Text = Replace(TxtValueMin.Text, ",", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
 
             'on check les valeurs renseignés
             If CbType.Text = "BAROMETRE" _
