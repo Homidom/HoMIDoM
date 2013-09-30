@@ -603,12 +603,30 @@ Namespace HoMIDom
                     Dim Tabl() As String = _device.Split(".")
 
                     If Tabl.Length = 1 Then
-                        Dim x As Object = _Server.ReturnRealDeviceByName(Tabl(0))
-                        If x IsNot Nothing Then
-                            _device = x.Value
-                        Else
-                            _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "DecodeCommand", "Device: " & Tabl(0) & " non trouvé")
-                        End If
+                        Select Case _device
+                            Case "SYSTEM_DATE"
+                                Return Now.Date.ToShortDateString
+                            Case "SYSTEM_LONG_DATE"
+                                Return Now.Date.ToLongDateString
+                            Case "SYSTEM_TIME"
+                                Return Now.ToShortTimeString
+                            Case "SYSTEM_LONG_TIME"
+                                Return Now.ToLongTimeString
+                            Case "SYSTEM_SOLEIL_COUCHE"
+                                Dim _date As Date = _Server.GetHeureCoucherSoleil
+                                Return _date.ToShortTimeString
+                            Case "SYSTEM_SOLEIL_LEVE"
+                                Dim _date As Date = _Server.GetHeureLeverSoleil
+                                Return _date.ToShortTimeString
+                            Case Else
+                                Dim x As Object = _Server.ReturnRealDeviceByName(Tabl(0))
+                                If x IsNot Nothing Then
+                                    _device = x.Value
+                                Else
+                                    _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "DecodeCommand", "Device: " & Tabl(0) & " non trouvé")
+                                End If
+                        End Select
+
                     ElseIf Tabl.Length = 2 Then
                         Dim x As Object = _Server.ReturnRealDeviceByName(Tabl(0))
                         If x IsNot Nothing Then

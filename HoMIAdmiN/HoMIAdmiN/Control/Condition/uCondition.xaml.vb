@@ -539,11 +539,16 @@ Public Class uCondition
                     _IdDevice = myService.GetAllDevices(IdSrv).Item(CbDevice.SelectedIndex).ID
                     _PropertyDevice = CbPropertyDevice.Text
                     _Signe = CbSigne2.SelectedIndex
-                    If String.IsNullOrEmpty(TxtValue.Tag.ToString) = True Then
-                        _Value = TxtValue.Text
+                    If TxtValue.Tag IsNot Nothing Then
+                        If String.IsNullOrEmpty(TxtValue.Tag.ToString) = True Then
+                            _Value = TxtValue.Text
+                        Else
+                            _Value = TxtValue.Tag
+                        End If
                     Else
-                        _Value = TxtValue.Tag
+                        _Value = TxtValue.Text
                     End If
+
                 End If
             End If
         Catch ex As Exception
@@ -939,9 +944,11 @@ Public Class uCondition
                 Dim _type As String = myService.TypeOfPropertyOfDevice(_ID, CbPropertyDevice.Text)
                 Dim _obj As Object = Nothing
 
-                If String.IsNullOrEmpty(TxtValue.Tag.ToString) = False Then
-                    If TxtValue.Tag.ToString.StartsWith("<") And TxtValue.Tag.ToString.EndsWith(">") And (TxtValue.Tag.ToString.Replace("|", ".").Contains(TxtValue.Text) Or TxtValue.Text.Contains(".")) Then
-                        Exit Sub
+                If TxtValue.Tag IsNot Nothing Then
+                    If String.IsNullOrEmpty(TxtValue.Tag.ToString) = False Then
+                        If TxtValue.Tag.ToString.StartsWith("<") And TxtValue.Tag.ToString.EndsWith(">") And (TxtValue.Tag.ToString.Replace("|", ".").Contains(TxtValue.Text) Or TxtValue.Text.Contains(".")) Then
+                            Exit Sub
+                        End If
                     End If
                 End If
 
