@@ -20,6 +20,8 @@ Imports System.Net
 Imports System.Net.Sockets
 Imports System.Net.Mail
 Imports TagLib
+Imports System.Text.RegularExpressions
+
 #End Region
 
 Namespace HoMIDom
@@ -36,10 +38,10 @@ Namespace HoMIDom
 #Region "Evènements"
         Public Event DeviceChanged(ByVal DeviceId As String, ByVal DeviceValue As String) Implements IHoMIDom.DeviceChanged 'Evènement lorsqu'un device change
         Public Event NewLog(ByVal TypLog As HoMIDom.Server.TypeLog, ByVal Source As HoMIDom.Server.TypeSource, ByVal Fonction As String, ByVal Message As String) Implements IHoMIDom.NewLog  'Evènement lorsqu'un nouveau log est écrit
-        Public Event MessageFromServeur(Id As String, Time As DateTime, Message As String) Implements IHoMIDom.MessageFromServeur  'Message provenant du serveur
-        Public Event DriverChanged(DriverId As String) Implements IHoMIDom.DriverChanged 'Evènement lorsq'un driver est modifié
-        Public Event ZoneChanged(ZoneId As String) Implements IHoMIDom.ZoneChanged 'Evènement lorsq'une zone est modifiée ou créée
-        Public Event MacroChanged(MacroId As String) Implements IHoMIDom.MacroChanged 'Evènement lorsq'une macro est modifiée ou créée
+        Public Event MessageFromServeur(ByVal Id As String, ByVal Time As DateTime, ByVal Message As String) Implements IHoMIDom.MessageFromServeur  'Message provenant du serveur
+        Public Event DriverChanged(ByVal DriverId As String) Implements IHoMIDom.DriverChanged 'Evènement lorsq'un driver est modifié
+        Public Event ZoneChanged(ByVal ZoneId As String) Implements IHoMIDom.ZoneChanged 'Evènement lorsq'une zone est modifiée ou créée
+        Public Event MacroChanged(ByVal MacroId As String) Implements IHoMIDom.MacroChanged 'Evènement lorsq'une macro est modifiée ou créée
         Public Event HeureSoleilChanged() Implements IHoMIDom.HeureSoleilChanged 'Evènement lorsque l'heure de lever/couché du soleil est modifié
 #End Region
 
@@ -601,10 +603,10 @@ Namespace HoMIDom
                                     Select Case list.Item(0).Attributes.Item(j).Name
                                         Case "longitude"
                                             '_Longitude = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
-                                            _Longitude = list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                            _Longitude = Regex.Replace(list.Item(0).Attributes.Item(j).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                                         Case "latitude"
                                             '_Latitude = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
-                                            _Latitude = list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                            _Latitude = Regex.Replace(list.Item(0).Attributes.Item(j).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                                         Case "heurecorrectionlever"
                                             _HeureLeverSoleilCorrection = list.Item(0).Attributes.Item(j).Value
                                         Case "heurecorrectioncoucher"
@@ -1117,10 +1119,8 @@ Namespace HoMIDom
                                             .Picture = _MonRepertoire & "\images\icones\composant_128.png"
                                         End If
                                         If (Not list.Item(j).Attributes.GetNamedItem("solo") Is Nothing) Then .Solo = list.Item(j).Attributes.GetNamedItem("solo").Value
-                                        'If (Not list.Item(j).Attributes.GetNamedItem("value") Is Nothing) Then .Value = Replace(list.Item(j).Attributes.GetNamedItem("value").Value, ".",",")
-                                        'If (Not list.Item(j).Attributes.GetNamedItem("valuelast") Is Nothing) Then .ValueLast = Replace(list.Item(j).Attributes.GetNamedItem("valuelast").Value, ".", ",")
-                                        If (Not list.Item(j).Attributes.GetNamedItem("value") Is Nothing) Then .Value = Replace(list.Item(j).Attributes.GetNamedItem("value").Value, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                                        If (Not list.Item(j).Attributes.GetNamedItem("valuelast") Is Nothing) Then .ValueLast = Replace(list.Item(j).Attributes.GetNamedItem("valuelast").Value, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                        If (Not list.Item(j).Attributes.GetNamedItem("value") Is Nothing) Then .Value = Regex.Replace(list.Item(j).Attributes.GetNamedItem("value").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                        If (Not list.Item(j).Attributes.GetNamedItem("valuelast") Is Nothing) Then .ValueLast = Regex.Replace(list.Item(j).Attributes.GetNamedItem("valuelast").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
 
                                         If (Not list.Item(j).Attributes.GetNamedItem("lastetat") Is Nothing) Then .LastEtat = list.Item(j).Attributes.GetNamedItem("lastetat").Value
                                         '-- propriétés generique value --
@@ -1139,10 +1139,10 @@ Namespace HoMIDom
                                         Or _Dev.Type = "UV" _
                                         Or _Dev.Type = "VOLET" _
                                         Then
-                                            If (Not list.Item(j).Attributes.GetNamedItem("valuemin") Is Nothing) Then .ValueMin = Replace(list.Item(j).Attributes.GetNamedItem("valuemin").Value, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                                            If (Not list.Item(j).Attributes.GetNamedItem("valuemax") Is Nothing) Then .ValueMax = Replace(list.Item(j).Attributes.GetNamedItem("valuemax").Value, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                                            If (Not list.Item(j).Attributes.GetNamedItem("valuedef") Is Nothing) Then .ValueDef = Replace(list.Item(j).Attributes.GetNamedItem("valuedef").Value, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                                            If (Not list.Item(j).Attributes.GetNamedItem("precision") Is Nothing) Then .Precision = Replace(list.Item(j).Attributes.GetNamedItem("precision").Value, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                            If (Not list.Item(j).Attributes.GetNamedItem("valuemin") Is Nothing) Then .ValueMin = Regex.Replace(list.Item(j).Attributes.GetNamedItem("valuemin").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                            If (Not list.Item(j).Attributes.GetNamedItem("valuemax") Is Nothing) Then .ValueMax = Regex.Replace(list.Item(j).Attributes.GetNamedItem("valuemax").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                            If (Not list.Item(j).Attributes.GetNamedItem("valuedef") Is Nothing) Then .ValueDef = Regex.Replace(list.Item(j).Attributes.GetNamedItem("valuedef").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                            If (Not list.Item(j).Attributes.GetNamedItem("precision") Is Nothing) Then .Precision = Regex.Replace(list.Item(j).Attributes.GetNamedItem("precision").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                                             If (Not list.Item(j).Attributes.GetNamedItem("correction") Is Nothing) Then .Correction = list.Item(j).Attributes.GetNamedItem("correction").Value
                                             If (Not list.Item(j).Attributes.GetNamedItem("formatage") Is Nothing) Then .Formatage = list.Item(j).Attributes.GetNamedItem("formatage").Value
                                         End If

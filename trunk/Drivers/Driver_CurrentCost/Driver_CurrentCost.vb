@@ -6,6 +6,7 @@ Imports System.Math
 Imports System.Net.Sockets
 Imports System.Threading
 Imports System.Globalization
+Imports System.Text.RegularExpressions
 
 Public Class Driver_CurrentCost
     Implements HoMIDom.HoMIDom.IDriver
@@ -318,7 +319,7 @@ Public Class Driver_CurrentCost
                 Next
 
                 If trv = False Then
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.nom & " Start", "Le port COM " & _Com & " n'existe pas, seuls les ports " & _ports & " existe(s)!")
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Le port COM " & _Com & " n'existe pas, seuls les ports " & _ports & " existe(s)!")
                     Exit Sub
                 End If
 
@@ -361,7 +362,7 @@ Public Class Driver_CurrentCost
                 _IsConnect = False
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.nom & " Stop", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Stop", ex.Message)
         End Try
     End Sub
 
@@ -381,7 +382,7 @@ Public Class Driver_CurrentCost
             If _IsConnect = False Then Exit Sub
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.nom & " Read", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", ex.Message)
         End Try
     End Sub
 
@@ -398,7 +399,7 @@ Public Class Driver_CurrentCost
 
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.nom & " Write", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", ex.Message)
         End Try
     End Sub
 
@@ -409,7 +410,7 @@ Public Class Driver_CurrentCost
         Try
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.nom & " DeleteDevice", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " DeleteDevice", ex.Message)
         End Try
     End Sub
 
@@ -420,7 +421,7 @@ Public Class Driver_CurrentCost
         Try
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.nom & " NewDevice", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " NewDevice", ex.Message)
         End Try
     End Sub
 
@@ -519,7 +520,7 @@ Public Class Driver_CurrentCost
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "@", "")
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.nom & " New", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " New", ex.Message)
         End Try
     End Sub
 
@@ -609,7 +610,7 @@ Public Class Driver_CurrentCost
     Private Sub traitement(ByVal type As String, ByVal adresse As String, ByVal valeur As Object)
         Try
             'correction valeur
-            valeur = Replace(valeur, ".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+            valeur = Regex.Replace(valeur, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
 
             'Recherche si un device affecté
             Dim listedevices As New ArrayList

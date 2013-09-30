@@ -23,6 +23,8 @@ Imports System.Windows.Controls.Primitives
 Imports HoMIWpF.Designer
 Imports HoMIWpF.Designer.ResizeRotateAdorner
 Imports System.Windows.Media.Animation
+Imports System.Text.RegularExpressions
+
 #End Region
 
 
@@ -94,7 +96,7 @@ Class Window1
         Get
             Return _ShowTimeFromServer
         End Get
-        Set(value As Boolean)
+        Set(ByVal value As Boolean)
             _ShowTimeFromServer = False
         End Set
     End Property
@@ -103,7 +105,7 @@ Class Window1
         Get
             Return _MaJWidgetFromServer
         End Get
-        Set(value As Boolean)
+        Set(ByVal value As Boolean)
             _MaJWidgetFromServer = value
         End Set
     End Property
@@ -112,7 +114,7 @@ Class Window1
         Get
             Return _KeyBoardPath
         End Get
-        Set(value As String)
+        Set(ByVal value As String)
             _KeyBoardPath = value
         End Set
     End Property
@@ -121,7 +123,7 @@ Class Window1
         Get
             Return _TranspBarHaut
         End Get
-        Set(value As Integer)
+        Set(ByVal value As Integer)
             If value < 0 Then value = 0
             If value > 255 Then value = 255
             _TranspBarHaut = value
@@ -133,7 +135,7 @@ Class Window1
         Get
             Return _TranspBarBas
         End Get
-        Set(value As Integer)
+        Set(ByVal value As Integer)
             If value < 0 Then value = 0
             If value > 255 Then value = 255
             _TranspBarBas = value
@@ -145,7 +147,7 @@ Class Window1
         Get
             Return _SaveDiffBack
         End Get
-        Set(value As Boolean)
+        Set(ByVal value As Boolean)
             _SaveDiffBack = value
         End Set
     End Property
@@ -154,7 +156,7 @@ Class Window1
         Get
             Return _flagSave
         End Get
-        Set(value As Boolean)
+        Set(ByVal value As Boolean)
             _flagSave = value
         End Set
     End Property
@@ -163,7 +165,7 @@ Class Window1
         Get
             Return _AutoSave
         End Get
-        Set(value As Boolean)
+        Set(ByVal value As Boolean)
             _AutoSave = value
             'If _AutoSave Then
             '    MnuSave.Visibility = Windows.Visibility.Collapsed
@@ -376,7 +378,7 @@ Class Window1
         Get
             Return _TimeoutSrvlive
         End Get
-        Set(value As Integer)
+        Set(ByVal value As Integer)
             _TimeoutSrvlive = value
         End Set
     End Property
@@ -458,7 +460,7 @@ Class Window1
         Get
             Return _ShowKeyBoard
         End Get
-        Set(value As Boolean)
+        Set(ByVal value As Boolean)
             _ShowKeyBoard = value
 
             If _ShowKeyBoard Then
@@ -632,7 +634,7 @@ Class Window1
     End Sub
 
     'Event lorsqu'un device change
-    Private Sub DeviceChanged(deviceid As String, DeviceValue As String)
+    Private Sub DeviceChanged(ByVal deviceid As String, ByVal DeviceValue As String)
         Try
             If MaJWidgetFromServer Then Exit Sub
 
@@ -665,7 +667,7 @@ Class Window1
         End Try
     End Sub
 
-    Private Sub MaJ_Device(Source As TemplateDevice, Destination As TemplateDevice)
+    Private Sub MaJ_Device(ByVal Source As TemplateDevice, ByVal Destination As TemplateDevice)
         Try
             Destination.Type = Source.Type
             If Source.Type = Device.ListeDevices.METEO Then
@@ -745,16 +747,16 @@ Class Window1
         End Try
     End Sub
 
-    Private Sub MessageFromServeur(Id As String, Time As DateTime, Message As String) 'Message provenant du serveur
+    Private Sub MessageFromServeur(ByVal Id As String, ByVal Time As DateTime, ByVal Message As String) 'Message provenant du serveur
 
     End Sub
-    Private Sub DriverChanged(DriverId As String) 'Evènement lorsq'un driver est modifié
+    Private Sub DriverChanged(ByVal DriverId As String) 'Evènement lorsq'un driver est modifié
 
     End Sub
-    Private Sub ZoneChanged(ZoneId As String) 'Evènement lorsq'une zone est modifiée ou créée
+    Private Sub ZoneChanged(ByVal ZoneId As String) 'Evènement lorsq'une zone est modifiée ou créée
 
     End Sub
-    Private Sub MacroChanged(MacroId As String) 'Evènement lorsq'une macro est modifiée ou créée
+    Private Sub MacroChanged(ByVal MacroId As String) 'Evènement lorsq'une macro est modifiée ou créée
 
     End Sub
     Private Sub HeureSoleilChanged() 'Evènement lorsque l'heure de lever/couché du soleil est modifié
@@ -823,16 +825,11 @@ Class Window1
             If list.Count > 0 Then 'présence des paramètres du server
                 For j As Integer = 0 To list.Item(0).Attributes.Count - 1
                     Select Case list.Item(0).Attributes.Item(j).Name
-                        Case "portsoap"
-                            _PortSOAP = list.Item(0).Attributes.Item(j).Value
-                        Case "ip"
-                            _IP = list.Item(0).Attributes.Item(j).Value
-                        Case "id"
-                            IdSrv = list.Item(0).Attributes.Item(j).Value
-                        Case "timeoutsrvlive"
-                            TimeOutServerLive = CInt(list.Item(0).Attributes.Item(j).Value)
-                        Case Else
-                            Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                        Case "portsoap" : _PortSOAP = list.Item(0).Attributes.Item(j).Value
+                        Case "ip" : _IP = list.Item(0).Attributes.Item(j).Value
+                        Case "id" : IdSrv = list.Item(0).Attributes.Item(j).Value
+                        Case "timeoutsrvlive" : TimeOutServerLive = CInt(list.Item(0).Attributes.Item(j).Value)
+                        Case Else : Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                     End Select
                 Next
             Else
@@ -858,12 +855,9 @@ Class Window1
             If list.Count > 0 Then 'présence des paramètres du server
                 For j As Integer = 0 To list.Item(0).Attributes.Count - 1
                     Select Case list.Item(0).Attributes.Item(j).Name
-                        Case "friction"
-                            m_friction = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
-                        Case "speedtouch"
-                            m_SpeedTouch = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
-                        Case Else
-                            Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                        Case "friction" : m_friction = CDbl(Regex.Replace(list.Item(0).Attributes.Item(j).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                        Case "speedtouch" : m_SpeedTouch = CDbl(Regex.Replace(list.Item(0).Attributes.Item(j).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                        Case Else : Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                     End Select
                 Next
             Else
@@ -878,34 +872,20 @@ Class Window1
             If list.Count > 0 Then 'présence des paramètres du server
                 For j As Integer = 0 To list.Item(0).Attributes.Count - 1
                     Select Case list.Item(0).Attributes.Item(j).Name
-                        Case "showtimefromsrv"
-                            ShowTimeFromServer = CBool(list.Item(0).Attributes.Item(j).Value)
-                        Case "majwidgetfromsrv"
-                            MaJWidgetFromServer = CBool(list.Item(0).Attributes.Item(j).Value)
-                        Case "keyboardpath"
-                            KeyboardPath = list.Item(0).Attributes.Item(j).Value
-                        Case "transparencebarhaut"
-                            TransparenceHaut = CInt(list.Item(0).Attributes.Item(j).Value)
-                        Case "transparencebarbas"
-                            TransparenceBas = CInt(list.Item(0).Attributes.Item(j).Value)
-                        Case "savediffback"
-                            SaveDiffBackup = CBool(list.Item(0).Attributes.Item(j).Value)
-                        Case "flagsave"
-                            FlagSave = CBool(list.Item(0).Attributes.Item(j).Value)
-                        Case "autosave"
-                            AutoSave = CBool(list.Item(0).Attributes.Item(j).Value)
-                        Case "showlbltime"
-                            ShowDateTime = CBool(list.Item(0).Attributes.Item(j).Value)
-                        Case "showsoleil"
-                            ShowSoleil = CBool(list.Item(0).Attributes.Item(j).Value)
-                        Case "showtemperature"
-                            ShowTemperature = CBool(list.Item(0).Attributes.Item(j).Value)
-                        Case "showlblzone"
-                            ShowLabelMnu = CBool(list.Item(0).Attributes.Item(j).Value)
-                        Case "showkeyboard"
-                            ShowKeyboard = CBool(list.Item(0).Attributes.Item(j).Value)
-                        Case "imgbackground"
-                            ImageBackGround = list.Item(0).Attributes.Item(j).Value
+                        Case "showtimefromsrv" : ShowTimeFromServer = CBool(list.Item(0).Attributes.Item(j).Value)
+                        Case "majwidgetfromsrv" : MaJWidgetFromServer = CBool(list.Item(0).Attributes.Item(j).Value)
+                        Case "keyboardpath" : KeyboardPath = list.Item(0).Attributes.Item(j).Value
+                        Case "transparencebarhaut" : TransparenceHaut = CInt(list.Item(0).Attributes.Item(j).Value)
+                        Case "transparencebarbas" : TransparenceBas = CInt(list.Item(0).Attributes.Item(j).Value)
+                        Case "savediffback" : SaveDiffBackup = CBool(list.Item(0).Attributes.Item(j).Value)
+                        Case "flagsave" : FlagSave = CBool(list.Item(0).Attributes.Item(j).Value)
+                        Case "autosave" : AutoSave = CBool(list.Item(0).Attributes.Item(j).Value)
+                        Case "showlbltime" : ShowDateTime = CBool(list.Item(0).Attributes.Item(j).Value)
+                        Case "showsoleil" : ShowSoleil = CBool(list.Item(0).Attributes.Item(j).Value)
+                        Case "showtemperature" : ShowTemperature = CBool(list.Item(0).Attributes.Item(j).Value)
+                        Case "showlblzone" : ShowLabelMnu = CBool(list.Item(0).Attributes.Item(j).Value)
+                        Case "showkeyboard" : ShowKeyboard = CBool(list.Item(0).Attributes.Item(j).Value)
+                        Case "imgbackground" : ImageBackGround = list.Item(0).Attributes.Item(j).Value
                         Case "fullscreen"
                             If list.Item(0).Attributes.Item(j).Value = False Then
                                 Me.FullScreen = False
@@ -914,34 +894,20 @@ Class Window1
                                 Me.FullScreen = True
                                 Me.WindowState = Windows.WindowState.Maximized
                             End If
-                        Case "showquitter"
-                            ShowQuitter = CBool(list.Item(0).Attributes.Item(j).Value)
-                        Case "widthpassword"
-                            _WithPassword = CBool(list.Item(0).Attributes.Item(j).Value)
-                        Case "password"
-                            _PassWord = list.Item(0).Attributes.Item(j).Value
-                        Case "left"
-                            Me.Left = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
-                        Case "top"
-                            Me.Top = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
-                        Case "width"
-                            Me.Width = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
-                        Case "height"
-                            Me.Height = CDbl(list.Item(0).Attributes.Item(j).Value.Replace(".", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
-                        Case "afflasterror"
-                            If IsBoolean(list.Item(0).Attributes.Item(j).Value) Then AffLastError = list.Item(0).Attributes.Item(j).Value
-                        Case "astimeoutpage"
-                            _AsTimeOutPage = list.Item(0).Attributes.Item(j).Value
-                        Case "timeoutpage"
-                            _TimeOutPage = list.Item(0).Attributes.Item(j).Value
-                        Case "masktaskmenu"
-                            _MaskTaskMnu = list.Item(0).Attributes.Item(j).Value
-                        Case "defautpage"
-                            _DefautPage = list.Item(0).Attributes.Item(j).Value
-                        Case "ville"
-                            _Ville = list.Item(0).Attributes.Item(j).Value
-                        Case Else
-                            Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                        Case "showquitter" : ShowQuitter = CBool(list.Item(0).Attributes.Item(j).Value)
+                        Case "widthpassword" : _WithPassword = CBool(list.Item(0).Attributes.Item(j).Value)
+                        Case "password" : _PassWord = list.Item(0).Attributes.Item(j).Value
+                        Case "left" : Me.Left = CDbl(Regex.Replace(list.Item(0).Attributes.Item(j).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                        Case "top" : Me.Top = CDbl(Regex.Replace(list.Item(0).Attributes.Item(j).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                        Case "width" : Me.Width = CDbl(Regex.Replace(list.Item(0).Attributes.Item(j).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                        Case "height" : Me.Height = CDbl(Regex.Replace(list.Item(0).Attributes.Item(j).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                        Case "afflasterror" : If IsBoolean(list.Item(0).Attributes.Item(j).Value) Then AffLastError = list.Item(0).Attributes.Item(j).Value
+                        Case "astimeoutpage" : _AsTimeOutPage = list.Item(0).Attributes.Item(j).Value
+                        Case "timeoutpage" : _TimeOutPage = list.Item(0).Attributes.Item(j).Value
+                        Case "masktaskmenu" : _MaskTaskMnu = list.Item(0).Attributes.Item(j).Value
+                        Case "defautpage" : _DefautPage = list.Item(0).Attributes.Item(j).Value
+                        Case "ville" : _Ville = list.Item(0).Attributes.Item(j).Value
+                        Case Else : Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                     End Select
                 Next
             Else
@@ -965,33 +931,21 @@ Class Window1
 
                     For k As Integer = 0 To list.Item(j).Attributes.Count - 1
                         Select Case list.Item(j).Attributes.Item(k).Name
-                            Case "nom"
-                                _MnuNom = list.Item(j).Attributes.Item(k).Value
-                            Case "defaut"
-                                _Mnudefaut = list.Item(j).Attributes.Item(k).Value
+                            Case "nom" : _MnuNom = list.Item(j).Attributes.Item(k).Value
+                            Case "defaut" : _Mnudefaut = list.Item(j).Attributes.Item(k).Value
                             Case "type"
                                 Select Case list.Item(j).Attributes.Item(k).Value
-                                    Case uCtrlImgMnu.TypeOfMnu.Internet.ToString
-                                        _MnuType = uCtrlImgMnu.TypeOfMnu.Internet
-                                    Case uCtrlImgMnu.TypeOfMnu.Meteo.ToString
-                                        _MnuType = uCtrlImgMnu.TypeOfMnu.Meteo
-                                    Case uCtrlImgMnu.TypeOfMnu.Zone.ToString
-                                        _MnuType = uCtrlImgMnu.TypeOfMnu.Zone
-                                    Case uCtrlImgMnu.TypeOfMnu.Config.ToString
-                                        _MnuType = uCtrlImgMnu.TypeOfMnu.Config
-                                    Case uCtrlImgMnu.TypeOfMnu.LecteurMedia.ToString
-                                        _MnuType = uCtrlImgMnu.TypeOfMnu.LecteurMedia
-                                    Case uCtrlImgMnu.TypeOfMnu.None.ToString
-                                        _MnuType = uCtrlImgMnu.TypeOfMnu.None
-                                    Case Else
-                                        _MnuType = uCtrlImgMnu.TypeOfMnu.None
+                                    Case uCtrlImgMnu.TypeOfMnu.Internet.ToString : _MnuType = uCtrlImgMnu.TypeOfMnu.Internet
+                                    Case uCtrlImgMnu.TypeOfMnu.Meteo.ToString : _MnuType = uCtrlImgMnu.TypeOfMnu.Meteo
+                                    Case uCtrlImgMnu.TypeOfMnu.Zone.ToString : _MnuType = uCtrlImgMnu.TypeOfMnu.Zone
+                                    Case uCtrlImgMnu.TypeOfMnu.Config.ToString : _MnuType = uCtrlImgMnu.TypeOfMnu.Config
+                                    Case uCtrlImgMnu.TypeOfMnu.LecteurMedia.ToString : _MnuType = uCtrlImgMnu.TypeOfMnu.LecteurMedia
+                                    Case uCtrlImgMnu.TypeOfMnu.None.ToString : _MnuType = uCtrlImgMnu.TypeOfMnu.None
+                                    Case Else : _MnuType = uCtrlImgMnu.TypeOfMnu.None
                                 End Select
-                            Case "icon"
-                                _MnuIcon = list.Item(j).Attributes.Item(k).Value
-                            Case "idelement"
-                                _MnuIDElement = list.Item(j).Attributes.Item(k).Value
-                            Case "visible"
-                                _MnuVisible = list.Item(j).Attributes.Item(k).Value
+                            Case "icon" : _MnuIcon = list.Item(j).Attributes.Item(k).Value
+                            Case "idelement" : _MnuIDElement = list.Item(j).Attributes.Item(k).Value
+                            Case "visible" : _MnuVisible = list.Item(j).Attributes.Item(k).Value
                             Case Else
                                 Dim a As String = list.Item(j).Attributes.Item(k).Name
                                 If a.Contains("parametre") Then
@@ -1016,91 +970,50 @@ Class Window1
 
                     For k As Integer = 0 To list.Item(j).Attributes.Count - 1
                         Select Case list.Item(j).Attributes.Item(k).Name
-                            Case "uid"
-                                x.Uid = list.Item(j).Attributes.Item(k).Value
-                            Case "id"
-                                x.Id = list.Item(j).Attributes.Item(k).Value
-                            Case "isempty"
-                                x.IsEmpty = list.Item(j).Attributes.Item(k).Value
+                            Case "uid" : x.Uid = list.Item(j).Attributes.Item(k).Value
+                            Case "id" : x.Id = list.Item(j).Attributes.Item(k).Value
+                            Case "isempty" : x.IsEmpty = list.Item(j).Attributes.Item(k).Value
                             Case "type"
                                 Select Case list.Item(j).Attributes.Item(k).Value
-                                    Case uWidgetEmpty.TypeOfWidget.Empty.ToString
-                                        x.Type = uWidgetEmpty.TypeOfWidget.Empty
-                                    Case uWidgetEmpty.TypeOfWidget.Device.ToString
-                                        x.Type = uWidgetEmpty.TypeOfWidget.Device
-                                    Case uWidgetEmpty.TypeOfWidget.Media.ToString
-                                        x.Type = uWidgetEmpty.TypeOfWidget.Media
-                                    Case uWidgetEmpty.TypeOfWidget.Web.ToString
-                                        x.Type = uWidgetEmpty.TypeOfWidget.Web
-                                    Case uWidgetEmpty.TypeOfWidget.Camera.ToString
-                                        x.Type = uWidgetEmpty.TypeOfWidget.Camera
-                                    Case uWidgetEmpty.TypeOfWidget.Volet.ToString
-                                        x.Type = uWidgetEmpty.TypeOfWidget.Volet
-                                    Case uWidgetEmpty.TypeOfWidget.Moteur.ToString
-                                        x.Type = uWidgetEmpty.TypeOfWidget.Moteur
-                                    Case uWidgetEmpty.TypeOfWidget.Rss.ToString
-                                        x.Type = uWidgetEmpty.TypeOfWidget.Rss
-                                    Case uWidgetEmpty.TypeOfWidget.Meteo.ToString
-                                        x.Type = uWidgetEmpty.TypeOfWidget.Meteo
-                                    Case uWidgetEmpty.TypeOfWidget.KeyPad.ToString
-                                        x.Type = uWidgetEmpty.TypeOfWidget.KeyPad
-                                    Case uWidgetEmpty.TypeOfWidget.Label.ToString
-                                        x.Type = uWidgetEmpty.TypeOfWidget.Label
-                                    Case uWidgetEmpty.TypeOfWidget.Image.ToString
-                                        x.Type = uWidgetEmpty.TypeOfWidget.Image
+                                    Case uWidgetEmpty.TypeOfWidget.Empty.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Empty
+                                    Case uWidgetEmpty.TypeOfWidget.Device.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Device
+                                    Case uWidgetEmpty.TypeOfWidget.Media.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Media
+                                    Case uWidgetEmpty.TypeOfWidget.Web.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Web
+                                    Case uWidgetEmpty.TypeOfWidget.Camera.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Camera
+                                    Case uWidgetEmpty.TypeOfWidget.Volet.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Volet
+                                    Case uWidgetEmpty.TypeOfWidget.Moteur.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Moteur
+                                    Case uWidgetEmpty.TypeOfWidget.Rss.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Rss
+                                    Case uWidgetEmpty.TypeOfWidget.Meteo.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Meteo
+                                    Case uWidgetEmpty.TypeOfWidget.KeyPad.ToString : x.Type = uWidgetEmpty.TypeOfWidget.KeyPad
+                                    Case uWidgetEmpty.TypeOfWidget.Label.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Label
+                                    Case uWidgetEmpty.TypeOfWidget.Image.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Image
                                 End Select
-                            Case "caneditvalue"
-                                x.CanEditValue = list.Item(j).Attributes.Item(k).Value
-                            Case "zoneid"
-                                x.ZoneId = list.Item(j).Attributes.Item(k).Value
-                            Case "iscommun"
-                                x.IsCommun = list.Item(j).Attributes.Item(k).Value
-                            Case "refresh"
-                                x.Refresh = list.Item(j).Attributes.Item(k).Value
-                            Case "x"
-                                x.X = list.Item(j).Attributes.Item(k).Value
-                            Case "y"
-                                x.Y = list.Item(j).Attributes.Item(k).Value
-                            Case "width"
-                                x.Width = list.Item(j).Attributes.Item(k).Value.Replace(".", ",")
-                            Case "height"
-                                x.Height = list.Item(j).Attributes.Item(k).Value.Replace(".", ",")
-                            Case "angle"
-                                x.Rotation = list.Item(j).Attributes.Item(k).Value.Replace(".", ",")
-                            Case "anglex"
-                                x.RotationX = list.Item(j).Attributes.Item(k).Value.Replace(".", ",")
-                            Case "angley"
-                                x.RotationY = list.Item(j).Attributes.Item(k).Value.Replace(".", ",")
-                            Case "zindex"
-                                x.ZIndex = list.Item(j).Attributes.Item(k).Value
-                            Case "min"
-                                x.Min = list.Item(j).Attributes.Item(k).Value
-                            Case "max"
-                                x.Max = list.Item(j).Attributes.Item(k).Value
-                            Case "showetiquette"
-                                x.ShowEtiquette = list.Item(j).Attributes.Item(k).Value
-                            Case "majetiquettefromsrv"
-                                x.MaJEtiquetteFromServeur = list.Item(j).Attributes.Item(k).Value
-                            Case "fondu"
-                                x.Fondu = list.Item(j).Attributes.Item(k).Value
-                            Case "showstatus"
-                                x.ShowStatus = list.Item(j).Attributes.Item(k).Value
-                            Case "etiquette"
-                                x.Etiquette = list.Item(j).Attributes.Item(k).Value
-                            Case "picture"
-                                x.Picture = list.Item(j).Attributes.Item(k).Value
-                            Case "showpicture"
-                                x.ShowPicture = list.Item(j).Attributes.Item(k).Value
-                            Case "savepictureproportion"
-                                x.GarderProportionImage = list.Item(j).Attributes.Item(k).Value
-                            Case "defautlabelstatus"
-                                x.DefautLabelStatus = list.Item(j).Attributes.Item(k).Value
-                            Case "taillestatus"
-                                x.TailleStatus = list.Item(j).Attributes.Item(k).Value
-                            Case "tailleetiquette"
-                                x.TailleEtiquette = list.Item(j).Attributes.Item(k).Value
-                            Case "alignementetiquette"
-                                x.EtiquetteAlignement = list.Item(j).Attributes.Item(k).Value
+                            Case "caneditvalue" : x.CanEditValue = list.Item(j).Attributes.Item(k).Value
+                            Case "zoneid" : x.ZoneId = list.Item(j).Attributes.Item(k).Value
+                            Case "iscommun" : x.IsCommun = list.Item(j).Attributes.Item(k).Value
+                            Case "refresh" : x.Refresh = list.Item(j).Attributes.Item(k).Value
+                            Case "x" : x.X = CDbl(Regex.Replace(list.Item(j).Attributes.Item(k).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                            Case "y" : x.Y = CDbl(Regex.Replace(list.Item(j).Attributes.Item(k).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                            Case "width" : x.Width = CDbl(Regex.Replace(list.Item(j).Attributes.Item(k).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                            Case "height" : x.Height = CDbl(Regex.Replace(list.Item(j).Attributes.Item(k).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                            Case "angle" : x.Rotation = CDbl(Regex.Replace(list.Item(j).Attributes.Item(k).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                            Case "anglex" : x.RotationX = CDbl(Regex.Replace(list.Item(j).Attributes.Item(k).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                            Case "angley" : x.RotationY = CDbl(Regex.Replace(list.Item(j).Attributes.Item(k).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                            Case "zindex" : x.ZIndex = list.Item(j).Attributes.Item(k).Value
+                            Case "min" : x.Min = CDbl(Regex.Replace(list.Item(j).Attributes.Item(k).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                            Case "max" : x.Max = CDbl(Regex.Replace(list.Item(j).Attributes.Item(k).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                            Case "showetiquette" : x.ShowEtiquette = list.Item(j).Attributes.Item(k).Value
+                            Case "majetiquettefromsrv" : x.MaJEtiquetteFromServeur = list.Item(j).Attributes.Item(k).Value
+                            Case "fondu" : x.Fondu = list.Item(j).Attributes.Item(k).Value
+                            Case "showstatus" : x.ShowStatus = list.Item(j).Attributes.Item(k).Value
+                            Case "etiquette" : x.Etiquette = list.Item(j).Attributes.Item(k).Value
+                            Case "picture" : x.Picture = list.Item(j).Attributes.Item(k).Value
+                            Case "showpicture" : x.ShowPicture = list.Item(j).Attributes.Item(k).Value
+                            Case "savepictureproportion" : x.GarderProportionImage = list.Item(j).Attributes.Item(k).Value
+                            Case "defautlabelstatus" : x.DefautLabelStatus = list.Item(j).Attributes.Item(k).Value
+                            Case "taillestatus" : x.TailleStatus = list.Item(j).Attributes.Item(k).Value
+                            Case "tailleetiquette" : x.TailleEtiquette = list.Item(j).Attributes.Item(k).Value
+                            Case "alignementetiquette" : x.EtiquetteAlignement = list.Item(j).Attributes.Item(k).Value
                             Case "colorbackground"
                                 If String.IsNullOrEmpty(list.Item(j).Attributes.Item(k).Value) = False Then
                                     Dim a As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 2, 2))
@@ -1121,22 +1034,14 @@ Class Window1
                                 Dim G As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 6, 2))
                                 Dim B As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 8, 2))
                                 x.ColorEtiquette = New SolidColorBrush(Color.FromArgb(a, R, G, B))
-                            Case "url"
-                                x.URL = list.Item(j).Attributes.Item(k).Value
-                            Case "urlrss"
-                                x.UrlRss = list.Item(j).Attributes.Item(k).Value
-                            Case "idmeteo"
-                                x.IDMeteo = list.Item(j).Attributes.Item(k).Value
-                            Case "idkeypad"
-                                x.IDKeyPad = list.Item(j).Attributes.Item(k).Value
-                            Case "showpassword"
-                                x.ShowPassWord = list.Item(j).Attributes.Item(k).Value
-                            Case "clearafterenter"
-                                x.ClearAfterEnter = list.Item(j).Attributes.Item(k).Value
-                            Case "showclavier"
-                                x.ShowClavier = list.Item(j).Attributes.Item(k).Value
-                            Case "httprefresh"
-                                x.HttpRefresh = list.Item(j).Attributes.Item(k).Value
+                            Case "url" : x.URL = list.Item(j).Attributes.Item(k).Value
+                            Case "urlrss" : x.UrlRss = list.Item(j).Attributes.Item(k).Value
+                            Case "idmeteo" : x.IDMeteo = list.Item(j).Attributes.Item(k).Value
+                            Case "idkeypad" : x.IDKeyPad = list.Item(j).Attributes.Item(k).Value
+                            Case "showpassword" : x.ShowPassWord = list.Item(j).Attributes.Item(k).Value
+                            Case "clearafterenter" : x.ClearAfterEnter = list.Item(j).Attributes.Item(k).Value
+                            Case "showclavier" : x.ShowClavier = list.Item(j).Attributes.Item(k).Value
+                            Case "httprefresh" : x.HttpRefresh = list.Item(j).Attributes.Item(k).Value
                         End Select
                     Next
 
@@ -1153,18 +1058,12 @@ Class Window1
                                     End With
 
                                     Select Case list.Item(j).ChildNodes.Item(l).ChildNodes.Item(m).Attributes.Item(0).Value
-                                        Case "gestureonclick"
-                                            x.Action_On_Click.Add(_act)
-                                        Case "gestureonlongclick"
-                                            x.Action_On_LongClick.Add(_act)
-                                        Case "gesturehautbas"
-                                            x.Action_GestureHautBas.Add(_act)
-                                        Case "gesturebashaut"
-                                            x.Action_GestureBasHaut.Add(_act)
-                                        Case "gesturegauchedroite"
-                                            x.Action_GestureGaucheDroite.Add(_act)
-                                        Case "gesturedroitegauche"
-                                            x.Action_GestureDroiteGauche.Add(_act)
+                                        Case "gestureonclick" : x.Action_On_Click.Add(_act)
+                                        Case "gestureonlongclick" : x.Action_On_LongClick.Add(_act)
+                                        Case "gesturehautbas" : x.Action_GestureHautBas.Add(_act)
+                                        Case "gesturebashaut" : x.Action_GestureBasHaut.Add(_act)
+                                        Case "gesturegauchedroite" : x.Action_GestureGaucheDroite.Add(_act)
+                                        Case "gesturedroitegauche" : x.Action_GestureDroiteGauche.Add(_act)
                                     End Select
                                 Next
                             End If
@@ -1356,16 +1255,20 @@ Class Window1
             writer.WriteValue(FullScreen)
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("left")
-            writer.WriteValue(Me.Left)
+            'writer.WriteValue(Me.left)
+            writer.WriteValue(Regex.Replace(Me.Left.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("top")
-            writer.WriteValue(Me.Top)
+            'writer.WriteValue(Me.Top)
+            writer.WriteValue(Regex.Replace(Me.Top.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("width")
-            writer.WriteValue(Me.Width)
+            'writer.WriteValue(Me.Width)
+            writer.WriteValue(Regex.Replace(Me.Width.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("height")
-            writer.WriteValue(Me.Height)
+            'writer.WriteValue(Me.Height)
+            writer.WriteValue(Regex.Replace(Me.Height.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("showquitter")
             writer.WriteValue(ShowQuitter)
@@ -1465,25 +1368,32 @@ Class Window1
                 writer.WriteValue(_ListElement.Item(i).IsCommun)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("x")
-                writer.WriteValue(Replace(CDbl(_ListElement.Item(i).X), ".", ","))
+                'writer.WriteValue(Replace(CDbl(_ListElement.Item(i).X), ".", ","))
+                writer.WriteValue(Regex.Replace(_ListElement.Item(i).X.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("y")
-                writer.WriteValue(Replace(CDbl(_ListElement.Item(i).Y), ".", ","))
+                'writer.WriteValue(Replace(CDbl(_ListElement.Item(i).Y), ".", ","))
+                writer.WriteValue(Regex.Replace(_ListElement.Item(i).Y.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("width")
-                writer.WriteValue(_ListElement.Item(i).Width)
+                'writer.WriteValue(_ListElement.Item(i).Width)
+                writer.WriteValue(Regex.Replace(_ListElement.Item(i).Width.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("height")
-                writer.WriteValue(_ListElement.Item(i).Height)
+                'writer.WriteValue(_ListElement.Item(i).Height)
+                writer.WriteValue(Regex.Replace(_ListElement.Item(i).Height.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("angle")
-                writer.WriteValue(_ListElement.Item(i).Rotation)
+                'writer.WriteValue(_ListElement.Item(i).Rotation)
+                writer.WriteValue(Regex.Replace(_ListElement.Item(i).Rotation.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("anglex")
-                writer.WriteValue(_ListElement.Item(i).RotationX)
+                'writer.WriteValue(_ListElement.Item(i).RotationX)
+                writer.WriteValue(Regex.Replace(_ListElement.Item(i).RotationX.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("angley")
-                writer.WriteValue(_ListElement.Item(i).RotationY)
+                'writer.WriteValue(_ListElement.Item(i).RotationY)
+                writer.WriteValue(Regex.Replace(_ListElement.Item(i).RotationY.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("zindex")
                 writer.WriteValue(_ListElement.Item(i).ZIndex)
@@ -1581,10 +1491,12 @@ Class Window1
                         writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).URL)
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("width")
-                        writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).Width)
+                        'writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).Width)
+                        writer.WriteValue(Regex.Replace(_ListElement.Item(i).ListHttpButton.Item(j).Width.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("height")
-                        writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).Height)
+                        'writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).Height)
+                        writer.WriteValue(Regex.Replace(_ListElement.Item(i).ListHttpButton.Item(j).Height.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                         writer.WriteEndAttribute()
                         writer.WriteEndElement()
                     Next
@@ -2958,7 +2870,7 @@ Class Window1
         End Try
     End Sub
 
-    Private Sub NewWidgetMoteur_Click(sender As Object, e As System.Windows.RoutedEventArgs) Handles NewWidgetMoteur.Click
+    Private Sub NewWidgetMoteur_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetMoteur.Click
         Try
             ' Remettre à zéro les modes édition + déplacement
             ChkMove.IsChecked = False
@@ -3275,7 +3187,7 @@ Class Window1
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Sub MnuSave_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles MnuSave.Click
+    Private Sub MnuSave_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuSave.Click
         Try
             SaveConfig(_ConfigFile)
         Catch ex As Exception
