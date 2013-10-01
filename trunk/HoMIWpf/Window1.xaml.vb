@@ -982,6 +982,7 @@ Class Window1
                                     Case uWidgetEmpty.TypeOfWidget.Camera.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Camera
                                     Case uWidgetEmpty.TypeOfWidget.Volet.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Volet
                                     Case uWidgetEmpty.TypeOfWidget.Moteur.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Moteur
+                                    Case uWidgetEmpty.TypeOfWidget.Prise.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Prise
                                     Case uWidgetEmpty.TypeOfWidget.Rss.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Rss
                                     Case uWidgetEmpty.TypeOfWidget.Meteo.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Meteo
                                     Case uWidgetEmpty.TypeOfWidget.KeyPad.ToString : x.Type = uWidgetEmpty.TypeOfWidget.KeyPad
@@ -2908,9 +2909,53 @@ Class Window1
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetVolet: " & ex.Message, "Erreur", "NewWidgetVolet")
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetMoteur: " & ex.Message, "Erreur", "NewWidgetMoteur")
         End Try
     End Sub
+
+    Private Sub NewWidgetPrise_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetPrise.Click
+        Try
+            ' Remettre à zéro les modes édition + déplacement
+            ChkMove.IsChecked = False
+            ChkEdit.IsChecked = False
+            Deplacement_Click(Me, e)
+
+            'Ajouter un nouveau Control
+            Dim x As New ContentControl
+            x.Width = 110
+            x.Height = 120
+            x.Style = mybuttonstyle
+            x.Tag = True
+            x.Uid = System.Guid.NewGuid.ToString()
+
+            'Ajoute l'élément dans la liste
+            Dim elmt As New uWidgetEmpty
+            elmt.Show = True
+            elmt.Uid = x.Uid
+            elmt.ZoneId = _CurrentIdZone
+            elmt.Width = 110
+            elmt.Height = 120
+            elmt.Rotation = 0
+            elmt.X = 300
+            elmt.Y = 300
+            elmt.IsEmpty = True
+            elmt.Type = uWidgetEmpty.TypeOfWidget.Prise
+            elmt.ShowStatus = False
+            elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
+            elmt.ColorBackGround = New SolidColorBrush(Color.FromArgb(255, 0, 0, 0))
+            elmt.GarderProportionImage = True
+            _ListElement.Add(elmt)
+
+            elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
+            x.Content = elmt
+            Canvas1.Children.Add(x)
+            Canvas.SetLeft(x, 300)
+            Canvas.SetTop(x, 300)
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetPrise: " & ex.Message, "Erreur", "NewWidgetPrise")
+        End Try
+    End Sub
+
 
 #End Region
 

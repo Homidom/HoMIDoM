@@ -181,6 +181,9 @@
     <Compile Include="CtrlDevice\uMoteur.xaml.vb">
       <DependentUpon>uMoteur.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CtrlDevice\uPrise.xaml.vb">
+      <DependentUpon>uPrise.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CtrlDevice\uVolet.xaml.vb">
       <DependentUpon>uVolet.xaml</DependentUpon>
     </Compile>
@@ -244,6 +247,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CtrlDevice\uMoteur.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CtrlDevice\uPrise.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -759,10 +766,15 @@
   <ItemGroup>
     <Resource Include="Images\Macro_64.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\masque_off.png" />
+    <Resource Include="Images\masque_on.png" />
+    <Resource Include="Images\prise_fond.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_UseGlobalSettings="False" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
