@@ -18,6 +18,7 @@ Public Class uWidgetEmpty
         Volet = 8
         Moteur = 9
         Image = 10
+        Prise = 11
         Device = 99
     End Enum
 
@@ -98,6 +99,9 @@ Public Class uWidgetEmpty
 
     'Variable Widget Moteur
     Dim _MOTEUR As uMoteur = Nothing
+
+    'Variable Widget Prise
+    Dim _PRISE As uPrise = Nothing
 
     'Variable Min/Max
     Dim _Min As Integer
@@ -384,6 +388,11 @@ Public Class uWidgetEmpty
                         ShowPicture = False
                         _MOTEUR = New uMoteur
                         StkReplaceImage.Children.Add(_MOTEUR)
+                    Case TypeOfWidget.Prise
+                        ShowPicture = False
+                        ShowStatus = False
+                        _PRISE = New uPrise
+                        StkReplaceImage.Children.Add(_PRISE)
                     Case TypeOfWidget.Rss
                         StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
                         StkTool.Visibility = Windows.Visibility.Visible
@@ -683,7 +692,10 @@ Public Class uWidgetEmpty
                 If ShowPicture Then If Image.Height < Image.Width Then Image.Width = Image.Height
                 If _MOTEUR IsNot Nothing Then If _MOTEUR.Width < _MOTEUR.Height Then _MOTEUR.Height = _MOTEUR.Width
                 If _MOTEUR IsNot Nothing Then If _MOTEUR.Height < _MOTEUR.Width Then _MOTEUR.Width = _MOTEUR.Height
+                If _PRISE IsNot Nothing Then If _PRISE.Width < _PRISE.Height Then _PRISE.Height = _PRISE.Width
+                If _PRISE IsNot Nothing Then If _PRISE.Height < _PRISE.Width Then _PRISE.Width = _PRISE.Height
             End If
+
         End Set
     End Property
 
@@ -1214,6 +1226,18 @@ Public Class uWidgetEmpty
                             End If
 
                         End If
+                        If Me.Type = TypeOfWidget.Prise And _PRISE IsNot Nothing Then
+                            If _dev.Value.GetType.ToString.ToUpper.Contains("BOOLEAN") Then
+                                If _dev.Value Then
+                                    _PRISE.Value = 1
+                                Else
+                                    _PRISE.Value = 0
+                                End If
+                            Else
+                                _PRISE.Value = _dev.Value
+                            End If
+
+                        End If
 
                         If _ShowValue Then
                             If _CurrentValue <> _dev.Value Then
@@ -1292,8 +1316,8 @@ Public Class uWidgetEmpty
                     _VOLET.Height = Me.ActualHeight - 30
                 Case TypeOfWidget.Moteur
                     ShowPicture = False
-                    '_MOTEUR.Width = Me.ActualWidth
-                    '_MOTEUR.Height = Me.ActualHeight
+                Case TypeOfWidget.Prise
+                    ShowPicture = False
                 Case TypeOfWidget.Meteo
                     _METEO.Width = Double.NaN
                     _METEO.Height = Double.NaN
@@ -2209,8 +2233,7 @@ Public Class uWidgetEmpty
                     _VOLET.Width = Me.ActualWidth
                     _VOLET.Height = Me.ActualHeight - 30
                 Case TypeOfWidget.Moteur
-                    '_MOTEUR.Width = Me.ActualWidth
-                    '_MOTEUR.Height = Me.ActualHeight - 2
+                Case TypeOfWidget.Prise
                 Case TypeOfWidget.Rss
                     _RSS.Width = Me.ActualWidth
                     _RSS.Height = Me.ActualHeight - 20
@@ -2227,23 +2250,28 @@ Public Class uWidgetEmpty
                 If H > 0 Then Image.Height = H
                 H = 0
             End If
-            If ShowEtiquette = False And (ShowPicture Or _type = TypeOfWidget.Moteur) And Me.ActualHeight > 0 Then
+            If ShowEtiquette = False And (ShowPicture Or _type = TypeOfWidget.Moteur Or _type = TypeOfWidget.Prise) And Me.ActualHeight > 0 Then
                 If ShowPicture Then Image.Height = Me.ActualHeight
                 If _MOTEUR IsNot Nothing Then _MOTEUR.Height = Me.ActualHeight
+                If _PRISE IsNot Nothing Then _PRISE.Height = Me.ActualHeight
             End If
-            If ShowStatus And (ShowPicture Or _type = TypeOfWidget.Moteur) And LblStatus.ActualHeight > 0 And Me.ActualWidth > 0 Then
+            If ShowStatus And (ShowPicture Or _type = TypeOfWidget.Moteur Or Type = TypeOfWidget.Prise) And LblStatus.ActualHeight > 0 And Me.ActualWidth > 0 Then
                 If ShowPicture Then Image.Width = Me.ActualWidth - LblStatus.ActualWidth
                 If _MOTEUR IsNot Nothing Then _MOTEUR.Width = Me.ActualWidth - LblStatus.ActualWidth
+                If _PRISE IsNot Nothing Then _PRISE.Width = Me.ActualWidth - LblStatus.ActualWidth
             End If
-            If ShowStatus = False And (ShowPicture Or _type = TypeOfWidget.Moteur) Then
+            If ShowStatus = False And (ShowPicture Or _type = TypeOfWidget.Moteur Or _type = TypeOfWidget.Prise) Then
                 If ShowPicture Then Image.Width = Me.ActualWidth
                 If _MOTEUR IsNot Nothing Then _MOTEUR.Width = Me.ActualWidth
+                If _PRISE IsNot Nothing Then _PRISE.Width = Me.ActualWidth
             End If
-            If (ShowPicture Or _type = TypeOfWidget.Moteur) And _GarderProportionImage Then
+            If (ShowPicture Or _type = TypeOfWidget.Moteur Or _type = TypeOfWidget.Prise) And _GarderProportionImage Then
                 If ShowPicture Then If Image.Width < Image.Height Then Image.Height = Image.Width
                 If ShowPicture Then If Image.Height < Image.Width Then Image.Width = Image.Height
                 If _MOTEUR IsNot Nothing Then If _MOTEUR.Width < _MOTEUR.Height Then _MOTEUR.Height = _MOTEUR.Width
                 If _MOTEUR IsNot Nothing Then If _MOTEUR.Height < _MOTEUR.Width Then _MOTEUR.Width = _MOTEUR.Height
+                If _PRISE IsNot Nothing Then If _PRISE.Width < _PRISE.Height Then _PRISE.Height = _PRISE.Width
+                If _PRISE IsNot Nothing Then If _PRISE.Height < _PRISE.Width Then _PRISE.Width = _PRISE.Height
             End If
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.SizeChanged: " & ex.Message, "Erreur", " uWidgetEmpty.SizeChanged")
@@ -2281,6 +2309,7 @@ Public Class uWidgetEmpty
             _Camera = Nothing
             _VOLET = Nothing
             _MOTEUR = Nothing
+            _PRISE = Nothing
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Unloaded: " & ex.Message, "Erreur", " uWidgetEmpty.Unloaded")
         End Try
@@ -2493,7 +2522,5 @@ Public Class uWidgetEmpty
         Popup1.IsOpen = False
     End Sub
 
-    Private Sub uWidgetEmpty_LostMouseCapture(sender As Object, e As System.Windows.Input.MouseEventArgs) Handles Me.LostMouseCapture
 
-    End Sub
 End Class
