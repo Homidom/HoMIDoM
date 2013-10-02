@@ -897,10 +897,10 @@ Class Window1
                         Case "showquitter" : ShowQuitter = CBool(list.Item(0).Attributes.Item(j).Value)
                         Case "widthpassword" : _WithPassword = CBool(list.Item(0).Attributes.Item(j).Value)
                         Case "password" : _PassWord = list.Item(0).Attributes.Item(j).Value
-                        Case "left" : Me.Left = CDbl(Regex.Replace(list.Item(0).Attributes.Item(j).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
-                        Case "top" : Me.Top = CDbl(Regex.Replace(list.Item(0).Attributes.Item(j).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
-                        Case "width" : Me.Width = CDbl(Regex.Replace(list.Item(0).Attributes.Item(j).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
-                        Case "height" : Me.Height = CDbl(Regex.Replace(list.Item(0).Attributes.Item(j).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                        Case "left" : Me.Left = FormatNumber(CDbl(Regex.Replace(list.Item(0).Attributes.Item(j).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)), 0)
+                        Case "top" : Me.Top = FormatNumber(CDbl(Regex.Replace(list.Item(0).Attributes.Item(j).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)), 0)
+                        Case "width" : Me.Width = FormatNumber(CDbl(Regex.Replace(list.Item(0).Attributes.Item(j).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)), 0)
+                        Case "height" : Me.Height = FormatNumber(CDbl(Regex.Replace(list.Item(0).Attributes.Item(j).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)), 0)
                         Case "afflasterror" : If IsBoolean(list.Item(0).Attributes.Item(j).Value) Then AffLastError = list.Item(0).Attributes.Item(j).Value
                         Case "astimeoutpage" : _AsTimeOutPage = list.Item(0).Attributes.Item(j).Value
                         Case "timeoutpage" : _TimeOutPage = list.Item(0).Attributes.Item(j).Value

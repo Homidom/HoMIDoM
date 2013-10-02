@@ -377,8 +377,6 @@
                             TxtTplFab.Text = _list.Item(i).Fabricant
                             TxtTplMod.Text = _list.Item(i).Modele
                             idx = i
-                            _Col = _list.Item(i).Colonne
-                            _Row = _list.Item(i).Ligne
 
                             If x.Commandes IsNot Nothing Then
                                 GrpCmd.Visibility = Windows.Visibility.Visible
@@ -677,8 +675,8 @@ Retour:
 
             For i As Integer = 0 To x.Commandes.Count - 1
                 If x.Commandes(i).Name = sender.command Then
-                    x.Commandes(i).Row = -1
-                    x.Commandes(i).Column = -1
+                    'x.Commandes(i).Row = -1
+                    'x.Commandes(i).Column = -1
                 End If
             Next
         Catch ex As Exception
@@ -738,49 +736,49 @@ Retour:
 
     Private Sub WTelecommande_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         Try
-            slider_Column.Value = _Col
-            slider_Row.Value = _Row
+            'slider_Column.Value = _Col
+            'slider_Row.Value = _Row
 
-            If x IsNot Nothing Then
-                If x.Commandes IsNot Nothing Then
-                    GrpCmd.Visibility = Windows.Visibility.Visible
+            'If x IsNot Nothing Then
+            '    If x.Commandes IsNot Nothing Then
+            '        GrpCmd.Visibility = Windows.Visibility.Visible
 
-                    Remplir()
+            '        Remplir()
 
-                    For i2 As Integer = 0 To x.Commandes.Count - 1
+            '        For i2 As Integer = 0 To x.Commandes.Count - 1
 
-                        If x.Commandes.Item(i2).Row > 0 And x.Commandes.Item(i2).Column > 0 Then
-                            Dim cvs As New Canvas
-                            cvs.Width = 45
-                            cvs.Height = 45
-                            cvs.Background = Brushes.Black
-                            cvs.AllowDrop = True
-                            cvs.Tag = x.Commandes.Item(i2).Row & "|" & x.Commandes.Item(i2).Column 'ListButton(i).Row & "|" & ListButton(i).Column
-                            AddHandler cvs.DragOver, AddressOf CVS_DragOver
-                            AddHandler cvs.Drop, AddressOf CVS_Drop
-                            Grid.SetColumn(cvs, x.Commandes.Item(i2).Column) ' ListButton(i).Column)
-                            Grid.SetRow(cvs, x.Commandes.Item(i2).Row) 'ListButton(i).Row)
+            '            If x.Commandes.Item(i2).Row > 0 And x.Commandes.Item(i2).Column > 0 Then
+            '                Dim cvs As New Canvas
+            '                cvs.Width = 45
+            '                cvs.Height = 45
+            '                cvs.Background = Brushes.Black
+            '                cvs.AllowDrop = True
+            '                cvs.Tag = x.Commandes.Item(i2).Row & "|" & x.Commandes.Item(i2).Column 'ListButton(i).Row & "|" & ListButton(i).Column
+            '                AddHandler cvs.DragOver, AddressOf CVS_DragOver
+            '                AddHandler cvs.Drop, AddressOf CVS_Drop
+            '                Grid.SetColumn(cvs, x.Commandes.Item(i2).Column) ' ListButton(i).Column)
+            '                Grid.SetRow(cvs, x.Commandes.Item(i2).Row) 'ListButton(i).Row)
 
-                            Dim img1 As New ImageButton
-                            img1.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Commandes.Item(i2).Picture))
-                            img1.Tag = x.Commandes.Item(i2).Picture
-                            img1.Command = x.Commandes.Item(i2).Name
+            '                Dim img1 As New ImageButton
+            '                img1.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Commandes.Item(i2).Picture))
+            '                img1.Tag = x.Commandes.Item(i2).Picture
+            '                img1.Command = x.Commandes.Item(i2).Name
 
-                            img1.AllowDrop = True
-                            Dim a() As String = cvs.Tag.split("|")
-                            img1.Row = a(0)
-                            img1.Column = a(1)
-                            img1.HorizontalAlignment = Windows.HorizontalAlignment.Stretch
-                            img1.VerticalAlignment = Windows.VerticalAlignment.Stretch
-                            AddHandler img1.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
-                            AddHandler img1.Delete, AddressOf DeleteButton
-                            cvs.Children.Add(img1)
+            '                img1.AllowDrop = True
+            '                Dim a() As String = cvs.Tag.split("|")
+            '                img1.Row = a(0)
+            '                img1.Column = a(1)
+            '                img1.HorizontalAlignment = Windows.HorizontalAlignment.Stretch
+            '                img1.VerticalAlignment = Windows.VerticalAlignment.Stretch
+            '                AddHandler img1.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
+            '                AddHandler img1.Delete, AddressOf DeleteButton
+            '                cvs.Children.Add(img1)
 
-                            grid_Telecommande.Children.Add(cvs)
-                        End If
-                    Next
-                End If
-            End If
+            '                grid_Telecommande.Children.Add(cvs)
+            '            End If
+            '        Next
+            '    End If
+            'End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, ex.ToString)
         End Try
@@ -796,8 +794,8 @@ Retour:
 
                 TxtTplFab.Text = _list.Item(cbTemplate.SelectedIndex).Fabricant
                 TxtTplMod.Text = _list.Item(cbTemplate.SelectedIndex).Modele
-                slider_Column.Value = _list.Item(cbTemplate.SelectedIndex).Colonne
-                slider_Row.Value = _list.Item(cbTemplate.SelectedIndex).Ligne
+                'slider_Column.Value = _list.Item(cbTemplate.SelectedIndex).Colonne
+                'slider_Row.Value = _list.Item(cbTemplate.SelectedIndex).Ligne
             End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString)

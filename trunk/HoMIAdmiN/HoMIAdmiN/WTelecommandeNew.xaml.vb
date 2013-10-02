@@ -281,10 +281,16 @@ Public Class WTelecommandeNew
         TxtTplFab.IsReadOnly = False
         TxtTplMod.IsReadOnly = False
         TxtTplName.IsReadOnly = False
+        TxtCharEndReceive.IsReadOnly = False
+        TxtTrameInit.IsReadOnly = False
+
         TxtTplFab.Text = ""
         TxtTplName.Text = ""
         TxtTplMod.Text = ""
+        TxtCharEndReceive.Text = ""
+        TxtTrameInit.Text = ""
         cbTemplate.Text = ""
+
         RdHttp.IsEnabled = True
         RdIR.IsEnabled = True
         RdRS232.IsEnabled = True
@@ -321,6 +327,8 @@ Public Class WTelecommandeNew
                 .Name = TxtTplName.Text
                 .Modele = TxtTplMod.Text
                 .Fabricant = TxtTplFab.Text
+                .TrameInit = TxtTrameInit.Text
+                .CharEndReceive = TxtCharEndReceive.Text
             End With
 
             'If _Driver IsNot Nothing Then
@@ -352,15 +360,23 @@ Public Class WTelecommandeNew
                 Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
                 _list = myService.GetListOfTemplate
                 For i As Integer = 0 To _list.Count - 1
-                    Dim tpl As String = Replace(_list(i).File, ".xml", "")
-                    cbTemplate.Items.Add(tpl)
+                    cbTemplate.Items.Add(_list(i).Name)
                 Next
-
                 cbTemplate.SelectedValue = _CurrentTemplate.Name
+
+
+                TxtTplFab.Text = ""
+                TxtTplName.Text = ""
+                TxtTplMod.Text = ""
+                TxtCharEndReceive.Text = ""
+                TxtTrameInit.Text = ""
+                cbTemplate.Text = ""
 
                 TxtTplFab.IsReadOnly = True
                 TxtTplMod.IsReadOnly = True
                 TxtTplName.IsReadOnly = True
+                TxtCharEndReceive.IsReadOnly = True
+                TxtTrameInit.IsReadOnly = True
                 RdHttp.IsEnabled = False
                 RdIR.IsEnabled = False
                 RdRS232.IsEnabled = False
@@ -409,284 +425,13 @@ Public Class WTelecommandeNew
 
 #Region "Designer"
 
-
-    '    Private Sub slider_Row_ValueChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Double)) Handles slider_Row.ValueChanged
-    '        Try
-    '            '==== Initalisation ====
-    '            If Me.grid_Telecommande Is Nothing Then Exit Sub
-
-    '            'Initialisation des lignes de la grille si celle-ci est vide
-    '            If Me.grid_Telecommande.RowDefinitions IsNot Nothing Then
-    '                If grid_Telecommande.RowDefinitions.Count = 0 Then
-    '                    grid_Telecommande.RowDefinitions.Clear()
-    '                    'grid_Telecommande.Height = 50
-    '                    'Initialisation de la hauteur du background
-    '                    'rectangle.Height = 70
-    '                End If
-    '            End If
-
-    '            'Augmente la hauteur de la grille
-    '            grid_Telecommande.Height = slider_Row.Value * 50
-    '            'Augmente la hauteur du background
-    '            rectangle.Height = slider_Row.Value * 50 + 20
-    '            Caneva_grid.Height = slider_Row.Value * 50 + 60
-
-    '            '==== Modification de la grille et du background pour chaque division du slider ====
-    '            If slider_Row.Value > 1 Then
-    '                'Si la grille contient moins de ligne que définit
-    '                If Me.grid_Telecommande.RowDefinitions.Count < slider_Row.Value Then
-    '                    Dim diff As Integer = slider_Row.Value - Me.grid_Telecommande.RowDefinitions.Count
-    '                    For i As Integer = 1 To diff
-
-    '                        'Ajoute une ligne à la grille
-    '                        Dim rowDef As New RowDefinition
-    '                        grid_Telecommande.RowDefinitions.Add(rowDef)
-
-    '                        For j As Integer = 0 To grid_Telecommande.ColumnDefinitions.Count - 1
-    '                            Dim x As New Canvas
-    '                            x.Width = 45
-    '                            x.Height = 45
-    '                            x.Background = Brushes.Black
-    '                            x.AllowDrop = True
-    '                            x.Tag = grid_Telecommande.RowDefinitions.Count - 1 & "|" & j
-    '                            AddHandler x.DragOver, AddressOf CVS_DragOver
-    '                            AddHandler x.Drop, AddressOf CVS_Drop
-    '                            Grid.SetColumn(x, j)
-    '                            Grid.SetRow(x, grid_Telecommande.RowDefinitions.Count - 1)
-    '                            grid_Telecommande.Children.Add(x)
-    '                        Next
-
-    '                    Next
-    '                End If
-    '                'Si la grille contient plus de ligne que définit
-    '                If Me.grid_Telecommande.RowDefinitions.Count > slider_Row.Value Then
-    '                    Dim diff As Integer = Me.grid_Telecommande.RowDefinitions.Count - slider_Row.Value
-    '                    For i As Integer = 1 To diff
-    '                        'Retire une ligne à la grille
-    '                        grid_Telecommande.RowDefinitions.RemoveAt(Me.grid_Telecommande.RowDefinitions.Count - 1)
-    '                    Next
-    'Retour:
-    '                    For i As Integer = 0 To grid_Telecommande.Children.Count - 1
-    '                        Dim x As Canvas = grid_Telecommande.Children.Item(i)
-    '                        Dim a() As String = Split(x.Tag, "|")
-    '                        If a(0) > grid_Telecommande.RowDefinitions.Count - 1 Then
-    '                            grid_Telecommande.Children.RemoveAt(i)
-    '                            GoTo Retour
-    '                        End If
-    '                    Next
-    '                End If
-    '            End If
-
-    '            'Remplir()
-    '        Catch ex As Exception
-    '            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur slider_Row_ValueChanged: " & ex.ToString)
-    '        End Try
-    '    End Sub
-
-    '    Private Sub slider_Column_ValueChanged(ByVal sender As Object, ByVal e As System.Windows.RoutedPropertyChangedEventArgs(Of Double)) Handles slider_Column.ValueChanged
-    '        Try
-    '            '==== Initalisation ====
-    '            If Me.grid_Telecommande Is Nothing Then Exit Sub
-    '            'Initialisation des colonnes de la grille si celle-ci est vide
-
-    '            If grid_Telecommande.ColumnDefinitions IsNot Nothing Then
-    '                If grid_Telecommande.ColumnDefinitions.Count = 0 Then
-    '                    grid_Telecommande.ColumnDefinitions.Clear()
-    '                    grid_Telecommande.Width = 50
-    '                    'Initialisation de la largeur du background
-    '                    'Me.rectangle.Width = 70
-    '                End If
-    '            End If
-
-    '            'Augmente la largeur de la grille
-    '            grid_Telecommande.Width = slider_Column.Value * 50
-    '            'Augmente la largeur du background
-    '            rectangle.Width = slider_Column.Value * 50 + 20
-    '            Caneva_grid.Width = slider_Column.Value * 50 + 60
-
-    '            '==== Modification de la grille et du background pour chaque division du slider ====
-    '            If slider_Column.Value > 1 Then
-    '                'Si la grille contient moins de ligne que définit
-    '                If Me.grid_Telecommande.ColumnDefinitions.Count < slider_Column.Value Then
-    '                    Dim diff As Integer = slider_Column.Value - Me.grid_Telecommande.ColumnDefinitions.Count
-    '                    For i As Integer = 1 To diff
-
-    '                        'Ajoute une colonne à la grille
-    '                        Dim colDef As New ColumnDefinition
-    '                        grid_Telecommande.ColumnDefinitions.Add(colDef)
-
-    '                        For j As Integer = 0 To grid_Telecommande.RowDefinitions.Count - 1
-    '                            Dim x As New Canvas
-    '                            x.Width = 45
-    '                            x.Height = 45
-    '                            x.Background = Brushes.Black
-    '                            x.AllowDrop = True
-    '                            x.Tag = j & "|" & grid_Telecommande.ColumnDefinitions.Count - 1
-    '                            AddHandler x.DragOver, AddressOf CVS_DragOver
-    '                            AddHandler x.Drop, AddressOf CVS_Drop
-    '                            Grid.SetColumn(x, grid_Telecommande.ColumnDefinitions.Count - 1)
-    '                            Grid.SetRow(x, j)
-    '                            grid_Telecommande.Children.Add(x)
-    '                        Next
-    '                    Next
-
-    '                    Me.Width = grid_Telecommande.Width + 300
-    '                End If
-
-    '                'Si la grille contient plus de colonne que définit
-    '                If Me.grid_Telecommande.ColumnDefinitions.Count > slider_Column.Value Then
-    '                    Dim diff As Integer = Me.grid_Telecommande.ColumnDefinitions.Count - slider_Column.Value
-    '                    For i As Integer = 1 To diff
-    '                        'Retire une ligne à la grille
-    '                        grid_Telecommande.ColumnDefinitions.RemoveAt(Me.grid_Telecommande.ColumnDefinitions.Count - 1)
-    '                    Next
-    'Retour:
-    '                    For i As Integer = 0 To grid_Telecommande.Children.Count - 1
-    '                        Dim x As Canvas = grid_Telecommande.Children.Item(i)
-    '                        Dim a() As String = Split(x.Tag, "|")
-    '                        If a(1) > grid_Telecommande.ColumnDefinitions.Count - 1 Then
-    '                            grid_Telecommande.Children.RemoveAt(i)
-    '                            GoTo Retour
-    '                        End If
-    '                    Next
-    '                End If
-    '            End If
-
-
-    '            'Remplir()
-    '        Catch ex As Exception
-    '            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur slider_Column_ValueChanged: " & ex.ToString)
-    '        End Try
-    '    End Sub
-
-
-    Private Sub Recharge()
-        Try
-            'Remplir()
-
-            For i As Integer = 0 To _CurrentTemplate.Commandes.Count - 1
-                Dim x As New Canvas
-                x.Width = 45
-                x.Height = 45
-                x.Margin = New Thickness(15)
-                x.HorizontalAlignment = Windows.HorizontalAlignment.Center
-                x.VerticalAlignment = Windows.VerticalAlignment.Center
-                x.Background = Brushes.Black
-                x.AllowDrop = True
-                x.Tag = _CurrentTemplate.Commandes(i).Row & "|" & _CurrentTemplate.Commandes(i).Column
-                'AddHandler x.DragOver, AddressOf CVS_DragOver
-                'AddHandler x.Drop, AddressOf CVS_Drop
-                Grid.SetColumn(x, _CurrentTemplate.Commandes(i).Column)
-                Grid.SetRow(x, _CurrentTemplate.Commandes(i).Row)
-
-                Dim img1 As New ImageButton
-                img1.Source = ConvertArrayToImage(myService.GetByteFromImage(_CurrentTemplate.Commandes(i).Picture))
-                img1.Command = _CurrentTemplate.Commandes(i).Name
-                img1.AllowDrop = True
-                Dim a() As String = x.Tag.split("|")
-                img1.Row = a(0)
-                img1.Column = a(1)
-                AddHandler img1.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
-                AddHandler img1.Delete, AddressOf DeleteButton
-                x.Children.Add(img1)
-
-                'grid_Telecommande.Children.Add(x)
-            Next
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Telecommande Recharge: " & ex.Message, "ERREUR", "")
-        End Try
-    End Sub
-
-    'Private Sub CVS_DragOver(ByVal sender As Object, ByVal e As System.Windows.DragEventArgs)
-    '    Try
-    '        If e.Data.GetDataPresent(GetType(ImageButton)) Then
-    '            e.Effects = DragDropEffects.Copy
-    '        Else
-    '            e.Effects = DragDropEffects.None
-    '        End If
-    '    Catch ex As Exception
-    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Telecommande CVS_DragOver: " & ex.Message, "ERREUR", "")
-    '    End Try
-    'End Sub
-
-    'Private Sub CVS_Drop(ByVal sender As System.Object, ByVal e As System.Windows.DragEventArgs)
-    '    Try
-    '        If e.Data.GetDataPresent(GetType(ImageButton)) Then
-    '            If sender.children.count > 0 Then
-    '                Exit Sub
-    '            End If
-
-    '            e.Effects = DragDropEffects.Copy
-    '            ' Utiliser uri comme vous le souhaitez
-    '            Dim img1 As New ImageButton
-    '            If InStr(e.Data.GetData(GetType(ImageButton)).parent.GetType.ToString, "Canvas") Then
-    '                If e.Data.GetData(GetType(ImageButton)).name <> "ImgCommande" Then
-    '                    e.Data.GetData(GetType(ImageButton)).parent.children.clear()
-    '                End If
-    '            End If
-    '            img1.Source = e.Data.GetData(GetType(ImageButton)).source
-    '            img1.Tag = e.Data.GetData(GetType(ImageButton)).Tag
-    '            img1.AllowDrop = True
-    '            If String.IsNullOrEmpty(ListCmd.SelectedValue) = False Then
-    '                img1.Command = ListCmd.SelectedValue
-    '                img1.ToolTip = ListCmd.SelectedValue
-    '            Else
-    '                img1.Command = e.Data.GetData(GetType(ImageButton)).Command
-    '                img1.ToolTip = e.Data.GetData(GetType(ImageButton)).ToolTip
-    '            End If
-
-    '            Dim a() As String = sender.tag.split("|")
-    '            img1.Row = a(0)
-    '            img1.Column = a(1)
-    '            img1.HorizontalAlignment = Windows.HorizontalAlignment.Center
-    '            img1.VerticalAlignment = Windows.VerticalAlignment.Center
-
-    '            AddHandler img1.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
-    '            AddHandler img1.Delete, AddressOf DeleteButton
-    '            sender.Children.Add(img1)
-
-    '        Else
-    '            e.Effects = DragDropEffects.None
-    '        End If
-    '    Catch ex As Exception
-    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Telecommande CVS_Drop: " & ex.ToString, "ERREUR", "")
-    '    End Try
-    'End Sub
-
-    'Private Sub Remplir()
-    '    Try
-    '        For i As Integer = 0 To grid_Telecommande.RowDefinitions.Count - 1
-    '            For j As Integer = 0 To grid_Telecommande.ColumnDefinitions.Count - 1
-    '                Dim x As New Canvas
-    '                x.Width = 45
-    '                x.Height = 45
-    '                x.Background = Brushes.Black
-    '                x.Margin = New Thickness(15)
-    '                x.VerticalAlignment = Windows.VerticalAlignment.Center
-    '                x.HorizontalAlignment = Windows.HorizontalAlignment.Center
-    '                x.AllowDrop = True
-    '                x.Tag = i & "|" & j
-    '                AddHandler x.DragOver, AddressOf CVS_DragOver
-    '                AddHandler x.Drop, AddressOf CVS_Drop
-    '                Grid.SetColumn(x, j)
-    '                Grid.SetRow(x, i)
-    '                grid_Telecommande.Children.Add(x)
-    '            Next
-    '        Next
-    '    Catch ex As Exception
-    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Telecommande Remplir: " & ex.Message, "ERREUR", "")
-    '    End Try
-    'End Sub
-
-    'Supprimer un bouton via menu contextuel
     Private Sub DeleteButton(ByVal sender As Object)
         Try
             sender.parent.children.clear()
 
             For i As Integer = 0 To _CurrentTemplate.Commandes.Count - 1
                 If _CurrentTemplate.Commandes(i).Name = sender.command Then
-                    _CurrentTemplate.Commandes(i).Row = -1
-                    _CurrentTemplate.Commandes(i).Column = -1
+
                 End If
             Next
         Catch ex As Exception
@@ -714,70 +459,16 @@ Public Class WTelecommandeNew
         End Try
     End Sub
 
-
-
 #End Region
 
     Private Sub WTelecommande_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         Try
-            'slider_Column.Value = _Col
-            'slider_Row.Value = _Row
+
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, ex.ToString)
         End Try
     End Sub
 
-    '''' <summary>
-    '''' Affiche les boutons (commandes) du template dans la grille
-    '''' </summary>
-    '''' <remarks></remarks>
-    'Private Sub AfficheGrilleOfCurrentTemplate()
-    '    Try
-    '        If _CurrentTemplate IsNot Nothing Then
-    '            If _CurrentTemplate.Commandes IsNot Nothing Then
-
-    '                'Remplir()
-
-    '                For i2 As Integer = 0 To _CurrentTemplate.Commandes.Count - 1
-
-    '                    If _CurrentTemplate.Commandes.Item(i2).Row >= 0 And _CurrentTemplate.Commandes.Item(i2).Column >= 0 Then
-    '                        Dim cvs As New Canvas
-    '                        cvs.Width = 45
-    '                        cvs.Height = 45
-    '                        cvs.Background = Brushes.Black
-    '                        cvs.AllowDrop = True
-    '                        cvs.Tag = _CurrentTemplate.Commandes.Item(i2).Row & "|" & _CurrentTemplate.Commandes.Item(i2).Column
-    '                        'AddHandler cvs.DragOver, AddressOf CVS_DragOver
-    '                        'AddHandler cvs.Drop, AddressOf CVS_Drop
-    '                        Grid.SetColumn(cvs, _CurrentTemplate.Commandes.Item(i2).Column)
-    '                        Grid.SetRow(cvs, _CurrentTemplate.Commandes.Item(i2).Row)
-
-    '                        Dim img1 As New ImageButton
-    '                        img1.Source = ConvertArrayToImage(myService.GetByteFromImage(_CurrentTemplate.Commandes.Item(i2).Picture))
-    '                        img1.Tag = _CurrentTemplate.Commandes.Item(i2).Picture
-    '                        img1.Command = _CurrentTemplate.Commandes.Item(i2).Name
-
-    '                        img1.AllowDrop = True
-    '                        Dim a() As String = cvs.Tag.split("|")
-    '                        img1.Row = a(0)
-    '                        img1.Column = a(1)
-    '                        img1.Width = 45
-    '                        img1.Height = 45
-    '                        img1.HorizontalAlignment = Windows.HorizontalAlignment.Center
-    '                        img1.VerticalAlignment = Windows.VerticalAlignment.Center
-    '                        AddHandler img1.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
-    '                        AddHandler img1.Delete, AddressOf DeleteButton
-    '                        cvs.Children.Add(img1)
-
-    '                        grid_Telecommande.Children.Add(cvs)
-    '                    End If
-    '                Next
-    '            End If
-    '        End If
-    '    Catch ex As Exception
-    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, ex.ToString)
-    '    End Try
-    'End Sub
 
     ''' <summary>
     ''' Sélection d'un template
@@ -800,8 +491,8 @@ Public Class WTelecommandeNew
                 TxtTplName.Text = _list.Item(cbTemplate.SelectedIndex).Name
                 TxtTplFab.Text = _list.Item(cbTemplate.SelectedIndex).Fabricant
                 TxtTplMod.Text = _list.Item(cbTemplate.SelectedIndex).Modele
-                'slider_Column.Value = _list.Item(cbTemplate.SelectedIndex).Colonne
-                ' slider_Row.Value = _list.Item(cbTemplate.SelectedIndex).Ligne
+                TxtTrameInit.Text = _list.Item(cbTemplate.SelectedIndex).TrameInit
+                TxtCharEndReceive.Text = _list.Item(cbTemplate.SelectedIndex).CharEndReceive
 
                 Select Case _list.Item(cbTemplate.SelectedIndex).Type
                     Case 0 'http
@@ -822,7 +513,6 @@ Public Class WTelecommandeNew
                 StkCmd.Visibility = Windows.Visibility.Visible
                 StkVar.Visibility = Windows.Visibility.Visible
 
-                'AfficheGrilleOfCurrentTemplate()
             End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString)
@@ -832,15 +522,12 @@ Public Class WTelecommandeNew
     Private Sub ChargeCmd()
         Try
             ListCmd.Items.Clear()
-            'ImgCommande2.Source = Nothing
-            'ImgCommande2.Tag = Nothing
-
             If _CurrentTemplate IsNot Nothing Then
                 For Each cmd In _CurrentTemplate.Commandes
                     ListCmd.Items.Add(cmd.Name)
                 Next
-
             End If
+
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur ChargeCmd: " & ex.Message)
         End Try
@@ -854,9 +541,8 @@ Public Class WTelecommandeNew
                 For Each var In _CurrentTemplate.Variables
                     ListVar.Items.Add(var.Name)
                 Next
-            Else
-
             End If
+
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur ChargeVar: " & ex.Message)
         End Try
@@ -994,23 +680,6 @@ Public Class WTelecommandeNew
     Private Sub buttonOk_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles buttonOk.Click
         Try
             If _CurrentTemplate IsNot Nothing Then
-                'For i As Integer = 0 To grid_Telecommande.Children.Count - 1
-                '    Dim cvs As Canvas = grid_Telecommande.Children.Item(i)
-
-                '    If cvs IsNot Nothing Then
-                '        If cvs.Children.Count <> 0 Then
-                '            For j As Integer = 0 To _CurrentTemplate.Commandes.Count - 1
-
-                '                Dim y As ImageButton = cvs.Children.Item(0)
-                '                If _CurrentTemplate.Commandes(j).Name = y.Command Then
-                '                    _CurrentTemplate.Commandes(j).Row = y.Row
-                '                    _CurrentTemplate.Commandes(j).Column = y.Column
-                '                    Exit For
-                '                End If
-                '            Next
-                '        End If
-                '    End If
-                'Next
 
                 Dim retour As String = myService.SaveTemplate(IdSrv, _CurrentTemplate)
 
