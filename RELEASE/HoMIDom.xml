@@ -2361,20 +2361,6 @@ HoMIDom
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Ligne">
-	<summary>
- Nombre de lignes de la grille du template
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Colonne">
-	<summary>
- Nombre de colonnes de la grille du template
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Type">
 	<summary>
  Type de driver 0=http 1=IR 2=RS232, par défaut 0
