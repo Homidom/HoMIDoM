@@ -4,11 +4,6 @@
     ''' </summary>
     ''' <remarks></remarks>
     Public Class Telecommande
-        Public Shared TemplateBOX() As String = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Power", "VolumeUp", "VolumeDown", "Mute", "ChannelUp", "ChannelDown"}
-        Public Shared TemplateTV() As String = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Power", "VolumeUp", "VolumeDown", "Mute", "ChannelUp", "ChannelDown"}
-        Public Shared TemplateDVD() As String = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Power", "Play", "Pause", "Stop", "Avance", "Recul", "ChapitreSuivant", "ChapitrePrecedent"}
-        Public Shared TemplateAUDIO() As String = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Power""VolumeUp", "VolumeDown", "Mute", "Play", "Pause", "Stop", "Avance", "Recul"}
-
         Public Class Template
 
 #Region "Variables"
@@ -19,15 +14,13 @@
             Dim _Driver As String
             Dim _File As String
             Dim _Type As Integer = 0 '0:http 1:ir 2:rs232
-            Dim _Colonne As Integer = 4
-            Dim _Ligne As Integer = 8
             Dim _TrameInit As String 'trame d'initialisation
             Dim _CharEndReceive 'caractère de fin d'une trame reçue
             Dim _IP As String 'adresse IP
             Dim _Port As Integer 'Port IP
             Dim _Cmd As New List(Of Commandes)
             Dim _Var As New List(Of TemplateVar)
-            Dim _GraficTemplate As GraficTemplate
+            Dim _GraficTemplate As New GraficTemplate
 #End Region
 
 #Region "Property"
@@ -113,36 +106,6 @@
                 End Get
                 Set(ByVal value As String)
                     _File = value
-                End Set
-            End Property
-
-            ''' <summary>
-            ''' Nombre de lignes de la grille du template
-            ''' </summary>
-            ''' <value></value>
-            ''' <returns></returns>
-            ''' <remarks></remarks>
-            Public Property Ligne As Integer
-                Get
-                    Return _Ligne
-                End Get
-                Set(ByVal value As Integer)
-                    _Ligne = value
-                End Set
-            End Property
-
-            ''' <summary>
-            ''' Nombre de colonnes de la grille du template
-            ''' </summary>
-            ''' <value></value>
-            ''' <returns></returns>
-            ''' <remarks></remarks>
-            Public Property Colonne As Integer
-                Get
-                    Return _Colonne
-                End Get
-                Set(ByVal value As Integer)
-                    _Colonne = value
                 End Set
             End Property
 
@@ -281,24 +244,7 @@
 
 
             Public Sub New()
-                'Création des variables par défaut
-                'variable "command", si on lui passe le nom d'une commande ça l'exécute
-                Dim x As New TemplateVar
-                x.Name = "command"
-                x.Type = TypeOfVar.String
-                _Var.Add(x)
 
-                'variable "ip" qui contient l'adresse ip du template
-                Dim y As New TemplateVar
-                y.Name = "ip"
-                y.Type = TypeOfVar.String
-                _Var.Add(y)
-
-                'variable "trame" qui contient l'adresse ip du template
-                Dim z As New TemplateVar
-                z.Name = "trame"
-                z.Type = TypeOfVar.String
-                _Var.Add(z)
             End Sub
 
             Public Function AddNewVar(ByVal Var As TemplateVar) As Integer
@@ -454,8 +400,6 @@
             Dim _IsScript As Boolean = False 'si false c'est une commande à envoyer si false c'est un script à exécuter
             Dim _Repeat As Integer = 0
             Dim _Picture As String
-            Dim _Row As Integer = -1
-            Dim _Column As Integer = -1
 
             'Variables graphiques
             Dim _Width As Double = 45
@@ -507,24 +451,6 @@
                 End Get
                 Set(ByVal value As String)
                     _Picture = value
-                End Set
-            End Property
-
-            Public Property Row As Integer
-                Get
-                    Return _Row
-                End Get
-                Set(ByVal value As Integer)
-                    _Row = value
-                End Set
-            End Property
-
-            Public Property Column As Integer
-                Get
-                    Return _Column
-                End Get
-                Set(ByVal value As Integer)
-                    _Column = value
                 End Set
             End Property
 
@@ -619,7 +545,7 @@
             Dim _Width As Double = 200
             Dim _Height As Double = 570
             Dim _BackgroundPicture As String = ""
-            Dim _ColorBackGround As Double 'SolidColorBrush = Brushes.Black
+            Dim _ColorBackGround As Double
             Dim _Widgets As New List(Of Widget)
 #End Region
 
@@ -669,7 +595,6 @@
                 End Set
             End Property
 #End Region
-
         End Class
 
 #End Region

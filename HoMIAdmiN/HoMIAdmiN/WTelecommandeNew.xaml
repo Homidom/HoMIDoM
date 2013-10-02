@@ -648,14 +648,14 @@
                                 <Button Name="BtnNewTemplate" Width="25" Margin="2" Height="25" Content="+" Foreground="White" Template="{DynamicResource GlassButton}"/>
                          </StackPanel>
                         <StackPanel Orientation="Horizontal" Name="StkTplBase" Visibility="Collapsed" >
-                          <Label Name="lbltplbase" Width="75" Content="Base:" Foreground="White"  />
+                          <!--<Label Name="lbltplbase" Width="75" Content="Base:" Foreground="White"  />
                          <ComboBox Width="90" Name="cbBase" SelectedIndex="0">
                         <ComboBoxItem Content="VIDE" />
                         <ComboBoxItem Content="TV" />
                         <ComboBoxItem Content="DVD" />
                     <ComboBoxItem Content="BOX" />
                     <ComboBoxItem Content="AUDIO" />
-                </ComboBox>
+                </ComboBox>-->
                 <Button Name="BtnSaveTemplate" Margin="2" Height="25" Width="25" Content="Ok" Visibility="Hidden" Foreground="White" Template="{DynamicResource GlassButton}"/>
             </StackPanel>
                         <StackPanel Name="StkNomTemplate" Orientation="Horizontal" >

@@ -31,44 +31,43 @@ Public Class uTelecommande
 
     Private Sub uTelecommande_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         Try
-            If _ActualTemplate IsNot Nothing Then
-                SetGrid(_ActualTemplate.Ligne, _ActualTemplate.Colonne)
-                Remplir()
+            'If _ActualTemplate IsNot Nothing Then
+            '    Remplir()
 
-                If _obj.Commandes IsNot Nothing Then
+            '    If _obj.Commandes IsNot Nothing Then
 
-                    For i2 As Integer = 0 To _obj.Commandes.Count - 1
+            '        For i2 As Integer = 0 To _obj.Commandes.Count - 1
 
-                        If _obj.Commandes.Item(i2).Row > 0 And _obj.Commandes.Item(i2).Column > 0 Then
-                            Dim cvs As New Canvas
-                            cvs.Width = 45
-                            cvs.Height = 45
+            '            If _obj.Commandes.Item(i2).Row > 0 And _obj.Commandes.Item(i2).Column > 0 Then
+            '                Dim cvs As New Canvas
+            '                cvs.Width = 45
+            '                cvs.Height = 45
 
-                            cvs.Background = Brushes.Black
-                            cvs.AllowDrop = True
-                            cvs.Tag = _obj.Commandes.Item(i2).Row & "|" & _obj.Commandes.Item(i2).Column
-                            Grid.SetColumn(cvs, _obj.Commandes.Item(i2).Column)
-                            Grid.SetRow(cvs, _obj.Commandes.Item(i2).Row)
+            '                cvs.Background = Brushes.Black
+            '                cvs.AllowDrop = True
+            '                cvs.Tag = _obj.Commandes.Item(i2).Row & "|" & _obj.Commandes.Item(i2).Column
+            '                Grid.SetColumn(cvs, _obj.Commandes.Item(i2).Column)
+            '                Grid.SetRow(cvs, _obj.Commandes.Item(i2).Row)
 
-                            Dim img1 As New ImageButton
-                            img1.Source = ConvertArrayToImage(myService.GetByteFromImage(_obj.Commandes.Item(i2).Picture))
-                            img1.Tag = _obj.Commandes.Item(i2).Picture
-                            img1.Command = _obj.Commandes.Item(i2).Name
+            '                Dim img1 As New ImageButton
+            '                img1.Source = ConvertArrayToImage(myService.GetByteFromImage(_obj.Commandes.Item(i2).Picture))
+            '                img1.Tag = _obj.Commandes.Item(i2).Picture
+            '                img1.Command = _obj.Commandes.Item(i2).Name
 
-                            img1.AllowDrop = True
-                            Dim a() As String = cvs.Tag.split("|")
-                            img1.Row = a(0)
-                            img1.Column = a(1)
-                            img1.HorizontalAlignment = Windows.HorizontalAlignment.Stretch
-                            img1.VerticalAlignment = Windows.VerticalAlignment.Stretch
-                            AddHandler img1.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
-                            cvs.Children.Add(img1)
+            '                img1.AllowDrop = True
+            '                Dim a() As String = cvs.Tag.split("|")
+            '                img1.Row = a(0)
+            '                img1.Column = a(1)
+            '                img1.HorizontalAlignment = Windows.HorizontalAlignment.Stretch
+            '                img1.VerticalAlignment = Windows.VerticalAlignment.Stretch
+            '                AddHandler img1.MouseLeftButtonDown, AddressOf Img_MouseLeftButtonDown
+            '                cvs.Children.Add(img1)
 
-                            grid_Telecommande.Children.Add(cvs)
-                        End If
-                    Next
-                End If
-            End If
+            '                grid_Telecommande.Children.Add(cvs)
+            '            End If
+            '        Next
+            '    End If
+            'End If
         Catch ex As Exception
             MessageBox.Show(ex.Message)
         End Try
