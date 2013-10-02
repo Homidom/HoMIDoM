@@ -97,6 +97,21 @@ Driver_Zwave
 </member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.SoftReset">
 	<summary>Reset le controleur Z-Wave sans effacer les parametres de configuration </summary>
 	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.StartInclusionMode">
+	<summary>
+ Place le controller en mode "inclusion" *** experimental ***
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.StartExclusionMode">
+	<summary>
+ Place le controller en mode "exclusion" *** experimental ***
+ </summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.StopAssociation">
+	<summary>
+ Annule la commande en cours : permet de sortir du mode "inclusion/exclusion" *** experimental ***
+ </summary>
+	<remarks></remarks>
 </member><member name="M:Driver_Zwave.Driver_ZWave.Driver_ZWave.NotificationHandler(OpenZWaveDotNet.ZWNotification)">
 	<summary>Handler lors d'une reception d'une trame</summary>
 	<param name="m_notification"></param>
