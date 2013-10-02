@@ -1,6 +1,8 @@
 ﻿Imports HoMIDom
+Imports HoMIDom.HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
+Imports SKYPE4COMLib
 
 ' Auteur : HoMIDoM
 ' Date : 05/04/2013
@@ -25,7 +27,7 @@ Imports HoMIDom.HoMIDom.Device
     Dim _IP_UDP As String = "@" 'Adresse IP UDP à utiliser, , "@" si non applicable pour le cacher côté client
     Dim _Port_UDP As String = "@" 'Port UDP à utiliser, , "@" si non applicable pour le cacher côté client
     Dim _Com As String = "@" 'Port COM à utiliser, , "@" si non applicable pour le cacher côté client
-    Dim _Refresh As Integer = 0 'Valeur à laquelle le driver doit rafraichir les valeurs des devices (ex: toutes les 200ms aller lire les devices)
+    Dim _Refresh As Integer = 10000 'Valeur à laquelle le driver doit rafraichir les valeurs des devices (ex: toutes les 200ms aller lire les devices)
     Dim _Modele As String = "Skype" 'Modèle du driver/interface
     Dim _Version As String = My.Application.Info.Version.ToString 'Version du driver
     Dim _OsPlatform As String = "3264" 'Plateforme compatible 32 64 ou 3264
@@ -47,6 +49,10 @@ Imports HoMIDom.HoMIDom.Device
 
 #Region "Variables Internes"
     'Insérer ici les variables internes propres au driver et non communes
+
+    Private oSkype As New SKYPE4COMLib.Skype
+    Private oCall As New SKYPE4COMLib.Call
+    Private mmCall As Boolean
 
 #End Region
 
@@ -394,11 +400,7 @@ Imports HoMIDom.HoMIDom.Device
                 If Command = "" Then
                     Return False
                 Else
-                    'Write(deviceobject, Command, Param(0), Param(1))
-                    Select Case UCase(Command)
-                        Case ""
-                        Case Else
-                    End Select
+                    Write(MyDevice, Command, Param(0))
                     Return True
                 End If
             Else
@@ -434,15 +436,38 @@ Imports HoMIDom.HoMIDom.Device
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
-            'récupération des paramétres avancés
-            Try
-                _DEBUG = _Parametres.Item(0).Valeur
-            Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
-            End Try
+            _DEBUG = _Parametres.Item(0).Valeur
+
+            'Vérifie si Skype est démarrer si non tentative de de connexion  
+
+            oSkype = New Skype
+            'oSkype = CreateObject("Skype4COM.Skype", "Skype_")
+
+            If oSkype.Client.IsRunning = False Then
+                oSkype.Client.Start(True, True)
+            End If
+
+            'While Not oSkype.Client.IsRunning
+            'System.Threading.Thread.Sleep(10000)
+            'End While
+
+            oSkype.Attach(5, True)
+            'oSkype.Attach(7, False)
+
+            AddHandler oSkype.MessageStatus, AddressOf MessageStatus
+            AddHandler oSkype.SmsMessageStatusChanged, AddressOf MessageStatusSMS
+            AddHandler oSkype.CallStatus, AddressOf CallStatus
+
+            If _Refresh > 0 Then
+                MyTimer.Interval = Refresh
+                MyTimer.Enabled = True
+                AddHandler MyTimer.Elapsed, AddressOf TimerTick
+            End If
 
             _IsConnect = True
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Driver " & Me.Nom & " démarré")
+
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Skype Start", "Demarré")
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", ex.Message)
         End Try
@@ -452,6 +477,15 @@ Imports HoMIDom.HoMIDom.Device
     ''' <remarks></remarks>
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Try
+
+            RemoveHandler oSkype.MessageStatus, AddressOf MessageStatus
+            RemoveHandler oSkype.SmsMessageStatusChanged, AddressOf MessageStatusSMS
+            RemoveHandler oSkype.CallStatus, AddressOf CallStatus
+            RemoveHandler MyTimer.Elapsed, AddressOf TimerTick
+
+            MyTimer.Stop()
+            'oSkype.Client.Shutdown()
+
             _IsConnect = False
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Stop", "Driver " & Me.Nom & " arrêté")
         Catch ex As Exception
@@ -472,6 +506,25 @@ Imports HoMIDom.HoMIDom.Device
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
             If _Enable = False Then Exit Sub
+
+            If Objet.Type = "GENERIQUEBOOLEEN" Then
+                If (UCase(Objet.adresse1.ToString) = "ENVOYER UN SMS" Or UCase(Objet.adresse1.ToString) = "ENVOYER UN MESSAGE") And Objet.value = True Then
+                    Write(Objet, "SEND", Objet.modele)
+                    Objet.setvalue(False)
+                End If
+                If UCase(Objet.adresse1.ToString) = "APPELER" Then
+                    If Objet.value = True Then
+                        Write(Objet, "CALL")
+                        mmCall = True
+                    Else
+                        If mmCall Then
+                            Write(Objet, "STOP CALL")
+                            mmCall = False
+                        End If
+                    End If
+                End If
+            End If
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", ex.Message)
         End Try
@@ -495,17 +548,65 @@ Imports HoMIDom.HoMIDom.Device
                 Exit Sub
             End If
 
-            If UCase(Command) = "ON" Then
-                Objet.Value = 100
-            End If
-            If UCase(Command) = "OFF" Then
-                Objet.Value = 0
-            End If
-            If UCase(Command) = "DIM" Then
-                If Parametre1 IsNot Nothing Then
-                    Objet.Value = Parametre1
-                End If
-            End If
+            Select Case UCase(Command)
+                Case "SEND"
+
+                    Try
+
+                        If Parametre1 = "" Then
+                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "Skype Write", "SMS à envoyer vide, annulation")
+                        Else
+
+                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "Skype Write", "SMS envoi en cours : " & Parametre1 & " à " & Objet.adresse2.ToString)
+                            Select Case UCase(Objet.adresse1.ToString)
+                                Case "ENVOYER UN SMS"
+
+                                    Dim SmsStatus As SKYPE4COMLib.TSmsMessageStatus
+
+                                    oSkype.CreateSms(TSmsMessageType.smsMessageTypeOutgoing, Objet.adresse2.ToString)
+                                    oSkype.SendSms(Objet.adresse2.ToString, Parametre1)
+
+                                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", oSkype.Convert.SmsMessageStatusToText(SmsStatus))
+
+                                Case "ENVOYER UN MESSAGE"
+                                    Dim ChatStatus As SKYPE4COMLib.TChatMessageStatus
+
+                                    oSkype.CreateChatWith(Objet.adresse2.ToString)
+                                    oSkype.SendMessage(Objet.adresse2.ToString, Parametre1)
+
+                                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", oSkype.Convert.ChatMessageStatusToText(ChatStatus))
+
+                            End Select
+
+                        End If
+
+                    Catch ex As Exception
+                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "Skype Write", "Error Sending SMS: " & ex.ToString)
+                    End Try
+
+                Case "CALL"
+                    Try
+                        If UCase(Objet.adresse1.ToString) = "APPELER" Then
+                            oCall = oSkype.PlaceCall(Objet.adresse2.ToString)
+                        End If
+
+                    Catch ex As Exception
+                        _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "Skype Write CALL", "error:" & ex.Message)
+                    End Try
+
+                Case "STOP CALL"
+                    Try
+                        If UCase(Objet.adresse1.ToString) = "APPELER" Then
+                            oCall.Finish()
+                        End If
+
+                    Catch ex As Exception
+                        _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "Skype Write STOP CALL", "error:" & ex.Message)
+                    End Try
+
+                Case Else : _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "Skype Write", "Commande " & Command & " non gérée")
+            End Select
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", ex.Message)
         End Try
@@ -611,24 +712,26 @@ Imports HoMIDom.HoMIDom.Device
 
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.GENERIQUESTRING)
+            _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
 
             'Parametres avancés
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
-            'add_devicecommande("PRESETDIM", "permet de paramétrer le DIM : param1=niveau, param2=timer", 2)
+            Add_DeviceCommande("SEND", "Envoyer un Message", 1)
+            Add_DeviceCommande("CALL", "Appeler", 0)
+            Add_DeviceCommande("STOP CALL", "Raccrocher", 0)
 
             'Libellé Driver
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            Add_LibelleDevice("ADRESSE1", "Adresse", "")
-            Add_LibelleDevice("ADRESSE2", "@", "")
+            Add_LibelleDevice("ADRESSE1", "Commande", "Envoyer un message, Envoyer un SMS, Recevoir un message, Recevoir un SMS, Appeler")
+            Add_LibelleDevice("ADRESSE2", "Contact", "Pseudo du contact (respecter la casse) ou numéro de téléphone commencant par +33xxxxxxxxx")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "@", "")
-            'Add_LibelleDevice("MODELE", "Modele", "Nom du modele de composant : xxx/yyy/zzz", "xxx|yyy|zzz")
-            Add_LibelleDevice("REFRESH", "Refresh", "")
+            Add_LibelleDevice("MODELE", "Message", "Maxi 160 caractères")
+            Add_LibelleDevice("REFRESH", "Raffraichissement", "")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
         Catch ex As Exception
@@ -639,13 +742,175 @@ Imports HoMIDom.HoMIDom.Device
     ''' <summary>Si refresh >0 gestion du timer</summary>
     ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
     Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
-
+        If oSkype.Client.IsRunning = True And oSkype.AttachmentStatus <> oSkype.Convert.TextToAttachmentStatus("SUCCESS") Then
+            oSkype.Attach(5, True)
+        End If
     End Sub
 
 #End Region
 
 #Region "Fonctions internes"
     'Insérer ci-dessous les fonctions propres au driver et nom communes (ex: start)
+
+    ''' <summary>Reception de SMS</summary>
+    Private Sub MessageStatusSMS(ByVal msg As SmsMessage, ByVal status As TSmsMessageStatus)
+        Try
+            If _Enable = False Then Exit Sub
+            If status = TSmsMessageStatus.smsMessageStatusReceived Then
+
+                If InStr(msg.Body, ":") Then
+
+                    CommandeString(msg.Body)
+                Else
+
+                    'Recherche si un device affecté
+                    Dim listedevices As New ArrayList
+                    listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, "", "", Me._ID, True)
+                    'un device trouvé on maj la value
+                    If (listedevices.Count > 0) Then
+                        For Each objet As Object In listedevices
+                            If InStr(msg.ReplyToNumber, "#" & objet.adresse2) And UCase(objet.adresse1) = "RECEVOIR UN SMS" Then
+                                objet.setValue = "Recu le : " & msg.Timestamp & " de: " & objet.adresse2 & " : " & msg.Body
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Reception Message SMS : ", "Recu de : " & objet.adresse2 & " le : " & msg.Timestamp & " : " & msg.Body)
+                            End If
+                        Next
+                    Else
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Skype Reception Message SMS", "Composant non trouvé : " & msg.Body)
+                    End If
+                End If
+
+            End If
+
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Skype Reception Message SMS", "Exception" & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub MessageStatus(ByVal msg As ChatMessage, ByVal status As TChatMessageStatus)
+        Try
+            If _Enable = False Then Exit Sub
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Reception Message Skype : ", "Recu de : " & msg.ChatName & " le: " & msg.Timestamp & " status: " & status & " : " & msg.Body)
+
+            If status = TChatMessageStatus.cmsReceived Then
+
+                If InStr(msg.Body, ":") Then
+
+                    CommandeString(msg.Body)
+                Else
+
+                    'Recherche si un device affecté
+                    Dim listedevices As New ArrayList
+                    listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, "", "", Me._ID, True)
+                    'un device trouvé on maj la value
+                    If (listedevices.Count > 0) Then
+                        For Each objet As Object In listedevices
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Reception Message Skype : ", "Recu de : " & objet.adresse2 & " de type: " & objet.adresse1)
+
+                            If InStr(msg.ChatName, "#" & objet.adresse2) And UCase(objet.adresse1) = "RECEVOIR UN MESSAGE" Then
+                                objet.setValue("Recu le : " & msg.Timestamp & " de: " & objet.adresse2 & " : " & msg.Body)
+                                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Reception Message Skype : ", "Recu de : " & msg.ChatName & " le: " & msg.Timestamp & " status: " & status & " : " & msg.Body)
+                            End If
+                        Next
+                    Else
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Reception Message Skype", "Composant non trouvé : " & msg.Body)
+                    End If
+                End If
+
+            End If
+
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Reception Message Skype", "Exception" & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub CallStatus(ByVal pCall As SKYPE4COMLib.Call, ByVal aStatus As SKYPE4COMLib.TCallStatus)
+
+        If oSkype.Convert.TextToCallStatus("RINGING") = aStatus And _
+            (oSkype.Convert.TextToCallType("INCOMING_P2P") = pCall.Type() Or _
+             oSkype.Convert.TextToCallType("INCOMING_PSTN") = pCall.Type) Then
+            pCall.Answer()
+        End If
+
+    End Sub
+
+    Private Sub CommandeString(ByVal msg As String)
+
+        Dim ParaAdr2 = Split(msg, ":")
+
+        Select Case ParaAdr2(0).ToUpper
+            Case "COMPOSANT" 'If _DEBUG Then
+                Dim ID = ReturnDeviceIDByName(ParaAdr2(1))
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Reception Message Commande", "Passage par la partie composant d'ID : " & ID & " L'action     est : " & ParaAdr2(2))
+                Dim TempDevice As TemplateDevice = _Server.ReturnDeviceById(_IdSrv, ID)
+                If TempDevice IsNot Nothing Then
+                    If TempDevice.Type = ListeDevices.LAMPE Or TempDevice.Type = ListeDevices.APPAREIL Then
+
+                        ' Analyse de la commande 
+                        Select Case ParaAdr2(2).ToUpper
+                            Case "ON", "OFF"
+                                Dim x As DeviceAction = New DeviceAction
+                                x.Nom = ParaAdr2(2)
+                                _Server.ExecuteDeviceCommand(_IdSrv, ID, x)
+
+                            Case "DIM"
+                                Dim x As DeviceActionSimple = New DeviceActionSimple
+                                x.Nom = ParaAdr2(2)
+                                x.Param1 = ParaAdr2(3)
+                                _Server.ExecuteDeviceCommandSimple(_IdSrv, ID, x)
+
+                            Case "READ"
+
+
+                        End Select
+                    End If
+                End If
+
+            Case "MACRO"
+                Dim ID = ReturnMacroIDByName(ParaAdr2(1))
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Reception Message Commande", "Passage par la partie Macro d'ID : " & ID)
+
+                Dim TempMacro As Macro = _Server.ReturnMacroById(_IdSrv, ID)
+                If TempMacro IsNot Nothing And TempMacro.Enable = True Then
+                    ' Analyse de la commande 
+                    Select Case ParaAdr2(2).ToUpper
+                        Case "START"
+                            _Server.RunMacro(_IdSrv, ID)
+                        Case "STOP"
+
+                    End Select
+                End If
+
+            Case Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Reception Message Skype", "Commande non non trouvée : " & ParaAdr2(2).ToUpper)
+        End Select
+
+    End Sub
+
+    Private Function ReturnDeviceIDByName(ByVal Name As String) As String
+        Dim listeDevices As New List(Of TemplateDevice)
+        Dim sortie As String = ""
+        listeDevices = _Server.GetAllDevices(_IdSrv)
+        For Each objet As Object In listeDevices
+            If Name = objet.Name Then
+                sortie = objet.ID
+                Exit For
+            End If
+        Next
+        Return sortie
+    End Function
+
+    Private Function ReturnMacroIDByName(ByVal Name As String) As String
+        Dim listeMacros As New List(Of Macro)
+        Dim sortie As String = ""
+        listeMacros = _Server.GetAllMacros(_IdSrv)
+        For Each objet As Object In listeMacros
+            If Name = objet.Nom Then
+                sortie = objet.ID
+                Exit For
+            End If
+        Next
+        Return sortie
+    End Function
 
 #End Region
 
