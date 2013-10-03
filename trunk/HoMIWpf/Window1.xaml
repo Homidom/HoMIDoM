@@ -81,7 +81,7 @@
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
-                                            <GradientStop Color="DarkGray" Offset="0.663" />
+                                            <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                         </LinearGradientBrush>
                                     </MenuItem.Background>
 
@@ -93,7 +93,7 @@
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
-                                            <GradientStop Color="DarkGray" Offset="0.663" />
+                                            <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                         </LinearGradientBrush>
                                     </MenuItem.Background>
 
@@ -104,7 +104,7 @@
                                         <MenuItem.Background>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                 <GradientStop Color="Black" Offset="0" />
-                                                <GradientStop Color="DarkGray" Offset="0.663" />
+                                                <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
                                     </MenuItem>
@@ -112,7 +112,7 @@
                                         <MenuItem.Background>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                 <GradientStop Color="Black" Offset="0" />
-                                                <GradientStop Color="DarkGray" Offset="0.663" />
+                                                <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
                                     </MenuItem>
@@ -120,7 +120,7 @@
                                         <MenuItem.Background>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                 <GradientStop Color="Black" Offset="0" />
-                                                <GradientStop Color="DarkGray" Offset="0.663" />
+                                                <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
                                     </MenuItem>
@@ -128,7 +128,7 @@
                                         <MenuItem.Background>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                 <GradientStop Color="Black" Offset="0" />
-                                                <GradientStop Color="DarkGray" Offset="0.663" />
+                                                <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
                                     </MenuItem>
@@ -136,7 +136,7 @@
                                         <MenuItem.Background>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                 <GradientStop Color="Black" Offset="0" />
-                                                <GradientStop Color="DarkGray" Offset="0.663" />
+                                                <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
                                     </MenuItem>
@@ -144,7 +144,7 @@
                                         <MenuItem.Background>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                 <GradientStop Color="Black" Offset="0" />
-                                                <GradientStop Color="DarkGray" Offset="0.663" />
+                                                <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
                                     </MenuItem>
@@ -152,7 +152,7 @@
                                         <MenuItem.Background>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                 <GradientStop Color="Black" Offset="0" />
-                                                <GradientStop Color="DarkGray" Offset="0.663" />
+                                                <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
                                     </MenuItem>
@@ -160,7 +160,7 @@
                                         <MenuItem.Background>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                 <GradientStop Color="Black" Offset="0" />
-                                                <GradientStop Color="DarkGray" Offset="0.663" />
+                                                <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
                                     </MenuItem>
@@ -168,7 +168,7 @@
                                         <MenuItem.Background>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                 <GradientStop Color="Black" Offset="0" />
-                                                <GradientStop Color="DarkGray" Offset="0.663" />
+                                                <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
                                     </MenuItem>
@@ -176,7 +176,7 @@
                                         <MenuItem.Background>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                 <GradientStop Color="Black" Offset="0" />
-                                                <GradientStop Color="DarkGray" Offset="0.663" />
+                                                <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
                                     </MenuItem>
@@ -184,7 +184,7 @@
                                         <MenuItem.Background>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                 <GradientStop Color="Black" Offset="0" />
-                                                <GradientStop Color="DarkGray" Offset="0.663" />
+                                                <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
                                     </MenuItem>
@@ -195,7 +195,7 @@
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
-                                            <GradientStop Color="DarkGray" Offset="0.663" />
+                                            <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                         </LinearGradientBrush>
                                     </MenuItem.Background>
 
@@ -206,7 +206,7 @@
                                         <MenuItem.Background>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                 <GradientStop Color="Black" Offset="0" />
-                                                <GradientStop Color="DarkGray" Offset="0.663" />
+                                                <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
 
@@ -218,7 +218,7 @@
                                         <MenuItem.Background>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                 <GradientStop Color="Black" Offset="0" />
-                                                <GradientStop Color="DarkGray" Offset="0.663" />
+                                                <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
 
@@ -227,11 +227,11 @@
                                     </MenuItem.Icon>
                                 </MenuItem>
                             </MenuItem>
-                                <MenuItem Name="ViewCalendar" Header="Calendrier" FontSize="12" Foreground="White">
+                                <MenuItem Name="ViewCalendar" Header="Calendrier" FontSize="12" Foreground="White" Visibility="Collapsed">
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
-                                            <GradientStop Color="DarkGray" Offset="0.663" />
+                                            <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                         </LinearGradientBrush>
                                     </MenuItem.Background>
 
@@ -243,7 +243,7 @@
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
-                                            <GradientStop Color="DarkGray" Offset="0.663" />
+                                            <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                         </LinearGradientBrush>
                                     </MenuItem.Background>
 
@@ -255,7 +255,7 @@
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
-                                            <GradientStop Color="DarkGray" Offset="0.663" />
+                                            <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                         </LinearGradientBrush>
                                     </MenuItem.Background>
                                     <MenuItem.Icon>
@@ -266,7 +266,7 @@
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
-                                            <GradientStop Color="DarkGray" Offset="0.663" />
+                                            <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                         </LinearGradientBrush>
                                     </MenuItem.Background>
 
@@ -278,7 +278,7 @@
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
-                                            <GradientStop Color="DarkGray" Offset="0.663" />
+                                            <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                         </LinearGradientBrush>
                                     </MenuItem.Background>
 
@@ -290,7 +290,7 @@
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
-                                            <GradientStop Color="DarkGray" Offset="0.663" />
+                                            <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                         </LinearGradientBrush>
                                     </MenuItem.Background>
 
@@ -302,7 +302,7 @@
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />
-                                            <GradientStop Color="DarkGray" Offset="0.663" />
+                                            <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                         </LinearGradientBrush>
                                     </MenuItem.Background>
 
