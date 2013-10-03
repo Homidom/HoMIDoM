@@ -57,6 +57,12 @@
                                             <TextBox Name="TxtPassword" Margin="5,0,0,0" Width="100" MaxLength="12" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" >
+                                            <Label Margin="5,0,0,0" Content="Page à l'ouverture:" Foreground="White" />
+                                            <ComboBox Name="CbStartPageDefaut" Width="150" SelectedIndex="0">
+                                                <ComboBoxItem Content="Aucune" />
+                                            </ComboBox>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" >
                                             <CheckBox Name="ChkTimeOutPage" Foreground="White" Content="Gérer TimeOut des Pages"/>
                                             <Label Margin="15,0,0,0" Content="Timeout:" Foreground="White" />
                                             <ComboBox Name="CbTimeOutPage" Width="50" SelectedIndex="0">

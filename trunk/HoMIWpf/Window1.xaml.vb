@@ -40,6 +40,7 @@ Class Window1
     Private Shared lock_logwrite As New Object
     Dim _flagIsShowScroll As Boolean = True
     Dim _MaskTaskMnu As Boolean = False
+    Dim dtstart As DispatcherTimer = New DispatcherTimer()
 
     'Paramètres de connexion à HomeSeer
     Dim _Serveur As String = ""
@@ -79,6 +80,7 @@ Class Window1
     Dim _TimeMouseDown As DateTime = Now
     Dim _TimeOutPage As Integer = 1 'Timeout d'une page en minute
     Dim _DefautPage As String = "Aucune" 'Page par défaut à afficher après tiemout
+    Dim _StartDefautPage As String = "Aucune" 'Page par défaut à afficher après tiemout
     Dim _AsTimeOutPage As Boolean = False 'definit si on gère le timeout d'une page
     Dim _TaskMnuTransp As Byte = 99
     Dim _ShowLabelMnu As Boolean = False 'si true affiche le nom du menu sélectionné dans la barre du haut
@@ -92,6 +94,15 @@ Class Window1
 #End Region
 
 #Region "Property"
+    Public Property StartDefautPage As String
+        Get
+            Return _StartDefautPage
+        End Get
+        Set(value As String)
+            _StartDefautPage = value
+        End Set
+    End Property
+
     Public Property ShowTimeFromServer As Boolean
         Get
             Return _ShowTimeFromServer
@@ -910,6 +921,7 @@ Class Window1
                         Case "timeoutpage" : _TimeOutPage = list.Item(0).Attributes.Item(j).Value
                         Case "masktaskmenu" : _MaskTaskMnu = list.Item(0).Attributes.Item(j).Value
                         Case "defautpage" : _DefautPage = list.Item(0).Attributes.Item(j).Value
+                        Case "startdefautpage" : _StartDefautPage = list.Item(0).Attributes.Item(j).Value
                         Case "ville" : _Ville = list.Item(0).Attributes.Item(j).Value
                         Case Else : Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Un attribut correspondant au serveur est inconnu: nom:" & list.Item(0).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
                     End Select
@@ -1295,6 +1307,9 @@ Class Window1
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("defautpage")
             writer.WriteValue(_DefautPage)
+            writer.WriteEndAttribute()
+            writer.WriteStartAttribute("startdefautpage")
+            writer.WriteValue(_StartDefautPage)
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("masktaskmenu")
             writer.WriteValue(_MaskTaskMnu)
@@ -1770,6 +1785,18 @@ Class Window1
         End Try
     End Sub
 
+    '2 secondes après le démarrage
+    Public Sub dispatcherTimerSart_Tick(ByVal sender As Object, ByVal e As EventArgs)
+        Try
+            AfficheStartDefautPage()
+            dtstart.Stop()
+            dtstart = Nothing
+        Catch ex As Exception
+            dtstart.Stop()
+            dtstart = Nothing
+        End Try
+    End Sub
+
     'Affiche la date et heure, heures levé et couché du soleil
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
         Try
@@ -1797,6 +1824,9 @@ Class Window1
                 End If
             End If
 
+            If Now.Minute = 59 And Now.Second = 0 Then
+                HeureSoleilChanged()
+            End If
             'If Now.Second = 0 Then
             '    'MaJ Liste des devices au moins toutes les minutes
             '    Dim x As New Thread(AddressOf Refresh)
@@ -1939,7 +1969,6 @@ Class Window1
     Private Sub ScrollViewer1_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles ScrollViewer1.MouseLeave
         DesAff_TaskMnu()
     End Sub
-
 
     Private Sub ScrollViewer1_PreviewMouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ScrollViewer1.PreviewMouseDown
         scrollStartPoint = e.GetPosition(Me)
@@ -3104,11 +3133,25 @@ Class Window1
     Private Sub Window1_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
         Try
             Me.Cursor = Nothing
+
+            AddHandler dtstart.Tick, AddressOf dispatcherTimerSart_Tick
+            dtstart.Interval = New TimeSpan(0, 0, 2)
+            dtstart.Start()
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Window1_Loaded: " & ex.Message, "Erreur", "Window1_Loaded")
         End Try
     End Sub
 
+    Private Sub AfficheStartDefautPage()
+        If _StartDefautPage IsNot Nothing Then 'si la page par defaut est pas null on l'affiche sinon on affiche rien
+            For Each icmnu In ListMnu
+                If icmnu.Label = _StartDefautPage Then
+                    IconMnuDoubleClick(icmnu, Nothing)
+                    Exit For
+                End If
+            Next
+        End If
+    End Sub
 
 
 #Region "Quitter"

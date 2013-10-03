@@ -38,6 +38,7 @@ Public Class WConfig
             If IsNumeric(TxtTimeOutSrvLive.Text) Then Frm.TimeOutServerLive = TxtTimeOutSrvLive.Text
             Frm.ListMnu = MyListMnu
             IdSrv = TxtID.Text
+            Frm.StartDefautPage = CbStartPageDefaut.Text
             Frm.AsTimeOutPage = ChkTimeOutPage.IsChecked
             Frm.TimeOutPage = CInt(CbTimeOutPage.Text)
             Frm.DefautPage = CbPageDefaut.Text
@@ -96,12 +97,15 @@ Public Class WConfig
         ListMnu.Items.Clear()
         MyListMnu.Clear()
         CbPageDefaut.Items.Clear()
+        CbStartPageDefaut.Items.Clear()
 
         'charger les pages
         CbPageDefaut.Items.Add("Aucune")
+        CbStartPageDefaut.Items.Add("Aucune")
         For Each icmnu In Frm.ListMnu
             ListMnu.Items.Add(icmnu.Label)
             CbPageDefaut.Items.Add(icmnu.Label)
+            CbStartPageDefaut.Items.Add(icmnu.Label)
         Next
         MyListMnu = Frm.ListMnu
 
@@ -109,6 +113,11 @@ Public Class WConfig
             CbPageDefaut.SelectedValue = Frm.DefautPage
         Catch ex As Exception
             CbPageDefaut.SelectedIndex = 0
+        End Try
+        Try
+            CbStartPageDefaut.SelectedValue = Frm.StartDefautPage
+        Catch ex As Exception
+            CbStartPageDefaut.SelectedIndex = 0
         End Try
 
         'affiche les programmes
