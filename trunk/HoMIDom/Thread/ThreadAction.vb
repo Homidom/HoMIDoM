@@ -114,12 +114,14 @@ Namespace HoMIDom
                             Dim result As Boolean
 
                             If x.Conditions.Item(i).Type = Action.TypeCondition.Device Then
-                                Dim retour As Object = CallByName(_Server.ReturnRealDeviceById(x.Conditions.Item(i).IdDevice), x.Conditions.Item(i).PropertyDevice, CallType.Get)
-                                Dim retour2 As Object = Nothing
+                                Dim retour As Object = CallByName(_Server.ReturnRealDeviceById(x.Conditions.Item(i).IdDevice), x.Conditions.Item(i).PropertyDevice, CallType.Get) 'Recup la valeur du device
+                                Dim retour2 As Object = Nothing 'Valeur à comparer
+
                                 If x.Conditions.Item(i).Value.ToString.StartsWith("<") And x.Conditions.Item(i).Value.ToString.EndsWith(">") Then
                                     Dim a() As String = x.Conditions.Item(i).Value.ToString.Split("|")
                                     If a.Length = 3 Then
-                                        Dim _dev As Object = _Server.ReturnRealDeviceById(a(1))
+                                        Dim _dev As Object = _Server.ReturnRealDeviceById(Mid(a(0), 2, Len(a(0)) - 1))
+
                                         If _dev IsNot Nothing Then
                                             retour2 = CallByName(_dev, Mid(a(2), 1, Len(a(2)) - 1), CallType.Get)
                                         End If
@@ -131,6 +133,7 @@ Namespace HoMIDom
                                 End If
 
                                 Select Case x.Conditions.Item(i).Condition
+
                                     Case Action.TypeSigne.Egal
                                         If retour = retour2 Then
                                             result = True
@@ -162,12 +165,13 @@ Namespace HoMIDom
                                             result = False
                                         End If
                                     Case Action.TypeSigne.SuperieurEgal
-                                        If retour > retour2 Then
+                                        If retour >= retour2 Then
                                             result = True
                                         Else
                                             result = False
                                         End If
                                 End Select
+
                                 If i = 0 Then 'c le 1er donc pas prendre en compte l'operateur
                                     flag = result
                                 Else
@@ -356,6 +360,7 @@ Namespace HoMIDom
                             End If
                         Next
 
+                        'La condition est vrai
                         If flag = True Then
                             For i As Integer = 0 To x.ListTrue.Count - 1
                                 Dim _action As New ThreadAction(_Server, x.ListTrue.Item(i), _NameMacro, _ID)
