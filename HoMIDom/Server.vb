@@ -8309,6 +8309,8 @@ Namespace HoMIDom
                     Template.Variables.Add(z)
                 End If
 
+                Template.ID = Api.GenerateGUID
+
                 Dim streamIO As StreamWriter = Nothing
                 Try
                     Dim serialXML As New System.Xml.Serialization.XmlSerializer(GetType(Telecommande.Template))

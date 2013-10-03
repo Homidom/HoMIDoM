@@ -51,8 +51,11 @@
                     <StackPanel Orientation="Horizontal" >
                             <StackPanel Margin="0,0,10,0" Name="StkModel">
                                 <Label Foreground="White" Name="LabelModele" HorizontalAlignment="Left" Visibility="Collapsed">Modele:</Label>
-                                <ComboBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Width="215" Name="CBModele" BorderThickness="2" Height="25" IsEditable="True" Tag="0" Visibility="Collapsed" HorizontalAlignment="Left" />
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtModele" Height="22" Width="215" Tag="1" Visibility="Collapsed" />
+                                <StackPanel Orientation="Horizontal" >
+                                    <ComboBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Width="215" Name="CBModele" BorderThickness="2" Height="25" IsEditable="False" Tag="0" Visibility="Collapsed" HorizontalAlignment="Left" />
+                                    <Image Name="ImgEditTemplate" Height="25" Width="25" Visibility="Collapsed" Source="/HoMIAdmiN;component/Images/Modifier_32.png" />
+                                </StackPanel>
                             </StackPanel>
                             <StackPanel Margin="0,0,10,0" Name="StkRefresh">
                                 <Label Foreground="White" Name="LabelRefresh" HorizontalAlignment="Left">Refresh (sec):</Label>

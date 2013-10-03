@@ -135,10 +135,17 @@ Partial Public Class uDevice
                     End If
 
                     BtnTest.Visibility = Windows.Visibility.Visible
-
+                    StkModel.Visibility = Visibility.Visible
                     If x.Type = ListeDevices.MULTIMEDIA Then
-                        BtnEditTel.Visibility = Windows.Visibility.Visible
-                        StkModel.Visibility = Visibility.Collapsed
+                        ImgEditTemplate.Visibility = Windows.Visibility.Visible
+                        'StkModel.Visibility = Visibility.Collapsed
+                        LabelModele.Visibility = Windows.Visibility.Visible
+                        LabelModele.Content = "Template"
+                        TxtModele.Visibility = Windows.Visibility.Collapsed
+                        CBModele.ItemsSource = myService.GetListOfTemplate
+                        CBModele.DisplayMemberPath = "Name"
+                        CBModele.Visibility = Windows.Visibility.Visible
+                        CBModele.SelectedValue = x.Modele
                     End If
 
                     'on verifie si le device est un device systeme pour le rendre NON modifiable
@@ -486,10 +493,15 @@ Partial Public Class uDevice
                     ChKAllValue.IsChecked = False
                 End If
 
+                StkModel.Visibility = Windows.Visibility.Visible
                 If CbType.SelectedValue = "MULTIMEDIA" Then
-                    StkModel.Visibility = Windows.Visibility.Collapsed
-                Else
-                    StkModel.Visibility = Windows.Visibility.Visible
+                    '    StkModel.Visibility = Windows.Visibility.Collapsed
+                    'Else
+                    LabelModele.Content = "Template"
+                    TxtModele.Visibility = Windows.Visibility.Collapsed
+                    CBModele.ItemsSource = myService.GetListOfTemplate
+                    CBModele.DisplayMemberPath = "Name"
+                    CBModele.Visibility = Windows.Visibility.Visible
                 End If
             End If
         Catch Ex As Exception
@@ -667,7 +679,7 @@ Partial Public Class uDevice
             End If
 
             'on recupere le bon champ Modele : Combobox ou texte
-            Dim _modele As String
+            Dim _modele As String = ""
             If CBModele.Tag = 1 Then
                 _modele = CBModele.Text
             Else
@@ -680,13 +692,19 @@ Partial Public Class uDevice
 
             'on sauvegarde le composant
             If CbType.Text = "MULTIMEDIA" Then
-                If x IsNot Nothing Then
-                    If String.IsNullOrEmpty(x.Modele) = True Then
-                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez sélectionner ou ajouter un template au device!", "Erreur", "")
-                        Exit Sub
-                    End If
-                    _modele = x.Modele
+                If CBModele.SelectedItem IsNot Nothing Then
+                    _modele = CBModele.SelectedItem.ID
+                Else
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez sélectionner ou ajouter un template au device!", "Erreur", "")
+                    Exit Sub
                 End If
+
+                'If x IsNot Nothing Then
+                '    If String.IsNullOrEmpty(x.Modele) = True Then
+
+                '    End If
+                '    _modele = x.Modele
+                'End If
                 If _Action = EAction.Modifier Then
                     If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
                 Else
@@ -835,12 +853,11 @@ Partial Public Class uDevice
 
             'on sauvegarde le composant
             If CbType.Text = "MULTIMEDIA" Then
-                If x IsNot Nothing Then
-                    If String.IsNullOrEmpty(x.Modele) = True Then
-                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez sélectionner ou ajouter un template au device!", "Erreur", "")
-                        Exit Sub
-                    End If
-                    _modele = x.Modele
+                If CBModele.SelectedItem IsNot Nothing Then
+                    _modele = CBModele.SelectedItem.ID
+                Else
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez sélectionner ou ajouter un template au device!", "Erreur", "")
+                    Exit Sub
                 End If
                 If _Action = EAction.Modifier Then
                     If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
@@ -952,4 +969,24 @@ Partial Public Class uDevice
         If ChKLastEtat.IsChecked Then ChKAllValue.IsChecked = False
     End Sub
 
+    Private Sub ImgEditTemplate_MouseDown(sender As System.Object, e As System.Windows.Input.MouseButtonEventArgs) Handles ImgEditTemplate.MouseDown
+        Try
+            Dim frm As New WTelecommandeNew
+            frm.ShowDialog()
+            If frm.DialogResult.HasValue And frm.DialogResult.Value Then
+                frm.Close()
+
+                CBModele.ItemsSource = myService.GetListOfTemplate
+                CBModele.DisplayMemberPath = "Name"
+                CBModele.Visibility = Windows.Visibility.Visible
+            Else
+                frm.Close()
+            End If
+
+
+
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur ImgEditTemplate_MouseDown: " & ex.ToString, "Erreur Admin", "ImgEditTemplate_MouseDown")
+        End Try
+    End Sub
 End Class
