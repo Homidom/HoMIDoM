@@ -604,6 +604,13 @@ Namespace HoMIDom
                 End Try
             End Sub
 
+            'Force la valeur
+            Public Sub SetValue(ByVal Value As Double)
+                If _Enable = False Then Exit Sub
+
+                Me.Value = Value
+            End Sub
+
             'Valeur
             Public Property Value() As Double
                 Get
@@ -712,6 +719,13 @@ Namespace HoMIDom
                 Catch ex As Exception
                     _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceBOOL Read", "Exception : " & ex.Message)
                 End Try
+            End Sub
+
+            'Force la valeur
+            Public Sub SetValue(ByVal Value As Boolean)
+                If _Enable = False Then Exit Sub
+
+                Me.Value = Value
             End Sub
 
             'Valeur : ON/OFF = True/False
@@ -862,6 +876,13 @@ Namespace HoMIDom
                 End Try
             End Sub
 
+            'Force la valeur
+            Public Sub SetValue(ByVal Value As Double)
+                If _Enable = False Then Exit Sub
+
+                Me.Value = Value
+            End Sub
+
             'Valeur de 0 à 100
             Public Property Value() As Integer
                 Get
@@ -975,6 +996,13 @@ Namespace HoMIDom
             Public Overridable Sub Read()
                 If _Enable = False Then Exit Sub
                 If Driver.IsConnect() Then Driver.Read(Me)
+            End Sub
+
+            'Force la valeur
+            Public Sub SetValue(ByVal Value As String)
+                If _Enable = False Then Exit Sub
+
+                Me.Value = Value
             End Sub
 
             Public Property Value() As String
@@ -1519,13 +1547,6 @@ Namespace HoMIDom
                     Driver.Write(Me, "ON")
                 End If
             End Sub
-
-            'Force la valeur
-            Public Sub SetValue(ByVal Value As Boolean)
-                If _Enable = False Then Exit Sub
-
-                Me.Value = Value
-            End Sub
         End Class
 
         <Serializable()> Class GENERIQUESTRING
@@ -1538,12 +1559,6 @@ Namespace HoMIDom
                 AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
-            'Force la valeur
-            Public Sub SetValue(ByVal Value As String)
-                If _Enable = False Then Exit Sub
-
-                Me.Value = Value
-            End Sub
         End Class
 
         <Serializable()> Class GENERIQUEVALUE
@@ -1556,12 +1571,6 @@ Namespace HoMIDom
                 AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
 
-            'Force la valeur
-            Public Sub SetValue(ByVal Value As Double)
-                If _Enable = False Then Exit Sub
-
-                Me.Value = Value
-            End Sub
         End Class
 
         <Serializable()> Class FREEBOX

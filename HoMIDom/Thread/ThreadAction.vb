@@ -69,8 +69,15 @@ Namespace HoMIDom
                                 If x.Parametres.Count > 0 Then
                                     If x.Parametres.Item(0) IsNot Nothing Then
                                         If x.Parametres.Item(0) <> "" Then
+                                            Dim _var0 As String = x.Parametres.Item(0).ToString
+                                            _var0 = DecodeCommand(_var0)
+
                                             Dim y2 As New HoMIDom.DeviceAction.Parametre
-                                            y2.Value = x.Parametres.Item(0)
+                                            If String.IsNullOrEmpty(_var0) Then
+                                                y2.Value = x.Parametres.Item(0)
+                                            Else
+                                                y2.Value = _var0
+                                            End If
                                             y.Parametres.Add(y2)
                                         End If
                                     End If
