@@ -61,6 +61,7 @@ Imports System.Net.Sockets
     Private adressRead As Integer
     Private adressWrite As Integer
     Private unit As Integer
+    Private flagWrite As Boolean
 
     Dim str_to_bool As New Dictionary(Of String, Integer)
 
@@ -294,7 +295,6 @@ Imports System.Net.Sockets
             Dim retour As String = "0"
             Select Case UCase(Champ)
 
-
             End Select
             Return retour
         Catch ex As Exception
@@ -418,16 +418,16 @@ Imports System.Net.Sockets
             If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Write", "Ecriture de " & Objet.Name)
             If Parametre1 Is Nothing Then Parametre1 = 0
             If Parametre2 Is Nothing Then Parametre2 = 0
+            If Objet.Adresse2 <> "-1" And Objet.Adresse2 <> "" Then
+                If TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
+                    ecrire(Objet.adresse2, Commande, Parametre1, Parametre2, sendtwice)
+                End If
 
-            If TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
-                ecrire(Objet.adresse1, Commande, Parametre1, Parametre2, sendtwice)
+                If TypeOf Objet.Value Is Boolean And Not TypeOf Objet.Value Is Integer And Not TypeOf Objet.Value Is Double Then
+                    Parametre1 = str_to_bool(Commande)
+                    ecrire(Objet.adresse2, Commande, Parametre1, Parametre2, sendtwice)
+                End If
             End If
-
-            If TypeOf Objet.Value Is Boolean And Not TypeOf Objet.Value Is Integer And Not TypeOf Objet.Value Is Double Then
-                Parametre1 = str_to_bool(Commande)
-                ecrire(Objet.adresse1, Commande, Parametre1, Parametre2, sendtwice)
-            End If
-
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP Write", ex.Message)
         End Try
@@ -568,10 +568,10 @@ Imports System.Net.Sockets
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant")
-            Add_LibelleDevice("ADRESSE2", "@", "")
+            Add_LibelleDevice("ADRESSE1", "Adresse Read", "Adresse de lecture du composant ou -1 si pas de lecture")
+            Add_LibelleDevice("ADRESSE2", "Adresse Write", "Adresse d'écriture du composant ou -1 si pas de écriture")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("REFRESH", "Rafraichissement", "Mettre 1 ou 0 pour que la valeur soit rafraichi ou pas")
+            Add_LibelleDevice("REFRESH", "@", "")
             Add_LibelleDevice("LASTCHANGEDUREE", "@", "")
 
             'dictionnaire Commande STR -> INT
@@ -593,14 +593,17 @@ Imports System.Net.Sockets
         Try
             If Not breading Then
                 breading = True
-                cptsend += 1
-                If cptsend > 3 Then cptsend = 1
-                StartAddress = ReadStartAdr(adressStart + adressRead + ((cptsend - 1) * 75)) '%MW256 = 12288 + 256 = 12544
-                Length = ReadStartAdr(75)
-                MBmaster.ReadHoldingRegister(unit, 3, StartAddress, Length)
+                If Not flagwrite Then
+                    cptsend += 1
+                    If cptsend > 3 Then cptsend = 1
+                    StartAddress = ReadStartAdr(adressStart + adressRead + ((cptsend - 1) * 75)) '%MW256 = 12288 + 256 = 12544
+                    Length = ReadStartAdr(75)
+                    MBmaster.ReadHoldingRegister(unit, 3, StartAddress, Length)
 
-                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Read", "ModbusTCP Demande de lecture")
-
+                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Read", "ModbusTCP Demande de lecture")
+                Else
+                    flagwrite = False
+                End If
             End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP Read " & " startadress=" & StartAddress & " et length=" & Length, ex.Message)
@@ -609,10 +612,14 @@ Imports System.Net.Sockets
     End Sub
 
     Sub DeviceChange(ByVal DeviceID, ByVal valeurString)
-        Dim genericDevice As templateDevice = _Server.ReturnDeviceById(_IdSrv, DeviceID)
-        If genericDevice.DriverID = _ID And (TypeOf genericDevice.Value Is Integer Or TypeOf genericDevice.Value Is Double) Then
-            Write(genericDevice, "", CInt(valeurString))
-        End If
+        Try
+            Dim genericDevice As TemplateDevice = _Server.ReturnDeviceById(_IdSrv, DeviceID)
+            If genericDevice.DriverID = _ID And genericDevice.Adresse2 <> "-1" And genericDevice.Adresse2 <> "" Then 'And (TypeOf genericDevice.Value Is Integer Or TypeOf genericDevice.Value Is Double)
+                Write(genericDevice, "", CInt(valeurString))
+            End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP Device Change", ex.Message)
+        End Try
     End Sub
 
 #End Region
@@ -703,6 +710,7 @@ Imports System.Net.Sockets
                     Dim Data() As Byte = GetData(dataE)
 
                     MBmaster.WriteMultipleRegister(unit, 16, StartAddress, Data)
+                    flagWrite = True
 
                 Catch ex As Exception
                     Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP", "ModbusTCP Ecrire startadress=" & StartAddress)
@@ -752,7 +760,7 @@ Imports System.Net.Sockets
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, "", "", Me._ID, True)
 
                 For Each j As Object In listedevices
-                    If j.refresh > 0 Then
+                    If j.Adresse1 <> "-1" Then
                         adresse = j.adresse1 - ((cptsend - 1) * 75) - 1
                         If j.adresse1 > 75 * (cptsend - 1) And j.adresse1 <= 75 * cptsend Then
                             msg += j.adresse1 & "=" & dataR(adresse) & " ; " & j.Value & " ;"
