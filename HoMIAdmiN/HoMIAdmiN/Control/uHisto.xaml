@@ -20,63 +20,75 @@
                     <Label HorizontalAlignment="Center" Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Historisation</Label>
                 </DockPanel>
                 <DockPanel DockPanel.Dock=" Top">
-                    <StackPanel >
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="2">
-                            <Label Content="Debut:" Foreground="White" VerticalAlignment="center"/>
-                            <DatePicker Name="DateStartSelect" Width="100" VerticalAlignment="Center" BorderBrush="{x:Null}" />
-                            <Label Content="Fin:" Foreground="White" VerticalAlignment="center"/>
-                            <DatePicker Name="DateFinSelect" Width="100" VerticalAlignment="Center" BorderBrush="{x:Null}" />
+                    <StackPanel Orientation="Horizontal">
+                      <GroupBox Padding="0,6,0,0" Margin="2" HeaderStringFormat="" Header="Modifier le graphe" Foreground="White">
+                            <DockPanel DockPanel.Dock=" Top">
+                                <DockPanel DockPanel.Dock=" Top">
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0">
+                                    <Label Content="Debut:" Foreground="White" VerticalAlignment="center"/>
+                                    <DatePicker Name="DateStartSelect" Width="100" VerticalAlignment="Center" BorderBrush="{x:Null}" />
+                                    <Label Content="Fin:" Foreground="White" VerticalAlignment="center"/>
+                                    <DatePicker Name="DateFinSelect" Width="100" VerticalAlignment="Center" BorderBrush="{x:Null}" />
 
-                            
-                            <Label Margin="5,0,0,0" Content="Format:" Foreground="White" VerticalAlignment="center"/>
-                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                                <RadioButton Name="ChkLine" IsChecked="True" Width="45" Height="25" Background="DarkGray" BorderBrush="Black" Foreground="White" >
-                                    <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/Line20Chart.png" Stretch="Fill"></Image>
-                                </RadioButton>
-                                <RadioButton Name="ChkLine_Full" Width="45" Height="25" Background="DarkGray" BorderBrush="Black" Foreground="White" >
-                                    <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/line_chart.png" Stretch="Fill"></Image>
-                                </RadioButton>
-                                <RadioButton Background="DarkGray" BorderBrush="Black" Foreground="White" Height="25" IsChecked="false" Name="ChkStep" Width="45">
-                                    <Image Height="25" Source="/HoMIAdmiN;component/Images/Stepline.png" Stretch="Fill" Width="25" />
-                                </RadioButton>
-                                <RadioButton Name="ChkHisto" Width="45" Height="25" Background="DarkGray" BorderBrush="Black" Foreground="White" >
-                                    <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/bar_chart.png" Stretch="Fill"></Image>
-                                </RadioButton>
-                                <RadioButton Name="ChkPie" Width="45" Height="25" Background="DarkGray" BorderBrush="Black" Foreground="White" >
-                                    <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/pie_chart.png" Stretch="Fill"></Image>
-                                </RadioButton>
+
+                                    <Label Margin="5,0,0,0" Content="Format:" Foreground="White" VerticalAlignment="center"/>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                        <RadioButton Name="ChkLine" IsChecked="True" Width="45" Height="25" Background="DarkGray" BorderBrush="Black" Foreground="White" >
+                                            <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/Line20Chart.png" Stretch="Fill"></Image>
+                                        </RadioButton>
+                                        <RadioButton Name="ChkLine_Full" Width="45" Height="25" Background="DarkGray" BorderBrush="Black" Foreground="White" >
+                                            <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/line_chart.png" Stretch="Fill"></Image>
+                                        </RadioButton>
+                                        <RadioButton Background="DarkGray" BorderBrush="Black" Foreground="White" Height="25" IsChecked="false" Name="ChkStep" Width="45">
+                                            <Image Height="25" Source="/HoMIAdmiN;component/Images/Stepline.png" Stretch="Fill" Width="25" />
+                                        </RadioButton>
+                                        <RadioButton Name="ChkHisto" Width="45" Height="25" Background="DarkGray" BorderBrush="Black" Foreground="White" >
+                                            <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/bar_chart.png" Stretch="Fill"></Image>
+                                        </RadioButton>
+                                        <RadioButton Name="ChkPie" Width="45" Height="25" Background="DarkGray" BorderBrush="Black" Foreground="White" >
+                                            <Image Width="25" Height="25" Source="/HoMIAdmiN;component/Images/pie_chart.png" Stretch="Fill"></Image>
+                                        </RadioButton>
+                                    </StackPanel>
+                                    <Button Height="25" Width="25" Margin="20,0,0,0" Name="Refresh" ToolTip="Rafraichir le graphe" Template="{DynamicResource GlassButton}">
+                                        <Image Name="ImgRefrsh" Source="/HoMIAdmiN;component/Images/Refresh_32.png"/>
+                                    </Button>
+                                </StackPanel>
+                                </DockPanel>
+                                <DockPanel>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0">
+                                        <Label Content="Moyenne:" Foreground="White" Height="22" />
+                                        <ComboBox Background="DarkGray" BorderBrush="Black" BorderThickness="2" Foreground="White" Name="ComboBoxMoyenne" SelectedIndex="0" Width="80" Height="24">
+                                            <ComboBoxItem Content="Aucune" />
+                                            <ComboBoxItem Content="Heure" />
+                                            <ComboBoxItem Content="Jour" />
+                                        </ComboBox>
+                                        <Label Content="Max Data:" Foreground="White" Height="22" />
+                                        <TextBox Name="TxtMaxData" Width="40" Text="2000" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" TextAlignment="Center" />
+                                        <Label Content="BackColor:" Foreground="White" VerticalAlignment="Center" Margin="5,0,0,0" />
+                                        <ComboBox Name="CbBackColor" Width="80" Height="24" VerticalAlignment="Center" SelectedIndex="5" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2">
+                                            <ComboBoxItem Content="Blanc" />
+                                            <ComboBoxItem Content="Bleu" />
+                                            <ComboBoxItem Content="Jaune" />
+                                            <ComboBoxItem Content="Rouge" />
+                                            <ComboBoxItem Content="Vert" />
+                                            <ComboBoxItem Content="Gris" />
+                                            <ComboBoxItem Content="Transparent" />
+                                        </ComboBox>
+                                    </StackPanel>
+
+                                </DockPanel>
+                            </DockPanel>
+                        </GroupBox>
+                        <GroupBox Padding="0,2,0,0" Margin="2" Header="Actions" Foreground="White">
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0">
+                               <Button Height="25" Width="25" Margin="5" Name="BtnSave" ToolTip="Sauvegarder le graphe" Template="{DynamicResource GlassButton}">
+                                    <Image Source="/HoMIAdmiN;component/Images/save_32.png" />
+                                </Button>
+                                <Button Height="25" Width="25" Name="BtnExport" Margin="5" ToolTip="Exporter les données" Template="{DynamicResource GlassButton}">
+                                    <Image Source="/HoMIAdmiN;component/Images/Export_32.png"/>
+                                </Button>
                             </StackPanel>
-                            <Button Height="25" Width="25" Margin="20,0,0,0" Name="Refresh" ToolTip="Rafraichir le graphe" Template="{DynamicResource GlassButton}">
-                                <Image Name="ImgRefrsh" Source="/HoMIAdmiN;component/Images/Refresh_32.png"/>
-                            </Button>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="2,2,2,10">
-                            <Label Content="Moyenne:" Foreground="White" />
-                            <ComboBox Background="DarkGray" BorderBrush="Black" BorderThickness="2" Foreground="White" Name="ComboBoxMoyenne" SelectedIndex="0" Width="80">
-                                <ComboBoxItem Content="Aucune" />
-                                <ComboBoxItem Content="Heure" />
-                                <ComboBoxItem Content="Jour" />
-                            </ComboBox>
-                            <Label Content="Max Data:" Foreground="White" />
-                            <TextBox Name="TxtMaxData" Width="40" Text="2000" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" TextAlignment="Center" />
-                            <Label Content="BackColor:" Foreground="White" VerticalAlignment="Center" Margin=" 5,0,0,0" />
-                            <ComboBox Name="CbBackColor" Width="80" VerticalAlignment="Center" SelectedIndex="5" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2">
-                                <ComboBoxItem Content="Blanc" />
-                                <ComboBoxItem Content="Bleu" />
-                                <ComboBoxItem Content="Jaune" />
-                                <ComboBoxItem Content="Rouge" />
-                                <ComboBoxItem Content="Vert" />
-                                <ComboBoxItem Content="Gris" />
-                                <ComboBoxItem Content="Transparent" />
-                            </ComboBox>
-                            <Button Height="25" Width="25" Margin="15,0,0,0" Name="BtnSave" ToolTip="Sauvegarder le graphe" Template="{DynamicResource GlassButton}">
-                                <Image Source="/HoMIAdmiN;component/Images/save_32.png" />
-                            </Button>
-                            <Rectangle Width="15"/>
-                            <Button Height="25" Width="25" Name="BtnExport" Margin="3" ToolTip="Exporter les données" Template="{DynamicResource GlassButton}">
-                                <Image Source="/HoMIAdmiN;component/Images/Export_32.png"/>
-                            </Button>
-                        </StackPanel>
+                        </GroupBox>
                     </StackPanel>
                 </DockPanel>
                 <StackPanel DockPanel.Dock="Bottom" >
@@ -160,6 +172,7 @@
                                 <WindowsFormsHost Name="Test" >
                                    
                                 </WindowsFormsHost>
+
                             </StackPanel>
                         </TabItem >
 

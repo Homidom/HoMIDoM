@@ -190,26 +190,27 @@ Public Class WActionParametrage
 
     Private Sub Cb1_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles Cb1.SelectionChanged
         Try
+            Cb2.Items.Clear()
             If _ObjAction.TypeAction = Action.TypeAction.ActionDevice Then
-                If Cb1.SelectedItem IsNot Nothing Then
-                    'Ajout des commandes standard
-                    For i As Integer = 0 To Cb1.SelectedItem.DeviceAction.Count - 1
-                        Cb2.Items.Add(Cb1.SelectedItem.DeviceAction.Item(i).Nom)
-                    Next
+            If Cb1.SelectedItem IsNot Nothing Then
+                'Ajout des commandes standard
+                For i As Integer = 0 To Cb1.SelectedItem.DeviceAction.Count - 1
+                    Cb2.Items.Add(Cb1.SelectedItem.DeviceAction.Item(i).Nom)
+                Next
 
-                    'Ajout des commandes avancées
-                    For i As Integer = 0 To Cb1.SelectedItem.GetDeviceCommandePlus.Count - 1
-                        Cb2.Items.Add("{" & Cb1.SelectedItem.GetDeviceCommandePlus.Item(i).NameCommand & "}")
-                    Next
+                'Ajout des commandes avancées
+                For i As Integer = 0 To Cb1.SelectedItem.GetDeviceCommandePlus.Count - 1
+                    Cb2.Items.Add("{" & Cb1.SelectedItem.GetDeviceCommandePlus.Item(i).NameCommand & "}")
+                Next
 
-                End If
+            End If
             ElseIf _ObjAction.TypeAction = Action.TypeAction.ActionDriver Then
-                If Cb1.SelectedItem IsNot Nothing Then
-                    'Ajout des commandes standard
-                    Cb2.Items.Add("Start")
-                    Cb2.Items.Add("Stop")
-                    Cb2.Items.Add("Restart")
-                End If
+            If Cb1.SelectedItem IsNot Nothing Then
+                'Ajout des commandes standard
+                Cb2.Items.Add("Start")
+                Cb2.Items.Add("Stop")
+                Cb2.Items.Add("Restart")
+            End If
             End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Cb1_selectionChanged: " & ex.ToString, "Erreur Admin", "")
@@ -318,7 +319,7 @@ Public Class WActionParametrage
                         Dim obj As Action.ActionMail = _ObjAction
 
                         'Mise en forme graphique
-                        Lbl1.Content = "Username:"
+                        Lbl1.Content = "Destinataire:"
                         Lbl2.Content = "Sujet:"
                         LblValue.Content = "Message:"
                         Txt2.Text = ""

@@ -10,9 +10,9 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("HoMIDomWebAPI")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("Microsoft")> 
+<Assembly: AssemblyCompany("HoMIDoM")> 
 <Assembly: AssemblyProduct("HoMIDomWebAPI")> 
-<Assembly: AssemblyCopyright("Copyright © Microsoft 2013")> 
+<Assembly: AssemblyCopyright("Copyright © HoMIDoM 2013")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.0.18.0")> 
-<Assembly: AssemblyFileVersion("1.0.18.0")> 
+<Assembly: AssemblyVersion("1.1.1.0")> 
+<Assembly: AssemblyFileVersion("1.1.1.0")> 
