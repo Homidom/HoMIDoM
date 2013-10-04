@@ -43,7 +43,7 @@
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Foreground="White" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Width="67">Pays:</Label>
-                                        <ComboBox  Background="DarkGray" BorderBrush="Black" Foreground="White" Height="21" HorizontalAlignment="Left" Name="CbCodePays" Width="150" ToolTip="Permet de définir le pays du serveur" SelectedIndex="0" />
+                                        <ComboBox BorderThickness="2" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="24" HorizontalAlignment="Left" Name="CbCodePays" Width="150" ToolTip="Permet de définir le pays du serveur" SelectedIndex="0" />
                                     </StackPanel>
 
                                     <StackPanel Orientation="Horizontal" >
@@ -140,7 +140,7 @@
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Content="Port SMTP:" Height="23" HorizontalAlignment="Left" Name="Lbl45" VerticalAlignment="Top" Width="100" Foreground="White" />
                                         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Name="TxtSmtpPort" VerticalAlignment="Top" Width="40" />
-                                        <CheckBox Name="ChkSSL" Margin="2" Content="Utiliser SSL" Foreground="White"/>
+                                        <CheckBox Name="ChkSSL" Margin="2" Content="Utiliser SSL" Background="DarkGray" BorderBrush="Black" Foreground="White" />
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Content="Login:" Height="27" HorizontalAlignment="Left"  Name="Label12" VerticalAlignment="Top" Width="100" Foreground="White" />

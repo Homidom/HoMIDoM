@@ -1423,6 +1423,29 @@ Class Window1
                                 ctxMenu.Items.Add(mnu0)
                                 y.ContextMenu = ctxMenu
 
+                                '*************************** TOOL TIP **************************
+                                Dim tl As New ToolTip
+                                tl.Foreground = System.Windows.Media.Brushes.White
+                                tl.Background = System.Windows.Media.Brushes.WhiteSmoke
+                                tl.BorderBrush = System.Windows.Media.Brushes.Black
+                                Dim _nbhisto As Long = myService.DeviceAsHisto(_dev.ID)
+                                Dim nomdriver As String = myService.ReturnDriverByID(IdSrv, _dev.DriverID).Nom
+                                Dim stkpopup As New StackPanel
+                                Dim tool As New Label
+                                tool.Content = "Nom: " & _dev.Name & vbCrLf
+                                tool.Content &= "Enable " & _dev.Enable & vbCrLf
+                                tool.Content &= "Description: " & _dev.Description & vbCrLf
+                                tool.Content &= "Type: " & _dev.Type.ToString & vbCrLf
+                                tool.Content &= "Driver: " & nomdriver & vbCrLf
+                                tool.Content &= "Date MAJ: " & _dev.LastChange & vbCrLf
+                                tool.Content &= "Nb Histo: " & _nbhisto & vbCrLf
+                                tool.Content &= "Value: " & _dev.Value
+                                stkpopup.Children.Add(tool)
+                                tool = Nothing
+                                tl.Content = stkpopup
+                                stkpopup = Nothing
+                                y.ToolTip = tl
+
                                 AddHandler y.MouseDoubleClick, AddressOf MnuitemHisto_Click
 
                                 TreeViewHisto.Items.Add(y)
