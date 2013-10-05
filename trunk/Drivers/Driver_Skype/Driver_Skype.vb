@@ -27,7 +27,7 @@ Imports SKYPE4COMLib
     Dim _IP_UDP As String = "@" 'Adresse IP UDP à utiliser, , "@" si non applicable pour le cacher côté client
     Dim _Port_UDP As String = "@" 'Port UDP à utiliser, , "@" si non applicable pour le cacher côté client
     Dim _Com As String = "@" 'Port COM à utiliser, , "@" si non applicable pour le cacher côté client
-    Dim _Refresh As Integer = 10000 'Valeur à laquelle le driver doit rafraichir les valeurs des devices (ex: toutes les 200ms aller lire les devices)
+    Dim _Refresh As Integer = 0 'Valeur à laquelle le driver doit rafraichir les valeurs des devices (ex: toutes les 200ms aller lire les devices)
     Dim _Modele As String = "Skype" 'Modèle du driver/interface
     Dim _Version As String = My.Application.Info.Version.ToString 'Version du driver
     Dim _OsPlatform As String = "3264" 'Plateforme compatible 32 64 ou 3264
@@ -436,7 +436,11 @@ Imports SKYPE4COMLib
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
-            _DEBUG = _Parametres.Item(0).Valeur
+            Try
+                _DEBUG = _Parametres.Item(0).Valeur
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+            End Try
 
             'Vérifie si Skype est démarrer si non tentative de de connexion  
 
@@ -445,6 +449,7 @@ Imports SKYPE4COMLib
 
             If oSkype.Client.IsRunning = False Then
                 oSkype.Client.Start(True, True)
+                Threading.Thread.Sleep(3000)
             End If
 
             'While Not oSkype.Client.IsRunning
@@ -464,7 +469,11 @@ Imports SKYPE4COMLib
                 AddHandler MyTimer.Elapsed, AddressOf TimerTick
             End If
 
-            _IsConnect = True
+            Threading.Thread.Sleep(3000)
+
+            If oSkype.AttachmentStatus = oSkype.Convert.TextToAttachmentStatus("SUCCESS") Then
+                _IsConnect = True
+            End If
 
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Skype Start", "Demarré")
 
@@ -731,7 +740,7 @@ Imports SKYPE4COMLib
             Add_LibelleDevice("ADRESSE2", "Contact", "Pseudo du contact (respecter la casse) ou numéro de téléphone commencant par +33xxxxxxxxx")
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "Message", "Maxi 160 caractères")
-            Add_LibelleDevice("REFRESH", "Raffraichissement", "")
+            Add_LibelleDevice("REFRESH", "Refresh", "")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
         Catch ex As Exception
@@ -744,6 +753,12 @@ Imports SKYPE4COMLib
     Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
         If oSkype.Client.IsRunning = True And oSkype.AttachmentStatus <> oSkype.Convert.TextToAttachmentStatus("SUCCESS") Then
             oSkype.Attach(5, True)
+            Threading.Thread.Sleep(3000)
+        End If
+        If oSkype.AttachmentStatus = oSkype.Convert.TextToAttachmentStatus("SUCCESS") Then
+            _IsConnect = True
+        Else
+            _IsConnect = False
         End If
     End Sub
 
