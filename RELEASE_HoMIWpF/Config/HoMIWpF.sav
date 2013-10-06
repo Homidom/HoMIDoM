@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<homidom>
+  <server portsoap="7999" ip="srv-homidom" id="123456789" />
+  <HS adresse="" login="" password="" />
+  <tactile speedtouch="600" friction="0.75" />
+  <interface showsoleil="true" showtemperature="true" imgbackground="C:\Users\Public\Pictures\Sample Pictures\Chrysanthemum.jpg" />
+  <menus>
+    <menu nom="Maison" defaut="false" type="Zone" idelement="97da176d-abe9-45c2-85db-dc2e8adb2e48" visible="true" />
+    <menu nom="Meteo" defaut="false" type="Meteo" icon="C:\ehome\images\125_goodmorning.png" />
+    <menu nom="Google" defaut="false" type="Internet" icon="C:\ehome\images\Internet.png" parametre0="http://www.google.fr/" />
+    <menu nom="Salon" defaut="false" type="Zone" idelement="005147d9-a705-4d71-8f4d-8edc405c8a79" visible="true" />
+    <menu nom="Chambre Parents" defaut="false" type="Zone" idelement="aeb30967-17a5-436d-b5fb-95832d8ebdf7" visible="true" />
+    <menu nom="Cuisine" defaut="false" type="Zone" idelement="76ba3b59-72e0-49c8-bcc5-3fb400fd5025" visible="true" />
+    <menu nom="Salle de Bain" defaut="false" type="Zone" idelement="3dd3e63e-c259-4ef3-8b04-99d0db2f6549" visible="true" />
+    <menu nom="test1" defaut="false" type="Zone" idelement="07545b50-42ab-48a9-b57f-e831641a8860" visible="true" />
+  </menus>
+  <elements>
+    <element uid="" id="8efb097e-4c14-4d5e-bb83-95d32a5bc6c4" isempty="true" type="Empty" caneditvalue="false" zoneid="97da176d-abe9-45c2-85db-dc2e8adb2e48" x="524" y="458" width="140" height="60" angle="-21" showetiquette="true" showstatus="true" showpicture="true" picture="" etiquette="" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" coloretiquette="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="" id="3ebcd1d4-f991-4e4f-9afa-d321dbbd9865" isempty="true" type="Empty" caneditvalue="false" zoneid="97da176d-abe9-45c2-85db-dc2e8adb2e48" x="223" y="82" width="140" height="60" angle="0" showetiquette="true" showstatus="true" showpicture="true" picture="" etiquette="" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" coloretiquette="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="" id="bb84549a-e0cf-4638-ae26-77fe22a6c228" isempty="true" type="Empty" caneditvalue="false" zoneid="97da176d-abe9-45c2-85db-dc2e8adb2e48" x="533" y="448" width="140" height="73" angle="0" showetiquette="true" showstatus="true" showpicture="true" picture="" etiquette="" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" coloretiquette="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="" id="3faa8af6-955b-43da-ba07-00b3176771af" isempty="true" type="Empty" caneditvalue="false" zoneid="97da176d-abe9-45c2-85db-dc2e8adb2e48" x="75" y="101" width="140" height="60" angle="0" showetiquette="true" showstatus="true" showpicture="true" picture="" etiquette="" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" coloretiquette="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="" id="c7b458fd-7eca-4bb6-8874-277ac837d3d5" isempty="true" type="Empty" caneditvalue="false" zoneid="97da176d-abe9-45c2-85db-dc2e8adb2e48" x="92" y="245" width="140" height="60" angle="0" showetiquette="true" showstatus="true" showpicture="true" picture="" etiquette="" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" coloretiquette="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="e88b68cf-d0eb-49f4-8bcf-bd7ae115f9f3" id="6a998cbc-8a69-499c-a1d1-e056e1f3a7d6" isempty="false" type="Device" caneditvalue="false" zoneid="76ba3b59-72e0-49c8-bcc5-3fb400fd5025" x="40" y="20" width="140" height="60" angle="0" showetiquette="true" showstatus="true" showpicture="true" picture="c:\homidom\debug\images\devices\appareil-defaut.png" etiquette="Lampe Evier Cuisine" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" coloretiquette="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="5d4392a3-0196-4683-a463-27da4c04c600" id="44056685-1465-4566-9a4d-d56f07ba2c19" isempty="false" type="Device" caneditvalue="false" zoneid="76ba3b59-72e0-49c8-bcc5-3fb400fd5025" x="190" y="20" width="140" height="60" angle="0" showetiquette="true" showstatus="true" showpicture="true" picture="c:\homidom\debug\images\devices\lampe-defaut.png" etiquette="Lampe Cuisine" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" coloretiquette="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="79d944c4-2745-483d-850a-7bc75b4c268e" id="393b1b29-7054-464e-9ace-afd0a1c74077" isempty="false" type="Device" caneditvalue="false" zoneid="76ba3b59-72e0-49c8-bcc5-3fb400fd5025" x="340" y="20" width="140" height="60" angle="0" showetiquette="true" showstatus="true" showpicture="true" picture="c:\homidom\debug\images\devices\volet-defaut.png" etiquette="Volet Cuisine" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" coloretiquette="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+  </elements>
+</homidom>
