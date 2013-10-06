@@ -1,0 +1,33 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+HoMIDomWebAPI
+</name>
+</assembly>
+<members>
+<member name="M:HoMIDomWebAPI.DeviceController.ExecuteCommandWithParams(System.String,System.String,System.String)">
+	<summary>
+ Permet d'executer une action avec des paramètres.
+ </summary>
+	<param name="id">GUID du composant (device)</param>
+	<param name="command">Nom de l'action a exécuter</param>
+	<param name="parameters">Listes de paramètres à passer à l'action. param1.nom:param1.value;param2.nom:param2.value</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDomWebAPI.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:HoMIDomWebAPI.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:HoMIDomWebAPI.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+</members>
+</doc>
