@@ -617,19 +617,19 @@ Namespace HoMIDom
                     If Tabl.Length = 1 Then
                         Select Case _device
                             Case "SYSTEM_DATE"
-                                Return Now.Date.ToShortDateString
+                                _device = Now.Date.ToShortDateString
                             Case "SYSTEM_LONG_DATE"
-                                Return Now.Date.ToLongDateString
+                                _device = Now.Date.ToLongDateString
                             Case "SYSTEM_TIME"
-                                Return Now.ToShortTimeString
+                                _device = Now.ToShortTimeString
                             Case "SYSTEM_LONG_TIME"
-                                Return Now.ToLongTimeString
+                                _device = Now.ToLongTimeString
                             Case "SYSTEM_SOLEIL_COUCHE"
                                 Dim _date As Date = _Server.GetHeureCoucherSoleil
-                                Return _date.ToShortTimeString
+                                _device = _date.ToShortTimeString
                             Case "SYSTEM_SOLEIL_LEVE"
                                 Dim _date As Date = _Server.GetHeureLeverSoleil
-                                Return _date.ToShortTimeString
+                                _device = _date.ToShortTimeString
                             Case Else
                                 Dim x As Object = _Server.ReturnRealDeviceByName(Tabl(0))
                                 If x IsNot Nothing Then
