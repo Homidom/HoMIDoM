@@ -1824,7 +1824,7 @@ Class Window1
                 End If
             End If
 
-            If Now.Minute = 59 And Now.Second = 0 Then
+            If Now.Minute = 0 And Now.Second = 0 Then
                 HeureSoleilChanged()
             End If
             'If Now.Second = 0 Then

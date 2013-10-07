@@ -373,7 +373,7 @@ Module Fonctions
                         If AllDevices IsNot Nothing And String.IsNullOrEmpty(frmMere.Ville) = False Then
                             For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In AllDevices
                                 If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True And ObjMeteo.Name.ToUpper = frmMere.Ville.ToUpper Then
-                                    If frmMere.MaJWidgetFromServer Then
+                                    If frmMere.MaJWidgetFromServer And IsConnect Then
                                         Return myService.ReturnDeviceByID(IdSrv, ObjMeteo.ID).ConditionActuel
                                     Else
                                         Return ObjMeteo.ConditionActuel
@@ -387,7 +387,7 @@ Module Fonctions
                         If AllDevices IsNot Nothing And String.IsNullOrEmpty(frmMere.Ville) = False Then
                             For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In AllDevices
                                 If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True And ObjMeteo.Name.ToUpper = frmMere.Ville.ToUpper Then
-                                    If frmMere.MaJWidgetFromServer Then
+                                    If frmMere.MaJWidgetFromServer And IsConnect Then
                                         Return myService.ReturnDeviceByID(IdSrv, ObjMeteo.ID).TemperatureActuel & " °C"
                                     Else
                                         Return ObjMeteo.TemperatureActuel & " °C"
@@ -401,7 +401,7 @@ Module Fonctions
                         If AllDevices IsNot Nothing And String.IsNullOrEmpty(frmMere.Ville) = False Then
                             For Each ObjMeteo As HoMIDom.HoMIDom.TemplateDevice In AllDevices
                                 If ObjMeteo.Type = HoMIDom.HoMIDom.Device.ListeDevices.METEO And ObjMeteo.Enable = True And ObjMeteo.Name.ToUpper = frmMere.Ville.ToUpper Then
-                                    If frmMere.MaJWidgetFromServer Then
+                                    If frmMere.MaJWidgetFromServer And IsConnect Then
                                         Return myService.ReturnDeviceByID(IdSrv, ObjMeteo.ID).IconActuel
                                     Else
                                         Return ObjMeteo.IconActuel
