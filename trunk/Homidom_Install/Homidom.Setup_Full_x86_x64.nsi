@@ -50,6 +50,7 @@ VIAddVersionKey "FileVersion" "${PRODUCT_VERSION}.${PRODUCT_BUILD}.${PRODUCT_REV
 ; --- inclusion du code de détection et de téléchargement du Framework .NET
 !include "includes\CheckDotNetInstalled.nsh"
 !include "includes\Redist.VC2010.nsh"
+!include "includes\Redist.VC11.nsh"
 
 ; MUI Settings
 !define MUI_ABORTWARNING
@@ -179,7 +180,9 @@ Function .onInit
 
   ; -- Vérification de la présence des runtimes VC2010
   Call CheckVC2010Redist
-  
+  ; -- Vérification de la présence des runtimes VC2012
+  Call CheckVC11Redist
+
   !insertmacro Log_String "Les dossier d'installation par défaut est '$INSTDIR'."
   
   ; --- Initialisation des variables

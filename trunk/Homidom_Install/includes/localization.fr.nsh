@@ -24,3 +24,5 @@ LangString FAILED_DOTNET_INSTALL ${LANG_FRENCH} "The installation of ${PRODUCT_N
 
 LangString DESC_VC2010_LABEL ${LANG_FRENCH} "Microsoft Visual C++ 2010"
 LangString DESC_VC2010_DECISION ${LANG_FRENCH} "$(DESC_VC2010_LABEL) est requis.$\nVoulez-vous télécharger et installer $(DESC_VC2010_LABEL) maintenant ?."
+LangString DESC_VC11_LABEL ${LANG_FRENCH} "Microsoft Visual C++ 2012"
+LangString DESC_VC11_DECISION ${LANG_FRENCH} "$(DESC_VC11_LABEL) est requis.$\nVoulez-vous télécharger et installer $(DESC_VC11_LABEL) maintenant ?."
