@@ -19,9 +19,6 @@
                 </DockPanel>
                 
                 <StackPanel Margin="5,10,0,0">
-                    <TabControl>
-                        <TabItem Header="1" />
-                    </TabControl>
                     <StackPanel Orientation="Horizontal">
                         <StackPanel Margin="0,0,3,0">
                             <GroupBox Name="GroupBox1" Margin="2">

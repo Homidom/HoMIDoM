@@ -102,22 +102,30 @@ Class Window1
 
                     'Vérifie si nouveau device
                     If myService.AsNewDevice Then
-                        If ImgNewDevice.Visibility = Windows.Visibility.Collapsed Then ImgNewDevice.Visibility = Windows.Visibility.Visible
+                        ImgNewDevice.ToolTip = "Afficher les nouveaux composants du mode découverte"
+                        ImgNewDevice.Visibility = Windows.Visibility.Visible
                     Else
-                        If ImgNewDevice.Visibility = Windows.Visibility.Visible Then ImgNewDevice.Visibility = Windows.Visibility.Collapsed
+                        ImgNewDevice.Visibility = Windows.Visibility.Collapsed
                     End If
-
+                    
                     'Modifie les LOG
+                    Dim _string As String = "Liste des Logs du serveur : " & vbCrLf
                     Dim list As List(Of String) = myService.GetLastLogs
-                    Dim _string As String = ""
-                    For Each logerror In list
-                        _string &= logerror & vbCrLf
-                    Next
-                    LOG.ToolTip = _string
-                    ImgLog.ToolTip = _string
-                    LOG.Content = Mid(list(0), 1, 100) & "..."
+                    If list.Count > 0 Then
+                        For Each logmsg In list
+                            If String.IsNullOrEmpty(logmsg) = False Then _string &= logmsg & vbCrLf
+                        Next
+                        LOG.ToolTip = _string
+                        ImgLog.ToolTip = _string
+                        LOG.Content = Mid(list(0), 1, 100) & "..."
+                    Else
+                        LOG.ToolTip = "Pas encore de logs..."
+                        ImgLog.ToolTip = "Pas encore de logs..."
+                        LOG.Content = "Pas encore de logs..."
+                    End If
                     list.Clear()
 
+                    _string = "Liste des Erreurs du serveur : " & vbCrLf
                     list = myService.GetLastLogsError
                     If list.Count > 0 Then
                         For Each logerror As String In list
@@ -127,24 +135,24 @@ Class Window1
                                 ImgError.ToolTip = _string
                             End If
                         Next
-                        _string = Nothing
                     Else
-                        If ImgError.Visibility = Windows.Visibility.Visible Then ImgError.Visibility = Windows.Visibility.Collapsed
+                        ImgError.Visibility = Windows.Visibility.Collapsed
                     End If
                     list.Clear()
 
+                    _string = "Liste des composants non à jour : " & vbCrLf
                     list = myService.GetDeviceNoMaJ(IdSrv)
                     If list.Count > 0 Then
-                        For Each logerror As String In list
-                            If String.IsNullOrEmpty(logerror) = False Then
-                                _string &= logerror & vbCrLf
+                        For Each logmsg As String In list
+                            If String.IsNullOrEmpty(logmsg) = False Then
+                                _string &= logmsg & vbCrLf
                                 If ImgDeviceNoMaj.Visibility <> Windows.Visibility.Visible Then ImgDeviceNoMaj.Visibility = Windows.Visibility.Visible
                                 ImgDeviceNoMaj.ToolTip = _string
                             End If
                         Next
                         _string = Nothing
                     Else
-                        If ImgDeviceNoMaj.Visibility = Windows.Visibility.Visible Then ImgDeviceNoMaj.Visibility = Windows.Visibility.Collapsed
+                        ImgDeviceNoMaj.Visibility = Windows.Visibility.Collapsed
                     End If
                     list.Clear()
                     _string = Nothing

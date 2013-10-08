@@ -13,7 +13,7 @@
                 
                 <StackPanel Name="StkOp" Orientation="Horizontal" Margin="235,0,0,0" >
                 <Label Content="Operateur:" Foreground="White" />
-                    <ComboBox Name="CbOperateur" SelectedIndex="0" Margin="4" BorderThickness="2" Background="DarkGray" BorderBrush="Black" Foreground="White">
+                    <ComboBox Name="CbOperateur" SelectedIndex="0" Margin="4" BorderThickness="2" Background="DarkGray" BorderBrush="Black" >
                     <ComboBoxItem Content="AND" />
                     <ComboBoxItem Content="OR" />
                 </ComboBox>
@@ -32,7 +32,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
                         <Label Content="Date &amp; Heure" Height="24" Foreground="White" />
-                        <ComboBox Name="CbSigne1" SelectedIndex="0" Margin="3" Height="22" BorderThickness="2" Background="DarkGray" BorderBrush="Black" Foreground="White">
+                        <ComboBox Name="CbSigne1" SelectedIndex="0" Margin="3" Height="22" BorderThickness="2" Background="DarkGray" BorderBrush="Black">
                     <ComboBoxItem Content="=" />
                     <ComboBoxItem Content="&lt;" />
                     <ComboBoxItem Content="&lt;=" />
@@ -120,10 +120,10 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" Name="StkDevice">
                 <Label Content="Device:" Foreground="White" />
-                <ComboBox Height="23" Name="CbDevice" Width="163" BorderThickness="2" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                <ComboBox Height="23" Name="CbDevice" Width="163" BorderThickness="2" Background="DarkGray" BorderBrush="Black" />
                 <Label Content="Propriété:" Foreground="White" />
-                <ComboBox Name="CbPropertyDevice" Width="118" Height="23" BorderThickness="2" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                <ComboBox Name="CbSigne2" SelectedIndex="0" Margin="3" Height="22" BorderThickness="2" Background="DarkGray" BorderBrush="Black" Foreground="White">
+                <ComboBox Name="CbPropertyDevice" Width="118" Height="23" BorderThickness="2" Background="DarkGray" BorderBrush="Black" />
+                <ComboBox Name="CbSigne2" SelectedIndex="0" Margin="3" Height="22" BorderThickness="2" Background="DarkGray" BorderBrush="Black" >
                     <ComboBoxItem Content="=" />
                     <ComboBoxItem Content="&lt;" />
                     <ComboBoxItem Content="&lt;=" />
