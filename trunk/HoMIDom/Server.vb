@@ -3295,7 +3295,15 @@ Namespace HoMIDom
                 Next
                 searcher.Dispose()
                 searcher = Nothing
-                uid = uid1 + uid2
+                'uid = uid1 + uid2
+                'cryptage de la clé en MD5
+                Dim md5Obj As New System.Security.Cryptography.MD5CryptoServiceProvider()
+                Dim bytesToHash() As Byte = System.Text.Encoding.ASCII.GetBytes(uid1 + uid2)
+                bytesToHash = md5Obj.ComputeHash(bytesToHash)
+                Dim b As Byte
+                For Each b In bytesToHash
+                    uid += b.ToString("x2")
+                Next
 
                 'on recupere la version de Windows
                 Dim osversion As String = My.Computer.Info.OSFullName.ToString() + "--" + Environment.OSVersion.Version.ToString() + "--" + Environment.OSVersion.ServicePack.ToString()
