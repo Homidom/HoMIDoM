@@ -3329,7 +3329,7 @@ Namespace HoMIDom
                     'on ouvre la page web de remerciement
                     Try
                         'If (Environment.UserInteractive) Then Process.Start("http://www.homidom.com/premiereinstall_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html")
-                        Dim request As HttpWebRequest = WebRequest.Create("http://www.homidom.com/premiereinstall_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html")
+                        Dim request As HttpWebRequest = WebRequest.Create("http://www.homidom.com/premiereinstall_" & UrlEncode(uid) & "_" & UrlEncode(GetServerVersion().Replace(".", "-")) & "_" & UrlEncode(osversion) & "_" & UrlEncode(resolution) & ".html")
                         CType(request, HttpWebRequest).UserAgent = "Other"
                         Dim response As WebResponse = request.GetResponse()
                     Catch ex As Exception
@@ -3348,12 +3348,17 @@ Namespace HoMIDom
                         If Mid(retoursql, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update date_maj", "Erreur Requete sqlite : " & retoursql)
                         retoursql = sqlite_homidom.nonquery("UPDATE config Set valeur=@parameter0 WHERE parametre='version_dll'", GetServerVersion())
                         If Mid(retoursql, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update version_dll", "Erreur Requete sqlite : " & retoursql)
+                        retoursql = sqlite_homidom.nonquery("UPDATE config Set valeur=@parameter0 WHERE parametre='uid'", uid)
+                        If Mid(retoursql, 1, 4) = "ERR:" Then Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New Update uid", "Erreur Requete sqlite : " & retoursql)
+
+
+                        Log(TypeLog.DEBUG, TypeSource.SERVEUR, "remerciement", " URL: http://www.homidom.com/miseajour_" & UrlEncode(uid) & "_" & UrlEncode(GetServerVersion().Replace(".", "-")) & "_" & UrlEncode(osversion) & "_" & UrlEncode(resolution) & ".html")
 
 
                         ' on ouvre la page web de remerciement
                         Try
                             'If (Environment.UserInteractive) Then Process.Start("http://www.homidom.com/miseajour_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html")
-                            Dim request As HttpWebRequest = WebRequest.Create("http://www.homidom.com/miseajour_" & HtmlEncode(uid) & "_" & HtmlEncode(GetServerVersion().Replace(".", "-")) & "_" & HtmlEncode(osversion) & "_" & HtmlEncode(resolution) & ".html")
+                            Dim request As HttpWebRequest = WebRequest.Create("http://www.homidom.com/miseajour_" & UrlEncode(uid) & "_" & UrlEncode(GetServerVersion().Replace(".", "-")) & "_" & UrlEncode(osversion) & "_" & UrlEncode(resolution) & ".html")
                             CType(request, HttpWebRequest).UserAgent = "Other"
                             Dim response As WebResponse = request.GetResponse()
                         Catch ex As Exception
