@@ -589,7 +589,7 @@ Imports ZibaseDll
     Private Sub zba_NewSensorDetected(ByVal seInfo As ZibaseDll.ZiBase.SensorInfo) Handles zba.NewSensorDetected
         'si on detecte une nouveau device
         'WriteLog("DBG: " & seInfo.sID & "_" & seInfo.sType & " ----> " & seInfo.sValue)
-        'traitement(seInfo.sID, seInfo.sType, seInfo.dwValue, seInfo.sValue)
+        traitement(seInfo.sID, seInfo.sType, seInfo.dwValue, seInfo.sValue)
     End Sub
 
     'nouvelle zibase detecté -> Log
@@ -599,7 +599,7 @@ Imports ZibaseDll
 
     'la zibase a qqch à logger
     Private Sub ZibaseLog(ByVal sMsg As String, ByVal level As Integer) Handles zba.WriteMessage
-        If _DEBUG Then WriteLog("DBG: " & sMsg & " - " & level)
+        If _DEBUG Then WriteLog("DBG: Message: " & sMsg & " - " & level)
     End Sub
 
     'executer un script stocké sur la zibase
@@ -843,15 +843,15 @@ Imports ZibaseDll
                     End If
                 End If
             ElseIf (listedevices.Count > 1) Then
-                WriteLog("ERR: Plusieurs devices correspondent à : " & type & " " & adresse & ":" & valeur)
+                WriteLog("ERR: Plusieurs composants correspondent à : " & type & " " & adresse & ":" & valeur)
             Else
 
                 'si autodiscover = true ou modedecouverte du serveur actif alors on crée le composant sinon on logue
                 If _AutoDiscover Or _Server.GetModeDecouverte Then
-                    WriteLog("DBG: Device non trouvé, AutoCreation du composant : " & type & " " & adresse & ":" & valeur)
+                    WriteLog("DBG: Composant non trouvé, AutoCreation du composant : " & type & " " & adresse & ":" & valeur)
                     _Server.AddDetectNewDevice(adresse, _ID, type, "", valeur)
                 Else
-                    WriteLog("ERR: Device non trouvé : " & type & " " & adresse & ":" & valeur)
+                    WriteLog("ERR: Composant non trouvé : " & type & " " & adresse & ":" & valeur)
                 End If
                 ''si autodiscover = true alors on crée le composant sinon on logue
                 'If _AUTODISCOVER Then

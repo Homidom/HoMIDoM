@@ -219,10 +219,10 @@
             <Label Foreground="White" Name="LblStatus" VerticalAlignment="Stretch">#####</Label>
             <Ellipse Height="20" Name="Ellipse1" Width="20" Fill="Red" />
             <Label Foreground="White" Name="LblConnect" VerticalAlignment="Stretch">#####</Label>
-            <Image Height="20"  Margin="10,0,0,0" Name="Image3" Stretch="Fill" Width="20" Source="/HoMIAdmiN;component/Images/Soleil_130.png" />
-            <Label Content="##:##" Name="LHS" Foreground="White" />
-            <Image Height="20"  Name="Image4" Stretch="Fill" Width="20" Source="/HoMIAdmiN;component/Images/Lune_130.png" />
-            <Label Content="##:##" Name="LCS" Foreground="White" />
+            <Image Height="20"  Margin="10,0,0,0" Name="Image3" Stretch="Fill" Width="20" Source="/HoMIAdmiN;component/Images/Soleil_130.png" ToolTip="Heure de lever du soleil" />
+            <Label Content="##:##" Name="LHS" Foreground="White" ToolTip="Heure de lever du soleil"/>
+            <Image Height="20"  Name="Image4" Stretch="Fill" Width="20" Source="/HoMIAdmiN;component/Images/Lune_130.png" ToolTip="Heure de coucher du soleil" />
+            <Label Content="##:##" Name="LCS" Foreground="White" ToolTip="Heure de coucher du soleil" />
             
             <Image Name="ImgSrv" Margin="10,2,2,2" Height="20" Source="/HoMIAdmiN;component/Images/Home_128.png">
                 <Image.LayoutTransform >
