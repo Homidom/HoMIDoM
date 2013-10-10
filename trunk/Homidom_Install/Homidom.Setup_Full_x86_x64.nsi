@@ -422,12 +422,12 @@ SectionGroup "HoMIDoM Service" HoMIDoM_SERVICE_GRP
 
     SetOverwrite on
     SetOutPath "$INSTDIR"
-    File "..\RELEASE\HoMIDomService.exe"
+    ;File "..\RELEASE\HoMIDomService.exe"
     File "..\RELEASE\HoMIService.exe"
     File "..\RELEASE\HoMIDomWebAPI.dll"
     
     SetOverwrite off
-    File "..\RELEASE\HoMIDomService.exe.config"
+    ;File "..\RELEASE\HoMIDomService.exe.config"
     File "..\RELEASE\HoMIService.exe.config"
 
     SetOverwrite off
