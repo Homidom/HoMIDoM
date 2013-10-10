@@ -138,14 +138,24 @@ Partial Public Class uDevice
                     StkModel.Visibility = Visibility.Visible
                     If x.Type = ListeDevices.MULTIMEDIA Then
                         ImgEditTemplate.Visibility = Windows.Visibility.Visible
-                        'StkModel.Visibility = Visibility.Collapsed
                         LabelModele.Visibility = Windows.Visibility.Visible
                         LabelModele.Content = "Template"
                         TxtModele.Visibility = Windows.Visibility.Collapsed
                         CBModele.ItemsSource = myService.GetListOfTemplate
                         CBModele.DisplayMemberPath = "Name"
                         CBModele.Visibility = Windows.Visibility.Visible
-                        CBModele.SelectedValue = x.Modele
+                        Dim idx As Integer = 0
+                        For Each itm In CBModele.Items
+                            If itm.id = x.Modele Then
+                                CBModele.SelectedIndex = idx
+                                Exit For
+                            End If
+                            idx += 1
+                        Next
+                        StkDriver.Visibility = Windows.Visibility.Collapsed
+                        LabelModele.ToolTip = "Template à utiliser"
+                        CBModele.ToolTip = "Template à utiliser"
+                        StkType.Margin = New Thickness(0)
                     End If
 
                     'on verifie si le device est un device systeme pour le rendre NON modifiable
@@ -275,12 +285,16 @@ Partial Public Class uDevice
             Dim _Driver As Object = Nothing
 
             'on cherche le driver
-            For i As Integer = 0 To ListeDrivers.Count - 1
-                If ListeDrivers.Item(i).Nom = CbDriver.SelectedItem.ToString Then
-                    _Driver = myService.ReturnDriverByID(IdSrv, ListeDrivers.Item(i).ID)
-                    Exit For
-                End If
-            Next
+
+            If CbDriver.SelectedItem IsNot Nothing Then
+                For i As Integer = 0 To ListeDrivers.Count - 1
+                    If ListeDrivers.Item(i).Nom = CbDriver.SelectedItem.ToString Then
+                        _Driver = myService.ReturnDriverByID(IdSrv, ListeDrivers.Item(i).ID)
+                        Exit For
+                    End If
+                Next
+            End If
+
             'si on a trouvé le driver selectionné
             If _Driver IsNot Nothing Then
                 'Si c'est un nouveau device, on peut modifier le type sinon non
@@ -495,13 +509,16 @@ Partial Public Class uDevice
 
                 StkModel.Visibility = Windows.Visibility.Visible
                 If CbType.SelectedValue = "MULTIMEDIA" Then
-                    '    StkModel.Visibility = Windows.Visibility.Collapsed
-                    'Else
+                    StkDriver.Visibility = Windows.Visibility.Collapsed
+
                     LabelModele.Content = "Template"
+                    LabelModele.ToolTip = "Template à utiliser"
+                    CBModele.ToolTip = "Template à utiliser"
                     TxtModele.Visibility = Windows.Visibility.Collapsed
                     CBModele.ItemsSource = myService.GetListOfTemplate
                     CBModele.DisplayMemberPath = "Name"
                     CBModele.Visibility = Windows.Visibility.Visible
+                    StkType.Margin = New Thickness(0)
                 End If
             End If
         Catch Ex As Exception
@@ -971,7 +988,7 @@ Partial Public Class uDevice
 
     Private Sub ImgEditTemplate_MouseDown(sender As System.Object, e As System.Windows.Input.MouseButtonEventArgs) Handles ImgEditTemplate.MouseDown
         Try
-            Dim frm As New WTelecommandeNew
+            Dim frm As New WTelecommandeNew(CBModele.Text)
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 frm.Close()
@@ -979,14 +996,44 @@ Partial Public Class uDevice
                 CBModele.ItemsSource = myService.GetListOfTemplate
                 CBModele.DisplayMemberPath = "Name"
                 CBModele.Visibility = Windows.Visibility.Visible
+
+                Dim idx As Integer = 0
+                For Each itm In CBModele.Items
+                    If itm.id = x.Modele Then
+                        CBModele.SelectedIndex = idx
+                        Exit For
+                    End If
+                    idx += 1
+                Next
             Else
                 frm.Close()
             End If
 
-
-
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur ImgEditTemplate_MouseDown: " & ex.ToString, "Erreur Admin", "ImgEditTemplate_MouseDown")
         End Try
+    End Sub
+
+    Private Sub CBModele_SelectionChanged(sender As Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles CBModele.SelectionChanged
+        If CbType.SelectedValue = "MULTIMEDIA" Then
+            If CBModele.SelectedItem IsNot Nothing Then
+                Dim selecttemplate As HoMIDom.HoMIDom.Telecommande.Template = CBModele.SelectedItem
+
+                Select Case selecttemplate.Type
+                    Case 0 'http
+                        CbDriver.SelectedValue = "HTTP"
+                        LabelAdresse1.Content = "Adresse IP"
+                        LabelAdresse2.Content = "Port IP"
+                    Case 1 'IR
+                        CbDriver.SelectedValue = "USBuirt"
+                        StkAdr1.Visibility = Windows.Visibility.Collapsed
+                        StkAdr2.Visibility = Windows.Visibility.Collapsed
+                    Case 2 'RS232
+                        CbDriver.SelectedValue = "RS232"
+                        LabelAdresse1.Content = "Port COM"
+                        StkAdr2.Visibility = Windows.Visibility.Collapsed
+                End Select
+            End If
+        End If
     End Sub
 End Class

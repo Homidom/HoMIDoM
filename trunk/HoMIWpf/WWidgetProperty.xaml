@@ -133,25 +133,47 @@
                         </StackPanel>
 </Expander>
                             <Expander Foreground=" White" Header="BackGround" BorderBrush="#FF373737" Margin="1">
+
                             <StackPanel >
                                 <StackPanel Orientation="Horizontal" >
-                             <Label Width="120" Content="Color BackGround:" Foreground="White"/>
-                            <StackPanel Orientation="Horizontal" >
-                <Label Name="lblColor" Height="20" Width="20 "/>
-                <TextBox Name="TxtColorBack" Width="0" Text="" Background="{Binding ElementName=ColorPicker1, Path=SelectedColor}" Visibility="Collapsed" />
-                <my:Colorpicker x:Name="ColorPicker1" Width="177" />
-                     
-            </StackPanel>
-                                   
-    </StackPanel>
+                                    <Label Width="120" Content="Color BackGround:" Foreground="White"/>
+                                    <StackPanel Orientation="Horizontal" >
+                                        <Label Name="lblColor" Height="20" Width="20 "/>
+                                        <TextBox Name="TxtColorBack" Width="0" Text="" Background="{Binding ElementName=ColorPicker1, Path=SelectedColor}" Visibility="Collapsed" />
+                                        <my:Colorpicker x:Name="ColorPicker1" Width="177" />
+                                    </StackPanel>
+                                </StackPanel>
+                                
                                 <StackPanel Orientation="Horizontal" >
-                            <Label Width="142" Content="Transparence:" Foreground="White"/>
-                            <StackPanel Orientation="Horizontal" />
-                            <Slider x:Name="Slider1" Width="177" Maximum="255" ValueChanged="Slider1_ValueChanged"/>
-                        </StackPanel>
-                            </StackPanel>
-                                </Expander> 
-                        <StackPanel Orientation="Horizontal" Name="StkRss" Visibility="Collapsed" >
+                                    <Label Width="142" Content="Transparence:" Foreground="White"/>
+                                    <StackPanel Orientation="Horizontal" />
+                                        <Slider x:Name="Slider1" Width="177" Maximum="255" ValueChanged="Slider1_ValueChanged"/>
+                                    </StackPanel>
+                                </StackPanel>
+                                </Expander>
+
+                            <Expander Foreground="White" Header="Contour" BorderBrush="#FF373737" Margin="1">
+                                <StackPanel >
+                                    <StackPanel Orientation="Horizontal" >
+                                        <Label Foreground=" White" Width="80" Content="Epaisseur:"/>
+                                        <TextBox Name="TxtBorderSize" Width="30"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" >
+                                        <Label Foreground=" White" Width="80" Content="Angle:"/>
+                                        <TextBox Name="TxtBorderAngle" Width="30"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" >
+                                        <Label Width="81" Content="Couleur:" Foreground="White"/>
+                                        <StackPanel Orientation="Horizontal" >
+                                            <Label Name="lblColorBorder" Height="20" Width="20 "/>
+                                            <TextBox Name="TxtColorBorder" Width="0" Text="" Background="{Binding ElementName=ColorPicker4, Path=SelectedColor}" Visibility="Collapsed" />
+                                            <my:Colorpicker x:Name="ColorPicker4" Width="177" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Expander>
+
+                            <StackPanel Orientation="Horizontal" Name="StkRss" Visibility="Collapsed" >
                             <Label Width="120" Content="URL Rss:" Foreground="White"/>
                             <TextBox Name="TxtURLRss" Width="150" Text=""/>
                         </StackPanel>

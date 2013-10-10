@@ -28,12 +28,12 @@
                     <Label Foreground="White" Name="LabelDescription">Description:</Label>
                         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtDescript" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="440" />
                     <StackPanel Orientation="Horizontal" >
-                            <StackPanel >
+                            <StackPanel Name="StkDriver">
                                 <Label Foreground="White" Name="LabelDriver"  Width="215">Driver:</Label>
                                 <ComboBox Width="215" Name="CbDriver" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" ToolTip="Liste des drivers actifs"/>
                             </StackPanel>
                             
-                            <StackPanel Margin="10,0,0,0">
+                            <StackPanel Name="StkType" Margin="10,0,0,0">
                                 <Label Foreground="White" Name="LabelType">Type:</Label>
                                 <ComboBox HorizontalAlignment="Left" Name="CbType" Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" IsReadOnly="True" ToolTip="IMPORTANT : Le type défini le type de valeur qu'il pourra stocker et les actions possibles."/>
                             </StackPanel>

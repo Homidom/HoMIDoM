@@ -23,6 +23,9 @@ Public Class uWidgetEmpty
     End Enum
 
     'Variables
+    Dim _BorderThickness As Double = Nothing
+    Dim _CornerRadius As Double = 6
+    Dim _ColorBorder As SolidColorBrush = Brushes.Transparent
     Dim _Show As Boolean
     Dim _Id As String = ""
     Dim _ParentId As String = ""
@@ -120,6 +123,36 @@ Public Class uWidgetEmpty
     Private myStoryboard As Storyboard
 
 #Region "Property"
+    Public Overloads Property BorderThickness As Double
+        Get
+            Return _BorderThickness
+        End Get
+        Set(value As Double)
+            _BorderThickness = value
+            Border1.BorderThickness = New Thickness(value)
+        End Set
+    End Property
+
+    Public Property CornerRadius As Double
+        Get
+            Return _CornerRadius
+        End Get
+        Set(value As Double)
+            _CornerRadius = value
+            Border1.CornerRadius = New CornerRadius(value)
+        End Set
+    End Property
+
+    Public Property ColorBorder As SolidColorBrush
+        Get
+            Return _ColorBorder
+        End Get
+        Set(value As SolidColorBrush)
+            _ColorBorder = value
+            Border1.BorderBrush = value
+        End Set
+    End Property
+
     Public Property ZIndex As Integer
         Get
             Return _Zindex
@@ -255,10 +288,10 @@ Public Class uWidgetEmpty
                         Case HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA
                             ShowStatus = False
                             _ShowValue = False
-                            Dim x As New uTelecommande(_Id)
-                            AddHandler x.SendCommand, AddressOf SendCommand
-                            StkPopup.Children.Add(x)
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.PLUIECOURANT
+                            '    Dim x As New uTelecommande(_Id)
+                            '    AddHandler x.SendCommand, AddressOf SendCommand
+                            '    StkPopup.Children.Add(x)
+                            'Case HoMIDom.HoMIDom.Device.ListeDevices.PLUIECOURANT
                         Case HoMIDom.HoMIDom.Device.ListeDevices.PLUIETOTAL
                         Case HoMIDom.HoMIDom.Device.ListeDevices.SWITCH
                             Dim x As New uOnOff

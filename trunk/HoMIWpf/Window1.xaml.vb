@@ -454,6 +454,9 @@ Class Window1
             Return _DefautPage
         End Get
         Set(ByVal value As String)
+            If _DefautPage <> value Then
+                AfficheStartDefautPage()
+            End If
             _DefautPage = value
         End Set
     End Property
@@ -505,7 +508,9 @@ Class Window1
                 End If
             Next
 
+
             ImageBackGround = _ImageBackGroundDefault
+            AfficheStartDefautPage()
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur UnloadControl: " & ex.Message, "Erreur", "UnloadControl")
         End Try
@@ -631,7 +636,7 @@ Class Window1
                 Dim _string As String = ""
                 For Each logerror As String In myService.GetLastLogsError
                     If String.IsNullOrEmpty(logerror) = False Then
-                        _string &= logerror & vbCrLf
+                        _string &= logerror & vbCrLf & vbCrLf
                         ImgMess.ToolTip = _string
                     End If
                 Next
@@ -741,22 +746,22 @@ Class Window1
         End Try
     End Sub
 
-    Private Sub NewLog(ByVal TypLog As HoMIDom.HoMIDom.Server.TypeLog, ByVal Source As HoMIDom.HoMIDom.Server.TypeSource, ByVal Fonction As String, ByVal Message As String) 'Evènement lorsqu'un nouveau log est écrit
-        Try
+    'Private Sub NewLog(ByVal TypLog As HoMIDom.HoMIDom.Server.TypeLog, ByVal Source As HoMIDom.HoMIDom.Server.TypeSource, ByVal Fonction As String, ByVal Message As String) 'Evènement lorsqu'un nouveau log est écrit
+    '    Try
 
-            If _AffLastError Then
-                Dim _string As String = ""
-                For Each logerror As String In myService.GetLastLogsError
-                    If String.IsNullOrEmpty(logerror) = False Then
-                        _string &= logerror & vbCrLf
-                        ImgMess.ToolTip = _string
-                    End If
-                Next
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Sub NewLog: " & ex.ToString, "Erreur", " Sub NewLog")
-        End Try
-    End Sub
+    '        If _AffLastError Then
+    '            Dim _string As String = ""
+    '            For Each logerror As String In myService.GetLastLogsError
+    '                If String.IsNullOrEmpty(logerror) = False Then
+    '                    _string &= logerror & vbCrLf & vbCrLf
+    '                    ImgMess.ToolTip = _string
+    '                End If
+    '            Next
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Sub NewLog: " & ex.ToString, "Erreur", " Sub NewLog")
+    '    End Try
+    'End Sub
 
     Private Sub MessageFromServeur(ByVal Id As String, ByVal Time As DateTime, ByVal Message As String) 'Message provenant du serveur
 
@@ -944,6 +949,8 @@ Class Window1
                     Dim _Mnudefaut As Boolean
                     Dim _MnuIDElement As String = ""
                     Dim _MnuVisible As Boolean = False
+                    Dim _MnuTemplateID As String = ""
+                    Dim _MnuImageBackground As String = ""
 
                     For k As Integer = 0 To list.Item(j).Attributes.Count - 1
                         Select Case list.Item(j).Attributes.Item(k).Name
@@ -956,9 +963,12 @@ Class Window1
                                     Case uCtrlImgMnu.TypeOfMnu.Zone.ToString : _MnuType = uCtrlImgMnu.TypeOfMnu.Zone
                                     Case uCtrlImgMnu.TypeOfMnu.Config.ToString : _MnuType = uCtrlImgMnu.TypeOfMnu.Config
                                     Case uCtrlImgMnu.TypeOfMnu.LecteurMedia.ToString : _MnuType = uCtrlImgMnu.TypeOfMnu.LecteurMedia
+                                    Case uCtrlImgMnu.TypeOfMnu.Multimedia.ToString : _MnuType = uCtrlImgMnu.TypeOfMnu.Multimedia
                                     Case uCtrlImgMnu.TypeOfMnu.None.ToString : _MnuType = uCtrlImgMnu.TypeOfMnu.None
                                     Case Else : _MnuType = uCtrlImgMnu.TypeOfMnu.None
                                 End Select
+                            Case "templateid" : _MnuTemplateID = list.Item(j).Attributes.Item(k).Value
+                            Case "imagebackground" : _MnuImageBackground = list.Item(j).Attributes.Item(k).Value
                             Case "icon" : _MnuIcon = list.Item(j).Attributes.Item(k).Value
                             Case "idelement" : _MnuIDElement = list.Item(j).Attributes.Item(k).Value
                             Case "visible" : _MnuVisible = list.Item(j).Attributes.Item(k).Value
@@ -969,6 +979,7 @@ Class Window1
                                 End If
                         End Select
                     Next
+
                     If _MnuType <> uCtrlImgMnu.TypeOfMnu.Config Then NewBtnMnu(_MnuNom, _MnuType, _MnuParam, _Mnudefaut, , _MnuIcon, _MnuIDElement, _MnuVisible)
                 Next
             Else
@@ -1017,6 +1028,16 @@ Class Window1
                             Case "anglex" : x.RotationX = CDbl(Regex.Replace(list.Item(j).Attributes.Item(k).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                             Case "angley" : x.RotationY = CDbl(Regex.Replace(list.Item(j).Attributes.Item(k).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                             Case "zindex" : x.ZIndex = list.Item(j).Attributes.Item(k).Value
+                            Case "borderthickness" : x.BorderThickness = list.Item(j).Attributes.Item(k).Value
+                            Case "cornerradius" : x.CornerRadius = list.Item(j).Attributes.Item(k).Value
+                            Case "colorborder"
+                                If String.IsNullOrEmpty(list.Item(j).Attributes.Item(k).Value) = False Then
+                                    Dim a As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 2, 2))
+                                    Dim R As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 4, 2))
+                                    Dim G As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 6, 2))
+                                    Dim B As Byte = CByte("&H" & Mid(list.Item(j).Attributes.Item(k).Value, 8, 2))
+                                    x.ColorBorder = New SolidColorBrush(Color.FromArgb(a, R, G, B))
+                                End If
                             Case "min" : x.Min = CDbl(Regex.Replace(list.Item(j).Attributes.Item(k).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                             Case "max" : x.Max = CDbl(Regex.Replace(list.Item(j).Attributes.Item(k).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                             Case "showetiquette" : x.ShowEtiquette = list.Item(j).Attributes.Item(k).Value
@@ -1418,6 +1439,15 @@ Class Window1
                 writer.WriteStartAttribute("zindex")
                 writer.WriteValue(_ListElement.Item(i).ZIndex)
                 writer.WriteEndAttribute()
+                writer.WriteStartAttribute("borderthickness")
+                writer.WriteValue(_ListElement.Item(i).BorderThickness)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("cornerradius")
+                writer.WriteValue(_ListElement.Item(i).CornerRadius)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("colorborder")
+                writer.WriteValue(_ListElement.Item(i).ColorBorder.ToString)
+                writer.WriteEndAttribute()
                 writer.WriteStartAttribute("majetiquettefromsrv")
                 writer.WriteValue(_ListElement.Item(i).MaJEtiquetteFromServeur)
                 writer.WriteEndAttribute()
@@ -1455,7 +1485,6 @@ Class Window1
                 writer.WriteValue(_ListElement.Item(i).EtiquetteAlignement)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("colorbackground")
-                'writer.WriteValue(_ListElement.Item(i).ColorBackGround.ToString)
                 writer.WriteValue(_ListElement.Item(i).ColorBackGround.ToString.Replace("#FF", "#" & Hex(CInt(_ListElement.Item(i).ColorBackGround.Opacity * 255))))
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("colorstatus")
@@ -1713,33 +1742,6 @@ Class Window1
                     AddHandler mypush.DeviceChanged, AddressOf DeviceChanged
                     mypush.Open()
 
-                    MnuMacro.Items.Clear()
-                    For Each _mac As Macro In myService.GetAllMacros(IdSrv)
-                        Dim mnu As New MenuItem
-                        mnu.Tag = _mac.ID
-                        mnu.Header = _mac.Nom
-                        mnu.FontSize = 14
-                        mnu.Height = 40
-                        mnu.Foreground = Brushes.White
-                        mnu.Background = MnuMacro.Background
-                        AddHandler mnu.Click, AddressOf MnuExecuteMacro
-                        MnuMacro.Items.Add(mnu)
-                    Next
-
-                    MnuLastError.Items.Clear()
-                    Dim list As List(Of String) = myService.GetLastLogsError
-                    If list.Count > 0 Then
-                        For Each logerror As String In list
-                            If String.IsNullOrEmpty(logerror) = False Then
-                                Dim mnu As New MenuItem
-                                mnu.Header = logerror
-                                mnu.FontSize = 10
-                                mnu.Foreground = Brushes.Black
-                                MnuLastError.Items.Add(mnu)
-                            End If
-                        Next
-                    End If
-                    list = Nothing
                 End If
             Catch ex As Exception
                 IsConnect = False
@@ -1754,8 +1756,14 @@ Class Window1
 #End Region
 
     'Creation  du menu
-    Private Sub NewBtnMnu(ByVal Label As String, ByVal type As uCtrlImgMnu.TypeOfMnu, Optional ByVal Parametres As List(Of String) = Nothing, Optional ByVal Defaut As Boolean = False, Optional ByVal Tag As String = "", Optional ByVal Icon As String = "", Optional ByVal IdElement As String = "", Optional ByVal Visible As Boolean = False)
+    Private Sub NewBtnMnu(ByVal Label As String, ByVal type As uCtrlImgMnu.TypeOfMnu, Optional ByVal Parametres As List(Of String) = Nothing, Optional ByVal Defaut As Boolean = False, Optional ByVal Tag As String = "", Optional ByVal Icon As String = "", Optional ByVal IdElement As String = "", Optional ByVal Visible As Boolean = False, Optional TemplateID As String = "", Optional ImageBackGround As String = "")
         Try
+            If String.IsNullOrEmpty(IdElement) = False Then
+                If IsConnect Then
+                    If myService.ReturnZoneByID(IdSrv, IdElement) Is Nothing Then Exit Sub
+                End If
+            End If
+
             For Each _Mnu In _ListMnu
                 If _Mnu.Name = Label And _Mnu.Type = type Then Exit Sub
             Next
@@ -1770,6 +1778,8 @@ Class Window1
             ctrl.Parametres = Parametres
             ctrl.IDElement = IdElement
             ctrl.Visible = Visible
+            ctrl.TemplateID = TemplateID
+            ctrl.ImageBackGround = ImageBackGround
             AddHandler ctrl.click, AddressOf IconMnuDoubleClick
             _ListMnu.Add(ctrl)
 
@@ -1824,6 +1834,7 @@ Class Window1
                 End If
             End If
 
+
             If Now.Minute = 0 And Now.Second = 0 Then
                 HeureSoleilChanged()
             End If
@@ -1834,6 +1845,7 @@ Class Window1
             '    x.Start()
             '    x = Nothing
             'End If
+
         Catch ex As Exception
             IsConnect = False
 
@@ -1920,6 +1932,8 @@ Class Window1
 
                     Case uCtrlImgMnu.TypeOfMnu.Zone
                         ShowZone(y.IDElement)
+                    Case uCtrlImgMnu.TypeOfMnu.Multimedia
+                        ShowTemplate(y.TemplateID)
                 End Select
             End If
 
@@ -1987,6 +2001,7 @@ Class Window1
     Public Sub LoadZones()
         Try
             Dim cntNewZone As Integer = 0
+            Dim flagexist As Boolean = False
 
             If IsConnect = False Then Exit Sub
 
@@ -1995,7 +2010,8 @@ Class Window1
                     NewBtnMnu(_zon.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , _zon.ID)
                     cntNewZone += 1
                 Else
-                    Dim flagexist As Boolean = False
+                    flagexist = False
+
                     'On vérifie si la zone est déjà créée
                     For j As Integer = 0 To ListMnu.Count - 1
                         If ListMnu.Item(j).IDElement = _zon.ID Then
@@ -2003,11 +2019,13 @@ Class Window1
                             Exit For
                         End If
                     Next
+
                     'si la zone n'existe pas on la crée
                     If flagexist = False Then
                         NewBtnMnu(_zon.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , _zon.ID, True)
                         cntNewZone += 1
                     End If
+
                 End If
             Next
 
@@ -2040,9 +2058,41 @@ Class Window1
 
             'Affiche l'image background de la zone
             ImgBackground.Source = Nothing
-            If _zone.Image.Contains("Zone_Image.png") = True Or _zone.Image.EndsWith("\defaut.jpg") = True Then
-                ImageBackGround = _MonRepertoire & "\Images\Fond-defaut.png"
+
+            If String.IsNullOrEmpty(_zone.Image) = False Then
+                If _zone.Image.Contains("Zone_Image.png") = True Or _zone.Image.EndsWith("\defaut.jpg") = True Then
+                    ImageBackGround = _MonRepertoire & "\Images\Fond-defaut.png"
+                Else
+                    Dim _nfile As String = _zone.Image
+                    Dim _result As String = ""
+
+                    For j As Integer = Len(_nfile) To 1 Step -1
+                        If Mid(_nfile, j, 1) <> "\" Then
+                            _result = Mid(_nfile, j, 1) & _result
+                        Else
+                            Exit For
+                        End If
+                    Next
+                    _result = _MonRepertoire & "\cache\images\" & _result
+
+                    If File.Exists(_result) Then
+                        ImgBackground.Source = LoadBitmapImage(_result)
+                    Else
+                        ImgBackground.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Image))
+
+                        'on enregistre l'image en cache
+                        Dim oFileStream As System.IO.FileStream
+                        oFileStream = New System.IO.FileStream(_result, System.IO.FileMode.Create)
+                        oFileStream.Write(myService.GetByteFromImage(_zone.Image), 0, myService.GetByteFromImage(_zone.Image).Length)
+                        oFileStream.Close()
+                        oFileStream = Nothing
+                    End If
+
+                    _nfile = ""
+                    _result = ""
+                End If
             Else
+
                 Dim _nfile As String = _zone.Image
                 Dim _result As String = ""
 
@@ -2119,6 +2169,10 @@ Class Window1
                             y.RotationX = _ListElement.Item(j).RotationX
                             y.RotationY = _ListElement.Item(j).RotationY
                             y.ZIndex = _ListElement.Item(j).ZIndex
+                            y.BorderBrush = _ListElement.Item(j).BorderBrush
+                            y.BorderThickness = _ListElement.Item(j).BorderThickness
+                            y.ColorBorder = _ListElement.Item(j).ColorBorder
+                            y.CornerRadius = _ListElement.Item(j).CornerRadius
                             y.IsEmpty = _ListElement.Item(j).IsEmpty
                             y.ShowEtiquette = _ListElement.Item(j).ShowEtiquette
                             y.MaJEtiquetteFromServeur = _ListElement.Item(j).MaJEtiquetteFromServeur
@@ -2234,6 +2288,10 @@ Class Window1
                     y.RotationX = _ListElement.Item(i).RotationX
                     y.RotationY = _ListElement.Item(i).RotationY
                     y.ZIndex = _ListElement.Item(i).ZIndex
+                    y.BorderBrush = _ListElement.Item(i).BorderBrush
+                    y.BorderThickness = _ListElement.Item(i).BorderThickness
+                    y.ColorBorder = _ListElement.Item(i).ColorBorder
+                    y.CornerRadius = _ListElement.Item(i).CornerRadius
                     y.IsEmpty = _ListElement.Item(i).IsEmpty
                     y.Type = _ListElement.Item(i).Type
                     y.Refresh = _ListElement.Item(i).Refresh
@@ -2290,6 +2348,125 @@ Class Window1
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ShowZone: " & ex.ToString, "Erreur", "ShowZone")
         End Try
     End Sub
+
+    Public Sub ShowTemplate(ByVal IdTemplate As String)
+        Try
+            'Gestion de l'erreur si le serveur n'est pas connecté
+            If IsConnect = False Then
+                AfficheMessageAndLog(Fonctions.TypeLog.INFO, "Le serveur Homidom n'est pas connecté, impossible d'afficher les éléments de la zone sélectionnée", "Information", "ShowZone")
+                Exit Sub
+            End If
+
+            'Déclaration des variables
+            Dim _template As Telecommande.Template
+            Dim _Left As Double = 0
+            Dim _Top As Double = 20
+            Dim _idx As Integer = 0
+
+            'Init des variables communes
+            _CurrentIdZone = IdTemplate
+            _template = myService.GetTemplateFromID(IdTemplate)
+
+            'Affiche l'image background de la zone
+            ImgBackground.Source = Nothing
+
+            'Desgin
+            ChkMove.Visibility = Windows.Visibility.Visible
+            ChkEdit.Visibility = Windows.Visibility.Visible
+            Chk3.Visibility = Windows.Visibility.Visible
+            If ChkMove.IsChecked = True Then ChkMove.IsChecked = False
+            If ChkEdit.IsChecked = True Then ChkEdit.IsChecked = False
+
+            'On va afficher tous les widgets empty
+            For i As Integer = 0 To _ListElement.Count - 1
+                If _ListElement.Item(i).ZoneId = IdTemplate And _ListElement.Item(i).IsEmpty = True Then
+                    'Ajouter un nouveau Control
+                    Dim x As New ContentControl
+                    Dim Trg As New TransformGroup
+                    Dim Rot As New RotateTransform(_ListElement.Item(i).Rotation)
+
+                    Trg.Children.Add(Rot)
+                    x.Width = _ListElement.Item(i).Width
+                    x.Height = _ListElement.Item(i).Height
+                    x.RenderTransform = Trg
+                    x.Style = mybuttonstyle
+                    x.Tag = True
+                    x.Uid = _ListElement.Item(i).Uid
+
+                    Dim y As New uWidgetEmpty
+                    y.Show = True
+                    y.Uid = _ListElement.Item(i).Uid
+                    y.Id = _ListElement.Item(i).Id
+                    y.ZoneId = _ListElement.Item(i).ZoneId
+                    y.Width = x.Width
+                    y.Height = x.Height
+                    y.X = _ListElement.Item(i).X
+                    y.Y = _ListElement.Item(i).Y
+                    y.Rotation = _ListElement.Item(i).Rotation
+                    y.RotationX = _ListElement.Item(i).RotationX
+                    y.RotationY = _ListElement.Item(i).RotationY
+                    y.ZIndex = _ListElement.Item(i).ZIndex
+                    y.BorderBrush = _ListElement.Item(i).BorderBrush
+                    y.BorderThickness = _ListElement.Item(i).BorderThickness
+                    y.ColorBorder = _ListElement.Item(i).ColorBorder
+                    y.CornerRadius = _ListElement.Item(i).CornerRadius
+                    y.IsEmpty = _ListElement.Item(i).IsEmpty
+                    y.Type = _ListElement.Item(i).Type
+                    y.Refresh = _ListElement.Item(i).Refresh
+                    y.CanEditValue = _ListElement.Item(i).CanEditValue
+                    y.Picture = _ListElement.Item(i).Picture
+                    y.ShowPicture = _ListElement.Item(i).ShowPicture
+                    y.GarderProportionImage = _ListElement.Item(i).GarderProportionImage
+                    y.ShowEtiquette = _ListElement.Item(i).ShowEtiquette
+                    y.IsCommun = _ListElement.Item(i).IsCommun
+                    y.Fondu = _ListElement.Item(i).Fondu
+                    y.ShowStatus = _ListElement.Item(i).ShowStatus
+                    y.Etiquette = _ListElement.Item(i).Etiquette
+                    y.DefautLabelStatus = _ListElement.Item(i).DefautLabelStatus
+                    y.TailleStatus = _ListElement.Item(i).TailleStatus
+                    y.TailleEtiquette = _ListElement.Item(i).TailleEtiquette
+                    y.EtiquetteAlignement = _ListElement.Item(i).EtiquetteAlignement
+                    y.MaJEtiquetteFromServeur = _ListElement.Item(i).MaJEtiquetteFromServeur
+                    y.ColorBackGround = _ListElement.Item(i).ColorBackGround
+                    y.ColorEtiquette = _ListElement.Item(i).ColorEtiquette
+                    y.ColorStatus = _ListElement.Item(i).ColorStatus
+                    y.IsHitTestVisible = True 'True:bouge pas False:Bouge
+                    y.Action_GestureBasHaut = _ListElement.Item(i).Action_GestureBasHaut
+                    y.Action_GestureDroiteGauche = _ListElement.Item(i).Action_GestureDroiteGauche
+                    y.Action_GestureGaucheDroite = _ListElement.Item(i).Action_GestureGaucheDroite
+                    y.Action_GestureHautBas = _ListElement.Item(i).Action_GestureHautBas
+                    y.Action_On_Click = _ListElement.Item(i).Action_On_Click
+                    y.Action_On_LongClick = _ListElement.Item(i).Action_On_LongClick
+                    y.Visuel = _ListElement.Item(i).Visuel
+                    y.URL = _ListElement.Item(i).URL
+                    y.HttpRefresh = _ListElement.Item(i).HttpRefresh
+                    y.UrlRss = _ListElement.Item(i).UrlRss
+                    y.ListHttpButton = _ListElement.Item(i).ListHttpButton
+                    y.IDMeteo = _ListElement.Item(i).IDMeteo
+                    y.IDKeyPad = _ListElement.Item(i).IDKeyPad
+                    y.ShowPassWord = _ListElement.Item(i).ShowPassWord
+                    y.ClearAfterEnter = _ListElement.Item(i).ClearAfterEnter
+                    y.ShowClavier = _ListElement.Item(i).ShowClavier
+                    y.Min = _ListElement.Item(i).Min
+                    y.Max = _ListElement.Item(i).Max
+
+                    AddHandler y.ShowZone, AddressOf ElementShowZone
+                    x.Content = y
+                    Canvas1.Children.Add(x)
+                    Canvas.SetLeft(x, _ListElement.Item(i).X)
+                    Canvas.SetTop(x, _ListElement.Item(i).Y)
+                    Canvas.SetZIndex(x, _ListElement.Item(i).ZIndex)
+
+                    x = Nothing
+                    y = Nothing
+                End If
+            Next
+
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ShowZone: " & ex.ToString, "Erreur", "ShowZone")
+        End Try
+    End Sub
+
 
     Private Sub Deplacement_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ChkMove.Click
         Try
@@ -3054,28 +3231,6 @@ Class Window1
         End Try
     End Sub
 
-    Private Sub MnuMacro_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles MnuMacro.MouseDown
-        Try
-            MnuMacro.Items.Clear()
-            For Each _mac As Macro In myService.GetAllMacros(IdSrv)
-                Dim mnu As New MenuItem
-                mnu.Tag = _mac.ID
-                mnu.Header = _mac.Nom
-                mnu.FontSize = 14
-                mnu.Foreground = Brushes.White
-                mnu.Height = 40
-                mnu.Background = MnuMacro.Background
-
-                AddHandler mnu.Click, AddressOf MnuExecuteMacro
-                MnuMacro.Items.Add(mnu)
-            Next
-
-            MnuMacro.UpdateLayout()
-        Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur MnuMacro_MouseDown: " & ex.Message, "Erreur", "MnuMacro_MouseDown")
-        End Try
-    End Sub
-
     Private Sub MnuConfig_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles MnuConfig.Click
         Try
             If VerifPassword() = False Then Exit Sub
@@ -3105,13 +3260,7 @@ Class Window1
 
                     AddHandler mnu.click, AddressOf IconMnuDoubleClick
                 Next
-                'For i As Integer = 0 To ListMnu.Count - 1
-                '    If ListMnu.Item(i).Type = uCtrlImgMnu.TypeOfMnu.Zone Then
-                '        If ListMnu.Item(i).Visible = True Then imgStackPnl.Children.Add(ListMnu.Item(i))
-                '    Else
-                '        imgStackPnl.Children.Add(ListMnu.Item(i))
-                '    End If
-                'Next
+
                 If x.ChkFullScreen.IsChecked = False Then
                     Me.WindowState = Windows.WindowState.Normal
                 Else
@@ -3122,6 +3271,8 @@ Class Window1
             Else
                 x.Close()
             End If
+
+            AfficheStartDefautPage()
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur MnuConfig_Click: " & ex.Message, "Erreur", "MnuConfig_Click")
         End Try
@@ -3223,23 +3374,60 @@ Class Window1
         CtxMnuBtn.PlacementTarget = sender
         CtxMnuBtn.IsOpen = True
 
-        If IsConnect Then
-            MnuLastError.Items.Clear()
-            Dim list As List(Of String) = myService.GetLastLogsError
-            If list.Count > 0 Then
-                Dim _tool As String = ""
-                For Each logerror As String In list
-                    If String.IsNullOrEmpty(logerror) = False Then
-                        Dim mnu As New MenuItem
-                        mnu.Header = logerror
-                        mnu.FontSize = 12
-                        mnu.Foreground = Brushes.Black
-                        MnuLastError.Items.Add(mnu)
-                    End If
+        Try
+            If IsConnect Then
+                MnuLastError.Items.Clear()
+                Dim list As List(Of String) = myService.GetLastLogsError
+                If list.Count > 0 Then
+                    Dim _tool As String = ""
+                    For Each logerror As String In list
+                        If String.IsNullOrEmpty(logerror) = False Then
+                            Dim mnu As New MenuItem
+                            mnu.Header = logerror
+                            mnu.FontSize = 12
+                            mnu.Foreground = Brushes.White
+                            mnu.Background = MnuLastError.Background
+                            Dim imagePath As String = "/HoMIWpF;component/Images/Error.png"
+                            Dim icon As Image = New Image
+                            icon.Width = 32
+                            icon.Height = 32
+                            icon.Source = New BitmapImage(New Uri(imagePath, UriKind.RelativeOrAbsolute))
+                            mnu.Icon = icon
+                            MnuLastError.Items.Add(mnu)
+                        End If
+                    Next
+                End If
+                list = Nothing
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Menu1_MouseDown: " & ex.Message, "Erreur", "Menu1_MouseDown")
+        End Try
+
+        Try
+            MnuMacro.Items.Clear()
+            If IsConnect Then
+                For Each _mac As Macro In myService.GetAllMacros(IdSrv)
+                    Dim mnu As New MenuItem
+                    mnu.Tag = _mac.ID
+                    mnu.Header = _mac.Nom
+                    mnu.FontSize = 14
+                    mnu.Foreground = Brushes.White
+                    mnu.Height = 40
+                    mnu.Background = MnuMacro.Background
+                    Dim imagePath As String = "/HoMIWpF;component/Images/Macro_64.png"
+                    Dim icon As Image = New Image
+                    icon.Width = 32
+                    icon.Height = 32
+                    icon.Source = New BitmapImage(New Uri(imagePath, UriKind.RelativeOrAbsolute))
+                    mnu.Icon = icon
+                    AddHandler mnu.Click, AddressOf MnuExecuteMacro
+                    MnuMacro.Items.Add(mnu)
                 Next
             End If
-            list = Nothing
-        End If
+            MnuMacro.UpdateLayout()
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Menu1_MouseDown: " & ex.Message, "Erreur", "Menu1_MouseDown")
+        End Try
     End Sub
 
 #Region "TaskMenu"
@@ -3287,4 +3475,29 @@ Class Window1
         End Try
     End Sub
 
+    'Affichage des messages erreurs
+    Private Sub ImgMess_PreviewMouseMove(sender As System.Object, e As System.Windows.Input.MouseEventArgs) Handles ImgMess.PreviewMouseMove
+        If AffLastError And IsConnect Then
+            Dim _string As String = ""
+            For Each logerror As String In myService.GetLastLogsError
+                If String.IsNullOrEmpty(logerror) = False Then
+                    _string &= logerror & vbCrLf & vbCrLf
+                    ImgMess.ToolTip = _string
+                End If
+            Next
+        End If
+    End Sub
+
+    Private Function AffMessage() As StackPanel
+        Try
+            Dim stk As New StackPanel
+            stk.Orientation = Orientation.Horizontal
+
+
+
+            Return stk
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur AffMessage: " & ex.Message, "Erreur", "AffMessage")
+        End Try
+    End Function
 End Class
