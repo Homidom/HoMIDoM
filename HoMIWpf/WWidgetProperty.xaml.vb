@@ -40,10 +40,14 @@ Public Class WWidgetProperty
                 lblColor.Background = Obj.ColorBackGround
                 lblColorStatus.Background = Obj.ColorStatus
                 lblColorEtiquette.Background = Obj.ColorEtiquette
+                lblColorBorder.Background = Obj.ColorBorder
                 CbEtiqAlign.SelectedIndex = Obj.EtiquetteAlignement
+                TxtBorderAngle.Text = Obj.CornerRadius
+                TxtBorderSize.Text = Obj.BorderThickness
                 ColorPicker1.SelectedColor = Obj.ColorBackGround
                 ColorPicker2.SelectedColor = Obj.ColorStatus
                 ColorPicker3.SelectedColor = Obj.ColorEtiquette
+                ColorPicker4.SelectedColor = Obj.ColorBorder
                 Slider1.Value = CDec("&H" & Obj.ColorBackGround.ToString.Substring(1, 2))
                 TxtURL.Text = Obj.URL
                 TxtURLRss.Text = Obj.UrlRss
@@ -370,6 +374,9 @@ Public Class WWidgetProperty
                 Exit Sub
             End Try
 
+            Obj.BorderThickness = TxtBorderSize.Text
+            Obj.CornerRadius = TxtBorderAngle.Text
+            Obj.ColorBorder = ColorPicker4.SelectedColor
             Obj.ColorBackGround = lblColor.Background
             Obj.ColorStatus = ColorPicker2.SelectedColor
             Obj.ColorEtiquette = ColorPicker3.SelectedColor
@@ -1363,6 +1370,11 @@ Public Class WWidgetProperty
         lblColorStatus.Background = ColorPicker2.SelectedColor
     End Sub
 
+    Private Sub ColorPicker4_SelectColorChange(ByVal sender As System.Windows.Media.Brush) Handles ColorPicker4.SelectColorChange
+        lblColorBorder.Background = ColorPicker4.SelectedColor
+    End Sub
+
+
     Private Sub Slider1_ValueChanged(sender As Object, e As RoutedPropertyChangedEventArgs(Of Double)) Handles Slider1.ValueChanged
         Dim mycolor As System.Windows.Media.Color
         Dim R, G, B As Byte
@@ -1384,5 +1396,17 @@ Public Class WWidgetProperty
         TxtEtiq.Text = "<" & cbBalise.SelectedItem.Tag & ">"
     End Sub
 
+    Private Sub TxtBorderSize_TextChanged(sender As System.Object, e As System.Windows.Controls.TextChangedEventArgs) Handles TxtBorderSize.TextChanged
+        If IsNumeric(TxtBorderSize.Text) = False Then
+            MessageBox.Show("Veuillez saisir une valeur numérique!", "Erreur", MessageBoxButtons.OK)
+            TxtBorderSize.Text = 1
+        End If
+    End Sub
 
+    Private Sub TxtBorderAngle_TextChanged(sender As System.Object, e As System.Windows.Controls.TextChangedEventArgs) Handles TxtBorderAngle.TextChanged
+        If IsNumeric(TxtBorderAngle.Text) = False Then
+            MessageBox.Show("Veuillez saisir une valeur numérique!", "Erreur", MessageBoxButtons.OK)
+            TxtBorderAngle.Text = 6
+        End If
+    End Sub
 End Class

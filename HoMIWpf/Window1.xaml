@@ -98,8 +98,8 @@
                                     </MenuItem.Background>
 
                                     <MenuItem.Icon>
-                                    <Image Width="40" Height="40"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
-                                </MenuItem.Icon>
+                                        <Image Width="40" Height="40"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
+                                    </MenuItem.Icon>
                                     <MenuItem Name="NewWidgetEmpty" Header="Nouveau Widget Vide" FontSize="14" Foreground="White">
                                         <MenuItem.Background>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -107,6 +107,10 @@
                                                 <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
+
+                                        <MenuItem.Icon>
+                                            <Image Width="40" Height="40"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
+                                        </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem Name="NewWidgetWeb" Header="Nouveau Widget Web" FontSize="14" Foreground="White">
                                         <MenuItem.Background>
@@ -115,6 +119,10 @@
                                                 <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
+
+                                        <MenuItem.Icon>
+                                            <Image Width="40" Height="40"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
+                                        </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem Name="NewWidgetRss" Header="Nouveau Widget Rss" FontSize="14" Foreground="White">
                                         <MenuItem.Background>
@@ -123,6 +131,10 @@
                                                 <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
+
+                                        <MenuItem.Icon>
+                                            <Image Width="40" Height="40"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
+                                        </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem Name="NewWidgetMeteo" Header="Nouveau Widget Meteo" FontSize="14" Foreground="White">
                                         <MenuItem.Background>
@@ -131,6 +143,10 @@
                                                 <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
+
+                                        <MenuItem.Icon>
+                                            <Image Width="40" Height="40"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
+                                        </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem Name="NewWidgetKeyPad" Header="Nouveau Widget KeyPad" FontSize="14" Foreground="White">
                                         <MenuItem.Background>
@@ -139,6 +155,10 @@
                                                 <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
+
+                                        <MenuItem.Icon>
+                                            <Image Width="40" Height="40"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
+                                        </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem Name="NewWidgetLabel" Header="Nouveau Widget Label" FontSize="14" Foreground="White">
                                         <MenuItem.Background>
@@ -147,6 +167,10 @@
                                                 <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
+
+                                        <MenuItem.Icon>
+                                            <Image Width="40" Height="40"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
+                                        </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem Name="NewWidgetCamera" Header="Nouveau Widget Camera" FontSize="14" Foreground="White">
                                         <MenuItem.Background>
@@ -155,6 +179,10 @@
                                                 <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
+
+                                        <MenuItem.Icon>
+                                            <Image Width="40" Height="40"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
+                                        </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem Name="NewWidgetImage" Header="Nouveau Widget Image" FontSize="14" Foreground="White">
                                         <MenuItem.Background>
@@ -163,6 +191,10 @@
                                                 <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
+
+                                        <MenuItem.Icon>
+                                            <Image Width="40" Height="40"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
+                                        </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem Name="NewWidgetVolet" Header="Nouveau Widget Volet" FontSize="14" Foreground="White">
                                         <MenuItem.Background>
@@ -171,6 +203,10 @@
                                                 <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
+
+                                        <MenuItem.Icon>
+                                            <Image Width="40" Height="40"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
+                                        </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem Name="NewWidgetMoteur" Header="Nouveau Widget Moteur" FontSize="14" Foreground="White">
                                         <MenuItem.Background>
@@ -179,6 +215,10 @@
                                                 <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
+
+                                        <MenuItem.Icon>
+                                            <Image Width="40" Height="40"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
+                                        </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem Name="NewWidgetPrise" Header="Nouveau Widget Prise" FontSize="14" Foreground="White">
                                         <MenuItem.Background>
@@ -187,6 +227,10 @@
                                                 <GradientStop Color="#FF4B4B4B" Offset="0.663" />
                                             </LinearGradientBrush>
                                         </MenuItem.Background>
+
+                                        <MenuItem.Icon>
+                                            <Image Width="40" Height="40"  Source="/HoMIWpF;component/Images/ajouter_32.png" />
+                                        </MenuItem.Icon>
                                     </MenuItem>
 
                                 </MenuItem>

@@ -8289,6 +8289,31 @@ Namespace HoMIDom
         End Function
 
         ''' <summary>
+        ''' Retourne un template via son ID
+        ''' </summary>
+        ''' <returns>List of Templates</returns>
+        ''' <remarks></remarks>
+        Public Function GetTemplateFromID(ID As String) As Telecommande.Template Implements IHoMIDom.GetTemplateFromID
+            Try
+                Dim Tabl As New List(Of Telecommande.Template)
+                Dim _template As Telecommande.Template = Nothing
+                Tabl = Me.GetListOfTemplate
+                
+                For Each _tpl In Tabl
+                    If _tpl.ID = ID Then
+                        _template = _tpl
+                        Exit For
+                    End If
+                Next
+
+                Return _template
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetTemplateFromID", "Erreur : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>
         ''' Crée un nouveau template dans le répertoire templates
         ''' </summary>
         ''' <returns>0 si ok, sinon message d'erreur</returns>

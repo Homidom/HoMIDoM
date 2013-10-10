@@ -1161,6 +1161,13 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         <OperationContract()> Function GetListOfTemplate() As List(Of Telecommande.Template)
 
+        ''' <summary>
+        ''' Retourne un template via son ID
+        ''' </summary>
+        ''' <returns>List of Templates</returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetTemplateFromID(ID As String) As Telecommande.Template
+
         '''' <param name="Fabricant">nom du fabricant</param>
         '''' <param name="Modele">modele</param>
         '''' <param name="Driver">driver</param>
