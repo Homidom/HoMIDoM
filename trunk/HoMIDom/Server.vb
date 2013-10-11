@@ -444,7 +444,7 @@ Namespace HoMIDom
         '    Try
 
         '    Catch ex As Exception
-        '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveFileToSrv", "Exception : " & ex.ToString)
+        '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveFileToSrv", "Exception : " & ex.message)
         '    End Try
         'End Function
 
@@ -692,7 +692,7 @@ Namespace HoMIDom
                             End If
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres du serveur chargés")
                         Catch ex As Exception
-                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement de la configuraion du serveur : " & ex.ToString)
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement de la configuraion du serveur : " & ex.message)
                         End Try
 
                         '********************************
@@ -755,7 +755,7 @@ Namespace HoMIDom
                                 Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucun driver n'est enregistré dans le fichier de config")
                             End If
                         Catch ex As Exception
-                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des drivers : " & ex.ToString)
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des drivers : " & ex.message)
                         End Try
 
                         '******************************************
@@ -815,7 +815,7 @@ Namespace HoMIDom
                             End If
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListZones.Count & " Zone(s) chargée(s)")
                         Catch ex As Exception
-                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des zones : " & ex.ToString)
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des zones : " & ex.message)
                         End Try
 
                         '******************************************
@@ -883,7 +883,7 @@ Namespace HoMIDom
                             End If
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListUsers.Count & " Utilisateur(s) chargé(s)")
                         Catch ex As Exception
-                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des utilisateurs : " & ex.ToString)
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des utilisateurs : " & ex.message)
                         End Try
 
 
@@ -927,7 +927,7 @@ Namespace HoMIDom
                             End If
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListNewDevices.Count & " nouveau(x) chargé(s)")
                         Catch ex As Exception
-                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des nouveaux devices : " & ex.ToString)
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des nouveaux devices : " & ex.message)
                         End Try
 
 
@@ -1220,7 +1220,7 @@ Namespace HoMIDom
                             End If
                             list = Nothing
                         Catch ex As Exception
-                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des Composants : " & ex.ToString)
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des Composants : " & ex.message)
                         End Try
 
                         '******************************************
@@ -1273,7 +1273,7 @@ Namespace HoMIDom
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListTriggers.Count & " Trigger(s) chargé(s)")
                             list = Nothing
                         Catch ex As Exception
-                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des triggers : " & ex.ToString)
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des triggers : " & ex.message)
                         End Try
 
                         '******************************************
@@ -1305,7 +1305,7 @@ Namespace HoMIDom
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListMacros.Count & " Macro(s) chargée(s)")
                             list = Nothing
                         Catch ex As Exception
-                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des macros : " & ex.ToString)
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des macros : " & ex.message)
                         End Try
 
                         Exit For
@@ -1325,7 +1325,7 @@ Namespace HoMIDom
                 Return " Chargement de la configuration terminée"
 
             Catch ex As Exception
-                Return " Erreur de chargement de la config: " & ex.ToString
+                Return " Erreur de chargement de la config: " & ex.message
             End Try
         End Function
 
@@ -1521,7 +1521,7 @@ Namespace HoMIDom
                     Next
                 End If
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadAction", ex.ToString)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadAction", ex.message)
             End Try
         End Sub
 
@@ -2588,7 +2588,7 @@ Namespace HoMIDom
                             End If
                         Next
                     Catch ex As Exception
-                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Load", " Erreur lors du chargement du driver: " & fi.Name & " Err: " & ex.ToString)
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Load", " Erreur lors du chargement du driver: " & fi.Name & " Err: " & ex.Message)
                     End Try
                 Next
 
@@ -2865,15 +2865,15 @@ Namespace HoMIDom
                     End SyncLock
                 Catch ex As IOException
                     'wait(500)
-                    Console.WriteLine(Now & " " & TypLog & " SERVER LOG ERROR IOException : " & ex.ToString)
+                    Console.WriteLine(Now & " " & TypLog & " SERVER LOG ERROR IOException : " & ex.Message)
                 Catch ex As Exception
                     'wait(500)
-                    Console.WriteLine(Now & " " & TypLog & " SERVER LOG ERROR Exception : " & ex.ToString)
+                    Console.WriteLine(Now & " " & TypLog & " SERVER LOG ERROR Exception : " & ex.Message)
                 End Try
                 texte = Nothing
                 FreeF = Nothing
             Catch ex As Exception
-                Console.WriteLine("Erreur lors de l'écriture d'un log: " & ex.ToString, MsgBoxStyle.Exclamation, "Erreur Serveur")
+                Console.WriteLine("Erreur lors de l'écriture d'un log: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
             End Try
         End Sub
 
@@ -2927,7 +2927,7 @@ Namespace HoMIDom
                 'Diagnostics.EventLog.WriteEntry("HoMIDoM", message)
                 myEventLog = Nothing
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LogEvent", "Exception : " & ex.ToString)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LogEvent", "Exception : " & ex.Message)
             End Try
         End Sub
 
@@ -2963,7 +2963,7 @@ Namespace HoMIDom
         '        rw.WriteEndDocument()
         '        rw.Close()
         '    Catch ex As Exception
-        '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CreateNewFileLog", "Erreur: " & ex.ToString)
+        '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CreateNewFileLog", "Erreur: " & ex.message)
         '    End Try
         'End Sub
 #End Region
@@ -3329,7 +3329,7 @@ Namespace HoMIDom
                         CType(request, HttpWebRequest).UserAgent = "Other"
                         Dim response As WebResponse = request.GetResponse()
                     Catch ex As Exception
-                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start OpenWebPage", "Exception : " & ex.ToString)
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start OpenWebPage", "Exception : " & ex.Message)
                     End Try
 
                     'Gestion clé enregistrement
@@ -3358,7 +3358,7 @@ Namespace HoMIDom
                             CType(request, HttpWebRequest).UserAgent = "Other"
                             Dim response As WebResponse = request.GetResponse()
                         Catch ex As Exception
-                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start OpenWebPage", "Exception : " & ex.ToString)
+                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start OpenWebPage", "Exception : " & ex.Message)
                         End Try
 
                         'Dim startInfo As ProcessStartInfo = New ProcessStartInfo()
@@ -3491,7 +3491,7 @@ Namespace HoMIDom
                     mymacro = Nothing
                 End If
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Macro:Action", ex.ToString)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Macro:Action", ex.Message)
             End Try
         End Sub
 #End Region
@@ -4168,7 +4168,7 @@ Namespace HoMIDom
                 Return retour
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CanDelete", "Erreur : " & ex.Message)
-                retour.Add("ERREUR lors de l'exécution de la fonction: " & ex.ToString)
+                retour.Add("ERREUR lors de l'exécution de la fonction: " & ex.Message)
                 Return retour
             End Try
         End Function
@@ -4231,7 +4231,7 @@ Namespace HoMIDom
                 retour.Add("0")
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "_CanDelete", "Erreur : " & ex.Message)
-                retour.Add("ERREUR lors de l'exécution de la fonction: " & ex.ToString)
+                retour.Add("ERREUR lors de l'exécution de la fonction: " & ex.Message)
                 retour.Add("0")
             End Try
         End Sub
@@ -4305,8 +4305,8 @@ Namespace HoMIDom
                     End Select
                 Next
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "VerifIdInAction", "Erreur : " & ex.ToString)
-                AddLabel(Retour, "ERREUR lors de l'exécution de la fonction: " & ex.ToString)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "VerifIdInAction", "Erreur : " & ex.Message)
+                AddLabel(Retour, "ERREUR lors de l'exécution de la fonction: " & ex.Message)
             End Try
         End Sub
 
@@ -4516,7 +4516,7 @@ Namespace HoMIDom
 
                 Return 0
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Upload", "Exception : " & ex.ToString)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Upload", "Exception : " & ex.Message)
                 Return ex.Message
             End Try
         End Function
@@ -5190,7 +5190,7 @@ Namespace HoMIDom
 
             Catch ex As Exception
                 If DeleteFileAfterImport = True Then IO.File.Delete(fichier)
-                Return "ERR: Erreur à l'importation de " & fichier & ". Erreur: " & ex.ToString
+                Return "ERR: Erreur à l'importation de " & fichier & ". Erreur: " & ex.Message
             End Try
         End Function
 
@@ -5608,7 +5608,7 @@ Namespace HoMIDom
                 Next
                 Return retour
             Catch ex As Exception
-                Return "Une erreur est apparue lors de la vérification du champ " & Champ & ": " & ex.ToString
+                Return "Une erreur est apparue lors de la vérification du champ " & Champ & ": " & ex.Message
             End Try
         End Function
 
@@ -6372,7 +6372,7 @@ Namespace HoMIDom
                 _list.Sort(AddressOf sortDevice)
                 Return _list
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllDevices", "Exception : " & ex.ToString)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllDevices", "Exception : " & ex.Message)
                 Return Nothing
             End Try
         End Function
@@ -6647,7 +6647,7 @@ Namespace HoMIDom
 
                 Return myID
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveDevice", "Exception : " & ex.ToString)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveDevice", "Exception : " & ex.Message)
                 Return "-1"
             End Try
         End Function
@@ -7194,7 +7194,7 @@ Namespace HoMIDom
                     Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "non effectué car le composant n'a pas été trouvé : " & DeviceId)
                 End If
             Catch ex As Exception
-                Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "Erreur lors du traitemant : " & ex.ToString)
+                Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "Erreur lors du traitemant : " & ex.Message)
             End Try
         End Sub
 
@@ -7260,7 +7260,7 @@ Namespace HoMIDom
                     Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDeviceCommandSimple", "ExecuteDeviceCommandSimple non effectué car le composant n'a pas été trouvé : " & DeviceId)
                 End If
             Catch ex As Exception
-                Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDeviceCommandSimple", "Erreur lors du traitemant : " & ex.ToString)
+                Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDeviceCommandSimple", "Erreur lors du traitemant : " & ex.Message)
             End Try
         End Sub
 
@@ -7872,7 +7872,7 @@ Namespace HoMIDom
                                 If Not IsNothing(_ListTriggers.Item(i).ConditionDeviceProperty) Then .ConditionDeviceProperty = _ListTriggers.Item(i).ConditionDeviceProperty
                                 If Not IsNothing(_ListTriggers.Item(i).ListMacro) Then .ListMacro = _ListTriggers.Item(i).ListMacro
                             Catch ex As Exception
-                                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllTriggers", "Exception part2 : " & .Nom & " ---" & ex.ToString)
+                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllTriggers", "Exception part2 : " & .Nom & " ---" & ex.Message)
                             End Try
 
                     End With
@@ -7882,7 +7882,7 @@ Namespace HoMIDom
                 _list.Sort(AddressOf sortTrigger)
                 Return _list
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllTriggers", "Exception : " & ex.ToString)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllTriggers", "Exception : " & ex.Message)
                 Return Nothing
             End Try
         End Function
@@ -7971,7 +7971,7 @@ Namespace HoMIDom
 
                 Return myID
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveTrigger", "Exception : " & ex.Message & vbCrLf & ex.ToString)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveTrigger", "Exception : " & ex.Message & vbCrLf & ex.Message)
                 Return "-1"
             End Try
         End Function
@@ -8419,7 +8419,7 @@ Namespace HoMIDom
 
                 Return _list
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReadTemplate", "Erreur : " & ex.ToString)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReadTemplate", "Erreur : " & ex.Message)
                 Return Nothing
             End Try
         End Function
@@ -8518,8 +8518,8 @@ Namespace HoMIDom
 
                 Return "Erreur: le device n'a pas été trouvé"
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TelecommandeSendCommand", "Erreur : " & ex.ToString)
-                Return "Erreur lors du traitement de la fonction TelecommandeSendCommand: " & ex.ToString
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TelecommandeSendCommand", "Erreur : " & ex.Message)
+                Return "Erreur lors du traitement de la fonction TelecommandeSendCommand: " & ex.Message
             End Try
         End Function
 #End Region
@@ -8659,7 +8659,7 @@ Namespace HoMIDom
                 End If
                 Return retour
             Catch ex As Exception
-                ReturnLog = "Erreur lors de la récupération du log: " & ex.ToString
+                ReturnLog = "Erreur lors de la récupération du log: " & ex.message
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnLog", "Exception : " & ex.Message)
             End Try
         End Function
@@ -8711,7 +8711,7 @@ Namespace HoMIDom
                 SR.Close()
                 Return retour
             Catch ex As Exception
-                Return "ERREUR lors de l'exportation du fichier de config: " & ex.ToString
+                Return "ERREUR lors de l'exportation du fichier de config: " & ex.message
             End Try
         End Function
 
@@ -8737,7 +8737,7 @@ Namespace HoMIDom
 
                 Return "0"
             Catch ex As Exception
-                Return "Erreur lors de l'importation du fichier de config: " & ex.ToString
+                Return "Erreur lors de l'importation du fichier de config: " & ex.message
             End Try
         End Function
 
@@ -8860,7 +8860,7 @@ Namespace HoMIDom
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "CleanLog", cnt & " Fichier(s) log supprimé(s)")
                 Return 0
             Catch ex As Exception
-                Return "ERR:" & ex.ToString
+                Return "ERR:" & ex.message
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CleanLog", "Erreur: " & ex.Message)
             End Try
         End Function
