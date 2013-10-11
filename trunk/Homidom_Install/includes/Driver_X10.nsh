@@ -5,7 +5,9 @@
     File "..\RELEASE\Drivers\Driver_X10_CM15.dll"
     ${If} ${RunningX64}
       File  "..\Dll_externes\Homidom-64bits\Drivers\Cm11.dll"
+      File  "..\Dll_externes\Homidom-64bits\Drivers\Interop.ActiveHomeScriptLib.dll"
     ${Else}
       File  "..\Dll_externes\Homidom-32bits\Drivers\Cm11.dll"
+      File  "..\Dll_externes\Homidom-32bits\Drivers\Interop.ActiveHomeScriptLib.dll"
     ${EndIf}
   SectionEnd
