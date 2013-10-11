@@ -553,7 +553,7 @@ Namespace HoMIDom
             objCompilerParameters.ReferencedAssemblies.Add("System.dll")
             objCompilerParameters.ReferencedAssemblies.Add("System.Windows.Forms.dll")
             objCompilerParameters.ReferencedAssemblies.Add("Microsoft.VisualBasic.dll")
-            objCompilerParameters.ReferencedAssemblies.Add("Homidom.dll")
+            objCompilerParameters.ReferencedAssemblies.Add(My.Application.Info.DirectoryPath + "\Homidom.dll")
             objCompilerParameters.GenerateInMemory = True
 
             '
