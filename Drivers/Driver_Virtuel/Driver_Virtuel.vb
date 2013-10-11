@@ -1,6 +1,7 @@
 ﻿Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
+Imports HoMIDom.HoMIDom
 
 ' Auteur : xxx
 ' Date : 01/01/2011
@@ -394,7 +395,7 @@ Imports HoMIDom.HoMIDom.Device
                 If Command = "" Then
                     Return False
                 Else
-                    'Write(deviceobject, Command, Param(0), Param(1))
+                    Write(MyDevice, Command, Param(0))
                     Select Case UCase(Command)
                         Case ""
                         Case Else
@@ -511,6 +512,39 @@ Imports HoMIDom.HoMIDom.Device
                     Objet.Value = Parametre1
                 End If
             End If
+            
+            If UCase(Command) = "OPERATION" Then      'ID:###########OP:-ID:############OP:+NB:2 --> composant1-composant2+2
+                If Parametre1 IsNot Nothing Then
+                    If InStr(Parametre1, "OP:") Then
+                        Dim rValue As Double
+                        Dim TabOp As String() = {"+", "-", "*", "/", "^"}
+                        Dim op As String = Mid(Parametre1, InStr(Parametre1, "OP:") + 3, 1)
+                        If TabOp.Contains(op) Then
+                            Dim Param = Split(Parametre1, "OP:" & op)
+                            For i As Integer = 0 To Param.Count - 1
+                                If Param(i) IsNot Nothing Then
+                                    If InStr(Param(i), ":") Then
+                                        rValue = Eval(rValue & op & Decode(Param(i)))
+                                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write Opération", "Opération: " & op & Decode(Param(i)) & " Egal: " & rValue)
+                                    Else
+                                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write Opération", "Il manque le type d'opérande (NB: ou ID:) dans l'expression " & Param(i))
+                                    End If
+                                Else
+                                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write Opération", "Le parametre " & i & " est incorrecte ")
+                                End If
+                            Next
+                            Objet.setValue(rValue)
+                        Else
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write Opération", "L'opérateur n'existe pas ")
+                        End If
+                    Else
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write Opération", "Il manque OP: ")
+                    End If
+                Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write Opération", "Il manque le Parametre1 ")
+                End If
+            End If
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", ex.Message)
         End Try
@@ -547,8 +581,8 @@ Imports HoMIDom.HoMIDom.Device
         Try
             Dim x As New DeviceCommande
             x.NameCommand = Nom
-            x.DescriptionCommand = description
-            x.CountParam = nbparam
+            x.DescriptionCommand = Description
+            x.CountParam = NbParam
             _DeviceCommandPlus.Add(x)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
@@ -633,7 +667,8 @@ Imports HoMIDom.HoMIDom.Device
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
-            'add_devicecommande("PRESETDIM", "permet de paramétrer le DIM : param1=niveau, param2=timer", 2)
+            Add_DeviceCommande("Operation", "Permet de faire une opération de composants ou/et de nombres : param1+param2+param3+...(ID: ou NB:) avec OP:+ ou OP:- ou OP:* ou OP:/", 1)
+
 
             'Libellé Driver
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
@@ -662,6 +697,57 @@ Imports HoMIDom.HoMIDom.Device
 
 #Region "Fonctions internes"
     'Insérer ci-dessous les fonctions propres au driver et nom communes (ex: start)
+
+    Private Function Decode(ByVal msg As String) As Double
+
+        Dim ParaAdr2 = Split(msg, ":")
+        Dim ValueR As Double
+
+        Select Case ParaAdr2(0).ToUpper
+            Case "ID"
+                Dim TempDevice As TemplateDevice = _Server.ReturnDeviceById(_IdSrv, ParaAdr2(1))
+                If TempDevice IsNot Nothing Then
+                    ValueR = TempDevice.Value
+                Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Decodage", "le composant qu a l'ID " & ParaAdr2(1) & " n'existe pas")
+                End If
+            Case "NB"
+                ValueR = ParaAdr2(1)
+            Case Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Decodage", "la commande " & ParaAdr2(0) & " n'existe pas")
+        End Select
+
+        Return ValueR
+
+    End Function
+
+    Private Function Eval(ByVal command As String) As Object
+        Dim MyProvider As New VBCodeProvider
+        Dim cp As New CodeDom.Compiler.CompilerParameters
+
+        cp.GenerateExecutable = False
+        cp.GenerateInMemory = True
+
+        Dim ClassName As String = "class" & Now.Ticks
+        Dim TempModuleSource As String = "Imports System" & Environment.NewLine & _
+                                         "Namespace ns " & Environment.NewLine & _
+                                         "    Public Class " & ClassName & Environment.NewLine & _
+                                         "        Public Shared Function Evaluate()" & Environment.NewLine & _
+                                         "            Return (" & command & ")" & Environment.NewLine & _
+                                         "        End Function" & Environment.NewLine & _
+                                         "    End Class" & Environment.NewLine & _
+                                         "End Namespace"
+        Dim cr As CodeDom.Compiler.CompilerResults = MyProvider.CompileAssemblyFromSource(cp, TempModuleSource)
+
+        If cr.Errors.Count > 0 Then
+            Return Nothing
+        Else
+
+            Dim methInfo As Reflection.MethodInfo = cr.CompiledAssembly.GetType("ns." & ClassName).GetMethod("Evaluate")
+
+            Return methInfo.Invoke(methInfo, New Object() {})
+        End If
+    End Function
 
 #End Region
 
