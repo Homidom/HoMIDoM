@@ -26,39 +26,54 @@ Partial Public Class uLog
                 TargetFile.Close()
 
                 Dim tr As TextReader = New StreamReader(MyRepAppData & "\log.txt")
-                Dim lineCount As Integer = 1
+                'Dim lineCount As Integer = 1
 
                 While tr.Peek() >= 0
                     Try
                         Dim line As String = tr.ReadLine()
 
-                        Dim tmp As String() = line.Trim.Split(vbTab)
-                        Dim data As String() = Nothing
+                        If line <> "" Then
+                            Dim tmp As String() = line.Trim.Split(vbTab)
+                            'Dim data As String() = Nothing
+                            'If tmp.Length < 6 And tmp.Length > 3 Then
+                            '    If tmp(4).Length > 255 Then tmp(4) = Mid(tmp(4), 1, 255)
+                            '    data = tmp
+                            'Else
+                            '    _LigneIgnorees += 1
+                            'End If
 
-                        If tmp.Length < 6 And tmp.Length > 3 Then
-                            If tmp(4).Length > 255 Then tmp(4) = Mid(tmp(4), 1, 255)
-                            data = tmp
-                        Else
-                            _LigneIgnorees += 1
+                            '' creates a dictionary where the column name is the key and
+                            ''    and the data is the value
+                            'Dim sensorData As New Dictionary(Of String, Object)
+
+                            'If data IsNot Nothing Then
+                            '    For i As Integer = 0 To data.Length - 1
+                            '        sensorData(keys(i)) = data(i)
+                            '    Next
+                            '    ligneLog.Add(sensorData)
+                            'End If
+
+                            'sensorData = Nothing
+
+                            If tmp.Length < 6 And tmp.Length > 3 Then
+                                If tmp(4).Length > 255 Then tmp(4) = Mid(tmp(4), 1, 255)
+                                Dim sensorData As New Dictionary(Of String, Object) ' creates a dictionary where column name is the key and data is the value
+                                For i As Integer = 0 To tmp.Length - 1
+                                    sensorData(keys(i)) = tmp(i)
+                                Next
+                                ligneLog.Add(sensorData)
+                                sensorData = Nothing
+                            Else
+                                _LigneIgnorees += 1
+                            End If
+                            'lineCount += 1
                         End If
-
-                        ' creates a dictionary where the column name is the key and
-                        '    and the data is the value
-                        Dim sensorData As New Dictionary(Of String, Object)
-
-                        If data IsNot Nothing Then
-                            For i As Integer = 0 To data.Length - 1
-                                sensorData(keys(i)) = data(i)
-                            Next
-                            ligneLog.Add(sensorData)
-                        End If
-
-                        sensorData = Nothing
-                        lineCount += 1
                     Catch ex As Exception
                         AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la ligne du fichier log: " & ex.ToString, "ERREUR", "")
                     End Try
                 End While
+                tr.Close()
+
                 Try
                     If File.Exists(MyRepAppData & "\log.txt") Then
                         File.Delete(MyRepAppData & "\log.txt")

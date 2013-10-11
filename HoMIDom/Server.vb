@@ -2598,7 +2598,7 @@ Namespace HoMIDom
                 aryFi = Nothing
                 fi = Nothing
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Load", " Erreur lors du chargement des drivers: " & ex.ToString)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Load", " Erreur lors du chargement des drivers: " & ex.Message)
             End Try
         End Sub
 
