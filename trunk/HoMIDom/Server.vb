@@ -3150,10 +3150,6 @@ Namespace HoMIDom
                 'test log
                 CleanLog(_MaxMonthLog)
 
-                Dim _devstart As Object = ReturnRealDeviceById("startsrv01")
-                If _devstart IsNot Nothing Then _devstart.value = True
-                _devstart = Nothing
-
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Serveur démarré")
 
             Catch ex As Exception
@@ -3388,6 +3384,16 @@ Namespace HoMIDom
             'Change l'etat du server
             Etat_server = True
 
+            'passage du composant HOMI_SERVER à True
+            Try
+                Dim _devstart As Object = ReturnRealDeviceById("startsrv01")
+                If _devstart IsNot Nothing Then _devstart.value = True
+                _devstart = Nothing
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Start Homi_server", "Exception : " & ex.Message)
+            End Try
+
+
         End Sub
 
         ''' <summary>Arrêt du serveur</summary>
@@ -3397,6 +3403,11 @@ Namespace HoMIDom
                 If VerifIdSrv(IdSrv) = False Then
                     Exit Sub
                 End If
+
+                'passage du composant HOMI_SERVER à False
+                Dim _devstart As Object = ReturnRealDeviceById("startsrv01")
+                If _devstart IsNot Nothing Then _devstart.value = False
+                _devstart = Nothing
 
                 'on change l'etat du server pour ne plus lancer de traitement
                 Etat_server = False
@@ -8293,12 +8304,12 @@ Namespace HoMIDom
         ''' </summary>
         ''' <returns>List of Templates</returns>
         ''' <remarks></remarks>
-        Public Function GetTemplateFromID(ID As String) As Telecommande.Template Implements IHoMIDom.GetTemplateFromID
+        Public Function GetTemplateFromID(ByVal ID As String) As Telecommande.Template Implements IHoMIDom.GetTemplateFromID
             Try
                 Dim Tabl As New List(Of Telecommande.Template)
                 Dim _template As Telecommande.Template = Nothing
                 Tabl = Me.GetListOfTemplate
-                
+
                 For Each _tpl In Tabl
                     If _tpl.ID = ID Then
                         _template = _tpl
