@@ -1157,7 +1157,7 @@ Namespace HoMIDom
                                             X = Nothing
                                         End If
                                         If String.IsNullOrEmpty(.ID) = False And String.IsNullOrEmpty(.Name) = False And String.IsNullOrEmpty(.Adresse1) = False And String.IsNullOrEmpty(.DriverId) = False Then
-                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
+                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ") --> " & .Value)
                                             If .ID = "soleil01" Then
                                                 trvSoleil = True
                                             End If
