@@ -1119,9 +1119,6 @@ Namespace HoMIDom
                                             .Picture = _MonRepertoire & "\images\icones\composant_128.png"
                                         End If
                                         If (Not list.Item(j).Attributes.GetNamedItem("solo") Is Nothing) Then .Solo = list.Item(j).Attributes.GetNamedItem("solo").Value
-                                        If (Not list.Item(j).Attributes.GetNamedItem("value") Is Nothing) Then .Value = Regex.Replace(list.Item(j).Attributes.GetNamedItem("value").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                                        If (Not list.Item(j).Attributes.GetNamedItem("valuelast") Is Nothing) Then .ValueLast = Regex.Replace(list.Item(j).Attributes.GetNamedItem("valuelast").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-
                                         If (Not list.Item(j).Attributes.GetNamedItem("lastetat") Is Nothing) Then .LastEtat = list.Item(j).Attributes.GetNamedItem("lastetat").Value
                                         '-- propriétés generique value --
                                         If _Dev.Type = "BAROMETRE" _
@@ -1146,6 +1143,9 @@ Namespace HoMIDom
                                             If (Not list.Item(j).Attributes.GetNamedItem("correction") Is Nothing) Then .Correction = list.Item(j).Attributes.GetNamedItem("correction").Value
                                             If (Not list.Item(j).Attributes.GetNamedItem("formatage") Is Nothing) Then .Formatage = list.Item(j).Attributes.GetNamedItem("formatage").Value
                                         End If
+                                        If (Not list.Item(j).Attributes.GetNamedItem("value") Is Nothing) Then .Value = Regex.Replace(list.Item(j).Attributes.GetNamedItem("value").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                        If (Not list.Item(j).Attributes.GetNamedItem("valuelast") Is Nothing) Then .ValueLast = Regex.Replace(list.Item(j).Attributes.GetNamedItem("valuelast").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+
                                         '-- cas spécifique du multimedia pour récupérer les commandes IR --
                                         'Verifie si prob de MaJ
                                         If .LastChangeDuree > 0 Then
