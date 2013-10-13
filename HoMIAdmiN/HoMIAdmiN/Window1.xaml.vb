@@ -1974,7 +1974,7 @@ Class Window1
                                     If retour <> "0" Then
                                         AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, retour, "Erreur import config", "")
                                     Else
-                                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'import du fichier de configuration a été effectué, l'ancien fichier a été renommé en .old, veuillez redémarrer le serveur pour prendre en compte cette nouvelle configuration", "Import config", "")
+                                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "L'import du fichier de configuration a été effectué, l'ancien fichier a été renommé en .old, veuillez redémarrer le serveur pour prendre en compte cette nouvelle configuration", "Import config", "")
                                     End If
                                 End If
                             Catch ex As Exception
@@ -2001,7 +2001,7 @@ Class Window1
                                         TargetFile = New StreamWriter(filename, False)
                                         TargetFile.Write(retour)
                                         TargetFile.Close()
-                                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'export du fichier de configuration a été effectué", "Export config", "")
+                                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "L'export du fichier de configuration a été effectué", "Export config", "")
                                     End If
                                 End If
                             Catch ex As Exception
@@ -2018,7 +2018,7 @@ Class Window1
                                 If retour <> "0" Then
                                     AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", "")
                                 Else
-                                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Enregistrement effectué", "HomIAdmin", "")
+                                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "Enregistrement effectué", "HomIAdmin", "")
                                     FlagChange = False
                                 End If
                             Catch ex As Exception
@@ -2038,7 +2038,7 @@ Class Window1
                                             If retour <> "0" Then
                                                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement veuillez consulter le log", "HomIAdmin", "")
                                             Else
-                                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Enregistrement effectué", "HomIAdmin", "")
+                                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "Enregistrement effectué", "HomIAdmin", "")
                                                 FlagChange = False
                                             End If
                                         End If
