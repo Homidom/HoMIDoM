@@ -7940,7 +7940,7 @@ Namespace HoMIDom
                                 x.ListMacro = macro
                             End If
                         End If
-
+                        If TypeTrigger = Trigger.TypeTrigger.TIMER Then x.maj_cron()
                     End With
                     myID = x.ID
                     _ListTriggers.Add(x)
@@ -7964,6 +7964,7 @@ Namespace HoMIDom
                                     _ListTriggers.Item(i).ConditionDeviceProperty = deviceproperty
                             End Select
                             If macro IsNot Nothing Then _ListTriggers.Item(i).ListMacro = macro
+                            If TypeTrigger = Trigger.TypeTrigger.TIMER Then _ListTriggers.Item(i).maj_cron()
                             SaveRealTime()
                         End If
                     Next
@@ -8643,10 +8644,14 @@ Namespace HoMIDom
             Try
                 Dim retour As String = ""
                 If String.IsNullOrEmpty(Requete) = True Then
-                    Dim SR As New StreamReader(_MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt")
-                    retour = SR.ReadToEnd()
-                    retour = HtmlDecode(retour)
-                    SR.Close()
+                    If System.IO.File.Exists(_MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt") Then
+                        Dim SR As New StreamReader(_MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt")
+                        retour = SR.ReadToEnd()
+                        retour = HtmlDecode(retour)
+                        SR.Close()
+                    Else
+                        retour = ""
+                    End If
                 Else
                     'creation d'une nouvelle instance du membre xmldocument
                     Dim XmlDoc As XmlDocument = New XmlDocument()
@@ -8659,7 +8664,7 @@ Namespace HoMIDom
                 End If
                 Return retour
             Catch ex As Exception
-                ReturnLog = "Erreur lors de la récupération du log: " & ex.message
+                ReturnLog = "Erreur lors de la récupération du log: " & ex.Message
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnLog", "Exception : " & ex.Message)
             End Try
         End Function

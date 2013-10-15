@@ -26,7 +26,7 @@ Public Class uTriggerDevice
 
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             If _Action = EAction.Nouveau Then 'Nouveau Trigger
-
+                ChkEnable.IsChecked = True
             Else 'Modifier Trigger
                 Dim x As HoMIDom.HoMIDom.Trigger = myService.ReturnTriggerById(IdSrv, _TriggerId)
 

@@ -135,14 +135,22 @@ Namespace Dynam
    
   'Ne pas supprimer cette function 
   Public Function ExecuteCode(paramarray prmParameters() as object) as object
-   Dim objTest as new TestClass
-   Dim strTest as String=objTest.Test
-   Dim Serveur as Homidom.Homidom.server
+    Dim objTest as new TestClass
+    Dim strTest as String=objTest.Test
+    Dim Serveur as Homidom.Homidom.server
 
-   Serveur=prmParameters(0)
-   AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR,strTest)
-   AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR,1*2*3)
-   AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "You passed in parameter: " &amp; Serveur.GetTime)
+    Serveur=prmParameters(0)
+    'log en info
+    Serveur.log(1, 2, "Macro VB:XXX", "Test: " &amp; strTest  &amp; " Heure: " &amp; Serveur.GetTime)
+    'log en erreur
+    Serveur.log(8, 2, "Macro VB:XXX", "Test: " &amp; strTest  &amp; " Heure: " &amp; Serveur.GetTime)
+    'log en debug
+    Serveur.log(10, 2, "Macro VB:XXX", "Test: " &amp; strTest  &amp; " Heure: " &amp; Serveur.GetTime)
+
+    'get valeu of composant
+    Dim ComposantX as Homidom.Homidom.TemplateDevice = Serveur.ReturnDeviceById("123456789","idducomposant")
+    'update another composant
+    Serveur.ChangeValueOfDevice("123456789","idducomposant2",(ComposantX * 25))
   End Function
 
  End Class
