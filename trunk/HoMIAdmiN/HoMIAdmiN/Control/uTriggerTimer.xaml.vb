@@ -25,7 +25,7 @@ Public Class uTriggerTimer
 
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             If _Action = EAction.Nouveau Then 'Nouveau Trigger
-
+                ChkEnable.IsChecked = True
             Else 'Modifier Trigger
                 Dim x As HoMIDom.HoMIDom.Trigger = myService.ReturnTriggerById(IdSrv, _TriggerId)
 
@@ -138,8 +138,8 @@ Public Class uTriggerTimer
                 If CheckBox1.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",1" Else _prepajr = "1"
                 If CheckBox2.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",2" Else _prepajr = "2"
                 If CheckBox3.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",3" Else _prepajr = "3"
-                If CheckBox4.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",4" Else  : _prepajr = "4"
-                If CheckBox5.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",5" Else  : _prepajr = "5"
+                If CheckBox4.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",4" Else _prepajr = "4"
+                If CheckBox5.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",5" Else _prepajr = "5"
                 If CheckBox6.IsChecked = True Then If _prepajr <> "" Then _prepajr &= ",6" Else _prepajr = "6"
                 If _prepajr = "" Then _prepajr = "*"
                 _myconditiontime &= _prepajr

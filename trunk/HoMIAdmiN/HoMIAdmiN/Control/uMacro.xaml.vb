@@ -23,7 +23,7 @@ Public Class uMacro
 
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             If _Action = EAction.Nouveau Then 'Nouvelle macro
-
+                cEnable.IsChecked = True
             Else 'Modifier Macro
                 Dim x As HoMIDom.HoMIDom.Macro = myService.ReturnMacroById(IdSrv, MacroId)
 
