@@ -412,7 +412,7 @@ Public Class uCondition
             TxtValue.ContextMenu = mycontextmnu
 
         Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur New uCondition: " & ex.ToString)
         End Try
     End Sub
 
@@ -428,7 +428,7 @@ Public Class uCondition
                 TxtValue.ToolTip = "Veuillez passer par le menu via le clic droit pour changer le device ou sa propriété"
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: uCondition_MenuItemDev_Click" & ex.ToString)
         End Try
     End Sub
 

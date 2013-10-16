@@ -350,7 +350,7 @@ Public Class uHisto
                         Next kvp
                     Next
                     sw.Close()
-                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Exportation terminée.", "HoMIAdmiN", "")
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "Exportation terminée.", "HoMIAdmiN", "")
                 End If
             Else
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Aucune donnée!", "ERREUR", "")

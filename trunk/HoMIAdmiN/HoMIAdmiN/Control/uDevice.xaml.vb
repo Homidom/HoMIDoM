@@ -425,10 +425,10 @@ Partial Public Class uDevice
             Dim x As TemplateDriver = myService.ReturnDriverByID(IdSrv, IdDriver)
             If x IsNot Nothing Then
                 If x.Enable = False Then
-                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le driver " & x.Nom & " n'est pas activé (Enable), le composant ne pourra pas être utilisé!", "INFO", "")
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "Le driver " & x.Nom & " n'est pas activé (Enable), le composant ne pourra pas être utilisé!", "INFO", "")
                     Exit Sub
                 End If
-                If x.IsConnect = False Then AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le driver " & x.Nom & " n'est pas démarré, le composant ne pourra pas être utilisé!", "INFO", "")
+                If x.IsConnect = False Then AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "Le driver " & x.Nom & " n'est pas démarré, le composant ne pourra pas être utilisé!", "INFO", "")
             Else
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le driver n'a pas pu être trouvé ! (ID du driver: " & IdDriver & ")", "ERREUR", "")
             End If
