@@ -787,7 +787,7 @@ Class Window1
                 tool.Content &= "Enable " & drv.Enable & vbCrLf
                 tool.Content &= "Description: " & drv.Description & vbCrLf
                 tool.Content &= "Version: " & drv.Version & vbCrLf
-                If drv.Modele <> "" Then tool.Content &= "Modele: " & drv.Modele & vbCrLf
+                If Drv.Modele <> "" And Drv.Modele <> "@" Then tool.Content &= "Modele: " & Drv.Modele & vbCrLf
 
                 Dim tl As New ToolTip
                 Dim imgpopup As New Image
@@ -966,12 +966,15 @@ Class Window1
                     label.Foreground = New SolidColorBrush(Colors.White)
                     'on verifie si la composant n'est pas à jour depuis au moins lastchangeduree
                     If Dev.LastChangeDuree > 0 Then
-                        Dim X As Date = Dev.LastChange
-                        X.AddHours(CInt(Dev.LastChangeDuree))
-                        If X < Now Then
+                        'Dim X As Date = Dev.LastChange
+                        'X.AddHours(CInt(Dev.LastChangeDuree))
+                        'If X < Now Then
+                        '    label.Foreground = New SolidColorBrush(Colors.Red)
+                        'End If
+                        'X = Nothing
+                        If DateTime.Compare(Dev.LastChange.AddMinutes(CInt(Dev.LastChangeDuree)), Now) < 0 Then
                             label.Foreground = New SolidColorBrush(Colors.Red)
                         End If
-                        X = Nothing
                     End If
                 Else
                     label.Foreground = New SolidColorBrush(Colors.Black)

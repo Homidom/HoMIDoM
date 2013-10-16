@@ -635,7 +635,7 @@ Namespace HoMIDom
                                 If x IsNot Nothing Then
                                     _device = x.Value
                                 Else
-                                    _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "DecodeCommand", "Device: " & Tabl(0) & " non trouvé")
+                                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "DecodeCommand", "Device: " & Tabl(0) & " non trouvé")
                                 End If
                         End Select
 
