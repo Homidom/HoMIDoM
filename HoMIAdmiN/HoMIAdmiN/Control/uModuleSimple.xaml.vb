@@ -307,7 +307,7 @@ Class uModuleSimple
 
 
             'End Select
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, resultatmessage, "Création d'un module simple", "")
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, resultatmessage, "Création d'un module simple", "")
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: ModuleSimple BtnAjouter_Click: " & ex.Message, "Error", "")

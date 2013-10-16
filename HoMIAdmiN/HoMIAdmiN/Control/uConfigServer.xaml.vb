@@ -302,7 +302,7 @@ Partial Public Class uConfigServer
                 If retour <> "0" Then
                     AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, retour, "Erreur import config", "")
                 Else
-                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'import du fichier de configuration a été effectué, l'ancien fichier a été renommé en .old, veuillez redémarrer le serveur pour prendre en compte cette nouvelle configuration", "Import config", "")
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "L'import du fichier de configuration a été effectué, l'ancien fichier a été renommé en .old, veuillez redémarrer le serveur pour prendre en compte cette nouvelle configuration", "Import config", "")
                 End If
             End If
 
@@ -342,7 +342,7 @@ Partial Public Class uConfigServer
                     TargetFile = New StreamWriter(filename, False)
                     TargetFile.Write(retour)
                     TargetFile.Close()
-                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'export du fichier de configuration a été effectué", "Export config", "")
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "L'export du fichier de configuration a été effectué", "Export config", "")
                 End If
             End If
 
@@ -362,7 +362,7 @@ Partial Public Class uConfigServer
             Dim retour As String = myService.TestSendMail(IdSrv, TxtMail.Text, mail, TxtAdresse.Text, TxtSmtpPort.Text, ChkSSL.IsChecked, TxtLogin.Text, TxtPassword.Password)
 
             If retour = "0" Then
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le mail de test a été envoyé à l'adresse: " & mail, "Test mail", "")
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "Le mail de test a été envoyé à l'adresse: " & mail, "Test mail", "")
             Else
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'envoi du mail de test envoyé à l'adresse: " & mail & ": " & retour, "Test mail", "")
             End If

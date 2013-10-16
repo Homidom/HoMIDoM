@@ -2297,7 +2297,7 @@ Class Window1
                             If result.Contains("ERR") = True Then
                                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, result, "Erreur", "")
                             Else
-                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Importation terminée.", "HoMIAdmiN", "")
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "Importation terminée.", "HoMIAdmiN", "")
                             End If
                         End If
                     Catch ex As Exception
@@ -2321,7 +2321,7 @@ Class Window1
 
                 Case "tag_multimedia" 'Multimedia Playlist
                     Try
-                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Désolé cette fonctionnalité n'est pas encore disponible...", "INFO", "")
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "Désolé cette fonctionnalité n'est pas encore disponible...", "INFO", "")
                         Exit Select
                     Catch ex As Exception
                         AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuAutre Playlist: " & ex.Message, "ERREUR", "")
@@ -2416,7 +2416,7 @@ Class Window1
                                 TargetFile = New StreamWriter(filename, False)
                                 TargetFile.Write(retour)
                                 TargetFile.Close()
-                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'export du fichier de configuration a été effectué", "Export config", "")
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "L'export du fichier de configuration a été effectué", "Export config", "")
                             End If
                         End If
                     Catch ex As Exception
@@ -2447,7 +2447,7 @@ Class Window1
                             If retour <> "0" Then
                                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, retour, "Erreur import config", "")
                             Else
-                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'import du fichier de configuration a été effectué, l'ancien fichier a été renommé en .old, veuillez redémarrer le serveur pour prendre en compte cette nouvelle configuration", "Import config", "")
+                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "L'import du fichier de configuration a été effectué, l'ancien fichier a été renommé en .old, veuillez redémarrer le serveur pour prendre en compte cette nouvelle configuration", "Import config", "")
                             End If
                         End If
                     Catch ex As Exception
@@ -2457,7 +2457,7 @@ Class Window1
                 Case "tag_config_sauvegarder"
                     Try
                         If IsConnect = False Then
-                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Impossible d'enregistrer la config car le serveur n'est pas connecté !!", "Erreur", "Window1.MainMenuAutre")
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Impossible d'enregistrer la config car le serveur n'est pas connecté !!", "Erreur", "Window1.MainMenuAutre")
                             Exit Sub
                         End If
 

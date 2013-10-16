@@ -85,7 +85,7 @@ Partial Public Class uLog
 
             Try
                 If _LigneIgnorees > 0 Then
-                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, _LigneIgnorees & " ligne(s) du log ne seront pas prises en compte car elles ne respectent pas le format attendu, veuillez consultez le fichier log sur le serveur pour avoir la totalité", "INFO", "")
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, _LigneIgnorees & " ligne(s) du log ne seront pas prises en compte car elles ne respectent pas le format attendu, veuillez consultez le fichier log sur le serveur pour avoir la totalité", "INFO", "")
                 End If
 
                 DGW.DataContext = ligneLog
