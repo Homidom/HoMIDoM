@@ -167,6 +167,7 @@ Public Class uHisto
                         cnt += 1
                         If cnt > _MaxData Then Exit For
                     Next
+                    If cnt = 0 Then AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "Il n'y a pas de valeurs sur cette période pour " & _namedevice, "Information", "")
                     series.BorderWidth = 3
                     series.IsXValueIndexed = False
                     Chart2.Series.Add(series)
