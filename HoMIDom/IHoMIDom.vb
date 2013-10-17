@@ -579,7 +579,7 @@ Namespace HoMIDom
         ''' <param name="Value"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function ChangeValueOfDeviceSimple(ByVal idsrv As String, ByVal IdDevice As String, ByVal Value As Object) As Integer
+        <OperationContract()> Function ChangeValueOfDeviceSimple(ByVal idsrv As String, ByVal IdDevice As String, ByVal Value As String) As Integer
 
         <OperationContract()> Function GetDeviceNoMaJ(ByVal idsrv) As List(Of String)
 
