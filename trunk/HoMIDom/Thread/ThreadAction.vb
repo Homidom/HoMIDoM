@@ -8,6 +8,7 @@ Imports System.Xml
 Imports System.Reflection
 Imports System.CodeDom.Compiler
 Imports HoMIDom.HoMIDom.Server
+Imports STRGS = Microsoft.VisualBasic.Strings
 
 Namespace HoMIDom
 
@@ -51,13 +52,25 @@ Namespace HoMIDom
                             y.Parametres.Add(param)
                             _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "Execute", "param0: " & _cmdav)
 
+                            'si on a des parametres et qu'ils sont corrects, on les ajoute
                             If x.Parametres.Count > 0 Then
                                 For idx As Integer = 0 To x.Parametres.Count - 1
                                     Dim param1 As New DeviceAction.Parametre
                                     If x.Parametres.Item(idx) IsNot Nothing Then
-                                        param1.Value = x.Parametres.Item(idx)
-                                        _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "Execute", "param" & idx + 1 & ": " & param1.Value)
-                                        y.Parametres.Add(param1)
+                                        'on recupere la valeur du parametre et on remplace les <compnom.value> et <comnom> par leur valeur
+                                        Dim _var0 As String = DecodeCommand(x.Parametres.Item(idx).ToString)
+                                        'si il y a une erreur on n'ajoute pas le parametre et on logue l'erreur
+                                        If STRGS.InStr(_var0, "ERR:") > 0 Then
+                                            _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ThreadAction Execute DeviceAction", STRGS.Right(_var0, _var0.Length - 5))
+                                        Else
+                                            If String.IsNullOrEmpty(_var0) Then
+                                                param1.Value = x.Parametres.Item(idx)
+                                            Else
+                                                param1.Value = _var0
+                                            End If
+                                            _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "Execute", "param" & idx + 1 & ": " & param1.Value)
+                                            y.Parametres.Add(param1)
+                                        End If
                                     End If
                                 Next
                             End If
@@ -65,20 +78,25 @@ Namespace HoMIDom
                             'C'est une commande standard
                             y.Nom = x.Method
 
+                            'si on a un parametre et qu'il est correct, on l'ajoute
                             If x.Parametres IsNot Nothing Then
                                 If x.Parametres.Count > 0 Then
                                     If x.Parametres.Item(0) IsNot Nothing Then
                                         If x.Parametres.Item(0) <> "" Then
-                                            Dim _var0 As String = x.Parametres.Item(0).ToString
-                                            _var0 = DecodeCommand(_var0)
-
-                                            Dim y2 As New HoMIDom.DeviceAction.Parametre
-                                            If String.IsNullOrEmpty(_var0) Then
-                                                y2.Value = x.Parametres.Item(0)
+                                            'on recupere la valeur du parametre et on remplace les <compnom.value> et <comnom> par leur valeur
+                                            Dim _var0 As String = DecodeCommand(x.Parametres.Item(0).ToString)
+                                            'si il y a une erreur on n'ajoute pas le parametre et on logue l'erreur
+                                            If STRGS.InStr(_var0, "ERR:") > 0 Then
+                                                _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ThreadAction Execute DeviceAction", STRGS.Right(_var0, _var0.Length - 5))
                                             Else
-                                                y2.Value = _var0
+                                                Dim y2 As New HoMIDom.DeviceAction.Parametre
+                                                If String.IsNullOrEmpty(_var0) Then
+                                                    y2.Value = x.Parametres.Item(0)
+                                                Else
+                                                    y2.Value = _var0
+                                                End If
+                                                y.Parametres.Add(y2)
                                             End If
-                                            y.Parametres.Add(y2)
                                         End If
                                     End If
                                 End If
@@ -485,7 +503,7 @@ Namespace HoMIDom
                         End Try
                 End Select
             Catch ex As Exception
-                If ex.ToString.Contains("ThreadAbortException") = False Then _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute", "Exception : " & ex.ToString)
+                If ex.ToString.Contains("ThreadAbortException") = False Then _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute", "Exception: " & ex.ToString)
             End Try
         End Sub
 
@@ -496,36 +514,40 @@ Namespace HoMIDom
                 _NameMacro = NameMacro
                 _ID = ID
             Catch ex As Exception
-                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "New Execute", "Exception : " & ex.ToString)
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "New Execute", "Exception: " & ex.ToString)
             End Try
         End Sub
 
         Public Sub Sendhttp(ByVal Commande As String)
             Try
-
+                Dim texte As String = Commande
+                'remplace les balises par la valeur
+                texte = DecodeCommand(texte)
+                'texte = texte.Replace("{time}", Now.ToShortTimeString) '--> pb avec le format qui ne passe pas dans une URL
+                'texte = texte.Replace("{date}", Now.ToLongDateString) '--> pb avec le format qui ne passe pas dans une URL
+                
                 Dim reader As StreamReader = Nothing
                 Dim str As String = ""
-                Dim request As WebRequest = WebRequest.Create(DecodeCommand(Commande))
+                Dim request As WebRequest = WebRequest.Create(texte)
                 Dim response As WebResponse = request.GetResponse()
                 reader = New StreamReader(response.GetResponseStream())
                 str = reader.ReadToEnd
                 reader.Close()
             Catch ex As Exception
-                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "Sendhttp", "Erreur lors de l'envoi de la commande http: " & ex.Message)
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "Sendhttp", "Exception lors de l'envoi de la commande http: " & ex.Message)
             End Try
         End Sub
 
         Private Sub Parler(ByVal Message As String)
-            Dim texte As String = Message
-
-            'remplace les balises par la valeur
-            texte = texte.Replace("{time}", Now.ToShortTimeString)
-            texte = texte.Replace("{date}", Now.ToLongDateString)
-            texte = DecodeCommand(texte)
-
             Try
+                Dim texte As String = Message
+                'remplace les balises par la valeur
+                texte = texte.Replace("{time}", Now.ToShortTimeString)
+                texte = texte.Replace("{date}", Now.ToLongDateString)
+                texte = DecodeCommand(texte)
+
                 Dim lamachineaparler As New Speech.Synthesis.SpeechSynthesizer
-                _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "Parler", "Message:" & texte)
+                _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "Parler", "Message: " & texte)
                 With lamachineaparler
                     .SelectVoice(_Server.GetDefautVoice)
                     '.SetOutputToWaveFile("C:\tet.wav")
@@ -536,7 +558,7 @@ Namespace HoMIDom
                 texte = Nothing
                 lamachineaparler = Nothing
             Catch ex As Exception
-                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "Parler", "Erreur lors de l'annonce du message: " & Message & " : " & ex.ToString)
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "Parler", "Exception lors de l'annonce du message: " & Message & " : " & ex.ToString)
             End Try
         End Sub
 
@@ -599,7 +621,7 @@ Namespace HoMIDom
                                 BindingFlags.InvokeMethod, Nothing, objTheClass, objFunctionParameters)
 
             Catch ex As Exception
-                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "ExecuteScript", "Error:" & ex.Message)
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "ExecuteScript", "Exception: " & ex.Message)
             End Try
         End Sub
 
@@ -635,7 +657,9 @@ Namespace HoMIDom
                                 If x IsNot Nothing Then
                                     _device = x.Value
                                 Else
-                                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "DecodeCommand", "Device: " & Tabl(0) & " non trouvé")
+                                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "DecodeCommand", "Composant: " & Tabl(0) & " non trouvé --> Arrêt du traitement")
+                                    retour = "ERR: DecodeCommand Composant: " & Tabl(0) & " non trouvé --> Arrêt du traitement"
+                                    Return retour
                                 End If
                         End Select
 
@@ -657,7 +681,8 @@ Namespace HoMIDom
 
                 Return retour
             Catch ex As Exception
-                retour = "Error:" & ex.ToString
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "DecodeCommand", "Exception: " & ex.Message)
+                retour = "ERR: " & ex.ToString
                 Return retour
             End Try
         End Function

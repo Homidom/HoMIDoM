@@ -571,6 +571,16 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         <OperationContract()> Function ChangeValueOfDevice(ByVal idsrv As String, ByVal IdDevice As String, ByVal Value As Object) As Integer
 
+        ''' <summary>
+        ''' Permet de changer la valeur d'un device en utilisant un string au lieu d'un objet
+        ''' </summary>
+        ''' <param name="idsrv"></param>
+        ''' <param name="IdDevice"></param>
+        ''' <param name="Value"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function ChangeValueOfDeviceSimple(ByVal idsrv As String, ByVal IdDevice As String, ByVal Value As Object) As Integer
+
         <OperationContract()> Function GetDeviceNoMaJ(ByVal idsrv) As List(Of String)
 
         ''' <summary>
