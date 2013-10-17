@@ -158,55 +158,21 @@ Namespace HoMIDom
                                 End If
 
                                 Select Case x.Conditions.Item(i).Condition
-
-                                    Case Action.TypeSigne.Egal
-                                        If retour = retour2 Then
-                                            result = True
-                                        Else
-                                            result = False
-                                        End If
-                                    Case Action.TypeSigne.Different
-                                        If retour <> retour2 Then
-                                            result = True
-                                        Else
-                                            result = False
-                                        End If
-                                    Case Action.TypeSigne.Inferieur
-                                        If retour < retour2 Then
-                                            result = True
-                                        Else
-                                            result = False
-                                        End If
-                                    Case Action.TypeSigne.InferieurEgal
-                                        If retour <= retour2 Then
-                                            result = True
-                                        Else
-                                            result = False
-                                        End If
-                                    Case Action.TypeSigne.Superieur
-                                        If retour > retour2 Then
-                                            result = True
-                                        Else
-                                            result = False
-                                        End If
-                                    Case Action.TypeSigne.SuperieurEgal
-                                        If retour >= retour2 Then
-                                            result = True
-                                        Else
-                                            result = False
-                                        End If
+                                    Case Action.TypeSigne.Egal : If retour = retour2 Then result = True Else result = False
+                                    Case Action.TypeSigne.Different : If retour <> retour2 Then result = True Else result = False
+                                    Case Action.TypeSigne.Inferieur : If retour < retour2 Then result = True Else result = False
+                                    Case Action.TypeSigne.InferieurEgal : If retour <= retour2 Then result = True Else  : result = False
+                                    Case Action.TypeSigne.Superieur : If retour > retour2 Then result = True Else  : result = False
+                                    Case Action.TypeSigne.SuperieurEgal : If retour >= retour2 Then result = True Else  : result = False
                                 End Select
 
                                 If i = 0 Then 'c le 1er donc pas prendre en compte l'operateur
                                     flag = result
                                 Else
                                     Select Case x.Conditions.Item(i).Operateur
-                                        Case Action.TypeOperateur.AND
-                                            flag = flag And result
-                                        Case Action.TypeOperateur.OR
-                                            flag = flag Or result
-                                        Case Action.TypeOperateur.NONE
-                                            flag = result
+                                        Case Action.TypeOperateur.AND : flag = flag And result
+                                        Case Action.TypeOperateur.OR : flag = flag Or result
+                                        Case Action.TypeOperateur.NONE : flag = result
                                     End Select
                                 End If
                             End If
@@ -224,40 +190,16 @@ Namespace HoMIDom
 
                                 'On travail juste sur une heure
                                 If (_tim(0) <> "*" Or _tim(1) <> "*" Or _tim(2) <> "*") And _tim(3) = "*" And _tim(4) = "*" And _tim(5) = "" And _tim(6) <> "1" And _tim(7) <> "1" Then
-                                    If _tim(0) = "*" Then
-                                        sc = Now.Second
-                                    Else
-                                        sc = CInt(_tim(0))
-                                    End If
-                                    If _tim(1) = "*" Then
-                                        mn = Now.Minute
-                                    Else
-                                        mn = CInt(_tim(1))
-                                    End If
-                                    If _tim(2) = "*" Then
-                                        hr = Now.Hour
-                                    Else
-                                        hr = CInt(_tim(2))
-                                    End If
-                                    a1 = New Date(Now.Year, Now.Month, Now.Day, hr, mn, sc)
-                                End If
+                                    If _tim(0) = "*" Then sc = Now.Second Else sc = CInt(_tim(0))
+                                If _tim(1) = "*" Then mn = Now.Minute Else mn = CInt(_tim(1))
+                                If _tim(2) = "*" Then hr = Now.Hour Else hr = CInt(_tim(2))
+                                a1 = New Date(Now.Year, Now.Month, Now.Day, hr, mn, sc)
+                            End If
                                 'On travail sur une heure + date
                                 If (_tim(0) <> "*" Or _tim(1) <> "*" Or _tim(2) <> "*") And (_tim(3) <> "*" Or _tim(4) <> "*") And _tim(5) = "" And _tim(6) <> "1" And _tim(7) <> "1" Then
-                                    If _tim(0) = "*" Then
-                                        sc = Now.Second
-                                    Else
-                                        sc = CInt(_tim(0))
-                                    End If
-                                    If _tim(1) = "*" Then
-                                        mn = Now.Minute
-                                    Else
-                                        mn = CInt(_tim(1))
-                                    End If
-                                    If _tim(2) = "*" Then
-                                        hr = Now.Hour
-                                    Else
-                                        hr = CInt(_tim(2))
-                                    End If
+                                    If _tim(0) = "*" Then sc = Now.Second Else sc = CInt(_tim(0))
+                                    If _tim(1) = "*" Then mn = Now.Minute Else mn = CInt(_tim(1))
+                                    If _tim(2) = "*" Then hr = Now.Hour Else hr = CInt(_tim(2))
                                     If _tim(3) = "*" Then
                                         dd = Now.Day
                                     Else
@@ -274,36 +216,16 @@ Namespace HoMIDom
                                 End If
                                 'On travail sur une heure + jour
                                 If (_tim(0) <> "*" Or _tim(1) <> "*" Or _tim(2) <> "*") And (_tim(3) = "*" And _tim(4) = "*") And _tim(5) <> "" And _tim(6) <> "1" And _tim(7) <> "1" Then
-                                    If _tim(0) = "*" Then
-                                        sc = Now.Second
-                                    Else
-                                        sc = CInt(_tim(0))
-                                    End If
-                                    If _tim(1) = "*" Then
-                                        mn = Now.Minute
-                                    Else
-                                        mn = CInt(_tim(1))
-                                    End If
-                                    If _tim(2) = "*" Then
-                                        hr = Now.Hour
-                                    Else
-                                        hr = CInt(_tim(2))
-                                    End If
+                                    If _tim(0) = "*" Then sc = Now.Second Else sc = CInt(_tim(0))
+                                    If _tim(1) = "*" Then mn = Now.Minute Else mn = CInt(_tim(1))
+                                    If _tim(2) = "*" Then hr = Now.Hour Else hr = CInt(_tim(2))
                                     a1 = New Date(Now.Year, Now.Month, Now.Day, hr, mn, sc)
                                     Flagjour = True
                                 End If
                                 'On travail sur une date
                                 If (_tim(0) = "*" And _tim(1) = "*" And _tim(2) = "*") And (_tim(3) <> "*" Or _tim(4) <> "*") And _tim(5) = "" And _tim(6) <> "1" And _tim(7) <> "1" Then
-                                    If _tim(3) = "*" Then
-                                        dd = Now.Day
-                                    Else
-                                        dd = CInt(_tim(3))
-                                    End If
-                                    If _tim(4) = "*" Then
-                                        ms = Now.Month
-                                    Else
-                                        ms = CInt(_tim(4))
-                                    End If
+                                    If _tim(3) = "*" Then dd = Now.Day Else dd = CInt(_tim(3))
+                                    If _tim(4) = "*" Then ms = Now.Month Else ms = CInt(_tim(4))
                                     a1 = New Date(Now.Year, ms, dd, Now.Hour, Now.Minute, Now.Second)
                                 End If
                                 'On travail sur un jour
@@ -323,44 +245,13 @@ Namespace HoMIDom
                                 Dim compare As Integer = DateTime.Compare(Now, a1)
 
                                 Select Case x.Conditions.Item(i).Condition
-                                    Case Action.TypeSigne.Egal
-                                        If compare = 0 Then
-                                            result = True
-                                        Else
-                                            result = False
-                                        End If
-                                    Case Action.TypeSigne.Different
-                                        If compare <> 0 Then
-                                            result = True
-                                        Else
-                                            result = False
-                                        End If
-                                    Case Action.TypeSigne.Inferieur
-                                        If compare < 0 Then
-                                            result = True
-                                        Else
-                                            result = False
-                                        End If
-                                    Case Action.TypeSigne.InferieurEgal
-                                        If compare <= 0 Then
-                                            result = True
-                                        Else
-                                            result = False
-                                        End If
-                                    Case Action.TypeSigne.Superieur
-                                        If compare > 0 Then
-                                            result = True
-                                        Else
-                                            result = False
-                                        End If
-                                    Case Action.TypeSigne.SuperieurEgal
-                                        If compare >= 0 Then
-                                            result = True
-                                        Else
-                                            result = False
-                                        End If
+                                    Case Action.TypeSigne.Egal : If compare = 0 Then result = True Else result = False
+                                    Case Action.TypeSigne.Different : If compare <> 0 Then result = True Else result = False
+                                    Case Action.TypeSigne.Inferieur : If compare < 0 Then result = True Else result = False
+                                    Case Action.TypeSigne.InferieurEgal : If compare <= 0 Then result = True Else result = False
+                                    Case Action.TypeSigne.Superieur : If compare > 0 Then result = True Else result = False
+                                    Case Action.TypeSigne.SuperieurEgal : If compare >= 0 Then result = True Else result = False
                                 End Select
-
 
                                 If Flagjour = True Then
                                     If (InStr(_tim(5), "0") > 0 And Now.DayOfWeek = DayOfWeek.Sunday) Or (InStr(_tim(5), "1") > 0 And Now.DayOfWeek = DayOfWeek.Monday) Or (InStr(_tim(5), "2") > 0 And Now.DayOfWeek = DayOfWeek.Tuesday) Or (InStr(_tim(5), "3") > 0 And Now.DayOfWeek = DayOfWeek.Wednesday) Or (InStr(_tim(5), "4") > 0 And Now.DayOfWeek = DayOfWeek.Thursday) Or (InStr(_tim(5), "5") > 0 And Now.DayOfWeek = DayOfWeek.Friday) Or (InStr(_tim(5), "6") > 0 And Now.DayOfWeek = DayOfWeek.Saturday) Then
@@ -374,12 +265,9 @@ Namespace HoMIDom
                                     flag = result
                                 Else
                                     Select Case x.Conditions.Item(i).Operateur
-                                        Case Action.TypeOperateur.AND
-                                            flag = flag And result
-                                        Case Action.TypeOperateur.OR
-                                            flag = flag Or result
-                                        Case Action.TypeOperateur.NONE
-                                            flag = result
+                                        Case Action.TypeOperateur.AND : flag = flag And result
+                                        Case Action.TypeOperateur.OR : flag = flag Or result
+                                        Case Action.TypeOperateur.NONE : flag = result
                                     End Select
                                 End If
                             End If
