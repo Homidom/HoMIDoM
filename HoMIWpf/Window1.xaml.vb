@@ -3498,6 +3498,7 @@ Class Window1
             Return stk
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur AffMessage: " & ex.Message, "Erreur", "AffMessage")
+            Return Nothing
         End Try
     End Function
 End Class

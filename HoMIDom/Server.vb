@@ -6083,6 +6083,35 @@ Namespace HoMIDom
         End Function
 
         ''' <summary>
+        ''' Permet de changer la valeur d'un device
+        ''' </summary>
+        ''' <param name="idsrv"></param>
+        ''' <param name="IdDevice"></param>
+        ''' <param name="Value"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ChangeValueOfDeviceSimple(ByVal idsrv As String, ByVal IdDevice As String, ByVal Value As String) As Integer Implements IHoMIDom.ChangeValueOfDeviceSimple
+            Try
+                If VerifIdSrv(idsrv) = False Then
+                    Return 99
+                End If
+
+                Dim result As Integer = -1
+                Dim _dev As Object = ReturnRealDeviceById(IdDevice)
+
+                If _dev IsNot Nothing Then
+                    _dev.value = Value
+                    result = 0
+                End If
+
+                Return result
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ChangeValueOfDeviceSimple", "Exception : " & ex.Message)
+                Return -1
+            End Try
+        End Function
+
+        ''' <summary>
         ''' Retourne la liste des devices non à jour
         ''' </summary>
         ''' <param name="idsrv"></param>
