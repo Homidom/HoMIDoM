@@ -22,7 +22,7 @@ LangString ERROR_DOTNET_INVALID_PATH ${LANG_FRENCH} "The $(DESC_SHORTDOTNET) Ins
 LangString ERROR_DOTNET_FATAL ${LANG_FRENCH} "A fatal error occurred during the installation$\n of the $(DESC_SHORTDOTNET)."
 LangString FAILED_DOTNET_INSTALL ${LANG_FRENCH} "The installation of ${PRODUCT_NAME} will$\n continue. However, it may not function properly$\nuntil $(DESC_SHORTDOTNET)$\nis installed."
 
-LangString DESC_VC2010_LABEL ${LANG_FRENCH} "Microsoft Visual C++ 2010"
-LangString DESC_VC2010_DECISION ${LANG_FRENCH} "$(DESC_VC2010_LABEL) est requis.$\nVoulez-vous télécharger et installer $(DESC_VC2010_LABEL) maintenant ?."
-LangString DESC_VC11_LABEL ${LANG_FRENCH} "Microsoft Visual C++ 2012"
+LangString DESC_VC10_LABEL ${LANG_FRENCH} "Microsoft Visual C++ 2010 (10.0)"
+LangString DESC_VC10_DECISION ${LANG_FRENCH} "$(DESC_VC10_LABEL) est requis.$\nVoulez-vous télécharger et installer $(DESC_VC10_LABEL) maintenant ?."
+LangString DESC_VC11_LABEL ${LANG_FRENCH} "Microsoft Visual C++ 2012 (11.0)"
 LangString DESC_VC11_DECISION ${LANG_FRENCH} "$(DESC_VC11_LABEL) est requis.$\nVoulez-vous télécharger et installer $(DESC_VC11_LABEL) maintenant ?."

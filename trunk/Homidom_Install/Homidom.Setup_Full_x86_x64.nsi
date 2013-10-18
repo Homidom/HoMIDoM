@@ -178,9 +178,10 @@ Function .onInit
     StrCpy $platform "x86"
   ${EndIf}
 
-  ; -- Vérification de la présence des runtimes VC2010
-  Call CheckVC2010Redist
-  ; -- Vérification de la présence des runtimes VC2012
+  ; -- Vérification de la présence des runtimes VC++ 2010 (10.0)
+  Call CheckVC10Redist
+  
+  ; -- Vérification de la présence des runtimes VC++ 2012 (11.0)
   Call CheckVC11Redist
 
   !insertmacro Log_String "Les dossier d'installation par défaut est '$INSTDIR'."
