@@ -2,7 +2,7 @@
 !define URL_VC11_X64 "http://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU3/vcredist_x64.exe"
 !define URL_VC11_X86 "http://download.microsoft.com/download/1/6/B/16B06F60-3B20-4FF2-B699-5E9B7962F9AE/VSU3/vcredist_x86.exe"
 
-; Microsoft Visual C++ 2012 Redistributable Package 
+; Microsoft Visual C++ 2012 (11.0) Redistributable Package 
 
 var URL_VC11
 var VC11_Package
@@ -46,52 +46,74 @@ FunctionEnd
 
 Function CheckVC11Redist
 
-; HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Microsoft\DevDiv\vc\Servicing\11.0\RuntimeMinimum
-; HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\DevDiv\vc\Servicing\11.0\RuntimeMinimum
+  StrCpy $IsVC11RedistInstalled "0"
 
   ${If} ${RunningX64}
     StrCpy $URL_VC11 "${URL_VC11_X64}"
     StrCpy $VC11_Package "vcredist_x64.exe"
-    StrCpy $VC11_RegKey "SOFTWARE\Wow6432Node\Microsoft\DevDiv\vc\Servicing\11.0\RuntimeMinimum"
-
-         ClearErrors
-         ; Read  from Registry
-         ReadRegDWORD $VC11RedistRegKeyValue HKLM "$VC11_RegKey" "Install"
-        ${If} ${Errors}
-          StrCpy $VC11_RegKey "SOFTWARE\Wow6432Node\Microsoft\DevDiv\vc\Servicing\11.0\RuntimeMinimum"
-                   ClearErrors
-                  ; Read  from Registry
-                  ReadRegDWORD $VC11RedistRegKeyValue HKLM "$VC11_RegKey" "Install"
-        ${EndIf}
   ${Else}
     StrCpy $URL_VC11 "${URL_VC11_X86}"
     StrCpy $VC11_Package "vcredist_x86.exe"
-    StrCpy $VC11_RegKey "SOFTWARE\Microsoft\DevDiv\vc\Servicing\11.0\RuntimeMinimum"    
-
-         ; Read  from Registry
-         ReadRegDWORD $VC11RedistRegKeyValue HKLM "$VC11_RegKey" "Install"
-        ${If} ${Errors}
-          StrCpy $VC11_RegKey "SOFTWARE\Microsoft\DevDiv\vc\Servicing\11.0\RuntimeMinimum"
-                   ClearErrors
-                  ; Read  from Registry
-                  ReadRegDWORD $VC11RedistRegKeyValue HKLM "$VC11_RegKey" "Install"
-        ${EndIf}
-
-
   ${EndIf}
 
+  ClearErrors
+  StrCpy $VC11_RegKey "SOFTWARE\Wow6432Node\Microsoft\DevDiv\vc\Servicing\11.0\RuntimeMinimum"
+  ReadRegDWORD $VC11RedistRegKeyValue HKLM "$VC11_RegKey" "Install"
+  IntCmp $VC11RedistRegKeyValue 1 VC11RegKeyFound
 
-         !insertmacro Log_String "Microsoft Visual C++ 2012 Redistributable : $VC11_RegKey = $VC11RedistRegKeyValue"
-         IfErrors noVC11Redist
+  ClearErrors
+  StrCpy $VC11_RegKey "SOFTWARE\Microsoft\DevDiv\vc\Servicing\11.0\RuntimeMinimum"
+  ReadRegDWORD $VC11RedistRegKeyValue HKLM "$VC11_RegKey" "Install"
+  IntCmp $VC11RedistRegKeyValue 1 VC11RegKeyFound
 
-         StrCpy $IsVC11RedistInstalled "$VC11RedistRegKeyValue"
-         Goto exitVC11RedistCheck
+  ClearErrors
+  StrCpy $VC11_RegKey "SOFTWARE\Wow6432Node\Microsoft\DevDiv\vc\Servicing\11.0\red"
+  ReadRegDWORD $VC11RedistRegKeyValue HKLM "$VC11_RegKey" "Install"
+  IntCmp $VC11RedistRegKeyValue 1 VC11RegKeyFound
 
-noVC11Redist:
-         StrCpy $IsVC11RedistInstalled "0"
-      
+  ClearErrors
+  StrCpy $VC11_RegKey "SOFTWARE\Microsoft\DevDiv\vc\Servicing\11.0\red" 
+  ReadRegDWORD $VC11RedistRegKeyValue HKLM "$VC11_RegKey" "Install"
+  IntCmp $VC11RedistRegKeyValue 1 VC11RegKeyFound
+
+
+  ClearErrors
+  StrCpy $VC11_RegKey "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\11.0\VC\Runtimes\x64"
+  ReadRegDWORD $VC11RedistRegKeyValue HKLM "$VC11_RegKey" "Installed"
+  IntCmp $VC11RedistRegKeyValue 1 VC11RegKeyFound
+
+  ClearErrors
+  StrCpy $VC11_RegKey "SOFTWARE\Microsoft\VisualStudio\11.0\VC\Runtimes\x64"
+  ReadRegDWORD $VC11RedistRegKeyValue HKLM "$VC11_RegKey" "Installed"
+  IntCmp $VC11RedistRegKeyValue 1 VC11RegKeyFound
+
+
+  ClearErrors
+  StrCpy $VC11_RegKey "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\11.0\VC\Runtimes\x86"
+  ReadRegDWORD $VC11RedistRegKeyValue HKLM "$VC11_RegKey" "Installed"
+  IntCmp $VC11RedistRegKeyValue 1 VC11RegKeyFound
+
+  ClearErrors
+  StrCpy $VC11_RegKey "SOFTWARE\Microsoft\VisualStudio\11.0\VC\Runtimes\x86"
+  ReadRegDWORD $VC11RedistRegKeyValue HKLM "$VC11_RegKey" "Installed"
+  IntCmp $VC11RedistRegKeyValue 1 VC11RegKeyFound
+
+  ${If} ${FileExists} "$SYSDIR\msvcr110.dll"
+    StrCpy $IsVC11RedistInstalled "1"
+  ${EndIf}
+
+  !insertmacro Log_String "$(DESC_VC11_LABEL) :  pas de clé de registre valide trouvé ! vérification de la présence de msvcr100.dll : $IsVC11RedistInstalled"
+  Goto exitVC11RedistCheck
+
+VC11RegKeyFound:
+
+  !insertmacro Log_String "$(DESC_VC11_LABEL) Redistributable : $VC11_RegKey => $VC11RedistRegKeyValue"
+  StrCpy $IsVC11RedistInstalled "1"
+
+
 
 exitVC11RedistCheck:
+
 
 FunctionEnd
 
