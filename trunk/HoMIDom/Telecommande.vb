@@ -13,6 +13,7 @@
             Dim _Modele As String
             Dim _Driver As String
             Dim _File As String
+            Dim _IsAudioVideo As Boolean = False
             Dim _Type As Integer = 0 '0:http 1:ir 2:rs232
             Dim _TrameInit As String 'trame d'initialisation
             Dim _CharEndReceive 'caractère de fin d'une trame reçue
@@ -21,6 +22,7 @@
             Dim _Cmd As New List(Of Commandes)
             Dim _Var As New List(Of TemplateVar)
             Dim _GraficTemplate As New GraficTemplate
+            Dim _DefautCmdAudioVideo() As String = {"PLAY", "PAUSE", "STOP", "POWER", "AVANCE", "RECUL", "NEXTCHAPITRE", "PREVIOUSCHAPITRE", "OK", "VOLUMEUP", "VOLUMEDOWN", "MUTE", "FLECHEHAUT", "FLECHEBAS", "FLECHEGAUCHE", "FLECHEDROITE", "ENREGISTRER", "BLUE", "RED", "GREEN", "YELLOW", "CHANNELUP", "CHANNELDOWN"}
 #End Region
 
 #Region "Property"
@@ -124,6 +126,37 @@
                     If val < 0 Then val = 0
                     If val > 2 Then val = 2
                     _Type = val
+                End Set
+            End Property
+
+            ''' <summary>
+            ''' Définit si de base le template est un équipement audio/video si oui on a le minimum 
+            ''' </summary>
+            ''' <value></value>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Property IsAudioVideo As Boolean
+                Get
+                    Return _IsAudioVideo
+                End Get
+                Set(value As Boolean)
+                    If _IsAudioVideo = False And value Then
+                        If _Cmd.Count = 0 Then
+                            Dim idx As Integer
+                            For idx = 0 To 9
+                                Dim _newcmd As New Commandes
+                                _newcmd.Name = idx
+                                _Cmd.Add(_newcmd)
+                            Next
+                            For Each _lblcmd In _DefautCmdAudioVideo
+                                Dim _newcmd As New Commandes
+                                _newcmd.Name = _lblcmd
+                                _Cmd.Add(_newcmd)
+                            Next
+                        End If
+                    End If
+                    _IsAudioVideo = value
+
                 End Set
             End Property
 
@@ -242,10 +275,6 @@
             End Property
 #End Region
 
-
-            Public Sub New()
-
-            End Sub
 
             Public Function AddNewVar(ByVal Var As TemplateVar) As Integer
                 Try
@@ -381,18 +410,6 @@
                 End Try
             End Function
         End Class
-
-        ''' <summary>
-        ''' Type d'équipement par défaut, pour définir ensuite les commandes de bases
-        ''' </summary>
-        ''' <remarks></remarks>
-        Public Enum TypeEquipement
-            VIDE = 0
-            TV = 1
-            DVD = 2
-            AUDIO = 3
-            BOX = 4
-        End Enum
 
         Public Class Commandes
             Dim _Name As String
@@ -542,11 +559,12 @@
 
 #Region "Variables"
             'Variables graphiques du template
-            Dim _Width As Double = 200
-            Dim _Height As Double = 570
+            Dim _Width As Double = 600
+            Dim _Height As Double = 480
             Dim _BackgroundPicture As String = ""
             Dim _ColorBackGround As Double
             Dim _Widgets As New List(Of Widget)
+
 #End Region
 
 #Region "Property Graphic"

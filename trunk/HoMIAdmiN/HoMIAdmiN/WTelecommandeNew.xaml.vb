@@ -290,6 +290,7 @@ Public Class WTelecommandeNew
         TxtCharEndReceive.Text = ""
         TxtTrameInit.Text = ""
         cbTemplate.Text = ""
+        ChkMultimedia.IsChecked = True
 
         RdHttp.IsEnabled = True
         RdIR.IsEnabled = True
@@ -329,6 +330,7 @@ Public Class WTelecommandeNew
                 .Fabricant = TxtTplFab.Text
                 .TrameInit = TxtTrameInit.Text
                 .CharEndReceive = TxtCharEndReceive.Text
+                .IsAudioVideo = ChkMultimedia.IsChecked
             End With
 
             'If _Driver IsNot Nothing Then
@@ -493,6 +495,7 @@ Public Class WTelecommandeNew
                 TxtTplMod.Text = _list.Item(cbTemplate.SelectedIndex).Modele
                 TxtTrameInit.Text = _list.Item(cbTemplate.SelectedIndex).TrameInit
                 TxtCharEndReceive.Text = _list.Item(cbTemplate.SelectedIndex).CharEndReceive
+                ChkMultimedia.IsChecked = _list.Item(cbTemplate.SelectedIndex).IsAudioVideo
 
                 Select Case _list.Item(cbTemplate.SelectedIndex).Type
                     Case 0 'http

@@ -8499,6 +8499,139 @@ Namespace HoMIDom
                     Return "Le template " & Template.Name & ".xml n'existe pas!"
                 End If
 
+                Try
+                    If Template.IsAudioVideo And Template.Commandes.Count > 0 And Template.GraphicTemplate.Widgets.Count = 0 Then
+                        For Each cmd In Template.Commandes
+                            Dim _widget As New Widget
+                            Dim _output As New Widget.Output
+                            Dim _picture As New Widget.Picture
+                            Dim _margin = 5
+
+                            _widget.Label = cmd.Name
+                            _widget.Height = 45
+                            _widget.Width = 45
+
+                            _output.Commande = cmd.Name
+                            _output.TemplateID = Template.ID
+                            _widget.Outputs.Add(_output)
+
+                            _picture.Path = _MonRepertoire & "\images\telecommande\" & cmd.Name & ".png"
+                            _widget.Pictures.Add(_picture)
+
+                            Dim _col As Byte = 0
+                            Dim _row As Byte = 0
+
+                            Select Case cmd.Name.ToUpper
+                                Case "0"
+                                    _row = 0
+                                    _col = 0
+                                Case "1"
+                                    _row = 1
+                                    _col = 0
+                                Case "2"
+                                    _row = 1
+                                    _col = 1
+                                Case "3"
+                                    _row = 1
+                                    _col = 2
+                                Case "4"
+                                    _row = 2
+                                    _col = 0
+                                Case "5"
+                                    _row = 2
+                                    _col = 1
+                                Case "6"
+                                    _row = 2
+                                    _col = 2
+                                Case "7"
+                                    _row = 3
+                                    _col = 0
+                                Case "8"
+                                    _row = 3
+                                    _col = 1
+                                Case "9"
+                                    _row = 3
+                                    _col = 2
+                                Case "PLAY"
+                                    _row = 11
+                                    _col = 2
+                                Case "PAUSE"
+                                    _row = 11
+                                    _col = 3
+                                Case "STOP"
+                                    _row = 11
+                                    _col = 1
+                                Case "POWER"
+                                    _row = 0
+                                    _col = 0
+                                Case "AVANCE"
+                                    _row = 12
+                                    _col = 2
+                                Case "RECUL"
+                                    _row = 12
+                                    _col = 1
+                                Case "NEXTCHAPITRE"
+                                    _row = 12
+                                    _col = 3
+                                Case "PREVIOUSCHAPITRE"
+                                    _row = 12
+                                    _col = 0
+                                Case "OK"
+                                    _row = 6
+                                    _col = 2
+                                Case "VOLUMEUP"
+                                    _row = 5
+                                    _col = 0
+                                Case "VOLUMEDOWN"
+                                    _row = 7
+                                    _col = 0
+                                Case "MUTE"
+                                    _row = 6
+                                    _col = 0
+                                Case "FLECHEHAUT"
+                                    _row = 5
+                                    _col = 2
+                                Case "FLECHEBAS"
+                                    _row = 7
+                                    _col = 2
+                                Case "FLECHEGAUCHE"
+                                    _row = 6
+                                    _col = 1
+                                Case "FLECHEDROITE"
+                                    _row = 6
+                                    _col = 3
+                                Case "ENREGISTRER"
+                                    _row = 11
+                                    _col = 0
+                                Case "BLUE"
+                                    _row = 9
+                                    _col = 0
+                                Case "RED"
+                                    _row = 9
+                                    _col = 1
+                                Case "GREEN"
+                                    _row = 9
+                                    _col = 2
+                                Case "YELLOW"
+                                    _row = 9
+                                    _col = 3
+                                Case "CHANNELUP"
+                                    _row = 5
+                                    _col = 4
+                                Case "CHANNELDOWN"
+                                    _row = 7
+                                    _col = 4
+                            End Select
+                            _widget.X = (_col * _widget.Width) + _margin
+                            _widget.Y = (_row * _widget.Height) + _margin
+
+                            Template.GraphicTemplate.Widgets.Add(_widget)
+                        Next
+                    End If
+                Catch ex As Exception
+                    Return "Erreur lors de la création des widgets du template !:" & vbCrLf & ex.ToString
+                End Try
+
                 Dim streamIO As StreamWriter = Nothing
                 Try
                     Dim serialXML As New System.Xml.Serialization.XmlSerializer(GetType(Telecommande.Template))

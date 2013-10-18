@@ -1727,6 +1727,12 @@ HoMIDom
 	<param name="DriverID"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnDeviceByZoneType(System.String,System.String,System.String,System.Boolean)">
+	<summary>Retourne une liste de device par sa Zone et/ou type et/ou son driver, ex: "Salle" "Volet" </summary>
+	<param name="ZoneID"></param>
+	<param name="DeviceType"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.ExecuteDeviceCommand(System.String,System.String,HoMIDom.HoMIDom.DeviceAction)">
 	<summary>Permet d'exécuter une commande Sub d'un Device</summary>
 	<param name="DeviceId"></param>
@@ -1915,6 +1921,12 @@ HoMIDom
  </summary>
 	<returns>List of Templates</returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetTemplateFromID(System.String)">
+	<summary>
+ Retourne un template via son ID
+ </summary>
+	<returns>List of Templates</returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.CreateNewTemplate(HoMIDom.HoMIDom.Telecommande.Template)">
 	<summary>
  Crée un nouveau template dans le répertoire templates
@@ -2064,6 +2076,17 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.Server.GetTarifNuit">
 	<summary>
  Get Tarif nuit
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetPuissanceMini(System.Int32)">
+	<summary>
+ Set Puissance mini
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetPuissanceMini">
+	<summary>
+ Get Puissance Mini
  </summary>
 	<returns></returns>
 	<remarks></remarks>
@@ -2701,6 +2724,15 @@ HoMIDom
 	<param name="DeviceDriver">ID driver du device</param>
 	<returns>List de device, Nothing si non trouvé ou ID du serveur erroné</returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnDeviceByZoneType(System.String,System.String,System.String,System.Boolean)">
+	<summary>
+ Retourne une liste de device suivant l'addresse1 et/ou son type 
+ </summary>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="ZoneID">Nom de la zone</param>
+	<param name="DeviceType">Type de device</param>
+	<returns>List de device, Nothing si non trouvé ou ID du serveur erroné</returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.String,System.String,System.Double,System.Double,System.Double,System.Double,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes},System.String,System.Int32,System.Boolean)">
 	<summary>
  Créer un nouveau device ou sauvegarder la modif (si ID est complété)
@@ -3138,6 +3170,12 @@ HoMIDom
  </summary>
 	<returns>List of Templates</returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetTemplateFromID(System.String)">
+	<summary>
+ Retourne un template via son ID
+ </summary>
+	<returns>List of Templates</returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.CreateNewTemplate(HoMIDom.HoMIDom.Telecommande.Template)">
 	<summary>
  Crée un nouveau template dans le répertoire templates
@@ -3164,6 +3202,17 @@ HoMIDom
 	<param name="IdDevice">Id du device concerné</param>
 	<param name="Commande">Nom de la Commande à envoyée</param>
 	<returns>0 si Ok sinon erreur</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetPuissanceMini(System.Int32)">
+	<summary>
+ Set Puissance mini
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetPuissanceMini">
+	<summary>
+ Get Puissance Mini
+ </summary>
+	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetModeDecouverte">
 	<summary>
@@ -3637,20 +3686,6 @@ HoMIDom
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Ligne">
-	<summary>
- Nombre de lignes de la grille du template
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
-</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Colonne">
-	<summary>
- Nombre de colonnes de la grille du template
- </summary>
-	<value></value>
-	<returns></returns>
-	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Type">
 	<summary>
  Type de driver 0=http 1=IR 2=RS232, par défaut 0
@@ -3707,7 +3742,7 @@ HoMIDom
 	<param name="idsrv"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Telecommande.Template.ExecuteCommand(System.String,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.Telecommande.Template.ExecuteCommand(System.String,System.String,HoMIDom.HoMIDom.Server)">
 	<summary>
  Execute une commande suivant son nom
  </summary>

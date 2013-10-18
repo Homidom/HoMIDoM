@@ -677,6 +677,9 @@
                             <RadioButton Name="RdRS232" Content="RS232" Foreground=" White" Margin="2"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
+                            <CheckBox Name="ChkMultimedia" Content="Multimedia" Foreground=" White" IsChecked=" True"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" >
                             <Label Content="Trame d'init:" Width="75" Foreground=" White" ToolTip="Trame d'initialisation"/>
                             <TextBox Name="TxtTrameInit" Width="150" Background="DarkGray" BorderBrush="Black" Foreground=" White" IsReadOnly="True" />
                         </StackPanel>
