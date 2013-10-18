@@ -118,6 +118,8 @@ Public Class uWidgetEmpty
     Public Event GestureGaucheDroite(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event GestureDroiteGauche(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event ShowZone(ByVal zoneid As String)
+    Public Event ShowTemplate(Templateid As String)
+
 
     'Animation
     Private myStoryboard As Storyboard
@@ -203,7 +205,6 @@ Public Class uWidgetEmpty
                 Else
                     _dev = ReturnDeviceById(_Id)
                 End If
-                '_dev = myService.ReturnDeviceByID(IdSrv, _Id)
                 _macro = myService.ReturnMacroById(IdSrv, _Id)
                 _zone = myService.ReturnZoneByID(IdSrv, _Id)
 
@@ -288,6 +289,7 @@ Public Class uWidgetEmpty
                         Case HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA
                             ShowStatus = False
                             _ShowValue = False
+
                             '    Dim x As New uTelecommande(_Id)
                             '    AddHandler x.SendCommand, AddressOf SendCommand
                             '    StkPopup.Children.Add(x)
@@ -686,11 +688,14 @@ Public Class uWidgetEmpty
             _Picture = value
             Try
                 If _Show = True Then
-                    'If Image.Tag <> _Picture Then
+                    If Me.Tag = "MULTIMEDIA" Then
+                        If String.IsNullOrEmpty(value) Then
+                            _Picture = _MonRepertoire & "\Images\Telecommande\front_multimedia.png"
+                        End If
+                    End If
                     Image.Tag = _Picture
                     LoadPicture()
-                    'End If
-                End If
+                    End If
             Catch ex As Exception
                 AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Set Picture: " & ex.Message, "Erreur", " uWidgetEmpty.Set Picture")
             End Try
@@ -2193,6 +2198,12 @@ Public Class uWidgetEmpty
                     If _macro IsNot Nothing Then
                         myService.RunMacro(IdSrv, _macro.ID)
                         Exit Sub
+                    End If
+                    If _dev IsNot Nothing Then
+                        If _dev.Type = HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA Then
+                            RaiseEvent ShowTemplate(_dev.Modele)
+                            Exit Sub
+                        End If
                     End If
                     If StkPopup.Children.Count > 0 Then
                         Select Case _dev.Type

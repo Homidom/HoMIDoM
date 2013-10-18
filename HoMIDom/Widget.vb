@@ -3,6 +3,7 @@
     Public Class Widget
 
 #Region "Variables"
+        Dim _uid As String
         Dim _Label As String
         Dim _X As Double
         Dim _Y As Double
@@ -13,6 +14,15 @@
 #End Region
 
 #Region "Property"
+
+        Public Property Uid As String
+            Get
+                Return _uid
+            End Get
+            Set(value As String)
+                _uid = value
+            End Set
+        End Property
 
         Public Property Label As String
             Get
@@ -78,6 +88,12 @@
         End Property
 #End Region
 
+#Region "Methode"
+        Public Sub New()
+            Uid = System.Guid.NewGuid.ToString()
+        End Sub
+#End Region
+
         Public Class Picture
             Dim _Path As String
 
@@ -113,5 +129,7 @@
                 End Set
             End Property
         End Class
+
+
     End Class
 End Namespace

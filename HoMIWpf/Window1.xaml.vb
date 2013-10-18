@@ -91,9 +91,20 @@ Class Window1
     Dim _KeyBoardPath As String = "osk"
     Dim _MaJWidgetFromServer As Boolean = True
     Dim _ShowTimeFromServer As Boolean = True 'Afficher l'heure du serveur ou si non celle du client
+    Dim _CurrentIdTemplate As String = "" 'ID du template telecommande en cours
+    Dim _IsTemplate As Boolean = False
 #End Region
 
 #Region "Property"
+    Public Property CurrentIdTemplate As String
+        Get
+            Return _CurrentIdTemplate
+        End Get
+        Set(value As String)
+            _CurrentIdTemplate = value
+        End Set
+    End Property
+
     Public Property StartDefautPage As String
         Get
             Return _StartDefautPage
@@ -1868,6 +1879,7 @@ Class Window1
         Try
             Me.Cursor = Cursors.Wait
 
+            _IsTemplate = False
             DesAff_TaskMnu()
             _TimeMouseDown = Now
             LblZone.Content = sender.Label
@@ -2039,6 +2051,9 @@ Class Window1
 
     Public Sub ShowZone(ByVal IdZone As String)
         Try
+            _CurrentIdTemplate = ""
+            _IsTemplate = False
+
             'Gestion de l'erreur si le serveur n'est pas connecté
             If IsConnect = False Then
                 AfficheMessageAndLog(Fonctions.TypeLog.INFO, "Le serveur Homidom n'est pas connecté, impossible d'afficher les éléments de la zone sélectionnée", "Information", "ShowZone")
@@ -2194,6 +2209,7 @@ Class Window1
                             y.Max = _ListElement.Item(j).Max
                             y.IsHitTestVisible = True 'True:bouge pas False:Bouge
                             AddHandler y.ShowZone, AddressOf ElementShowZone
+                            AddHandler y.ShowTemplate, AddressOf ShowTemplate
                             x.Content = y
                             Canvas1.Children.Add(x)
                             Canvas.SetLeft(x, _ListElement.Item(j).X)
@@ -2243,6 +2259,7 @@ Class Window1
                         elmt.TailleStatus = 20
                         elmt.IsHitTestVisible = True
                         AddHandler elmt.ShowZone, AddressOf ElementShowZone
+                        AddHandler elmt.ShowTemplate, AddressOf ShowTemplate
                         x.Content = elmt
                         _ListElement.Add(elmt)
 
@@ -2333,6 +2350,7 @@ Class Window1
                     y.Max = _ListElement.Item(i).Max
 
                     AddHandler y.ShowZone, AddressOf ElementShowZone
+                    AddHandler y.ShowTemplate, AddressOf ShowTemplate
                     x.Content = y
                     Canvas1.Children.Add(x)
                     Canvas.SetLeft(x, _ListElement.Item(i).X)
@@ -2357,7 +2375,16 @@ Class Window1
                 Exit Sub
             End If
 
+            Canvas1.Children.Clear()
+
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
+
+            Me.UpdateLayout()
+
             'Déclaration des variables
+            _CurrentIdTemplate = IdTemplate
             Dim _template As Telecommande.Template
             Dim _Left As Double = 0
             Dim _Top As Double = 20
@@ -2370,6 +2397,10 @@ Class Window1
             'Affiche l'image background de la zone
             ImgBackground.Source = Nothing
 
+            If _template Is Nothing Then Exit Sub
+
+            _IsTemplate = True
+
             'Desgin
             ChkMove.Visibility = Windows.Visibility.Visible
             ChkEdit.Visibility = Windows.Visibility.Visible
@@ -2377,96 +2408,139 @@ Class Window1
             If ChkMove.IsChecked = True Then ChkMove.IsChecked = False
             If ChkEdit.IsChecked = True Then ChkEdit.IsChecked = False
 
-            'On va afficher tous les widgets empty
-            For i As Integer = 0 To _ListElement.Count - 1
-                If _ListElement.Item(i).ZoneId = IdTemplate And _ListElement.Item(i).IsEmpty = True Then
-                    'Ajouter un nouveau Control
-                    Dim x As New ContentControl
-                    Dim Trg As New TransformGroup
-                    Dim Rot As New RotateTransform(_ListElement.Item(i).Rotation)
+            'on va afficher l'image de fond **********************************
 
-                    Trg.Children.Add(Rot)
-                    x.Width = _ListElement.Item(i).Width
-                    x.Height = _ListElement.Item(i).Height
-                    x.RenderTransform = Trg
-                    x.Style = mybuttonstyle
-                    x.Tag = True
-                    x.Uid = _ListElement.Item(i).Uid
+            'Ajouter un nouveau Control
+            Dim x As New ContentControl
+            Dim Trg As New TransformGroup
+            Dim Rot As New RotateTransform(0)
 
-                    Dim y As New uWidgetEmpty
-                    y.Show = True
-                    y.Uid = _ListElement.Item(i).Uid
-                    y.Id = _ListElement.Item(i).Id
-                    y.ZoneId = _ListElement.Item(i).ZoneId
-                    y.Width = x.Width
-                    y.Height = x.Height
-                    y.X = _ListElement.Item(i).X
-                    y.Y = _ListElement.Item(i).Y
-                    y.Rotation = _ListElement.Item(i).Rotation
-                    y.RotationX = _ListElement.Item(i).RotationX
-                    y.RotationY = _ListElement.Item(i).RotationY
-                    y.ZIndex = _ListElement.Item(i).ZIndex
-                    y.BorderBrush = _ListElement.Item(i).BorderBrush
-                    y.BorderThickness = _ListElement.Item(i).BorderThickness
-                    y.ColorBorder = _ListElement.Item(i).ColorBorder
-                    y.CornerRadius = _ListElement.Item(i).CornerRadius
-                    y.IsEmpty = _ListElement.Item(i).IsEmpty
-                    y.Type = _ListElement.Item(i).Type
-                    y.Refresh = _ListElement.Item(i).Refresh
-                    y.CanEditValue = _ListElement.Item(i).CanEditValue
-                    y.Picture = _ListElement.Item(i).Picture
-                    y.ShowPicture = _ListElement.Item(i).ShowPicture
-                    y.GarderProportionImage = _ListElement.Item(i).GarderProportionImage
-                    y.ShowEtiquette = _ListElement.Item(i).ShowEtiquette
-                    y.IsCommun = _ListElement.Item(i).IsCommun
-                    y.Fondu = _ListElement.Item(i).Fondu
-                    y.ShowStatus = _ListElement.Item(i).ShowStatus
-                    y.Etiquette = _ListElement.Item(i).Etiquette
-                    y.DefautLabelStatus = _ListElement.Item(i).DefautLabelStatus
-                    y.TailleStatus = _ListElement.Item(i).TailleStatus
-                    y.TailleEtiquette = _ListElement.Item(i).TailleEtiquette
-                    y.EtiquetteAlignement = _ListElement.Item(i).EtiquetteAlignement
-                    y.MaJEtiquetteFromServeur = _ListElement.Item(i).MaJEtiquetteFromServeur
-                    y.ColorBackGround = _ListElement.Item(i).ColorBackGround
-                    y.ColorEtiquette = _ListElement.Item(i).ColorEtiquette
-                    y.ColorStatus = _ListElement.Item(i).ColorStatus
-                    y.IsHitTestVisible = True 'True:bouge pas False:Bouge
-                    y.Action_GestureBasHaut = _ListElement.Item(i).Action_GestureBasHaut
-                    y.Action_GestureDroiteGauche = _ListElement.Item(i).Action_GestureDroiteGauche
-                    y.Action_GestureGaucheDroite = _ListElement.Item(i).Action_GestureGaucheDroite
-                    y.Action_GestureHautBas = _ListElement.Item(i).Action_GestureHautBas
-                    y.Action_On_Click = _ListElement.Item(i).Action_On_Click
-                    y.Action_On_LongClick = _ListElement.Item(i).Action_On_LongClick
-                    y.Visuel = _ListElement.Item(i).Visuel
-                    y.URL = _ListElement.Item(i).URL
-                    y.HttpRefresh = _ListElement.Item(i).HttpRefresh
-                    y.UrlRss = _ListElement.Item(i).UrlRss
-                    y.ListHttpButton = _ListElement.Item(i).ListHttpButton
-                    y.IDMeteo = _ListElement.Item(i).IDMeteo
-                    y.IDKeyPad = _ListElement.Item(i).IDKeyPad
-                    y.ShowPassWord = _ListElement.Item(i).ShowPassWord
-                    y.ClearAfterEnter = _ListElement.Item(i).ClearAfterEnter
-                    y.ShowClavier = _ListElement.Item(i).ShowClavier
-                    y.Min = _ListElement.Item(i).Min
-                    y.Max = _ListElement.Item(i).Max
+            Trg.Children.Add(Rot)
+            x.Width = _template.GraphicTemplate.Width
+            x.Height = _template.GraphicTemplate.Height
+            x.RenderTransform = Trg
+            x.Style = mybuttonstyle
+            x.Tag = True
+            x.Uid = System.Guid.NewGuid.ToString()
 
-                    AddHandler y.ShowZone, AddressOf ElementShowZone
-                    x.Content = y
-                    Canvas1.Children.Add(x)
-                    Canvas.SetLeft(x, _ListElement.Item(i).X)
-                    Canvas.SetTop(x, _ListElement.Item(i).Y)
-                    Canvas.SetZIndex(x, _ListElement.Item(i).ZIndex)
+            Dim y As New uWidgetEmpty
+            y.Show = True
+            y.Uid = System.Guid.NewGuid.ToString()
+            y.Tag = "MULTIMEDIA"
+            y.Width = _template.GraphicTemplate.Width
+            y.Height = _template.GraphicTemplate.Height
+            y.X = (Canvas1.ActualWidth - _template.GraphicTemplate.Width) / 2
+            y.Y = (Canvas1.ActualHeight - _template.GraphicTemplate.Height) / 2
+            y.ZIndex = -99
+            y.CornerRadius = 0
+            y.IsEmpty = True
+            y.Type = uWidgetEmpty.TypeOfWidget.Image
+            y.Refresh = 0
+            y.Picture = _template.GraphicTemplate.BackGroundPicture
+            y.ShowPicture = True
+            y.GarderProportionImage = False
+            y.ShowEtiquette = False
+            y.IsCommun = False
+            y.Fondu = True
+            y.ShowStatus = False
+            y.IsHitTestVisible = True 'True:bouge pas False:Bouge
+            x.Content = y
+            Canvas1.Children.Add(x)
+            Canvas.SetLeft(x, (Canvas1.ActualWidth - _template.GraphicTemplate.Width) / 2)
+            Canvas.SetTop(x, (Canvas1.ActualHeight - _template.GraphicTemplate.Height) / 2)
+            Canvas.SetZIndex(x, -99)
 
-                    x = Nothing
-                    y = Nothing
-                End If
-            Next
+            x = Nothing
+            y = Nothing
+
+
+            'On va afficher tous lew widgets du template
+            'For i As Integer = 0 To _template.GraphicTemplate.Widgets.Count - 1
+            '    '    'Ajouter un nouveau Control
+            '    x = New ContentControl
+            '    Trg = New TransformGroup
+            '     Rot = New RotateTransform(_ListElement.Item(i).Rotation)
+
+            '    Trg.Children.Add(Rot)
+            '    x.Width = _ListElement.Item(i).Width
+            '    x.Height = _ListElement.Item(i).Height
+            '    x.RenderTransform = Trg
+            '    x.Style = mybuttonstyle
+            '    x.Tag = True
+            '    x.Uid = _ListElement.Item(i).Uid
+
+            '    y = New uWidgetEmpty
+            '    y.Show = True
+            '    y.Uid = _ListElement.Item(i).Uid
+            '    y.Id = _ListElement.Item(i).Id
+            '    y.ZoneId = _ListElement.Item(i).ZoneId
+            '    y.Width = x.Width
+            '    y.Height = x.Height
+            '    y.X = _ListElement.Item(i).X
+            '    y.Y = _ListElement.Item(i).Y
+            '    y.Rotation = _ListElement.Item(i).Rotation
+            '    y.RotationX = _ListElement.Item(i).RotationX
+            '    y.RotationY = _ListElement.Item(i).RotationY
+            '    y.ZIndex = _ListElement.Item(i).ZIndex
+            '    y.BorderBrush = _ListElement.Item(i).BorderBrush
+            '    y.BorderThickness = _ListElement.Item(i).BorderThickness
+            '    y.ColorBorder = _ListElement.Item(i).ColorBorder
+            '    y.CornerRadius = _ListElement.Item(i).CornerRadius
+            '    y.IsEmpty = _ListElement.Item(i).IsEmpty
+            '    y.Type = _ListElement.Item(i).Type
+            '    y.Refresh = _ListElement.Item(i).Refresh
+            '    y.CanEditValue = _ListElement.Item(i).CanEditValue
+            '    y.Picture = _ListElement.Item(i).Picture
+            '    y.ShowPicture = _ListElement.Item(i).ShowPicture
+            '    y.GarderProportionImage = _ListElement.Item(i).GarderProportionImage
+            '    y.ShowEtiquette = _ListElement.Item(i).ShowEtiquette
+            '    y.IsCommun = _ListElement.Item(i).IsCommun
+            '    y.Fondu = _ListElement.Item(i).Fondu
+            '    y.ShowStatus = _ListElement.Item(i).ShowStatus
+            '    y.Etiquette = _ListElement.Item(i).Etiquette
+            '    y.DefautLabelStatus = _ListElement.Item(i).DefautLabelStatus
+            '    y.TailleStatus = _ListElement.Item(i).TailleStatus
+            '    y.TailleEtiquette = _ListElement.Item(i).TailleEtiquette
+            '    y.EtiquetteAlignement = _ListElement.Item(i).EtiquetteAlignement
+            '    y.MaJEtiquetteFromServeur = _ListElement.Item(i).MaJEtiquetteFromServeur
+            '    y.ColorBackGround = _ListElement.Item(i).ColorBackGround
+            '    y.ColorEtiquette = _ListElement.Item(i).ColorEtiquette
+            '    y.ColorStatus = _ListElement.Item(i).ColorStatus
+            '    y.IsHitTestVisible = True 'True:bouge pas False:Bouge
+            '    y.Action_GestureBasHaut = _ListElement.Item(i).Action_GestureBasHaut
+            '    y.Action_GestureDroiteGauche = _ListElement.Item(i).Action_GestureDroiteGauche
+            '    y.Action_GestureGaucheDroite = _ListElement.Item(i).Action_GestureGaucheDroite
+            '    y.Action_GestureHautBas = _ListElement.Item(i).Action_GestureHautBas
+            '    y.Action_On_Click = _ListElement.Item(i).Action_On_Click
+            '    y.Action_On_LongClick = _ListElement.Item(i).Action_On_LongClick
+            '    y.Visuel = _ListElement.Item(i).Visuel
+            '    y.URL = _ListElement.Item(i).URL
+            '    y.HttpRefresh = _ListElement.Item(i).HttpRefresh
+            '    y.UrlRss = _ListElement.Item(i).UrlRss
+            '    y.ListHttpButton = _ListElement.Item(i).ListHttpButton
+            '    y.IDMeteo = _ListElement.Item(i).IDMeteo
+            '    y.IDKeyPad = _ListElement.Item(i).IDKeyPad
+            '    y.ShowPassWord = _ListElement.Item(i).ShowPassWord
+            '    y.ClearAfterEnter = _ListElement.Item(i).ClearAfterEnter
+            '    y.ShowClavier = _ListElement.Item(i).ShowClavier
+            '    y.Min = _ListElement.Item(i).Min
+            '    y.Max = _ListElement.Item(i).Max
+
+            '    AddHandler y.ShowZone, AddressOf ElementShowZone
+            '    x.Content = y
+            '    Canvas1.Children.Add(x)
+            '    Canvas.SetLeft(x, _ListElement.Item(i).X)
+            '    Canvas.SetTop(x, _ListElement.Item(i).Y)
+            '    Canvas.SetZIndex(x, _ListElement.Item(i).ZIndex)
+
+            '    x = Nothing
+            '    y = Nothing
+            'Next
 
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ShowZone: " & ex.ToString, "Erreur", "ShowZone")
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ShowTemplate: " & ex.ToString, "Erreur", "ShowZone")
         End Try
     End Sub
-
 
     Private Sub Deplacement_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ChkMove.Click
         Try
@@ -2496,45 +2570,85 @@ Class Window1
                     RemoveHandler child.SizeChanged, AddressOf Resize
                     Selector.SetIsSelected(child, False)
 
-                    For j As Integer = 0 To _ListElement.Count - 1
-                        If _ListElement.Item(j).Uid = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
-                            _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
-                            _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
-                            _ListElement.Item(j).Width = child.Width
-                            _ListElement.Item(j).Height = child.Height
+                    If _IsTemplate = False Then
+                        'c'est pas un template mais une zone
+                        For j As Integer = 0 To _ListElement.Count - 1
+                            If _ListElement.Item(j).Uid = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
+                                _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
+                                _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
+                                _ListElement.Item(j).Width = child.Width
+                                _ListElement.Item(j).Height = child.Height
 
-                            If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
-                                Dim gt As TransformGroup = child.RenderTransform
-                                For k = 0 To gt.Children.Count - 1
-                                    If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
-                                        Dim rt As RotateTransform = gt.Children.Item(k)
-                                        If rt IsNot Nothing Then
-                                            _ListElement.Item(j).Rotation = rt.Angle
+                                If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
+                                    Dim gt As TransformGroup = child.RenderTransform
+                                    For k = 0 To gt.Children.Count - 1
+                                        If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
+                                            Dim rt As RotateTransform = gt.Children.Item(k)
+                                            If rt IsNot Nothing Then
+                                                _ListElement.Item(j).Rotation = rt.Angle
+                                            End If
                                         End If
-                                    End If
-                                    If InStr(LCase(gt.Children.Item(k).GetType.ToString), "skewtransform") > 0 Then
-                                        Dim rt As SkewTransform = gt.Children.Item(k)
-                                        If rt IsNot Nothing Then
-                                            _ListElement.Item(j).RotationX = rt.AngleX
-                                            _ListElement.Item(j).RotationY = rt.AngleY
+                                        If InStr(LCase(gt.Children.Item(k).GetType.ToString), "skewtransform") > 0 Then
+                                            Dim rt As SkewTransform = gt.Children.Item(k)
+                                            If rt IsNot Nothing Then
+                                                _ListElement.Item(j).RotationX = rt.AngleX
+                                                _ListElement.Item(j).RotationY = rt.AngleY
+                                            End If
                                         End If
-                                    End If
-                                Next
+                                    Next
+                                End If
+                                If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
+                                    _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                                End If
+                                If InStr(child.RenderTransform.GetType.ToString, "SkewTransform") > 0 Then
+                                    _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleXProperty)
+                                    _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleYProperty)
+                                End If
                             End If
-                            If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
-                                _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
-                            End If
-                            If InStr(child.RenderTransform.GetType.ToString, "SkewTransform") > 0 Then
-                                _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleXProperty)
-                                _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleYProperty)
-                            End If
-                        End If
-                    Next
+                        Next
+                    Else
+                        'c'est un template multimedia!! corriger _listelement par le template
+                        For j As Integer = 0 To _ListElement.Count - 1
+                            If _ListElement.Item(j).Uid = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
+                                _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
+                                _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
+                                _ListElement.Item(j).Width = child.Width
+                                _ListElement.Item(j).Height = child.Height
 
+                                If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
+                                    Dim gt As TransformGroup = child.RenderTransform
+                                    For k = 0 To gt.Children.Count - 1
+                                        If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
+                                            Dim rt As RotateTransform = gt.Children.Item(k)
+                                            If rt IsNot Nothing Then
+                                                _ListElement.Item(j).Rotation = rt.Angle
+                                            End If
+                                        End If
+                                        If InStr(LCase(gt.Children.Item(k).GetType.ToString), "skewtransform") > 0 Then
+                                            Dim rt As SkewTransform = gt.Children.Item(k)
+                                            If rt IsNot Nothing Then
+                                                _ListElement.Item(j).RotationX = rt.AngleX
+                                                _ListElement.Item(j).RotationY = rt.AngleY
+                                            End If
+                                        End If
+                                    Next
+                                End If
+                                If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
+                                    _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                                End If
+                                If InStr(child.RenderTransform.GetType.ToString, "SkewTransform") > 0 Then
+                                    _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleXProperty)
+                                    _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleYProperty)
+                                End If
+                            End If
+                        Next
+                    End If
                     Dim lbl As uWidgetEmpty = child.Content
                     lbl.IsHitTestVisible = True
 
+
                 Next
+
             End If
 
             Me.UpdateLayout()
@@ -2574,41 +2688,79 @@ Class Window1
 
                     Selector.SetIsSelected(child, False)
 
-                    For j As Integer = 0 To _ListElement.Count - 1
-                        If _ListElement.Item(j).Uid = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
-                            _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
-                            _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
-                            _ListElement.Item(j).Width = child.Width
-                            _ListElement.Item(j).Height = child.Height
+                    If _IsTemplate = False Then
+                        'c'est pas un template mais une zone
+                        For j As Integer = 0 To _ListElement.Count - 1
+                            If _ListElement.Item(j).Uid = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
+                                _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
+                                _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
+                                _ListElement.Item(j).Width = child.Width
+                                _ListElement.Item(j).Height = child.Height
 
-                            If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
-                                Dim gt As TransformGroup = child.RenderTransform
-                                For k = 0 To gt.Children.Count - 1
-                                    If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
-                                        Dim rt As RotateTransform = gt.Children.Item(k)
-                                        If rt IsNot Nothing Then
-                                            _ListElement.Item(j).Rotation = rt.Angle
+                                If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
+                                    Dim gt As TransformGroup = child.RenderTransform
+                                    For k = 0 To gt.Children.Count - 1
+                                        If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
+                                            Dim rt As RotateTransform = gt.Children.Item(k)
+                                            If rt IsNot Nothing Then
+                                                _ListElement.Item(j).Rotation = rt.Angle
+                                            End If
                                         End If
-                                    End If
-                                    If InStr(LCase(gt.Children.Item(k).GetType.ToString), "skewtransform") > 0 Then
-                                        Dim rt As SkewTransform = gt.Children.Item(k)
-                                        If rt IsNot Nothing Then
-                                            _ListElement.Item(j).RotationX = rt.AngleX
-                                            _ListElement.Item(j).RotationY = rt.AngleY
+                                        If InStr(LCase(gt.Children.Item(k).GetType.ToString), "skewtransform") > 0 Then
+                                            Dim rt As SkewTransform = gt.Children.Item(k)
+                                            If rt IsNot Nothing Then
+                                                _ListElement.Item(j).RotationX = rt.AngleX
+                                                _ListElement.Item(j).RotationY = rt.AngleY
+                                            End If
                                         End If
-                                    End If
-                                Next
+                                    Next
+                                End If
+                                If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
+                                    _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                                End If
+                                If InStr(child.RenderTransform.GetType.ToString, "SkewTransform") > 0 Then
+                                    _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleXProperty)
+                                    _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleYProperty)
+                                End If
                             End If
-                            If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
-                                _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
-                            End If
-                            If InStr(child.RenderTransform.GetType.ToString, "SkewTransform") > 0 Then
-                                _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleXProperty)
-                                _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleYProperty)
-                            End If
-                        End If
-                    Next
+                        Next
+                    Else
+                        'c'est un template !!! remplace listelement par template
+                        For j As Integer = 0 To _ListElement.Count - 1
+                            If _ListElement.Item(j).Uid = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
+                                _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
+                                _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
+                                _ListElement.Item(j).Width = child.Width
+                                _ListElement.Item(j).Height = child.Height
 
+                                If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
+                                    Dim gt As TransformGroup = child.RenderTransform
+                                    For k = 0 To gt.Children.Count - 1
+                                        If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
+                                            Dim rt As RotateTransform = gt.Children.Item(k)
+                                            If rt IsNot Nothing Then
+                                                _ListElement.Item(j).Rotation = rt.Angle
+                                            End If
+                                        End If
+                                        If InStr(LCase(gt.Children.Item(k).GetType.ToString), "skewtransform") > 0 Then
+                                            Dim rt As SkewTransform = gt.Children.Item(k)
+                                            If rt IsNot Nothing Then
+                                                _ListElement.Item(j).RotationX = rt.AngleX
+                                                _ListElement.Item(j).RotationY = rt.AngleY
+                                            End If
+                                        End If
+                                    Next
+                                End If
+                                If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
+                                    _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                                End If
+                                If InStr(child.RenderTransform.GetType.ToString, "SkewTransform") > 0 Then
+                                    _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleXProperty)
+                                    _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleYProperty)
+                                End If
+                            End If
+                        Next
+                    End If
                     Dim lbl As uWidgetEmpty = child.Content
                     lbl.IsHitTestVisible = True
                     lbl = Nothing
@@ -2628,64 +2780,65 @@ Class Window1
         End Try
     End Sub
 
-    Private Sub MaJ_Element(Optional ByVal Objet As Object = Nothing)
-        Try
-            Dim a As String = ""
-            Dim child As ContentControl
+    'Private Sub MaJ_Element(Optional ByVal Objet As Object = Nothing)
+    '    Try
+    '        Dim a As String = ""
+    '        Dim child As ContentControl
 
-            For Each child In Canvas1.Children
-                Dim obj As uWidgetEmpty = child.Content
-                If Objet IsNot Nothing Then
-                    obj = Objet.Content
-                End If
-                obj.IsHitTestVisible = False
-                obj.ModeEdition = False
-                obj = Nothing
+    '        For Each child In Canvas1.Children
+    '            Dim obj As uWidgetEmpty = child.Content
+    '            If Objet IsNot Nothing Then
+    '                obj = Objet.Content
+    '            End If
+    '            obj.IsHitTestVisible = False
+    '            obj.ModeEdition = False
+    '            obj = Nothing
 
-                Selector.SetIsSelected(child, False)
+    '            Selector.SetIsSelected(child, False)
 
-                For j As Integer = 0 To _ListElement.Count - 1
-                    If _ListElement.Item(j).Id = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
-                        _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
-                        _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
-                        _ListElement.Item(j).Width = child.Width
-                        _ListElement.Item(j).Height = child.Height
+    '            For j As Integer = 0 To _ListElement.Count - 1
+    '                If _ListElement.Item(j).Id = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
+    '                    _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
+    '                    _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
+    '                    _ListElement.Item(j).Width = child.Width
+    '                    _ListElement.Item(j).Height = child.Height
 
-                        If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
-                            Dim gt As TransformGroup = child.RenderTransform '.GetValue(RotateTransform.AngleProperty)
-                            For k = 0 To gt.Children.Count - 1
-                                If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
-                                    Dim rt As RotateTransform = gt.Children.Item(k)
-                                    If rt IsNot Nothing Then
-                                        _ListElement.Item(j).Rotation = rt.Angle 'child.RenderTransform.GetValue(RotateTransform.AngleProperty)
-                                    End If
-                                End If
-                                If InStr(LCase(gt.Children.Item(k).GetType.ToString), "skewtransform") > 0 Then
-                                    Dim rt As SkewTransform = gt.Children.Item(k)
-                                    If rt IsNot Nothing Then
-                                        _ListElement.Item(j).RotationX = rt.AngleX
-                                        _ListElement.Item(j).RotationY = rt.AngleY
-                                    End If
-                                End If
-                            Next
-                        End If
-                        If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
-                            _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
-                        End If
-                        If InStr(child.RenderTransform.GetType.ToString, "SkewTransform") > 0 Then
-                            _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleXProperty)
-                            _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleYProperty)
-                        End If
-                    End If
-                Next
+    '                    If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
+    '                        Dim gt As TransformGroup = child.RenderTransform '.GetValue(RotateTransform.AngleProperty)
+    '                        For k = 0 To gt.Children.Count - 1
+    '                            If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
+    '                                Dim rt As RotateTransform = gt.Children.Item(k)
+    '                                If rt IsNot Nothing Then
+    '                                    _ListElement.Item(j).Rotation = rt.Angle 'child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+    '                                End If
+    '                            End If
+    '                            If InStr(LCase(gt.Children.Item(k).GetType.ToString), "skewtransform") > 0 Then
+    '                                Dim rt As SkewTransform = gt.Children.Item(k)
+    '                                If rt IsNot Nothing Then
+    '                                    _ListElement.Item(j).RotationX = rt.AngleX
+    '                                    _ListElement.Item(j).RotationY = rt.AngleY
+    '                                End If
+    '                            End If
+    '                        Next
+    '                    End If
+    '                    If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
+    '                        _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+    '                    End If
+    '                    If InStr(child.RenderTransform.GetType.ToString, "SkewTransform") > 0 Then
+    '                        _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleXProperty)
+    '                        _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleYProperty)
+    '                    End If
+    '                End If
+    '            Next
 
-                Dim lbl As uWidgetEmpty = child.Content
-                lbl.IsHitTestVisible = True
-            Next
-        Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Resize: " & ex.Message, "Erreur", "Resize")
-        End Try
-    End Sub
+    '            Dim lbl As uWidgetEmpty = child.Content
+    '            lbl.IsHitTestVisible = True
+    '        Next
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Resize: " & ex.Message, "Erreur", "Resize")
+    '    End Try
+    'End Sub
+
 
 #Region "Nouveau Widget"
 
