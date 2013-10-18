@@ -81,7 +81,7 @@ Namespace My.Resources
         '''   
         '''  &apos;Ne pas supprimer cette function 
         '''  Public Function ExecuteCode(paramarray prmParameters() as object) as object
-        '''    Dim objTest as new TestC [le reste de la chaîne a été tronqué]&quot;;.
+        '''    Dim Serveur as Homidom.H [le reste de la chaîne a été tronqué]&quot;;.
         '''</summary>
         Friend ReadOnly Property ExempleVBS() As String
             Get
