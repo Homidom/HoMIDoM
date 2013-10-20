@@ -1,0 +1,324 @@
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	
+	margin-left: 10%;
+	line-height: 1; 
+	font-family:Helvetica neue, Helvetica, "arial Black", Gadget, sans-serif;
+	width: 70;
+	display: inline;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+html {
+/* Background Cover */
+background: url(Images/fond-logo.png) no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;		
+} 
+body article {
+	width: 160Px;
+	height: 70px;
+	background-color : rgba(75,75,75,0.75);
+
+ 	border: 1px groove #777777;
+	margin: 5px;
+	display : inline-block; 
+	z-index: 5;
+	
+ 	-moz-border-radius: 10px;
+ 	-webkit-border-radius: 10px;
+ 	border-radius: 10px;
+	
+	box-shadow:5px 7px 7px rgba(95,95,95,1);
+	-moz-box-shadow: 5px 7px 7px rgba(95,95,95,1);
+ 	-webkit-box-shadow: 5px 7px 7px rgba(95,95,95,1);
+}
+
+
+footer {
+	margin: auto;
+	width:100%;	
+	float: left;
+	color : Red;
+}
+
+
+ footer a, footer a:hover  {
+	float: left;
+	font-size: 10pt;
+	color: White;
+	
+}
+
+header {
+	margin: 10px auto 10px;
+	width:85%;	
+	float: none;
+	display:inline-block;
+}
+
+header span, header p {
+	display:inline-block;
+	font-size:small;
+	color:white;
+	text-align:center;
+}
+
+ .InfoSoleil {
+	float : right;
+	margin-right: 25px;
+	margin-top: 10px;
+}
+
+.LogoDate {
+	display : inline-block;
+}	
+
+.DateHeader, .LogoHeader {
+	font-size: 16pt;
+	font-style: italic;
+	font-weight : bold;
+	vertical-align: middle;
+}	
+
+.MiddlePanel {
+	width:78%;
+	margin: 1%;
+	background-color: rgba(190,190,190,0.75) ;
+	display: inline-block;
+	z-index:5;
+}
+
+.ZonesPanel {
+	float: left;
+	width:78%;
+	margin: 1%;
+	background-color: rgba(190,190,190,0.75) ;
+	display: inline-block;
+	z-index:4;
+}
+
+.RightPanel {
+	margin: 1%;
+	float: right;
+	width: 15%; 
+	height : auto;
+	font-size: 16px;
+	padding: 5 px; 
+	background-color: rgba(190,190,190,0.75) ;
+	text-align: center;
+	display: inline-block;
+}
+
+.LeftPanel {
+	font-size: 16px;
+	margin: 5px,5px;
+	padding: 5 px; 
+	width: 18%;
+	display: inline-block;
+}
+
+#aside {
+}
+
+#devices {
+	width: 95%;
+	background-color:  rgba(0,124,0,1);
+	margin-left: auto;
+  	margin-right: auto;
+	padding-bottom: 15px;
+	background: transparent none;
+}
+
+
+h1 {
+	font-size:32px;
+}
+
+h2 {
+	margin-top: 10px;
+	margin-bottom: 10px;
+	text-align: center;
+	font-size:24px;
+	color: White;
+	font-weight: bold;
+}
+
+nav {
+	text-align:center;
+}
+nav ul li {
+	display:inline-block;
+	margin:30px;
+}
+
+.NomDevice {
+	margin:  5px 0 -3% 5%; 
+	font-size: 0.7em;
+	font-weight: bold;
+	text-align : center;
+	color : white ;
+}
+
+.align_image img, .BoutonZone img {
+	width:45px;
+	height:45px; 
+}
+
+.align_image span, .BoutonZone span {
+  margin: 1% 1% ;
+  font-size: 12pt;
+  font-weight: bold;
+  font-style: !important;
+}
+
+.align_image img, .align_image span {
+  vertical-align : baseline;
+  display: inline-block;
+  color : white ;
+}
+
+.macros {
+	margin: auto;
+}
+.align_macro:hover {
+	background-image: -webkit-linear-gradient( top, red 35%, Black 75%);
+	background-image:    -moz-linear-gradient( top, red 35%, Black 75%);
+}
+
+.BoutonZone img, .BoutonZone span {
+  vertical-align : baseline;
+  color : white ;
+}
+
+.MenuZone {
+	width: 85%;
+	margin-right: auto;
+	margin-left: auto;
+	float: inherit;
+}
+
+
+.align_Zone {
+	width: 105px;
+	height: 85px;
+ 	border: 3px groove #A9A9A9;
+	margin-left: 30px; 
+	margin-right: 30px;
+	background-image: -webkit-linear-gradient( top, #BEBEBE 0%, Black 75%);
+	background-image:    -moz-linear-gradient( top, #BEBEBE 0%, Black 75%);
+ 	-moz-border-radius: 10px;
+ 	-webkit-border-radius: 10px;
+ 	border-radius: 10px;
+	display: inline-block;
+}
+.align_Zone:hover {
+	background-image: -webkit-linear-gradient( top, red 35%, Black 75%);
+	background-image:    -moz-linear-gradient( top, red 35%, Black 75%);
+}
+
+.align_Zone img,  .align_Zone span {
+  display: block;
+}
+
+.align_Zone img {
+	width:50px;
+	height:50px; 
+	margin-top : 3%;
+	margin-left : auto;
+	margin-right : auto;
+}
+
+.align_Zone p {
+  Margin : 5%;
+  color : white ;
+  font-size: 0.8em;
+  text-align : center;	
+}
+
+#menu {
+	display: none;
+}
+
+#menu ul {
+ margin:0;
+ padding:0;
+ list-style-type:none;
+ text-align:center;
+
+ }
+ 
+#menu li {
+ float: right;
+ margin:auto;
+ padding:0;
+ text-align: center;
+ background-color:black;
+ -moz-border-radius: 5px;
+ -webkit-border-radius: 5px;
+ border-radius: 5px; 
+ 
+ position: relative;
+ z-index: 5;
+ }
+ 
+#menu li a {
+ display:block;
+ width:160px;
+ color:white;
+ text-decoration:none;
+ padding:5px;
+ }
+ 
+#menu li a:hover {
+ color:#FFD700;
+ }
+
+article:hover #menu {
+	display: block;
+} 
+ 

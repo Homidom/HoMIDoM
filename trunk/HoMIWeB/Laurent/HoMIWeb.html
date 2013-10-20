@@ -1,0 +1,245 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<title>HoMIDom Interface Web</title>
+		<meta charset="utf-8" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script src="jquery.jsonp-2.4.0.min.js"></script>
+		<script src="jquery.signalR.min.js"></script>
+		<script type="text/javascript" >
+			ZoneIDText = "##";
+			var ListDevices = [];
+			var ListZones = [];
+			var ServerName = "localhost";
+		</script>
+		<script src="http://"+ ServerName + ":7999/live/signalr/hubs/"></script>
+		<link href="HoMIWeb.css" rel="stylesheet" type="text/css">
+		
+	</head>
+	<body>
+	
+	<header class="header">
+			<section class="LogoDate">
+			<p  class="DateHeader" title="HomiDoM"><img  class="LogoHeader" alt="Information sur l'image" src="Images/Rond_64x64.png"/>
+			<script type="text/javascript" >
+				d = new Date();
+				document.write(d.toLocaleDateString().charAt(0).toUpperCase()+ d.toLocaleDateString().slice(1) +'   --   '+d.toLocaleTimeString()+'</p>');
+
+			</script>
+		</section>	
+		<span class="InfoSoleil">
+ 			<span id="LeverSoleil"><div class="align_image"><img src="Images/icones/01.png" /></div><p id="HeureLever">  :  </p></span>	
+			<span id="CoucherSoleil"><div class="align_image"><img src="Images/icones/36.png" /></div><p id="HeureCoucher">  :  </p></span>	
+		</span>	
+	 <!-- bloc login 
+      	 <div id="login">
+        	<form action="index1.html" method="post">
+            	<input type="text" class="name" name="name" id="name" value="Name" onClick="this.value=''"/>
+                <input type="password" class="pass" name="pass" id="pass" value="Pass" onClick="this.value=''"/>
+                <input type="submit" class="valider" name="submit" id="submit" value="Inscription">
+            </form>
+        </div>	-->
+	</header>	
+
+			
+	<body>
+	
+	
+	<div class="RightPanel">
+		<h2>Event logs</h2>
+		<div id="events">
+			<p> Vofsrfzedvses </p>	
+		</div>
+	</div>	
+	
+	<div class="MiddlePanel">
+		<h2>Devices</h2>
+		<div id="devices"></div>	
+	</div>
+	
+	<div class="ZonesPanel">
+		<h2>Macros</h2>
+		<div id="macros"></div>	
+	</div>
+	
+	<div class="ZonesPanel">
+		<h2>Zones</h2>	
+		<div id="zones"></div>	
+	</div>	
+		
+		<script type="text/javascript">
+			var devices;
+		
+			$(document).ready(function () {
+				$.jsonp({
+					url: 'http://'+ ServerName + ':7999/api/123456789/device/',
+					callbackParameter: "callback",
+					success: loadDevices,
+					error: onError
+				})
+				$.jsonp({
+					url: 'http://' + ServerName +':7999/api/123456789/zone/',
+					callbackParameter: "callback",
+					success: loadZones,
+					error: onError
+				})
+				$.jsonp({
+					url: 'http://'+ ServerName + ':7999/api/123456789/macro/',
+					callbackParameter: "callback",
+					success: loadMacros,
+					error: onError
+				})
+				$('#btnTest').click(function(){
+					$.connection.NotificationHub.server.test("Test");
+				});
+
+				var connection = $.hubConnection('http://'+ ServerName + ':7999/live');
+				var nHubProxy = connection.createHubProxy('NotificationHub');
+				nHubProxy.on('DeviceChanged', function (id, value) {
+					console.log(id + ' = ' + value);
+					var dName = getDeviceName(id);
+					var currentdate = new Date(); 
+					var time = currentdate.getHours() + ":"  + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+					$('#events').prepend(time+' - '+dName+' = ' + value + '<br/>');
+					document.getElementById('HeureLever').innerHTML = '06:17';
+					document.getElementById('HeureCoucher').innerHTML = '20:32';
+				});
+				
+				connection.qs = { "sKey" : '123456789' };
+				connection.start()
+					.done(function(){ console.log('Now connected, connection ID=' + connection.id); })
+					.fail(function(){ console.log('Could not connect'); });
+			});
+			
+			function onError(jqXHR, textStatus, errorThrown ) {
+				alert('erreur:' + textStatus);
+			}
+			
+			function getDeviceName(id) {
+				return $('#'+id).find('p').text();
+			}
+			
+			function loadDevices(data) {
+				var items = [];
+				ListDevices = data;
+			}
+			
+			function loadZones(data) {
+				var items = [];
+				ListZones = data;
+				// items.push('<div class="MenuZone">');
+				$.each(ListZones, function(index, zone) {
+					items.push('<article class="align_Zone" onclick="AfficheZone(\''+zone._Id+'\');" ><img  src="images/icones/defaut.png" alt=""/><p>' + zone._Name + '</p></article>');
+				});
+				//items.push('</div>');
+
+
+				$('<ul/>', {
+					'class': 'MenuZone',
+					html: items.join('')
+				}).appendTo('#zones');
+			}
+			
+
+			function loadMacros(data) {
+				var items = [];
+				$.each(data, function(index, macro) {
+					items.push('<article class="align_macro"><div class="NomDevice"><span>'+ macro._Nom + '</span></div><div class="align_image"><img src="images/Icones/Macro_64.png" alt="" /><span href="#" onClick="executeMacro(\''+macro._ID+'\')">Lancer</span></div></article> ' );
+					// items.push('<li id="' + macro._ID + '">' + macro._Nom + '&nbsp; <a href="#" onClick="executeMacro(\''+macro._ID+'\')">Lancer</a></li>');
+				});
+				$('<ul/>', {
+					'class': 'MenuZone',
+					html: items.join('')
+				}).appendTo('#macros');
+			}
+			
+			function execute(deviceId, command) {
+				$.jsonp({
+					url: 'http://'+ ServerName +':7999/api/123456789/command/device/'+deviceId+'/'+command,
+					type: 'GET',
+					callbackParameter: "callback",
+					success: onExecuteSuccess,
+					error: onError
+				})
+			}
+			
+			
+			function executeMacro(macroId) {
+				$.jsonp({
+					url: 'http://' + ServerName +':7999/api/123456789/command/macro/'+macroId+'/EXEC',
+					type: 'GET',
+					callbackParameter: "callback",
+					success: onExecuteSuccess,
+					error: onError
+				})
+			}
+
+			function onExecuteSuccess() {
+				alert('Commande executée');
+			}
+
+			function AfficheZone(ZoneDefined) {
+					var items = [];
+					var FirstItem = false;
+					
+				//alert('L Id de la zone est : ' +ZoneDefined);
+				
+				ZoneIDText = ZoneDefined; 
+				// document.getElementById('ZoneID').innerHTML = ZoneIDText;	
+				
+				// Supprime les elements deja affichés
+				$('#devices').empty();
+				
+				$.each(ListZones, function(index, zone) {
+					if (zone._Id == ZoneDefined){
+						for (var i=0; i < zone._ListElement.length; i++)
+						{
+							if (zone._ListElement[i]._Visible) 
+							{
+								for (var a=0; a < ListDevices.length; a++)
+							 	{
+									//document.writeln("Coucou " + ListDevices[a]._ID + '  :  ' + zone._ListElement[i]._ElementID + '<br/>');
+									if ( ListDevices[a]._ID == zone._ListElement[i]._ElementID)
+									{
+										// pour le Debug
+										// document.writeln("Coucou " + ListDevices[a]._ID + '  :  ' + ListDevices[a]._Name  + ' / '+ ListDevices[a]._Type +'<br/>');
+										//document.getElementById('ZoneID').innerHTML = ZoneIDText+'<br/>'+ "Coucou " + ListDevices[a]._ID + '  :  ' + ListDevices[a]._Name  + ' / '+ ListDevices[a]._Type +'<br/>';
+										
+										items.push('<article><div class="NomDevice"><span>'+ListDevices[a]._Name + '</span></div><div class="align_image"><img src="images/devices/'+ListDevices[a]._Type+'-defaut.png" alt="" /><span>'+ListDevices[a]._Value + '</span> ' );
+										var actions = [];
+										$.each(ListDevices[a]._DeviceAction, function(i, command) {
+				    					 actions.push('<li class="command"><a href="#" onClick="execute(\''+ListDevices[a]._ID+'\', \''+command.Nom+'\')">' + command.Nom + '</a></li>');
+										});
+										 items.push('<div id="menu"><ul class="Navigation" role="navigation">');
+										// if (actions.length > 0)
+											items.push(actions.join(''));
+										 items.push('</ul></div></div></article>');
+
+									}
+								}
+							}			 
+						}
+					}
+				});
+
+				$('<ul/>', {
+					'class': 'devices',
+					html: items.join('')
+				}).appendTo('#devices');
+			}		
+		</script>
+		
+	<footer>
+
+		<p id="ZoneID"></p>
+		<button id="btnTest">Test</button>		
+		<hr/>
+			<a href="http://homidom.com"> HoMIDoM © 2011</a>	
+			<br />
+			<a href="http://www.homidom.com/mentions-legales-c2.html"> Mentions Légales </a>	
+	</footer>		
+	
+	</body>
+
+</html>
