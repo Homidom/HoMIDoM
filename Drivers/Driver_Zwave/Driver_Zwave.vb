@@ -748,7 +748,8 @@ Public Class Driver_ZWave
                                     If NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY) Then
                                         m_manager.SetValue(ValueTemp, True)
                                     Else
-                                        m_manager.SetValue(ValueTemp, 255)
+                                        Dim OnValue As Byte = Objet.ValueMax
+                                        m_manager.SetValue(ValueTemp, OnValue)
                                     End If
 
                                 Else
@@ -760,7 +761,8 @@ Public Class Driver_ZWave
                                     If NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY) Then
                                         m_manager.SetValue(ValueTemp, False)
                                     Else
-                                        m_manager.SetValue(ValueTemp, 0)
+                                        Dim OffValue As Byte = Objet.ValueMin
+                                        m_manager.SetValue(ValueTemp, OffValue)
                                     End If
                                 Else
                                     m_manager.SetNodeOff(m_homeId, NodeTemp.ID)
@@ -768,10 +770,11 @@ Public Class Driver_ZWave
 
                             Case "DIM"
                                 If Not (IsNothing(Parametre1)) Then
-                                    Dim ValDimmer As Byte = Math.Round(Parametre1 * 2.55) ' Reformate la valeur entre 0 : OFF  et 255 :ON 
+                                    'Dim ValDimmer As Byte = Math.Round(Parametre1 * 2.55) ' Reformate la valeur entre 0 : OFF  et 255 :ON 
+                                    Dim ValDimmer As Byte = Parametre1
                                     texteCommande = texteCommande & " avec le % = " & Val(Parametre1) & " - " & ValDimmer
                                     If IsMultiLevel Then
-                                        m_manager.SetValue(ValueTemp, 255)
+                                        m_manager.SetValue(ValueTemp, ValDimmer)
                                     Else
                                         m_manager.SetNodeLevel(m_homeId, NodeTemp.ID, ValDimmer)
                                     End If
