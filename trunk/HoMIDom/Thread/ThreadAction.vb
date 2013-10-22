@@ -66,7 +66,8 @@ Namespace HoMIDom
                                             If String.IsNullOrEmpty(_var0) Then
                                                 param1.Value = x.Parametres.Item(idx)
                                             Else
-                                                param1.Value = _var0
+                                                'param1.Value = _var0
+                                                param1.Value = EvaluateCommand(_var0)
                                             End If
                                             _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "Execute", "param" & idx + 1 & ": " & param1.Value)
                                             y.Parametres.Add(param1)
@@ -93,7 +94,9 @@ Namespace HoMIDom
                                                 If String.IsNullOrEmpty(_var0) Then
                                                     y2.Value = x.Parametres.Item(0)
                                                 Else
-                                                    y2.Value = _var0
+                                                    'y2.Value = _var0
+                                                    y2.Value = EvaluateCommand(_var0)
+
                                                 End If
                                                 y.Parametres.Add(y2)
                                             End If
@@ -191,10 +194,10 @@ Namespace HoMIDom
                                 'On travail juste sur une heure
                                 If (_tim(0) <> "*" Or _tim(1) <> "*" Or _tim(2) <> "*") And _tim(3) = "*" And _tim(4) = "*" And _tim(5) = "" And _tim(6) <> "1" And _tim(7) <> "1" Then
                                     If _tim(0) = "*" Then sc = Now.Second Else sc = CInt(_tim(0))
-                                If _tim(1) = "*" Then mn = Now.Minute Else mn = CInt(_tim(1))
-                                If _tim(2) = "*" Then hr = Now.Hour Else hr = CInt(_tim(2))
-                                a1 = New Date(Now.Year, Now.Month, Now.Day, hr, mn, sc)
-                            End If
+                                    If _tim(1) = "*" Then mn = Now.Minute Else mn = CInt(_tim(1))
+                                    If _tim(2) = "*" Then hr = Now.Hour Else hr = CInt(_tim(2))
+                                    a1 = New Date(Now.Year, Now.Month, Now.Day, hr, mn, sc)
+                                End If
                                 'On travail sur une heure + date
                                 If (_tim(0) <> "*" Or _tim(1) <> "*" Or _tim(2) <> "*") And (_tim(3) <> "*" Or _tim(4) <> "*") And _tim(5) = "" And _tim(6) <> "1" And _tim(7) <> "1" Then
                                     If _tim(0) = "*" Then sc = Now.Second Else sc = CInt(_tim(0))
@@ -277,7 +280,7 @@ Namespace HoMIDom
                         If flag = True Then
                             For i As Integer = 0 To x.ListTrue.Count - 1
                                 Dim _action As New ThreadAction(_Server, x.ListTrue.Item(i), _NameMacro, _ID)
-                                Dim y As New Thread(AddressOf _action.Execute)
+                                Dim y As New Thread(AddressOf _Action.Execute)
                                 y.Name = _ID
                                 y.Start()
                                 _Server.GetListThread.Add(y)
@@ -286,7 +289,7 @@ Namespace HoMIDom
                         Else
                             For i As Integer = 0 To x.ListFalse.Count - 1
                                 Dim _action As New ThreadAction(_Server, x.ListFalse.Item(i), _NameMacro, _ID)
-                                Dim y As New Thread(AddressOf _action.Execute)
+                                Dim y As New Thread(AddressOf _Action.Execute)
                                 y.Name = _ID
                                 y.Start()
                                 _Server.GetListThread.Add(y)
@@ -308,7 +311,7 @@ Namespace HoMIDom
                         Dim _user As Users.User = _Server.ReturnUserById(_IdSrv, x.UserId)
                         If _user IsNot Nothing Then
                             Dim _action As New Mail(_Server, _Server.GetSMTPMailServeur(_IdSrv), _user.eMail, x.Sujet, x.Message, _Server.GetSMTPServeur(_IdSrv), _Server.GetSMTPPort(_IdSrv), _Server.GetSMTPSSL(_IdSrv), _Server.GetSMTPLogin(_IdSrv), _Server.GetSMTPPassword(_IdSrv))
-                            Dim y As New Thread(AddressOf _action.Send_email)
+                            Dim y As New Thread(AddressOf _Action.Send_email)
                             y.Name = "Traitement du script"
                             y.Start()
                             y = Nothing
@@ -413,7 +416,7 @@ Namespace HoMIDom
                 texte = DecodeCommand(texte)
                 'texte = texte.Replace("{time}", Now.ToShortTimeString) '--> pb avec le format qui ne passe pas dans une URL
                 'texte = texte.Replace("{date}", Now.ToLongDateString) '--> pb avec le format qui ne passe pas dans une URL
-                
+
                 Dim reader As StreamReader = Nothing
                 Dim str As String = ""
                 Dim request As WebRequest = WebRequest.Create(texte)
@@ -575,5 +578,21 @@ Namespace HoMIDom
             End Try
         End Function
 
+        Public Function EvaluateCommand(ByVal Command As String) As String
+            'si la chaine ne contient que des chiffres et operateurs "+-*/^().," on calcule sinon on affecte
+            Try
+                If Text.RegularExpressions.Regex.IsMatch(Command, "^[0-9+\-*/\^().,]*$") Then
+                    Dim dt = New DataTable()
+                    Dim resultat As Double = CDbl(dt.Compute(Command, ""))
+                    dt = Nothing
+                    Return resultat
+                Else
+                    Return Command
+                End If
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "EvaluateCommand", "Exception: " & ex.ToString)
+                Return Command
+            End Try
+        End Function
     End Class
 End Namespace
