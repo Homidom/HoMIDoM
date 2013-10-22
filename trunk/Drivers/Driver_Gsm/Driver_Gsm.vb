@@ -458,6 +458,10 @@ Imports System.Threading
         'Objet.adresse1.ToString = phonedestination
         Try
             If _Enable = False Then Exit Sub
+            If _IsConnect = False Then
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GSM Write", "Le driver n'est pas démarré, impossible d'écrire sur le port")
+                Exit Sub
+            End If
             If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "WRITE", "Commande: " & Command & ", Texte: " & Parametre1 & ", Composant: " & Objet.Name)
 
             Select Case UCase(Command)

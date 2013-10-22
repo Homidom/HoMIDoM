@@ -2573,16 +2573,29 @@ Namespace HoMIDom
                                         i1.Picture = _MonRepertoire & "\images\icones\Driver_128.png"
                                     End If
 
-                                    'Si le driver est prevu pour la plateforme de l'OS, on le charge
-                                    If i1.OsPlatform.Contains(_OsPlatForm) Then
-                                        Dim pt As New Driver(Me, _IdSrv, i1.ID)
-                                        _ListDrivers.Add(i1)
-                                        _ListImgDrivers.Add(pt)
-                                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", " - " & i1.Nom & " chargé (Version : " & i1.Version & " - " & i1.OsPlatform & ")")
-                                        pt = Nothing
+                                    'verification si un driver avec le même nom a déjà été chargé
+                                    Dim driverdejacharge As Boolean = False
+                                    For Each driverx As IDriver In _ListDrivers
+                                        If driverx.Nom = i1.Nom Then
+                                            driverdejacharge = True
+                                            Exit For
+                                        End If
+                                    Next
+                                    If driverdejacharge Then
+                                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", " - " & i1.Nom & " non chargé car un autre driver avec le même nom a déjà été chargé (Version : " & i1.Version & " - " & i1.OsPlatform & " - " & fi.Name & ")")
                                     Else
-                                        Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", " - " & i1.Nom & " non chargé, Platforme " & _OsPlatForm & " non géré (Version : " & i1.Version & " - " & i1.OsPlatform & ")")
+                                        'Si le driver est prevu pour la plateforme de l'OS, on le charge
+                                        If i1.OsPlatform.Contains(_OsPlatForm) Then
+                                            Dim pt As New Driver(Me, _IdSrv, i1.ID)
+                                            _ListDrivers.Add(i1)
+                                            _ListImgDrivers.Add(pt)
+                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", " - " & i1.Nom & " chargé (Version : " & i1.Version & " - " & i1.OsPlatform & " - " & fi.Name & ")")
+                                            pt = Nothing
+                                        Else
+                                            Log(TypeLog.INFO, TypeSource.SERVEUR, "Drivers_Load", " - " & i1.Nom & " non chargé, Platforme " & _OsPlatForm & " non géré (Version : " & i1.Version & " - " & i1.OsPlatform & " - " & fi.Name & ")")
+                                        End If
                                     End If
+
                                     i1 = Nothing
                                 End If
                             End If
