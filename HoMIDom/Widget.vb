@@ -11,6 +11,8 @@
         Dim _Height As Double
         Dim _Pictures As New List(Of Picture)
         Dim _Outputs As New List(Of Output)
+        Dim _Rotation As Double = 0
+        Dim _Zindex As Integer = 0
 #End Region
 
 #Region "Property"
@@ -86,6 +88,24 @@
                 _Outputs = value
             End Set
         End Property
+
+        Public Property Rotation As Double
+            Get
+                Return _Rotation
+            End Get
+            Set(value As Double)
+                _Rotation = value
+            End Set
+        End Property
+
+        Public Property ZIndex As Integer
+            Get
+                Return _Zindex
+            End Get
+            Set(value As Integer)
+                _Zindex = value
+            End Set
+        End Property
 #End Region
 
 #Region "Methode"
@@ -110,6 +130,7 @@
         Public Class Output
             Dim _TemplateID As String 'ID du template concerné
             Dim _Commande As String 'Commande à envoyer
+            Dim _deviceID As String 'ID du device à utiliser
 
             Public Property TemplateID As String
                 Get
@@ -126,6 +147,15 @@
                 End Get
                 Set(value As String)
                     _Commande = value
+                End Set
+            End Property
+
+            Public Property DeviceID As String
+                Get
+                    Return _deviceID
+                End Get
+                Set(value As String)
+                    _deviceID = value
                 End Set
             End Property
         End Class

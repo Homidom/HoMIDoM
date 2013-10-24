@@ -1617,6 +1617,15 @@ HoMIDom
 	<param name="Value"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ChangeValueOfDeviceSimple(System.String,System.String,System.String)">
+	<summary>
+ Permet de changer la valeur d'un device
+ </summary>
+	<param name="idsrv"></param>
+	<param name="IdDevice"></param>
+	<param name="Value"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetDeviceNoMaJ(System.Object)">
 	<summary>
  Retourne la liste des devices non à jour
@@ -2666,6 +2675,15 @@ HoMIDom
 	<param name="Value"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ChangeValueOfDeviceSimple(System.String,System.String,System.String)">
+	<summary>
+ Permet de changer la valeur d'un device en utilisant un string au lieu d'un objet
+ </summary>
+	<param name="idsrv"></param>
+	<param name="IdDevice"></param>
+	<param name="Value"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllDevices(System.String)">
 	<summary>
  Obtient la liste des devices
@@ -3693,6 +3711,13 @@ HoMIDom
 	<value></value>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.IsAudioVideo">
+	<summary>
+ Définit si de base le template est un équipement audio/video si oui on a le minimum 
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.TrameInit">
 	<summary>
  Trame d'initialisation à envoyer avant tout envoi de commande
@@ -3758,11 +3783,6 @@ HoMIDom
 	<param name="namevar"></param>
 	<param name="Value"></param>
 	<returns></returns>
-	<remarks></remarks>
-</member><member name="T:HoMIDom.HoMIDom.Telecommande.TypeEquipement">
-	<summary>
- Type d'équipement par défaut, pour définir ensuite les commandes de bases
- </summary>
 	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Telecommande.TemplateVar.Name">
 	<summary>

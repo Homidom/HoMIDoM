@@ -8403,6 +8403,8 @@ Namespace HoMIDom
 
                 Template.ID = Api.GenerateGUID
 
+                Template.InitCmd()
+
                 Dim streamIO As StreamWriter = Nothing
                 Try
                     Dim serialXML As New System.Xml.Serialization.XmlSerializer(GetType(Telecommande.Template))
@@ -8512,138 +8514,7 @@ Namespace HoMIDom
                     Return "Le template " & Template.Name & ".xml n'existe pas!"
                 End If
 
-                Try
-                    If Template.IsAudioVideo And Template.Commandes.Count > 0 And Template.GraphicTemplate.Widgets.Count = 0 Then
-                        For Each cmd In Template.Commandes
-                            Dim _widget As New Widget
-                            Dim _output As New Widget.Output
-                            Dim _picture As New Widget.Picture
-                            Dim _margin = 5
-
-                            _widget.Label = cmd.Name
-                            _widget.Height = 45
-                            _widget.Width = 45
-
-                            _output.Commande = cmd.Name
-                            _output.TemplateID = Template.ID
-                            _widget.Outputs.Add(_output)
-
-                            _picture.Path = _MonRepertoire & "\images\telecommande\" & cmd.Name & ".png"
-                            _widget.Pictures.Add(_picture)
-
-                            Dim _col As Byte = 0
-                            Dim _row As Byte = 0
-
-                            Select Case cmd.Name.ToUpper
-                                Case "0"
-                                    _row = 0
-                                    _col = 0
-                                Case "1"
-                                    _row = 1
-                                    _col = 0
-                                Case "2"
-                                    _row = 1
-                                    _col = 1
-                                Case "3"
-                                    _row = 1
-                                    _col = 2
-                                Case "4"
-                                    _row = 2
-                                    _col = 0
-                                Case "5"
-                                    _row = 2
-                                    _col = 1
-                                Case "6"
-                                    _row = 2
-                                    _col = 2
-                                Case "7"
-                                    _row = 3
-                                    _col = 0
-                                Case "8"
-                                    _row = 3
-                                    _col = 1
-                                Case "9"
-                                    _row = 3
-                                    _col = 2
-                                Case "PLAY"
-                                    _row = 11
-                                    _col = 2
-                                Case "PAUSE"
-                                    _row = 11
-                                    _col = 3
-                                Case "STOP"
-                                    _row = 11
-                                    _col = 1
-                                Case "POWER"
-                                    _row = 0
-                                    _col = 0
-                                Case "AVANCE"
-                                    _row = 12
-                                    _col = 2
-                                Case "RECUL"
-                                    _row = 12
-                                    _col = 1
-                                Case "NEXTCHAPITRE"
-                                    _row = 12
-                                    _col = 3
-                                Case "PREVIOUSCHAPITRE"
-                                    _row = 12
-                                    _col = 0
-                                Case "OK"
-                                    _row = 6
-                                    _col = 2
-                                Case "VOLUMEUP"
-                                    _row = 5
-                                    _col = 0
-                                Case "VOLUMEDOWN"
-                                    _row = 7
-                                    _col = 0
-                                Case "MUTE"
-                                    _row = 6
-                                    _col = 0
-                                Case "FLECHEHAUT"
-                                    _row = 5
-                                    _col = 2
-                                Case "FLECHEBAS"
-                                    _row = 7
-                                    _col = 2
-                                Case "FLECHEGAUCHE"
-                                    _row = 6
-                                    _col = 1
-                                Case "FLECHEDROITE"
-                                    _row = 6
-                                    _col = 3
-                                Case "ENREGISTRER"
-                                    _row = 11
-                                    _col = 0
-                                Case "BLUE"
-                                    _row = 9
-                                    _col = 0
-                                Case "RED"
-                                    _row = 9
-                                    _col = 1
-                                Case "GREEN"
-                                    _row = 9
-                                    _col = 2
-                                Case "YELLOW"
-                                    _row = 9
-                                    _col = 3
-                                Case "CHANNELUP"
-                                    _row = 5
-                                    _col = 4
-                                Case "CHANNELDOWN"
-                                    _row = 7
-                                    _col = 4
-                            End Select
-                            _widget.X = (_col * _widget.Width) + _margin
-                            _widget.Y = (_row * _widget.Height) + _margin
-
-                            Template.GraphicTemplate.Widgets.Add(_widget)
-                        Next
-                    End If
-                Catch ex As Exception
-                    Return "Erreur lors de la création des widgets du template !:" & vbCrLf & ex.ToString
-                End Try
+                Template = CreateDefautTemplateGrafic(Template)
 
                 Dim streamIO As StreamWriter = Nothing
                 Try
@@ -8666,6 +8537,174 @@ Namespace HoMIDom
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveTemplate", "Erreur : " & ex.Message)
                 Return ex.Message
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Efface la partie graphique du template
+        ''' </summary>
+        ''' <param name="Template"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function EffaceTemplateGraphic(Template As Telecommande.Template) As String
+            Try
+                Template.GraphicTemplate = Nothing
+
+                Return "0"
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "EffaceTemplate", "Erreur : " & ex.Message)
+                Return ex.Message
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Cree un template graphique par defaut
+        ''' </summary>
+        ''' <param name="Template"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function CreateDefautTemplateGrafic(Template As Telecommande.Template) As Telecommande.Template
+            Try
+                Dim _NewTemplate As Telecommande.Template = Template
+
+                _NewTemplate.GraphicTemplate.Width = 600
+                _NewTemplate.GraphicTemplate.Height = 480
+                _NewTemplate.GraphicTemplate.BackGroundPicture = _MonRepertoire & "\Images\Telecommande\front_multimedia.png"
+                _NewTemplate.GraphicTemplate.Widgets.Clear()
+
+                If _NewTemplate.IsAudioVideo And _NewTemplate.Commandes.Count > 0 Then
+                    For Each cmd In _NewTemplate.Commandes
+                        Dim _widget As New Widget
+                        Dim _output As New Widget.Output
+                        Dim _picture As New Widget.Picture
+                        Dim _margin As Integer = 7
+
+                        _widget.Label = cmd.Name
+                        _widget.Height = 45
+                        _widget.Width = 45
+
+                        _output.Commande = cmd.Name
+                        _output.TemplateID = _NewTemplate.ID
+                        _widget.Outputs.Add(_output)
+
+                        _picture.Path = _MonRepertoire & "\images\telecommande\" & cmd.Name & ".png"
+                        _widget.Pictures.Add(_picture)
+
+                        Dim _col As Byte = 0
+                        Dim _row As Byte = 0
+
+                        Select Case cmd.Name.ToUpper
+                            Case "0"
+                                _row = 4
+                                _col = 2
+                            Case "1"
+                                _row = 1
+                                _col = 1
+                            Case "2"
+                                _row = 1
+                                _col = 2
+                            Case "3"
+                                _row = 1
+                                _col = 3
+                            Case "4"
+                                _row = 2
+                                _col = 1
+                            Case "5"
+                                _row = 2
+                                _col = 2
+                            Case "6"
+                                _row = 2
+                                _col = 3
+                            Case "7"
+                                _row = 3
+                                _col = 1
+                            Case "8"
+                                _row = 3
+                                _col = 2
+                            Case "9"
+                                _row = 3
+                                _col = 3
+                            Case "PLAY"
+                                _row = 8
+                                _col = 9
+                            Case "PAUSE"
+                                _row = 8
+                                _col = 10
+                            Case "STOP"
+                                _row = 8
+                                _col = 8
+                            Case "POWER"
+                                _row = 0
+                                _col = 0
+                            Case "AVANCE"
+                                _row = 9
+                                _col = 9
+                            Case "RECUL"
+                                _row = 9
+                                _col = 8
+                            Case "NEXTCHAPITRE"
+                                _row = 9
+                                _col = 10
+                            Case "PREVIOUSCHAPITRE"
+                                _row = 9
+                                _col = 7
+                            Case "OK"
+                                _row = 6
+                                _col = 2
+                            Case "VOLUMEUP"
+                                _row = 5
+                                _col = 0
+                            Case "VOLUMEDOWN"
+                                _row = 7
+                                _col = 0
+                            Case "MUTE"
+                                _row = 6
+                                _col = 0
+                            Case "FLECHEHAUT"
+                                _row = 5
+                                _col = 2
+                            Case "FLECHEBAS"
+                                _row = 7
+                                _col = 2
+                            Case "FLECHEGAUCHE"
+                                _row = 6
+                                _col = 1
+                            Case "FLECHEDROITE"
+                                _row = 6
+                                _col = 3
+                            Case "ENREGISTRER"
+                                _row = 8
+                                _col = 7
+                            Case "BLUE"
+                                _row = 9
+                                _col = 0
+                            Case "RED"
+                                _row = 9
+                                _col = 1
+                            Case "GREEN"
+                                _row = 9
+                                _col = 2
+                            Case "YELLOW"
+                                _row = 9
+                                _col = 3
+                            Case "CHANNELUP"
+                                _row = 5
+                                _col = 4
+                            Case "CHANNELDOWN"
+                                _row = 7
+                                _col = 4
+                        End Select
+                        _widget.X = (_col * (_widget.Width + 5))
+                        _widget.Y = (_row * _widget.Height)
+
+                        _NewTemplate.GraphicTemplate.Widgets.Add(_widget)
+                    Next
+                End If
+
+                Return _NewTemplate
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CreateDefautTemplate", "Erreur : " & ex.Message)
+                Return Template
             End Try
         End Function
 
@@ -8891,7 +8930,7 @@ Namespace HoMIDom
                 SR.Close()
                 Return retour
             Catch ex As Exception
-                Return "ERREUR lors de l'exportation du fichier de config: " & ex.message
+                Return "ERREUR lors de l'exportation du fichier de config: " & ex.Message
             End Try
         End Function
 
@@ -8917,7 +8956,7 @@ Namespace HoMIDom
 
                 Return "0"
             Catch ex As Exception
-                Return "Erreur lors de l'importation du fichier de config: " & ex.message
+                Return "Erreur lors de l'importation du fichier de config: " & ex.Message
             End Try
         End Function
 
@@ -9040,7 +9079,7 @@ Namespace HoMIDom
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "CleanLog", cnt & " Fichier(s) log supprimé(s)")
                 Return 0
             Catch ex As Exception
-                Return "ERR:" & ex.message
+                Return "ERR:" & ex.Message
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CleanLog", "Erreur: " & ex.Message)
             End Try
         End Function
