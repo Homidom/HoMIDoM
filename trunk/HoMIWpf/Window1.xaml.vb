@@ -2367,7 +2367,7 @@ Class Window1
         End Try
     End Sub
 
-    Public Sub ShowTemplate(ByVal IdTemplate As String)
+    Public Sub ShowTemplate(ByVal IdTemplate As String, Optional DeviceId As String = "")
         Try
             'Gestion de l'erreur si le serveur n'est pas connecté
             If IsConnect = False Then
@@ -2387,7 +2387,7 @@ Class Window1
             _CurrentIdTemplate = IdTemplate
             Dim _template As Telecommande.Template
             Dim _Left As Double = 0
-            Dim _Top As Double = 20
+            Dim _Top As Double = 0
             Dim _idx As Integer = 0
 
             'Init des variables communes
@@ -2450,92 +2450,69 @@ Class Window1
             Canvas.SetTop(x, (Canvas1.ActualHeight - _template.GraphicTemplate.Height) / 2)
             Canvas.SetZIndex(x, -99)
 
+            _Left = (Canvas1.ActualWidth - _template.GraphicTemplate.Width) / 2
+            _Top = (Canvas1.ActualHeight - _template.GraphicTemplate.Height) / 2
+
             x = Nothing
             y = Nothing
 
-
             'On va afficher tous lew widgets du template
-            'For i As Integer = 0 To _template.GraphicTemplate.Widgets.Count - 1
-            '    '    'Ajouter un nouveau Control
-            '    x = New ContentControl
-            '    Trg = New TransformGroup
-            '     Rot = New RotateTransform(_ListElement.Item(i).Rotation)
+            For Each _widgt In _template.GraphicTemplate.Widgets
+                '    'Ajouter un nouveau Control
+                x = New ContentControl
+                Trg = New TransformGroup
+                Rot = New RotateTransform(_widgt.Rotation)
 
-            '    Trg.Children.Add(Rot)
-            '    x.Width = _ListElement.Item(i).Width
-            '    x.Height = _ListElement.Item(i).Height
-            '    x.RenderTransform = Trg
-            '    x.Style = mybuttonstyle
-            '    x.Tag = True
-            '    x.Uid = _ListElement.Item(i).Uid
+                Trg.Children.Add(Rot)
+                x.Width = _widgt.Width
+                x.Height = _widgt.Height
+                x.RenderTransform = Trg
+                x.Style = mybuttonstyle
+                x.Tag = True
+                x.Uid = _widgt.Uid
 
-            '    y = New uWidgetEmpty
-            '    y.Show = True
-            '    y.Uid = _ListElement.Item(i).Uid
-            '    y.Id = _ListElement.Item(i).Id
-            '    y.ZoneId = _ListElement.Item(i).ZoneId
-            '    y.Width = x.Width
-            '    y.Height = x.Height
-            '    y.X = _ListElement.Item(i).X
-            '    y.Y = _ListElement.Item(i).Y
-            '    y.Rotation = _ListElement.Item(i).Rotation
-            '    y.RotationX = _ListElement.Item(i).RotationX
-            '    y.RotationY = _ListElement.Item(i).RotationY
-            '    y.ZIndex = _ListElement.Item(i).ZIndex
-            '    y.BorderBrush = _ListElement.Item(i).BorderBrush
-            '    y.BorderThickness = _ListElement.Item(i).BorderThickness
-            '    y.ColorBorder = _ListElement.Item(i).ColorBorder
-            '    y.CornerRadius = _ListElement.Item(i).CornerRadius
-            '    y.IsEmpty = _ListElement.Item(i).IsEmpty
-            '    y.Type = _ListElement.Item(i).Type
-            '    y.Refresh = _ListElement.Item(i).Refresh
-            '    y.CanEditValue = _ListElement.Item(i).CanEditValue
-            '    y.Picture = _ListElement.Item(i).Picture
-            '    y.ShowPicture = _ListElement.Item(i).ShowPicture
-            '    y.GarderProportionImage = _ListElement.Item(i).GarderProportionImage
-            '    y.ShowEtiquette = _ListElement.Item(i).ShowEtiquette
-            '    y.IsCommun = _ListElement.Item(i).IsCommun
-            '    y.Fondu = _ListElement.Item(i).Fondu
-            '    y.ShowStatus = _ListElement.Item(i).ShowStatus
-            '    y.Etiquette = _ListElement.Item(i).Etiquette
-            '    y.DefautLabelStatus = _ListElement.Item(i).DefautLabelStatus
-            '    y.TailleStatus = _ListElement.Item(i).TailleStatus
-            '    y.TailleEtiquette = _ListElement.Item(i).TailleEtiquette
-            '    y.EtiquetteAlignement = _ListElement.Item(i).EtiquetteAlignement
-            '    y.MaJEtiquetteFromServeur = _ListElement.Item(i).MaJEtiquetteFromServeur
-            '    y.ColorBackGround = _ListElement.Item(i).ColorBackGround
-            '    y.ColorEtiquette = _ListElement.Item(i).ColorEtiquette
-            '    y.ColorStatus = _ListElement.Item(i).ColorStatus
-            '    y.IsHitTestVisible = True 'True:bouge pas False:Bouge
-            '    y.Action_GestureBasHaut = _ListElement.Item(i).Action_GestureBasHaut
-            '    y.Action_GestureDroiteGauche = _ListElement.Item(i).Action_GestureDroiteGauche
-            '    y.Action_GestureGaucheDroite = _ListElement.Item(i).Action_GestureGaucheDroite
-            '    y.Action_GestureHautBas = _ListElement.Item(i).Action_GestureHautBas
-            '    y.Action_On_Click = _ListElement.Item(i).Action_On_Click
-            '    y.Action_On_LongClick = _ListElement.Item(i).Action_On_LongClick
-            '    y.Visuel = _ListElement.Item(i).Visuel
-            '    y.URL = _ListElement.Item(i).URL
-            '    y.HttpRefresh = _ListElement.Item(i).HttpRefresh
-            '    y.UrlRss = _ListElement.Item(i).UrlRss
-            '    y.ListHttpButton = _ListElement.Item(i).ListHttpButton
-            '    y.IDMeteo = _ListElement.Item(i).IDMeteo
-            '    y.IDKeyPad = _ListElement.Item(i).IDKeyPad
-            '    y.ShowPassWord = _ListElement.Item(i).ShowPassWord
-            '    y.ClearAfterEnter = _ListElement.Item(i).ClearAfterEnter
-            '    y.ShowClavier = _ListElement.Item(i).ShowClavier
-            '    y.Min = _ListElement.Item(i).Min
-            '    y.Max = _ListElement.Item(i).Max
+                y = New uWidgetEmpty
+                y.Show = True
+                y.Uid = _widgt.Uid
+                y.Id = DeviceId
+                y.ZoneId = IdTemplate
+                y.Width = x.Width
+                y.Height = x.Height
+                y.X = _widgt.X + 55
+                y.Y = _widgt.Y
+                y.Rotation = _widgt.Rotation
+                y.ZIndex = _widgt.ZIndex
+                y.IsEmpty = True
+                y.Type = uWidgetEmpty.TypeOfWidget.Image
+                If _widgt.Pictures.Count > 0 Then y.Picture = _widgt.Pictures.Item(0).Path
+                y.ShowPicture = True
+                y.GarderProportionImage = False
+                y.ShowEtiquette = False
+                y.IsCommun = False
+                y.ShowStatus = False
 
-            '    AddHandler y.ShowZone, AddressOf ElementShowZone
-            '    x.Content = y
-            '    Canvas1.Children.Add(x)
-            '    Canvas.SetLeft(x, _ListElement.Item(i).X)
-            '    Canvas.SetTop(x, _ListElement.Item(i).Y)
-            '    Canvas.SetZIndex(x, _ListElement.Item(i).ZIndex)
+                For Each _out In _widgt.Outputs
+                    Dim _act As New cWidget.Action
+                    _act.IdObject = DeviceId
+                    _act.Methode = "EnvoyerCommande"
+                    _act.Value = _out.Commande
+                    y.Action_On_Click.Add(_act)
+                Next
 
-            '    x = Nothing
-            '    y = Nothing
-            'Next
+                y.IsHitTestVisible = True 'True:bouge pas False:Bouge
+
+
+
+
+                x.Content = y
+                Canvas1.Children.Add(x)
+                Canvas.SetLeft(x, _Left + _widgt.X + 5)
+                Canvas.SetTop(x, _Top + _widgt.Y + 5)
+                Canvas.SetZIndex(x, _widgt.ZIndex)
+
+                x = Nothing
+                y = Nothing
+            Next
 
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ShowTemplate: " & ex.ToString, "Erreur", "ShowZone")

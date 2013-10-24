@@ -118,7 +118,7 @@ Public Class uWidgetEmpty
     Public Event GestureGaucheDroite(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event GestureDroiteGauche(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event ShowZone(ByVal zoneid As String)
-    Public Event ShowTemplate(Templateid As String)
+    Public Event ShowTemplate(Templateid As String, Deviceid As String)
 
 
     'Animation
@@ -688,11 +688,6 @@ Public Class uWidgetEmpty
             _Picture = value
             Try
                 If _Show = True Then
-                    If Me.Tag = "MULTIMEDIA" Then
-                        If String.IsNullOrEmpty(value) Then
-                            _Picture = _MonRepertoire & "\Images\Telecommande\front_multimedia.png"
-                        End If
-                    End If
                     Image.Tag = _Picture
                     LoadPicture()
                     End If
@@ -2201,7 +2196,7 @@ Public Class uWidgetEmpty
                     End If
                     If _dev IsNot Nothing Then
                         If _dev.Type = HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA Then
-                            RaiseEvent ShowTemplate(_dev.Modele)
+                            RaiseEvent ShowTemplate(_dev.Modele, _dev.ID)
                             Exit Sub
                         End If
                     End If

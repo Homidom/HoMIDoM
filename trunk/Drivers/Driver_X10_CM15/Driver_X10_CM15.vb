@@ -195,7 +195,7 @@ Public Class Driver_X10_CM15
         If _Enable = False Then Exit Sub
 
         Try
-            'ActiveHomeObj.SendAction(
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: " & ex.ToString)
         End Try
@@ -283,16 +283,16 @@ Public Class Driver_X10_CM15
             Dim retour As String = "0"
             Select Case UCase(Champ)
                 Case "ADRESSE1"
-                    If Value = " " Or Value = "" Then
+                    If String.IsNullOrEmpty(Value) Then
                         retour = "l'adresse du module est obligatoire"
                     ElseIf Len(Value) < 2 Then
                         retour = "l'adresse doit à minima comporter une lettre (House) et un chiffre (Code)"
                     ElseIf IsNumeric(Mid(Value, 1, 1)) Then
                         retour = "l'adresse doit commencer par une lettre (House), ex: A"
-                    ElseIf Value < "A" Or Value > "P" Then
+                    ElseIf Mid(Value, 1, 1) < "A" Or Mid(Value, 1, 1) > "P" Then
                         retour = "l'adresse House doit être compris entre Ax et Px (x numéro de Code)"
                     ElseIf IsNumeric(Mid(Value, 2, Len(Value) - 1)) = False Then
-                        retour = "l'adresse doit être assciée au House puis le Code qui doit être compris entre 1 et 16, ex: C3"
+                        retour = "l'adresse doit être associée au House puis le Code qui doit être compris entre 1 et 16, ex: C3"
                     ElseIf CInt(Mid(Value, 2, Len(Value) - 1)) < 1 Or CInt(Mid(Value, 2, Len(Value) - 1)) > 16 Then
                         retour = "l'adresse doit être assciée au House puis le Code qui doit être compris entre 1 et 16, ex: C3"
                     End If

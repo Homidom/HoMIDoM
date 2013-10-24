@@ -503,9 +503,6 @@
     <Resource Include="Images\VolumeUp.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\ForwardGreen.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\12.png" />
   </ItemGroup>
   <ItemGroup>
@@ -594,52 +591,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\kmute.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Telecommande\0.png" />
-    <Resource Include="Images\Telecommande\1.png" />
-    <Resource Include="Images\Telecommande\2.png" />
-    <Resource Include="Images\Telecommande\3.png" />
-    <Resource Include="Images\Telecommande\4.png" />
-    <Resource Include="Images\Telecommande\5.png" />
-    <Resource Include="Images\Telecommande\6.png" />
-    <Resource Include="Images\Telecommande\7.png" />
-    <Resource Include="Images\Telecommande\8.png" />
-    <Resource Include="Images\Telecommande\9.png" />
-    <Resource Include="Images\Telecommande\mute.png" />
-    <Resource Include="Images\Telecommande\pause.png" />
-    <Resource Include="Images\Telecommande\Play.png" />
-    <Resource Include="Images\Telecommande\stop.png" />
-    <Resource Include="Images\Telecommande\VolumeDown.png" />
-    <Resource Include="Images\Telecommande\VolumeUp.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Telecommande\Enregistrer.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Telecommande\Avance.png" />
-    <Resource Include="Images\Telecommande\ChapRetour.png" />
-    <Resource Include="Images\Telecommande\ChapSuivant.png" />
-    <Resource Include="Images\Telecommande\Recul.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Telecommande\BLUE.png" />
-    <Resource Include="Images\Telecommande\GREEN.png" />
-    <Resource Include="Images\Telecommande\RED.png" />
-    <Resource Include="Images\Telecommande\YELLOW.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Telecommande\PRGM.png" />
-    <Resource Include="Images\Telecommande\PRGP.png" />
-    <Resource Include="Images\Telecommande\VOLM.png" />
-    <Resource Include="Images\Telecommande\VOLP.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Telecommande\FBAS.png" />
-    <Resource Include="Images\Telecommande\FDROITE.png" />
-    <Resource Include="Images\Telecommande\FGAUCHE.png" />
-    <Resource Include="Images\Telecommande\FHAUT.png" />
-    <Resource Include="Images\Telecommande\OK.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Courbe_128.png" />
@@ -738,12 +689,6 @@
     <Resource Include="Images\Rond_32x32.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\fond_defaut.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\black-glossy-button-md.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\multimedia_128.png" />
   </ItemGroup>
   <ItemGroup>
@@ -774,7 +719,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_IncrementBeforeBuild="True" BuildVersion_UseGlobalSettings="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="True" BuildVersion_IncrementBeforeBuild="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

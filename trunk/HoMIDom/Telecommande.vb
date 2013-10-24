@@ -140,25 +140,28 @@
                     Return _IsAudioVideo
                 End Get
                 Set(value As Boolean)
-                    If _IsAudioVideo = False And value Then
-                        If _Cmd.Count = 0 Then
-                            Dim idx As Integer
-                            For idx = 0 To 9
-                                Dim _newcmd As New Commandes
-                                _newcmd.Name = idx
-                                _Cmd.Add(_newcmd)
-                            Next
-                            For Each _lblcmd In _DefautCmdAudioVideo
-                                Dim _newcmd As New Commandes
-                                _newcmd.Name = _lblcmd
-                                _Cmd.Add(_newcmd)
-                            Next
-                        End If
-                    End If
                     _IsAudioVideo = value
-
                 End Set
             End Property
+
+            Public Sub InitCmd()
+                _Cmd.Clear()
+                If _IsAudioVideo Then
+                    If _Cmd.Count = 0 Then
+                        Dim idx As Integer
+                        For idx = 0 To 9
+                            Dim _newcmd As New Commandes
+                            _newcmd.Name = idx
+                            _Cmd.Add(_newcmd)
+                        Next
+                        For Each _lblcmd In _DefautCmdAudioVideo
+                            Dim _newcmd As New Commandes
+                            _newcmd.Name = _lblcmd
+                            _Cmd.Add(_newcmd)
+                        Next
+                    End If
+                End If
+            End Sub
 
             ''' <summary>
             ''' Trame d'initialisation à envoyer avant tout envoi de commande
@@ -559,12 +562,11 @@
 
 #Region "Variables"
             'Variables graphiques du template
-            Dim _Width As Double = 600
-            Dim _Height As Double = 480
+            Dim _Width As Double
+            Dim _Height As Double
             Dim _BackgroundPicture As String = ""
             Dim _ColorBackGround As Double
             Dim _Widgets As New List(Of Widget)
-
 #End Region
 
 #Region "Property Graphic"
@@ -609,7 +611,7 @@
                     Return _Widgets
                 End Get
                 Set(value As List(Of Widget))
-                    _Widgets = Widgets
+                    _Widgets = value
                 End Set
             End Property
 #End Region
