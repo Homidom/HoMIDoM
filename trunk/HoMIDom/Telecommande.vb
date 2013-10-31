@@ -385,6 +385,32 @@
                 End Try
             End Function
 
+            Public Function TraiteCommandAndReturnCode(ByVal Name As String) As String
+                Try
+
+                    For Each cmd In _Cmd
+                        If cmd.Name.ToLower = Name.ToLower Then 'on a trouvé la commande
+                            Dim code As String = cmd.Code
+
+                            'on remplace les variables mis en accolades par leur valeur
+                            For Each var In _Var
+                                If var.Type = TypeOfVar.String Or var.Type = TypeOfVar.Double Then
+                                    Dim _var As String = "{" & var.Name.ToLower & "}"
+                                    If code.ToLower.Contains(_var) Then
+                                        code = code.Replace(_var, var.Value)
+                                    End If
+                                End If
+                            Next
+                        End If
+                    Next
+
+                    Return Nothing
+                Catch ex As Exception
+                    Return ex.ToString
+                End Try
+            End Function
+
+
             ''' <summary>
             ''' Permet de définir la valeur d'une variable associée au template
             ''' </summary>

@@ -1960,6 +1960,20 @@ HoMIDom
 	<param name="Template">Nom du template</param>
 	<returns>O si ok sinon message d'erreur</returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.EffaceTemplateGraphic(HoMIDom.HoMIDom.Telecommande.Template)">
+	<summary>
+ Efface la partie graphique du template
+ </summary>
+	<param name="Template"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.CreateDefautTemplateGrafic(HoMIDom.HoMIDom.Telecommande.Template)">
+	<summary>
+ Cree un template graphique par defaut
+ </summary>
+	<param name="Template"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.TelecommandeSendCommand(System.String,System.String,System.String)">
 	<summary>
  Demande au device d'envoyer une commande (telecommande) à son driver

@@ -59,6 +59,7 @@ Public Class WWidgetProperty
                 ChKShowClavier.IsChecked = Obj.ShowClavier
                 ChKClearAfterEnter.IsChecked = Obj.ClearAfterEnter
                 ChkFondu.IsChecked = Obj.Fondu
+
                 _listhttpbtn = Obj.ListHttpButton
                 If IO.File.Exists(Obj.Picture) Then
                     ImgPicture.Source = New BitmapImage(New Uri(Obj.Picture))
@@ -76,7 +77,7 @@ Public Class WWidgetProperty
                     'TxtEtiq.IsReadOnly = True
                 Else
                     Select Case Obj.Type
-                        Case uWidgetEmpty.TypeOfWidget.Empty
+                        Case uWidgetEmpty.TypeOfWidget.Empty Or uWidgetEmpty.TypeOfWidget.Image
                             BtnEditAction.Visibility = Windows.Visibility.Visible
                             BtnEditVisu.Visibility = Windows.Visibility.Visible
                             BtnDelete.Visibility = Windows.Visibility.Visible
@@ -444,6 +445,7 @@ Public Class WWidgetProperty
 
     Private Sub CbObjet_SelectionChanged(ByVal sender As System.Object, ByVal e As Object) Handles CbObjet.SelectionChanged, CbObjet.MouseLeftButtonDown
         If CbObjet.SelectedItem IsNot Nothing Then
+
             If CbObjet.SelectedItem.tag = "DEVICE" Then
                 Dim _DeviceId As String
                 Dim _Device As HoMIDom.HoMIDom.TemplateDevice
@@ -452,14 +454,24 @@ Public Class WWidgetProperty
                 _Device = myService.ReturnDeviceByID(IdSrv, _DeviceId)
                 CbMethode.Items.Clear()
 
-                For i As Integer = 0 To _Device.DeviceAction.Count - 1
+                If _Device.Type = Device.ListeDevices.MULTIMEDIA Then
                     Dim lbl1 As New ComboBoxItem
-                    lbl1.Content = _Device.DeviceAction.Item(i).Nom
+                    lbl1.Content = "EnvoyerCommande"
                     lbl1.Tag = 0 'c une fonction de base
                     CbMethode.Items.Add(lbl1)
                     LblMethode.Visibility = Windows.Visibility.Visible
                     CbMethode.Visibility = Windows.Visibility.Visible
-                Next
+                Else
+                    For i As Integer = 0 To _Device.DeviceAction.Count - 1
+                        Dim lbl1 As New ComboBoxItem
+                        lbl1.Content = _Device.DeviceAction.Item(i).Nom
+                        lbl1.Tag = 0 'c une fonction de base
+                        CbMethode.Items.Add(lbl1)
+                        LblMethode.Visibility = Windows.Visibility.Visible
+                        CbMethode.Visibility = Windows.Visibility.Visible
+                    Next
+                End If
+
 
                 _Device = Nothing
                 TxtValue.Text = Nothing
@@ -537,7 +549,6 @@ Public Class WWidgetProperty
         If CbObjetVisu.SelectedIndex < 0 Or CbObjetVisu.SelectedItem.tag <> "DEVICE" Then
             Exit Sub
         End If
-
 
         CbPropertyVisu.Items.Clear()
         Select Case AllDevices.Item(CbObjetVisu.SelectedIndex).Type
@@ -630,6 +641,7 @@ Public Class WWidgetProperty
     Private Sub LstObjetActions_SelectionChanged(ByVal sender As Object, ByVal e As Object) Handles LstObjetActions.SelectionChanged, LstObjetActions.MouseLeftButtonDown
         If LstObjetActions.SelectedIndex >= 0 Then
             Dim _act As cWidget.Action = Nothing
+
             Select Case CbAction.SelectedIndex
                 Case 0
                     _act = Obj.Action_On_Click.Item(LstObjetActions.SelectedIndex)
@@ -662,7 +674,12 @@ Public Class WWidgetProperty
                     Exit For
                 End If
             Next
-            CbMethode.SelectedIndex = _idx
+            If _idx >= 0 Then
+                CbMethode.SelectedIndex = _idx
+            Else
+                CbMethode.Text = _act.Methode
+            End If
+
 
             If _act.Value.ToString = Nothing Then
                 TxtValue.Visibility = Windows.Visibility.Collapsed

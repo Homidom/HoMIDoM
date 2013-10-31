@@ -110,6 +110,9 @@ Public Class uWidgetEmpty
     Dim _Min As Integer
     Dim _Max As Integer
 
+    'Variable Template
+    Dim _IsUseForTemplate As Boolean = False  'utilisé pour un template
+
     'Event
     Public Event Click(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event LongClick(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
@@ -119,7 +122,6 @@ Public Class uWidgetEmpty
     Public Event GestureDroiteGauche(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
     Public Event ShowZone(ByVal zoneid As String)
     Public Event ShowTemplate(Templateid As String, Deviceid As String)
-
 
     'Animation
     Private myStoryboard As Storyboard
@@ -875,6 +877,17 @@ Public Class uWidgetEmpty
     End Property
 #End Region
 
+#Region "Property Template"
+    Public Property IsUseForTemplate As Boolean
+        Get
+            Return _IsUseForTemplate
+        End Get
+        Set(value As Boolean)
+            _IsUseForTemplate = value
+        End Set
+    End Property
+#End Region
+
 #Region "Property/Sub Web"
     Public Property URL As String
         Get
@@ -1477,7 +1490,7 @@ Public Class uWidgetEmpty
             End If
 
             If vDiff.Seconds < 1 Then
-                If IsEmpty = True And _type = TypeOfWidget.Empty Then
+                If IsEmpty = True And _type <> TypeOfWidget.Device Then
                     Traite_Action_OnClick()
                 End If
                 RaiseEvent Click(Me, e)
@@ -1512,6 +1525,10 @@ Public Class uWidgetEmpty
                         Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
                         param.Value = _act.Value
                         x.Parametres.Add(param)
+                    End If
+
+                    If _dev.Type = HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA Then
+                        MessageBox.Show(_act.Methode & ":" & _act.Value)
                     End If
 
                     _FlagBlock = True
@@ -2166,23 +2183,23 @@ Public Class uWidgetEmpty
                     x.ShowDialog()
 
                     If x.DialogResult.HasValue Then
-
                         For i As Integer = 0 To _ListElement.Count - 1
                             If _ListElement.Item(i).Uid = Me.Uid And _ListElement.Item(i).ZoneId = Me.ZoneId Then
                                 _ListElement.Item(i) = x.Objet
                                 Exit For
                             End If
                         Next
+
                         ' <Horizon99> Suppression de la mise à jour immédiate: cela crée une sorte de "deuxième couche" de widgets.
                         ' S'il y a un problème de rafraîchissement on peut cliquer 
                         ' sur l 'icône de la zone pour faire un refresh manuel
                         'frmMere.ShowZone(frmMere._CurrentIdZone)
                     End If
-                    x.Close()
+            X.Close()
 
-                Catch ex As Exception
-                    AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Stk1_MouseDown: " & ex.Message, "Erreur", " uWidgetEmpty.Stk1_MouseDown")
-                End Try
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Stk1_MouseDown: " & ex.Message, "Erreur", " uWidgetEmpty.Stk1_MouseDown")
+        End Try
             Else
                 If IsEmpty = False Then
                     If e.ClickCount > 1 Then Exit Sub

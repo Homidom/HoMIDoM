@@ -89,7 +89,34 @@
                                     <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Modifier_32.png" />
                                 </MenuItem.Icon>
                             </MenuItem>
+                                <MenuItem Name="MnuTemplate" Header="Template" Visibility="Collapsed" FontSize="12" Foreground="White">
+                                    <MenuItem.Background>
+                                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                            <GradientStop Color="Black" Offset="0" />
+                                            <GradientStop Color="#FF4B4B4B" Offset="0.663" />
+                                        </LinearGradientBrush>
+                                    </MenuItem.Background>
+
+                                    <MenuItem.Icon>
+                                        <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Modifier_32.png" />
+                                    </MenuItem.Icon>
+
+                                    <MenuItem Name="SaveTemplate" Header="Sauvegarder le template" FontSize="14" Foreground="White">
+                                        <MenuItem.Background>
+                                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                                <GradientStop Color="Black" Offset="0" />
+                                                <GradientStop Color="#FF4B4B4B" Offset="0.663" />
+                                            </LinearGradientBrush>
+                                        </MenuItem.Background>
+
+                                        <MenuItem.Icon>
+                                            <Image Width="40" Height="40"  Source="/HoMIWpF;component/Images/save_32.png" />
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </MenuItem>
+
                                 <MenuItem Name="Chk3" Header="Ajouter" Visibility="Collapsed" FontSize="12" Foreground="White">
+                                    
                                     <MenuItem.Background>
                                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                             <GradientStop Color="Black" Offset="0" />

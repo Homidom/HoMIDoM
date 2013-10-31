@@ -1,4 +1,6 @@
-﻿Namespace HoMIDom
+﻿Imports System.Windows.Media
+
+Namespace HoMIDom
 
     Public Class Widget
 
@@ -13,6 +15,10 @@
         Dim _Outputs As New List(Of Output)
         Dim _Rotation As Double = 0
         Dim _Zindex As Integer = 0
+        Dim _BorderThickness As Double = 0
+        Dim _CornerRadius As Double = 6
+        Dim _ColorBorder As SolidColorBrush = Brushes.Transparent
+        Dim _BorderBrush As Windows.Media.Brush
 #End Region
 
 #Region "Property"
@@ -106,6 +112,34 @@
                 _Zindex = value
             End Set
         End Property
+
+        'Public Overloads Property BorderThickness As Double
+        '    Get
+        '        Return _BorderThickness
+        '    End Get
+        '    Set(value As Double)
+        '        _BorderThickness = value
+        '    End Set
+        'End Property
+
+        'Public Property CornerRadius As Double
+        '    Get
+        '        Return _CornerRadius
+        '    End Get
+        '    Set(value As Double)
+        '        _CornerRadius = value
+        '    End Set
+        'End Property
+
+        'Public Property ColorBorder As SolidColorBrush
+        '    Get
+        '        Return _ColorBorder
+        '    End Get
+        '    Set(value As SolidColorBrush)
+        '        _ColorBorder = value
+        '    End Set
+        'End Property
+
 #End Region
 
 #Region "Methode"

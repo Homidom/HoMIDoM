@@ -172,6 +172,14 @@
                                     </StackPanel>
                                 </StackPanel>
                             </Expander>
+                            <Expander Foreground="White" Header="Commande" BorderBrush="#FF373737" Margin="1" Visibility="Collapsed"  >
+                                <StackPanel >
+                                    <StackPanel Orientation="Horizontal" >
+                                        <Label Foreground=" White" Width="80" Content="Commande:"/>
+                                        <ComboBox  Name="CbTemplateCmd" Width="30"/>
+                                    </StackPanel>
+                                 </StackPanel>
+                            </Expander>
 
                             <StackPanel Orientation="Horizontal" Name="StkRss" Visibility="Collapsed" >
                             <Label Width="120" Content="URL Rss:" Foreground="White"/>
