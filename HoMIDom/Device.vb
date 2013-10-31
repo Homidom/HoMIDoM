@@ -2391,18 +2391,14 @@ Namespace HoMIDom
             ''' <param name="Commande"></param>
             ''' <remarks></remarks>
             Public Sub EnvoyerCommande(ByVal Commande As String)
-                For i As Integer = 0 To Commandes.Count - 1
-                    If UCase(Commande) = UCase(Commandes.Item(i).Name) Then
-                        Dim code As String = ""
-                        If _Adresse1 <> "" Then
-                            code = code & _Adresse1
-                        End If
-                        code = code & Commandes.Item(i).Code
-                        If _Adresse2 <> "" Then
-                            code = code & _Adresse2
-                        End If
+                Dim _template As HoMIDom.Telecommande.Template
+                _template = _Server.GetTemplateFromID(Me.Modele)
 
-                        Dim repeat As String = Commandes.Item(i).Repeat
+                For i As Integer = 0 To _template.Commandes.Count - 1
+                    If UCase(Commande) = UCase(_template.Commandes.Item(i).Name) Then
+                        Dim code As String = TraiteCommand(_template.Commandes.Item(i).Name, _template)
+                        Dim repeat As String = _template.Commandes.Item(i).Repeat
+
                         _Server.Log(TypeLog.DEBUG, TypeSource.DEVICE, "EnvoyerCommande", "La commande " & code & " Repeat " & repeat & " a été envoyée au driver")
                         Driver.EnvoyerCode(code, repeat)
                         Exit Sub
@@ -2410,6 +2406,37 @@ Namespace HoMIDom
                 Next
                 _Server.Log(TypeLog.DEBUG, TypeSource.DEVICE, "EnvoyerCommande", "La commande " & Commande & " n'as pas été trouvée!!")
             End Sub
+
+            Private Function TraiteCommand(NameCommand As String, Template As HoMIDom.Telecommande.Template) As String
+                Try
+                    Dim _template As HoMIDom.Telecommande.Template
+                    Dim code As String = Nothing
+                    _template = _Server.GetTemplateFromID(Me.Modele)
+
+                    For Each cmd In _template.Commandes
+                        If cmd.Name.ToLower = NameCommand.ToLower Then 'on a trouvé la commande
+                            code = cmd.Code
+
+                            'on remplace les variables mis en accolades par leur valeur
+                            For Each var In _template.Variables
+                                If var.Type = HoMIDom.Telecommande.TypeOfVar.String Or var.Type = HoMIDom.Telecommande.TypeOfVar.Double Then
+                                    Dim _var As String = "{" & var.Name.ToLower & "}"
+                                    If code.ToLower.Contains(_var) Then
+                                        code = code.Replace(_var, var.Value)
+                                    End If
+                                End If
+                            Next
+
+                            Return code
+                        End If
+                    Next
+
+                    Return code
+                Catch ex As Exception
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DEVICE, "TraiteCommand", "Erreur: " & ex.Message)
+                    Return Nothing
+                End Try
+            End Function
 
             Protected Overrides Sub Finalize()
                 MyBase.Finalize()

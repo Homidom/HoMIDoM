@@ -8405,6 +8405,8 @@ Namespace HoMIDom
 
                 Template.InitCmd()
 
+                Template = CreateDefautTemplateGrafic(Template)
+
                 Dim streamIO As StreamWriter = Nothing
                 Try
                     Dim serialXML As New System.Xml.Serialization.XmlSerializer(GetType(Telecommande.Template))
@@ -8514,8 +8516,6 @@ Namespace HoMIDom
                     Return "Le template " & Template.Name & ".xml n'existe pas!"
                 End If
 
-                Template = CreateDefautTemplateGrafic(Template)
-
                 Dim streamIO As StreamWriter = Nothing
                 Try
                     Dim serialXML As New System.Xml.Serialization.XmlSerializer(GetType(Telecommande.Template))
@@ -8567,8 +8567,8 @@ Namespace HoMIDom
             Try
                 Dim _NewTemplate As Telecommande.Template = Template
 
-                _NewTemplate.GraphicTemplate.Width = 600
-                _NewTemplate.GraphicTemplate.Height = 480
+                _NewTemplate.GraphicTemplate.Width = 800
+                _NewTemplate.GraphicTemplate.Height = 600
                 _NewTemplate.GraphicTemplate.BackGroundPicture = _MonRepertoire & "\Images\Telecommande\front_multimedia.png"
                 _NewTemplate.GraphicTemplate.Widgets.Clear()
 
@@ -8580,8 +8580,8 @@ Namespace HoMIDom
                         Dim _margin As Integer = 7
 
                         _widget.Label = cmd.Name
-                        _widget.Height = 45
-                        _widget.Width = 45
+                        _widget.Height = 56
+                        _widget.Width = 56
 
                         _output.Commande = cmd.Name
                         _output.TemplateID = _NewTemplate.ID

@@ -1395,317 +1395,316 @@ Class Window1
             ''------------
             writer.WriteStartElement("elements")
             For i As Integer = 0 To _ListElement.Count - 1
-                'If (_ListElement.Item(i).IsEmpty = False And IsConnect = True) Or _ListElement.Item(i).IsEmpty = True Then
+                If _ListElement.Item(i).IsUseForTemplate = False Then
+                    writer.WriteStartElement("element")
+                    writer.WriteStartAttribute("uid") 'ID du widget
+                    writer.WriteValue(_ListElement.Item(i).Uid)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("id") 'ID de l'élément (device, zone, macro...)
+                    writer.WriteValue(_ListElement.Item(i).Id)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("isempty") 'ID de l'élément (device, zone, macro...)
+                    writer.WriteValue(_ListElement.Item(i).IsEmpty)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("type") 'type de widget
+                    writer.WriteValue(_ListElement.Item(i).Type.ToString)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("caneditvalue") 'type de widget
+                    writer.WriteValue(_ListElement.Item(i).CanEditValue)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("zoneid")
+                    writer.WriteValue(_ListElement.Item(i).ZoneId)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("iscommun")
+                    writer.WriteValue(_ListElement.Item(i).IsCommun)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("x")
+                    'writer.WriteValue(Replace(CDbl(_ListElement.Item(i).X), ".", ","))
+                    writer.WriteValue(Regex.Replace(_ListElement.Item(i).X.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("y")
+                    'writer.WriteValue(Replace(CDbl(_ListElement.Item(i).Y), ".", ","))
+                    writer.WriteValue(Regex.Replace(_ListElement.Item(i).Y.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("width")
+                    'writer.WriteValue(_ListElement.Item(i).Width)
+                    writer.WriteValue(Regex.Replace(_ListElement.Item(i).Width.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("height")
+                    'writer.WriteValue(_ListElement.Item(i).Height)
+                    writer.WriteValue(Regex.Replace(_ListElement.Item(i).Height.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("angle")
+                    'writer.WriteValue(_ListElement.Item(i).Rotation)
+                    writer.WriteValue(Regex.Replace(_ListElement.Item(i).Rotation.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("anglex")
+                    'writer.WriteValue(_ListElement.Item(i).RotationX)
+                    writer.WriteValue(Regex.Replace(_ListElement.Item(i).RotationX.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("angley")
+                    'writer.WriteValue(_ListElement.Item(i).RotationY)
+                    writer.WriteValue(Regex.Replace(_ListElement.Item(i).RotationY.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("zindex")
+                    writer.WriteValue(_ListElement.Item(i).ZIndex)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("borderthickness")
+                    writer.WriteValue(_ListElement.Item(i).BorderThickness)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("cornerradius")
+                    writer.WriteValue(_ListElement.Item(i).CornerRadius)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("colorborder")
+                    writer.WriteValue(_ListElement.Item(i).ColorBorder.ToString)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("majetiquettefromsrv")
+                    writer.WriteValue(_ListElement.Item(i).MaJEtiquetteFromServeur)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("showetiquette")
+                    writer.WriteValue(_ListElement.Item(i).ShowEtiquette)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("fondu")
+                    writer.WriteValue(_ListElement.Item(i).Fondu)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("showstatus")
+                    writer.WriteValue(_ListElement.Item(i).ShowStatus)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("showpicture")
+                    writer.WriteValue(_ListElement.Item(i).ShowPicture)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("savepictureproportion")
+                    writer.WriteValue(_ListElement.Item(i).GarderProportionImage)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("picture")
+                    writer.WriteValue(_ListElement.Item(i).Picture)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("etiquette")
+                    writer.WriteValue(_ListElement.Item(i).Etiquette)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("defautlabelstatus")
+                    writer.WriteValue(_ListElement.Item(i).DefautLabelStatus)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("taillestatus")
+                    writer.WriteValue(_ListElement.Item(i).TailleStatus)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("tailleetiquette")
+                    writer.WriteValue(_ListElement.Item(i).TailleEtiquette)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("alignementetiquette")
+                    writer.WriteValue(_ListElement.Item(i).EtiquetteAlignement)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("colorbackground")
+                    writer.WriteValue(_ListElement.Item(i).ColorBackGround.ToString.Replace("#FF", "#" & Hex(CInt(_ListElement.Item(i).ColorBackGround.Opacity * 255))))
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("colorstatus")
+                    writer.WriteValue(_ListElement.Item(i).ColorStatus.ToString)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("coloretiquette")
+                    writer.WriteValue(_ListElement.Item(i).ColorEtiquette.ToString)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("refresh")
+                    writer.WriteValue(_ListElement.Item(i).Refresh)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("url")
+                    writer.WriteValue(_ListElement.Item(i).URL)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("urlrss")
+                    writer.WriteValue(_ListElement.Item(i).UrlRss)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("idmeteo")
+                    writer.WriteValue(_ListElement.Item(i).IDMeteo)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("min")
+                    writer.WriteValue(_ListElement.Item(i).Min)
+                    writer.WriteEndAttribute()
+                    writer.WriteStartAttribute("max")
+                    writer.WriteValue(_ListElement.Item(i).Max)
+                    writer.WriteEndAttribute()
+                    If _ListElement.Item(i).Type = uWidgetEmpty.TypeOfWidget.KeyPad Then
+                        writer.WriteStartAttribute("idkeypad")
+                        writer.WriteValue(_ListElement.Item(i).IDKeyPad)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("showpassword")
+                        writer.WriteValue(_ListElement.Item(i).ShowPassWord)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("clearafterenter")
+                        writer.WriteValue(_ListElement.Item(i).ShowPassWord)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("showclavier")
+                        writer.WriteValue(_ListElement.Item(i).ShowPassWord)
+                        writer.WriteEndAttribute()
+                    End If
+                    writer.WriteStartAttribute("httprefresh")
+                    writer.WriteValue(_ListElement.Item(i).HttpRefresh)
+                    writer.WriteEndAttribute()
 
-                writer.WriteStartElement("element")
-                writer.WriteStartAttribute("uid") 'ID du widget
-                writer.WriteValue(_ListElement.Item(i).Uid)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("id") 'ID de l'élément (device, zone, macro...)
-                writer.WriteValue(_ListElement.Item(i).Id)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("isempty") 'ID de l'élément (device, zone, macro...)
-                writer.WriteValue(_ListElement.Item(i).IsEmpty)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("type") 'type de widget
-                writer.WriteValue(_ListElement.Item(i).Type.ToString)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("caneditvalue") 'type de widget
-                writer.WriteValue(_ListElement.Item(i).CanEditValue)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("zoneid")
-                writer.WriteValue(_ListElement.Item(i).ZoneId)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("iscommun")
-                writer.WriteValue(_ListElement.Item(i).IsCommun)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("x")
-                'writer.WriteValue(Replace(CDbl(_ListElement.Item(i).X), ".", ","))
-                writer.WriteValue(Regex.Replace(_ListElement.Item(i).X.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("y")
-                'writer.WriteValue(Replace(CDbl(_ListElement.Item(i).Y), ".", ","))
-                writer.WriteValue(Regex.Replace(_ListElement.Item(i).Y.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("width")
-                'writer.WriteValue(_ListElement.Item(i).Width)
-                writer.WriteValue(Regex.Replace(_ListElement.Item(i).Width.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("height")
-                'writer.WriteValue(_ListElement.Item(i).Height)
-                writer.WriteValue(Regex.Replace(_ListElement.Item(i).Height.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("angle")
-                'writer.WriteValue(_ListElement.Item(i).Rotation)
-                writer.WriteValue(Regex.Replace(_ListElement.Item(i).Rotation.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("anglex")
-                'writer.WriteValue(_ListElement.Item(i).RotationX)
-                writer.WriteValue(Regex.Replace(_ListElement.Item(i).RotationX.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("angley")
-                'writer.WriteValue(_ListElement.Item(i).RotationY)
-                writer.WriteValue(Regex.Replace(_ListElement.Item(i).RotationY.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("zindex")
-                writer.WriteValue(_ListElement.Item(i).ZIndex)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("borderthickness")
-                writer.WriteValue(_ListElement.Item(i).BorderThickness)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("cornerradius")
-                writer.WriteValue(_ListElement.Item(i).CornerRadius)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("colorborder")
-                writer.WriteValue(_ListElement.Item(i).ColorBorder.ToString)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("majetiquettefromsrv")
-                writer.WriteValue(_ListElement.Item(i).MaJEtiquetteFromServeur)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("showetiquette")
-                writer.WriteValue(_ListElement.Item(i).ShowEtiquette)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("fondu")
-                writer.WriteValue(_ListElement.Item(i).Fondu)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("showstatus")
-                writer.WriteValue(_ListElement.Item(i).ShowStatus)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("showpicture")
-                writer.WriteValue(_ListElement.Item(i).ShowPicture)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("savepictureproportion")
-                writer.WriteValue(_ListElement.Item(i).GarderProportionImage)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("picture")
-                writer.WriteValue(_ListElement.Item(i).Picture)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("etiquette")
-                writer.WriteValue(_ListElement.Item(i).Etiquette)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("defautlabelstatus")
-                writer.WriteValue(_ListElement.Item(i).DefautLabelStatus)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("taillestatus")
-                writer.WriteValue(_ListElement.Item(i).TailleStatus)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("tailleetiquette")
-                writer.WriteValue(_ListElement.Item(i).TailleEtiquette)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("alignementetiquette")
-                writer.WriteValue(_ListElement.Item(i).EtiquetteAlignement)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("colorbackground")
-                writer.WriteValue(_ListElement.Item(i).ColorBackGround.ToString.Replace("#FF", "#" & Hex(CInt(_ListElement.Item(i).ColorBackGround.Opacity * 255))))
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("colorstatus")
-                writer.WriteValue(_ListElement.Item(i).ColorStatus.ToString)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("coloretiquette")
-                writer.WriteValue(_ListElement.Item(i).ColorEtiquette.ToString)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("refresh")
-                writer.WriteValue(_ListElement.Item(i).Refresh)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("url")
-                writer.WriteValue(_ListElement.Item(i).URL)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("urlrss")
-                writer.WriteValue(_ListElement.Item(i).UrlRss)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("idmeteo")
-                writer.WriteValue(_ListElement.Item(i).IDMeteo)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("min")
-                writer.WriteValue(_ListElement.Item(i).Min)
-                writer.WriteEndAttribute()
-                writer.WriteStartAttribute("max")
-                writer.WriteValue(_ListElement.Item(i).Max)
-                writer.WriteEndAttribute()
-                If _ListElement.Item(i).Type = uWidgetEmpty.TypeOfWidget.KeyPad Then
-                    writer.WriteStartAttribute("idkeypad")
-                    writer.WriteValue(_ListElement.Item(i).IDKeyPad)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("showpassword")
-                    writer.WriteValue(_ListElement.Item(i).ShowPassWord)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("clearafterenter")
-                    writer.WriteValue(_ListElement.Item(i).ShowPassWord)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("showclavier")
-                    writer.WriteValue(_ListElement.Item(i).ShowPassWord)
-                    writer.WriteEndAttribute()
-                End If
-                writer.WriteStartAttribute("httprefresh")
-                writer.WriteValue(_ListElement.Item(i).HttpRefresh)
-                writer.WriteEndAttribute()
+                    If _ListElement.Item(i).Type = uWidgetEmpty.TypeOfWidget.Web Or _ListElement.Item(i).Type = uWidgetEmpty.TypeOfWidget.Camera Then
+                        writer.WriteStartElement("web")
+                        For j As Integer = 0 To _ListElement.Item(i).ListHttpButton.Count - 1
+                            writer.WriteStartElement("httpbutton")
+                            writer.WriteStartAttribute("label")
+                            writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).Content)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("url")
+                            writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).URL)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("width")
+                            'writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).Width)
+                            writer.WriteValue(Regex.Replace(_ListElement.Item(i).ListHttpButton.Item(j).Width.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("height")
+                            'writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).Height)
+                            writer.WriteValue(Regex.Replace(_ListElement.Item(i).ListHttpButton.Item(j).Height.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                            writer.WriteEndAttribute()
+                            writer.WriteEndElement()
+                        Next
+                        writer.WriteEndElement()
+                    End If
 
-                If _ListElement.Item(i).Type = uWidgetEmpty.TypeOfWidget.Web Or _ListElement.Item(i).Type = uWidgetEmpty.TypeOfWidget.Camera Then
-                    writer.WriteStartElement("web")
-                    For j As Integer = 0 To _ListElement.Item(i).ListHttpButton.Count - 1
-                        writer.WriteStartElement("httpbutton")
-                        writer.WriteStartAttribute("label")
-                        writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).Content)
+                    writer.WriteStartElement("actions")
+                    For j As Integer = 0 To _ListElement.Item(i).Action_GestureBasHaut.Count - 1
+                        writer.WriteStartElement("action")
+                        writer.WriteStartAttribute("type") 'type d'action
+                        writer.WriteValue("gesturebashaut")
                         writer.WriteEndAttribute()
-                        writer.WriteStartAttribute("url")
-                        writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).URL)
+                        writer.WriteStartAttribute("idobject") 'objet
+                        writer.WriteValue(_ListElement.Item(i).Action_GestureBasHaut.Item(j).IdObject)
                         writer.WriteEndAttribute()
-                        writer.WriteStartAttribute("width")
-                        'writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).Width)
-                        writer.WriteValue(Regex.Replace(_ListElement.Item(i).ListHttpButton.Item(j).Width.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                        writer.WriteStartAttribute("methode") 'methode
+                        writer.WriteValue(_ListElement.Item(i).Action_GestureBasHaut.Item(j).Methode)
                         writer.WriteEndAttribute()
-                        writer.WriteStartAttribute("height")
-                        'writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).Height)
-                        writer.WriteValue(Regex.Replace(_ListElement.Item(i).ListHttpButton.Item(j).Height.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
+                        writer.WriteStartAttribute("value") 'methode
+                        writer.WriteValue(_ListElement.Item(i).Action_GestureBasHaut.Item(j).Value)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("sound") 'methode
+                        writer.WriteValue(_ListElement.Item(i).Action_GestureBasHaut.Item(j).Sound)
+                        writer.WriteEndAttribute()
+                        writer.WriteEndElement()
+                    Next
+                    For j As Integer = 0 To _ListElement.Item(i).Action_GestureDroiteGauche.Count - 1
+                        writer.WriteStartElement("action")
+                        writer.WriteStartAttribute("type") 'type d'action
+                        writer.WriteValue("gesturedroitegauche")
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("idobject") 'objet
+                        writer.WriteValue(_ListElement.Item(i).Action_GestureDroiteGauche.Item(j).IdObject)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("methode") 'methode
+                        writer.WriteValue(_ListElement.Item(i).Action_GestureDroiteGauche.Item(j).Methode)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("value") 'methode
+                        writer.WriteValue(_ListElement.Item(i).Action_GestureDroiteGauche.Item(j).Value)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("sound") 'methode
+                        writer.WriteValue(_ListElement.Item(i).Action_GestureDroiteGauche.Item(j).Sound)
+                        writer.WriteEndAttribute()
+                        writer.WriteEndElement()
+                    Next
+                    For j As Integer = 0 To _ListElement.Item(i).Action_GestureGaucheDroite.Count - 1
+                        writer.WriteStartElement("action")
+                        writer.WriteStartAttribute("type") 'type d'action
+                        writer.WriteValue("gesturegauchedroite")
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("idobject") 'objet
+                        writer.WriteValue(_ListElement.Item(i).Action_GestureGaucheDroite.Item(j).IdObject)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("methode") 'methode
+                        writer.WriteValue(_ListElement.Item(i).Action_GestureGaucheDroite.Item(j).Methode)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("value") 'methode
+                        writer.WriteValue(_ListElement.Item(i).Action_GestureGaucheDroite.Item(j).Value)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("sound") 'methode
+                        writer.WriteValue(_ListElement.Item(i).Action_GestureGaucheDroite.Item(j).Sound)
+                        writer.WriteEndAttribute()
+                        writer.WriteEndElement()
+                    Next
+                    For j As Integer = 0 To _ListElement.Item(i).Action_GestureHautBas.Count - 1
+                        writer.WriteStartElement("action")
+                        writer.WriteStartAttribute("type") 'type d'action
+                        writer.WriteValue("gesturehautbas")
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("idobject") 'objet
+                        writer.WriteValue(_ListElement.Item(i).Action_GestureHautBas.Item(j).IdObject)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("methode") 'methode
+                        writer.WriteValue(_ListElement.Item(i).Action_GestureHautBas.Item(j).Methode)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("value") 'methode
+                        writer.WriteValue(_ListElement.Item(i).Action_GestureHautBas.Item(j).Value)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("sound") 'methode
+                        writer.WriteValue(_ListElement.Item(i).Action_GestureHautBas.Item(j).Sound)
+                        writer.WriteEndAttribute()
+                        writer.WriteEndElement()
+                    Next
+                    For j As Integer = 0 To _ListElement.Item(i).Action_On_Click.Count - 1
+                        writer.WriteStartElement("action")
+                        writer.WriteStartAttribute("type") 'type d'action
+                        writer.WriteValue("gestureonclick")
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("idobject") 'objet
+                        writer.WriteValue(_ListElement.Item(i).Action_On_Click.Item(j).IdObject)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("methode") 'methode
+                        writer.WriteValue(_ListElement.Item(i).Action_On_Click.Item(j).Methode)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("value") 'methode
+                        writer.WriteValue(_ListElement.Item(i).Action_On_Click.Item(j).Value)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("sound") 'methode
+                        writer.WriteValue(_ListElement.Item(i).Action_On_Click.Item(j).Sound)
+                        writer.WriteEndAttribute()
+                        writer.WriteEndElement()
+                    Next
+                    For j As Integer = 0 To _ListElement.Item(i).Action_On_LongClick.Count - 1
+                        writer.WriteStartElement("action")
+                        writer.WriteStartAttribute("type") 'type d'action
+                        writer.WriteValue("gestureonlongclick")
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("idobject") 'objet
+                        writer.WriteValue(_ListElement.Item(i).Action_On_LongClick.Item(j).IdObject)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("methode") 'methode
+                        writer.WriteValue(_ListElement.Item(i).Action_On_LongClick.Item(j).Methode)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("value") 'methode
+                        writer.WriteValue(_ListElement.Item(i).Action_On_LongClick.Item(j).Value)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("sound") 'methode
+                        writer.WriteValue(_ListElement.Item(i).Action_On_LongClick.Item(j).Sound)
                         writer.WriteEndAttribute()
                         writer.WriteEndElement()
                     Next
                     writer.WriteEndElement()
+
+                    writer.WriteStartElement("visuels")
+                    For j As Integer = 0 To _ListElement.Item(i).Visuel.Count - 1
+                        writer.WriteStartElement("visuel")
+                        writer.WriteStartAttribute("idobject") 'objet
+                        writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).IdObject)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("property") 'methode
+                        writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).Propriete)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("value")
+                        writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).Value)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("image") 'image
+                        writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).Image)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("operateur") 'operateur
+                        writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).Operateur)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("text") 'text
+                        writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).Text)
+                        writer.WriteEndAttribute()
+                        writer.WriteEndElement()
+                    Next
+                    writer.WriteEndElement()
+                    writer.WriteEndElement()
                 End If
-
-                writer.WriteStartElement("actions")
-                For j As Integer = 0 To _ListElement.Item(i).Action_GestureBasHaut.Count - 1
-                    writer.WriteStartElement("action")
-                    writer.WriteStartAttribute("type") 'type d'action
-                    writer.WriteValue("gesturebashaut")
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("idobject") 'objet
-                    writer.WriteValue(_ListElement.Item(i).Action_GestureBasHaut.Item(j).IdObject)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("methode") 'methode
-                    writer.WriteValue(_ListElement.Item(i).Action_GestureBasHaut.Item(j).Methode)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("value") 'methode
-                    writer.WriteValue(_ListElement.Item(i).Action_GestureBasHaut.Item(j).Value)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("sound") 'methode
-                    writer.WriteValue(_ListElement.Item(i).Action_GestureBasHaut.Item(j).Sound)
-                    writer.WriteEndAttribute()
-                    writer.WriteEndElement()
-                Next
-                For j As Integer = 0 To _ListElement.Item(i).Action_GestureDroiteGauche.Count - 1
-                    writer.WriteStartElement("action")
-                    writer.WriteStartAttribute("type") 'type d'action
-                    writer.WriteValue("gesturedroitegauche")
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("idobject") 'objet
-                    writer.WriteValue(_ListElement.Item(i).Action_GestureDroiteGauche.Item(j).IdObject)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("methode") 'methode
-                    writer.WriteValue(_ListElement.Item(i).Action_GestureDroiteGauche.Item(j).Methode)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("value") 'methode
-                    writer.WriteValue(_ListElement.Item(i).Action_GestureDroiteGauche.Item(j).Value)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("sound") 'methode
-                    writer.WriteValue(_ListElement.Item(i).Action_GestureDroiteGauche.Item(j).Sound)
-                    writer.WriteEndAttribute()
-                    writer.WriteEndElement()
-                Next
-                For j As Integer = 0 To _ListElement.Item(i).Action_GestureGaucheDroite.Count - 1
-                    writer.WriteStartElement("action")
-                    writer.WriteStartAttribute("type") 'type d'action
-                    writer.WriteValue("gesturegauchedroite")
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("idobject") 'objet
-                    writer.WriteValue(_ListElement.Item(i).Action_GestureGaucheDroite.Item(j).IdObject)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("methode") 'methode
-                    writer.WriteValue(_ListElement.Item(i).Action_GestureGaucheDroite.Item(j).Methode)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("value") 'methode
-                    writer.WriteValue(_ListElement.Item(i).Action_GestureGaucheDroite.Item(j).Value)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("sound") 'methode
-                    writer.WriteValue(_ListElement.Item(i).Action_GestureGaucheDroite.Item(j).Sound)
-                    writer.WriteEndAttribute()
-                    writer.WriteEndElement()
-                Next
-                For j As Integer = 0 To _ListElement.Item(i).Action_GestureHautBas.Count - 1
-                    writer.WriteStartElement("action")
-                    writer.WriteStartAttribute("type") 'type d'action
-                    writer.WriteValue("gesturehautbas")
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("idobject") 'objet
-                    writer.WriteValue(_ListElement.Item(i).Action_GestureHautBas.Item(j).IdObject)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("methode") 'methode
-                    writer.WriteValue(_ListElement.Item(i).Action_GestureHautBas.Item(j).Methode)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("value") 'methode
-                    writer.WriteValue(_ListElement.Item(i).Action_GestureHautBas.Item(j).Value)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("sound") 'methode
-                    writer.WriteValue(_ListElement.Item(i).Action_GestureHautBas.Item(j).Sound)
-                    writer.WriteEndAttribute()
-                    writer.WriteEndElement()
-                Next
-                For j As Integer = 0 To _ListElement.Item(i).Action_On_Click.Count - 1
-                    writer.WriteStartElement("action")
-                    writer.WriteStartAttribute("type") 'type d'action
-                    writer.WriteValue("gestureonclick")
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("idobject") 'objet
-                    writer.WriteValue(_ListElement.Item(i).Action_On_Click.Item(j).IdObject)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("methode") 'methode
-                    writer.WriteValue(_ListElement.Item(i).Action_On_Click.Item(j).Methode)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("value") 'methode
-                    writer.WriteValue(_ListElement.Item(i).Action_On_Click.Item(j).Value)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("sound") 'methode
-                    writer.WriteValue(_ListElement.Item(i).Action_On_Click.Item(j).Sound)
-                    writer.WriteEndAttribute()
-                    writer.WriteEndElement()
-                Next
-                For j As Integer = 0 To _ListElement.Item(i).Action_On_LongClick.Count - 1
-                    writer.WriteStartElement("action")
-                    writer.WriteStartAttribute("type") 'type d'action
-                    writer.WriteValue("gestureonlongclick")
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("idobject") 'objet
-                    writer.WriteValue(_ListElement.Item(i).Action_On_LongClick.Item(j).IdObject)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("methode") 'methode
-                    writer.WriteValue(_ListElement.Item(i).Action_On_LongClick.Item(j).Methode)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("value") 'methode
-                    writer.WriteValue(_ListElement.Item(i).Action_On_LongClick.Item(j).Value)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("sound") 'methode
-                    writer.WriteValue(_ListElement.Item(i).Action_On_LongClick.Item(j).Sound)
-                    writer.WriteEndAttribute()
-                    writer.WriteEndElement()
-                Next
-                writer.WriteEndElement()
-
-                writer.WriteStartElement("visuels")
-                For j As Integer = 0 To _ListElement.Item(i).Visuel.Count - 1
-                    writer.WriteStartElement("visuel")
-                    writer.WriteStartAttribute("idobject") 'objet
-                    writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).IdObject)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("property") 'methode
-                    writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).Propriete)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("value")
-                    writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).Value)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("image") 'image
-                    writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).Image)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("operateur") 'operateur
-                    writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).Operateur)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("text") 'text
-                    writer.WriteValue(_ListElement.Item(i).Visuel.Item(j).Text)
-                    writer.WriteEndAttribute()
-                    writer.WriteEndElement()
-                Next
-                writer.WriteEndElement()
-                writer.WriteEndElement()
-                'End If
             Next
             writer.WriteEndElement()
             ''FIN DES ELEMENTS------------
@@ -2140,6 +2139,7 @@ Class Window1
             'Desgin
             ChkMove.Visibility = Windows.Visibility.Visible
             ChkEdit.Visibility = Windows.Visibility.Visible
+            MnuTemplate.Visibility = Windows.Visibility.Collapsed
             Chk3.Visibility = Windows.Visibility.Visible
             If ChkMove.IsChecked = True Then ChkMove.IsChecked = False
             If ChkEdit.IsChecked = True Then ChkEdit.IsChecked = False
@@ -2405,6 +2405,7 @@ Class Window1
             ChkMove.Visibility = Windows.Visibility.Visible
             ChkEdit.Visibility = Windows.Visibility.Visible
             Chk3.Visibility = Windows.Visibility.Visible
+            MnuTemplate.Visibility = Windows.Visibility.Visible
             If ChkMove.IsChecked = True Then ChkMove.IsChecked = False
             If ChkEdit.IsChecked = True Then ChkEdit.IsChecked = False
 
@@ -2426,7 +2427,8 @@ Class Window1
             Dim y As New uWidgetEmpty
             y.Show = True
             y.Uid = System.Guid.NewGuid.ToString()
-            y.Tag = "MULTIMEDIA"
+            y.Tag = "BACKGROUND_MULTIMEDIA"
+            y.ZoneId = IdTemplate
             y.Width = _template.GraphicTemplate.Width
             y.Height = _template.GraphicTemplate.Height
             y.X = (Canvas1.ActualWidth - _template.GraphicTemplate.Width) / 2
@@ -2434,6 +2436,7 @@ Class Window1
             y.ZIndex = -99
             y.CornerRadius = 0
             y.IsEmpty = True
+            y.IsUseForTemplate = True
             y.Type = uWidgetEmpty.TypeOfWidget.Image
             y.Refresh = 0
             y.Picture = _template.GraphicTemplate.BackGroundPicture
@@ -2445,13 +2448,14 @@ Class Window1
             y.ShowStatus = False
             y.IsHitTestVisible = True 'True:bouge pas False:Bouge
             x.Content = y
+            _ListElement.Add(y)
             Canvas1.Children.Add(x)
             Canvas.SetLeft(x, (Canvas1.ActualWidth - _template.GraphicTemplate.Width) / 2)
             Canvas.SetTop(x, (Canvas1.ActualHeight - _template.GraphicTemplate.Height) / 2)
             Canvas.SetZIndex(x, -99)
 
-            _Left = (Canvas1.ActualWidth - _template.GraphicTemplate.Width) / 2
-            _Top = (Canvas1.ActualHeight - _template.GraphicTemplate.Height) / 2
+            '_Left = (Canvas1.ActualWidth - _template.GraphicTemplate.Width) / 2
+            '_Top = (Canvas1.ActualHeight - _template.GraphicTemplate.Height) / 2
 
             x = Nothing
             y = Nothing
@@ -2478,17 +2482,25 @@ Class Window1
                 y.ZoneId = IdTemplate
                 y.Width = x.Width
                 y.Height = x.Height
-                y.X = _widgt.X + 55
+                y.X = _widgt.X
                 y.Y = _widgt.Y
+                y.IsUseForTemplate = True
                 y.Rotation = _widgt.Rotation
                 y.ZIndex = _widgt.ZIndex
                 y.IsEmpty = True
+                y.IsCommun = False
+                y.Etiquette = _widgt.Label
+                y.Fondu = True
+                'y.BorderBrush = _widgt.BorderBrush
+                'y.BorderThickness = _widgt.BorderThickness
+                'y.ColorBorder = _widgt.ColorBorder
+                'y.CornerRadius = _widgt.CornerRadius
                 y.Type = uWidgetEmpty.TypeOfWidget.Image
+                y.Refresh = 0
                 If _widgt.Pictures.Count > 0 Then y.Picture = _widgt.Pictures.Item(0).Path
                 y.ShowPicture = True
                 y.GarderProportionImage = False
                 y.ShowEtiquette = False
-                y.IsCommun = False
                 y.ShowStatus = False
 
                 For Each _out In _widgt.Outputs
@@ -2500,11 +2512,8 @@ Class Window1
                 Next
 
                 y.IsHitTestVisible = True 'True:bouge pas False:Bouge
-
-
-
-
                 x.Content = y
+                _ListElement.Add(y)
                 Canvas1.Children.Add(x)
                 Canvas.SetLeft(x, _Left + _widgt.X + 5)
                 Canvas.SetTop(x, _Top + _widgt.Y + 5)
@@ -2547,85 +2556,46 @@ Class Window1
                     RemoveHandler child.SizeChanged, AddressOf Resize
                     Selector.SetIsSelected(child, False)
 
-                    If _IsTemplate = False Then
-                        'c'est pas un template mais une zone
-                        For j As Integer = 0 To _ListElement.Count - 1
-                            If _ListElement.Item(j).Uid = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
-                                _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
-                                _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
-                                _ListElement.Item(j).Width = child.Width
-                                _ListElement.Item(j).Height = child.Height
+                    ' If _IsTemplate = False Then
+                    'c'est pas un template mais une zone
+                    For j As Integer = 0 To _ListElement.Count - 1
+                        If _ListElement.Item(j).Uid = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
+                            _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
+                            _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
+                            _ListElement.Item(j).Width = child.Width
+                            _ListElement.Item(j).Height = child.Height
 
-                                If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
-                                    Dim gt As TransformGroup = child.RenderTransform
-                                    For k = 0 To gt.Children.Count - 1
-                                        If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
-                                            Dim rt As RotateTransform = gt.Children.Item(k)
-                                            If rt IsNot Nothing Then
-                                                _ListElement.Item(j).Rotation = rt.Angle
-                                            End If
+                            If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
+                                Dim gt As TransformGroup = child.RenderTransform
+                                For k = 0 To gt.Children.Count - 1
+                                    If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
+                                        Dim rt As RotateTransform = gt.Children.Item(k)
+                                        If rt IsNot Nothing Then
+                                            _ListElement.Item(j).Rotation = rt.Angle
                                         End If
-                                        If InStr(LCase(gt.Children.Item(k).GetType.ToString), "skewtransform") > 0 Then
-                                            Dim rt As SkewTransform = gt.Children.Item(k)
-                                            If rt IsNot Nothing Then
-                                                _ListElement.Item(j).RotationX = rt.AngleX
-                                                _ListElement.Item(j).RotationY = rt.AngleY
-                                            End If
+                                    End If
+                                    If InStr(LCase(gt.Children.Item(k).GetType.ToString), "skewtransform") > 0 Then
+                                        Dim rt As SkewTransform = gt.Children.Item(k)
+                                        If rt IsNot Nothing Then
+                                            _ListElement.Item(j).RotationX = rt.AngleX
+                                            _ListElement.Item(j).RotationY = rt.AngleY
                                         End If
-                                    Next
-                                End If
-                                If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
-                                    _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
-                                End If
-                                If InStr(child.RenderTransform.GetType.ToString, "SkewTransform") > 0 Then
-                                    _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleXProperty)
-                                    _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleYProperty)
-                                End If
+                                    End If
+                                Next
                             End If
-                        Next
-                    Else
-                        'c'est un template multimedia!! corriger _listelement par le template
-                        For j As Integer = 0 To _ListElement.Count - 1
-                            If _ListElement.Item(j).Uid = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
-                                _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
-                                _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
-                                _ListElement.Item(j).Width = child.Width
-                                _ListElement.Item(j).Height = child.Height
+                            If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
+                                _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                            End If
+                            If InStr(child.RenderTransform.GetType.ToString, "SkewTransform") > 0 Then
+                                _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleXProperty)
+                                _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleYProperty)
+                            End If
+                        End If
+                    Next
 
-                                If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
-                                    Dim gt As TransformGroup = child.RenderTransform
-                                    For k = 0 To gt.Children.Count - 1
-                                        If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
-                                            Dim rt As RotateTransform = gt.Children.Item(k)
-                                            If rt IsNot Nothing Then
-                                                _ListElement.Item(j).Rotation = rt.Angle
-                                            End If
-                                        End If
-                                        If InStr(LCase(gt.Children.Item(k).GetType.ToString), "skewtransform") > 0 Then
-                                            Dim rt As SkewTransform = gt.Children.Item(k)
-                                            If rt IsNot Nothing Then
-                                                _ListElement.Item(j).RotationX = rt.AngleX
-                                                _ListElement.Item(j).RotationY = rt.AngleY
-                                            End If
-                                        End If
-                                    Next
-                                End If
-                                If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
-                                    _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
-                                End If
-                                If InStr(child.RenderTransform.GetType.ToString, "SkewTransform") > 0 Then
-                                    _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleXProperty)
-                                    _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleYProperty)
-                                End If
-                            End If
-                        Next
-                    End If
                     Dim lbl As uWidgetEmpty = child.Content
                     lbl.IsHitTestVisible = True
-
-
                 Next
-
             End If
 
             Me.UpdateLayout()
@@ -2665,79 +2635,41 @@ Class Window1
 
                     Selector.SetIsSelected(child, False)
 
-                    If _IsTemplate = False Then
-                        'c'est pas un template mais une zone
-                        For j As Integer = 0 To _ListElement.Count - 1
-                            If _ListElement.Item(j).Uid = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
-                                _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
-                                _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
-                                _ListElement.Item(j).Width = child.Width
-                                _ListElement.Item(j).Height = child.Height
+                    For j As Integer = 0 To _ListElement.Count - 1
+                        If _ListElement.Item(j).Uid = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
+                            _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
+                            _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
+                            _ListElement.Item(j).Width = child.Width
+                            _ListElement.Item(j).Height = child.Height
 
-                                If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
-                                    Dim gt As TransformGroup = child.RenderTransform
-                                    For k = 0 To gt.Children.Count - 1
-                                        If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
-                                            Dim rt As RotateTransform = gt.Children.Item(k)
-                                            If rt IsNot Nothing Then
-                                                _ListElement.Item(j).Rotation = rt.Angle
-                                            End If
+                            If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
+                                Dim gt As TransformGroup = child.RenderTransform
+                                For k = 0 To gt.Children.Count - 1
+                                    If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
+                                        Dim rt As RotateTransform = gt.Children.Item(k)
+                                        If rt IsNot Nothing Then
+                                            _ListElement.Item(j).Rotation = rt.Angle
                                         End If
-                                        If InStr(LCase(gt.Children.Item(k).GetType.ToString), "skewtransform") > 0 Then
-                                            Dim rt As SkewTransform = gt.Children.Item(k)
-                                            If rt IsNot Nothing Then
-                                                _ListElement.Item(j).RotationX = rt.AngleX
-                                                _ListElement.Item(j).RotationY = rt.AngleY
-                                            End If
+                                    End If
+                                    If InStr(LCase(gt.Children.Item(k).GetType.ToString), "skewtransform") > 0 Then
+                                        Dim rt As SkewTransform = gt.Children.Item(k)
+                                        If rt IsNot Nothing Then
+                                            _ListElement.Item(j).RotationX = rt.AngleX
+                                            _ListElement.Item(j).RotationY = rt.AngleY
                                         End If
-                                    Next
-                                End If
-                                If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
-                                    _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
-                                End If
-                                If InStr(child.RenderTransform.GetType.ToString, "SkewTransform") > 0 Then
-                                    _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleXProperty)
-                                    _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleYProperty)
-                                End If
+                                    End If
+                                Next
                             End If
-                        Next
-                    Else
-                        'c'est un template !!! remplace listelement par template
-                        For j As Integer = 0 To _ListElement.Count - 1
-                            If _ListElement.Item(j).Uid = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
-                                _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
-                                _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
-                                _ListElement.Item(j).Width = child.Width
-                                _ListElement.Item(j).Height = child.Height
+                            If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
+                                _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                            End If
+                            If InStr(child.RenderTransform.GetType.ToString, "SkewTransform") > 0 Then
+                                _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleXProperty)
+                                _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleYProperty)
+                            End If
+                        End If
+                    Next
 
-                                If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
-                                    Dim gt As TransformGroup = child.RenderTransform
-                                    For k = 0 To gt.Children.Count - 1
-                                        If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
-                                            Dim rt As RotateTransform = gt.Children.Item(k)
-                                            If rt IsNot Nothing Then
-                                                _ListElement.Item(j).Rotation = rt.Angle
-                                            End If
-                                        End If
-                                        If InStr(LCase(gt.Children.Item(k).GetType.ToString), "skewtransform") > 0 Then
-                                            Dim rt As SkewTransform = gt.Children.Item(k)
-                                            If rt IsNot Nothing Then
-                                                _ListElement.Item(j).RotationX = rt.AngleX
-                                                _ListElement.Item(j).RotationY = rt.AngleY
-                                            End If
-                                        End If
-                                    Next
-                                End If
-                                If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
-                                    _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
-                                End If
-                                If InStr(child.RenderTransform.GetType.ToString, "SkewTransform") > 0 Then
-                                    _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleXProperty)
-                                    _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleYProperty)
-                                End If
-                            End If
-                        Next
-                    End If
                     Dim lbl As uWidgetEmpty = child.Content
                     lbl.IsHitTestVisible = True
                     lbl = Nothing
@@ -2757,64 +2689,64 @@ Class Window1
         End Try
     End Sub
 
-    'Private Sub MaJ_Element(Optional ByVal Objet As Object = Nothing)
-    '    Try
-    '        Dim a As String = ""
-    '        Dim child As ContentControl
+    Private Sub MaJ_Element(Optional ByVal Objet As Object = Nothing)
+        Try
+            Dim a As String = ""
+            Dim child As ContentControl
 
-    '        For Each child In Canvas1.Children
-    '            Dim obj As uWidgetEmpty = child.Content
-    '            If Objet IsNot Nothing Then
-    '                obj = Objet.Content
-    '            End If
-    '            obj.IsHitTestVisible = False
-    '            obj.ModeEdition = False
-    '            obj = Nothing
+            For Each child In Canvas1.Children
+                Dim obj As uWidgetEmpty = child.Content
+                If Objet IsNot Nothing Then
+                    obj = Objet.Content
+                End If
+                obj.IsHitTestVisible = False
+                obj.ModeEdition = False
+                obj = Nothing
 
-    '            Selector.SetIsSelected(child, False)
+                Selector.SetIsSelected(child, False)
 
-    '            For j As Integer = 0 To _ListElement.Count - 1
-    '                If _ListElement.Item(j).Id = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
-    '                    _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
-    '                    _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
-    '                    _ListElement.Item(j).Width = child.Width
-    '                    _ListElement.Item(j).Height = child.Height
+                For j As Integer = 0 To _ListElement.Count - 1
+                    If _ListElement.Item(j).Id = child.Uid And _ListElement.Item(j).ZoneId = _CurrentIdZone Then
+                        _ListElement.Item(j).X = CType(Canvas.GetLeft(child), Double)
+                        _ListElement.Item(j).Y = CType(Canvas.GetTop(child), Double)
+                        _ListElement.Item(j).Width = child.Width
+                        _ListElement.Item(j).Height = child.Height
 
-    '                    If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
-    '                        Dim gt As TransformGroup = child.RenderTransform '.GetValue(RotateTransform.AngleProperty)
-    '                        For k = 0 To gt.Children.Count - 1
-    '                            If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
-    '                                Dim rt As RotateTransform = gt.Children.Item(k)
-    '                                If rt IsNot Nothing Then
-    '                                    _ListElement.Item(j).Rotation = rt.Angle 'child.RenderTransform.GetValue(RotateTransform.AngleProperty)
-    '                                End If
-    '                            End If
-    '                            If InStr(LCase(gt.Children.Item(k).GetType.ToString), "skewtransform") > 0 Then
-    '                                Dim rt As SkewTransform = gt.Children.Item(k)
-    '                                If rt IsNot Nothing Then
-    '                                    _ListElement.Item(j).RotationX = rt.AngleX
-    '                                    _ListElement.Item(j).RotationY = rt.AngleY
-    '                                End If
-    '                            End If
-    '                        Next
-    '                    End If
-    '                    If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
-    '                        _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
-    '                    End If
-    '                    If InStr(child.RenderTransform.GetType.ToString, "SkewTransform") > 0 Then
-    '                        _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleXProperty)
-    '                        _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleYProperty)
-    '                    End If
-    '                End If
-    '            Next
+                        If InStr(child.RenderTransform.GetType.ToString, "TransformGroup") > 0 Then
+                            Dim gt As TransformGroup = child.RenderTransform '.GetValue(RotateTransform.AngleProperty)
+                            For k = 0 To gt.Children.Count - 1
+                                If InStr(LCase(gt.Children.Item(k).GetType.ToString), "rotatetransform") > 0 Then
+                                    Dim rt As RotateTransform = gt.Children.Item(k)
+                                    If rt IsNot Nothing Then
+                                        _ListElement.Item(j).Rotation = rt.Angle 'child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                                    End If
+                                End If
+                                If InStr(LCase(gt.Children.Item(k).GetType.ToString), "skewtransform") > 0 Then
+                                    Dim rt As SkewTransform = gt.Children.Item(k)
+                                    If rt IsNot Nothing Then
+                                        _ListElement.Item(j).RotationX = rt.AngleX
+                                        _ListElement.Item(j).RotationY = rt.AngleY
+                                    End If
+                                End If
+                            Next
+                        End If
+                        If InStr(child.RenderTransform.GetType.ToString, "RotateTransform") > 0 Then
+                            _ListElement.Item(j).Rotation = child.RenderTransform.GetValue(RotateTransform.AngleProperty)
+                        End If
+                        If InStr(child.RenderTransform.GetType.ToString, "SkewTransform") > 0 Then
+                            _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleXProperty)
+                            _ListElement.Item(j).RotationX = child.RenderTransform.GetValue(SkewTransform.AngleYProperty)
+                        End If
+                    End If
+                Next
 
-    '            Dim lbl As uWidgetEmpty = child.Content
-    '            lbl.IsHitTestVisible = True
-    '        Next
-    '    Catch ex As Exception
-    '        AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Resize: " & ex.Message, "Erreur", "Resize")
-    '    End Try
-    'End Sub
+                Dim lbl As uWidgetEmpty = child.Content
+                lbl.IsHitTestVisible = True
+            Next
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Resize: " & ex.Message, "Erreur", "Resize")
+        End Try
+    End Sub
 
 
 #Region "Nouveau Widget"
@@ -3623,12 +3555,47 @@ Class Window1
             Dim stk As New StackPanel
             stk.Orientation = Orientation.Horizontal
 
-
-
             Return stk
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur AffMessage: " & ex.Message, "Erreur", "AffMessage")
             Return Nothing
         End Try
     End Function
+
+    Private Sub SaveTemplate_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles SaveTemplate.Click
+        Try
+            If String.IsNullOrEmpty(_CurrentIdTemplate) = False Then
+                Dim _template As Telecommande.Template = myService.GetTemplateFromID(_CurrentIdTemplate)
+
+                For Each _elmt In _ListElement
+                    If _elmt.IsUseForTemplate Then
+                        If _elmt.Tag = "BACKGROUND_MULTIMEDIA" Then 'c le widget de background
+                            _template.GraphicTemplate.Width = _elmt.Width
+                            _template.GraphicTemplate.Height = _elmt.Height
+                            _template.GraphicTemplate.BackGroundPicture = _elmt.Picture
+                        Else
+                            For Each _Widgt In _template.GraphicTemplate.Widgets
+                                If _Widgt.Uid = _elmt.Uid And _template.ID = _elmt.ZoneId Then
+                                    _Widgt.Width = _elmt.Width
+                                    _Widgt.Height = _elmt.Height
+                                    _Widgt.X = _elmt.X
+                                    _Widgt.Y = _elmt.Y
+                                    _Widgt.Label = _elmt.Etiquette
+                                    _Widgt.ZIndex = _elmt.ZIndex
+                                    '_Widgt.CornerRadius = _elmt.CornerRadius
+                                    '_Widgt.ColorBorder = _elmt.ColorBorder
+                                    '_Widgt.BorderThickness = _elmt.BorderThickness
+                                    '_Widgt.BorderBrush = _elmt.BorderBrush
+                                End If
+                            Next
+                        End If
+                    End If
+                Next
+
+                myService.SaveTemplate(IdSrv, _template)
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur SaveTemplate_Click: " & ex.Message, "Erreur", "SaveTemplate_Click")
+        End Try
+    End Sub
 End Class
