@@ -583,12 +583,12 @@ Imports ZibaseDll
 
     'reception d'une valeur -> analyse
     Private Sub zba_UpdateSensorInfo(ByVal seInfo As ZibaseDll.ZiBase.SensorInfo) Handles zba.UpdateSensorInfo
-        'WriteLog("DBG: " & seInfo.sID & "_" & seInfo.sType & " ----> " & seInfo.sValue)
+        If _DEBUG Then WriteLog("DBG: " & seInfo.sID & "_" & seInfo.sType & " ----> " & seInfo.sValue)
         traitement(seInfo.sID, seInfo.sType, seInfo.dwValue, seInfo.sValue)
     End Sub
     Private Sub zba_NewSensorDetected(ByVal seInfo As ZibaseDll.ZiBase.SensorInfo) Handles zba.NewSensorDetected
         'si on detecte une nouveau device
-        'WriteLog("DBG: " & seInfo.sID & "_" & seInfo.sType & " ----> " & seInfo.sValue)
+        If _DEBUG Then WriteLog("DBG: " & seInfo.sID & "_" & seInfo.sType & " ----> " & seInfo.sValue)
         traitement(seInfo.sID, seInfo.sType, seInfo.dwValue, seInfo.sValue)
     End Sub
 
