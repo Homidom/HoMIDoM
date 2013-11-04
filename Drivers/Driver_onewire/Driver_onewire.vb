@@ -353,6 +353,9 @@ Public Class Driver_onewire
                     Case "TEMPERATURE"
                         Dim retour As Double = temp_get_save(Objet.Adresse1)
                         If retour <> 9999 Then Objet.Value = retour
+                    Case "HUMIDITE"
+                        Dim retour As Double = humidity_get(Objet.Adresse1)
+                        If retour <> 9999 Then Objet.Value = retour
                     Case "SWITCH"
                         If Objet.Adresse2 = "" Then
                             'c'est un simple switch
@@ -696,6 +699,48 @@ Public Class Driver_onewire
                 End If
             Catch ex As Exception
                 retour = "ERR: temp_get : " & ex.ToString
+            End Try
+        End SyncLock
+        Return retour
+    End Function
+
+    Private Function humidity_get(ByVal adresse As String) As Double
+        ' Renvoi la valeur de l'humidité du capteur X
+        Dim resolution As Double = 5 'resolution de l"humidité en %
+        Dim retour As Double = 9999
+        Dim state As Object
+        SyncLock lock_portwrite
+            Try
+                Dim tc As com.dalsemi.onewire.container.HumidityContainer
+                Dim owd As com.dalsemi.onewire.container.OneWireContainer
+                If _IsConnect = True Then
+                    'demande l'acces exclusif au reseau
+                    wir_adapter.beginExclusive(False)
+                    owd = wir_adapter.getDeviceContainer(adresse) 'recupere le composant
+                    If owd.isPresent() Then
+                        Try
+                            tc = DirectCast(owd, com.dalsemi.onewire.container.HumidityContainer) 'creer la connexion
+                            state = tc.readDevice 'lit le capteur
+                            tc.setHumidityResolution(resolution, state) 'modifie la resolution à 0.1 degré (0.5 par défaut)
+                            tc.doHumidityConvert(state) 'converti la valeur obtenu en humidité
+                            state = tc.readDevice 'lit la conversion
+                            retour = Math.Round(tc.getHumidity(state), 1)
+                        Catch ex As Exception
+                            retour = 9999
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire humidity_get", ex.ToString)
+                        End Try
+                    Else
+                        retour = 9999
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire humidity_get", "Capteur à l'adresse " & adresse & " Non présent")
+                    End If
+                    wir_adapter.endExclusive()
+                Else
+                    retour = 9999
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire humidity_get", "Erreur Adaptateur non présent")
+                End If
+            Catch ex As Exception
+                retour = 9999
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire humidity_get", ex.ToString)
             End Try
         End SyncLock
         Return retour
