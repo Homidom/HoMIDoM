@@ -493,6 +493,11 @@ Public Class Driver_ZWave
                                 m_manager.RequestNodeState(m_homeId, NodeTemp.ID)
                                 If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "Passage par la commande REQUESTNODESTATE = " & NodeTemp.Name)
 
+                            Case "TESTNETWORKNODE"
+                                NodeTemp = GetNode(m_homeId, MyDevice.Adresse1)
+                                m_manager.TestNetworkNode(m_homeId, NodeTemp.ID, 1)
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "Passage par la commande TESTNETWORKNODE = " & NodeTemp.Name)
+
                             Case "REQUESTNETWORKUPDATE"
                                 NodeTemp = GetNode(m_homeId, MyDevice.Adresse1)
                                 m_manager.BeginControllerCommand(m_homeId, ZWControllerCommand.RequestNetworkUpdate, True, NodeTemp.ID)
@@ -922,6 +927,7 @@ Public Class Driver_ZWave
                 Add_DeviceCommande("SetConfigParam", "paramètre de configuration - Par1 : Index - Par2 : Valeur", 2)
                 Add_DeviceCommande("GetConfigParam", "paramètre de configuration - Par1 : Index", 1)
                 Add_DeviceCommande("RequestNodeState", "Nom du composant", 0)
+                Add_DeviceCommande("TestNetworkNode", "Nom du composant", 0)
                 Add_DeviceCommande("RequestNetworkUpdate", "Nom du composant", 0)
                 Add_DeviceCommande("GetNumGroups", "Nom du composant", 0)
 
