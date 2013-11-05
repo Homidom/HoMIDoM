@@ -711,7 +711,7 @@ Public Class Driver_onewire
         Dim state As Object
         SyncLock lock_portwrite
             Try
-                Dim tc As com.dalsemi.onewire.container.HumidityContainer
+                Dim hc As com.dalsemi.onewire.container.HumidityContainer
                 Dim owd As com.dalsemi.onewire.container.OneWireContainer
                 If _IsConnect = True Then
                     'demande l'acces exclusif au reseau
@@ -719,12 +719,13 @@ Public Class Driver_onewire
                     owd = wir_adapter.getDeviceContainer(adresse) 'recupere le composant
                     If owd.isPresent() Then
                         Try
-                            tc = DirectCast(owd, com.dalsemi.onewire.container.HumidityContainer) 'creer la connexion
-                            state = tc.readDevice 'lit le capteur
-                            If tc.hasSelectableHumidityResolution() Then tc.setHumidityResolution(resolution, state) 'modifie la resolution à 0.1 degré (0.5 par défaut)
-                            tc.doHumidityConvert(state) 'converti la valeur obtenu en humidité
-                            state = tc.readDevice 'lit la conversion
-                            retour = Math.Round(tc.getHumidity(state), 1)
+                            hc = DirectCast(owd, com.dalsemi.onewire.container.HumidityContainer) 'creer la connexion
+                            state = hc.readDevice 'lit le capteur
+                            If hc.hasSelectableHumidityResolution() Then hc.setHumidityResolution(resolution, state) 'modifie la resolution à 0.1 degré (0.5 par défaut)
+                            hc.doHumidityConvert(state) 'converti la valeur obtenu en humidité
+                            state = hc.readDevice 'lit la conversion
+                            'retour = Math.Round(tc.getHumidity(state), 1)
+                            retour = hc.getHumidity(state)
                         Catch ex As Exception
                             retour = 9999
                             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire humidity_get", ex.ToString)
