@@ -92,6 +92,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "HoMIServicE", "HoMIServicE\
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "HoMIGuI", "HoMIGuI\HoMIGuI.vbproj", "{1209794D-A004-4D5F-A169-80F1B709CE54}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Hue", "Drivers\Driver_Hue\Driver_Hue.vbproj", "{E95E1D0E-F4F8-4197-8C99-0A9868685E7D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -489,15 +491,25 @@ Global
 		{1209794D-A004-4D5F-A169-80F1B709CE54}.Release|Mixed Platforms.Build.0 = Release|x86
 		{1209794D-A004-4D5F-A169-80F1B709CE54}.Release|x86.ActiveCfg = Release|x86
 		{1209794D-A004-4D5F-A169-80F1B709CE54}.Release|x86.Build.0 = Release|x86
+		{E95E1D0E-F4F8-4197-8C99-0A9868685E7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E95E1D0E-F4F8-4197-8C99-0A9868685E7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E95E1D0E-F4F8-4197-8C99-0A9868685E7D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E95E1D0E-F4F8-4197-8C99-0A9868685E7D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E95E1D0E-F4F8-4197-8C99-0A9868685E7D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E95E1D0E-F4F8-4197-8C99-0A9868685E7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E95E1D0E-F4F8-4197-8C99-0A9868685E7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E95E1D0E-F4F8-4197-8C99-0A9868685E7D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E95E1D0E-F4F8-4197-8C99-0A9868685E7D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E95E1D0E-F4F8-4197-8C99-0A9868685E7D}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_UpdateAssemblyVersion = True
-		BuildVersion_UpdateFileVersion = True
-		BuildVersion_BuildVersioningStyle = None.None.Increment.None
-		BuildVersion_UseGlobalSettings = True
 		BuildVersion_IncrementBeforeBuild = True
+		BuildVersion_UseGlobalSettings = True
+		BuildVersion_BuildVersioningStyle = None.None.Increment.None
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_UpdateAssemblyVersion = True
 	EndGlobalSection
 EndGlobal
