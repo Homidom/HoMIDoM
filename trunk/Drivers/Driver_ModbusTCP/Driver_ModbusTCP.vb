@@ -294,7 +294,7 @@ Imports System.Net.Sockets
         Try
             Dim retour As String = "0"
             Select Case UCase(Champ)
-
+			
             End Select
             Return retour
         Catch ex As Exception
@@ -418,16 +418,34 @@ Imports System.Net.Sockets
             If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Write", "Ecriture de " & Objet.Name)
             If Parametre1 Is Nothing Then Parametre1 = 0
             If Parametre2 Is Nothing Then Parametre2 = 0
-            If Objet.Adresse2 <> "-1" And Objet.Adresse2 <> "" Then
-                If TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
-                    ecrire(Objet.adresse2, Commande, Parametre1, Parametre2, sendtwice)
-                End If
-
-                If TypeOf Objet.Value Is Boolean And Not TypeOf Objet.Value Is Integer And Not TypeOf Objet.Value Is Double Then
-                    Parametre1 = str_to_bool(Commande)
-                    ecrire(Objet.adresse2, Commande, Parametre1, Parametre2, sendtwice)
-                End If
+			If Objet.Adresse2 <> "-1" And Objet.Adresse2 <> "" Then
+			    If TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
+			
+			select commande
+			case "ON"
+				Parametre1=Objet.ValueMax
+			case "OFF"
+				Parametre1=Objet.ValueMin				
+			case "OPEN"
+				Parametre1=Objet.ValueMax
+			case "CLOSE"
+				Parametre1=Objet.ValueMin			
+			end select
+			
+	        ecrire(Objet.adresse2, Commande, Parametre1, Parametre2, sendtwice)			
             End If
+			
+            If TypeOf Objet.Value Is Boolean  Then
+                Parametre1 = str_to_bool(Commande)
+                ecrire(Objet.adresse2, Commande, Parametre1, Parametre2, sendtwice)
+            End If
+			End if
+			Select Case commande
+                        Case "ON", "OFF"
+                    If Parametre1 = 0 Then traitement("OFF", Objet.adresse2, Commande, True) Else traitement("ON", Objet.adresse2, Commande, True)
+                        Case "DIM", "OUVERTURE"
+                    traitement(CStr(Parametre1), Objet.adresse2, Commande, True)
+            End Select
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP Write", ex.Message)
         End Try
@@ -563,6 +581,9 @@ Imports System.Net.Sockets
             add_devicecommande("OFF", "Eteint tous les appareils du meme range que ce device", 0)
             add_devicecommande("ON", "Allume toutes les lampes du meme range que ce device", 0)
             add_devicecommande("DIM", "Variation, parametre = Variation", 1)
+            add_devicecommande("CLOSE", "Eteint tous les appareils du meme range que ce device", 0)
+            add_devicecommande("OPEN", "Allume toutes les lampes du meme range que ce device", 0)
+            add_devicecommande("OUVERTURE", "Variation, parametre = Variation", 1)
 
             'Libellé Driver
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
@@ -593,15 +614,15 @@ Imports System.Net.Sockets
         Try
             If Not breading Then
                 breading = True
-                If Not flagwrite Then
-                    cptsend += 1
-                    If cptsend > 3 Then cptsend = 1
-                    StartAddress = ReadStartAdr(adressStart + adressRead + ((cptsend - 1) * 75)) '%MW256 = 12288 + 256 = 12544
-                    Length = ReadStartAdr(75)
-                    MBmaster.ReadHoldingRegister(unit, 3, StartAddress, Length)
+				If Not flagwrite Then
+                cptsend += 1
+                If cptsend > 3 Then cptsend = 1
+                StartAddress = ReadStartAdr(adressStart + adressRead + ((cptsend - 1) * 75)) '%MW256 = 12288 + 256 = 12544
+                Length = ReadStartAdr(75)
+                MBmaster.ReadHoldingRegister(unit, 3, StartAddress, Length)
 
-                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Read", "ModbusTCP Demande de lecture")
-                Else
+                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Read", "ModbusTCP Demande de lecture")
+				Else
                     flagwrite = False
                 End If
             End If
@@ -612,12 +633,12 @@ Imports System.Net.Sockets
     End Sub
 
     Sub DeviceChange(ByVal DeviceID, ByVal valeurString)
-        Try
-            Dim genericDevice As TemplateDevice = _Server.ReturnDeviceById(_IdSrv, DeviceID)
-            If genericDevice.DriverID = _ID And genericDevice.Adresse2 <> "-1" And genericDevice.Adresse2 <> "" Then 'And (TypeOf genericDevice.Value Is Integer Or TypeOf genericDevice.Value Is Double)
-                Write(genericDevice, "", CInt(valeurString))
-            End If
-        Catch ex As Exception
+		Try
+        Dim genericDevice As templateDevice = _Server.ReturnDeviceById(_IdSrv, DeviceID)
+        If genericDevice.DriverID = _ID And  TypeOf genericDevice.Value Is Double Then
+            Write(genericDevice, "", CInt(valeurString))
+        End If
+		Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP Device Change", ex.Message)
         End Try
     End Sub
@@ -680,7 +701,56 @@ Imports System.Net.Sockets
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP Wait", "Exception : " & ex.Message)
         End Try
     End Sub
+	
+    ''' <summary>Traite les paquets reçus</summary>
+    ''' <remarks></remarks>
+    Private Sub traitement(ByVal valeur As String, ByVal adresse As String, ByVal commande As String, ByVal erreursidevicepastrouve As Boolean)
+        If valeur <> "" Then
+            Try
 
+                'Recherche si un device affecté
+                Dim listedevices As New ArrayList
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, "", Me._ID, True)
+                If IsNothing(listedevices) Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Process", "Communication impossible avec le serveur, l'IDsrv est peut être erroné : " & _IdSrv)
+                    Exit Sub
+                End If
+                'un device trouvé on maj la value
+                If (listedevices.Count = 1) Then
+                    'correction valeur pour correspondre au type de value
+                    If TypeOf listedevices.Item(0).Value Is Integer Then
+                        If valeur = "ON" Then
+                            listedevices.Item(0).Value = listedevices.Item(0).ValueMax
+                        ElseIf valeur = "OFF" Then
+                            listedevices.Item(0).Value = listedevices.Item(0).ValueMin
+                        Else
+                            listedevices.Item(0).Value = valeur
+                        End If
+                    ElseIf TypeOf listedevices.Item(0).Value Is Boolean Then
+                        If valeur = "ON" Then
+                            listedevices.Item(0).Value = True
+                        ElseIf valeur = "OFF" Then
+                            listedevices.Item(0).Value = False
+                        Else
+                            listedevices.Item(0).Value = True
+                        End If
+                    Else
+                        listedevices.Item(0).Value = valeur
+                    End If
+                ElseIf (listedevices.Count > 1) Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Process", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
+                Else                    
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Process", "Device non trouvé : " & adresse & ":" & valeur)
+
+                    'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
+
+                End If
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Traitement", "Exception : " & ex.Message & " --> " & adresse & " : " & commande & "-" & valeur)
+            End Try
+        End If
+    End Sub
+	
     ''' <summary>Ecrire sur le port ModbusTCP</summary>
     ''' <param name="adresse">Adresse du device : A1...</param>
     ''' <param name="commande">commande à envoyer : ON, OFF...</param>
@@ -710,8 +780,8 @@ Imports System.Net.Sockets
                     Dim Data() As Byte = GetData(dataE)
 
                     MBmaster.WriteMultipleRegister(unit, 16, StartAddress, Data)
-                    flagWrite = True
-
+					flagWrite = True
+					
                 Catch ex As Exception
                     Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP", "ModbusTCP Ecrire startadress=" & StartAddress)
                 End Try
@@ -758,21 +828,21 @@ Imports System.Net.Sockets
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, "", "", Me._ID, True)
-
+				
                 For Each j As Object In listedevices
-                    If j.Adresse1 <> "-1" Then
+                    If j.Adresse1 <> "-1" And j.Adresse1 <> ""  Then
                         adresse = j.adresse1 - ((cptsend - 1) * 75) - 1
                         If j.adresse1 > 75 * (cptsend - 1) And j.adresse1 <= 75 * cptsend Then
                             msg += j.adresse1 & "=" & dataR(adresse) & " ; " & j.Value & " ;"
                             If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
                                 j.Value = dataR(adresse)
                             End If
-                            If TypeOf j.Value Is Boolean And Not TypeOf j.Value Is Integer And dataR(adresse) > -1 And dataR(adresse) < 2 Then
+                            If TypeOf j.Value Is Boolean And dataR(adresse) > -1 And dataR(adresse) < 2 Then
                                 j.Value = CBool(dataR(adresse))
                             End If
                         End If
                     End If
-                Next
+                Next			
             End If
             breading = False
             If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Modbus slave receive", "MBmaster_OnResponseData : " & 75 * (cptsend - 1) & " et data = " & msg)
