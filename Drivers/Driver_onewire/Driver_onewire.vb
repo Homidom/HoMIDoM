@@ -721,7 +721,7 @@ Public Class Driver_onewire
                         Try
                             tc = DirectCast(owd, com.dalsemi.onewire.container.HumidityContainer) 'creer la connexion
                             state = tc.readDevice 'lit le capteur
-                            tc.setHumidityResolution(resolution, state) 'modifie la resolution à 0.1 degré (0.5 par défaut)
+                            If tc.hasSelectableHumidityResolution() Then tc.setHumidityResolution(resolution, state) 'modifie la resolution à 0.1 degré (0.5 par défaut)
                             tc.doHumidityConvert(state) 'converti la valeur obtenu en humidité
                             state = tc.readDevice 'lit la conversion
                             retour = Math.Round(tc.getHumidity(state), 1)
