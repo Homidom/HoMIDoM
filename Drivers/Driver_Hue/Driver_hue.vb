@@ -1,7 +1,7 @@
 ﻿Imports HoMIDom
+Imports HoMIDom.HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
-Imports HoMIDom.HoMIDom
 
 ' Auteur : Alamata
 ' Date : 01/11/2013
@@ -9,6 +9,7 @@ Imports HoMIDom.HoMIDom
 ''' <summary>Class Driver_Hue</summary>
 ''' <remarks></remarks>
 <Serializable()> Public Class Driver_hue
+    Implements HoMIDom.HoMIDom.IDriver
 
 #Region "Variables génériques"
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
