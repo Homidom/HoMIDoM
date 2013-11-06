@@ -3,6 +3,23 @@ Imports HoMIDom.HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 
+Imports Q42.HueApi
+
+Imports AsyncCtpExtensions
+Imports AsyncCtpThreadingExtensions
+Imports Newtonsoft.Json
+
+Imports System
+Imports System.IO
+Imports System.Net
+Imports System.Data
+Imports System.Linq
+Imports System.ComponentModel
+Imports System.Threading.Tasks
+Imports System.Collections.Generic
+Imports System.Runtime.Serialization
+
+Imports STRGS = Microsoft.VisualBasic.Strings
 ' Auteur : Alamata
 ' Date : 01/11/2013
 
@@ -48,7 +65,7 @@ Imports HoMIDom.HoMIDom.Device
 
 #Region "Variables Internes"
     'Insérer ici les variables internes propres au driver et non communes
-
+    Dim _Registered As Boolean = False
 #End Region
 
 #Region "Propriétés génériques"
@@ -434,16 +451,28 @@ Imports HoMIDom.HoMIDom.Device
     ''' <summary>Démarrer le driver</summary>
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
-        Try
-            'récupération des paramétres avancés
-            Try
-                '_DEBUG = _Parametres.Item(0).Valeur
-            Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
-            End Try
+        Dim retour As String = ""
 
-            _IsConnect = True
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Driver " & Me.Nom & " démarré")
+        'récupération des paramétres avancés
+        Try
+            '_DEBUG = _Parametres.Item(0).Valeur
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
+        End Try
+        Try
+            If _IP_TCP <> "" Then
+
+
+                    GetAllHueDevices()
+
+
+
+
+
+            Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "ERR: Impossible d'atteindre le Bridge Hue pas d'IP renseignée !")
+            End If
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", ex.Message)
         End Try
@@ -496,23 +525,45 @@ Imports HoMIDom.HoMIDom.Device
                 Exit Sub
             End If
 
-            If UCase(Command) = "ON" Then
-                Objet.Value = 100
+            If UCase(Command) = "ONONE" Then
+                ONone(Objet.adresse1.ToString())
             End If
-            If UCase(Command) = "OFF" Then
-                Objet.Value = 0
+            If UCase(Command) = "ONALL" Then
+                ONall()
             End If
-            If UCase(Command) = "DIM" Then
-                If Parametre1 IsNot Nothing Then
-                    Objet.Value = Parametre1
-                End If
+            If UCase(Command) = "OFFONE" Then
+                OFFone(Objet.adresse1.ToString())
             End If
-            If UCase(Command) = "OUVERTURE" Then
-                If Parametre1 IsNot Nothing Then
-                    Objet.Value = Parametre1
-                End If
+            If UCase(Command) = "OFFALL" Then
+                OFFall()
             End If
 
+            If UCase(Command) = "ONONESETCOLOR" Then
+                If Parametre1 IsNot Nothing Then
+                    Objet.Value = Parametre1
+                    ONoneSetColor(Parametre1, Objet.adresse1.ToString())
+
+                End If
+            End If
+            If UCase(Command) = "ONALLSETCOLOR" Then
+                If Parametre1 IsNot Nothing Then
+                    Objet.Value = Parametre1
+                    ONallSetColor(Parametre1)
+
+                End If
+            End If
+            If UCase(Command) = "SETCOLOR" Then
+                If Parametre1 IsNot Nothing Then
+                    Objet.Value = Parametre1
+                    SetColor(Parametre1, Objet.adresse1.ToString())
+
+                End If
+            End If
+            If UCase(Command) = "REGISTER" Then
+                Register()
+
+
+            End If
             If UCase(Command) = "OPERATION" Then      'ID:###########OP:-ID:############OP:+NB:2 --> composant1-composant2+2
                 If Parametre1 IsNot Nothing Then
                     If InStr(Parametre1, "OP:") Then
@@ -657,16 +708,22 @@ Imports HoMIDom.HoMIDom.Device
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
-            
-
+            Add_DeviceCommande("ONone", "Allumer un Device Hue", 0)
+            Add_DeviceCommande("ONall", "Allumer tous les Devices Hue", 0)
+            Add_DeviceCommande("OFFone", "Eteindre un DeviceHue", 0)
+            Add_DeviceCommande("OFFall", "Eteindre tous les Devices Hue", 0)
+            Add_DeviceCommande("ONoneSetColor", "Allumer et Indiquer une couleur a un DeviceHue", 1)
+            Add_DeviceCommande("ONallSetColor", "Allumer et Indiquer une couleur a tous les Devices Hue", 1)
+            Add_DeviceCommande("SetColor", "Indiquer une couleur au Device Hue", 1)
+            Add_DeviceCommande("Register", "Enregistrement sur le Bridge Hue", 0)
             'Libellé Driver
             'Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            Add_LibelleDevice("ADRESSE1", "Adresse IP", "")
-            Add_LibelleDevice("ADRESSE2", "@", "")
+            Add_LibelleDevice("ADRESSE1", "Device ID", "ID du Device Hue associé")
+            Add_LibelleDevice("ADRESSE2", "Hue", "Valeur de la Teinte (0-65535)")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "@", "")
+            Add_LibelleDevice("MODELE", "ColorTmeperature", "Valeur de la Temperature des blancs (153-500)")
             'Add_LibelleDevice("MODELE", "Modele", "Nom du modele de composant : xxx/yyy/zzz", "xxx|yyy|zzz")
             Add_LibelleDevice("REFRESH", "@", "")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
@@ -738,6 +795,171 @@ Imports HoMIDom.HoMIDom.Device
         End If
     End Function
 
+    Public Async Function GetAllHueDevices() As Task
+
+
+        Dim client As New HueClient(_IP_TCP)
+
+        client.Initialize("8123486789")
+
+        Dim resultgethuedevices = Await client.GetLightsAsync()
+
+        For Each device As Object In resultgethuedevices
+            _IsConnect = True
+            Dim gen = New HoMIDom.HoMIDom.Server()
+            Dim listedevices As New ArrayList
+            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, device.ID.ToString(), "GENERIQUESTRING", Me._ID, True)
+            If IsNothing(listedevices) Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ERR: Communication impossible avec le serveur, l'IDsrv est peut être erroné : ", _IdSrv)
+                Exit Function
+            End If
+            If (listedevices.Count = 0) Then
+                gen.SaveDevice(_IdSrv, "", "Hue-" + device.Name, device.ID.ToString(), True, False, _ID, "GENERIQUESTRING", 0, device.State.Hue.ToString(), "", device.State.ColorTemperature.ToString(), "Devices et Valeurs recuperées du Bridge Hue", 0, False, "0", "", 0, 9999, -9999, 0.0, Nothing, "", 0, True)
+
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Driver " & Me.Nom & " démarré")
+
+            End If
+
+
+        Next
+
+
+
+    End Function
+
+    Public Function ONone(ByVal ParametreID As String)
+
+        Dim command = New LightCommand()
+        Dim client As New HueClient(_IP_TCP)
+        client.Initialize("8123486789")
+
+        client.SendCommandAsync(command.TurnOn(), New List(Of String)() From { _
+         ParametreID _
+        })
+
+    End Function
+
+    Public Function ONall()
+
+        Dim command = New LightCommand()
+        Dim client As New HueClient(_IP_TCP)
+        client.Initialize("8123486789")
+
+
+        client.SendCommandAsync(command.TurnOn())
+
+    End Function
+
+    Public Function OFFone(ByVal ParametreID As String)
+
+        Dim command = New LightCommand()
+        Dim client As New HueClient(_IP_TCP)
+        client.Initialize("8123486789")
+
+
+        client.SendCommandAsync(command.TurnOff(), New List(Of String)() From { _
+         ParametreID _
+        })
+
+    End Function
+
+    Public Function OFFall()
+
+        Dim command = New LightCommand()
+        Dim client As New HueClient(_IP_TCP)
+        client.Initialize("8123486789")
+
+
+        client.SendCommandAsync(command.TurnOff())
+
+    End Function
+
+    Public Function ONoneSetColor(ByVal ParametreRGB As String, ByVal ParametreID As String)
+
+        Dim command = New LightCommand()
+        Dim client As New HueClient(_IP_TCP)
+        client.Initialize("8123486789")
+
+        Dim arrRGB() As String = ParametreRGB.Split("-")
+        Dim paramR As String = arrRGB(0)
+        Dim paramG As String = arrRGB(1)
+        Dim paramB As String = arrRGB(2)
+
+
+
+        client.SendCommandAsync(command.TurnOn().SetColor(paramR, paramG, paramB), New List(Of String)() From { _
+         ParametreID _
+        })
+
+
+
+    End Function
+
+    Public Function ONallSetColor(ByVal ParametreRGB As String)
+
+        Dim command = New LightCommand()
+        Dim client As New HueClient(_IP_TCP)
+        client.Initialize("8123486789")
+
+        Dim arrRGB() As String = ParametreRGB.Split("-")
+        Dim paramR As String = arrRGB(0)
+        Dim paramG As String = arrRGB(1)
+        Dim paramB As String = arrRGB(2)
+
+
+
+        client.SendCommandAsync(command.TurnOn().SetColor(paramR, paramG, paramB))
+
+
+
+    End Function
+
+    Public Function SetColor(ByVal ParametreRGB As String, ByVal ParametreID As String)
+
+
+        Dim command = New LightCommand()
+        Dim client As New HueClient(_IP_TCP)
+        client.Initialize("8123486789")
+
+        Dim arrRGB() As String = ParametreRGB.Split("-")
+        Dim paramR As String = arrRGB(0)
+        Dim paramG As String = arrRGB(1)
+        Dim paramB As String = arrRGB(2)
+
+
+
+        client.SendCommandAsync(command.SetColor(paramR, paramG, paramB), New List(Of String)() From { _
+         ParametreID _
+        })
+
+
+
+    End Function
+
+    Public Async Function Register() As Task
+
+        Dim client As New HueClient(_IP_TCP)
+
+
+        Dim result = Await client.RegisterAsync("driverHue", "81234567898")
+
+        If result = True Then
+
+
+
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Enregistrement", "Driver " & Me.Nom & "Enregistrement Bridge Hue Reussi !!")
+            GetAllHueDevices()
+
+
+        Else
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Enregistrement", "Driver " & Me.Nom & "Adresse Ip Bridge Correct !!")
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Enregistrement", "Driver " & Me.Nom & "Enregistrement Bridge Hue Echoué !!")
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Enregistrement", "Driver " & Me.Nom & "Push on the LINK Button on the Bridge Hue BEFORE !!")
+
+        End If
+    End Function
 #End Region
+
+
 
 End Class

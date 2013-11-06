@@ -1,0 +1,9 @@
+C:\Users\ALAMATA\Documents\Developpement\HoMiDoM Novembre\Drivers\Driver_Hue\obj\Debug\Driver_Hue.vbprojResolveAssemblyReference.cache
+C:\Users\ALAMATA\Documents\Developpement\HoMiDoM Novembre\Drivers\Driver_Hue\obj\Debug\Driver_hue.Resources.resources
+C:\Users\ALAMATA\Documents\Developpement\HoMiDoM Novembre\Drivers\Driver_Hue\obj\Debug\Driver_Hue.vbproj.GenerateResource.Cache
+C:\Users\ALAMATA\Documents\Developpement\HoMiDoM Novembre\DEBUG\Drivers\Driver_hue.dll
+C:\Users\ALAMATA\Documents\Developpement\HoMiDoM Novembre\DEBUG\Drivers\Driver_hue.pdb
+C:\Users\ALAMATA\Documents\Developpement\HoMiDoM Novembre\DEBUG\Drivers\Driver_hue.xml
+C:\Users\ALAMATA\Documents\Developpement\HoMiDoM Novembre\Drivers\Driver_Hue\obj\Debug\Driver_hue.dll
+C:\Users\ALAMATA\Documents\Developpement\HoMiDoM Novembre\Drivers\Driver_Hue\obj\Debug\Driver_hue.xml
+C:\Users\ALAMATA\Documents\Developpement\HoMiDoM Novembre\Drivers\Driver_Hue\obj\Debug\Driver_hue.pdb
