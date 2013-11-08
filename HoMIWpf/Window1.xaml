@@ -23,6 +23,7 @@
                     </DoubleAnimationUsingPath.PathGeometry>
                 </DoubleAnimationUsingPath>
             </Storyboard>
+            
             <Storyboard x:Key="sb_Rect2">
                 <!-- The X-axis animation -->
                 <DoubleAnimationUsingPath 
@@ -38,6 +39,73 @@
                     </DoubleAnimationUsingPath.PathGeometry>
                 </DoubleAnimationUsingPath>
             </Storyboard>
+
+            <Storyboard x:Key="sb_Rect3">
+                <!-- The X-axis animation -->
+                <DoubleAnimationUsingPath 
+               Storyboard.TargetName="ttAnimationTarget_Rect3" 
+               Storyboard.TargetProperty="X" 
+               Source="X" 
+               Duration="0:0:1" 
+               RepeatBehavior="1x" 
+               DecelerationRatio="0.6"
+               AutoReverse="False">
+                    <DoubleAnimationUsingPath.PathGeometry>
+                        <PathGeometry Figures="M0,0 L2000,0"/>
+                    </DoubleAnimationUsingPath.PathGeometry>
+                </DoubleAnimationUsingPath>
+            </Storyboard>
+
+            <Storyboard x:Key="sb_Rect31">
+                <!-- The X-axis animation -->
+                <DoubleAnimationUsingPath 
+               Storyboard.TargetName="ttAnimationTarget_Rect4" 
+               Storyboard.TargetProperty="X" 
+               Source="X" 
+               Duration="0:0:1" 
+               RepeatBehavior="1x" 
+               DecelerationRatio="0.6"
+               AutoReverse="False">
+                    <DoubleAnimationUsingPath.PathGeometry>
+                        <PathGeometry Figures="M0,0 L2000,0"/>
+                    </DoubleAnimationUsingPath.PathGeometry>
+                </DoubleAnimationUsingPath>
+            </Storyboard>
+
+
+            <Storyboard x:Key="sb_Rect4">
+                <!-- The X-axis animation -->
+                <DoubleAnimationUsingPath 
+               Storyboard.TargetName="ttAnimationTarget_Rect3" 
+               Storyboard.TargetProperty="X" 
+               Source="X" 
+               Duration="0:0:0.9" 
+               RepeatBehavior="1x" 
+               DecelerationRatio="0.1"
+               AutoReverse="False">
+                    <DoubleAnimationUsingPath.PathGeometry>
+                        <PathGeometry Figures="M0,0 L-1,0"/>
+                    </DoubleAnimationUsingPath.PathGeometry>
+                </DoubleAnimationUsingPath>
+            </Storyboard>
+
+            <Storyboard x:Key="sb_Rect41">
+                <!-- The X-axis animation -->
+                <DoubleAnimationUsingPath 
+               Storyboard.TargetName="ttAnimationTarget_Rect4" 
+               Storyboard.TargetProperty="X" 
+               Source="X" 
+               Duration="0:0:0.9" 
+               RepeatBehavior="1x" 
+               DecelerationRatio="0.1"
+               AutoReverse="False">
+                    <DoubleAnimationUsingPath.PathGeometry>
+                        <PathGeometry Figures="M0,0 L-1,0"/>
+                    </DoubleAnimationUsingPath.PathGeometry>
+                </DoubleAnimationUsingPath>
+            </Storyboard>
+
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/DesignerItem.xaml"/>
                 <ResourceDictionary Source="Resources/SizeChrome.xaml"/>
@@ -49,13 +117,19 @@
     </Window.Resources>
     
     <Grid>
-    <DockPanel Background="Black">
+    <DockPanel Background="Black" Name="DockPanel1">
             <Rectangle Width="0" DockPanel.Dock="Left" />
             <StackPanel Height="30" DockPanel.Dock="Top" Orientation="Horizontal" HorizontalAlignment="Right">
 
             </StackPanel> 
             <Rectangle Height="130" DockPanel.Dock="Bottom"/>
-            <Image Stretch="Fill" Name="ImgBackground" Margin="0,-30,0,-130" />
+            <Image Stretch="Fill" Name="ImgBackground" Margin="0,-30,0,-130" >
+                <Image.RenderTransform>
+                    <TransformGroup >
+                        <TranslateTransform x:Name="ttAnimationTarget_Rect4" X="0" Y="0" />
+                    </TransformGroup>
+                </Image.RenderTransform>
+            </Image> 
     </DockPanel>
         <DockPanel >
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Top"  Name="StkTop" Margin="0,0,1,0" Background="#3A000000">
@@ -406,7 +480,13 @@
                 
 
             </StackPanel>    
-            <Canvas Margin="1" Name="Canvas1" ClipToBounds="True" SnapsToDevicePixels="True"/>
+            <Canvas Margin="1" Name="Canvas1" ClipToBounds="True" SnapsToDevicePixels="True">
+                <Canvas.RenderTransform>
+                    <TransformGroup >
+                        <TranslateTransform x:Name="ttAnimationTarget_Rect3" X="0" Y="0" />
+                    </TransformGroup>
+                </Canvas.RenderTransform>
+            </Canvas>
         </DockPanel>
         <StackPanel Name="StkKeyboard" Orientation="Horizontal" Height="40" DockPanel.Dock="right" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="2,2,75,2">
             <my:keyboard Foreground="{x:Null}" x:Name="Keyboard1" Height="40"/>

@@ -1505,6 +1505,12 @@ Public Class uWidgetEmpty
         End Try
     End Sub
 
+    Private Sub Image_PreviewMouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Me.PreviewMouseDown
+        _Down = Now
+        _oldposition = e.GetPosition(Me)
+    End Sub
+
+
 #Region "Gerer_Action_Gesture"
     Private Sub Traite_Action_OnClick()
         Try
@@ -1527,9 +1533,9 @@ Public Class uWidgetEmpty
                         x.Parametres.Add(param)
                     End If
 
-                    If _dev.Type = HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA Then
-                        MessageBox.Show(_act.Methode & ":" & _act.Value)
-                    End If
+                    'If _dev.Type = HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA Then
+                    '    MessageBox.Show(_act.Methode & ":" & _act.Value)
+                    'End If
 
                     _FlagBlock = True
                     myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
@@ -1804,10 +1810,6 @@ Public Class uWidgetEmpty
     End Sub
 #End Region
 
-    Private Sub Image_PreviewMouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Me.PreviewMouseDown
-        _Down = Now
-        _oldposition = e.GetPosition(Me)
-    End Sub
 
 #Region "Gestion des evenements provenant des popup"
     Private Sub FreeTouch(ByVal Touche As String)

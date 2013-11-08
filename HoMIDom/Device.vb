@@ -2317,57 +2317,6 @@ Namespace HoMIDom
                 _Type = "MULTIMEDIA"
                 AddHandler MyTimer.Elapsed, AddressOf Read
 
-                'ListCommandName.Add("Power")
-                'ListCommandData.Add("0")
-                'ListCommandRepeat.Add("0")
-                'ListCommandName.Add("ChannelUp")
-                'ListCommandData.Add("0")
-                'ListCommandRepeat.Add("0")
-                'ListCommandName.Add("ChannelDown")
-                'ListCommandData.Add("0")
-                'ListCommandRepeat.Add("0")
-                'ListCommandName.Add("VolumeUp")
-                'ListCommandData.Add("0")
-                'ListCommandRepeat.Add("0")
-                'ListCommandName.Add("VolumeDown")
-                'ListCommandData.Add("0")
-                'ListCommandRepeat.Add("0")
-                'ListCommandName.Add("Mute")
-                'ListCommandData.Add("0")
-                'ListCommandRepeat.Add("0")
-                'ListCommandName.Add("Source")
-                'ListCommandData.Add("0")
-                'ListCommandRepeat.Add("0")
-                'ListCommandName.Add("0")
-                'ListCommandData.Add("0")
-                'ListCommandRepeat.Add("0")
-                'ListCommandName.Add("1")
-                'ListCommandData.Add("0")
-                'ListCommandRepeat.Add("0")
-                'ListCommandName.Add("2")
-                'ListCommandData.Add("0")
-                'ListCommandRepeat.Add("0")
-                'ListCommandName.Add("3")
-                'ListCommandData.Add("0")
-                'ListCommandRepeat.Add("0")
-                'ListCommandName.Add("4")
-                'ListCommandData.Add("0")
-                'ListCommandRepeat.Add("0")
-                'ListCommandName.Add("5")
-                'ListCommandData.Add("0")
-                'ListCommandRepeat.Add("0")
-                'ListCommandName.Add("6")
-                'ListCommandData.Add("0")
-                'ListCommandRepeat.Add("0")
-                'ListCommandName.Add("7")
-                'ListCommandData.Add("0")
-                'ListCommandRepeat.Add("0")
-                'ListCommandName.Add("8")
-                'ListCommandData.Add("0")
-                'ListCommandRepeat.Add("0")
-                'ListCommandName.Add("9")
-                'ListCommandData.Add("0")
-                'ListCommandRepeat.Add("0")
             End Sub
 
             'redéfinition car on veut rien faire
@@ -2396,10 +2345,19 @@ Namespace HoMIDom
 
                 For i As Integer = 0 To _template.Commandes.Count - 1
                     If UCase(Commande) = UCase(_template.Commandes.Item(i).Name) Then
-                        Dim code As String = TraiteCommand(_template.Commandes.Item(i).Name, _template)
+                        Dim code As String = ""
+                        If _template.Type = 0 And String.IsNullOrEmpty(Me.Adresse1) = False Then
+                            code = "http://"
+                            If String.IsNullOrEmpty(Me.Adresse2) = False Then
+                                code &= Adresse1 & ":" & Me.Adresse2 & "/"
+                            Else
+                                code &= Adresse1 & "/"
+                            End If
+                        End If
+                        code &= TraiteCommand(_template.Commandes.Item(i).Name, _template)
                         Dim repeat As String = _template.Commandes.Item(i).Repeat
 
-                        _Server.Log(TypeLog.DEBUG, TypeSource.DEVICE, "EnvoyerCommande", "La commande " & code & " Repeat " & repeat & " a été envoyée au driver")
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DEVICE, "EnvoyerCommande", "La commande " & Commande & " code:" & code & " Repeat:" & repeat & " a été envoyée au driver")
                         Driver.EnvoyerCode(code, repeat)
                         Exit Sub
                     End If
@@ -2409,16 +2367,14 @@ Namespace HoMIDom
 
             Private Function TraiteCommand(NameCommand As String, Template As HoMIDom.Telecommande.Template) As String
                 Try
-                    Dim _template As HoMIDom.Telecommande.Template
-                    Dim code As String = Nothing
-                    _template = _Server.GetTemplateFromID(Me.Modele)
+                    Dim code As String = ""
 
-                    For Each cmd In _template.Commandes
+                    For Each cmd In Template.Commandes
                         If cmd.Name.ToLower = NameCommand.ToLower Then 'on a trouvé la commande
-                            code = cmd.Code
+                            If cmd.Code IsNot Nothing Then code = cmd.Code
 
                             'on remplace les variables mis en accolades par leur valeur
-                            For Each var In _template.Variables
+                            For Each var In Template.Variables
                                 If var.Type = HoMIDom.Telecommande.TypeOfVar.String Or var.Type = HoMIDom.Telecommande.TypeOfVar.Double Then
                                     Dim _var As String = "{" & var.Name.ToLower & "}"
                                     If code.ToLower.Contains(_var) Then

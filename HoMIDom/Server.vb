@@ -2601,7 +2601,7 @@ Namespace HoMIDom
                             End If
                         Next
                     Catch ex As Exception
-                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Load", " Erreur lors du chargement du driver: " & fi.Name & " Err: " & ex.Message)
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Drivers_Load", " Erreur lors du chargement du driver: " & fi.Name & " Err: " & ex.ToString)
                     End Try
                 Next
 
