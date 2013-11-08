@@ -639,7 +639,10 @@ Public Class Driver_onewire
                         Try
                             tc = DirectCast(owd, com.dalsemi.onewire.container.TemperatureContainer) 'creer la connexion
                             state = tc.readDevice 'lit le capteur
-                            tc.setTemperatureResolution(resolution, state) 'modifie la resolution à 0.1 degré (0.5 par défaut)
+                            If tc.hasSelectableTemperatureResolution() Then
+                                tc.setTemperatureResolution(resolution, state) 'modifie la resolution à 0.1 degré (0.5 par défaut)
+                                tc.writeDevice(state)
+                            End If
                             tc.doTemperatureConvert(state) 'converti la valeur obtenu en temperature
                             state = tc.readDevice 'lit la conversion
                             retour = Math.Round(tc.getTemperature(state), 1)
@@ -721,11 +724,15 @@ Public Class Driver_onewire
                         Try
                             hc = DirectCast(owd, com.dalsemi.onewire.container.HumidityContainer) 'creer la connexion
                             state = hc.readDevice 'lit le capteur
-                            If hc.hasSelectableHumidityResolution() Then hc.setHumidityResolution(resolution, state) 'modifie la resolution à 0.1 degré (0.5 par défaut)
+                            If hc.hasSelectableHumidityResolution() Then
+                                hc.setHumidityResolution(resolution, state)
+                                hc.writeDevice(state)
+                            End If
                             hc.doHumidityConvert(state) 'converti la valeur obtenu en humidité
                             state = hc.readDevice 'lit la conversion
                             'retour = Math.Round(tc.getHumidity(state), 1)
                             retour = hc.getHumidity(state)
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "1-Wire humidity_get", "DEBUG: valeur humidity read : " & retour)
                         Catch ex As Exception
                             retour = 9999
                             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire humidity_get", ex.ToString)
