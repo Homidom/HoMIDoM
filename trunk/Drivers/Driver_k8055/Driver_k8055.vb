@@ -2,10 +2,9 @@
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 
-
 ''' <summary>Driver Velleman k8055, le device doit dans son adresse 1 indiqué sa carte et son numéro de relais séparé par un x, exemple pour le relais 1 de la carte 1: 1x1</summary>
 ''' <remarks>Nécessite la dll k8055d.dll</remarks>
-<Serializable()> Public Class Driver_k8055
+Public Class Driver_k8055
     Implements HoMIDom.HoMIDom.IDriver
 
 #Region "Variable Driver"
@@ -69,8 +68,11 @@ Imports HoMIDom.HoMIDom.Device
     Private Declare Function ReadCounter Lib "k8055d.dll" (ByVal CounterNr As Integer) As Integer
     Private Declare Sub ResetCounter Lib "k8055d.dll" (ByVal CounterNr As Integer)
     Private Declare Sub SetCounterDebounceTime Lib "k8055d.dll" (ByVal CounterNr As Integer, ByVal DebounceTime As Integer)
+    Private Declare Function ReadBackDigitalOut Lib "k8055d.dll" () As Integer
+    Private Declare Sub ReadBackAnalogOut Lib "k8055d.dll" (ByRef Buffer As Integer)
 
     Dim _carte(3) As Boolean
+
 #End Region
 
 #Region "Fonctions génériques"
@@ -574,8 +576,8 @@ Imports HoMIDom.HoMIDom.Device
         Try
             Dim x As New DeviceCommande
             x.NameCommand = Nom
-            x.DescriptionCommand = description
-            x.CountParam = nbparam
+            x.DescriptionCommand = Description
+            x.CountParam = NbParam
             _DeviceCommandPlus.Add(x)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
@@ -636,22 +638,26 @@ Imports HoMIDom.HoMIDom.Device
     End Sub
 
     Public Sub New()
-        _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
+        Try
+            _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
 
-        _DeviceSupport.Add(ListeDevices.SWITCH) 'SORTIE
-        _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN) 'ENTREE
-        _DeviceSupport.Add(ListeDevices.APPAREIL) 'SORTIE
-        _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE) 'E/S ANA (Adresse Ex ou Sx)
+            _DeviceSupport.Add(ListeDevices.SWITCH) 'SORTIE
+            _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN) 'ENTREE
+            _DeviceSupport.Add(ListeDevices.APPAREIL) 'SORTIE
+            _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE) 'E/S ANA (Adresse Ex ou Sx)
 
-        'ajout des commandes avancées pour les devices
-        Add_DeviceCommande("VALEUR", "Valeur à écrire", 1)
+            'ajout des commandes avancées pour les devices
+            Add_DeviceCommande("VALEUR", "Valeur à écrire", 1)
 
-        Add_LibelleDevice("ADRESSE1", "Adresse du device", "Doit être compris entre 1 et 5 pour une entrée et 1 et 8 pour une sortie")
-        Add_LibelleDevice("ADRESSE2", "Adresse de la carte", "Adresse de la carte qui doit être compris entre 0 et 3")
-        Add_LibelleDevice("SOLO", "@", "")
-        Add_LibelleDevice("MODELE", "@", "")
-        'Add_LibelleDevice("REFRESH", "Refresh (sec)", "Valeur de rafraîchissement de la mesure en secondes")
-        'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
+            Add_LibelleDevice("ADRESSE1", "Adresse du device", "Doit être compris entre 1 et 5 pour une entrée et 1 et 8 pour une sortie")
+            Add_LibelleDevice("ADRESSE2", "Adresse de la carte", "Adresse de la carte qui doit être compris entre 0 et 3")
+            Add_LibelleDevice("SOLO", "@", "")
+            Add_LibelleDevice("MODELE", "@", "")
+            'Add_LibelleDevice("REFRESH", "Refresh (sec)", "Valeur de rafraîchissement de la mesure en secondes")
+            'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "K8055 New", ex.Message)
+        End Try
     End Sub
 #End Region
 

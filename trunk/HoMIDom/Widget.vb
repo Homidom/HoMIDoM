@@ -1,4 +1,4 @@
-﻿Imports System.Windows.Media
+﻿'Imports System.Windows.Media
 
 Namespace HoMIDom
 
@@ -15,10 +15,10 @@ Namespace HoMIDom
         Dim _Outputs As New List(Of Output)
         Dim _Rotation As Double = 0
         Dim _Zindex As Integer = 0
-        Dim _BorderThickness As Double = 0
-        Dim _CornerRadius As Double = 6
-        Dim _ColorBorder As SolidColorBrush = Brushes.Transparent
-        Dim _BorderBrush As Windows.Media.Brush
+        'Dim _BorderThickness As Double = 0
+        'Dim _CornerRadius As Double = 6
+        'Dim _ColorBorder As SolidColorBrush = Brushes.Transparent
+        'Dim _BorderBrush As SolidColorBrush = Brushes.Transparent
 #End Region
 
 #Region "Property"

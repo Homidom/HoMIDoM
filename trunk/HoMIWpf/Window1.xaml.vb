@@ -3595,7 +3595,84 @@ Class Window1
                 myService.SaveTemplate(IdSrv, _template)
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur SaveTemplate_Click: " & ex.Message, "Erreur", "SaveTemplate_Click")
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur SaveTemplate_Click: " & ex.ToString, "Erreur", "SaveTemplate_Click")
         End Try
     End Sub
+
+    Dim _oldposition As Point = Nothing
+    Dim _Down As DateTime
+
+    Private Sub DockPanel1_MouseLeave(ByVal sender As Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles DockPanel1.MouseLeave
+        Try
+            If e.LeftButton = MouseButtonState.Released Then Exit Sub
+
+            Dim _NewPos As Point = e.GetPosition(Me)
+            Dim _DiffY As Double = _oldposition.Y - _NewPos.Y
+            Dim _DiffX As Double = _oldposition.X - _NewPos.X
+
+            'Gesture Bas Haut 
+            If _DiffY > 60 And (-60 < _DiffX < 60) Then
+                Exit Sub
+            End If
+            'Gesture Haut Bas
+            If _DiffY < -60 And (-60 < _DiffX < 60) Then
+                Exit Sub
+            End If
+            'Gesture Gauche Droite
+            If _DiffX < -60 And (-60 < _DiffY < 60) Then
+                Exit Sub
+            End If
+            'Gesture Droite Gauche
+            If _DiffX > 60 And (-60 < _DiffY < 60) Then
+                Exit Sub
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.MouseLeave: " & ex.Message, "Erreur", " uWidgetEmpty.MouseLeave")
+        End Try
+    End Sub
+
+    Private Sub DockPanel1_MouseLeftButtonUp(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles DockPanel1.MouseLeftButtonUp
+        Try
+
+            Dim vDiff As TimeSpan = Now - _Down
+            Dim _NewPos As Point = e.GetPosition(Me)
+            Dim _DiffY As Double = _oldposition.Y - _NewPos.Y
+            Dim _DiffX As Double = _oldposition.X - _NewPos.X
+
+            'Gesture Bas Haut 
+            If _DiffY > 60 And (-60 < _DiffX < 60) Then
+                Exit Sub
+            End If
+            'Gesture Haut Bas
+            If _DiffY < -60 And (-60 < _DiffX < 60) Then
+                Exit Sub
+            End If
+            'Gesture Gauche Droite
+            If _DiffX < -60 And (-60 < _DiffY < 60) Then
+                'Dim st2 As Storyboard = TryFindResource("sb_Rect3")
+                'Canvas1.BeginStoryboard(st2)
+                'Dim st31 As Storyboard = TryFindResource("sb_Rect31")
+                'ImgBackground.BeginStoryboard(st31)
+                'Exit Sub
+            End If
+            'Gesture Droite Gauche
+            If _DiffX > 60 And (-60 < _DiffY < 60) Then
+                'Dim st2 As Storyboard = TryFindResource("sb_Rect4")
+                'Canvas1.BeginStoryboard(st2)
+                'Dim st41 As Storyboard = TryFindResource("sb_Rect41")
+                'ImgBackground.BeginStoryboard(st41)
+                'Exit Sub
+            End If
+
+        Catch ex As Exception
+            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Image_MouseLeftButtonUp: " & ex.Message, "Erreur", " uWidgetEmpty.Image_MouseLeftButtonUp")
+        End Try
+    End Sub
+
+    Private Sub DockPanel1_PreviewMouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles DockPanel1.PreviewMouseDown
+        _Down = Now
+        _oldposition = e.GetPosition(Me)
+    End Sub
+
+
 End Class
