@@ -86,6 +86,7 @@ Imports System.Threading
     Dim _MODE As String = "PDU"
     Dim _BAUD As Integer = "9600"
     Dim _PinCode As String = ""
+    Dim _Carnet As Boolean = False
 
 #End Region
 
@@ -374,6 +375,7 @@ Imports System.Threading
         End Try
     End Function
 
+
     ''' <summary>Démarrer le du driver</summary>
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
@@ -385,6 +387,8 @@ Imports System.Threading
             _MODE = _Parametres.Item(1).Valeur.ToString.ToUpper
             _BAUD = _Parametres.Item(2).Valeur.ToString.ToUpper
             _PinCode = _Parametres.Item(3).Valeur.ToString.ToUpper
+            _Carnet = _Parametres.Item(4).Valeur.ToString.ToUpper
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
         End Try
@@ -393,6 +397,9 @@ Imports System.Threading
         Try
             If _Com <> "" Then
                 retour = ouvrir(_Com)
+
+
+               
             Else
                 retour = "ERR: Port Com non défini. Impossible d'ouvrir le port !"
             End If
@@ -700,8 +707,9 @@ Imports System.Threading
 
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", True)
             Add_ParamAvance("Mode", "Choisir le mode de connexion (PDU/TEXTE)", "PDU")
-            Add_ParamAvance("Baud", "Vitesse du port : 300|600|1200|2400|9600|14400|19200|38400|57600|115200", "57600")
+            Add_ParamAvance("Baud", "Vitesse du port : 300|600|1200|2400|9600|14400|19200|38400|57600|115200", "9600")
             Add_ParamAvance("PinCode", "En test, inscrire le code pin de la carte SIM", "")
+            Add_ParamAvance("Carnet", "Recuperer le carnet d'adresses (True/False)", False)
             'Add_ParamAvance("storage", "sim card : true / gsm : false", True)
             'ajout des commandes avancées pour les devices
 
@@ -1105,6 +1113,11 @@ Imports System.Threading
                             comm.EnableMessageRouting()
                             _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Start", "   * Activation du routage des SMS")
                             _SMSROUTING = True
+
+
+
+                            PhoneDir()
+
                         Catch ex As Exception
                             _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Start", "   * Désactivation du routage des SMS car non supporté par le modem")
                             _SMSROUTING = False
@@ -1190,10 +1203,13 @@ Imports System.Threading
 
                             _IsConnect = True
 
+
+                            PhoneDir()
+
                             sIncomming = Nothing
 
                             'suppression des 50 msg 
-                            '   For i = 1 To 50
+                            ' For i = 1 To 50
                             ' ATport.WriteLine("AT+CMGD=" & i & vbCrLf) '
                             ' Thread.Sleep(500)
                             ' _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "delete msg : " & i)
@@ -1204,6 +1220,10 @@ Imports System.Threading
 
                             AddHandler ATport.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
                             Return ("Port " & port_name & " ouvert à " & _BAUD & " bauds.")
+
+
+
+
                         End If
                     Else
                         Return ("Port " & port_name & " dejà ouvert")
@@ -1528,6 +1548,8 @@ Imports System.Threading
 
         sIncomming = ATport.ReadLine
         'MsgBox("##" & sIncomming)
+        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MessageReceived", sIncomming)
+
         Try
 
             ''           'une notification de sms arrive
@@ -1536,6 +1558,7 @@ Imports System.Threading
                 Dim indexmsg As String
 
                 sIncomming = sIncomming.Replace("+CMTI: ", "").Replace(vbCr, "").Replace(vbLf, "")
+                _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM MessageReceived", sIncomming)
                 'décodage de l'index du message arrivé
                 Dim decodecmti() As String = sIncomming.Split(New Char() {","c})
                 storemsg = decodecmti(0)
@@ -1551,6 +1574,7 @@ Imports System.Threading
                 ATport.WriteLine("AT+CMGD=" & indexmsg & vbCrLf)
                 Thread.Sleep(100)
                 If _DEBUG Then _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Datareceived", " : le message " & indexmsg & " et stocké dans " & storemsg & " à été effacé")
+                If _DEBUG Then _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Datareceived", " : le message " & indexmsg & " à été traité.")
 
                 'flush()
                 'ATport.DiscardInBuffer()
@@ -1558,7 +1582,7 @@ Imports System.Threading
 
 
             End If
-
+          
             'lecture du message
             If Left(sIncomming, 6) = "+CMGR:" Then
                 '+CMGR: <status>,<from_address>,<mr>,<scts><CRLF><data> 
@@ -1611,9 +1635,8 @@ Imports System.Threading
 
                 ' If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM ReceptionSMS", "Reception d'un SMS de type " & Type & ", numéro " & numero & ", texte " & texte & ",  Date " & dateenvoi)
                 ' If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM ReceptionSMS", "Reception d'un SMS de type " & Type & ", numéro " & numero & ", texte " & texte & ",  Date " & dateenvoi)
-
-            End If
-
+                   End If
+          
 
             If Left(sIncomming, 4) = "RING" Then
                 ' ATA
@@ -1724,6 +1747,118 @@ Imports System.Threading
 
         End Select
         Return 0
+    End Function
+
+
+
+    ''' <summary>Recuperation carnet d'adresse</summary>
+    Private Sub PhoneDir()
+        Try
+            Select Case _MODE
+                Case "PDU"
+                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "CARNET", _Carnet)
+                    If _Carnet = True Then
+                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "CARNET", "Récuperation du carnet d'adresses")
+
+                        Dim storage As String = PhoneStorageType.Sim
+                        Dim entries As PhonebookEntry() = comm.GetPhonebook(storage)
+
+                        If entries.Length > 0 Then
+                            ' Display the entries read
+
+                            For Each entry As PhonebookEntry In entries
+                                If entry.Text.IndexOf("0") <> -1 Then
+
+
+
+                                    _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, entry.Number, HexToString(entry.Text))
+                                    Dim strok As String = HexToString(entry.Text)
+
+                                    Dim sb As New System.Text.StringBuilder
+
+                                    For Each ch As Char In strok
+                                        If Char.IsLetterOrDigit(ch) OrElse ch = " "c Then
+                                            sb.Append(ch)
+                                        End If
+                                    Next
+
+
+
+
+                                    Dim gen = New HoMIDom.HoMIDom.Server()
+                                    Dim listedevices As New ArrayList
+                                    listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_Idsrv, entry.Number, "GENERIQUESTRING", Me._ID, True)
+                                    If IsNothing(listedevices) Then
+
+                                        Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "ERR: Communication impossible avec le serveur, l'IDsrv est peut être erroné : " & _Idsrv)
+                                        Exit Sub
+                                    End If
+                                    If (listedevices.Count = 0) Then
+                                        gen.SaveDevice(_Idsrv, "", "GSM_" + sb.ToString(), entry.Number, True, False, _ID, "GENERIQUESTRING", 0, "", "", "", "Créé depuis le carnet d adresse du téléphone", 0, False, "0", "", 0, 9999, -9999, 0.0, Nothing, "", 0, True)
+                                    End If
+
+
+                                End If
+                                If entry.Text.Length <> 0 Then
+                                    Dim stra = ""
+                                    Dim strb = ""
+                                    If entry.Text.IndexOf("0") = -1 Then
+
+                                        stra = entry.Number.Replace(",", "").Replace("""", "").Replace("1", "").Replace("2", "").Replace("3", "").Replace("4", "").Replace("5", "").Replace("6", "").Replace("7", "").Replace("8", "").Replace("9", "").Replace("0", "").Replace("+", "")
+                                        strb = entry.Number.Remove(entry.Number.IndexOf(""""))
+
+
+
+                                        Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, entry.Number, stra)
+                                        Dim gen = New HoMIDom.HoMIDom.Server()
+                                        Dim listedevices As New ArrayList
+                                        listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_Idsrv, entry.Number, "GENERIQUESTRING", Me._ID, True)
+                                        If IsNothing(listedevices) Then
+
+                                            Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GSM Start", "ERR: Communication impossible avec le serveur, l'IDsrv est peut être erroné : " & _Idsrv)
+                                            Exit Sub
+                                        End If
+                                        If (listedevices.Count = 0) Then
+
+                                            gen.SaveDevice(_Idsrv, "", "GSM_" + stra, strb, True, False, _ID, "GENERIQUESTRING", 0, "", "", "", "Créé depuis le carnet d adresse du téléphone", 0, False, "0", "", 0, 9999, -9999, 0.0, Nothing, "", 0, True)
+                                        End If
+                                    End If
+
+                                End If
+                            Next
+
+                        End If
+                    End If
+
+                Case "TEXTE"
+                    If _Carnet = True Then
+                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "Carnet d adresse actuellement non supporté dans ce mode")
+                    Else
+                    End If
+
+                Case Else
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM", "mode non supporté")
+
+            End Select
+        Catch ex As Exception
+            _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DRIVER, "GSM", "ERR: Phonedir  :" & ex.Message)
+
+
+        End Try
+    End Sub
+
+
+
+
+
+    ''' <summary>hexa to string</summary>
+    ''' <remarks></remarks>
+    Function HexToString(ByVal hex As String) As String
+        Dim text As New System.Text.StringBuilder(hex.Length \ 2)
+        For i As Integer = 0 To hex.Length - 2 Step 2
+            text.Append(Chr(Convert.ToByte(hex.Substring(i, 2), 16)))
+        Next
+        Return text.ToString
     End Function
 
 
