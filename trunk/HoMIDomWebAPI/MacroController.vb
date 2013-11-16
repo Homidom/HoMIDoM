@@ -19,4 +19,9 @@ Public Class MacroController
         HoMIDomAPI.CurrentServer.RunMacro(Me.ServerKey, id)
         Return True
     End Function
+
+    <HttpGet()>
+    Public Function GetValue(id As String, field As String) As Object
+        Return Me.GetField(Me.Get(id), field)
+    End Function
 End Class

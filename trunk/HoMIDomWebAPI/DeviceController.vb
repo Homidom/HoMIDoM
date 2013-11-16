@@ -15,11 +15,15 @@ Public Class DeviceController
         Return HoMIDomAPI.CurrentServer.ReturnDeviceByID(Me.ServerKey, id)
     End Function
 
-
     <HttpGet()>
     Public Function ExecuteCommand(id As String, command As String) As Boolean
         HoMIDomAPI.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, id, New DeviceAction() With {.Nom = command})
         Return True
+    End Function
+
+    <HttpGet()>
+    Public Function GetValue(id As String, field As String) As Object
+        Return Me.GetField(Me.Get(id), field)
     End Function
 
     ''' <summary>
@@ -40,11 +44,11 @@ Public Class DeviceController
 
             ' récupération du composant
             Dim tplDevice As TemplateDevice = HoMIDomAPI.CurrentServer.ReturnDeviceByID(Me.ServerKey, id)
-            If tplDevice Is Nothing Then Throw New Exception("Composant non trouvé !")
+            If tplDevice Is Nothing Then Throw New ArgumentException("Composant non trouvé !", "id")
 
             ' recherche de l'action invoquée
             Dim devAction As DeviceAction = tplDevice.DeviceAction.Where(Function(t) t.Nom = command).FirstOrDefault()
-            If devAction Is Nothing Then Throw New Exception("Action non trouvée pour ce composant !")
+            If devAction Is Nothing Then Throw New ArgumentException("Action non trouvée pour ce composant !", "command")
 
             ' extraction des paramètre reçu
             Dim params As String()
@@ -79,4 +83,6 @@ Public Class DeviceController
         HoMIDomAPI.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, id, action)
         Return True
     End Function
+
+
 End Class
