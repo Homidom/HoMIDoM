@@ -57,10 +57,13 @@ Public Class HoMIDomAPI
             Dim config = New HttpSelfHostConfiguration(webApiUrl)
 
             config.Routes.MapHttpRoute("DefaultApi", "{key}/{controller}/{id}", New With { _
-             .id = RouteParameter.[Optional] _
+             .id = RouteParameter.[Optional]
             })
             config.Routes.MapHttpRoute("CommandApi", "{key}/command/{controller}/{id}/{command}", New With { _
-             .action = "ExecuteCommand" _
+             .action = "ExecuteCommand"
+            })
+            config.Routes.MapHttpRoute("ValueApi", "{key}/value/{controller}/{id}/{field}", New With { _
+             .action = "GetValue"
             })
 
             ' Add jsonp formatter for cross domain call

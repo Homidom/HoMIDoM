@@ -14,4 +14,9 @@ Public Class TriggerController
         Return HoMIDomAPI.CurrentServer.ReturnTriggerById(Me.ServerKey, id)
     End Function
 
+
+    <HttpGet()>
+    Public Function GetValue(id As String, field As String) As Object
+        Return Me.GetField(Me.Get(id), field)
+    End Function
 End Class

@@ -19,5 +19,10 @@ Public Class DriverController
         HoMIDomAPI.CurrentServer.ExecuteDriverCommand(Me.ServerKey, id, New DeviceAction() With {.Nom = command})
         Return True
     End Function
+
+    <HttpGet()>
+    Public Function GetValue(id As String, field As String) As Object
+        Return Me.GetField(Me.Get(id), field)
+    End Function
 End Class
 
