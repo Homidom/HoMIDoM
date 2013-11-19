@@ -804,6 +804,9 @@ Imports ZibaseDll
 
             If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
 
+            'mise en majuscule
+            valeur = valeur.ToUpper
+
             'Recherche si un device affecté
             Dim listedevices As New ArrayList
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
