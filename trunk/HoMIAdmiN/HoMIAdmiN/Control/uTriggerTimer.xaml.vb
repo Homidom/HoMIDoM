@@ -1,5 +1,5 @@
-﻿Imports HoMIDom.HoMIDom.Api
-Imports NCrontab
+﻿Imports HoMIDom.NCrontab
+Imports HoMIDom.HoMIDom.Api
 
 Public Class uTriggerTimer
     Public Event CloseMe(ByVal MyObject As Object)
@@ -12,6 +12,10 @@ Public Class uTriggerTimer
         RaiseEvent CloseMe(Me)
     End Sub
 
+    Private Sub TabItemChanged(ByVal sender As System.Object, ByVal e As System.Windows.DependencyPropertyChangedEventArgs) Handles Tabitem_avance.IsVisibleChanged
+        simulate_cron_avance()
+    End Sub
+
     Public Sub New(ByVal Action As Classe.EAction, ByVal TriggerId As String)
         Try
             ' Cet appel est requis par le concepteur.
@@ -20,8 +24,6 @@ Public Class uTriggerTimer
 
             _Action = Action
             _TriggerId = TriggerId
-
-
 
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
             If _Action = EAction.Nouveau Then 'Nouveau Trigger
@@ -39,20 +41,6 @@ Public Class uTriggerTimer
                     If cron.Length > 10 Then
                         'cron = Mid(cron, 6, Len(cron) - 5)
                         Dim c() As String = cron.Split("#")
-
-                        'mode avancé
-                        TxtSc_avance.Text = c(0)
-                        TxtMn_avance.Text = c(1)
-                        TxtHr_avance.Text = c(2)
-                        TxtJr_avance.Text = c(3)
-                        TxtMs_avance.Text = c(4)
-                        If InStr(c(5), "1") Then CheckBox1_avance.IsChecked = True
-                        If InStr(c(5), "2") Then CheckBox2_avance.IsChecked = True
-                        If InStr(c(5), "3") Then CheckBox3_avance.IsChecked = True
-                        If InStr(c(5), "4") Then CheckBox4_avance.IsChecked = True
-                        If InStr(c(5), "5") Then CheckBox5_avance.IsChecked = True
-                        If InStr(c(5), "6") Then CheckBox6_avance.IsChecked = True
-                        If InStr(c(5), "0") Then CheckBox7_avance.IsChecked = True
 
                         'mode simple (si pas de caracteres spéciaux sinon avancé uniquement)
                         If InStr(c(0), "/") = 0 And InStr(c(1), "/") = 0 And InStr(c(2), "/") = 0 And InStr(c(3), "/") = 0 And InStr(c(4), "/") = 0 And _
@@ -79,7 +67,27 @@ Public Class uTriggerTimer
                             SP_modesimplecontenu.Visibility = Windows.Visibility.Collapsed
                             SP_modesimplealerte.Visibility = Windows.Visibility.Visible
                             SP_exemplesimple.Visibility = Windows.Visibility.Collapsed
+
                         End If
+
+                        'mode avancé
+                        If InStr(c(0), "/") Then c(0) = Right(c(0), c(0).Length - InStr(c(0), "/")) : CheckBox9.IsChecked = True
+                        If InStr(c(1), "/") Then c(1) = Right(c(1), c(1).Length - InStr(c(1), "/")) : CheckBox10.IsChecked = True
+                        If InStr(c(2), "/") Then c(2) = Right(c(2), c(2).Length - InStr(c(2), "/")) : CheckBox11.IsChecked = True
+                        If InStr(c(3), "/") Then c(3) = Right(c(3), c(3).Length - InStr(c(3), "/")) : CheckBox12.IsChecked = True
+                        If InStr(c(4), "/") Then c(4) = Right(c(4), c(4).Length - InStr(c(4), "/")) : CheckBox13.IsChecked = True
+                        TxtSc_avance.Text = c(0)
+                        TxtMn_avance.Text = c(1)
+                        TxtHr_avance.Text = c(2)
+                        TxtJr_avance.Text = c(3)
+                        TxtMs_avance.Text = c(4)
+                        If InStr(c(5), "1") Then CheckBox1_avance.IsChecked = True
+                        If InStr(c(5), "2") Then CheckBox2_avance.IsChecked = True
+                        If InStr(c(5), "3") Then CheckBox3_avance.IsChecked = True
+                        If InStr(c(5), "4") Then CheckBox4_avance.IsChecked = True
+                        If InStr(c(5), "5") Then CheckBox5_avance.IsChecked = True
+                        If InStr(c(5), "6") Then CheckBox6_avance.IsChecked = True
+                        If InStr(c(5), "0") Then CheckBox7_avance.IsChecked = True
 
                     End If
                 End If
@@ -98,13 +106,30 @@ Public Class uTriggerTimer
                 Exit Sub
             End If
 
+            If checkModeSimple Then
+                If Instr(listeprochainscronssimple.Text, "Erreur") Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le résultat de ces conditions simples retourne une erreur, revoyer les valeurs indiquées", "Trigger", "")
+                    Exit Sub
+                End If
+            Else
+                If Instr(listeprochainscrons.Text, "Erreur") Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le résultat de ces conditions avancées retourne une erreur, revoyez les valeurs indiquées, commencez et terminez par un nombre, utilisez uniquement tiret du 6 et virgule . ", "Trigger", "")
+                    Exit Sub
+                End If
+            End If
+
             'calcul du mode complexe
             Dim _myconditiontime_avance As String = ""
-            _myconditiontime_avance &= TxtSc_avance.Text & "#"
-            _myconditiontime_avance &= TxtMn_avance.Text & "#"
-            _myconditiontime_avance &= TxtHr_avance.Text & "#"
-            _myconditiontime_avance &= TxtJr_avance.Text & "#"
-            _myconditiontime_avance &= TxtMs_avance.Text & "#"
+            If Not CheckBox9.IsChecked Then _myconditiontime_avance &= TxtSc_avance.Text & "#" Else If TxtSc_avance.Text = "*" Then _myconditiontime_avance &= TxtSc_avance.Text & "#" Else _myconditiontime_avance &= "*/" & TxtSc_avance.Text & "#"
+            If Not CheckBox10.IsChecked Then _myconditiontime_avance &= TxtMn_avance.Text & "#" Else If TxtMn_avance.Text = "*" Then _myconditiontime_avance &= TxtMn_avance.Text & "#" Else _myconditiontime_avance &= "*/" & TxtMn_avance.Text & "#"
+            If Not CheckBox11.IsChecked Then _myconditiontime_avance &= TxtHr_avance.Text & "#" Else If TxtHr_avance.Text = "*" Then _myconditiontime_avance &= TxtHr_avance.Text & "#" Else _myconditiontime_avance &= "*/" & TxtHr_avance.Text & "#"
+            If Not CheckBox12.IsChecked Then _myconditiontime_avance &= TxtJr_avance.Text & "#" Else If TxtJr_avance.Text = "*" Then _myconditiontime_avance &= TxtJr_avance.Text & "#" Else _myconditiontime_avance &= "*/" & TxtJr_avance.Text & "#"
+            If Not CheckBox13.IsChecked Then _myconditiontime_avance &= TxtMs_avance.Text & "#" Else If TxtMs_avance.Text = "*" Then _myconditiontime_avance &= TxtMs.Text & "#" Else _myconditiontime_avance &= "*/" & TxtMs_avance.Text & "#"
+            '_myconditiontime_avance &= TxtSc_avance.Text & "#"
+            '_myconditiontime_avance &= TxtMn_avance.Text & "#"
+            '_myconditiontime_avance &= TxtHr_avance.Text & "#"
+            '_myconditiontime_avance &= TxtJr_avance.Text & "#"
+            '_myconditiontime_avance &= TxtMs_avance.Text & "#"
 
             Dim _myconditiontime As String = ""
             'Si on a des caracteres spéciaux alors on utilise le mode avancé
@@ -766,111 +791,78 @@ Public Class uTriggerTimer
 #End Region
 
 #Region "Gestion Date/time mode avancé"
-    Private Sub TxtHr_avance_TextChanged(sender As System.Object, e As System.Windows.Controls.TextChangedEventArgs) Handles TxtHr_avance.TextChanged
+
+    Private Function checkModeSimple() As Boolean
+
+        If CheckBox13.IsChecked Or InStr(TxtMs_avance.Text, ",") Or InStr(TxtMs_avance.Text, "-") Or _
+                    CheckBox12.IsChecked Or InStr(TxtJr_avance.Text, ",") Or InStr(TxtJr_avance.Text, "-") Or _
+                    CheckBox11.IsChecked Or InStr(TxtHr_avance.Text, ",") Or InStr(TxtHr_avance.Text, "-") Or _
+                    CheckBox10.IsChecked Or InStr(TxtMn_avance.Text, ",") Or InStr(TxtMn_avance.Text, "-") Or _
+                    CheckBox9.IsChecked Or InStr(TxtSc_avance.Text, ",") Or InStr(TxtSc_avance.Text, "-") Then
+            SP_modesimplecontenu.Visibility = Windows.Visibility.Collapsed
+            SP_modesimplealerte.Visibility = Windows.Visibility.Visible
+            SP_exemplesimple.Visibility = Windows.Visibility.Collapsed
+            Return False
+        Else
+            SP_modesimplecontenu.Visibility = Windows.Visibility.Visible
+            SP_modesimplealerte.Visibility = Windows.Visibility.Collapsed
+            SP_exemplesimple.Visibility = Windows.Visibility.Visible
+            Return True
+        End If
+
+    End Function
+
+    Private Sub refreshMode(ByVal condtiontime As String)
+        If checkModeSimple Then
+            If TxtSc_avance.Text = "*" Then TxtSc.Text = "" Else TxtSc.Text = TxtSc_avance.Text
+            If TxtMn_avance.Text = "*" Then TxtMn.Text = "" Else TxtMn.Text = TxtMn_avance.Text
+            If TxtHr_avance.Text = "*" Then TxtHr.Text = "" Else TxtHr.Text = TxtHr_avance.Text
+            If TxtJr_avance.Text = "*" Then TxtJr.Text = "" Else TxtJr.Text = TxtJr_avance.Text
+            If TxtMs_avance.Text = "*" Then TxtMs.Text = "" Else TxtMs.Text = TxtMs_avance.Text
+            simulate_cron_simple()
+        End If
+    End Sub
+
+    Private Sub TxtHr_avance_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtHr_avance.TextChanged
         Try
             If TxtHr_avance.Text = "" Or TxtHr_avance.Text = " " Then TxtHr_avance.Text = "*"
-            If InStr(TxtHr_avance.Text, "/") Or InStr(TxtHr_avance.Text, ",") Or InStr(TxtHr_avance.Text, "-") Then
-                SP_modesimplecontenu.Visibility = Windows.Visibility.Collapsed
-                SP_modesimplealerte.Visibility = Windows.Visibility.Visible
-                SP_exemplesimple.Visibility = Windows.Visibility.Collapsed
-            Else
-                If TxtHr_avance.Text = "*" Then
-                    TxtHr.Text = ""
-                Else
-                    TxtHr.Text = TxtHr_avance.Text
-                End If
-                SP_modesimplecontenu.Visibility = Windows.Visibility.Visible
-                SP_modesimplealerte.Visibility = Windows.Visibility.Collapsed
-                SP_exemplesimple.Visibility = Windows.Visibility.Visible
-            End If
+
             simulate_cron_avance()
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer TxtHr_avance_TextChanged: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
-    Private Sub TxtMn_avance_TextChanged(sender As System.Object, e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMn_avance.TextChanged
+    Private Sub TxtMn_avance_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMn_avance.TextChanged
         Try
             If TxtMn_avance.Text = "" Or TxtMn_avance.Text = " " Then TxtMn_avance.Text = "*"
-            If InStr(TxtMn_avance.Text, "/") Or InStr(TxtMn_avance.Text, ",") Or InStr(TxtMn_avance.Text, "-") Then
-                SP_modesimplecontenu.Visibility = Windows.Visibility.Collapsed
-                SP_modesimplealerte.Visibility = Windows.Visibility.Visible
-                SP_exemplesimple.Visibility = Windows.Visibility.Collapsed
-            Else
-                If TxtMn_avance.Text = "*" Then
-                    TxtMn.Text = ""
-                Else
-                    TxtMn.Text = TxtMn_avance.Text
-                End If
-                SP_modesimplecontenu.Visibility = Windows.Visibility.Visible
-                SP_modesimplealerte.Visibility = Windows.Visibility.Collapsed
-                SP_exemplesimple.Visibility = Windows.Visibility.Visible
-            End If
+
             simulate_cron_avance()
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer TxtMn_avance_TextChanged: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
-    Private Sub TxtSc_avance_TextChanged(sender As System.Object, e As System.Windows.Controls.TextChangedEventArgs) Handles TxtSc_avance.TextChanged
+    Private Sub TxtSc_avance_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtSc_avance.TextChanged
         Try
             If TxtSc_avance.Text = "" Or TxtSc_avance.Text = " " Then TxtSc_avance.Text = "*"
-            If InStr(TxtSc_avance.Text, "/") Or InStr(TxtSc_avance.Text, ",") Or InStr(TxtSc_avance.Text, "-") Then
-                SP_modesimplecontenu.Visibility = Windows.Visibility.Collapsed
-                SP_modesimplealerte.Visibility = Windows.Visibility.Visible
-                SP_exemplesimple.Visibility = Windows.Visibility.Collapsed
-            Else
-                If TxtSc_avance.Text = "*" Then
-                    TxtSc.Text = ""
-                Else
-                    TxtSc.Text = TxtSc_avance.Text
-                End If
-                SP_modesimplecontenu.Visibility = Windows.Visibility.Visible
-                SP_modesimplealerte.Visibility = Windows.Visibility.Collapsed
-                SP_exemplesimple.Visibility = Windows.Visibility.Visible
-            End If
+
             simulate_cron_avance()
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer TxtSc_avance_TextChanged: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
-    Private Sub TxtMs_avance_TextChanged(sender As System.Object, e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMs_avance.TextChanged
+    Private Sub TxtMs_avance_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtMs_avance.TextChanged
         Try
             If TxtMs_avance.Text = "" Or TxtMs_avance.Text = " " Then TxtMs_avance.Text = "*"
-            If InStr(TxtMs_avance.Text, "/") Or InStr(TxtMs_avance.Text, ",") Or InStr(TxtMs_avance.Text, "-") Then
-                SP_modesimplecontenu.Visibility = Windows.Visibility.Collapsed
-                SP_modesimplealerte.Visibility = Windows.Visibility.Visible
-                SP_exemplesimple.Visibility = Windows.Visibility.Collapsed
-            Else
-                If TxtMs_avance.Text = "*" Then
-                    TxtMs.Text = ""
-                Else
-                    TxtMs.Text = TxtMs_avance.Text
-                End If
-                SP_modesimplecontenu.Visibility = Windows.Visibility.Visible
-                SP_modesimplealerte.Visibility = Windows.Visibility.Collapsed
-                SP_exemplesimple.Visibility = Windows.Visibility.Visible
-            End If
+
             simulate_cron_avance()
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer TxtMs_avance_TextChanged: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
-    Private Sub TxtJr_avance_TextChanged(sender As System.Object, e As System.Windows.Controls.TextChangedEventArgs) Handles TxtJr_avance.TextChanged
+    Private Sub TxtJr_avance_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtJr_avance.TextChanged
         Try
             If TxtJr_avance.Text = "" Or TxtJr_avance.Text = " " Then TxtJr_avance.Text = "*"
-            If InStr(TxtJr_avance.Text, "/") Or InStr(TxtJr_avance.Text, ",") Or InStr(TxtJr_avance.Text, "-") Then
-                SP_modesimplecontenu.Visibility = Windows.Visibility.Collapsed
-                SP_modesimplealerte.Visibility = Windows.Visibility.Visible
-                SP_exemplesimple.Visibility = Windows.Visibility.Collapsed
-            Else
-                If TxtJr_avance.Text = "*" Then
-                    TxtJr.Text = ""
-                Else
-                    TxtJr.Text = TxtJr_avance.Text
-                End If
-                SP_modesimplecontenu.Visibility = Windows.Visibility.Visible
-                SP_modesimplealerte.Visibility = Windows.Visibility.Collapsed
-                SP_exemplesimple.Visibility = Windows.Visibility.Visible
-            End If
+
             simulate_cron_avance()
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uTriggerTimer TxtJr_avance_TextChanged: " & ex.Message, "ERREUR", "")
@@ -939,11 +931,18 @@ Public Class uTriggerTimer
             'on formate le cron avec les données
             Dim _myconditiontime_avance As String = ""
             Try
-                _myconditiontime_avance &= TxtSc_avance.Text & " "
-                _myconditiontime_avance &= TxtMn_avance.Text & " "
-                _myconditiontime_avance &= TxtHr_avance.Text & " "
-                _myconditiontime_avance &= TxtJr_avance.Text & " "
-                _myconditiontime_avance &= TxtMs_avance.Text & " "
+                If CheckBox13.IsChecked And (InStr(TxtMs_avance.Text, ",") Or InStr(TxtMs_avance.Text, "-")) Then CheckBox13.IsChecked = False : AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Impossible de mettre 'chaque' et les instructions '-' ou ',' en même temps, 'chaque' est desactivé ", "Trigger", "")
+                If CheckBox12.IsChecked And (InStr(TxtJr_avance.Text, ",") Or InStr(TxtJr_avance.Text, "-")) Then CheckBox12.IsChecked = False : AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Impossible de mettre 'chaque' et les instructions '-' ou ',' en même temps, 'chaque' est desactivé ", "Trigger", "")
+                If CheckBox11.IsChecked And (InStr(TxtHr_avance.Text, ",") Or InStr(TxtHr_avance.Text, "-")) Then CheckBox11.IsChecked = False : AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Impossible de mettre 'chaque' et les instructions '-' ou ',' en même temps, 'chaque' est desactivé ", "Trigger", "")
+                If CheckBox10.IsChecked And (InStr(TxtMn_avance.Text, ",") Or InStr(TxtMn_avance.Text, "-")) Then CheckBox10.IsChecked = False : AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Impossible de mettre 'chaque' et les instructions '-' ou ',' en même temps, 'chaque' est desactivé ", "Trigger", "")
+                If CheckBox9.IsChecked And (InStr(TxtSc_avance.Text, ",") Or InStr(TxtSc_avance.Text, "-")) Then CheckBox9.IsChecked = False : AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Impossible de mettre 'chaque' et les instructions '-' ou ',' en même temps, 'chaque' est desactivé ", "Trigger", "")
+
+                If Not CheckBox9.IsChecked Then _myconditiontime_avance &= TxtSc_avance.Text & " " Else If TxtSc_avance.Text = "*" Then _myconditiontime_avance &= TxtSc_avance.Text & " " Else _myconditiontime_avance &= "*/" & TxtSc_avance.Text & " "
+                If Not CheckBox10.IsChecked Then _myconditiontime_avance &= TxtMn_avance.Text & " " Else If TxtMn_avance.Text = "*" Then _myconditiontime_avance &= TxtMn_avance.Text & " " Else _myconditiontime_avance &= "*/" & TxtMn_avance.Text & " "
+                If Not CheckBox11.IsChecked Then _myconditiontime_avance &= TxtHr_avance.Text & " " Else If TxtHr_avance.Text = "*" Then _myconditiontime_avance &= TxtHr_avance.Text & " " Else _myconditiontime_avance &= "*/" & TxtHr_avance.Text & " "
+                If Not CheckBox12.IsChecked Then _myconditiontime_avance &= TxtJr_avance.Text & " " Else If TxtJr_avance.Text = "*" Then _myconditiontime_avance &= TxtJr_avance.Text & " " Else _myconditiontime_avance &= "*/" & TxtJr_avance.Text & " "
+                If Not CheckBox13.IsChecked Then _myconditiontime_avance &= TxtMs_avance.Text & " " Else If TxtMs_avance.Text = "*" Then _myconditiontime_avance &= TxtMs_avance.Text & " " Else _myconditiontime_avance &= "*/" & TxtMs_avance.Text & " "
+
                 Dim _prepajr_avance As String = ""
                 If CheckBox7_avance.IsChecked = True Then _prepajr_avance = "0"
                 If CheckBox1_avance.IsChecked = True Then If _prepajr_avance <> "" Then _prepajr_avance &= ",1" Else _prepajr_avance = "1"
@@ -954,6 +953,8 @@ Public Class uTriggerTimer
                 If CheckBox6_avance.IsChecked = True Then If _prepajr_avance <> "" Then _prepajr_avance &= ",6" Else _prepajr_avance = "6"
                 If _prepajr_avance = "" Then _prepajr_avance = "*"
                 _myconditiontime_avance &= _prepajr_avance
+                refreshMode(_myconditiontime_avance)
+
             Catch ex As Exception
                 Exit Sub
             End Try
@@ -962,6 +963,7 @@ Public Class uTriggerTimer
             Try
                 Dim nextcron As Date
                 listeprochainscrons.Text = ""
+                'listeprochainscrons.Text = _myconditiontime_avance & vbCrLf
                 nextcron = CrontabSchedule.Parse(_myconditiontime_avance).GetNextOccurrence(DateAndTime.Now)
                 listeprochainscrons.Text &= nextcron.ToString("yyyy-MM-dd HH:mm:ss") & vbCrLf
                 For i As Integer = 1 To 7
@@ -969,7 +971,7 @@ Public Class uTriggerTimer
                     listeprochainscrons.Text &= nextcron.ToString("yyyy-MM-dd HH:mm:ss") & vbCrLf
                 Next
             Catch ex As Exception
-                listeprochainscrons.Text = "Erreur... "
+                listeprochainscrons.Text &= "Erreur... "
             End Try
             'Else
             'listeprochainscrons.Text = "..."
@@ -981,5 +983,33 @@ Public Class uTriggerTimer
 
 #End Region
 
+    Private Sub CheckBox9_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CheckBox9.Click
 
+        simulate_cron_avance()
+
+    End Sub
+
+    Private Sub CheckBox10_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CheckBox10.Click
+
+        simulate_cron_avance()
+
+    End Sub
+
+    Private Sub CheckBox11_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CheckBox11.Click
+
+        simulate_cron_avance()
+
+    End Sub
+
+    Private Sub CheckBox12_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CheckBox12.Click
+
+        simulate_cron_avance()
+
+    End Sub
+
+    Private Sub CheckBox13_Checked(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles CheckBox13.Click
+
+        simulate_cron_avance()
+
+    End Sub
 End Class

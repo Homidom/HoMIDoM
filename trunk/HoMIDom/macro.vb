@@ -1,6 +1,6 @@
 ﻿Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
-Imports NCrontab
+Imports HoMIDom.NCrontab
 Imports STRGS = Microsoft.VisualBasic.Strings
 Imports System.Net.Mail
 Imports System.Threading
