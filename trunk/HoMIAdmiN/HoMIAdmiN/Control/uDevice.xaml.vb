@@ -919,33 +919,33 @@ Partial Public Class uDevice
         End Try
     End Sub
 
-    Private Sub BtnEditTel_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnEditTel.Click
-        Try
-            Dim _driverid As String = ""
-            For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
-                If myService.GetAllDrivers(IdSrv).Item(i).Nom = CbDriver.Text Then
-                    _driverid = myService.GetAllDrivers(IdSrv).Item(i).ID
-                    Exit For
-                End If
-            Next
+    'Private Sub BtnEditTel_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnEditTel.Click
+    '    Try
+    '        Dim _driverid As String = ""
+    '        For i As Integer = 0 To myService.GetAllDrivers(IdSrv).Count - 1
+    '            If myService.GetAllDrivers(IdSrv).Item(i).Nom = CbDriver.Text Then
+    '                _driverid = myService.GetAllDrivers(IdSrv).Item(i).ID
+    '                Exit For
+    '            End If
+    '        Next
 
-            Dim frm As New WTelecommande(_DeviceId, _driverid, x)
-            frm.ShowDialog()
-            If frm.DialogResult.HasValue And frm.DialogResult.Value Then
-                If x IsNot Nothing Then
-                    If String.IsNullOrEmpty(x.Modele) = False Then 'On vérifie si on viens de changer de template
-                        'If x.Commandes.Count = 0 The
-                        'BtnEditTel.Visibility = Windows.Visibility.Collapsed
-                    End If
-                    frm.Close()
-                End If
-            Else
-                frm.Close()
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR BtnEditTel_MouseDown: " & ex.ToString, "ERREUR", "")
-        End Try
-    End Sub
+    '        Dim frm As New WTelecommande(_DeviceId, _driverid, x)
+    '        frm.ShowDialog()
+    '        If frm.DialogResult.HasValue And frm.DialogResult.Value Then
+    '            If x IsNot Nothing Then
+    '                If String.IsNullOrEmpty(x.Modele) = False Then 'On vérifie si on viens de changer de template
+    '                    'If x.Commandes.Count = 0 The
+    '                    'BtnEditTel.Visibility = Windows.Visibility.Collapsed
+    '                End If
+    '                frm.Close()
+    '            End If
+    '        Else
+    '            frm.Close()
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR BtnEditTel_MouseDown: " & ex.ToString, "ERREUR", "")
+    '    End Try
+    'End Sub
 
     Private Sub BtnHisto_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnHisto.Click
         Try
@@ -1019,10 +1019,13 @@ Partial Public Class uDevice
             If CBModele.SelectedItem IsNot Nothing Then
                 Dim selecttemplate As HoMIDom.HoMIDom.Telecommande.Template = CBModele.SelectedItem
 
+                MsgBox(CbDriver.SelectedValue)
+
                 Select Case selecttemplate.Type
                     Case 0 'http
                         CbDriver.SelectedValue = "HTTP"
                         LabelAdresse1.Content = "Adresse IP"
+                        If String.IsNullOrEmpty(TxtAdresse1.Text) Then TxtAdresse1.Text = "localhost"
                         LabelAdresse2.Content = "Port IP"
                     Case 1 'IR
                         CbDriver.SelectedValue = "USBuirt"
@@ -1031,7 +1034,13 @@ Partial Public Class uDevice
                     Case 2 'RS232
                         CbDriver.SelectedValue = "RS232"
                         LabelAdresse1.Content = "Port COM"
-                        StkAdr2.Visibility = Windows.Visibility.Collapsed
+                        If My.Computer.Ports.SerialPortNames.Count > 0 Then
+                            If String.IsNullOrEmpty(TxtAdresse1.Text) Then TxtAdresse1.Text = My.Computer.Ports.SerialPortNames.Item(0)
+                        Else
+                            TxtAdresse1.Text = "Aucun port RS232 disponible !!"
+                        End If
+                        LabelAdresse2.Content = "Paramètres"
+                        TxtAdresse2.Text = "9600,0,8,1"
                 End Select
             End If
         End If

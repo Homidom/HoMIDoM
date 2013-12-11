@@ -443,7 +443,7 @@ Public Class WWidgetProperty
         GrpEditVisu.Visibility = Windows.Visibility.Collapsed
     End Sub
 
-    Private Sub CbObjet_SelectionChanged(ByVal sender As System.Object, ByVal e As Object) Handles CbObjet.SelectionChanged, CbObjet.MouseLeftButtonDown
+    Private Sub CbObjet_SelectionChanged(ByVal sender As System.Object, ByVal e As Object) Handles CbObjet.SelectionChanged, CbObjet.MouseLeftButtonUp
         If CbObjet.SelectedItem IsNot Nothing Then
 
             If CbObjet.SelectedItem.tag = "DEVICE" Then
@@ -461,6 +461,7 @@ Public Class WWidgetProperty
                     CbMethode.Items.Add(lbl1)
                     LblMethode.Visibility = Windows.Visibility.Visible
                     CbMethode.Visibility = Windows.Visibility.Visible
+                    CbMethode.SelectedIndex = 0
                 Else
                     For i As Integer = 0 To _Device.DeviceAction.Count - 1
                         Dim lbl1 As New ComboBoxItem
@@ -582,7 +583,7 @@ Public Class WWidgetProperty
 
     End Sub
 
-    Private Sub CbAction_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbAction.SelectionChanged
+    Private Sub CbAction_MouseLeftButtonDown(ByVal sender As System.Object, ByVal e As Object) Handles CbAction.MouseLeftButtonUp, CbAction.SelectionChanged
         BtnOkAction.Visibility = Windows.Visibility.Collapsed
         LblObjet.Visibility = Windows.Visibility.Collapsed
         CbObjet.Visibility = Windows.Visibility.Collapsed
@@ -590,7 +591,7 @@ Public Class WWidgetProperty
         CbMethode.Visibility = Windows.Visibility.Collapsed
         TxtValue.Visibility = Windows.Visibility.Collapsed
         LblActionValue.Visibility = Windows.Visibility.Collapsed
-        
+
         Refresh_LstObjetAction()
     End Sub
 
@@ -638,7 +639,7 @@ Public Class WWidgetProperty
 
     End Sub
 
-    Private Sub LstObjetActions_SelectionChanged(ByVal sender As Object, ByVal e As Object) Handles LstObjetActions.SelectionChanged, LstObjetActions.MouseLeftButtonDown
+    Private Sub LstObjetActions_SelectionChanged(ByVal sender As Object, ByVal e As Object) Handles LstObjetActions.SelectionChanged, LstObjetActions.MouseLeftButtonUp
         If LstObjetActions.SelectedIndex >= 0 Then
             Dim _act As cWidget.Action = Nothing
 
@@ -767,6 +768,7 @@ Public Class WWidgetProperty
         BtnOkAction.Visibility = Windows.Visibility.Visible
         LblObjet.Visibility = Windows.Visibility.Visible
         CbObjet.Visibility = Windows.Visibility.Visible
+        CbObjet.SelectedIndex = -1
         TxtValue.Visibility = Windows.Visibility.Collapsed
         LblActionValue.Visibility = Windows.Visibility.Collapsed
         _FlagNewAction = True
@@ -795,18 +797,19 @@ Public Class WWidgetProperty
         End If
     End Sub
 
-    Private Sub CbMethode_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbMethode.SelectionChanged
+    Private Sub CbMethode_SelectionChanged(ByVal sender As Object, ByVal e As Object) Handles CbMethode.SelectionChanged, CbMethode.MouseLeftButtonUp
         Dim _dev As TemplateDevice = myService.ReturnDeviceByID(IdSrv, CbObjet.SelectedItem.uid)
 
         If CbMethode.SelectedIndex < 0 Then Exit Sub
+
+        TxtValue.Visibility = Windows.Visibility.Collapsed
+        LblActionValue.Visibility = Windows.Visibility.Collapsed
 
         If _dev IsNot Nothing Then
             If _dev.DeviceAction.Item(CbMethode.SelectedIndex).Parametres.Count > 0 Then
                 LblActionValue.Visibility = Windows.Visibility.Visible
                 TxtValue.Visibility = Windows.Visibility.Visible
             Else
-                LblActionValue.Visibility = Windows.Visibility.Collapsed
-                TxtValue.Visibility = Windows.Visibility.Collapsed
                 TxtValue.Text = ""
             End If
         End If
@@ -814,9 +817,6 @@ Public Class WWidgetProperty
         If CType(CbMethode.SelectedItem, ComboBoxItem).Content = "Exécuter commande DOS" Or CType(CbMethode.SelectedItem, ComboBoxItem).Content = "Charger configuration" Then
             TxtValue.Visibility = Windows.Visibility.Visible
             LblActionValue.Visibility = Windows.Visibility.Visible
-        Else
-            TxtValue.Visibility = Windows.Visibility.Collapsed
-            LblActionValue.Visibility = Windows.Visibility.Collapsed
         End If
 
     End Sub

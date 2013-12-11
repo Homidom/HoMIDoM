@@ -410,7 +410,6 @@
                 End Try
             End Function
 
-
             ''' <summary>
             ''' Permet de définir la valeur d'une variable associée au template
             ''' </summary>
@@ -438,6 +437,30 @@
                     Return ex.ToString
                 End Try
             End Function
+
+            ''' <summary>
+            ''' Permet d'obtenir la valeur d'une variable associée au template
+            ''' </summary>
+            ''' <param name="namevar"></param>
+            ''' <returns></returns>
+            ''' <remarks></remarks>
+            Public Function GetVariable(ByVal namevar As String) As Object
+                Try
+                    Dim result As Object = Nothing
+
+                    For Each var In _Var
+                        If var.Name.ToLower = namevar.ToLower Then
+                            result = var.Value
+                            Exit For
+                        End If
+                    Next
+
+                    Return result
+                Catch ex As Exception
+                    Return ex.ToString
+                End Try
+            End Function
+
         End Class
 
         Public Class Commandes

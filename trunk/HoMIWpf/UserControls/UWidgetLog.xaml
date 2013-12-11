@@ -1,0 +1,24 @@
+﻿<UserControl x:Class="UWidgetLog"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"  >
+    
+    <Border BorderThickness="2" BorderBrush="WhiteSmoke" CornerRadius="5">
+    <Grid Background="#FF5C5C5C">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="57*" />
+            <ColumnDefinition Width="350*" />
+        </Grid.ColumnDefinitions>
+        
+        <Image Height="40" HorizontalAlignment="Left" Margin="5,5,0,0" Name="ImageIcon" Stretch="Fill" VerticalAlignment="Top" Width="40" />
+        <StackPanel Grid.Column="1" HorizontalAlignment="Left" Margin="2,0,0,0">
+            <Label Name="LblSource" Content="###############" Foreground="LightGray" FontWeight="Bold" />
+            <TextBlock  Name="LblMessage" Text="########################################################" Foreground="LightGray"  MaxWidth="350" TextWrapping="Wrap" />
+            <Label Name="LblTime" Content="###############" Foreground="LightGray"  />
+        </StackPanel>
+
+        </Grid> 
+    </Border>
+</UserControl>

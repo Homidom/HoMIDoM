@@ -347,7 +347,7 @@
                                     <MenuItem.Icon>
                                     <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/Log_32.png" />
                                 </MenuItem.Icon>
-                                    <MenuItem Name="ViewLogClient" Header="Client" FontSize="12" Tag="1" Foreground="White" >
+                                    <!--<MenuItem Name="ViewLogClient" Header="Client" FontSize="12" Tag="1" Foreground="White" >
                                         <MenuItem.Background>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                                 <GradientStop Color="Black" Offset="0" />
@@ -358,7 +358,7 @@
                                         <MenuItem.Icon>
                                         <Image Width="40" Height="40" Source="/HoMIWpF;component/Images/pc.png" />
                                     </MenuItem.Icon>
-                                </MenuItem>
+                                </MenuItem>-->
                                     <MenuItem Name="ViewLogSrv" Header="Serveur" FontSize="12" Tag="0" Foreground="White">
                                         <MenuItem.Background>
                                             <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">

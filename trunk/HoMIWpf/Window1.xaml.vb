@@ -1995,6 +1995,8 @@ Class Window1
         DesAff_TaskMnu()
     End Sub
 
+#Region "Barre du bas"
+
     Private Sub ScrollViewer1_PreviewMouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ScrollViewer1.PreviewMouseDown
         scrollStartPoint = e.GetPosition(Me)
         scrollStartOffset.X = ScrollViewer1.HorizontalOffset
@@ -2008,6 +2010,7 @@ Class Window1
             ScrollToPosition(ScrollViewer1, scrollTarget.X, currentPoint.Y, m_SpeedTouch)
         End If
     End Sub
+#End Region
 
     Public Sub LoadZones()
         Try
@@ -2146,7 +2149,7 @@ Class Window1
 
             'On parcours tous les éléments de la zone (hors widgets empty)
             For i As Integer = 0 To _zone.ListElement.Count - 1
-                Dim z As Zone.Element_Zone = myService.ReturnZoneByID(IdSrv, IdZone).ListElement.Item(i)
+                Dim z As Zone.Element_Zone = _zone.ListElement.Item(i) 'myService.ReturnZoneByID(IdSrv, IdZone).ListElement.Item(i)
 
                 'l'élément est définit comme visible dans la zone
                 If z.Visible = True Then
@@ -2508,7 +2511,12 @@ Class Window1
                     _act.IdObject = DeviceId
                     _act.Methode = "EnvoyerCommande"
                     _act.Value = _out.Commande
-                    y.Action_On_Click.Add(_act)
+                    If _out.Event = 0 Then y.Action_On_Click.Add(_act)
+                    If _out.Event = 1 Then y.Action_On_LongClick.Add(_act)
+                    If _out.Event = 2 Then y.Action_GestureGaucheDroite.Add(_act)
+                    If _out.Event = 3 Then y.Action_GestureDroiteGauche.Add(_act)
+                    If _out.Event = 4 Then y.Action_GestureHautBas.Add(_act)
+                    If _out.Event = 5 Then y.Action_GestureBasHaut.Add(_act)
                 Next
 
                 y.IsHitTestVisible = True 'True:bouge pas False:Bouge
@@ -3233,24 +3241,37 @@ Class Window1
 
 #Region "Menu"
 
-    Private Sub ViewLog_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ViewLogClient.Click, ViewLogSrv.Click
+    Private Sub ViewLog_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ViewLogSrv.Click ',ViewLogClient.Click
         Try
             Me.Cursor = Cursors.Wait
-            If Canvas1.Children.Count > 0 Then
-                Canvas1.Children.Clear()
-                Me.UpdateLayout()
-            End If
+
+
 
             ChkMove.Visibility = Windows.Visibility.Collapsed
             ChkEdit.Visibility = Windows.Visibility.Collapsed
             Chk3.Visibility = Windows.Visibility.Collapsed
 
-            Dim x As New uLog(sender.tag)
-            x.Uid = System.Guid.NewGuid.ToString()
-            AddHandler x.CloseMe, AddressOf UnloadControl
-            x.Width = Canvas1.ActualWidth - 100
-            x.Height = Canvas1.ActualHeight - 50
-            Canvas1.Children.Add(x)
+            If Canvas1.Children.Count > 0 Then
+                Canvas1.Children.Clear()
+                Me.UpdateLayout()
+            End If
+
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
+
+            ImageBackGround = _ImageBackGroundDefault
+            Dim x As New WLog(sender.tag)
+            x.Owner = Me
+            x.ShowDialog()
+
+            If x.DialogResult.HasValue And x.DialogResult.Value Then
+                x.Close()
+            Else
+                x.Close()
+            End If
+
+            AfficheStartDefautPage()
 
             Me.Cursor = Nothing
         Catch ex As Exception
@@ -3586,6 +3607,55 @@ Class Window1
                                     '_Widgt.ColorBorder = _elmt.ColorBorder
                                     '_Widgt.BorderThickness = _elmt.BorderThickness
                                     '_Widgt.BorderBrush = _elmt.BorderBrush
+                                    _Widgt.Outputs.Clear()
+                                    For Each _act In _elmt.Action_On_Click
+                                        Dim _output As New Widget.Output
+                                        _output.DeviceID = _act.IdObject
+                                        _output.Commande = _act.Value
+                                        _output.Event = 0
+                                        _output.TemplateID = _elmt.ZoneId
+                                        _Widgt.Outputs.Add(_output)
+                                    Next
+                                    For Each _act In _elmt.Action_On_LongClick
+                                        Dim _output As New Widget.Output
+                                        _output.DeviceID = _act.IdObject
+                                        _output.Commande = _act.Value
+                                        _output.Event = 1
+                                        _output.TemplateID = _elmt.ZoneId
+                                        _Widgt.Outputs.Add(_output)
+                                    Next
+                                    For Each _act In _elmt.Action_GestureGaucheDroite
+                                        Dim _output As New Widget.Output
+                                        _output.DeviceID = _act.IdObject
+                                        _output.Commande = _act.Value
+                                        _output.Event = 2
+                                        _output.TemplateID = _elmt.ZoneId
+                                        _Widgt.Outputs.Add(_output)
+                                    Next
+                                    For Each _act In _elmt.Action_GestureDroiteGauche
+                                        Dim _output As New Widget.Output
+                                        _output.DeviceID = _act.IdObject
+                                        _output.Commande = _act.Value
+                                        _output.Event = 3
+                                        _output.TemplateID = _elmt.ZoneId
+                                        _Widgt.Outputs.Add(_output)
+                                    Next
+                                    For Each _act In _elmt.Action_GestureHautBas
+                                        Dim _output As New Widget.Output
+                                        _output.DeviceID = _act.IdObject
+                                        _output.Commande = _act.Value
+                                        _output.Event = 4
+                                        _output.TemplateID = _elmt.ZoneId
+                                        _Widgt.Outputs.Add(_output)
+                                    Next
+                                    For Each _act In _elmt.Action_GestureBasHaut
+                                        Dim _output As New Widget.Output
+                                        _output.DeviceID = _act.IdObject
+                                        _output.Commande = _act.Value
+                                        _output.Event = 5
+                                        _output.TemplateID = _elmt.ZoneId
+                                        _Widgt.Outputs.Add(_output)
+                                    Next
                                 End If
                             Next
                         End If

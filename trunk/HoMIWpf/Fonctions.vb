@@ -248,8 +248,8 @@ Module Fonctions
         Dim vertAnim As New DoubleAnimation()
         vertAnim.From = ScrollViewer.VerticalOffset
         vertAnim.[To] = y
-        vertAnim.DecelerationRatio = 0.2
-        vertAnim.Duration = New Duration(TimeSpan.FromMilliseconds(250))
+        vertAnim.DecelerationRatio = 0.99
+        vertAnim.Duration = New Duration(TimeSpan.FromMilliseconds(Duree))
 
         Dim horzAnim As New DoubleAnimation()
         horzAnim.From = ScrollViewer.HorizontalOffset
@@ -258,11 +258,11 @@ Module Fonctions
         horzAnim.Duration = New Duration(TimeSpan.FromMilliseconds(Duree))
 
         Dim sb As New Storyboard()
-        'sb.Children.Add(vertAnim)
+        sb.Children.Add(vertAnim)
         sb.Children.Add(horzAnim)
 
         Storyboard.SetTarget(vertAnim, ScrollViewer)
-        'Storyboard.SetTargetProperty(vertAnim, New PropertyPath(UAniScrollViewer.AniScrollViewer.CurrentVerticalOffsetProperty))
+        Storyboard.SetTargetProperty(vertAnim, New PropertyPath(UAniScrollViewer.AniScrollViewer.CurrentVerticalOffsetProperty))
         Storyboard.SetTarget(horzAnim, ScrollViewer)
         Storyboard.SetTargetProperty(horzAnim, New PropertyPath(UAniScrollViewer.AniScrollViewer.CurrentHorizontalOffsetProperty))
 
