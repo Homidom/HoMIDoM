@@ -8383,6 +8383,7 @@ Namespace HoMIDom
                 End If
 
                 If Template.Variables.Count = 0 Then
+                    'variable "command" qui sert à envoyer une commande
                     Dim x As New Telecommande.TemplateVar
                     x.Name = "command"
                     x.Type = Telecommande.TypeOfVar.String
@@ -8394,7 +8395,7 @@ Namespace HoMIDom
                     y.Type = Telecommande.TypeOfVar.String
                     Template.Variables.Add(y)
 
-                    'variable "trame" qui contient l'adresse ip du template
+                    'variable "trame" qui contient le retour de trame
                     Dim z As New Telecommande.TemplateVar
                     z.Name = "trame"
                     z.Type = Telecommande.TypeOfVar.String
@@ -8486,8 +8487,10 @@ Namespace HoMIDom
                         Dim x As Object = _ListDrivers.Item(i)
                         retour = x.LearnCode()
                         Log(TypeLog.INFO, TypeSource.SERVEUR, "SERVEUR", "StartLearning: " & retour)
+                        Exit For
                     End If
                 Next
+
                 Return retour
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "StartLearning", "Erreur : " & ex.Message)

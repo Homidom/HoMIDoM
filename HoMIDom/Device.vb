@@ -1,6 +1,9 @@
 ﻿Imports System.Net
 Imports System.IO
 Imports HoMIDom.HoMIDom.Server
+Imports System.Reflection
+Imports System.CodeDom.Compiler
+Imports Microsoft.VisualBasic
 
 Namespace HoMIDom
     '***********************************************
@@ -213,6 +216,7 @@ Namespace HoMIDom
             Protected _Unit As String = ""
             Protected _Puiss As Integer = 0
             Protected _AllValue As Boolean = False
+            Protected _Template As HoMIDom.Telecommande.Template = Nothing
 
             '<NonSerialized()> Protected _FirstTime As Boolean = True
             Public Commandes As New List(Of HoMIDom.Telecommande.Commandes)
@@ -373,15 +377,11 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As String)
                     _Modele = value
-                    'If _Type = "MULTIMEDIA" Then
-                    '    Dim a() As String = value.Split("-")
-                    '    If a.Length = 3 Then
-                    '        Dim _fab As String = a(0)
-                    '        Dim _mod As String = a(1)
-                    '        Dim _drv As String = a(2)
-                    '        Commandes = _Server.ReadTemplate(_fab, _mod, _drv)
-                    '    End If
-                    'End If
+                    If _Type = "MULTIMEDIA" Then
+                        If String.IsNullOrEmpty(_Modele) = False Then _Template = _Server.GetTemplateFromID(Me.Modele)
+                    Else
+                        _Template = Nothing
+                    End If
                 End Set
             End Property
 
@@ -2307,31 +2307,16 @@ Namespace HoMIDom
         <Serializable()> Class MULTIMEDIA
             Inherits DeviceGenerique_ValueString
 
-            Public ListCommandName As New ArrayList
-            'Public ListCommandData As New ArrayList
-            'Public ListCommandRepeat As New ArrayList
-
             'Creation du device
             Public Sub New(ByVal Server As Server)
                 _Server = Server
                 _Type = "MULTIMEDIA"
                 AddHandler MyTimer.Elapsed, AddressOf Read
-
             End Sub
 
             'redéfinition car on veut rien faire
             Public Overrides Sub Read()
                 If _Enable = False Then Exit Sub
-            End Sub
-
-            Public Sub SendCommand(ByVal NameCommand As String)
-                'For i As Integer = 0 To ListCommandName.Count - 1
-                '    If ListCommandName(i) = NameCommand Then
-                '        If _Enable = False Then Exit Sub
-                '        Driver.Write(Me, "SendCodeIR", ListCommandData(i), ListCommandRepeat(i))
-                '        Exit For
-                '    End If
-                'Next
             End Sub
 
             ''' <summary>
@@ -2340,13 +2325,13 @@ Namespace HoMIDom
             ''' <param name="Commande"></param>
             ''' <remarks></remarks>
             Public Sub EnvoyerCommande(ByVal Commande As String)
-                Dim _template As HoMIDom.Telecommande.Template
-                _template = _Server.GetTemplateFromID(Me.Modele)
 
-                For i As Integer = 0 To _template.Commandes.Count - 1
-                    If UCase(Commande) = UCase(_template.Commandes.Item(i).Name) Then
+                For i As Integer = 0 To _Template.Commandes.Count - 1
+                    If UCase(Commande) = UCase(_Template.Commandes.Item(i).Name) Then
                         Dim code As String = ""
-                        If _template.Type = 0 And String.IsNullOrEmpty(Me.Adresse1) = False Then
+                        Dim repeat As String = _Template.Commandes.Item(i).Repeat
+
+                        If _Template.Type = 0 And String.IsNullOrEmpty(Me.Adresse1) = False Then
                             code = "http://"
                             If String.IsNullOrEmpty(Me.Adresse2) = False Then
                                 code &= Adresse1 & ":" & Me.Adresse2 & "/"
@@ -2354,16 +2339,103 @@ Namespace HoMIDom
                                 code &= Adresse1 & "/"
                             End If
                         End If
-                        code &= TraiteCommand(_template.Commandes.Item(i).Name, _template)
-                        Dim repeat As String = _template.Commandes.Item(i).Repeat
+                        code &= TraiteCommand(_Template.Commandes.Item(i).Name, _Template)
 
                         _Server.Log(TypeLog.DEBUG, TypeSource.DEVICE, "EnvoyerCommande", "La commande " & Commande & " code:" & code & " Repeat:" & repeat & " a été envoyée au driver")
-                        Driver.EnvoyerCode(code, repeat)
+                        Select Case _Template.Type
+                            Case 0 'http
+                                _Template.SetVariable(_IdSrv, "trame", Driver.EnvoyerCode(code, repeat))
+                            Case 1 'IR
+                                _Template.SetVariable(_IdSrv, "trame", Driver.EnvoyerCode(code, repeat))
+                            Case 2 'RS232
+                                _Template.SetVariable(_IdSrv, "trame", Driver.EnvoyerCode(code, Me.Adresse1, 9600, 8, 0, 1, repeat))
+                        End Select
+
                         Exit Sub
                     End If
                 Next
                 _Server.Log(TypeLog.DEBUG, TypeSource.DEVICE, "EnvoyerCommande", "La commande " & Commande & " n'as pas été trouvée!!")
             End Sub
+
+            Public Sub SetVariable(Name As String, Value As Object)
+                _Template.SetVariable(_IdSrv, Name.ToLower, Value)
+            End Sub
+
+            Public Function GetVariable(Name As String) As Object
+                Return _Template.GetVariable(Name)
+            End Function
+
+            'Private Sub ExecuteCode(ScriptVB As String)
+            '    Try
+            '        '
+            '        ' Instantiate the VB compiler.
+            '        '
+            '        Dim objCodeCompiler As ICodeCompiler = New VBCodeProvider().CreateCompiler
+
+            '        '
+            '        ' Pass parameters into the compiler.
+            '        '
+            '        Dim objCompilerParameters As New CompilerParameters
+            '        objCompilerParameters.ReferencedAssemblies.Add("System.dll")
+            '        objCompilerParameters.ReferencedAssemblies.Add("System.Windows.Forms.dll")
+            '        objCompilerParameters.ReferencedAssemblies.Add("Microsoft.VisualBasic.dll")
+            '        objCompilerParameters.GenerateInMemory = True
+
+            '        '
+            '        ' Get te source code and compile it.
+            '        '
+            '        Dim strCode As String = txtSourceCode.Text
+            '        Dim objCompileResults As CompilerResults = objCodeCompiler.CompileAssemblyFromSource(objCompilerParameters, strCode)
+
+            '        '
+            '        ' Check for compiler errors.
+            '        '
+            '        If objCompileResults.Errors.HasErrors Then
+            '            MsgBox("Error: Line>" & objCompileResults.Errors(0).Line.ToString & ", " & objCompileResults.Errors(0).ErrorText)
+            '            Exit Sub
+            '        End If
+
+            '        '
+            '        ' Get a reference to the assembly.
+            '        '
+            '        Dim objAssembly As System.Reflection.Assembly = objCompileResults.CompiledAssembly
+
+            '        '
+            '        ' Create an instance of the DynamicCode class referenced in the source code.
+            '        '
+            '        Dim objTheClass As Object = objAssembly.CreateInstance("Dynam.DynamicCode")
+
+            '        If objTheClass Is Nothing Then
+            '            MessageBox.Show("Unable to load class.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            '            Exit Sub
+            '        End If
+
+            '        '
+            '        ' Create a parameter to be passed into the ExecuteCode function in class DynamicCode.
+            '        '
+            '        Dim objFunctionParameters(0) As Object
+            '        Dim var As New Var
+            '        var.Valeur = 1
+            '        objFunctionParameters(0) = var
+
+            '        '
+            '        ' Call the DynamicCode.ExecuteCode
+            '        '
+            '        Try
+            '            Dim objResult As Object = objTheClass.GetType.InvokeMember("ExecuteCode", _
+            '                            BindingFlags.InvokeMethod, Nothing, objTheClass, objFunctionParameters)
+
+            '            MessageBox.Show(objResult.ToString())
+
+            '            var.Valeur += 1
+            '            MessageBox.Show(var.Valeur.ToString)
+            '        Catch ex As Exception
+            '            MessageBox.Show("Error:" & ex.Message)
+            '        End Try
+            '    Catch ex As Exception
+            '        _Server.Log(TypeLog.DEBUG, TypeSource.DEVICE, "ExecuteCode", "Erreur lors de l'exécution de ExecuteCode: " & ex.ToString)
+            '    End Try
+            'End Sub
 
             Private Function TraiteCommand(NameCommand As String, Template As HoMIDom.Telecommande.Template) As String
                 Try

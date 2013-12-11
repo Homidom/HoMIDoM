@@ -49,7 +49,7 @@ Imports System.IO
 #End Region
 
 #Region "Declaration"
-    Dim rs232 As New System.IO.Ports.SerialPort
+    Dim rs232 As System.IO.Ports.SerialPort
 #End Region
 
 #Region "Fonctions génériques"
@@ -281,7 +281,6 @@ Imports System.IO
             Dim retour As String = "0"
             Select Case UCase(Champ)
 
-
             End Select
             Return retour
         Catch ex As Exception
@@ -291,12 +290,14 @@ Imports System.IO
 
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
-            With rs232
-                .PortName = _Com
-                .Open()
-            End With
+            If My.Computer.Ports.SerialPortNames.Count > 0 Then
+                _IsConnect = True
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RS232", "Driver démarré")
+            Else
+                _IsConnect = False
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RS232", "Driver non démarré car aucun port RS232 disponible")
+            End If
             _IsConnect = True
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "K8056", "Driver démarré")
         Catch ex As Exception
             _IsConnect = False
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RS232", "Driver en erreur lors du démarrage: " & ex.Message)
@@ -314,7 +315,6 @@ Imports System.IO
 
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Try
-            rs232.Close()
             _IsConnect = False
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "RS232", "Driver arrêté")
         Catch ex As Exception
@@ -338,7 +338,6 @@ Imports System.IO
         Try
             If _Enable = False Then Exit Sub
             If Objet.type = "MULTIMEDIA" Then
-                Dim tabl() As String = Objet.adresse1.split("x")
 
                 Select Case UCase(Commande)
                     Case "SENDTRAME"
@@ -435,10 +434,10 @@ Imports System.IO
     Public Sub New()
         _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
 
-        _DeviceSupport.Add(ListeDevices.APPAREIL)
+        _DeviceSupport.Add(ListeDevices.MULTIMEDIA)
 
-        Add_LibelleDevice("ADRESSE1", "Adresse", "")
-        Add_LibelleDevice("ADRESSE2", "@", "")
+        'Add_LibelleDevice("ADRESSE1", "@", "")
+        'Add_LibelleDevice("ADRESSE2", "@", "")
         Add_LibelleDevice("SOLO", "@", "")
         Add_LibelleDevice("MODELE", "@", "")
         'Add_LibelleDevice("REFRESH", "Refresh (sec)", "Valeur de rafraîchissement de la mesure en secondes")
@@ -446,5 +445,66 @@ Imports System.IO
     End Sub
 #End Region
 
+#Region "Fonctions internes"
+    'Insérer ci-dessous les fonctions propres au driver et nom communes (ex: start)
+    Public Function EnvoyerCode(ByVal Code As String, PortCom As String, Optional BaudRate As Integer = 9600, Optional DataBits As Integer = 8, Optional Parity As Integer = 0, Optional StopBits As Integer = 1, Optional ByVal Repeat As Integer = 0) As String
+        If _Enable = False Then
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " EnvoyerCode", "Erreur: impossible d'envoyer le code, le driver RS232 n'est pas activé")
+            Return "Erreur: impossible d'envoyer le code, le driver RS232 n'est pas activé"
+            Exit Function
+        End If
+
+        If _IsConnect = False Then
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " EnvoyerCode", "Erreur: Impossible de traiter la commande car le driver n'est pas démarré")
+            Return "Erreur: impossible d'envoyer le code, le driver RS232 n'est pas démarré"
+            Exit Function
+        End If
+
+        Dim URL As String = Code
+        If String.IsNullOrEmpty(URL) Then
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " EnvoyerCode", "Erreur: impossible d'envoyer le code celui-ci est vide")
+            Return "Erreur: impossible d'envoyer le code celui-ci est vide"
+            Exit Function
+        End If
+
+        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " EnvoyerCode", "Code=" & URL)
+
+        Try
+            rs232 = New System.IO.Ports.SerialPort
+            Dim str As String = ""
+            Dim _repeat As Integer = Repeat
+
+            With rs232
+                .PortName = PortCom
+                .BaudRate = BaudRate
+                .DataBits = DataBits
+                .Parity = Parity
+                .StopBits = StopBits
+                .Open()
+            End With
+
+            If _repeat < 0 Then _repeat = 0
+
+            For i As Integer = 0 To Repeat
+                'envoi de la commande
+                rs232.Write(URL)
+                'récupérer le retour ici parès envoi de la commande
+                str = rs232.ReadLine
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " EnvoyerCode", "Retour=" & str)
+                'attendre 
+                Threading.Thread.Sleep(200)
+            Next
+
+            rs232.Close()
+            Return str
+        Catch ex As Exception
+            If rs232.IsOpen Then rs232.Close()
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " EnvoyerCode", ex.ToString)
+            Return "Erreur: " & ex.Message
+        End Try
+    End Function
+
+
+#End Region
 
 End Class

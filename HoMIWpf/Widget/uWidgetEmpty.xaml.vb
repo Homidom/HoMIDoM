@@ -1533,10 +1533,6 @@ Public Class uWidgetEmpty
                         x.Parametres.Add(param)
                     End If
 
-                    'If _dev.Type = HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA Then
-                    '    MessageBox.Show(_act.Methode & ":" & _act.Value)
-                    'End If
-
                     _FlagBlock = True
                     myService.ExecuteDeviceCommand(IdSrv, _act.IdObject, x)
                     _FlagBlock = False

@@ -200,9 +200,6 @@
     <Compile Include="uHisto.xaml.vb">
       <DependentUpon>uHisto.xaml</DependentUpon>
     </Compile>
-    <Compile Include="uLog.xaml.vb">
-      <DependentUpon>uLog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="uReleve.xaml.vb">
       <DependentUpon>uReleve.xaml</DependentUpon>
     </Compile>
@@ -214,11 +211,17 @@
     <Compile Include="UserControls\uMedia.xaml.vb">
       <DependentUpon>uMedia.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\UWidgetLog.xaml.vb">
+      <DependentUpon>UWidgetLog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WCalendar.xaml.vb">
       <DependentUpon>WCalendar.xaml</DependentUpon>
     </Compile>
     <Compile Include="WindowImg.xaml.vb">
       <DependentUpon>WindowImg.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WLog.xaml.vb">
+      <DependentUpon>WLog.xaml</DependentUpon>
     </Compile>
     <Compile Include="WMedia.xaml.vb">
       <DependentUpon>WMedia.xaml</DependentUpon>
@@ -302,10 +305,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="uLog.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="uReleve.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -315,6 +314,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\uMedia.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\UWidgetLog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -403,6 +406,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="WindowImg.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="WLog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -495,9 +502,6 @@
     <Resource Include="Images\pause.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\pANELaUDIO.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Images\mute.png" />
     <Resource Include="Images\VolumeDown.png" />
     <Resource Include="Images\VolumeUp.png" />
@@ -551,13 +555,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\13.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\Volet_0.png" />
-    <Resource Include="Images\Volet_100.png" />
-    <Resource Include="Images\Volet_25.png" />
-    <Resource Include="Images\Volet_50.png" />
-    <Resource Include="Images\Volet_75.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\temperature.png" />
@@ -716,10 +713,20 @@
     <Resource Include="Images\masque_on.png" />
     <Resource Include="Images\prise_fond.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\keyboard.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\bulle.png" />
+    <Resource Include="Images\debug.png" />
+    <Resource Include="Images\info.png" />
+    <Resource Include="Images\Value_Change.png" />
+    <Resource Include="Images\Value_NotChange.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="True" BuildVersion_IncrementBeforeBuild="True" />
+      <UserProperties BuildVersion_IncrementBeforeBuild="True" BuildVersion_UseGlobalSettings="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

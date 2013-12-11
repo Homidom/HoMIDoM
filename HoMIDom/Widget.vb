@@ -164,7 +164,8 @@ Namespace HoMIDom
         Public Class Output
             Dim _TemplateID As String 'ID du template concerné
             Dim _Commande As String 'Commande à envoyer
-            Dim _deviceID As String 'ID du device à utiliser
+            Dim _DeviceID As String 'ID du device à utiliser
+            Dim _Event As Integer = 0 '0:click 1:longlic 2:gauchedroite 3:droitegauche 4:hautbas 5:bashaut
 
             Public Property TemplateID As String
                 Get
@@ -190,6 +191,15 @@ Namespace HoMIDom
                 End Get
                 Set(value As String)
                     _deviceID = value
+                End Set
+            End Property
+
+            Public Property [Event] As Integer
+                Get
+                    Return _event
+                End Get
+                Set(value As Integer)
+                    _event = value
                 End Set
             End Property
         End Class
