@@ -2789,6 +2789,7 @@ Imports System.Media
                         valeur &= " DOWN"
                     End If
                     WriteLog("decode_Lighting4: Commande non gérée PT2262 : " & adresse & "=" & valeur)
+                    'WriteRetour(adresse, "", valeur)
                     'WriteMessage("Pulse         = " & ((recbuf(LIGHTING4.pulsehigh) * 256) + recbuf(LIGHTING4.pulselow)).ToString & " usec")
                 Case Else : WriteLog("ERR: decode_Lighting4 : Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING4.packettype)) & ": " & Hex(recbuf(LIGHTING4.subtype)))
             End Select
