@@ -1100,7 +1100,7 @@ DOW:        Dim dateChanged = day <> baseDay OrElse month <> baseMonth OrElse ye
                 'End If
                 _ep = provider
             Catch e As Exception
-                MsgBox(e.Message)
+                'MsgBox(e.Message)
             End Try
 
 
@@ -1129,7 +1129,8 @@ DOW:        Dim dateChanged = day <> baseDay OrElse month <> baseMonth OrElse ye
                     End If
                     Return _value
                 Catch e As Exception
-                    MsgBox(e.Message)
+                    'MsgBox(e.Message)
+                    Return Nothing
                 End Try
             End Get
         End Property

@@ -9,7 +9,7 @@ Imports System.Math
 Imports System.Threading
 Imports System.Globalization
 Imports System.ComponentModel
-Imports ZibaseDll
+Imports Driver_Zibase.ZibaseDllvb
 
 ' Auteur : David
 ' Date : 18/04/2012
@@ -57,7 +57,7 @@ Imports ZibaseDll
 #End Region
 
 #Region "Variables Internes"
-    Private WithEvents zba As New ZibaseDll.ZiBase
+    Private WithEvents zba As New ZibaseDllvb.ZiBase
 
 #End Region
 
@@ -582,18 +582,18 @@ Imports ZibaseDll
     End Property
 
     'reception d'une valeur -> analyse
-    Private Sub zba_UpdateSensorInfo(ByVal seInfo As ZibaseDll.ZiBase.SensorInfo) Handles zba.UpdateSensorInfo
+    Private Sub zba_UpdateSensorInfo(ByVal seInfo As ZibaseDllvb.ZiBase.SensorInfo) Handles zba.UpdateSensorInfo
         If _DEBUG Then WriteLog("DBG: " & seInfo.sID & "_" & seInfo.sType & " ----> " & seInfo.sValue)
         traitement(seInfo.sID, seInfo.sType, seInfo.dwValue, seInfo.sValue)
     End Sub
-    Private Sub zba_NewSensorDetected(ByVal seInfo As ZibaseDll.ZiBase.SensorInfo) Handles zba.NewSensorDetected
+    Private Sub zba_NewSensorDetected(ByVal seInfo As ZibaseDllvb.ZiBase.SensorInfo) Handles zba.NewSensorDetected
         'si on detecte une nouveau device
         If _DEBUG Then WriteLog("DBG: " & seInfo.sID & "_" & seInfo.sType & " ----> " & seInfo.sValue)
         traitement(seInfo.sID, seInfo.sType, seInfo.dwValue, seInfo.sValue)
     End Sub
 
     'nouvelle zibase detecté -> Log
-    Private Sub zba_newzibasedetected(ByVal ZiInfo As ZibaseDll.ZiBase.ZibaseInfo) Handles zba.NewZibaseDetected
+    Private Sub zba_newzibasedetected(ByVal ZiInfo As ZibaseDllvb.ZiBase.ZibaseInfo) Handles zba.NewZibaseDetected
         WriteLog("Nouvelle Zibase détecté : " & ZiInfo.sLabelBase & "-" & ZiInfo.lIpAddress)
     End Sub
 
