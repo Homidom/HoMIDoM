@@ -1,4 +1,22 @@
 ﻿<!DOCTYPE html>
+<script type="text/javascript" >
+			var ZoneIDText = "##";
+			var ListDevices = [];
+			var ListZones = [];
+			
+			var SiteActuel= sessionStorage.SiteActuel;
+			var ZoneActuel="" ;
+			// alert('Le site actuel est : ' + SiteActuel );
+		
+			var key = localStorage.key(SiteActuel);
+	   		var InfosServeur = JSON.parse(localStorage.getItem(key));
+			var ServerName = InfosServeur.AdresseIP;
+			var PortActuel = InfosServeur.Port;
+			var IDSERVERActuel = InfosServeur.IDSERVER;
+			var AdresseIPActuel = InfosServeur.AdresseIP;
+			// alert('Le site actuel est : ' +ServerName + " / " + PortActuel);
+</script>
+
 <html lang="fr">
 	<head>
 		<title>HoMIDom Interface Web</title>
@@ -7,41 +25,43 @@
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 		<script src="jquery.jsonp-2.4.0.min.js"></script>
 		<script src="jquery.signalR.min.js"></script>
-		<script type="text/javascript" >
-			ZoneIDText = "##";
-			var ListDevices = [];
-			var ListZones = [];
-			var ServerName = "localhost";
-		</script>
-		<script src="http://"+ ServerName + ":7999/live/signalr/hubs/"></script>
-		<link href="HoMIWeb.css" rel="stylesheet" type="text/css">
 		
+		<script src="http://"+ ServerName + ":"+ PortActuel + "/live/signalr/hubs/"></script>
+		<link href="./css/HoMIWeb.css" rel="stylesheet" type="text/css">		
 	</head>
-	<body>
 	
+<body>
 	<header class="header">
 			<section class="LogoDate">
-			<p  class="DateHeader" title="HomiDoM"><img  class="LogoHeader" alt="Information sur l'image" src="Images/Rond_64x64.png"/>
+			<p  class="DateHeader" title="HomiDoM"><img  class="LogoHeader" alt="Information sur l'image" src="./images/Rond_64x64.png"/>
 			<script type="text/javascript" >
-				d = new Date();
-				document.write(d.toLocaleDateString().charAt(0).toUpperCase()+ d.toLocaleDateString().slice(1) +'   --   '+d.toLocaleTimeString()+'</p>');
+				var d = new Date();
+				document.write(d.toLocaleDateString().charAt(0).toUpperCase()+ d.toLocaleDateString().slice(1) +'   --   '+d.toLocaleTimeString()+'<br>'+ServerName.toUpperCase() +':'+ PortActuel + '</p>');
+					
+				
+		var myVar = setInterval(function(){myTimer()},60000);
+
+		function myTimer()
+		{
+			 loadDevices(ListDevices);
+		     AfficheZone(ZoneActuel);
+			var d = new Date();
+			var t = d.hours()+":"+d.getMinutes();
+			document.getElementById("HeureTest").innerHTML=t;
+		}
+
+
 
 			</script>
 		</section>	
 		<span class="InfoSoleil">
- 			<span id="LeverSoleil"><div class="align_image"><img src="Images/icones/01.png" /></div><p id="HeureLever">  :  </p></span>	
-			<span id="CoucherSoleil"><div class="align_image"><img src="Images/icones/36.png" /></div><p id="HeureCoucher">  :  </p></span>	
+ 			<span id="LeverSoleil"><div class="align_image"><img src="./Images/icones/01.png" /></div><p id="HeureLever">  :  </p></span>	
+			<span id="CoucherSoleil"><div class="align_image"><img src="./Images/icones/36.png" /></div><p id="HeureCoucher">  :  </p></span>	
+			<span id="HeureTest"> :  </span>	
+			
 		</span>	
-	 <!-- bloc login 
-      	 <div id="login">
-        	<form action="index1.html" method="post">
-            	<input type="text" class="name" name="name" id="name" value="Name" onClick="this.value=''"/>
-                <input type="password" class="pass" name="pass" id="pass" value="Pass" onClick="this.value=''"/>
-                <input type="submit" class="valider" name="submit" id="submit" value="Inscription">
-            </form>
-        </div>	-->
+	 
 	</header>	
-
 			
 	<body>
 	
@@ -53,39 +73,48 @@
 		</div>
 	</div>	
 	
-	<div class="MiddlePanel">
-		<h2>Devices</h2>
-		<div id="devices"></div>	
+		
+	<div class="LeftPanel">
+		<h2>Zones</h2>	
+		<div id="zones"></div>	
 	</div>
+		
+	<div class="MiddlePanel">
+		<h2 onclick="javascript:AfficheZone(ZoneActuel);">Devices</h2>
+		<div id="devices" >
+		</div>	
+	</div>
+	
+
+	<script type="text/javascript">
+
+	</script>
 	
 	<div class="ZonesPanel">
 		<h2>Macros</h2>
-		<div id="macros"></div>	
+		<div id="macros">
+		</div>	
 	</div>
 	
-	<div class="ZonesPanel">
-		<h2>Zones</h2>	
-		<div id="zones"></div>	
-	</div>	
 		
 		<script type="text/javascript">
 			var devices;
 		
 			$(document).ready(function () {
 				$.jsonp({
-					url: 'http://'+ ServerName + ':7999/api/123456789/device/',
+					url: 'http://'+ ServerName + ':'+ PortActuel + '/api/'+ IDSERVERActuel + '/device/',
 					callbackParameter: "callback",
 					success: loadDevices,
 					error: onError
 				})
 				$.jsonp({
-					url: 'http://' + ServerName +':7999/api/123456789/zone/',
+					url: 'http://'+ ServerName + ':'+ PortActuel + '/api/'+ IDSERVERActuel + '/zone/',
 					callbackParameter: "callback",
 					success: loadZones,
 					error: onError
 				})
 				$.jsonp({
-					url: 'http://'+ ServerName + ':7999/api/123456789/macro/',
+					url: 'http://'+ ServerName + ':'+ PortActuel + '/api/'+ IDSERVERActuel + '/macro/',
 					callbackParameter: "callback",
 					success: loadMacros,
 					error: onError
@@ -94,16 +123,19 @@
 					$.connection.NotificationHub.server.test("Test");
 				});
 
-				var connection = $.hubConnection('http://'+ ServerName + ':7999/live');
+				var connection = $.hubConnection('http://'+ ServerName + ':' + PortActuel + '/live');
 				var nHubProxy = connection.createHubProxy('NotificationHub');
 				nHubProxy.on('DeviceChanged', function (id, value) {
 					console.log(id + ' = ' + value);
-					var dName = getDeviceName(id);
+					var dName = getDeviceName(id, value);
 					var currentdate = new Date(); 
 					var time = currentdate.getHours() + ":"  + currentdate.getMinutes() + ":" + currentdate.getSeconds();
-					$('#events').prepend(time+' - '+dName+' = ' + value + '<br/>');
+					$('#events').prepend(time+' / '+ id + '- '+dName+' = ' + value + '<br/>');
 					document.getElementById('HeureLever').innerHTML = '06:17';
 					document.getElementById('HeureCoucher').innerHTML = '20:32';
+					if (ZoneActuel) {
+						AfficheZone(ZoneActuel);
+					}
 				});
 				
 				connection.qs = { "sKey" : '123456789' };
@@ -116,8 +148,14 @@
 				alert('erreur:' + textStatus);
 			}
 			
-			function getDeviceName(id) {
-				return $('#'+id).find('p').text();
+			function getDeviceName(id, value) {
+				for (var a=0; a < ListDevices.length; a++)
+				{
+					 if (ListDevices[a]._ID == id) {
+					 	 ListDevices[a]._Value = value; 
+						 return ListDevices[a]._Name;
+					}
+				}
 			}
 			
 			function loadDevices(data) {
@@ -128,12 +166,10 @@
 			function loadZones(data) {
 				var items = [];
 				ListZones = data;
-				// items.push('<div class="MenuZone">');
-				$.each(ListZones, function(index, zone) {
-					items.push('<article class="align_Zone" onclick="AfficheZone(\''+zone._Id+'\');" ><img  src="images/icones/defaut.png" alt=""/><p>' + zone._Name + '</p></article>');
-				});
-				//items.push('</div>');
 
+				$.each(ListZones, function(index, zone) {
+					items.push('<article class="align_Zone" onclick="AfficheZone(\''+zone._Id+'\');" ><img  src="./images/icones/defaut.png" alt=""/><p>' + zone._Name + '</p></article>');
+				});
 
 				$('<ul/>', {
 					'class': 'MenuZone',
@@ -145,8 +181,8 @@
 			function loadMacros(data) {
 				var items = [];
 				$.each(data, function(index, macro) {
-					items.push('<article class="align_macro"><div class="NomDevice"><span>'+ macro._Nom + '</span></div><div class="align_image"><img src="images/Icones/Macro_64.png" alt="" /><span href="#" onClick="executeMacro(\''+macro._ID+'\')">Lancer</span></div></article> ' );
-					// items.push('<li id="' + macro._ID + '">' + macro._Nom + '&nbsp; <a href="#" onClick="executeMacro(\''+macro._ID+'\')">Lancer</a></li>');
+					items.push('<article class="align_macro"><div class="NomDevice"><span>'+ macro._Nom + '</span></div><div class="align_image"><img src="./images/icones/Macro_64.png" alt="" /><span href="#" onClick="executeMacro(\''+macro._ID+'\')">Lancer</span></div></article> ' );
+					
 				});
 				$('<ul/>', {
 					'class': 'MenuZone',
@@ -156,7 +192,8 @@
 			
 			function execute(deviceId, command) {
 				$.jsonp({
-					url: 'http://'+ ServerName +':7999/api/123456789/command/device/'+deviceId+'/'+command,
+					url: 'http://'+ ServerName + ':'+ PortActuel + '/api/'+ IDSERVERActuel + '/command/device/'+deviceId+'/'+command,
+					
 					type: 'GET',
 					callbackParameter: "callback",
 					success: onExecuteSuccess,
@@ -167,7 +204,7 @@
 			
 			function executeMacro(macroId) {
 				$.jsonp({
-					url: 'http://' + ServerName +':7999/api/123456789/command/macro/'+macroId+'/EXEC',
+					url: 'http://'+ ServerName + ':'+ PortActuel + '/api/'+ IDSERVERActuel + '/command/macro/'+macroId+'/EXEC',
 					type: 'GET',
 					callbackParameter: "callback",
 					success: onExecuteSuccess,
@@ -176,18 +213,22 @@
 			}
 
 			function onExecuteSuccess() {
-				alert('Commande executée');
+				// alert('Commande executée');
 			}
-
+			function ExecuteDIM(Device,Command) {
+				 document.getElementById(Device._Name+"Slider").innerHTML =this.value; 
+				 execute(Device._ID+'\', \''+command.Nom+'?Variation='+this.value); 
+				//  alert('Commande Dim executée');
+			}
+			
 			function AfficheZone(ZoneDefined) {
 					var items = [];
 					var FirstItem = false;
+					ZoneActuel = ZoneDefined; 
 					
-				//alert('L Id de la zone est : ' +ZoneDefined);
 				
 				ZoneIDText = ZoneDefined; 
-				// document.getElementById('ZoneID').innerHTML = ZoneIDText;	
-				
+				// alert('L Id de la zone est : ' + ZoneIDText );	
 				// Supprime les elements deja affichés
 				$('#devices').empty();
 				
@@ -199,23 +240,39 @@
 							{
 								for (var a=0; a < ListDevices.length; a++)
 							 	{
-									//document.writeln("Coucou " + ListDevices[a]._ID + '  :  ' + zone._ListElement[i]._ElementID + '<br/>');
 									if ( ListDevices[a]._ID == zone._ListElement[i]._ElementID)
 									{
-										// pour le Debug
-										// document.writeln("Coucou " + ListDevices[a]._ID + '  :  ' + ListDevices[a]._Name  + ' / '+ ListDevices[a]._Type +'<br/>');
-										//document.getElementById('ZoneID').innerHTML = ZoneIDText+'<br/>'+ "Coucou " + ListDevices[a]._ID + '  :  ' + ListDevices[a]._Name  + ' / '+ ListDevices[a]._Type +'<br/>';
+										// Widget Météo
+										if (ListDevices[a]._Type==17) {
+										items.push('<section id="WidMeteo"><h1>'+ListDevices[a]._Name + '</h1><h2>Actuellement</h2><div class="MeteoJour" title="Méteo actuelle"><article class="Info"><img src="./Images/meteo/'+ ListDevices[a]._IconActuel +'.png" /><h3>'+ListDevices[a]._JourToday + '</h3></article><article class="Info"><img src="./Images/meteo/temperature-defaut.png" /><h3>'+ListDevices[a]._TempActuel+ '°</h3></article><article class="Info"><img src="./Images/meteo/humidite-defaut.png" /><h3>'+ ListDevices[a]._HumActuel + '%</h3></article><article class="Info"><img src="./Images/meteo/vitessevent-defaut.png" /><h3>'+ListDevices[a]._VentActuel+ '</h3></article></div><div class="MeteoPrev" title="Prévisions"><article class="Prev"><img src="./Images/meteo/'+ListDevices[a]._IconActuel + '.png" /><h4>'+ListDevices[a]._JourToday + '</h4><span title="Min" class="TempMin">'+ ListDevices[a]._MinToday + '°</span><span title="Max" class="TempMax">'+ ListDevices[a]._MaxToday + '°</span></article><article class="Prev"><img src="./Images/meteo/'+ ListDevices[a]._IconJ1 + '.png" /><h4>'+ ListDevices[a]._JourJ1 + '</h4><span title="Min" class="TempMin">'+ ListDevices[a]._MinJ1 + '°</span><span title="Max" class="TempMax">'+ ListDevices[a]._MaxJ1 + '°</span></article><article class="Prev"><img src="./Images/meteo/'+ ListDevices[a]._IconJ2 + '.png" /><h4>'+ ListDevices[a]._JourJ2 + '</h4><span title="Min" class="TempMin">'+ ListDevices[a]._MinJ2 + '°</span><span title="Max" class="TempMax">'+ ListDevices[a]._MaxJ2 + '°</span></article><article class="Prev"><img src="./Images/meteo/'+ ListDevices[a]._IconJ3 + '.png" /><h4>'+ ListDevices[a]._JourJ3 + '</h4><span title="Min" class="TempMin">'+ ListDevices[a]._MinJ3 + '°</span><span title="Max" class="TempMax">'+ ListDevices[a]._MaxJ3 + '°</span></article></div>');
+										items.push('</section>');		
+										} 
+										else {
 										
-										items.push('<article><div class="NomDevice"><span>'+ListDevices[a]._Name + '</span></div><div class="align_image"><img src="images/devices/'+ListDevices[a]._Type+'-defaut.png" alt="" /><span>'+ListDevices[a]._Value + '</span> ' );
+										items.push('<article><div class="NomDevice"><span>'+ListDevices[a]._Name + '</span></div><div class="align_image"><img src="./images/devices/'+ListDevices[a]._Type+'-defaut.png" alt="" /><span>'+ListDevices[a]._Value + '</span> ' );
 										var actions = [];
+										actions.push('<div id="ListCommand">');
 										$.each(ListDevices[a]._DeviceAction, function(i, command) {
-				    					 actions.push('<li class="command"><a href="#" onClick="execute(\''+ListDevices[a]._ID+'\', \''+command.Nom+'\')">' + command.Nom + '</a></li>');
+											
+											if (command.Nom == "DIM"){
+												//actions.push('<li class="command"><a href="#" onDoubleClick="execute(\''+ListDevices[a]._ID+'\', \''+command.Nom+'\')">');
+										//		actions.push('<input type="range" min="0" max="100" step="5" value="50" onchange="document.getElementById("rangeValLabel").innerHTML = this.value;" />
+//	<label id="rangeValLabel" />0</label>');
+											 actions.push('<li class="command"><input type="range" min="0" max="100" step="5" value="50" onchange="document.getElementById(\''+ListDevices[a]._Name+"Slider"+'\').innerHTML =this.value; execute(\''+ListDevices[a]._ID+'\', \''+command.Nom+'?Variation=this.value\'); \"  /><label id="'+ListDevices[a]._Name+"Slider"+'" /></label></li>');
+
+											}
+											 
+											else {
+												actions.push('<li class="command"><a href="#" onClick="execute(\''+ListDevices[a]._ID+'\', \''+command.Nom+'\')">');
+												actions.push(command.Nom + '</a></li>');
+										}
+				    					  
 										});
 										 items.push('<div id="menu"><ul class="Navigation" role="navigation">');
 										// if (actions.length > 0)
 											items.push(actions.join(''));
-										 items.push('</ul></div></div></article>');
-
+										 items.push('</ul></div></div></article>');	
+										} 
 									}
 								}
 							}			 
@@ -233,7 +290,7 @@
 	<footer>
 
 		<p id="ZoneID"></p>
-		<button id="btnTest">Test</button>		
+		<button id="btnTest" onclick="javascript:AfficheZone(ZoneActuel);">Rafraichir</button>		
 		<hr/>
 			<a href="http://homidom.com"> HoMIDoM © 2011</a>	
 			<br />

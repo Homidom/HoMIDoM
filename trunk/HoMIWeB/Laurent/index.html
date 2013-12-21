@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+		<title>Page de connexion à HomiWeb</title>
+		<meta name="" content="">
+		<link href="css/LoginForm.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+<script type="text/javascript">
+	var ListeServeurs = [];
+	var SiteActuel = 0;
+	
+
+// enregistre les informations d'un site
+function ClickBouton(){
+	// Lancement de l'application 
+	 if (!window.sessionStorage){
+        return;
+	 }
+	//alert("Lancement de l'application"+ SiteActuel);
+	sessionStorage.SiteActuel= SiteActuel;
+	setTimeout(function(){document.location.href = "HoMIWeb.html"; },200);
+}  
+
+
+// stocke tous les informations de site dans un tableau
+function ReadSites(){
+	  if (!window.localStorage){
+        return;
+    }
+	// Supprime tous les icones deja exitantes
+	v_div_parent = document.getElementById("ListeServeurs");
+	while (v_div_parent.firstChild) {
+  		v_div_parent.removeChild(v_div_parent.firstChild);
+}
+	
+	var Cpt = localStorage.length; 
+	
+	// REdessine toutes les icones
+	for (i=0;i<Cpt;i++) {
+		key = localStorage.key(i);
+	    InfosServeur = JSON.parse(localStorage.getItem(key));
+		ListeServeurs.push(InfosServeur);
+		document.getElementById('ListeServeurs').innerHTML += '<div><img src="Images/icones/Home_128.png" onclick="AfficheSite(' + i +')" /><span>'+ InfosServeur.SERVER + '</span></div>';
+	}	
+}	
+
+// Affiche les infos du site selectionné
+function AfficheSite(IndexSite){
+	// alert("Passage par la fonction alert avec le parametre : "+IndexSite)
+	document.getElementById('Nom').value = ListeServeurs[IndexSite].SERVER;
+	document.getElementById('IDServer').value = ListeServeurs[IndexSite].IDSERVER;
+	document.getElementById('AdresseIP').value = ListeServeurs[IndexSite].AdresseIP;
+	document.getElementById('Port').value = ListeServeurs[IndexSite].Port;
+	SiteActuel = IndexSite;
+}
+
+// Affiche les infos du site selectionné
+function SupprimeSite(){
+	// alert("Passage par la fonction SupprimeSite avec le parametre : "+SiteActuel + " - " +ListeServeurs[SiteActuel].NomSite)  ;	
+	localStorage.removeItem(ListeServeurs[SiteActuel].NomSite);
+	ListeServeurs.splice(SiteActuel,1);	
+	ReadSites();
+}
+
+// enregistre les informations d'un site
+function AjouterSite(){
+	var InfosServeur = new Object();
+
+	if (!window.localStorage){
+        return;
+    }
+    var Cpt = localStorage.length;	
+	var Nom = document.getElementById('Nom').value;
+	var NomSite = "Site"+"::"+ Cpt ;
+	
+	if (!Nom=="") {
+		InfosServeur.NomSite    = NomSite;
+		InfosServeur.SERVER    = document.getElementById('Nom').value;
+		InfosServeur.IDSERVER  = document.getElementById('IDServer').value;
+		InfosServeur.AdresseIP = document.getElementById('AdresseIP').value;
+		InfosServeur.Port      = document.getElementById('Port').value;	
+		localStorage.setItem(NomSite, JSON.stringify(InfosServeur));	
+		ReadSites();  	
+	}
+	else {
+		alert('Veuillez saisir les informations ! ');
+	}
+}  
+
+
+</SCRIPT>
+
+<section id="Login_form">
+	<img src="Images/Rond_64x64.png" margin="5px" />
+	<h1>HomIWeB</h1>
+	<h2>Connexion</h2>
+	<div id="ListeServeurs"> 
+	<script>    ReadSites(); </script>
+	</div>
+		<form action="#" >
+			<fieldset class="labels">
+			
+				<div>
+					<label for="Nom">Nom :</label>
+					<input type="text" id="Nom" placeholder="Nom" title="Nom du Site"/>
+				</div>
+				<div>
+					<label for="IDServer">ID Server :</label>
+					<input type="text" id="IDServer" placeholder="123456789" title="ID du Site"/>
+				</div>
+				
+				<div>
+					<label for="AdreseIP">Adresse IP :</label>	
+ 					<input type="text" id="AdresseIP" placeholder="localhost" title="Adresse du Site" />					
+				</div>
+				<div>
+					<label for="Port">Port :</label>	
+					<input type="text" id="Port" placeholder="7999" title="Port du Site"/>
+				</div>
+				<div id="BoutonsCommande"> 
+					<img title="Ajouter ce Site"   src="Images/icones/save_32.png"      class="BoutonCommande" onclick="AjouterSite();" />
+					<img title="Supprimer ce Site" src="Images/icones/Supprimer_32.png" class="BoutonCommande" onclick="SupprimeSite();" />
+				</div>
+			</fieldset>	
+			
+			<input class="Bouton" onclick="ClickBouton();" type="submit" value="OK">
+			<input class="Bouton" type="button" onClick="javascript:window.close();" value="Cancel">
+		</form>
+</section>
+</body>
+</html>
