@@ -1493,16 +1493,16 @@ Public Class Driver_ZWave
                                             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " traiteValeur", " Exception : Unité non traitée " & m_manager.GetValueUnits(m_valueID))
                                     End Select
                                     ' Traitement particulier pour les Appareils
-                                ElseIf LocalDevice.type = "APPAREIL" Then
-                                    Dim myValue As String = Nothing
-                                    Select Case ValeurRecue
-                                        Case True
-                                            myValue = "ON"
-                                        Case False
-                                            myValue = "OFF"
-                                    End Select
-                                    ValeurRecue = myValue.ToString
-                                Else
+                                    'ElseIf LocalDevice.type = "APPAREIL" Then
+                                    ' Dim myValue As String = Nothing
+                                    '   Select ValeurRecue
+                                    '      Case True
+                                    '  myValue = "ON"
+                                    '      Case False
+                                    '   myValue = "OFF"
+                                    '   End Select
+                                    ' ValeurRecue = myValue
+                                    'Else
                                 End If
                                 LocalDevice.value = ValeurRecue
 
