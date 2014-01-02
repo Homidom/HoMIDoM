@@ -1114,15 +1114,12 @@ Imports System.Threading
                             _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Start", "   * Activation du routage des SMS")
                             _SMSROUTING = True
 
-
-
-                            PhoneDir()
-
                         Catch ex As Exception
                             _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Start", "   * Désactivation du routage des SMS car non supporté par le modem")
                             _SMSROUTING = False
                         End Try
 
+                        PhoneDir()
                         Return ("Port " & _Com & " ouvert à " & _BAUD & " bauds.")
                     Else
                         Return ("Port " & _Com & " dejà ouvert")
@@ -1316,12 +1313,9 @@ Imports System.Threading
                         Try
                             Dim MsgLocation As Integer
                             Dim counter As Integer = 0
-                            ' Dim messages As DecodedShortMessage() = 
+                            ' Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.ReceivedUnread, PhoneStorageType.Sim)
+                            ' Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.All, PhoneStorageType.Phone)
 
-                            comm.ReadMessages(PhoneMessageStatus.ReceivedUnread, PhoneStorageType.Sim)
-                            ' Dim messages As DecodedShortMessage() = 
-
-                            comm.ReadMessages(PhoneMessageStatus.All, PhoneStorageType.Phone)
                             Dim messages As DecodedShortMessage() = comm.ReadMessages(PhoneMessageStatus.ReceivedUnread, PhoneStorageType.Phone)
                             For Each Message In messages
                                 If TypeOf Message.Data Is SmsDeliverPdu Then
@@ -1753,7 +1747,7 @@ Imports System.Threading
 
     ''' <summary>Recuperation carnet d'adresse</summary>
     Private Sub PhoneDir()
-        Try
+       Try
             Select Case _MODE
                 Case "PDU"
                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "CARNET", _Carnet)
@@ -1765,11 +1759,11 @@ Imports System.Threading
 
                         If entries.Length > 0 Then
                             ' Display the entries read
+                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "CARNET", "Nb Entries " & entries.Length)
 
                             For Each entry As PhonebookEntry In entries
-                                If entry.Text.IndexOf("0") <> -1 Then
-
-
+                                If entry.Text.IndexOf(0) <> -1 Then
+                                 
 
                                     _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, entry.Number, HexToString(entry.Text))
                                     Dim strok As String = HexToString(entry.Text)
@@ -1781,7 +1775,6 @@ Imports System.Threading
                                             sb.Append(ch)
                                         End If
                                     Next
-
 
 
 
@@ -1799,17 +1792,19 @@ Imports System.Threading
 
 
                                 End If
+
+
                                 If entry.Text.Length <> 0 Then
                                     Dim stra = ""
                                     Dim strb = ""
-                                    If entry.Text.IndexOf("0") = -1 Then
+                                    If entry.Text.IndexOf(0) = -1 Then
+                                        stra = entry.Text
+                                        strb = entry.Number
+                                        ' stra = entry.Number.Replace(",", "").Replace("""", "").Replace("1", "").Replace("2", "").Replace("3", "").Replace("4", "").Replace("5", "").Replace("6", "").Replace("7", "").Replace("8", "").Replace("9", "").Replace("0", "").Replace("+", "")
+                                        '   strb = entry.Number.Remove(entry.Number.IndexOf(""""))
+                                        _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "CARNET", "Entry " & stra & " " & strb)
 
-                                        stra = entry.Number.Replace(",", "").Replace("""", "").Replace("1", "").Replace("2", "").Replace("3", "").Replace("4", "").Replace("5", "").Replace("6", "").Replace("7", "").Replace("8", "").Replace("9", "").Replace("0", "").Replace("+", "")
-                                        strb = entry.Number.Remove(entry.Number.IndexOf(""""))
 
-
-
-                                        Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, entry.Number, stra)
                                         Dim gen = New HoMIDom.HoMIDom.Server()
                                         Dim listedevices As New ArrayList
                                         listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_Idsrv, entry.Number, "GENERIQUESTRING", Me._ID, True)
