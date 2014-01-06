@@ -535,6 +535,7 @@ Imports OpenWebNet
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.APPAREIL)
             _DeviceSupport.Add(ListeDevices.LAMPE)
+            _DeviceSupport.Add(ListeDevices.VOLET)
 
             Add_LibelleDevice("ADRESSE1", "Adresse (WHERE)", "")
             Add_LibelleDevice("ADRESSE2", "@", "")
