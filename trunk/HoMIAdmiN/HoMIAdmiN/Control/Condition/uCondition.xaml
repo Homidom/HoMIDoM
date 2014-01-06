@@ -24,7 +24,7 @@
             <StackPanel Orientation="Horizontal" Name="StkTime">
                 <StackPanel >
                     <StackPanel >
-                        <CheckBox Name="ChkHeure" Content="Suivant une heure" IsChecked="True" Foreground="White" Background="DarkGray" BorderBrush="Black" FontSize="11" />
+                        <CheckBox Name="ChkHeure" Content="Suivant une heure" Foreground="White" Background="DarkGray" BorderBrush="Black" FontSize="11" />
                         <CheckBox Name="ChkDate" Content="Suivant une date" Foreground="White" Background="DarkGray" BorderBrush="Black" FontSize="11" />
                         <CheckBox Name="ChkJour" Content="Suivant un jour" Foreground="White" Background="DarkGray" BorderBrush="Black" FontSize="11" />
                         <CheckBox Name="ChkLeveS" Content="Suivant heure du levé du soleil" Foreground="White" Background="DarkGray" BorderBrush="Black" FontSize="11" />
