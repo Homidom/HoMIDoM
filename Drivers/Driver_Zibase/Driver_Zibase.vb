@@ -599,7 +599,8 @@ Imports Driver_Zibase.ZibaseDllvb
 
     'la zibase a qqch à logger
     Private Sub ZibaseLog(ByVal sMsg As String, ByVal level As Integer) Handles zba.WriteMessage
-        If _DEBUG Then WriteLog("DBG: Message: " & sMsg & " - " & level)
+        'If _DEBUG Then WriteLog("DBG: Message: " & sMsg & " - " & level)
+        If _DEBUG Then WriteLog("DBG: Message: " & sMsg)
     End Sub
 
     'executer un script stocké sur la zibase

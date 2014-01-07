@@ -138,9 +138,9 @@ Namespace ZibaseDllvb
         'private String LogFilePath = Path.Combine( Path.GetDirectoryName( Assembly.GetExecutingAssembly().Location),"ZibaseLog.txt");
         Private LogFilePath As [String] = Path.Combine("c:\", "ZibaseLog.txt")
         Private Sub LOG(log__1 As [String])
-#If LOG Then
-			File.AppendAllText(LogFilePath, log__1 & vbCr & vbLf)
-#End If
+            '#If LOG Then
+            '            File.AppendAllText(LogFilePath, log__1 & vbCr & vbLf)
+            '#End If
         End Sub
 
         Public Sub StartZB(Optional bAutoSearch As Boolean = True, Optional dwPort As UInt32 = 0)
@@ -340,7 +340,7 @@ Namespace ZibaseDllvb
 
                     RaiseEvent WriteMessage(sZibaseName & ":" & s, MSG_DEBUG)
 
-                    LOG(s)
+                    'LOG(s)
 
                     's = "Received radio ID (<rf>433Mhz</rf> Noise=<noise>2564</noise> Level=<lev>4.6</lev>/5 <dev>Oregon THWR288A-THN132N</dev> Ch=<ch>1</ch> T=<tem>+15.4</tem>°C (+59.7°F) Batt=<bat>Ok</bat>): <id>OS3930910721</id>";
                     '      received radio ID (<rf>433Mhz</rf> Noise=<noise>2095</noise> Level=<lev>4.1</lev>/5 <dev>Remote control</dev> Flags= <flag1>Alarm</flag1> Batt=<bat>Ok</bat>: <id>VS262818XX14</id>
@@ -359,7 +359,7 @@ Namespace ZibaseDllvb
 
 
 
-                        RaiseEvent WriteMessage("TEST DEBUG : ID" & seInfo.sID & " NAME" & seInfo.sName, MSG_DEBUG)
+                        RaiseEvent WriteMessage("TEST DEBUG : ID: " & seInfo.sID & " NAME: " & seInfo.sName, MSG_DEBUG)
 
 
 
@@ -396,6 +396,18 @@ Namespace ZibaseDllvb
 
                         '#End Region
 
+
+
+
+
+
+
+                        RaiseEvent WriteMessage("TEST DEBUG 2 : ID: " & seInfo.sID & " NAME: " & seInfo.sName, MSG_DEBUG)
+
+
+
+
+
                         ' On modifie l'id pour Chacon et Visonic pour qui correspondent à l'actionneur (ON et OFF)
                         If (seInfo.sID.Substring(0, 2) = "CS") Then
                             seInfo.sID = "CS" & ((Convert.ToInt32(seInfo.sID.Substring(2), System.Globalization.CultureInfo.InvariantCulture) And Not &H10))
@@ -406,17 +418,14 @@ Namespace ZibaseDllvb
                             seInfo.sID = "VS" & ((Convert.ToInt32(seInfo.sID.Substring(2), System.Globalization.CultureInfo.InvariantCulture)) And Not &HF)
                             seInfo.sName = "Visonic"
 
-
-
-
+                            'VISONIC : ADDED BY DAVIDINFO
+                            RaiseEvent WriteMessage("TEST DEBUG VISONIC : ID: " & seInfo.sID & " NAME: " & seInfo.sName, MSG_DEBUG)
                             sId = seInfo.sID
-
                             sType = ""
                             seInfo.sType = ""
                             seInfo.sDevice = ""
                             sValue = GetValue(s, "flag1")
-
-                            ' Declaration d'une variable de type état
+                            RaiseEvent WriteMessage("TEST DEBUG 3 : ID: " & seInfo.sID & " NAME: " & seInfo.sName & " VALUE: " & sValue, MSG_DEBUG)
                             If (Not String.IsNullOrEmpty(sValue)) Then
                                 seInfo.sValue = sValue
                                 seInfo.sHTMLValue = sValue
@@ -434,25 +443,43 @@ Namespace ZibaseDllvb
                                 seInfo.sValue = ""
                                 seInfo.sHTMLValue = ""
                                 seInfo.dwValue = ""
-                                If (_SensorList.Keys.Contains(sId & sType)) Then
+                                If (_SensorList.Keys.Contains(sId & sType)) Then 'test if new component
                                     seInfo.sHSName = _SensorList(sId & sType).sHSName
                                     seInfo.sDevice = _SensorList(sId & sType).sDevice
                                     _SensorList(sId & sType) = seInfo
+                                    RaiseEvent UpdateSensorInfo(seInfo)
                                 Else
                                     _SensorList.Add(sId & sType, seInfo)
                                     RaiseEvent NewSensorDetected(seInfo)
                                 End If
-                                RaiseEvent UpdateSensorInfo(seInfo)
                             End If
+                        End If
 
-
-
-
-
-
-
-
-
+                        'ZWAVE : ADDED BY DAVIDINFO
+                        If (seInfo.sID.Substring(0, 1) = "Z") Then
+                            RaiseEvent WriteMessage("TEST DEBUG ZWAVE : ID: " & seInfo.sID & " NAME: " & seInfo.sName, MSG_DEBUG)
+                            sId = seInfo.sID
+                            sType = ""
+                            seInfo.sType = ""
+                            seInfo.sDevice = ""
+                            If seInfo.sID.EndsWith("_OFF") Then
+                                seInfo.sValue = "OFF"
+                                seInfo.sHTMLValue = "OFF"
+                                seInfo.dwValue = 0
+                            Else
+                                seInfo.sValue = "ON"
+                                seInfo.sHTMLValue = "ON"
+                                seInfo.dwValue = 1
+                            End If
+                            If (_SensorList.Keys.Contains(sId & sType)) Then 'test if new component
+                                seInfo.sHSName = _SensorList(sId & sType).sHSName
+                                seInfo.sDevice = _SensorList(sId & sType).sDevice
+                                _SensorList(sId & sType) = seInfo
+                                RaiseEvent UpdateSensorInfo(seInfo)
+                            Else
+                                _SensorList.Add(sId & sType, seInfo)
+                                RaiseEvent NewSensorDetected(seInfo)
+                            End If
                         End If
 
                         If (seInfo.sID.Substring(0, 2) = "DX") Then
@@ -465,6 +492,9 @@ Namespace ZibaseDllvb
                             seInfo.sID = "WS" & ((Convert.ToInt32(seInfo.sID.Substring(2), System.Globalization.CultureInfo.InvariantCulture)) And Not &HF)
                             seInfo.sName = "OWL"
                         End If
+
+
+
 
                         '#Region "XS Security Device"
 
@@ -548,384 +578,295 @@ Namespace ZibaseDllvb
 
                         '#End Region
 
+
+
+
+
                         '#Region "sta"
-
                         sId = seInfo.sID
-
                         sType = "sta"
                         seInfo.sType = sType
                         seInfo.sDevice = ""
                         sValue = GetValue(s, sType)
-
                         ' Declaration d'une variable de type état
                         If (Not String.IsNullOrEmpty(sValue)) Then
                             seInfo.sValue = sValue
                             seInfo.sHTMLValue = sValue
-
                             seInfo.dwValue = If(sValue = "ON", 2, 3)
-
                             If (_SensorList.Keys.Contains(sId & sType)) Then
                                 seInfo.sHSName = _SensorList(sId & sType).sHSName
                                 seInfo.sDevice = _SensorList(sId & sType).sDevice
-
                                 _SensorList(sId & sType) = seInfo
                             Else
                                 _SensorList.Add(sId & sType, seInfo)
-
                                 RaiseEvent NewSensorDetected(seInfo)
                             End If
-
                             RaiseEvent UpdateSensorInfo(seInfo)
                         End If
-
                         '#End Region
 
                         '#Region "lev"
-
                         sType = "lev"
                         seInfo.sType = sType
                         seInfo.sDevice = ""
                         sValue = GetValue(s, sType)
-
                         ' Declaration d'une variable de type strength level
                         If (Not String.IsNullOrEmpty(sValue)) Then
                             seInfo.dwValue = CInt(Math.Truncate(Convert.ToDouble(sValue, System.Globalization.CultureInfo.InvariantCulture) * 10))
                             seInfo.sValue = (seInfo.dwValue / 10.0) & "/5"
                             seInfo.sHTMLValue = sValue
-
                             If (_SensorList.Keys.Contains(sId & sType)) Then
                                 seInfo.sHSName = _SensorList(sId & sType).sHSName
                                 seInfo.sDevice = _SensorList(sId & sType).sDevice
-
                                 _SensorList(sId & sType) = seInfo
                             Else
                                 _SensorList.Add(sId & sType, seInfo)
-
                                 RaiseEvent NewSensorDetected(seInfo)
                             End If
-
                             RaiseEvent UpdateSensorInfo(seInfo)
                         End If
-
                         '#End Region
 
                         '#Region "temc"
-
                         sType = "temc"
                         seInfo.sType = sType
                         seInfo.sDevice = ""
                         sValue = GetValue(s, sType)
-
                         ' Declaration d'une variable de type consigne de température
                         If (Not String.IsNullOrEmpty(sValue)) Then
                             seInfo.dwValue = Convert.ToInt32(sValue, System.Globalization.CultureInfo.InvariantCulture)
                             seInfo.sValue = seInfo.dwValue & "°C"
                             seInfo.sHTMLValue = sValue
-
                             If (_SensorList.Keys.Contains(sId & sType)) Then
                                 seInfo.sHSName = _SensorList(sId & sType).sHSName
                                 seInfo.sDevice = _SensorList(sId & sType).sDevice
-
                                 _SensorList(sId & sType) = seInfo
                             Else
                                 _SensorList.Add(sId & sType, seInfo)
-
                                 RaiseEvent NewSensorDetected(seInfo)
                                 RaiseEvent NewSensorDetected(seInfo)
                             End If
-
                             RaiseEvent UpdateSensorInfo(seInfo)
                         End If
-
                         '#End Region
 
                         '#Region "kwh"
-
                         sType = "kwh"
                         seInfo.sType = sType
                         seInfo.sDevice = ""
                         sValue = GetValue(s, sType)
-
                         If (Not String.IsNullOrEmpty(sValue)) Then
                             LOG(DateTime.Now & " KWh :" & sValue)
                             seInfo.dwValue = CLng(Math.Truncate(Convert.ToDouble(sValue, CultureInfo.InvariantCulture) * 100))
                             seInfo.sValue = (seInfo.dwValue / 100.0) & " kWh"
                             seInfo.sHTMLValue = sValue
                             LOG(DateTime.Now & " Trace1")
-
                             If (_SensorList.Keys.Contains(sId & sType)) Then
                                 seInfo.sHSName = _SensorList(sId & sType).sHSName
                                 seInfo.sDevice = _SensorList(sId & sType).sDevice
-
                                 _SensorList(sId & sType) = seInfo
                             Else
                                 _SensorList.Add(sId & sType, seInfo)
-
                                 RaiseEvent NewSensorDetected(seInfo)
                             End If
-
                             RaiseEvent UpdateSensorInfo(seInfo)
                         End If
-
                         '#End Region
 
                         '#Region "kw"
-
                         sType = "kw"
                         seInfo.sType = sType
                         seInfo.sDevice = ""
                         sValue = GetValue(s, sType)
-
                         If (Not String.IsNullOrEmpty(sValue)) Then
                             seInfo.dwValue = CLng(Math.Truncate(Convert.ToDouble(sValue, CultureInfo.InvariantCulture) * 100))
                             seInfo.sValue = (seInfo.dwValue / 100.0) & " kW"
                             seInfo.sHTMLValue = sValue
-
                             If (_SensorList.Keys.Contains(sId & sType)) Then
                                 seInfo.sHSName = _SensorList(sId & sType).sHSName
                                 seInfo.sDevice = _SensorList(sId & sType).sDevice
-
                                 _SensorList(sId & sType) = seInfo
                             Else
                                 _SensorList.Add(sId & sType, seInfo)
-
                                 RaiseEvent NewSensorDetected(seInfo)
                             End If
-
                             RaiseEvent UpdateSensorInfo(seInfo)
                         End If
-
                         '#End Region
 
                         '#Region "tra"
-
                         sType = "tra"
                         seInfo.sType = sType
                         seInfo.sDevice = ""
                         sValue = GetValue(s, sType)
-
                         If (Not String.IsNullOrEmpty(sValue)) Then
                             seInfo.dwValue = Convert.ToInt32(sValue, System.Globalization.CultureInfo.InvariantCulture) * 100
                             seInfo.sValue = seInfo.dwValue & " mm"
                             seInfo.sHTMLValue = sValue
-
                             If (_SensorList.Keys.Contains(sId & sType)) Then
                                 seInfo.sHSName = _SensorList(sId & sType).sHSName
                                 seInfo.sDevice = _SensorList(sId & sType).sDevice
-
                                 _SensorList(sId & sType) = seInfo
                             Else
                                 _SensorList.Add(sId & sType, seInfo)
-
                                 RaiseEvent NewSensorDetected(seInfo)
                             End If
-
                             RaiseEvent UpdateSensorInfo(seInfo)
                         End If
-
                         '#End Region
 
                         '#Region "cra"
-
                         sType = "cra"
                         seInfo.sType = sType
                         seInfo.sDevice = ""
                         sValue = GetValue(s, sType)
-
                         If (Not String.IsNullOrEmpty(sValue)) Then
                             seInfo.dwValue = Convert.ToInt32(sValue, System.Globalization.CultureInfo.InvariantCulture) * 100
                             seInfo.sValue = seInfo.dwValue & " mm/h"
                             seInfo.sHTMLValue = sValue
-
                             If (_SensorList.Keys.Contains(sId & sType)) Then
                                 seInfo.sHSName = _SensorList(sId & sType).sHSName
                                 seInfo.sDevice = _SensorList(sId & sType).sDevice
-
                                 _SensorList(sId & sType) = seInfo
                             Else
                                 _SensorList.Add(sId & sType, seInfo)
-
                                 RaiseEvent NewSensorDetected(seInfo)
                             End If
-
                             RaiseEvent UpdateSensorInfo(seInfo)
                         End If
-
                         '#End Region
 
                         '#Region "awi"
-
                         sType = "awi"
                         seInfo.sType = sType
                         seInfo.sDevice = ""
                         sValue = GetValue(s, sType)
-
                         If (Not String.IsNullOrEmpty(sValue)) Then
                             seInfo.dwValue = CLng(Math.Truncate(Convert.ToDouble(sValue, CultureInfo.InvariantCulture) * 100))
                             seInfo.sValue = seInfo.dwValue & " m/s"
                             seInfo.sHTMLValue = sValue
-
                             If (_SensorList.Keys.Contains(sId & sType)) Then
                                 seInfo.sHSName = _SensorList(sId & sType).sHSName
                                 seInfo.sDevice = _SensorList(sId & sType).sDevice
-
                                 _SensorList(sId & sType) = seInfo
                             Else
                                 _SensorList.Add(sId & sType, seInfo)
-
                                 RaiseEvent NewSensorDetected(seInfo)
                             End If
-
                             RaiseEvent UpdateSensorInfo(seInfo)
                         End If
-
                         '#End Region
 
                         '#Region "drt"
-
                         sType = "drt"
                         seInfo.sType = sType
                         seInfo.sDevice = ""
                         sValue = GetValue(s, sType)
-
                         If (Not String.IsNullOrEmpty(sValue)) Then
                             seInfo.dwValue = Convert.ToInt32(sValue, System.Globalization.CultureInfo.InvariantCulture) * 100
                             seInfo.sValue = seInfo.dwValue & " °"
                             seInfo.sHTMLValue = sValue
-
                             If (_SensorList.Keys.Contains(sId & sType)) Then
                                 seInfo.sHSName = _SensorList(sId & sType).sHSName
                                 seInfo.sDevice = _SensorList(sId & sType).sDevice
-
                                 _SensorList(sId & sType) = seInfo
                             Else
                                 _SensorList.Add(sId & sType, seInfo)
-
                                 RaiseEvent NewSensorDetected(seInfo)
                             End If
-
                             RaiseEvent UpdateSensorInfo(seInfo)
                         End If
-
                         '#End Region
 
                         '#Region "uvl"
-
                         sType = "uvl"
                         seInfo.sType = sType
                         seInfo.sDevice = ""
                         sValue = GetValue(s, sType)
-
                         If (Not String.IsNullOrEmpty(sValue)) Then
                             seInfo.dwValue = Convert.ToInt32(sValue, System.Globalization.CultureInfo.InvariantCulture) * 100
                             seInfo.sValue = seInfo.dwValue & ""
                             seInfo.sHTMLValue = sValue
-
                             If (_SensorList.Keys.Contains(sId & sType)) Then
                                 seInfo.sHSName = _SensorList(sId & sType).sHSName
                                 seInfo.sDevice = _SensorList(sId & sType).sDevice
-
                                 _SensorList(sId & sType) = seInfo
                             Else
                                 _SensorList.Add(sId & sType, seInfo)
-
                                 RaiseEvent NewSensorDetected(seInfo)
                             End If
-
                             RaiseEvent UpdateSensorInfo(seInfo)
                         End If
-
                         '#End Region
 
                         '#Region "bat"
-
                         sType = "bat"
                         seInfo.sType = sType
                         seInfo.sDevice = ""
                         sValue = GetValue(s, sType)
-
                         ' Declaration d'une variable de type battery
                         If (Not String.IsNullOrEmpty(sValue) And sValue <> "?") Then
                             seInfo.sValue = sValue
                             seInfo.sHTMLValue = sValue
-
                             seInfo.dwValue = If(sValue = "Low", 0, 1)
-
                             If (_SensorList.Keys.Contains(sId & sType)) Then
                                 seInfo.sHSName = _SensorList(sId & sType).sHSName
                                 seInfo.sDevice = _SensorList(sId & sType).sDevice
-
                                 _SensorList(sId & sType) = seInfo
                             Else
                                 _SensorList.Add(sId & sType, seInfo)
-
                                 RaiseEvent NewSensorDetected(seInfo)
                             End If
-
                             RaiseEvent UpdateSensorInfo(seInfo)
                         End If
-
                         '#End Region
 
                         '#Region "tem"
-
                         ' Gestion du type de sonde
                         sType = "tem"
                         seInfo.sType = sType
                         seInfo.sDevice = ""
                         sValue = GetValue(s, sType)
-
                         ' Declaration d'une variable de type temperature
                         If (Not String.IsNullOrEmpty(sValue)) Then
                             seInfo.dwValue = CLng(Math.Truncate(Convert.ToDouble(sValue, CultureInfo.InvariantCulture) * 100))
                             seInfo.sValue = [String].Format("{0:0.0} °C", seInfo.dwValue / 100.0)
                             ' "#.#") + "°C";
                             seInfo.sHTMLValue = sValue
-
                             If (_SensorList.Keys.Contains(sId & sType)) Then
                                 seInfo.sHSName = _SensorList(sId & sType).sHSName
                                 seInfo.sDevice = _SensorList(sId & sType).sDevice
-
                                 _SensorList(sId & sType) = seInfo
                             Else
                                 _SensorList.Add(sId & sType, seInfo)
-
                                 RaiseEvent NewSensorDetected(seInfo)
                             End If
-
                             RaiseEvent UpdateSensorInfo(seInfo)
                         End If
-
                         '#End Region
 
                         '#Region "hum"
-
                         sType = "hum"
                         seInfo.sType = sType
                         seInfo.sDevice = ""
                         sValue = GetValue(s, sType)
-
                         ' Declaration d'une variable de type humidity
                         If (Not String.IsNullOrEmpty(sValue)) Then
                             seInfo.dwValue = Convert.ToInt32(sValue, System.Globalization.CultureInfo.InvariantCulture)
                             seInfo.sValue = seInfo.dwValue & "%"
                             seInfo.sHTMLValue = sValue
-
                             If (_SensorList.Keys.Contains(sId & sType)) Then
                                 seInfo.sHSName = _SensorList(sId & sType).sHSName
                                 seInfo.sDevice = _SensorList(sId & sType).sDevice
-
                                 _SensorList(sId & sType) = seInfo
                             Else
                                 _SensorList.Add(sId & sType, seInfo)
-
                                 RaiseEvent NewSensorDetected(seInfo)
                             End If
-
                             RaiseEvent UpdateSensorInfo(seInfo)
-
                             '#End Region
                         End If
+
                     End If
                 End If
             Catch ex As Exception
