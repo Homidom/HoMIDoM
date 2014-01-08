@@ -353,22 +353,7 @@ Namespace ZibaseDllvb
                         Dim sValue As String = Nothing
                         Dim sType As String = Nothing
 
-
-
-
-
-
-
-                        RaiseEvent WriteMessage("TEST DEBUG : ID: " & seInfo.sID & " NAME: " & seInfo.sName, MSG_DEBUG)
-
-
-
-
-
-
-
                         '#Region "Remote Control"
-
                         '| LPL ?? Information.IsNumeric(seInfo.sID.Substring(1).Replace("_OFF", ""))))
                         If (Val(seInfo.sID(0)) >= Val("A"c) AndAlso Val(seInfo.sID(0)) <= Val("P"c) AndAlso ([Char].IsNumber(seInfo.sID, 1))) Then
                             seInfo.sName = "Remote Control"
@@ -393,39 +378,27 @@ Namespace ZibaseDllvb
                                 ' seInfo.sID = GetValue(s, "id").Replace("_OFF", "")
                             Next
                         End If
-
                         '#End Region
 
-
-
-
-
-
-
-                        RaiseEvent WriteMessage("TEST DEBUG 2 : ID: " & seInfo.sID & " NAME: " & seInfo.sName, MSG_DEBUG)
-
-
-
-
-
                         ' On modifie l'id pour Chacon et Visonic pour qui correspondent à l'actionneur (ON et OFF)
-                        If (seInfo.sID.Substring(0, 2) = "CS") Then
+                        If (seInfo.sID.Substring(0, 2).ToUpper = "CS") Then
                             seInfo.sID = "CS" & ((Convert.ToInt32(seInfo.sID.Substring(2), System.Globalization.CultureInfo.InvariantCulture) And Not &H10))
                             seInfo.sName = "Chacon"
                         End If
 
-                        If (seInfo.sID.Substring(0, 2) = "VS") Then
-                            seInfo.sID = "VS" & ((Convert.ToInt32(seInfo.sID.Substring(2), System.Globalization.CultureInfo.InvariantCulture)) And Not &HF)
+                        RaiseEvent WriteMessage("TEST DEBUG VISONIC BEFORE (" & seInfo.sID.Substring(0, 2).ToUpper & ") : ID: " & seInfo.sID & " NAME: " & seInfo.sName, MSG_DEBUG)
+                        If (seInfo.sID.Substring(0, 2).ToUpper = "VS") Then
+                            'seInfo.sID = "VS" & ((Convert.ToInt32(seInfo.sID.Substring(2), System.Globalization.CultureInfo.InvariantCulture)) And Not &HF)
                             seInfo.sName = "Visonic"
 
                             'VISONIC : ADDED BY DAVIDINFO
-                            RaiseEvent WriteMessage("TEST DEBUG VISONIC : ID: " & seInfo.sID & " NAME: " & seInfo.sName, MSG_DEBUG)
+                            RaiseEvent WriteMessage("TEST DEBUG VISONIC OK : ID: " & seInfo.sID & " NAME: " & seInfo.sName, MSG_DEBUG)
                             sId = seInfo.sID
                             sType = ""
                             seInfo.sType = ""
                             seInfo.sDevice = ""
                             sValue = GetValue(s, "flag1")
-                            RaiseEvent WriteMessage("TEST DEBUG 3 : ID: " & seInfo.sID & " NAME: " & seInfo.sName & " VALUE: " & sValue, MSG_DEBUG)
+                            RaiseEvent WriteMessage("TEST DEBUG VISNONIC VALUE : ID: " & seInfo.sID & " NAME: " & seInfo.sName & " VALUE: " & sValue, MSG_DEBUG)
                             If (Not String.IsNullOrEmpty(sValue)) Then
                                 seInfo.sValue = sValue
                                 seInfo.sHTMLValue = sValue
@@ -456,7 +429,7 @@ Namespace ZibaseDllvb
                         End If
 
                         'ZWAVE : ADDED BY DAVIDINFO
-                        If (seInfo.sID.Substring(0, 1) = "Z") Then
+                        If (seInfo.sID.Substring(0, 1).ToUpper = "Z") Then
                             RaiseEvent WriteMessage("TEST DEBUG ZWAVE : ID: " & seInfo.sID & " NAME: " & seInfo.sName, MSG_DEBUG)
                             sId = seInfo.sID
                             sType = ""
@@ -466,6 +439,7 @@ Namespace ZibaseDllvb
                                 seInfo.sValue = "OFF"
                                 seInfo.sHTMLValue = "OFF"
                                 seInfo.dwValue = 0
+                                sId = sId.Substring(0, sId.Length - 5) 'we remove the _OFF"
                             Else
                                 seInfo.sValue = "ON"
                                 seInfo.sHTMLValue = "ON"
@@ -871,6 +845,7 @@ Namespace ZibaseDllvb
                 End If
             Catch ex As Exception
                 'LOG(ex.Message)
+                RaiseEvent WriteMessage("ZibaseDllVB AfterReceive: " & ex.Message, MSG_ERROR)
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ZibaseDllVB AfterReceive", ex.Message)
             End Try
         End Sub
