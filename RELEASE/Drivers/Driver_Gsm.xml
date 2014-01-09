@@ -116,6 +116,11 @@ Driver_Gsm
 </member><member name="M:Driver_Gsm.Driver_Gsm.IsSimpinOk">
 	<summary>vérification codepin</summary>
 	<remarks></remarks>
+</member><member name="M:Driver_Gsm.Driver_Gsm.PhoneDir">
+	<summary>Recuperation carnet d'adresse</summary>
+</member><member name="M:Driver_Gsm.Driver_Gsm.HexToString(System.String)">
+	<summary>hexa to string</summary>
+	<remarks></remarks>
 </member><member name="T:Driver_Gsm.Driver_Gsm">
 	<summary>Class Driver GSM </summary>
 	<remarks>Les drivers de votre modem doivent etre installés

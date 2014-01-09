@@ -2370,6 +2370,184 @@ HoMIDom
  Classe permettant le calcul des heures de lever et coucher du soleil
  </summary>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.NCrontab.CrontabSchedule.GetNextOccurrence(System.DateTime)">
+	<summary>
+ Gets the next occurrence of this schedule starting with a base time.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabSchedule.GetNextOccurrence(System.DateTime,System.DateTime)">
+	<summary>
+ Gets the next occurrence of this schedule starting with a base 
+ time and up to an end time limit.
+ </summary>
+	<remarks>
+ This method does not return the value of <paramref name="baseTime"/>
+ itself if it falls on the schedule. For example, if <paramref name="baseTime"/>
+ is midnight and the schedule was created from the expression <c>* * * * *</c> 
+ (meaning every minute) then the next occurrence of the schedule 
+ will be at one minute past midnight and not midnight itself.
+ The method returns the <em>next</em> occurrence <em>after</em>
+		<paramref name="baseTime"/>. Also, <param name="endTime"/> is
+ exclusive.
+ </remarks>
+</member><member name="M:HoMIDom.NCrontab.CrontabSchedule.ToString">
+	<summary>
+ Returns a string in crontab expression (expanded) that represents 
+ this schedule.
+ </summary>
+</member><member name="T:HoMIDom.NCrontab.CrontabSchedule">
+	<summary>
+ Represents a schedule initialized from the crontab expression.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.Parse(HoMIDom.NCrontab.CrontabFieldKind,System.String)">
+	<summary>
+ Parses a crontab field expression given its kind.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.seconds(System.String)">
+	<summary>
+ Parses a crontab field expression representing seconds.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.Minutes(System.String)">
+	<summary>
+ Parses a crontab field expression representing minutes.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.Hours(System.String)">
+	<summary>
+ Parses a crontab field expression representing hours.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.Days(System.String)">
+	<summary>
+ Parses a crontab field expression representing days in any given month.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.Months(System.String)">
+	<summary>
+ Parses a crontab field expression representing months.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.DaysOfWeek(System.String)">
+	<summary>
+ Parses a crontab field expression representing days of a week.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.GetFirst">
+	<summary>
+ Gets the first value of the field or -1.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.Next(System.Int32)">
+	<summary>
+ Gets the next value of the field that occurs after the given 
+ start value or -1 if there is no next value available.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.GetNext(System.Int32)">
+	<summary>
+ Gets the first value of the field or -1.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.Contains(System.Int32)">
+	<summary>
+ Determines if the given value occurs in the field.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.Accumulate(System.Int32,System.Int32,System.Int32,HoMIDom.NCrontab.ExceptionHandler)">
+	<summary>
+ Accumulates the given range (start to end) and interval of values
+ into the current set of the field.
+ </summary>
+	<remarks>
+ To set the entire range of values representable by the field,
+ set <param name="start"/> and <param name="end"/> to -1 and
+ <param name="interval"/> to 1.
+ </remarks>
+</member><member name="T:HoMIDom.NCrontab.CrontabField">
+	<summary>
+ Represents a single crontab field.
+ </summary>
+</member><member name="T:HoMIDom.NCrontab.ExceptionHandler">
+	<summary>
+ Represents the method that will handle an <see cref="T:System.Exception"/> object.
+ </summary>
+</member><member name="T:HoMIDom.NCrontab.ExceptionProvider">
+	<summary>
+ Represents the method that will generate an <see cref="T:System.Exception"/> object.
+ </summary>
+</member><member name="F:HoMIDom.NCrontab.ErrorHandling.Throw">
+	<summary>
+ A stock <see cref="T:HoMIDom.NCrontab.ExceptionHandler"/> that throws.
+ </summary>
+</member><member name="T:HoMIDom.NCrontab.ErrorHandling">
+	<summary>
+ Defines error handling strategies.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.#ctor(`0)">
+	<summary>
+ Initializes the object with a defined value.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.#ctor(System.Exception)">
+	<summary>
+ Initializes the object with an error.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.#ctor(HoMIDom.NCrontab.ExceptionProvider)">
+	<summary>
+ Initializes the object with a handler that will provide
+ the error result when needed.
+ </summary>
+</member><member name="P:HoMIDom.NCrontab.ValueOrError`1.HasValue">
+	<summary>
+ Determines if object holds a defined value or not.
+ </summary>
+</member><member name="P:HoMIDom.NCrontab.ValueOrError`1.Value">
+	<summary>
+ Gets the value otherwise throws an error if undefined.
+ </summary>
+</member><member name="P:HoMIDom.NCrontab.ValueOrError`1.IsError">
+	<summary>
+ Determines if object identifies an error condition or not.
+ </summary>
+</member><member name="P:HoMIDom.NCrontab.ValueOrError`1.Error">
+	<summary>
+ Gets the <see cref="T:System.Exception"/> object if this object
+ represents an error condition otherwise it returns <c>null</c>.
+ </summary>
+</member><member name="P:HoMIDom.NCrontab.ValueOrError`1.ErrorProvider">
+	<summary>
+ Gets the <see cref="T:HoMIDom.NCrontab.ExceptionProvider"/> object if this 
+ object represents an error condition otherwise it returns <c>null</c>.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.TryGetValue(`0)">
+	<summary>
+ Attempts to get the defined value or another in case
+ of an error.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.op_Implicit(`0)~HoMIDom.NCrontab.ValueOrError{`0}">
+	<summary>
+ Implicitly converts a <typeparamref name="T"/> value to
+ an object of this type.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.op_Implicit(System.Exception)~HoMIDom.NCrontab.ValueOrError{`0}">
+	<summary>
+ Implicitly converts an <see cref="T:System.Exception"/> object to
+ an object of this type that represents the error condition.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.op_Implicit(HoMIDom.NCrontab.ExceptionProvider)~HoMIDom.NCrontab.ValueOrError{`0}">
+	<summary>
+ Implicitly converts an <see cref="T:HoMIDom.NCrontab.ExceptionProvider"/> object to
+ an object of this type that represents the error condition.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.op_Explicit(HoMIDom.NCrontab.ValueOrError{`0})~`0">
+	<summary>
+ Explicits converts this object to a <typeparamref name="T"/> value.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.op_Explicit(HoMIDom.NCrontab.ValueOrError{`0})~System.Exception">
+	<summary>
+ Explicits converts this object to an <see cref="T:System.Exception"/> object
+ if it represents an error condition. The conversion yields <c>null</c>
+ if this object does not represent an error condition.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.op_Explicit(HoMIDom.NCrontab.ValueOrError{`0})~HoMIDom.NCrontab.ExceptionProvider">
+	<summary>
+ Explicits converts this object to an <see cref="T:HoMIDom.NCrontab.ExceptionProvider"/> object
+ if it represents an error condition. The conversion yields <c>null</c>
+ if this object does not represent an error condition.
+ </summary>
+</member><member name="T:HoMIDom.NCrontab.ValueOrError`1">
+	<summary>
+ A generic type that either represents a value or an error condition.
+ </summary>
 </member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Name">
 	<summary>
  Nom du template
@@ -2483,6 +2661,13 @@ HoMIDom
 	<param name="idsrv"></param>
 	<param name="namevar"></param>
 	<param name="Value"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Telecommande.Template.GetVariable(System.String)">
+	<summary>
+ Permet d'obtenir la valeur d'une variable associée au template
+ </summary>
+	<param name="namevar"></param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Telecommande.TemplateVar.Name">
