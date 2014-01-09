@@ -826,7 +826,8 @@ Imports STRGS = Microsoft.VisualBasic.Strings
         End If
     End Function
 
-    Public Async Function GetAllHueDevices() As Task
+    'Public Async Function GetAllHueDevices() As Task
+    Public Function GetAllHueDevices() As Task
 
 
 
@@ -971,7 +972,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
     Public Async Function Register() As Task
 
-        Dim client As New HueClient(_IP_TCP)
+    Dim client As New HueClient(_IP_TCP)
 
         Try
             Dim result = Await client.RegisterAsync("HomidomHue", "448123456789844")

@@ -91,6 +91,9 @@ Driver_ModbusTCP
 </member><member name="M:Driver_ModbusTCP.Driver_ModbusTCP.wait(System.Int32)">
 	<summary>Pause pour attendre x msecondes </summary>
 	<remarks></remarks>
+</member><member name="M:Driver_ModbusTCP.Driver_ModbusTCP.traitement(System.String,System.String,System.String,System.Boolean)">
+	<summary>Traite les paquets reçus</summary>
+	<remarks></remarks>
 </member><member name="M:Driver_ModbusTCP.Driver_ModbusTCP.ecrire(System.String,System.String,System.Int32,System.Int32,System.Boolean)">
 	<summary>Ecrire sur le port ModbusTCP</summary>
 	<param name="adresse">Adresse du device : A1...</param>

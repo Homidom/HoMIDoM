@@ -715,9 +715,9 @@ Imports Driver_Zibase.ZibaseDllvb
                     'valeur = STRGS.Left(valeur, (valeur.Length - 2))
                     valeur = CStr(CInt(valeur) / 100)
                     type = "THC" 'Température de consigne (Thermostat : °C)
-                Case "XSE", "BAT", "LNK", "STA" : valeur = valeurstring 'on utilise la valeur normale et non l'entier
+                Case "XSE", "BAT", "LNK", "STA", "" : valeur = valeurstring 'on utilise la valeur normale et non l'entier
             End Select
-            'dans le cas des adresse du tpe M5
+            'dans le cas des adresse du type M5
             If adresse.Length = 2 Then valeur = valeurstring 'on utilise la valeur normale et non l'entier
 
             'Action suivant le type

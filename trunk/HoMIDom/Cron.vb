@@ -1154,7 +1154,7 @@ DOW:        Dim dateChanged = day <> baseDay OrElse month <> baseMonth OrElse ye
             Get
 
                 'Return If(IsError, ErrorProvider.Invoke, Nothing)
-
+                Return Nothing
             End Get
         End Property
 

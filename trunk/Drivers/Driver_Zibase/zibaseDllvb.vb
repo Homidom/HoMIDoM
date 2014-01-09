@@ -351,6 +351,9 @@ Namespace ZibaseDllvb
 
                         Dim sId As String = Nothing
                         Dim sValue As String = Nothing
+                        Dim sValue1 As String = Nothing
+                        Dim sValue2 As String = Nothing
+                        Dim sValue3 As String = Nothing
                         Dim sType As String = Nothing
 
                         '#Region "Remote Control"
@@ -392,39 +395,43 @@ Namespace ZibaseDllvb
                             seInfo.sName = "Visonic"
 
                             'VISONIC : ADDED BY DAVIDINFO
-                            RaiseEvent WriteMessage("TEST DEBUG VISONIC OK : ID: " & seInfo.sID & " NAME: " & seInfo.sName, MSG_DEBUG)
                             sId = seInfo.sID
                             sType = ""
                             seInfo.sType = ""
                             seInfo.sDevice = ""
-                            sValue = GetValue(s, "flag1")
-                            RaiseEvent WriteMessage("TEST DEBUG VISNONIC VALUE : ID: " & seInfo.sID & " NAME: " & seInfo.sName & " VALUE: " & sValue, MSG_DEBUG)
-                            If (Not String.IsNullOrEmpty(sValue)) Then
-                                seInfo.sValue = sValue
-                                seInfo.sHTMLValue = sValue
-                                seInfo.dwValue = ""
-                                If (_SensorList.Keys.Contains(sId & sType)) Then
-                                    seInfo.sHSName = _SensorList(sId & sType).sHSName
-                                    seInfo.sDevice = _SensorList(sId & sType).sDevice
-                                    _SensorList(sId & sType) = seInfo
-                                Else
-                                    _SensorList.Add(sId & sType, seInfo)
-                                    RaiseEvent NewSensorDetected(seInfo)
-                                End If
-                                RaiseEvent UpdateSensorInfo(seInfo)
+                            sValue1 = GetValue(s, "flag1")
+                            sValue2 = GetValue(s, "flag2")
+                            sValue3 = GetValue(s, "flag3")
+                            RaiseEvent WriteMessage("TEST DEBUG VISNONIC VALUE : ID: " & seInfo.sID & " NAME: " & seInfo.sName & " VALUE: " & sValue1 & " - " & sValue2 & " - " & sValue3, MSG_DEBUG)
+
+                            'getting value
+                            If (Not String.IsNullOrEmpty(sValue1)) Then
+                                seInfo.sValue = sValue1
+                                seInfo.sHTMLValue = sValue1
+                                seInfo.dwValue = 0
+                            ElseIf (Not String.IsNullOrEmpty(sValue2)) Then
+                                seInfo.sValue = sValue2
+                                seInfo.sHTMLValue = sValue2
+                                seInfo.dwValue = 0
+                            ElseIf (Not String.IsNullOrEmpty(sValue3)) Then
+                                seInfo.sValue = sValue3
+                                seInfo.sHTMLValue = sValue3
+                                seInfo.dwValue = 0
                             Else
                                 seInfo.sValue = ""
                                 seInfo.sHTMLValue = ""
-                                seInfo.dwValue = ""
-                                If (_SensorList.Keys.Contains(sId & sType)) Then 'test if new component
-                                    seInfo.sHSName = _SensorList(sId & sType).sHSName
-                                    seInfo.sDevice = _SensorList(sId & sType).sDevice
-                                    _SensorList(sId & sType) = seInfo
-                                    RaiseEvent UpdateSensorInfo(seInfo)
-                                Else
-                                    _SensorList.Add(sId & sType, seInfo)
-                                    RaiseEvent NewSensorDetected(seInfo)
-                                End If
+                                seInfo.dwValue = 0
+                            End If
+
+                            'Creating event
+                            If (_SensorList.Keys.Contains(sId & sType)) Then 'test if new component
+                                seInfo.sHSName = _SensorList(sId & sType).sHSName
+                                seInfo.sDevice = _SensorList(sId & sType).sDevice
+                                _SensorList(sId & sType) = seInfo
+                                RaiseEvent UpdateSensorInfo(seInfo)
+                            Else
+                                _SensorList.Add(sId & sType, seInfo)
+                                RaiseEvent NewSensorDetected(seInfo)
                             End If
                         End If
 
@@ -439,7 +446,8 @@ Namespace ZibaseDllvb
                                 seInfo.sValue = "OFF"
                                 seInfo.sHTMLValue = "OFF"
                                 seInfo.dwValue = 0
-                                sId = sId.Substring(0, sId.Length - 5) 'we remove the _OFF"
+                                sId = sId.Substring(0, sId.Length - 4) 'we remove the _OFF"
+                                seInfo.sID = sId
                             Else
                                 seInfo.sValue = "ON"
                                 seInfo.sHTMLValue = "ON"
