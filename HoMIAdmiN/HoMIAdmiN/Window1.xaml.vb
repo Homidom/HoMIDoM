@@ -1219,6 +1219,12 @@ Class Window1
                 mnu1.Uid = Mac.ID
                 AddHandler mnu1.Click, AddressOf MnuitemMac_Click
                 ctxMenu.Items.Add(mnu1)
+                Dim mnu2 As New MenuItem
+                mnu2.Header = "Executer"
+                mnu2.Tag = 2
+                mnu2.Uid = Mac.ID
+                AddHandler mnu2.Click, AddressOf MnuitemMac_Click
+                ctxMenu.Items.Add(mnu2)
                 label.ContextMenu = ctxMenu
 
                 uri = MyRep & "\Images\Icones\Macro_32.png"
@@ -1261,6 +1267,8 @@ Class Window1
                     AffControlPage(x)
                 Case 1 'Supprimer
                     DeleteElement(sender.uid, 5)
+                Case 2 'Executer
+                    myService.RunMacro(IdSrv, sender.uid)
             End Select
 
         Catch ex As Exception
