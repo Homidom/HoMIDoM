@@ -77,69 +77,42 @@ Public Class WWidgetProperty
                     'TxtEtiq.IsReadOnly = True
                 Else
                     Select Case Obj.Type
-                        Case uWidgetEmpty.TypeOfWidget.Empty Or uWidgetEmpty.TypeOfWidget.Image
+                        Case uWidgetEmpty.TypeOfWidget.Empty
                             BtnEditAction.Visibility = Windows.Visibility.Visible
                             BtnEditVisu.Visibility = Windows.Visibility.Visible
                             BtnDelete.Visibility = Windows.Visibility.Visible
 
                             Refresh_LstObjetVisu()
 
-                            For Each obj As TemplateDevice In AllDevices
-                                Dim lbl1 As New ComboBoxItem
-                                Dim lbl2 As New ComboBoxItem
-                                lbl1.Content = obj.Name & " [Device]"
-                                lbl1.Tag = "DEVICE"
-                                lbl1.Uid = obj.ID
-                                lbl2.Content = obj.Name & " [Device]"
-                                lbl2.Tag = "DEVICE"
-                                lbl2.Uid = obj.ID
-                                CbObjet.Items.Add(lbl1)
-                                CbObjetVisu.Items.Add(lbl2)
-                                lbl1 = Nothing
-                                lbl2 = Nothing
-                            Next
-                            For Each obj As Macro In myService.GetAllMacros(IdSrv)
-                                Dim lbl1 As New ComboBoxItem
-                                Dim lbl2 As New ComboBoxItem
-                                lbl1.Content = obj.Nom & " [Macro]"
-                                lbl1.Tag = "MACRO"
-                                lbl1.Uid = obj.ID
-                                lbl2.Content = obj.Nom & " [Macro]"
-                                lbl2.Tag = "MACRO"
-                                lbl2.Uid = obj.ID
-                                CbObjet.Items.Add(lbl1)
-                                CbObjetVisu.Items.Add(lbl2)
-                                lbl1 = Nothing
-                                lbl2 = Nothing
-                            Next
-                            For Each obj As Zone In myService.GetAllZones(IdSrv)
-                                Dim lbl1 As New ComboBoxItem
-                                Dim lbl2 As New ComboBoxItem
-                                lbl1.Content = obj.Name & " [Zone]"
-                                lbl1.Tag = "ZONE"
-                                lbl1.Uid = obj.ID
-                                lbl2.Content = obj.Name & " [Zone]"
-                                lbl2.Tag = "ZONE"
-                                lbl2.Uid = obj.ID
-                                CbObjet.Items.Add(lbl1)
-                                CbObjetVisu.Items.Add(lbl2)
-                                lbl1 = Nothing
-                                lbl2 = Nothing
-                            Next
+                            Charge_Device_InCombo()
 
-                            ' Commandes
-                            Dim lb1 As New ComboBoxItem
-                            Dim lb2 As New ComboBoxItem
-                            lb1.Content = "Commandes"
-                            lb1.Tag = "COMMAND"
-                            lb1.Uid = Nothing
-                            lb2.Content = "Commandes"
-                            lb2.Tag = "COMMAND"
-                            lb2.Uid = Nothing
-                            CbObjet.Items.Add(lb1)
-                            CbObjetVisu.Items.Add(lb2)
-                            lb1 = Nothing
-                            lb2 = Nothing
+                            Charge_Macro_InCombo()
+
+                            Charge_Zone_InCombo()
+
+                            Charge_Cmd_InCombo()
+
+                        Case uWidgetEmpty.TypeOfWidget.Image
+                            StkPicture.Visibility = Visibility.Visible
+                            StkStatus.Visibility = Visibility.Collapsed
+                            StkEtiq.Visibility = Windows.Visibility.Collapsed
+                            ChkMajEtiq.Visibility = Windows.Visibility.Hidden
+                            ChkShowStatus.Visibility = Visibility.Collapsed
+                            ChkShowEtiq.Visibility = Visibility.Collapsed
+                            ChkEditValue.Visibility = Windows.Visibility.Collapsed
+                            BtnEditAction.Visibility = Windows.Visibility.Visible
+                            BtnEditVisu.Visibility = Windows.Visibility.Visible
+                            BtnDelete.Visibility = Windows.Visibility.Visible
+
+                            Refresh_LstObjetVisu()
+
+                            Charge_Device_InCombo()
+
+                            Charge_Macro_InCombo()
+
+                            Charge_Zone_InCombo()
+
+                            Charge_Cmd_InCombo()
 
                         Case uWidgetEmpty.TypeOfWidget.Web
                             StkPicture.Visibility = Visibility.Collapsed
@@ -311,17 +284,6 @@ Public Class WWidgetProperty
                             BtnEditVisu.Visibility = Windows.Visibility.Collapsed
                             BtnDelete.Visibility = Windows.Visibility.Visible
 
-                        Case uWidgetEmpty.TypeOfWidget.Image
-                            StkPicture.Visibility = Visibility.Visible
-                            StkStatus.Visibility = Visibility.Collapsed
-                            StkEtiq.Visibility = Windows.Visibility.Collapsed
-                            ChkMajEtiq.Visibility = Windows.Visibility.Hidden
-                            ChkShowStatus.Visibility = Visibility.Collapsed
-                            ChkShowEtiq.Visibility = Visibility.Collapsed
-                            BtnEditAction.Visibility = Windows.Visibility.Visible
-                            ChkEditValue.Visibility = Windows.Visibility.Collapsed
-                            BtnEditVisu.Visibility = Windows.Visibility.Visible
-                            BtnDelete.Visibility = Windows.Visibility.Visible
                     End Select
 
                 End If
@@ -330,6 +292,77 @@ Public Class WWidgetProperty
             End Try
         End Set
     End Property
+
+#Region "Chargement des combos"
+    Private Sub Charge_Device_InCombo()
+        For Each obj As TemplateDevice In myService.GetAllDevices(IdSrv)
+            Dim lbl1 As New ComboBoxItem
+            Dim lbl2 As New ComboBoxItem
+            lbl1.Content = obj.Name & " [Device]"
+            lbl1.Tag = "DEVICE"
+            lbl1.Uid = obj.ID
+            lbl2.Content = obj.Name & " [Device]"
+            lbl2.Tag = "DEVICE"
+            lbl2.Uid = obj.ID
+            CbObjet.Items.Add(lbl1)
+            CbObjetVisu.Items.Add(lbl2)
+            lbl1 = Nothing
+            lbl2 = Nothing
+        Next
+    End Sub
+
+    Private Sub Charge_Macro_InCombo()
+        For Each obj As Macro In myService.GetAllMacros(IdSrv)
+            Dim lbl1 As New ComboBoxItem
+            Dim lbl2 As New ComboBoxItem
+            lbl1.Content = obj.Nom & " [Macro]"
+            lbl1.Tag = "MACRO"
+            lbl1.Uid = obj.ID
+            lbl2.Content = obj.Nom & " [Macro]"
+            lbl2.Tag = "MACRO"
+            lbl2.Uid = obj.ID
+            CbObjet.Items.Add(lbl1)
+            CbObjetVisu.Items.Add(lbl2)
+            lbl1 = Nothing
+            lbl2 = Nothing
+        Next
+    End Sub
+
+    Private Sub Charge_Zone_InCombo()
+        For Each obj As Zone In myService.GetAllZones(IdSrv)
+            Dim lbl1 As New ComboBoxItem
+            Dim lbl2 As New ComboBoxItem
+            lbl1.Content = obj.Name & " [Zone]"
+            lbl1.Tag = "ZONE"
+            lbl1.Uid = obj.ID
+            lbl2.Content = obj.Name & " [Zone]"
+            lbl2.Tag = "ZONE"
+            lbl2.Uid = obj.ID
+            CbObjet.Items.Add(lbl1)
+            CbObjetVisu.Items.Add(lbl2)
+            lbl1 = Nothing
+            lbl2 = Nothing
+        Next
+    End Sub
+
+    Private Sub Charge_Cmd_InCombo()
+        ' Commandes
+        Dim lb1 As New ComboBoxItem
+        Dim lb2 As New ComboBoxItem
+        lb1.Content = "Commandes"
+        lb1.Tag = "COMMAND"
+        lb1.Uid = Nothing
+        lb2.Content = "Commandes"
+        lb2.Tag = "COMMAND"
+        lb2.Uid = Nothing
+        CbObjet.Items.Add(lb1)
+        CbObjetVisu.Items.Add(lb2)
+        lb1 = Nothing
+        lb2 = Nothing
+    End Sub
+#End Region
+
+#Region "Button OK Annuler"
 
     Private Sub BtnOk_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOk.Click
         Try
@@ -406,6 +439,7 @@ Public Class WWidgetProperty
     Private Sub BtnCancel_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnCancel.Click
         DialogResult = False
     End Sub
+#End Region
 
     Private Function ShowDialog(ByVal color As Nullable(Of System.Windows.Media.Color)) As Nullable(Of System.Windows.Media.Color)
         ' Instancier une boite de dilogue de Winform 
@@ -426,6 +460,12 @@ Public Class WWidgetProperty
         End If
     End Function
 
+    ''' <summary>
+    ''' Editer les actions
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub BtnEditAction_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnEditAction.Click
         GrpEditAction.Visibility = Windows.Visibility.Visible
         CbAction.SelectedIndex = 0
@@ -435,6 +475,12 @@ Public Class WWidgetProperty
         GrpEditAction.Visibility = Windows.Visibility.Collapsed
     End Sub
 
+    ''' <summary>
+    ''' Editer les visuels
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
     Private Sub BtnEditVisu_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnEditVisu.Click
         GrpEditVisu.Visibility = Windows.Visibility.Visible
     End Sub
@@ -445,7 +491,6 @@ Public Class WWidgetProperty
 
     Private Sub CbObjet_SelectionChanged(ByVal sender As System.Object, ByVal e As Object) Handles CbObjet.SelectionChanged, CbObjet.MouseLeftButtonUp
         If CbObjet.SelectedItem IsNot Nothing Then
-
             If CbObjet.SelectedItem.tag = "DEVICE" Then
                 Dim _DeviceId As String
                 Dim _Device As HoMIDom.HoMIDom.TemplateDevice
@@ -453,6 +498,7 @@ Public Class WWidgetProperty
                 _DeviceId = CbObjet.SelectedItem.uid
                 _Device = myService.ReturnDeviceByID(IdSrv, _DeviceId)
                 CbMethode.Items.Clear()
+                CbActionValue.Items.Clear()
 
                 If _Device.Type = Device.ListeDevices.MULTIMEDIA Then
                     Dim lbl1 As New ComboBoxItem
@@ -460,8 +506,19 @@ Public Class WWidgetProperty
                     lbl1.Tag = 0 'c une fonction de base
                     CbMethode.Items.Add(lbl1)
                     LblMethode.Visibility = Windows.Visibility.Visible
+                    TxtValue.Visibility = Windows.Visibility.Collapsed
                     CbMethode.Visibility = Windows.Visibility.Visible
                     CbMethode.SelectedIndex = 0
+
+                    If String.IsNullOrEmpty(_Device.Modele) = False Then
+                        TxtValue.Visibility = Windows.Visibility.Collapsed
+                        Dim tpl As Telecommande.Template = myService.GetTemplateFromID(_Device.Modele)
+                        If tpl IsNot Nothing Then
+                            For Each cmd In tpl.Commandes
+                                CbActionValue.Items.Add(cmd.Name)
+                            Next
+                        End If
+                    End If
                 Else
                     For i As Integer = 0 To _Device.DeviceAction.Count - 1
                         Dim lbl1 As New ComboBoxItem
@@ -471,11 +528,12 @@ Public Class WWidgetProperty
                         LblMethode.Visibility = Windows.Visibility.Visible
                         CbMethode.Visibility = Windows.Visibility.Visible
                     Next
+                    TxtValue.Visibility = Windows.Visibility.Visible
                 End If
-
 
                 _Device = Nothing
                 TxtValue.Text = Nothing
+
             End If
 
             If CbObjet.SelectedItem.tag = "MACRO" Then
@@ -541,7 +599,7 @@ Public Class WWidgetProperty
 
                 LblActionValue.Visibility = Windows.Visibility.Visible
                 CbMethode.Visibility = Windows.Visibility.Visible
-                TxtValue.Visibility = Windows.Visibility.Visible
+
             End If
         End If
     End Sub
@@ -590,6 +648,7 @@ Public Class WWidgetProperty
         LblMethode.Visibility = Windows.Visibility.Collapsed
         CbMethode.Visibility = Windows.Visibility.Collapsed
         TxtValue.Visibility = Windows.Visibility.Collapsed
+        CbActionValue.Visibility = Windows.Visibility.Collapsed
         LblActionValue.Visibility = Windows.Visibility.Collapsed
 
         Refresh_LstObjetAction()
@@ -643,6 +702,10 @@ Public Class WWidgetProperty
         If LstObjetActions.SelectedIndex >= 0 Then
             Dim _act As cWidget.Action = Nothing
 
+            LblActionValue.Visibility = Windows.Visibility.Collapsed
+            CbActionValue.Visibility = Windows.Visibility.Collapsed
+            TxtValue.Visibility = Windows.Visibility.Collapsed
+
             Select Case CbAction.SelectedIndex
                 Case 0
                     _act = Obj.Action_On_Click.Item(LstObjetActions.SelectedIndex)
@@ -686,9 +749,16 @@ Public Class WWidgetProperty
                 TxtValue.Visibility = Windows.Visibility.Collapsed
                 LblActionValue.Visibility = Windows.Visibility.Collapsed
             Else
-                TxtValue.Visibility = Windows.Visibility.Visible
                 LblActionValue.Visibility = Windows.Visibility.Visible
                 TxtValue.Text = _act.Value.ToString
+                CbActionValue.Text = _act.Value.ToString
+                If CbMethode.Text <> "EnvoyerCommande" Then
+                    TxtValue.Visibility = Windows.Visibility.Visible
+                    CbActionValue.Visibility = Windows.Visibility.Collapsed
+                Else
+                    TxtValue.Visibility = Windows.Visibility.Collapsed
+                    CbActionValue.Visibility = Windows.Visibility.Visible
+                End If
             End If
 
             BtnOkAction.Visibility = Windows.Visibility.Visible
@@ -698,15 +768,15 @@ Public Class WWidgetProperty
     End Sub
 
     Private Sub BtnOkAction_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOkAction.Click
-        If CbObjet.Text = "" Or CbObjet.SelectedIndex < 0 Then
+        If String.IsNullOrEmpty(CbObjet.Text) Or CbObjet.SelectedIndex < 0 Then
             MessageBox.Show("Veuillez sélectionner un Objet!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
-        If CbMethode.Text = "" Or CbMethode.SelectedIndex < 0 Then
+        If String.IsNullOrEmpty(CbMethode.Text) Or CbMethode.SelectedIndex < 0 Then
             MessageBox.Show("Veuillez sélectionner une méthode!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
-        If TxtValue.Visibility = Windows.Visibility.Visible And TxtValue.Text = "" Then
+        If TxtValue.Visibility = Windows.Visibility.Visible And String.IsNullOrEmpty(TxtValue.Text) Then
             MessageBox.Show("Veuillez saisir une valeur!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
             Exit Sub
         End If
@@ -715,7 +785,11 @@ Public Class WWidgetProperty
         With _act
             .IdObject = CbObjet.SelectedItem.uid
             .Methode = CbMethode.Text
-            .Value = TxtValue.Text
+            If CbMethode.Text <> "EnvoyerCommande" Then
+                .Value = TxtValue.Text
+            Else
+                .Value = CbActionValue.Text
+            End If
         End With
 
         If _FlagNewAction = False Then
@@ -761,7 +835,7 @@ Public Class WWidgetProperty
         CbMethode.Visibility = Windows.Visibility.Collapsed
         LblActionValue.Visibility = Windows.Visibility.Collapsed
         TxtValue.Visibility = Windows.Visibility.Collapsed
-
+        CbActionValue.Visibility = Windows.Visibility.Collapsed
     End Sub
 
     Private Sub BtnNewAction_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewAction.Click
@@ -797,26 +871,34 @@ Public Class WWidgetProperty
         End If
     End Sub
 
-    Private Sub CbMethode_SelectionChanged(ByVal sender As Object, ByVal e As Object) Handles CbMethode.SelectionChanged, CbMethode.MouseLeftButtonUp
+    Private Sub CbMethode_SelectionChanged(ByVal sender As Object, ByVal e As Object) Handles CbMethode.SelectionChanged, CbMethode.MouseLeftButtonUp, CbMethode.SourceUpdated
         Dim _dev As TemplateDevice = myService.ReturnDeviceByID(IdSrv, CbObjet.SelectedItem.uid)
 
         If CbMethode.SelectedIndex < 0 Then Exit Sub
 
         TxtValue.Visibility = Windows.Visibility.Collapsed
         LblActionValue.Visibility = Windows.Visibility.Collapsed
+        CbActionValue.Visibility = Windows.Visibility.Collapsed
 
         If _dev IsNot Nothing Then
             If _dev.DeviceAction.Item(CbMethode.SelectedIndex).Parametres.Count > 0 Then
                 LblActionValue.Visibility = Windows.Visibility.Visible
-                TxtValue.Visibility = Windows.Visibility.Visible
+                If _dev.Type <> Device.ListeDevices.MULTIMEDIA Then
+                    TxtValue.Visibility = Windows.Visibility.Visible
+                    CbActionValue.Visibility = Windows.Visibility.Collapsed
+                Else
+                    TxtValue.Visibility = Windows.Visibility.Collapsed
+                    CbActionValue.Visibility = Windows.Visibility.Visible
+                End If
+                'TxtValue.Visibility = Windows.Visibility.Visible
             Else
-                TxtValue.Text = ""
+                TxtValue.Text = String.Empty
             End If
         End If
 
         If CType(CbMethode.SelectedItem, ComboBoxItem).Content = "Exécuter commande DOS" Or CType(CbMethode.SelectedItem, ComboBoxItem).Content = "Charger configuration" Then
-            TxtValue.Visibility = Windows.Visibility.Visible
             LblActionValue.Visibility = Windows.Visibility.Visible
+            TxtValue.Visibility = Windows.Visibility.Visible
         End If
 
     End Sub

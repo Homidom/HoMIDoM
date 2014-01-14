@@ -23,12 +23,12 @@ Partial Public Class uCtrlImgMnu
     Dim _Parametres As New List(Of String)
     Dim _Defaut As Boolean
     Dim _Idelement As String
-    Dim _Visible As Boolean 'en désactivant cette propriété la page n’est plus accessible depuis le bandeau de navigation ou par navigation avec le doigt (glissement vers la gauche ou la droite). La page n’est alors accessible que par "jump" depuis le "What I Do" des widgets. Cela permet de créer des pages cachées ou annexes.
+    Dim _Visible As Boolean = True 'en désactivant cette propriété la page n’est plus accessible depuis le bandeau de navigation ou par navigation avec le doigt (glissement vers la gauche ou la droite). La page n’est alors accessible que par "jump" depuis le "What I Do" des widgets. Cela permet de créer des pages cachées ou annexes.
     Dim _IsSelect As Boolean
     Dim _IsDefaut As Boolean 'page par defaut
     Dim _Statique 'une page statique est visible en permanence à l’écran. Elle est donc retirée automatiquement de la navigation. Cela permet de placer widgets communs ou un fond commun à toutes les pages.
-    Dim _ShowBackground As Boolean
-    Dim _ImageBackGround As String
+    Dim _ShowBackground As Boolean = True
+    Dim _ImageBackGround As String = ""
     Dim _TemplateID As String
 
 #Region "Property"
@@ -85,7 +85,12 @@ Partial Public Class uCtrlImgMnu
             Return _Id
         End Get
         Set(ByVal value As String)
-            _Id = value
+            If String.IsNullOrEmpty(value) Then
+                _Id = System.Guid.NewGuid.ToString()
+            Else
+                _Id = value
+            End If
+
         End Set
     End Property
 
@@ -214,8 +219,6 @@ Partial Public Class uCtrlImgMnu
             RaiseEvent click(Me, e)
         End If
     End Sub
-
-
 
     Public Event click(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs)
 

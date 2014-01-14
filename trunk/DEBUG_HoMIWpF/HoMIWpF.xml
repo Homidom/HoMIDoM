@@ -38,30 +38,6 @@ InitializeComponent
 	<summary>
 uWidgetEmpty
 </summary>
-</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
-	<summary>
-CreateInstance
-</summary>
-</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
-	<summary>
-GetPropertyValue
-</summary>
-</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
-	<summary>
-SetPropertyValue
-</summary>
-</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
-	<summary>
-CreateDelegate
-</summary>
-</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
-	<summary>
-AddEventHandler
-</summary>
-</member><member name="T:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper">
-	<summary>
-GeneratedInternalTypeHelper
-</summary>
 </member><member name="M:HoMIWpF.keyboard.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -309,6 +285,20 @@ uCtrlImgMnu
 	<summary>renvoi le fichier log suivant une requête xml si besoin</summary>
 	<param name="Requete"></param>
 	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIWpF.WWidgetProperty.BtnEditAction_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Editer les actions
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIWpF.WWidgetProperty.BtnEditVisu_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Editer les visuels
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
 	<remarks></remarks>
 </member><member name="M:HoMIWpF.Window1.LoadConfig(System.String)">
 	<summary>Chargement de la config depuis le fichier XML</summary>
