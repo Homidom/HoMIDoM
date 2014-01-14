@@ -116,8 +116,8 @@
                                 </Expander>
                             <Expander Foreground=" White" Header="Status" BorderBrush="#FF373737" Margin="1">
                                 <StackPanel Name="StkStatus">
-            <StackPanel  Orientation="Horizontal" >
-                            <Label Width="120" Content="Defaut Status:" Foreground="White"/>
+                                    <StackPanel  Orientation="Horizontal" >
+                                    <Label Width="120" Content="Defaut Status:" Foreground="White"/>
                 <TextBox Name="TxtDefStatus" Width="150" Text="?"/>
             </StackPanel>
                             <StackPanel  Orientation="Horizontal" >
@@ -216,16 +216,16 @@
                     </GroupBox.Header>
                 <StackPanel >
                         <StackPanel Orientation="Horizontal" Height="25" Margin="2">
-                    <Label Foreground=" White" Content="Action:" Width="60"/>
-                    <ComboBox Name="CbAction" Width="150" SelectedIndex="-1">
-                        <ComboBoxItem Content="OnClick" />
-                        <ComboBoxItem Content="OnLongClick" />
-                        <ComboBoxItem Content="GestureGaucheDroite" />
-                        <ComboBoxItem Content="GestureDroiteGauche" />
-                        <ComboBoxItem Content="GestureHautBas" />
-                        <ComboBoxItem Content="GestureBasHaut" />
-                    </ComboBox>
-                </StackPanel>
+                            <Label Foreground=" White" Content="Action:" Width="60"/>
+                            <ComboBox Name="CbAction" Width="150" SelectedIndex="-1">
+                                <ComboBoxItem Content="OnClick" />
+                                <ComboBoxItem Content="OnLongClick" />
+                                <ComboBoxItem Content="GestureGaucheDroite" />
+                                <ComboBoxItem Content="GestureDroiteGauche" />
+                                <ComboBoxItem Content="GestureHautBas" />
+                                <ComboBoxItem Content="GestureBasHaut" />
+                            </ComboBox>
+                        </StackPanel>
                         <StackPanel Orientation="Horizontal" >
                             <Label Foreground=" White" Content="Objets:" Width="80"/>
                             <ListBox Name="LstObjetActions" Width="150" Height="100" SelectedIndex="0" />
@@ -237,17 +237,18 @@
                         </StackPanel>
 
                         <StackPanel Orientation="Horizontal" Height="25" Margin="2">
-                        <Label Name="LblObjet" Foreground=" White" Content="Objet:" Width="60" Visibility="Collapsed" />
-                        <ComboBox Name="CbObjet" Width="150" SelectedIndex="-1" Visibility="Collapsed">
-                        </ComboBox>
-                    </StackPanel>
+                            <Label Name="LblObjet" Foreground=" White" Content="Objet:" Width="60" Visibility="Collapsed" />
+                            <ComboBox Name="CbObjet" Width="150" SelectedIndex="-1" Visibility="Collapsed">
+                            </ComboBox>
+                        </StackPanel>
                         <StackPanel Orientation="Horizontal" Height="25" Margin="2">
-                    <Label Name="LblMethode" Foreground=" White" Content="Fonction:" Width="60" Visibility="Collapsed" />
-                    <ComboBox Name="CbMethode" Width="150" Visibility="Collapsed" />
-                </StackPanel>
-                        <StackPanel Orientation="Horizontal" Height="25" Margin="2">
+                            <Label Name="LblMethode" Foreground=" White" Content="Fonction:" Width="60" Visibility="Collapsed" />
+                            <ComboBox Name="CbMethode" Width="150" Visibility="Collapsed" />
+                        </StackPanel>
+                        <StackPanel Name="StkActionValue" Orientation="Horizontal" Height="25" Margin="2">
                             <Label Name="LblActionValue" Foreground=" White" Content="Valeur:" Width="60" Visibility="Collapsed" />
                             <TextBox Name="TxtValue" Width="150" Visibility="Collapsed" />
+                            <ComboBox Name="CbActionValue" Width="150" Visibility="Collapsed" />
                         </StackPanel>
                  </StackPanel>
         </GroupBox>

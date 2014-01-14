@@ -953,45 +953,47 @@ Class Window1
             list = myxml.SelectNodes("/homidom/menus/menu")
             If list.Count > 0 Then 'présence des paramètres du server
                 For j As Integer = 0 To list.Count - 1
-                    Dim _MnuNom As String = ""
-                    Dim _MnuType As uCtrlImgMnu.TypeOfMnu
-                    Dim _MnuIcon As String = ""
-                    Dim _MnuParam As New List(Of String)
-                    Dim _Mnudefaut As Boolean
-                    Dim _MnuIDElement As String = ""
-                    Dim _MnuVisible As Boolean = False
-                    Dim _MnuTemplateID As String = ""
-                    Dim _MnuImageBackground As String = ""
+                    Dim Page As New uCtrlImgMnu
+                    'Dim _MnuNom As String = ""
+                    'Dim _MnuType As uCtrlImgMnu.TypeOfMnu
+                    'Dim _MnuIcon As String = ""
+                    'Dim _MnuParam As New List(Of String)
+                    'Dim _Mnudefaut As Boolean
+                    'Dim _MnuIDElement As String = ""
+                    'Dim _MnuVisible As Boolean = False
+                    'Dim _MnuTemplateID As String = ""
+                    'Dim _MnuImageBackground As String = ""
 
                     For k As Integer = 0 To list.Item(j).Attributes.Count - 1
                         Select Case list.Item(j).Attributes.Item(k).Name
-                            Case "nom" : _MnuNom = list.Item(j).Attributes.Item(k).Value
-                            Case "defaut" : _Mnudefaut = list.Item(j).Attributes.Item(k).Value
+                            Case "id" : Page.Id = list.Item(j).Attributes.Item(k).Value
+                            Case "nom" : Page.Label = list.Item(j).Attributes.Item(k).Value
+                            Case "defaut" : Page.IsDefaut = list.Item(j).Attributes.Item(k).Value
                             Case "type"
                                 Select Case list.Item(j).Attributes.Item(k).Value
-                                    Case uCtrlImgMnu.TypeOfMnu.Internet.ToString : _MnuType = uCtrlImgMnu.TypeOfMnu.Internet
-                                    Case uCtrlImgMnu.TypeOfMnu.Meteo.ToString : _MnuType = uCtrlImgMnu.TypeOfMnu.Meteo
-                                    Case uCtrlImgMnu.TypeOfMnu.Zone.ToString : _MnuType = uCtrlImgMnu.TypeOfMnu.Zone
-                                    Case uCtrlImgMnu.TypeOfMnu.Config.ToString : _MnuType = uCtrlImgMnu.TypeOfMnu.Config
-                                    Case uCtrlImgMnu.TypeOfMnu.LecteurMedia.ToString : _MnuType = uCtrlImgMnu.TypeOfMnu.LecteurMedia
-                                    Case uCtrlImgMnu.TypeOfMnu.Multimedia.ToString : _MnuType = uCtrlImgMnu.TypeOfMnu.Multimedia
-                                    Case uCtrlImgMnu.TypeOfMnu.None.ToString : _MnuType = uCtrlImgMnu.TypeOfMnu.None
-                                    Case Else : _MnuType = uCtrlImgMnu.TypeOfMnu.None
+                                    Case uCtrlImgMnu.TypeOfMnu.Internet.ToString : Page.Type = uCtrlImgMnu.TypeOfMnu.Internet
+                                    Case uCtrlImgMnu.TypeOfMnu.Meteo.ToString : Page.Type = uCtrlImgMnu.TypeOfMnu.Meteo
+                                    Case uCtrlImgMnu.TypeOfMnu.Zone.ToString : Page.Type = uCtrlImgMnu.TypeOfMnu.Zone
+                                    Case uCtrlImgMnu.TypeOfMnu.Config.ToString : Page.Type = uCtrlImgMnu.TypeOfMnu.Config
+                                    Case uCtrlImgMnu.TypeOfMnu.LecteurMedia.ToString : Page.Type = uCtrlImgMnu.TypeOfMnu.LecteurMedia
+                                    Case uCtrlImgMnu.TypeOfMnu.Multimedia.ToString : Page.Type = uCtrlImgMnu.TypeOfMnu.Multimedia
+                                    Case uCtrlImgMnu.TypeOfMnu.None.ToString : Page.Type = uCtrlImgMnu.TypeOfMnu.None
+                                    Case Else : Page.Type = uCtrlImgMnu.TypeOfMnu.None
                                 End Select
-                            Case "templateid" : _MnuTemplateID = list.Item(j).Attributes.Item(k).Value
-                            Case "imagebackground" : _MnuImageBackground = list.Item(j).Attributes.Item(k).Value
-                            Case "icon" : _MnuIcon = list.Item(j).Attributes.Item(k).Value
-                            Case "idelement" : _MnuIDElement = list.Item(j).Attributes.Item(k).Value
-                            Case "visible" : _MnuVisible = list.Item(j).Attributes.Item(k).Value
+                            Case "templateid" : Page.TemplateID = list.Item(j).Attributes.Item(k).Value
+                            Case "imagebackground" : Page.ImageBackGround = list.Item(j).Attributes.Item(k).Value
+                            Case "icon" : Page.Icon = list.Item(j).Attributes.Item(k).Value
+                            Case "idelement" : Page.IDElement = list.Item(j).Attributes.Item(k).Value
+                            Case "visible" : Page.Visible = list.Item(j).Attributes.Item(k).Value
                             Case Else
                                 Dim a As String = list.Item(j).Attributes.Item(k).Name
                                 If a.Contains("parametre") Then
-                                    _MnuParam.Add(list.Item(j).Attributes.Item(k).Value)
+                                    Page.Parametres.Add(list.Item(j).Attributes.Item(k).Value)
                                 End If
                         End Select
                     Next
 
-                    If _MnuType <> uCtrlImgMnu.TypeOfMnu.Config Then NewBtnMnu(_MnuNom, _MnuType, _MnuParam, _Mnudefaut, , _MnuIcon, _MnuIDElement, _MnuVisible)
+                    If Page.Type <> uCtrlImgMnu.TypeOfMnu.Config Then NewBtnMnu(Page) '_MnuNom, _MnuType, _MnuParam, _Mnudefaut, , _MnuIcon, _MnuIDElement, _MnuVisible, _MnuTemplateID, _MnuImageBackground)
                 Next
             Else
             End If
@@ -1304,19 +1306,15 @@ Class Window1
             writer.WriteValue(FullScreen)
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("left")
-            'writer.WriteValue(Me.left)
             writer.WriteValue(Regex.Replace(Me.Left.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("top")
-            'writer.WriteValue(Me.Top)
             writer.WriteValue(Regex.Replace(Me.Top.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("width")
-            'writer.WriteValue(Me.Width)
             writer.WriteValue(Regex.Replace(Me.Width.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("height")
-            'writer.WriteValue(Me.Height)
             writer.WriteValue(Regex.Replace(Me.Height.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
             writer.WriteEndAttribute()
             writer.WriteStartAttribute("showquitter")
@@ -1355,34 +1353,45 @@ Class Window1
             ''Sauvegarde des menus
             ''------------
             writer.WriteStartElement("menus")
-            For i As Integer = 0 To ListMnu.Count - 1
+            For Each Mnu In ListMnu
                 writer.WriteStartElement("menu")
+                writer.WriteStartAttribute("id")
+                writer.WriteValue(Mnu.Id)
+                writer.WriteEndAttribute()
                 writer.WriteStartAttribute("nom")
-                writer.WriteValue(ListMnu.Item(i).Label)
+                writer.WriteValue(Mnu.Label)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("defaut")
-                writer.WriteValue(ListMnu.Item(i).Defaut)
+                writer.WriteValue(Mnu.Defaut)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("type")
-                writer.WriteValue(ListMnu.Item(i).Type.ToString)
+                writer.WriteValue(Mnu.Type.ToString)
                 writer.WriteEndAttribute()
-                If ListMnu.Item(i).Type <> uCtrlImgMnu.TypeOfMnu.Zone Then
+                If String.IsNullOrEmpty(Mnu.ImageBackGround) = False Then
+                    writer.WriteStartAttribute("imagebackground")
+                    writer.WriteValue(Mnu.ImageBackGround)
+                    writer.WriteEndAttribute()
+                End If
+                writer.WriteStartAttribute("showbackground")
+                writer.WriteValue(Mnu.ShowBackground)
+                writer.WriteEndAttribute()
+                If Mnu.Type <> uCtrlImgMnu.TypeOfMnu.Zone And String.IsNullOrEmpty(Mnu.Icon) = False Then
                     writer.WriteStartAttribute("icon")
-                    writer.WriteValue(ListMnu.Item(i).Icon)
+                    writer.WriteValue(Mnu.Icon)
                     writer.WriteEndAttribute()
                 End If
-                If ListMnu.Item(i).Type = uCtrlImgMnu.TypeOfMnu.Zone Then
+                If Mnu.Type = uCtrlImgMnu.TypeOfMnu.Zone Then
                     writer.WriteStartAttribute("idelement")
-                    writer.WriteValue(ListMnu.Item(i).IDElement)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("visible")
-                    writer.WriteValue(ListMnu.Item(i).Visible)
+                    writer.WriteValue(Mnu.IDElement)
                     writer.WriteEndAttribute()
                 End If
-                If ListMnu.Item(i).Parametres IsNot Nothing Then
-                    For j As Integer = 0 To ListMnu.Item(i).Parametres.Count - 1
+                writer.WriteStartAttribute("visible")
+                writer.WriteValue(Mnu.Visible)
+                writer.WriteEndAttribute()
+                If Mnu.Parametres IsNot Nothing Then
+                    For j As Integer = 0 To Mnu.Parametres.Count - 1
                         writer.WriteStartAttribute("parametre" & j)
-                        writer.WriteValue(ListMnu.Item(i).Parametres(j))
+                        writer.WriteValue(Mnu.Parametres(j))
                         writer.WriteEndAttribute()
                     Next
                 End If
@@ -1419,31 +1428,24 @@ Class Window1
                     writer.WriteValue(_ListElement.Item(i).IsCommun)
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("x")
-                    'writer.WriteValue(Replace(CDbl(_ListElement.Item(i).X), ".", ","))
                     writer.WriteValue(Regex.Replace(_ListElement.Item(i).X.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("y")
-                    'writer.WriteValue(Replace(CDbl(_ListElement.Item(i).Y), ".", ","))
                     writer.WriteValue(Regex.Replace(_ListElement.Item(i).Y.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("width")
-                    'writer.WriteValue(_ListElement.Item(i).Width)
                     writer.WriteValue(Regex.Replace(_ListElement.Item(i).Width.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("height")
-                    'writer.WriteValue(_ListElement.Item(i).Height)
                     writer.WriteValue(Regex.Replace(_ListElement.Item(i).Height.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("angle")
-                    'writer.WriteValue(_ListElement.Item(i).Rotation)
                     writer.WriteValue(Regex.Replace(_ListElement.Item(i).Rotation.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("anglex")
-                    'writer.WriteValue(_ListElement.Item(i).RotationX)
                     writer.WriteValue(Regex.Replace(_ListElement.Item(i).RotationX.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("angley")
-                    'writer.WriteValue(_ListElement.Item(i).RotationY)
                     writer.WriteValue(Regex.Replace(_ListElement.Item(i).RotationY.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                     writer.WriteEndAttribute()
                     writer.WriteStartAttribute("zindex")
@@ -1550,11 +1552,9 @@ Class Window1
                             writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).URL)
                             writer.WriteEndAttribute()
                             writer.WriteStartAttribute("width")
-                            'writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).Width)
                             writer.WriteValue(Regex.Replace(_ListElement.Item(i).ListHttpButton.Item(j).Width.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                             writer.WriteEndAttribute()
                             writer.WriteStartAttribute("height")
-                            'writer.WriteValue(_ListElement.Item(i).ListHttpButton.Item(j).Height)
                             writer.WriteValue(Regex.Replace(_ListElement.Item(i).ListHttpButton.Item(j).Height.ToString, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator))
                             writer.WriteEndAttribute()
                             writer.WriteEndElement()
@@ -1766,40 +1766,29 @@ Class Window1
 #End Region
 
     'Creation  du menu
-    Private Sub NewBtnMnu(ByVal Label As String, ByVal type As uCtrlImgMnu.TypeOfMnu, Optional ByVal Parametres As List(Of String) = Nothing, Optional ByVal Defaut As Boolean = False, Optional ByVal Tag As String = "", Optional ByVal Icon As String = "", Optional ByVal IdElement As String = "", Optional ByVal Visible As Boolean = False, Optional TemplateID As String = "", Optional ImageBackGround As String = "")
+    Private Sub NewBtnMnu(Page As uCtrlImgMnu) 'ByVal Label As String, ByVal type As uCtrlImgMnu.TypeOfMnu, Optional ByVal Parametres As List(Of String) = Nothing, Optional ByVal Defaut As Boolean = False, Optional ByVal Tag As String = "", Optional ByVal Icon As String = "", Optional ByVal IdElement As String = "", Optional ByVal Visible As Boolean = False, Optional TemplateID As String = "", Optional ImageBackGround As String = "", Optional ShowBackGround As Boolean = True)
         Try
-            If String.IsNullOrEmpty(IdElement) = False Then
+            If Page Is Nothing Then Exit Sub
+
+            If String.IsNullOrEmpty(Page.IDElement) = False Then
                 If IsConnect Then
-                    If myService.ReturnZoneByID(IdSrv, IdElement) Is Nothing Then Exit Sub
+                    If myService.ReturnZoneByID(IdSrv, Page.IDElement) Is Nothing Then Exit Sub
                 End If
             End If
 
             For Each _Mnu In _ListMnu
-                If _Mnu.Name = Label And _Mnu.Type = type Then Exit Sub
+                If _Mnu.Name = Page.Label And _Mnu.Type = Page.Type Then Exit Sub
             Next
 
-            Dim ctrl As New uCtrlImgMnu
-            ctrl.Type = type
-            ctrl.Defaut = Defaut
-            ctrl.Id = System.Guid.NewGuid.ToString()
-            ctrl.Label = Label
-            ctrl.Tag = Tag
-            ctrl.Icon = Icon
-            ctrl.Parametres = Parametres
-            ctrl.IDElement = IdElement
-            ctrl.Visible = Visible
-            ctrl.TemplateID = TemplateID
-            ctrl.ImageBackGround = ImageBackGround
-            AddHandler ctrl.click, AddressOf IconMnuDoubleClick
-            _ListMnu.Add(ctrl)
+            AddHandler Page.click, AddressOf IconMnuDoubleClick
+            _ListMnu.Add(Page) 'ctrl)
 
-            If type = uCtrlImgMnu.TypeOfMnu.Zone Then
-                If Visible Then imgStackPnl.Children.Add(ctrl)
+            If Page.Type = uCtrlImgMnu.TypeOfMnu.Zone Then
+                If Page.Visible Then imgStackPnl.Children.Add(Page) 'ctrl)
             Else
-                imgStackPnl.Children.Add(ctrl)
+                imgStackPnl.Children.Add(Page) 'ctrl)
             End If
 
-            ctrl = Nothing
         Catch ex As Exception
             AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur lors de la création du bouton menu: " & ex.Message, "Erreur", "NewBtnMnu")
         End Try
@@ -2021,7 +2010,13 @@ Class Window1
 
             For Each _zon In myService.GetAllZones(IdSrv)
                 If ListMnu.Count = 0 Then
-                    NewBtnMnu(_zon.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , _zon.ID)
+                    Dim Page As New uCtrlImgMnu
+                    With Page
+                        .Label = _zon.Name
+                        .Type = uCtrlImgMnu.TypeOfMnu.Zone
+                        .IDElement = _zon.ID
+                    End With
+                    NewBtnMnu(Page) '_zon.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , _zon.ID)
                     cntNewZone += 1
                 Else
                     flagexist = False
@@ -2036,7 +2031,15 @@ Class Window1
 
                     'si la zone n'existe pas on la crée
                     If flagexist = False Then
-                        NewBtnMnu(_zon.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , _zon.ID, True)
+                        Dim Page As New uCtrlImgMnu
+                        With Page
+                            .Label = _zon.Name
+                            .Type = uCtrlImgMnu.TypeOfMnu.Zone
+                            .IDElement = _zon.ID
+                            .Visible = True
+                        End With
+                        NewBtnMnu(Page) '_zon.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , _zon.ID)
+                        ' NewBtnMnu(_zon.Name, uCtrlImgMnu.TypeOfMnu.Zone, , False, , , _zon.ID, True)
                         cntNewZone += 1
                     End If
 

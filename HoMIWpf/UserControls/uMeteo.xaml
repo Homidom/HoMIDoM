@@ -7,7 +7,10 @@
 
         <StackPanel >
             <StackPanel.Background>
-                <ImageBrush ImageSource="/HoMIWpF;component/Images/Panel01.png" Stretch="Fill" />
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="Black" Offset="0" />
+                    <GradientStop Color="#FF5F5F5F" Offset="0.994" />
+                </LinearGradientBrush>
             </StackPanel.Background>
             <StackPanel Orientation="Horizontal">
                     <Label FontSize="14" Foreground="White" Margin="3" Name="Lbl" VerticalAlignment="Top" Width="188">Label</Label>
