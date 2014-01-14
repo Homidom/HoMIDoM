@@ -92,6 +92,7 @@ Namespace HoMIDom
         Private Shared lock_logwrite As New Object
         <NonSerialized()> Shared _SaveRealTime As Boolean = True 'True si on enregistre en temps réel
         <NonSerialized()> Shared _Devise As String = "€"
+        <NonSerialized()> Shared _IsWeekEnd As Boolean = False
 
         <NonSerialized()> Shared _EnableSrvWeb As Boolean = False
         <NonSerialized()> Shared _PortSrvWeb As Integer = 8080
@@ -367,6 +368,15 @@ Namespace HoMIDom
                 If ladate.Hour = 0 And ladate.Minute = 0 And ladate.Second = 0 Then
                     MAJ_HeuresSoleil()
                     CleanLog(_MaxMonthLog)
+                    VerifIsWeekEnd()
+                    MaJSaint()
+                End If
+
+                '---- Actions à effectuer à 3h du mat (au cas où qu'à minuit non maj) ----
+                If ladate.Hour = 3 And ladate.Minute = 0 And ladate.Second = 0 Then
+                    MAJ_HeuresSoleil()
+                    VerifIsWeekEnd()
+                    MaJSaint()
                 End If
 
                 '---- Actions à effectuer à midi ----
@@ -478,6 +488,62 @@ Namespace HoMIDom
 #End Region
 
 #Region "Soleil"
+        Public Sub MaJSaint()
+            Try
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    If _ListDevices.Item(i).id = "saint01" Then
+                        _ListDevices.Item(i).value = GetSaint()
+                        Exit For
+                    End If
+                Next
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "MaJSaint", "Exception : " & ex.Message)
+            End Try
+        End Sub
+
+        Public Function GetSaint() As String
+            Try
+                Dim lines() As String = My.Resources.Saint.Split(System.Environment.NewLine)
+                Return lines(Now.DayOfYear - 1).Replace(Chr(10), "")
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSaint", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Vérifie si c'est le weekend
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub VerifIsWeekEnd()
+            Try
+                If Now.DayOfWeek = DayOfWeek.Sunday Or Now.DayOfWeek = DayOfWeek.Saturday Then
+                    IsWeekEnd = True
+                Else
+                    IsWeekEnd = False
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "VerifIsWeekEnd", "Exception : " & ex.Message)
+            End Try
+        End Sub
+
+        Public Property IsWeekEnd As Boolean
+            Get
+                Return _IsWeekEnd
+            End Get
+            Set(value As Boolean)
+                If _IsWeekEnd <> value Then
+                    _IsWeekEnd = value
+                    For i As Integer = 0 To _ListDevices.Count - 1
+                        If _ListDevices.Item(i).id = "isweekend01" Then
+                            _ListDevices.Item(i).value = _IsWeekEnd
+                            Exit For
+                        End If
+                    Next
+                End If
+            End Set
+        End Property
+
         Private Sub VerifIsJour()
             Try
                 If _HeureLeverSoleil <= Now And _HeureCoucherSoleil >= Now Then
@@ -942,6 +1008,8 @@ Namespace HoMIDom
                             Dim trvSoleil As Boolean = False
                             Dim trvStartSrv As Boolean = False
                             Dim trvnrjtot As Boolean = False
+                            Dim trvisweekend As Boolean = False
+                            Dim trvsaint As Boolean = False
 
                             If list.Count > 0 Then 'présence d'un composant
                                 For j As Integer = 0 To list.Count - 1
@@ -1167,6 +1235,12 @@ Namespace HoMIDom
                                             If .ID = "energietotale01" Then
                                                 trvnrjtot = True
                                             End If
+                                            If .ID = "isweekend01" Then
+                                                trvisweekend = True
+                                            End If
+                                            If .ID = "saint01" Then
+                                                trvsaint = True
+                                            End If
                                         Else
                                             _Dev.Enable = False
                                             Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", " -> Erreur lors du chargement du composant (information incomplete -> Disable) " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ")")
@@ -1209,6 +1283,32 @@ Namespace HoMIDom
                                     _Devs.Adresse1 = "N/A"
                                     _Devs.AllValue = True
                                     _Devs.Description = "Energie Totale instantanee"
+                                    _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
+                                    _ListDevices.Add(_Devs)
+                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
+                                    _Devs = Nothing
+                                End If
+                                If trvisweekend = False Then
+                                    Dim _Devs As New Device.GENERIQUEBOOLEEN(Me)
+                                    _Devs.ID = "isweekend01"
+                                    _Devs.Name = "HOMI_IsWeekend"
+                                    _Devs.Enable = True
+                                    _Devs.Adresse1 = "N/A"
+                                    _Devs.AllValue = True
+                                    _Devs.Description = "Permet de savoir si c'est le week-end (samedi/dimanche)"
+                                    _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
+                                    _ListDevices.Add(_Devs)
+                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
+                                    _Devs = Nothing
+                                End If
+                                If trvisweekend = False Then
+                                    Dim _Devs As New Device.GENERIQUESTRING(Me)
+                                    _Devs.ID = "saint01"
+                                    _Devs.Name = "HOMI_Saint"
+                                    _Devs.Enable = True
+                                    _Devs.Adresse1 = "N/A"
+                                    _Devs.AllValue = True
+                                    _Devs.Description = "Permet de connaitre le saint du jour"
                                     _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
                                     _ListDevices.Add(_Devs)
                                     Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
@@ -3102,6 +3202,12 @@ Namespace HoMIDom
                 '----- Calcul les heures de lever et coucher du soleil ----- 
                 MAJ_HeuresSoleil()
                 VerifIsJour()
+
+                '----- Vérifie si c'est le weekend ----- 
+                VerifIsWeekEnd()
+
+                '----- Recupère le saint du jour ----- 
+                MaJSaint()
 
                 '----- Maj des triggers type CRON ----- 
                 For i = 0 To _ListTriggers.Count - 1
