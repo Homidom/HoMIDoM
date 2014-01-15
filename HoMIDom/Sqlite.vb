@@ -80,6 +80,11 @@ Namespace HoMIDom
                     Return "ERR: base sqlite " & bdd_name & " non trouvé"
                 End If
             Catch ex As Exception
+                Try
+                    connecte = False
+                    SQLconnect.Close()
+                Catch
+                End Try
                 Return "ERR: Non Connecté à la base sqlite " & bdd_name & " exception: " & ex.Message
             End Try
         End Function
@@ -96,6 +101,7 @@ Namespace HoMIDom
                 SQLconnect.Close()
                 Return "Deconnecté"
             Catch ex As Exception
+                connecte = False
                 Return "ERR: Erreur lors de la déconnexion de la base " & bdd_name & " : " & ex.Message
             End Try
         End Function
@@ -142,6 +148,10 @@ Namespace HoMIDom
                     Return "ERR: La commande est vide"
                 End If
             Catch ex As Exception
+                Try
+                    If SQLconnect.State = ConnectionState.Open Then disconnect()
+                Catch
+                End Try
                 Return "ERR: Erreur lors de la nonquery " & commande & "  --> " & ex.ToString
             End Try
         End Function
@@ -172,15 +182,13 @@ Namespace HoMIDom
                                     SQLcommand.Parameters.Add(New SQLiteParameter("@parameter" + p.ToString(), params(p)))
                                 Next
                             End If
-                            ''lock pour etre sur de ne pas faire deux operations en meme temps
-                            'SyncLock lock
 
                             Try
                                 SQLreader = SQLcommand.ExecuteReader()
                             Catch ex As Exception
-                                Return "ERR: Erreur lors de la querysimple ExecuteReader " & commande & "  --> " & ex.ToString
+                                Return "ERR: Erreur lors de la query ExecuteReader " & commande & "  --> " & ex.ToString
                             End Try
-                            'End SyncLock
+
                             SQLcommand.Dispose()
                             If SQLreader.HasRows = True Then
                                 'lecture de la premiere ligne       
@@ -224,6 +232,10 @@ Namespace HoMIDom
                     Return "ERR: La commande est vide"
                 End If
             Catch ex As Exception
+                Try
+                    If SQLconnect.State = ConnectionState.Open Then disconnect()
+                Catch
+                End Try
                 Return "ERR: Erreur lors de la query " & commande & " Erreur: " & ex.ToString
             End Try
         End Function
@@ -252,15 +264,12 @@ Namespace HoMIDom
                                     SQLcommand.Parameters.Add(New SQLiteParameter("@parameter" + p.ToString(), params(p)))
                                 Next
                             End If
-                            ''lock pour etre sur de ne pas faire deux operations en meme temps
-                            'SyncLock lock
-                            resultat = SQLcommand.ExecuteScalar
                             Try
                                 resultat = SQLcommand.ExecuteScalar
                             Catch ex As Exception
                                 Return "ERR: Erreur lors de la querysimple ExecuteScalar " & commande & "  --> " & ex.ToString
                             End Try
-                            'End SyncLock
+
                             SQLcommand.Dispose()
                             disconnect()
                             Return "Commande éxécutée avec succés : " & commande
@@ -273,6 +282,10 @@ Namespace HoMIDom
                     Return "ERR: La commande est vide"
                 End If
             Catch ex As Exception
+                Try
+                    If SQLconnect.State = ConnectionState.Open Then disconnect()
+                Catch
+                End Try
                 Return "ERR: Erreur lors de la querysimple " & commande & " Erreur: " & ex.ToString
             End Try
         End Function
@@ -289,35 +302,46 @@ Namespace HoMIDom
                 'If commande IsNot Nothing And commande <> "" Then
                 resultat = 0
                 If Not String.IsNullOrEmpty(commande) Then
-                    connect()
-                    'on vérifie si on est connecté à la BDD   
-                    If SQLconnect.State = ConnectionState.Open Then
-                        Dim SQLcommand As SQLiteCommand
-                        SQLcommand = SQLconnect.CreateCommand
-                        SQLcommand.CommandText = commande
+                    'lock pour etre sur de ne pas faire deux operations en meme temps
+                    SyncLock lock
+                        connect()
+                        'on vérifie si on est connecté à la BDD   
+                        If SQLconnect.State = ConnectionState.Open Then
+                            Dim SQLcommand As SQLiteCommand
+                            SQLcommand = SQLconnect.CreateCommand
+                            SQLcommand.CommandText = commande
 
-                        'lock pour etre sur de ne pas faire deux operations en meme temps
-                        SyncLock lock
-                            resultat = SQLcommand.ExecuteScalar()
-                        End SyncLock
+                            Try
+                                resultat = SQLcommand.ExecuteScalar()
+                            Catch ex As Exception
+                                Return "ERR: Erreur lors de la query count ExecuteScalar " & commande & "  --> " & ex.ToString
+                            End Try
 
-                        SQLcommand.Dispose()
-                        disconnect()
-                        Return "Commande éxécutée avec succés : " & commande
-                    Else
-                        connecte = False
-                        Return "ERR: Non connecté à la BDD " & bdd_name
-                    End If
+                            SQLcommand.Dispose()
+                            disconnect()
+                            Return "Commande éxécutée avec succés : " & commande
+                        Else
+                            connecte = False
+                            Return "ERR: Non connecté à la BDD " & bdd_name
+                        End If
+                    End SyncLock
                 Else
                     Return "ERR: La commande est vide"
                 End If
             Catch ex As Exception
+                Try
+                    If SQLconnect.State = ConnectionState.Open Then disconnect()
+                Catch
+                End Try
                 Return "ERR: Erreur lors de la query Count " & commande & " Erreur: " & ex.ToString
             End Try
         End Function
 
         Private Sub sqlite_UnhandledExceptionEvent(ByVal sender As Object, ByVal e As UnhandledExceptionEventArgs)
-            _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SQLite UnhandledExceptionEvent", "Exception : " & e.ExceptionObject.ToString())
+            Try
+                _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SQLite UnhandledExceptionEvent", "Exception : " & e.ExceptionObject.ToString())
+            Catch ex As Exception
+            End Try
         End Sub
 
     End Class
