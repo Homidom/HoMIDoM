@@ -115,38 +115,39 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Function nonquery(ByVal commande As String, ByVal ParamArray params() As String) As String
             Try
-                'on vérifie si la commande n'est pas vide
-                If Not String.IsNullOrEmpty(commande) Then
-                    SyncLock lock
-                        connect() 'lock pour etre sur de ne pas faire deux operations en meme temps 
-                        'on vérifie si on est connecté à la BDD       
-                        If SQLconnect.State = ConnectionState.Open Then
-                            Dim SQLcommand As SQLiteCommand
-                            SQLcommand = SQLconnect.CreateCommand
-                            SQLcommand.CommandText = commande
-                            If params IsNot Nothing Then
-                                For p = 0 To params.Length - 1
-                                    SQLcommand.Parameters.Add(New SQLiteParameter("@parameter" + p.ToString(), params(p)))
-                                Next
-                            End If
-                            'SyncLock lock 'lock pour etre sur de ne pas faire deux operations en meme temps 
+                Dim retour As String = ""
+                If Not String.IsNullOrEmpty(commande) Then  'on vérifie si la commande n'est pas vide
+                    'creation de la requete
+                    Dim SQLcommand As SQLiteCommand
+                    SQLcommand = SQLconnect.CreateCommand
+                    SQLcommand.CommandText = commande
+                    If params IsNot Nothing Then
+                        For p = 0 To params.Length - 1
+                            SQLcommand.Parameters.Add(New SQLiteParameter("@parameter" + p.ToString(), params(p)))
+                        Next
+                    End If
+
+                    SyncLock lock 'lock pour etre sur de ne pas faire deux operations en meme temps 
+                        connect()
+                        If SQLconnect.State = ConnectionState.Open Then 'on vérifie si on est connecté à la BDD 
                             Try
                                 SQLcommand.ExecuteNonQuery()
                             Catch ex As Exception
-                                Return "ERR: Erreur lors de la nonquery Execute " & commande & "  --> " & ex.ToString
+                                retour = "ERR: Erreur lors de la nonquery Execute " & commande & "  --> " & ex.ToString
                             End Try
-                            'End SyncLock
-                            SQLcommand.Dispose()
-                            disconnect()
-                            Return "Commande éxécutée avec succés : " & commande
+                            If SQLconnect.State = ConnectionState.Open Then disconnect() Else connecte = False
+                            retour = "Commande éxécutée avec succés : " & commande
                         Else
                             connecte = False
-                            Return "ERR: Non connecté à la BDD " & bdd_name
+                            retour = "ERR: Non connecté à la BDD " & bdd_name
                         End If
                     End SyncLock
+
+                    SQLcommand.Dispose()
                 Else
-                    Return "ERR: La commande est vide"
+                    retour = "ERR: La commande est vide"
                 End If
+                Return retour
             Catch ex As Exception
                 Try
                     If SQLconnect.State = ConnectionState.Open Then disconnect()
@@ -163,74 +164,65 @@ Namespace HoMIDom
         ''' <remarks></remarks>          
         Public Function query(ByVal commande As String, ByRef resultat As DataTable, ByVal ParamArray params() As String) As String
            Try
-                'on vérifie si la commande n'est pas vide  
-                'If commande IsNot Nothing And commande <> "" Then
-                If Not String.IsNullOrEmpty(commande) Then
-                    'lock pour etre sur de ne pas faire deux operations en meme temps
-                    SyncLock lock
+                Dim retour As String = ""
+                If Not String.IsNullOrEmpty(commande) Then 'on vérifie si la commande n'est pas vide 
+                    'creation de la requete
+                    Dim SQLcommand As SQLiteCommand
+                    Dim SQLreader As SQLiteDataReader
+                    SQLcommand = SQLconnect.CreateCommand
+                    SQLcommand.CommandText = commande
+                    If params IsNot Nothing Then
+                        For p = 0 To params.Length - 1
+                            SQLcommand.Parameters.Add(New SQLiteParameter("@parameter" + p.ToString(), params(p)))
+                        Next
+                    End If
+
+                    SyncLock lock 'lock pour etre sur de ne pas faire deux operations en meme temps
                         connect()
-
-                        'on vérifie si on est connecté à la BDD   
-                        If SQLconnect.State = ConnectionState.Open Then
-                            Dim SQLcommand As SQLiteCommand
-                            Dim SQLreader As SQLiteDataReader
-                            SQLcommand = SQLconnect.CreateCommand
-                            SQLcommand.CommandText = commande
-
-                            If params IsNot Nothing Then
-                                For p = 0 To params.Length - 1
-                                    SQLcommand.Parameters.Add(New SQLiteParameter("@parameter" + p.ToString(), params(p)))
-                                Next
-                            End If
-
+                        If SQLconnect.State = ConnectionState.Open Then 'on vérifie si on est connecté à la BDD   
                             Try
                                 SQLreader = SQLcommand.ExecuteReader()
-                            Catch ex As Exception
-                                Return "ERR: Erreur lors de la query ExecuteReader " & commande & "  --> " & ex.ToString
-                            End Try
-
-                            SQLcommand.Dispose()
-                            If SQLreader.HasRows = True Then
-                                'lecture de la premiere ligne       
-                                'SQLreader.Read()
-
-                                Dim x As DataColumn
-                                Dim resultattemp As New DataTable
-                                For i = 0 To SQLreader.FieldCount - 1 'pour chaque colonne, on va créer la même dans le datable 
-                                    x = New DataColumn("col_" & i)
-                                    resultattemp.Columns.Add(x)
-                                Next
-                                x = Nothing
-
-                                'lecture des lignes   
-                                Dim j As Integer = 0
-                                While SQLreader.Read()
-                                    Dim row As DataRow = resultattemp.NewRow() ' on créé une premiere ligne dans le datatble      
-                                    For i = 0 To SQLreader.FieldCount - 1
-                                        row.Item(i) = SQLreader(i)
+                                If SQLreader.HasRows = True Then
+                                    'SQLreader.Read() 'lecture de la premiere ligne      
+                                    Dim x As DataColumn
+                                    Dim resultattemp As New DataTable
+                                    For i = 0 To SQLreader.FieldCount - 1 'pour chaque colonne, on va créer la même dans le datable 
+                                        x = New DataColumn("col_" & i)
+                                        resultattemp.Columns.Add(x)
                                     Next
-                                    resultattemp.Rows.Add(row)
-                                    j += 1
-                                End While
-                                resultat = resultattemp
-                                resultattemp = Nothing
-                                SQLreader.Close()
-                                disconnect()
-                                Return "Commande éxécutée avec succés : " & commande
-                            Else
-                                SQLreader.Close()
-                                disconnect()
-                                Return "Commande éxécutée avec succés mais pas de résultat : " & commande
-                            End If
+                                    x = Nothing
 
+                                    'lecture des lignes   
+                                    Dim j As Integer = 0
+                                    While SQLreader.Read()
+                                        Dim row As DataRow = resultattemp.NewRow() ' on créé une premiere ligne dans le datatble      
+                                        For i = 0 To SQLreader.FieldCount - 1
+                                            row.Item(i) = SQLreader(i)
+                                        Next
+                                        resultattemp.Rows.Add(row)
+                                        j += 1
+                                    End While
+                                    resultat = resultattemp
+                                    resultattemp = Nothing
+                                    retour = "Commande éxécutée avec succés : " & commande
+                                Else
+                                    retour = "Commande éxécutée avec succés mais pas de résultat : " & commande
+                                End If
+                                SQLreader.Close()
+                            Catch ex As Exception
+                                retour = "ERR: Erreur lors de la query ExecuteReader " & commande & "  --> " & ex.ToString
+                            End Try
+                            If SQLconnect.State = ConnectionState.Open Then disconnect() Else connecte = False
                         Else
                             connecte = False
-                            Return "ERR: Non connecté à la BDD " & bdd_name
+                            retour = "ERR: Non connecté à la BDD " & bdd_name
                         End If
                     End SyncLock
+                    SQLcommand.Dispose()
                 Else
-                    Return "ERR: La commande est vide"
+                    retour = "ERR: La commande est vide"
                 End If
+                Return retour
             Catch ex As Exception
                 Try
                     If SQLconnect.State = ConnectionState.Open Then disconnect()
@@ -247,40 +239,38 @@ Namespace HoMIDom
         ''' <remarks></remarks>          
         Public Function querysimple(ByVal commande As String, ByRef resultat As String, ByVal ParamArray params() As String) As String
             Try
-                'on vérifie si la commande n'est pas vide
-                'If commande IsNot Nothing And commande <> "" Then
-                If Not String.IsNullOrEmpty(commande) Then
-                    'lock pour etre sur de ne pas faire deux operations en meme temps
-                    SyncLock lock
-                        connect()
-                        'on vérifie si on est connecté à la BDD   
-                        If SQLconnect.State = ConnectionState.Open Then
-                            Dim SQLcommand As SQLiteCommand
-                            SQLcommand = SQLconnect.CreateCommand
-                            SQLcommand.CommandText = commande
+                Dim retour As String = ""
+                If Not String.IsNullOrEmpty(commande) Then 'on vérifie si la commande n'est pas vide
+                    Dim SQLcommand As SQLiteCommand
+                    SQLcommand = SQLconnect.CreateCommand
+                    SQLcommand.CommandText = commande
+                    If params IsNot Nothing Then
+                        For p = 0 To params.Length - 1
+                            SQLcommand.Parameters.Add(New SQLiteParameter("@parameter" + p.ToString(), params(p)))
+                        Next
+                    End If
 
-                            If params IsNot Nothing Then
-                                For p = 0 To params.Length - 1
-                                    SQLcommand.Parameters.Add(New SQLiteParameter("@parameter" + p.ToString(), params(p)))
-                                Next
-                            End If
+                    SyncLock lock 'lock pour etre sur de ne pas faire deux operations en meme temps
+                        connect()
+                        If SQLconnect.State = ConnectionState.Open Then 'on vérifie si on est connecté à la BDD 
                             Try
                                 resultat = SQLcommand.ExecuteScalar
                             Catch ex As Exception
-                                Return "ERR: Erreur lors de la querysimple ExecuteScalar " & commande & "  --> " & ex.ToString
+                                retour = "ERR: Erreur lors de la querysimple ExecuteScalar " & commande & "  --> " & ex.ToString
                             End Try
-
-                            SQLcommand.Dispose()
-                            disconnect()
-                            Return "Commande éxécutée avec succés : " & commande
+                            If SQLconnect.State = ConnectionState.Open Then disconnect() Else connecte = False
+                            retour = "Commande éxécutée avec succés : " & commande
                         Else
                             connecte = False
-                            Return "ERR: Non connecté à la BDD " & bdd_name
+                            retour = "ERR: Non connecté à la BDD " & bdd_name
                         End If
                     End SyncLock
+
+                    SQLcommand.Dispose()
                 Else
-                    Return "ERR: La commande est vide"
+                    retour = "ERR: La commande est vide"
                 End If
+                Return retour
             Catch ex As Exception
                 Try
                     If SQLconnect.State = ConnectionState.Open Then disconnect()
@@ -297,37 +287,34 @@ Namespace HoMIDom
         ''' <remarks></remarks>          
         Public Function count(ByVal commande As String, ByRef resultat As Integer) As String
             Try
-
-                'on vérifie si la commande n'est pas vide
-                'If commande IsNot Nothing And commande <> "" Then
+                Dim retour As String = ""
                 resultat = 0
-                If Not String.IsNullOrEmpty(commande) Then
-                    'lock pour etre sur de ne pas faire deux operations en meme temps
-                    SyncLock lock
-                        connect()
-                        'on vérifie si on est connecté à la BDD   
-                        If SQLconnect.State = ConnectionState.Open Then
-                            Dim SQLcommand As SQLiteCommand
-                            SQLcommand = SQLconnect.CreateCommand
-                            SQLcommand.CommandText = commande
+                If Not String.IsNullOrEmpty(commande) Then 'on vérifie si la commande n'est pas vide
+                    Dim SQLcommand As SQLiteCommand
+                    SQLcommand = SQLconnect.CreateCommand
+                    SQLcommand.CommandText = commande
 
+                    SyncLock lock 'lock pour etre sur de ne pas faire deux operations en meme temps
+                        connect()
+                        If SQLconnect.State = ConnectionState.Open Then 'on vérifie si on est connecté à la BDD 
                             Try
                                 resultat = SQLcommand.ExecuteScalar()
                             Catch ex As Exception
-                                Return "ERR: Erreur lors de la query count ExecuteScalar " & commande & "  --> " & ex.ToString
+                                retour = "ERR: Erreur lors de la query count ExecuteScalar " & commande & "  --> " & ex.ToString
                             End Try
-
-                            SQLcommand.Dispose()
-                            disconnect()
-                            Return "Commande éxécutée avec succés : " & commande
+                            If SQLconnect.State = ConnectionState.Open Then disconnect() Else connecte = False
+                            retour = "Commande éxécutée avec succés : " & commande
                         Else
                             connecte = False
-                            Return "ERR: Non connecté à la BDD " & bdd_name
+                            retour = "ERR: Non connecté à la BDD " & bdd_name
                         End If
                     End SyncLock
+
+                    SQLcommand.Dispose()
                 Else
-                    Return "ERR: La commande est vide"
+                    retour = "ERR: La commande est vide"
                 End If
+                Return retour
             Catch ex As Exception
                 Try
                     If SQLconnect.State = ConnectionState.Open Then disconnect()
