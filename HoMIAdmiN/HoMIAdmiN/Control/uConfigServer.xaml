@@ -2,7 +2,7 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Margin="5">
 
-    <Grid Margin="1" Background="#636060" Opacity="0.85">
+    <Grid Margin="1" Background="#636060" Opacity="0.85" Width="750">
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2">
             <StackPanel>
                 <DockPanel >
@@ -17,27 +17,92 @@
                 </StackPanel>
                     <Label Name="Label0" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center" HorizontalContentAlignment="Center" VerticalContentAlignment="Top">Propriétés du Serveur</Label>
                 </DockPanel>
-                
-                <StackPanel Margin="5,10,0,0">
-                    <StackPanel Orientation="Horizontal">
-                        <StackPanel Margin="0,0,3,0">
-                            <GroupBox Name="GroupBox1" Margin="2">
-                                <GroupBox.Header>
-                                    <Label Foreground="White" FontWeight="Bold">Paramètres du Serveur</Label>
-                                </GroupBox.Header>
-                                <StackPanel >
+
+
+                <StackPanel DockPanel.Dock="Bottom" >
+                    <TabControl  Name="TabControl1" Margin="2" Background="black" Height="415">
+                        <TabControl.Resources>
+                            <Style TargetType="{x:Type TabItem}">
+                                <Setter Property="BorderThickness" Value="0"/>
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="HeaderTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <Border x:Name="grid">
+                                                <ContentPresenter>
+                                                    <ContentPresenter.Content>
+                                                        <TextBlock Margin="1,0,1,0" FontSize="11" Text="{TemplateBinding Content}" Foreground="white"/>
+                                                    </ContentPresenter.Content>
+                                                </ContentPresenter>
+                                            </Border>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type TabItem}">
+                                            <Grid>
+                                                <Border Name="Border" Margin="1,1,1,0" Background="black" BorderBrush="gray" BorderThickness="2,2,2,0" CornerRadius="5,5,0,0" >
+                                                    <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Header" Margin="10,3,10,5" RecognizesAccessKey="True">
+                                                        <ContentPresenter.LayoutTransform>
+                                                            <RotateTransform Angle="0" />
+                                                        </ContentPresenter.LayoutTransform>
+                                                    </ContentPresenter>
+                                                </Border>
+                                            </Grid>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter Property="Panel.ZIndex" Value="100" />
+                                                    <Setter TargetName="Border" Property="Background" Value="#FF615D5D" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+
+                            <Style TargetType="TreeView">
+                                <Setter Property="OverridesDefaultStyle" Value="True" />
+                                <Setter Property="SnapsToDevicePixels" Value="True" />
+                                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto" />
+                                <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="TreeView">
+                                            <Border Name="Border" CornerRadius="0" BorderThickness="0">
+                                                <Border.BorderBrush>
+                                                    <SolidColorBrush Color="{DynamicResource BorderMediumColor}" />
+                                                </Border.BorderBrush>
+                                                <Border.Background>
+                                                    <SolidColorBrush Color="#FF514D4D" />
+                                                </Border.Background>
+                                                <ScrollViewer Focusable="False" CanContentScroll="False" Padding="0">
+                                                    <ItemsPresenter />
+                                                </ScrollViewer>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TabControl.Resources>
+
+                        <TabItem Header="Serveur" >
+                            <StackPanel Orientation="Vertical" VerticalAlignment="top" HorizontalAlignment="left" MaxWidth="750">
                                     <StackPanel Orientation="Horizontal" >
-                                        <Label Foreground="White" Height="28" HorizontalAlignment="Left" Name="Label19" VerticalAlignment="Top" Width="67">Id Serveur:</Label>
+                                        <Label Foreground="White" Height="28" Name="Label19" Width="67">Id Serveur:</Label>
                                         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="21" HorizontalAlignment="Left" Name="TxtIdSrv" Width="150" ToolTip="Id du serveur" />
-                                    </StackPanel>
+                                    <Label Content="Cet ID est comme un mot de passe à 9 chiffres, conseil sécurité : changer le (Défaut : 123456789)" Name="Label5" Foreground="Gray" Height="28" FontSize="10" />
+                                </StackPanel>
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Foreground="White" Height="28" HorizontalAlignment="Left" Name="Label28" VerticalAlignment="Top" Width="67">IP SOAP:</Label>
                                         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="21" HorizontalAlignment="Left" Name="TxtIPSOAP" Width="150" ToolTip="Permet de modifier le port SOAP du serveur à son prochain démarrage" />
-                                    </StackPanel>
+                                    <Label Content="Utilisé par Homidom pour la connexion des clients/admin... ex: 192.168.0.1 (Défaut : localhost)" Name="Label6" Foreground="Gray" Height="28" FontSize="10" />
+                                </StackPanel>
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Foreground="White" Height="28" HorizontalAlignment="Left" Name="Label8" VerticalAlignment="Top" Width="67">Port SOAP:</Label>
                                         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="21" HorizontalAlignment="Left" Name="TxtSOAP" Width="150" ToolTip="Permet de modifier le port SOAP du serveur à son prochain démarrage" />
-                                    </StackPanel>
+                                    <Label Content="Utilisé par Homidom pour la connexion des clients/admin... conseil sécurité : changez le (Défaut : 7999)" Name="Label7" Foreground="Gray" Height="28" FontSize="10" />
+                                </StackPanel>
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Foreground="White" Height="28" HorizontalAlignment="Left" VerticalAlignment="Top" Width="67">Pays:</Label>
                                         <ComboBox BorderThickness="2" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="24" HorizontalAlignment="Left" Name="CbCodePays" Width="150" ToolTip="Permet de définir le pays du serveur" SelectedIndex="0" />
@@ -54,166 +119,111 @@
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Foreground="White" Name="Label3" Width="190">Correction Heure Lever Soleil:</Label>
                                         <TextBox Background="DarkGray"  BorderBrush="Black" Foreground="White" Name="HCL" Width="26" Height="20" TextAlignment="center" Text="0" />
-                                    </StackPanel>
+                                    <Label Content="Ceci permet d'ajouter ou d'enlever des minutes à l'heure calculée en fonction de la longitude et latitude (Défaut : 0)" Name="Label9" Foreground="Gray" Height="28" FontSize="10" />
+                                </StackPanel>
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Foreground="White" Name="Label4" Width="190">Correction Heure Coucher Soleil:</Label>
                                         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="26" Name="HCC" Text="0" TextAlignment="center" />
-                                    </StackPanel>
+                                    <Label Content="Ceci permet d'ajouter ou d'enlever des minutes à l'heure calculée en fonction de la longitude et latitude (Défaut : 0)" Name="Label20" Foreground="Gray" Height="28" FontSize="10" />
+                                </StackPanel>
                                     <StackPanel Orientation="Horizontal">
                                         <Label Foreground=" White" Content="Voix par défaut:" VerticalAlignment="center" Width="100"/>
                                         <ComboBox Name="CbVoice" Width="150" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="24" />
-                                    </StackPanel>
-
+                                    <Label Content="Voix utilisée pour la lecture de text (TTS) sur le serveur" Name="Label21" Foreground="Gray" Height="28" FontSize="10" />
                                 </StackPanel>
-                            </GroupBox>
-                            <GroupBox Name="GroupBox4" Width="389" Margin="2" >
-                                <GroupBox.Header>
-                                    <Label Foreground="White" FontWeight="Bold">Paramètres Log</Label>
-                                </GroupBox.Header>
-                                <Grid >
-                                    <StackPanel >
-                                        <StackPanel Orientation="Horizontal" >
-                                            <Label Content="Taille max du fichier Log (Ko):" Name="Label22" Margin="1" Foreground="White" Width="180" />
-                                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Name="TxtFile" Width="143" />
-                                        </StackPanel>
-                                        <StackPanel Orientation="Horizontal" >
-                                            <Label Content="Conservation ancien log (mois):" Name="Label14" Margin="1" Foreground="White" Width="180" />
-                                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Name="TxtMaxLogMonth" Width="50" />
-                                        </StackPanel>
-                                        <GroupBox >
-                                            <GroupBox.Header>
-                                                <Label Foreground="White" FontWeight="Bold">Type de Log à prendre en compte</Label>
-                                            </GroupBox.Header>
-                                            <StackPanel Orientation="Horizontal" >
-                                                <StackPanel Width="72">
-                                                    <CheckBox Name="ChkTyp0" Content="Info" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                                    <CheckBox Name="ChkTyp1" Content="Action" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                                    <CheckBox Name="ChkTyp2" Content="Message" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                                </StackPanel>
-                                                <StackPanel Width="170">
-                                                    <CheckBox Name="ChkTyp3" Content="Valeur-Change" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                                    <CheckBox Name="ChkTyp4" Content="Valeur-Inchangé" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                                    <CheckBox Name="ChkTyp5" Content="Valeur-Inchangé-Précision" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                                    <CheckBox Name="ChkTyp6" Content="Valeur-Inchangé-LasEtat" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                                </StackPanel>
-                                                <StackPanel >
-                                                    <CheckBox Name="ChkTyp7" Content="Erreur" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                                    <CheckBox Name="ChkTyp8" Content="Erreur-Critique" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                                    <CheckBox Name="ChkTyp9" Content="DEBUG" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                                </StackPanel>
-                                                <StackPanel ></StackPanel>
-                                            </StackPanel>
-                                        </GroupBox>
+                                </StackPanel>
+                        </TabItem >
 
-                                    </StackPanel>
-                                </Grid>
-                            </GroupBox>
-                            <GroupBox Name="GroupBox8" Width="389" Margin="2" >
-                                <GroupBox.Header>
-                                    <Label Foreground="White" FontWeight="Bold">Mode Decouverte</Label>
-                                </GroupBox.Header>
-                                <Grid >
-                                    <StackPanel Orientation="Horizontal">
-                                        <CheckBox Name="ChkModeDecouv" Content="Activer" Background="DarkGray" BorderBrush="Black" Foreground=" White" ToolTip="Si activé, le mode découverte des nouveaux composants est forcé sur tous les drivers sinon il faut le paramétrer dans chaque driver suivant les besoins." />
-                                    </StackPanel>
-                                </Grid>
-                            </GroupBox>
-
-                        </StackPanel>
-                        <StackPanel VerticalAlignment="Top" Margin="3,0,0,0">
-                            <GroupBox Name="GroupBox23" Margin="2">
-                                <GroupBox.Header>
-                                    <Label Foreground="White" FontWeight="Bold">Paramètres SMTP</Label>
-                                </GroupBox.Header>
-                                <StackPanel >
+                        <TabItem Header="Logs" >
+                            <StackPanel Orientation="vertical" HorizontalAlignment="left" >
+                                <Label Content="Les logs sont affichés dans la console ainsi que dans les fenêtres dédiés (GUI et ADMIN) et sont aussi enregistrés dans le répertoire HoMIDoM" Name="Label25" Foreground="Gray" Height="28" FontSize="11" />
+                                <StackPanel Orientation="Horizontal" >
+                                    <Label Content="Taille max du fichier Log (Ko):" Name="Label22" Margin="1" Foreground="White" Width="180" />
+                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Name="TxtFile" Width="143" />
+                                    <Label Content="Defaut : " Name="Label26" Foreground="Gray" Height="28" FontSize="10" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" >
+                                    <Label Content="Conservation ancien log (mois):" Name="Label14" Margin="1" Foreground="White" Width="180" />
+                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Name="TxtMaxLogMonth" Width="50" />
+                                    <Label Content="Defaut : " Name="Label27" Foreground="Gray" Height="28" FontSize="10" />
+                                </StackPanel>
+                                <GroupBox Width="700">
+                                    <GroupBox.Header>
+                                        <Label Foreground="White" FontWeight="Bold">Type de Log à prendre en compte</Label>
+                                    </GroupBox.Header>
                                     <StackPanel Orientation="Horizontal" >
+                                        <StackPanel Width="100">
+                                            <CheckBox Name="ChkTyp0" Content="Info" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                            <CheckBox Name="ChkTyp1" Content="Action" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                            <CheckBox Name="ChkTyp2" Content="Message" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                        </StackPanel>
+                                        <StackPanel Width="200">
+                                            <CheckBox Name="ChkTyp3" Content="Valeur-Change" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                            <CheckBox Name="ChkTyp4" Content="Valeur-Inchangé" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                            <CheckBox Name="ChkTyp5" Content="Valeur-Inchangé-Précision" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                            <CheckBox Name="ChkTyp6" Content="Valeur-Inchangé-LasEtat" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                        </StackPanel>
+                                        <StackPanel >
+                                            <CheckBox Name="ChkTyp7" Content="Erreur" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                            <CheckBox Name="ChkTyp8" Content="Erreur-Critique" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                            <CheckBox Name="ChkTyp9" Content="DEBUG" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                        </StackPanel>
+                                        <StackPanel ></StackPanel>
+                                    </StackPanel>
+                                </GroupBox>
+                                <Label Content="Conseil : selectionnez tout lors de la mise en place ou de problémes, ensuite vous pouvez décocher DEBUG et valeur-inchangée" Name="Label24" Foreground="Gray" Height="25" FontSize="10" />
+
+                            </StackPanel>
+                        </TabItem >
+
+                        <TabItem Header="Email" >
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="left">
+                                <Label Content="Configuration requise pour qu'HoMIDoM puisse envoyer des emails." Name="Label29" Foreground="Gray" Height="28" FontSize="11" />
+                                <StackPanel Orientation="Horizontal" >
                                     <Label Content="Adresse Mail:" Height="25" HorizontalAlignment="Left" Name="Label10" VerticalAlignment="Top" Width="100" Foreground="White" />
-                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Name="TxtMail" VerticalAlignment="Top" Width="230" />
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" >
-                                    <Label Content="Adresse SMTP:" Height="23" HorizontalAlignment="Left" Name="Label11" VerticalAlignment="Top" Width="100" Foreground="White" />
-                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Name="TxtAdresse" VerticalAlignment="Top" Width="230" />
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" >
-                                        <Label Content="Port SMTP:" Height="23" HorizontalAlignment="Left" Name="Lbl45" VerticalAlignment="Top" Width="100" Foreground="White" />
-                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Name="TxtSmtpPort" VerticalAlignment="Top" Width="40" />
-                                        <CheckBox Name="ChkSSL" Margin="2" Content="Utiliser SSL" Background="DarkGray" BorderBrush="Black" Foreground="White" />
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" >
-                                        <Label Content="Login:" Height="27" HorizontalAlignment="Left"  Name="Label12" VerticalAlignment="Top" Width="100" Foreground="White" />
-                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left"  Name="TxtLogin" VerticalAlignment="Top" Width="230" />
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" >
-                                    <Label Content="Password:" Height="27" HorizontalAlignment="Left"  Name="Label13" VerticalAlignment="Top" Width="100" Foreground="White" />
-                                        <PasswordBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Name="TxtPassword" VerticalAlignment="Top" Width="230" />
-                                    </StackPanel>
-                                    <Button Height="25" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnTestMail" VerticalAlignment="Top" Width="88.75" Foreground="White">Tester</Button>
-
+                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Name="TxtMail" VerticalAlignment="Top" Width="230" />
+                                    <Label Content="Adresse email utilisée pour l'envoi, exemple : serveurhomidom@nomdedomaine.com " Name="Label30" Foreground="Gray" Height="28" FontSize="10" />
                                 </StackPanel>
-                            </GroupBox>
-                            <GroupBox Name="GroupBox28" Margin="2">
-                                <GroupBox.Header>
-                                    <Label Foreground="White" FontWeight="Bold">Serveur Web</Label>
-                                </GroupBox.Header>
-                                <StackPanel >
-                                    <StackPanel Orientation="Horizontal" >
-                                        <CheckBox Name="ChKEnableSrvWeb" IsChecked="True" Background="DarkGray" BorderBrush="Black" Foreground="White" VerticalAlignment="center" Content="Activer" />
-                                        <Button Height="25" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="8,2,2,2" Name="BtnStartSrvWeb" VerticalAlignment="Top" Width="50" Foreground="White">Restart</Button>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" >
-                                        <Label Content="Port:" Foreground=" White" />
-                                        <TextBox Name="TxtPortSrvWeb" Text="8080" Width="40" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
-                                    </StackPanel>
-                                    </StackPanel>
-                            </GroupBox>
+                                <StackPanel Orientation="Horizontal" >
+                                    <Label Content="Adresse SMTP:" Height="23" HorizontalAlignment="Left" Name="Label11" VerticalAlignment="Top" Width="100" Foreground="White" />
+                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Name="TxtAdresse" VerticalAlignment="Top" Width="230" />
+                                    <Label Content="Adresse SMTP de votre fournisseur d'accés ou d'emails, exemple : smtp.free.fr" Name="Label31" Foreground="Gray" Height="28" FontSize="10" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" >
+                                    <Label Content="Port SMTP:" Height="23" HorizontalAlignment="Left" Name="Lbl45" VerticalAlignment="Top" Width="100" Foreground="White" />
+                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Name="TxtSmtpPort" VerticalAlignment="Top" Width="40" />
+                                    <CheckBox Name="ChkSSL" Margin="2" Content="Utiliser SSL" Background="DarkGray" BorderBrush="Black" Foreground="White" />
+                                    <Label Content="   Port SMTP de votre fournisseur d'accés ou d'emails, défaut : 25" Name="Label32" Foreground="Gray" Height="28" FontSize="10" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" >
+                                    <Label Content="Login:" Height="27" HorizontalAlignment="Left"  Name="Label12" VerticalAlignment="Top" Width="100" Foreground="White" />
+                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left"  Name="TxtLogin" VerticalAlignment="Top" Width="230" />
+                                    <Label Content="Login de votre fournisseur d'accés ou emails : facultatif" Name="Label33" Foreground="Gray" Height="28" FontSize="10" />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" >
+                                    <Label Content="Password:" Height="27" HorizontalAlignment="Left"  Name="Label13" VerticalAlignment="Top" Width="100" Foreground="White" />
+                                    <PasswordBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Name="TxtPassword" VerticalAlignment="Top" Width="230" />
+                                    <Label Content="Mot de passe de votre fournisseur d'accés ou emails : facultatif" Name="Label34" Foreground="Gray" Height="28" FontSize="10" />
+                                </StackPanel>
+                                <Button Height="25" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnTestMail" VerticalAlignment="Top" Width="88.75" Foreground="White">Tester</Button>
 
-                            <GroupBox Name="GroupBox24" Margin="2">
-                                <GroupBox.Header>
-                                    <Label Foreground="White" FontWeight="Bold">Configuration</Label>
-                                </GroupBox.Header>
-                                <StackPanel >
-                                    <StackPanel Orientation="Horizontal">
-                                        <Label Foreground="White" Name="Label15" Width="190">Sauvegarder automatiquement:</Label>
-                                        <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="25" Name="TxtSave" Text="0"  TextAlignment="center" />
-                                        <Label Foreground="White">(en minutes, 0=Inactif)</Label>
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="center">
-                                        <Label Foreground="White" Width="190">Sauvegarder en temps réel:</Label>
-                                        <CheckBox Name="ChKSaveRealTime" IsChecked="True" Background="DarkGray" BorderBrush="Black" Foreground="White" VerticalAlignment="center" />
-                                    </StackPanel>
-                                    <StackPanel Orientation="Horizontal" >
-                                        <Button  Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnExport" VerticalAlignment="Top" Width="88.75"  >
-                                            <StackPanel Orientation="Horizontal" >
-                                            <Image Source="/HoMIAdmiN;component/Images/Export_32.png" Width="16" />
-                                                <Label Content="Exporter" Foreground="White" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch" />
-                                            </StackPanel>
-                                        </Button>
-                                        <Button  Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnImport" VerticalAlignment="Top" Width="88.75"  >
-                                            <StackPanel Orientation="Horizontal" >
-                                                <Image Source="/HoMIAdmiN;component/Images/Import_32.png" Width="16" />
-                                                <Label Content="Importer" Foreground="White" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch" />
-                                            </StackPanel>
-                                        </Button>
+                            </StackPanel>
+                        </TabItem >
 
-                                    </StackPanel>
-                                    </StackPanel>
-                            </GroupBox>
-                            <GroupBox Name="GroupEnergie" Margin="2">
-                                <GroupBox.Header>
-                                    <Label Foreground="White" FontWeight="Bold">Energie</Label>
-                                </GroupBox.Header>
-                                <StackPanel >
-                                    <StackPanel Orientation="Horizontal" >
-                                        <Label Foreground="White" Name="LblDevise" >Devise:</Label>
-                                        <TextBox Name="TxtDevise" Width="40" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20"/>
-                                    </StackPanel>
-                                    <CheckBox Name="ChkEnergie" Content="Gérer Energie" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
-                                    <StackPanel Orientation="Horizontal" >
-                                        <Label Content="Puissance Minimale (par défaut):" Foreground="White" />
-                                        <TextBox Name="TxtPuissMini" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="80"/>
-                                        <Label Content="Watt" Foreground="White" />
-                                    </StackPanel>
-                                    <StackPanel Name="StkTarifEnergie">
+                        <TabItem Header="Energie" >
+                            <StackPanel Orientation="Vertical" VerticalAlignment="top" HorizontalAlignment="left">
+                                <Label Content="Configuration de la gestion de l'énergie, ceci permet de calculer et d'afficher la consommation approximative de votre installation." Foreground="Gray" Height="28" FontSize="11" />
+                                <StackPanel Orientation="Horizontal" >
+                                    <Label Foreground="White" Name="LblDevise" >Devise:</Label>
+                                    <TextBox Name="TxtDevise" Width="40" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20"/>
+                                </StackPanel>
+                                <CheckBox Name="ChkEnergie" Content="Gérer Energie" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="25"/>
+                                <StackPanel Orientation="Horizontal" >
+                                    <Label Content="Puissance Minimale (par défaut):" Foreground="White" />
+                                    <TextBox Name="TxtPuissMini" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="80"/>
+                                    <Label Content="Watt" Foreground="White" />
+                                </StackPanel>
+                                <StackPanel Name="StkTarifEnergie">
                                     <StackPanel Orientation="Horizontal" >
                                         <Label Content="Tarif Jour:" Foreground="White"/>
                                         <TextBox Name="TxtTarifJour" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="40"/>
@@ -222,12 +232,106 @@
                                         <Label Content="Tarif Nuit:" Foreground="White"/>
                                         <TextBox Name="TxtTarifNuit" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="40"/>
                                     </StackPanel>
-                                    </StackPanel>
                                 </StackPanel>
-                            </GroupBox>
+                            </StackPanel>
+                        </TabItem >
 
-                        </StackPanel>
-                    </StackPanel>
+                        <TabItem Header="Configuration" >
+                          
+                            <StackPanel Orientation="Vertical" VerticalAlignment="top" HorizontalAlignment="left">
+                                <GroupBox Name="GroupBox10" Margin="2" HorizontalAlignment="left" Width="700">
+                                    <GroupBox.Header>
+                                        <Label Foreground="White" FontWeight="Bold">Sauvegarde</Label>
+                                    </GroupBox.Header>
+                                    <StackPanel >
+                                        <Label Content="Paramétrer la sauvegarde automtique de la configuration d'HoMIDoM" Foreground="Gray" Height="28" FontSize="11" />
+                                         <StackPanel Orientation="Horizontal">
+                                            <Label Foreground="White" Name="Label15" Width="190">Sauvegarder automatiquement:</Label>
+                                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="25" Name="TxtSave" Text="0"  TextAlignment="center" />
+                                            <Label Foreground="White">(en minutes, 0=Inactif)</Label>
+                                            <Label Content="Sauvegarder toutes les x minutes la configuration, conseil : 0 (défaut : 0)" Foreground="Gray" Height="28" FontSize="10" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="center">
+                                            <Label Foreground="White" Width="190">Sauvegarder en temps réel:</Label>
+                                            <CheckBox Name="ChKSaveRealTime" IsChecked="True" Background="DarkGray" BorderBrush="Black" Foreground="White" VerticalAlignment="center" />
+                                            <Label Content="Sauvegarder la configuration à chaque modification la configuration, conseil : activé (défaut : activé)" Foreground="Gray" Height="28" FontSize="10" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Name="GroupBox11" Margin="2" HorizontalAlignment="left" Width="700">
+                                    <GroupBox.Header>
+                                        <Label Foreground="White" FontWeight="Bold">Importer et exporter la configuration</Label>
+                                    </GroupBox.Header>
+                                    <StackPanel >
+                                        <Label Content="Permet d'exporter ou importer la configuration d'HoMIDoM" Foreground="Gray" Height="28" FontSize="11" />
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button  Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnExport" VerticalAlignment="Top" Width="88.75"  >
+                                                <StackPanel Orientation="Horizontal" >
+                                                    <Image Source="/HoMIAdmiN;component/Images/Export_32.png" Width="16" />
+                                                    <Label Content="Exporter" Foreground="White" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch" />
+                                                </StackPanel>
+                                            </Button>
+                                            <Label Content="Exporter la configuration pour par exemple la sauvegarder ou la transfèrer au support" Foreground="Gray" Height="28" FontSize="10" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="center">
+                                            <Button  Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnImport" VerticalAlignment="Top" Width="88.75"  >
+                                                <StackPanel Orientation="Horizontal" >
+                                                    <Image Source="/HoMIAdmiN;component/Images/Import_32.png" Width="16" />
+                                                    <Label Content="Importer" Foreground="White" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch" />
+                                                </StackPanel>
+                                            </Button>
+                                            <Label Content="Importer la configuration pour restaurer cette dernière" Foreground="Gray" Height="28" FontSize="10" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" >
+
+
+
+                                        </StackPanel>
+                                    </StackPanel>
+                                </GroupBox>
+
+                            </StackPanel>
+                        </TabItem >
+
+                        <TabItem Header="Divers" >
+                            <StackPanel Orientation="Vertical" VerticalAlignment="top" HorizontalAlignment="left">
+                                <GroupBox Name="GroupBox8" Margin="2" HorizontalAlignment="left" Width="700">
+                                    <GroupBox.Header>
+                                        <Label Foreground="White" FontWeight="Bold">Mode Decouverte</Label>
+                                    </GroupBox.Header>
+                                    <StackPanel >
+                                        <Label Content="Permet de forcer le mode découverte des nouveaux composants sur tous les drivers." Foreground="Gray" Height="28" FontSize="11" />
+                                        <Label Content="Si désactivé, le mode découverte est à configurer dans chaque driver suivant vos besoins. (Défaut : désactivé)" Foreground="Gray" Height="28" FontSize="11" />
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Content="Activer le mode découverte :" Foreground=" White" />
+                                            <CheckBox Name="ChkModeDecouv" Content="" VerticalAlignment="center" Background="DarkGray" BorderBrush="Black" Foreground=" White" ToolTip="Si activé, le mode découverte des nouveaux composants est forcé sur tous les drivers sinon il faut le paramétrer dans chaque driver suivant les besoins." />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </GroupBox>
+
+                                <GroupBox Name="GroupBox28" Margin="2" Width="700">
+                                    <GroupBox.Header>
+                                        <Label Foreground="White" FontWeight="Bold">Serveur Web</Label>
+                                    </GroupBox.Header>
+                                    <StackPanel >
+                                        <Label Content="Le serveur web intégré permet d'utiliser des requêtes https pour piloter HoMIDoM." Foreground="Gray" Height="28" FontSize="11" />
+                                        <StackPanel Orientation="Horizontal" >
+                                            <Label Content="Activer le serveur web intégré :" Foreground=" White" />
+                                            <CheckBox Name="ChKEnableSrvWeb" IsChecked="True" Background="DarkGray" BorderBrush="Black" Foreground="White" VerticalAlignment="center" Content="" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" >
+                                            <Label Content="Port :" Foreground=" White" />
+                                            <TextBox Name="TxtPortSrvWeb" Text="8080" Width="40" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
+                                            <Label Content="   Port utilisé par le serveur web (il faut l'ouvrir sur votre firewall windows et/ou box internet), défaut : 8080" Foreground="Gray" Height="28" FontSize="10" />
+                                        </StackPanel>
+                                        <Button HorizontalAlignment="left" Height="25" Template="{DynamicResource GlassButton}" Margin="8,2,2,2" Name="BtnStartSrvWeb" VerticalAlignment="Top" Width="160" Foreground="White">Redémarrer le serveur WEB</Button>
+                                    </StackPanel>
+                                </GroupBox>
+                            </StackPanel>
+                        </TabItem >
+                    </TabControl>
+
                 </StackPanel>
             </StackPanel>
         </Border>
