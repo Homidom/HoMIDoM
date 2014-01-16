@@ -807,30 +807,27 @@ Imports System.Xml
 
     Public Function GET_IPX800(ByVal Adresse As String, ByVal Element As String) As Object
         Try
-            Dim doc As New XmlDocument
-            Dim nodes As XmlNodeList
+            'Dim doc As New XmlDocument
+            'Dim nodes As XmlNodeList
             Dim retour As Object = Nothing
-
             ' Create a new XmlDocument   
-            doc = New XmlDocument()
-
-            'File.Delete("IPX800.xml")
-            'T 
+            'doc = New XmlDocument()
 
             Dim url As New Uri(Adresse & "/status.xml")
             Dim Request As HttpWebRequest = CType(HttpWebRequest.Create(url), System.Net.HttpWebRequest)
-            'Request.UserAgent = "Mozilla/5.0 (Windows; U; Windows NT 5.1; fr; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7"
             Dim response As Net.HttpWebResponse = CType(Request.GetResponse(), Net.HttpWebResponse)
             Dim flag As Boolean = False
 
-            doc.Load(response.GetResponseStream)
-            doc.Save("IPX800.xml")
+            'doc.Load(response.GetResponseStream)
+            'doc.Save("IPX800.xml")
+            Dim SR As New StreamReader(response.GetResponseStream)
 
             Dim Line As String = ""
-            FileOpen(1, "IPX800.xml", OpenMode.Input) ' Ouvre en lecture.
-            While Not EOF(1) ' Boucler jusqu'à la fin du fichier
-                Line = LineInput(1) ' Lire chaque ligne
-                Dim a As String = "<" & Element & ">"
+            Dim a As String = "<" & Element & ">"
+
+            Do Until SR.Peek = -1
+                Line = SR.ReadLine()
+
                 Dim b As String = Trim(Line)
                 If b.StartsWith(a) Then
                     Dim idx1 As Integer = InStr(2, b, ">")
@@ -855,9 +852,41 @@ Imports System.Xml
                 Else
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GET_IPX800", "ligne: " & b)
                 End If
-            End While
-            FileClose(1) ' Fermer.
-            File.Delete("IPX800.xml")
+            Loop
+
+            SR.Close()
+            'FileOpen(1, "IPX800.xml", OpenMode.Input) ' Ouvre en lecture.
+
+            'While Not EOF(1) ' Boucler jusqu'à la fin du fichier
+            '    Line = LineInput(1) ' Lire chaque ligne
+            '    Dim a As String = "<" & Element & ">"
+            '    Dim b As String = Trim(Line)
+            '    If b.StartsWith(a) Then
+            '        Dim idx1 As Integer = InStr(2, b, ">")
+            '        Dim idx2 As Integer = InStr(idx1, b, "<")
+            '        If idx1 > 0 And idx2 > 0 And idx2 > idx1 Then
+            '            Dim idx3 As Integer = idx1 + 1
+            '            Dim c As String = ""
+            '            Do While Mid(b, idx3, 1) <> "<"
+            '                c &= Mid(b, idx3, 1)
+            '                idx3 += 1
+            '            Loop
+            '            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GET_IPX800", "Trouvé " & c)
+            '            retour = c
+            '            If IsNumeric(retour) = False Then
+            '                If LCase(retour.ToString) = "up" Then
+            '                    retour = 1
+            '                Else
+            '                    retour = 0
+            '                End If
+            '            End If
+            '        End If
+            '    Else
+            '        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GET_IPX800", "ligne: " & b)
+            '    End If
+            'End While
+            'FileClose(1) ' Fermer.
+            'File.Delete("IPX800.xml")
 
             'nodes = doc.SelectNodes("response/")
 
@@ -884,8 +913,8 @@ Imports System.Xml
             '    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GET_IPX800", "Aucun élément n'a été trouvé")
             'End If
 
-            doc = Nothing
-            nodes = Nothing
+            'doc = Nothing
+            'nodes = Nothing
 
             Return retour
         Catch ex As Exception
