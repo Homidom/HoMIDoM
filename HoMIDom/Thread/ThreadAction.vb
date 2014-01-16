@@ -525,7 +525,8 @@ Namespace HoMIDom
 
                 Do While startcmd > 0 And endcmd > 0
                     Dim _device As String = Mid(newcmd, startcmd + 1, endcmd - startcmd - 1)
-                    Dim Tabl() As String = _device.Split(".")
+                    'Dim Tabl() As String = _device.Split(".")
+                    Dim Tabl() As String = _device.Split(System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
 
                     If Tabl.Length = 1 Then
                         Select Case _device
