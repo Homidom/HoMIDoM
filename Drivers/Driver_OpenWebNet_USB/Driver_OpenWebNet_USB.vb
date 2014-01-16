@@ -383,13 +383,13 @@ Imports OpenWebNet
                 Case "VOLET"
                     Select Case UCase(Command)
                         Case "ON"
-                            Gateway.AutomationUp("100")
+                            Gateway.AutomationUp(Objet.Adresse1)
                             Objet.value = True
                         Case "OFF"
-                            Gateway.AutomationDown("0")
+                            Gateway.AutomationDown(Objet.Adresse1)
                             Objet.value = False
                         Case "DIM"
-                            Gateway.AutomationStop(Parametre1)
+                            Gateway.AutomationStop(Objet.Adresse1)
                             Objet.value = Parametre1
                     End Select
                 Case Else
