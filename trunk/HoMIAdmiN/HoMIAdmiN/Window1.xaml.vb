@@ -24,6 +24,7 @@ Class Window1
     Dim MyRep As String = System.Environment.CurrentDirectory
     Dim MyRepAppData As String = System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData) & "\HoMIAdmiN"
 
+    Dim MainMenu As uMainMenu
     Dim WMainMenu As Double = 0
     Dim HMainMenu As Double = 0
     Dim _MainMenuAction As Integer = -1 'NEW,MODIF,SUPP -1 si aucun
@@ -43,9 +44,18 @@ Class Window1
 
             Me.Title = "HoMIAdmiN v" & My.Application.Info.Version.ToString & " - HoMIDoM"
 
+
             Dim spl As Window2 = New Window2
             spl.Show()
             Thread.Sleep(1000)
+
+            Me.Window1.WindowState = My.Settings.WindowState
+            If Me.Window1.WindowState = Windows.WindowState.Normal Then
+                Me.Window1.Top = My.Settings.Top
+                Me.Window1.Left = My.Settings.Left
+                Me.Window1.Width = My.Settings.Width
+                Me.Window1.Height = My.Settings.Height
+            End If
 
             myBrushVert.GradientOrigin = New Point(0.75, 0.25)
             myBrushVert.GradientStops.Add(New GradientStop(Colors.LightGreen, 0.0))
@@ -81,6 +91,7 @@ Class Window1
             End If
 
             AffIsDisconnect()
+
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub New: " & ex.Message, "ERREUR", "")
         End Try
@@ -228,6 +239,7 @@ Class Window1
                 objStreamWriter.Close()
                 x = Nothing
             End If
+
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement du fichier de config xml de l'application Admin : " & ex.Message, "Erreur", "")
         End Try
@@ -339,6 +351,14 @@ Class Window1
                 End If
                 FlagChange = False
             End If
+            My.Settings.WindowState = Me.Window1.WindowState
+            If Me.Window1.WindowState = Windows.WindowState.Normal Then
+                My.Settings.Top = Me.Window1.Top
+                My.Settings.Left = Me.Window1.Left
+                My.Settings.Width = Me.Window1.Width
+                My.Settings.Height = Me.Window1.Height
+            End If
+            My.Settings.Save()
             End
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Unloaded Quitter: " & ex.Message, "ERREUR", "")
@@ -1727,7 +1747,7 @@ Class Window1
 
     Private Sub ShowMainMenu()
         Try
-            Dim MainMenu As New uMainMenu
+            MainMenu = New uMainMenu
 
             MainMenu.Uid = "MAINMENU"
             AddHandler MainMenu.menu_contextmenu, AddressOf MainMenucontextmenu
@@ -2747,7 +2767,7 @@ Class Window1
                     Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
                     myDoubleAnimation.From = 1.0
                     myDoubleAnimation.To = 0.0
-                    myDoubleAnimation.Duration = New Duration(TimeSpan.FromMilliseconds(650))
+                    myDoubleAnimation.Duration = New Duration(TimeSpan.FromMilliseconds(My.Settings.AnimationDuration))
                     Dim myStoryboard As Storyboard = New Storyboard()
                     myStoryboard.Children.Add(myDoubleAnimation)
                     AddHandler myStoryboard.Completed, AddressOf AffControlPageSuite
@@ -2798,7 +2818,7 @@ Class Window1
             Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
             myDoubleAnimation.From = 1.0
             myDoubleAnimation.To = 0.0
-            myDoubleAnimation.Duration = New Duration(TimeSpan.FromMilliseconds(650))
+            myDoubleAnimation.Duration = New Duration(TimeSpan.FromMilliseconds(My.Settings.AnimationDuration))
             Dim myStoryboard As Storyboard = New Storyboard()
             myStoryboard.Children.Add(myDoubleAnimation)
             AddHandler myStoryboard.Completed, AddressOf StoryBoardFinish
@@ -2821,7 +2841,7 @@ Class Window1
                 Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
                 myDoubleAnimation.From = 0.0
                 myDoubleAnimation.To = 1.0
-                myDoubleAnimation.Duration = New Duration(TimeSpan.FromMilliseconds(650))
+                myDoubleAnimation.Duration = New Duration(TimeSpan.FromMilliseconds(My.Settings.AnimationDuration))
                 Dim myStoryboard As Storyboard = New Storyboard()
                 myStoryboard.Children.Add(myDoubleAnimation)
 
@@ -2963,6 +2983,17 @@ Class Window1
         Catch ex As Exception
             MessageBox.Show(ex.ToString)
         End Try
+    End Sub
+
+    Private Sub Window1_SizeChanged(sender As Object, e As SizeChangedEventArgs) Handles Window1.SizeChanged
+
+        If flagShowMainMenu = True Then
+            WMainMenu = CanvasRight.ActualWidth / 2 - (MainMenu.Width / 2)
+            HMainMenu = CanvasRight.ActualHeight / 2 - (MainMenu.Height / 2)
+            Canvas.SetLeft(MainMenu, WMainMenu)
+            Canvas.SetTop(MainMenu, HMainMenu)
+        End If
+
     End Sub
 End Class
 

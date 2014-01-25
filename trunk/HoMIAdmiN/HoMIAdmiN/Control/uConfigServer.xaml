@@ -328,6 +328,18 @@
                                         <Button HorizontalAlignment="left" Height="25" Template="{DynamicResource GlassButton}" Margin="8,2,2,2" Name="BtnStartSrvWeb" VerticalAlignment="Top" Width="160" Foreground="White">Redémarrer le serveur WEB</Button>
                                     </StackPanel>
                                 </GroupBox>
+                                <GroupBox Name="GroupBox29" Margin="2" Width="700">
+                                    <GroupBox.Header>
+                                        <Label Foreground="White" FontWeight="Bold">Affichage</Label>
+                                    </GroupBox.Header>
+                                    <StackPanel >
+                                        <Label Content="Paramètres d'affichage de la console d'administration." Foreground="Gray" Height="28" FontSize="11" />
+                                        <StackPanel Orientation="Horizontal" >
+                                            <Label Content="Désactiver les fondus à l'ouverture et fermeture des fenêtres :" Foreground=" White" />
+                                            <CheckBox Name="ChKDisableAnimations" IsChecked="True" Background="DarkGray" BorderBrush="Black" Foreground="White" VerticalAlignment="center" Content="" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </GroupBox>
                             </StackPanel>
                         </TabItem >
                     </TabControl>

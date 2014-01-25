@@ -147,6 +147,12 @@ Partial Public Class uConfigServer
 
                 myService.SetTypeLogEnable(_list)
 
+                If ChKDisableAnimations.IsChecked = True Then
+                    My.Settings.AnimationDuration = 0
+                Else
+                    My.Settings.AnimationDuration = 650
+                End If
+
                 My.Settings.SaveRealTime = ChKSaveRealTime.IsChecked
                 My.Settings.Save()
 
@@ -235,6 +241,12 @@ Partial Public Class uConfigServer
                 ChkTyp9.IsChecked = _list.Item(9)
 
                 ChKSaveRealTime.IsChecked = My.Settings.SaveRealTime
+
+                If My.Settings.AnimationDuration = 650 Then
+                    ChKDisableAnimations.IsChecked = False
+                Else
+                    ChKDisableAnimations.IsChecked = True
+                End If
 
                 Dim idx = -1
                 For i As Integer = 0 To myService.GetAllVoice.Count - 1
