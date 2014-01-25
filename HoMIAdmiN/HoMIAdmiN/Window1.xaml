@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Window1"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    MinHeight="700" MinWidth="1024" Icon="/HoMIAdmiN;component/Images/Homidom_logo_128.png" Name="Window1" WindowStartupLocation="CenterScreen" Background="#FF312D2D" WindowState="Maximized" WindowStyle="SingleBorderWindow">
+    MinHeight="700" MinWidth="1024" Icon="/HoMIAdmiN;component/Images/Homidom_logo_128.png" Name="Window1" Background="#FF312D2D" WindowState="Maximized" WindowStyle="SingleBorderWindow">
 
 
 
