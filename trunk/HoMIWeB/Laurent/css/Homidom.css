@@ -1,0 +1,31 @@
+body {
+		Margin : auto;
+		position: relative;
+		font-family:Helvetica neue, Helvetica, "arial Black", Gadget, sans-serif;
+		background-color: #606060;
+		margin-left : 10px;
+		max-width : 400px;
+}
+.page-header { display: inline-block; margin : 10px; }
+header h1 { margin-left : 75px;  color : gray }
+header small { font-size : 16pt; color : darkorange }
+.alert.alert-danger  { text-align : center ; color : darkorange; background-color : a8a8a8 }
+.well {text-align : center }
+.input-group   {margin : 10px }
+.input-group-addon { min-width : 100px; color:darkorange ; font-weight:bold;}
+.action {margin : 20px }
+.action button {margin  : 0 auto auto ; width : 170px}
+
+.ListeChamp{ border-radius : 5px ; border: 3px; border-style: solid; border-color: white; margin : 5px 5px }
+
+
+#ListeServeurs { width : 98%; height :90px;	 margin :10px 0 10px 5px; overflow:auto; }
+#ListeServeurs  img{width : 70px; height :70px;	}
+#ListeServeurs div { text-align: center; display : inline-table; margin : 2px; width : 70px;height :70px;		
+	border : 2px; border-style : solid;  border-color : gray; -webkit-border-radius: 10px;	border-radius: 10px;}
+#ListeServeurs div:hover{ border-style : solid; 	border-color : Orange;	-webkit-border-radius: 10px;	border-radius: 10px;}
+#ListeServeurs span {	font-size: 7pt;	display : block;		color : white;}
+#ListeServeurs img, #ListeServeurs span {	margin : auto;}
+
+.commandes button {margin : 10px  25px 10px 25px; background-image:linear-gradient(to bottom  , white,  orange);}
+.commandes button:hover { background: orange }
