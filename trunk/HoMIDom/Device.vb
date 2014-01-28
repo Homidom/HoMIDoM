@@ -1865,10 +1865,8 @@ Namespace HoMIDom
             End Property
 
             Public Sub Read()
-
                 If _Enable = False Then Exit Sub
                 If Driver.IsConnect() And _Server.Etat_server Then Driver.Read(Me)
-
             End Sub
 
             'Contien l'avant derniere valeur
