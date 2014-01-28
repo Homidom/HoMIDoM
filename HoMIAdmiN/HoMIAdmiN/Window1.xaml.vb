@@ -955,6 +955,7 @@ Class Window1
 
             Dim ListeDevices As List(Of TemplateDevice) = myService.GetAllDevices(IdSrv)
             Dim ListeZones As List(Of Zone) = myService.GetAllZones(IdSrv)
+            Dim DevicesAsHisto As Dictionary(Of String, Boolean) = myService.DevicesAsHisto
 
             CntDevice.Content = ListeDevices.Count & " Device(s)"
             For Each Dev As TemplateDevice In ListeDevices
@@ -964,8 +965,13 @@ Class Window1
                 Dim img As New Image
                 Dim FlagZone As Boolean = False
                 Dim nomdriver As String = myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom
+                Dim _nbhisto As Long = 0
+
                 stack.Orientation = Orientation.Horizontal
-                Dim _nbhisto As Long = myService.DeviceAsHisto(Dev.ID)
+
+                If DevicesAsHisto.ContainsKey(Dev.ID) Then
+                    _nbhisto = myService.DeviceAsHisto(Dev.ID)
+                End If
 
                 'gestion de l'image du composant dans le menu
                 img.Height = 20
@@ -974,8 +980,7 @@ Class Window1
                     img.Source = ConvertArrayToImage(myService.GetByteFromImage(Dev.Picture), 20)
                 Else
                     Dim bmpImage As New BitmapImage()
-                    Dim uri As String = ""
-                    uri = MyRep & "\Images\Icones\Composant_32.png"
+                    Dim uri As String = MyRep & "\Images\Icones\Composant_32.png"
                     img.Source = ImageFromUri(uri)
                 End If
                 stack.Children.Add(img)
@@ -986,12 +991,6 @@ Class Window1
                     label.Foreground = New SolidColorBrush(Colors.White)
                     'on verifie si la composant n'est pas à jour depuis au moins lastchangeduree
                     If Dev.LastChangeDuree > 0 Then
-                        'Dim X As Date = Dev.LastChange
-                        'X.AddHours(CInt(Dev.LastChangeDuree))
-                        'If X < Now Then
-                        '    label.Foreground = New SolidColorBrush(Colors.Red)
-                        'End If
-                        'X = Nothing
                         If DateTime.Compare(Dev.LastChange.AddMinutes(CInt(Dev.LastChangeDuree)), Now) < 0 Then
                             label.Foreground = New SolidColorBrush(Colors.Red)
                         End If
@@ -1010,18 +1009,20 @@ Class Window1
                                 Exit For
                             End If
                         Next
+                    Else
+                        Exit For
                     End If
                 Next
+
                 If FlagZone = False Then
                     Dim uri2 As String = MyRep & "\Images\Icones\ZoneNo_32.png"
-                    Dim img2 As New Image
-                    img2.Height = 20
-                    img2.Width = 20
-                    img2.Source = ImageFromUri(uri2)
-                    img2.ToolTip = "Ce composant ne fait pas partie d'une zone"
-                    stack.Children.Add(img2)
-                    img2 = Nothing
-                    uri2 = Nothing
+                    Dim imgNoZone As New Image
+                    imgNoZone.Height = 20
+                    imgNoZone.Width = 20
+                    imgNoZone.Source = ImageFromUri(uri2)
+                    imgNoZone.ToolTip = "Ce composant ne fait pas partie d'une zone"
+                    stack.Children.Add(imgNoZone)
+                    imgNoZone = Nothing
                 End If
 
                 '*************************** TOOL TIP **************************
@@ -1041,7 +1042,7 @@ Class Window1
 
                 Dim tool As New Label
                 tool.Content = "Nom: " & Dev.Name & vbCrLf
-                tool.Content &= "Enable " & Dev.Enable & vbCrLf
+                tool.Content &= "Enable: " & Dev.Enable & vbCrLf
                 tool.Content &= "Description: " & Dev.Description & vbCrLf
                 tool.Content &= "Type: " & Dev.Type.ToString & vbCrLf
                 tool.Content &= "Driver: " & nomdriver & vbCrLf
