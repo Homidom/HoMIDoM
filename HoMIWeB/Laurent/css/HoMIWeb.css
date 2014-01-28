@@ -29,12 +29,11 @@ footer, header, hgroup, menu, nav, section {
 	display: block;
 }
 body {
-	
-	margin-left: 10%;
+	margin-left: 5px;
+	margin-right: 5px;
 	line-height: 1; 
 	font-family:Helvetica neue, Helvetica, "arial Black", Gadget, sans-serif;
-	width: 70%;
-	display: inline;
+	background : transparent; 
 }
 ol, ul {
 	list-style: none;
@@ -79,6 +78,7 @@ body article {
 footer {
 	margin: auto;
 	width:100%;	
+	width:100%;	
 	float: left;
 	color : Red;
 }
@@ -91,12 +91,12 @@ footer {
 	
 }
 
-header {
-	margin: 10px auto 10px;
-	width:85%;	
-	float: none;
-	display:inline-block;
+
+
+header h1 {
+color : rgba(230,30,30,0.75);
 }
+
 
 header span, header p {
 	display:inline-block;
@@ -105,70 +105,17 @@ header span, header p {
 	text-align:center;
 }
 
- .InfoSoleil {
-	float : right;
-	margin-right: 25px;
-	margin-top: 10px;
+.row {
+margin : 1px;
 }
 
-.LogoDate {
-	display : inline-block;
-}	
-
-.DateHeader, .LogoHeader {
-	font-size: 16pt;
-	font-style: italic;
-	font-weight : bold;
-	vertical-align: middle;
-}	
-
-.MiddlePanel {
-	width:70%;
-	margin-top: 1%;
-	background-color: rgba(190,190,190,0.75) ;
-	display: inline-block;
-	z-index:5;
-	border: 5px outset #A9A9A9;
- 	-webkit-border-radius: 10px;
- 	border-radius: 10px;
-}
-
-.ZonesPanel {
-	float: left;
-	margin-top: 1%;
-	width:70%;
-	background-color: rgba(190,190,190,0.75) ;
-	display: inline-block;
-	z-index:4;
-	border: 5px outset #A9A9A9;
- 	-webkit-border-radius: 10px;
- 	border-radius: 10px;
-}
-
-.RightPanel {
-	margin-top: 1%;
-	float: right;
-	width: 15%; 
-	height : auto;
-	font-size: 16px;
-	padding: 5px; 
-	background-color: rgba(190,190,190,0.75) ;
-	text-align: center;
-	display: inline-block;
-}
-
-.LeftPanel {
-	margin: 1%;
-	float: left;
-	font-size: 16px;
-	padding: 5px; 
-	width: 10%;
-	background-color: rgba(190,190,190,0.75) ;
-	text-align: center;	
-	display: inline-block;
-}
-
-#aside {
+.col-lg-12 , .col-md-2  {
+color: White;
+background-color: rgba(190,190,190,0.75);
+border: 1px groove #777777;
+-webkit-border-radius: 10px;
+ border-radius: 10px;
+ margin-bottom : 1%;
 }
 
 #devices , .MenuZone {
@@ -186,133 +133,36 @@ h1 {
 }
 
 h2 {
-	margin-top: 10px;
+	margin-top: 15px;
 	margin-bottom: 10px;
 	text-align: center;
 	font-size:24px;
 	color: White;
 	font-weight: bold;
 }
-
-nav {
-	text-align:center;
+h3 {	
+	margin-top: 15px;
+	text-align: center;
+	font-size:18px;
+	color: White;	
+	text-decoration:underline;
 }
-nav ul li {
-	display:inline-block;
-	margin:30px;
-}
-
-.NomDevice {
-	margin:  5px 0 -3% 5%; 
-	font-size: 10pt;
+h4 {	
+	margin-top: 5px;
+	text-align: center;
 	font-weight: bold;
-	text-align : center;
-	color : white ;
 }
 
-.align_image img, .BoutonZone img {
+.align_image img {
 	width:45px;
 	height:45px;
-	margin: 5% 0 3% 2%; 
+	margin: 5% 8% 3% 2%; 
+}
+.align_image img, .align_image button {
+	display : inline;
+	vertical-align:middle;
 }
 
-.align_image span, .BoutonZone span {
-  margin: 7%;
-  font-size: 14pt;
-  font-weight: bold;
-}
-
-.align_image img, .align_image span {
-  vertical-align : baseline;
-  display: inline-block;
-  color : white ;
-}
-
-
-.macros {
-	margin: auto;
-}
-.align_macro:hover {
-	background-image:    -moz-linear-gradient( top, red 35%, Black 75%);
-}
-
-.BoutonZone img, .BoutonZone span {
-  vertical-align : baseline;
-  color : white ;
-}
-
-.align_Zone {
-	width: 105px;
-	height: 85px;
- 	border: 3px groove #A9A9A9;
-	background-image:    -moz-linear-gradient( top, #BEBEBE 0%, Black 75%);
- 	-webkit-border-radius: 10px;
- 	border-radius: 10px;
-	display: inline-block;
-}
-.align_Zone:hover {
-	background-image:    -moz-linear-gradient( top, red 35%, Black 75%);
-}
-
-.align_Zone img,  .align_Zone span {
-  display: block;
-}
-
-.align_Zone img {
-	width:50px;
-	height:50px; 
-	margin-top : 3%;
-	margin-left : auto;
-	margin-right : auto;
-}
-
-.align_Zone p {
-  Margin : 5%;
-  color : white ;
-  font-size: 0.8em;
-  text-align : center;	
-}
-
-#menu {
-	display: none;
-}
-
-#menu ul {
- margin:0;
- padding:0;
- list-style-type:none;
- text-align:center;
-
- }
- 
-#menu li {
- float: right;
- margin:auto;
- padding:0;
- text-align: center;
- background-color:black;
- -webkit-border-radius: 5px;
- border-radius: 5px; 
- 
- position: relative;
- z-index: 5;
- }
- 
-#menu li a {
- display:block;
- width:160px;
- color:white;
- text-decoration:none;
- padding:5px;
- }
- 
-#menu li a:hover {
- color:#FFD700;
- }
-
-article:hover #menu {
-	display: block;
-} 
 #WidMeteo {
 	height: 250px;
 	width:  200px;
@@ -390,11 +240,15 @@ article:hover #menu {
 }
 
 
-.command input, .command label {
-	margin: auto;
-	 font-size: 10pt;
-	 display: inline-table;
-	 color : yellow;
-	 vertical-align : middle;
-	  z-index: 2;
+
+#zones  a img {
+	width:50px;
+	height:50px; 
+}
+#zones  a {
+margin-top : 5px;
+} 
+#Colmid {
+margin:  10px; 
+
 }
