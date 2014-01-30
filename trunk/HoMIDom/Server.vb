@@ -7747,6 +7747,7 @@ Namespace HoMIDom
         Function DeleteIDToAction(ByVal IdSrv As String, ByVal Actions As ArrayList, ByVal Id As String) As String
             Try
                 If VerifIdSrv(IdSrv) = False Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteIDToAction", "Idsrv incorrect, Action will not be deleted in actions list : " & Id)
                     Return 99
                 End If
 
@@ -7796,6 +7797,7 @@ Namespace HoMIDom
         Public Function DeleteMacro(ByVal IdSrv As String, ByVal macroId As String) As Integer Implements IHoMIDom.DeleteMacro
             Try
                 If VerifIdSrv(IdSrv) = False Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteMacro", "Idsrv incorrect, macros will not be deleted : " & macroId)
                     Return 99
                 End If
 
@@ -7819,6 +7821,7 @@ Namespace HoMIDom
         Function GetAllMacros(ByVal IdSrv As String) As List(Of Macro) Implements IHoMIDom.GetAllMacros
             Try
                 If VerifIdSrv(IdSrv) = False Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllMacros", "Idsrv incorrect, macros will not be returned")
                     Return Nothing
                 End If
 
@@ -7866,6 +7869,7 @@ Namespace HoMIDom
         Public Function SaveMacro(ByVal IdSrv As String, ByVal macroId As String, ByVal nom As String, ByVal enable As Boolean, Optional ByVal description As String = "", Optional ByVal listactions As ArrayList = Nothing) As String Implements IHoMIDom.SaveMacro
             Try
                 If VerifIdSrv(IdSrv) = False Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveMacro", "Idsrv incorrect macro will not be saved : " & nom)
                     Return 99
                 End If
 
@@ -7914,6 +7918,7 @@ Namespace HoMIDom
         Public Function ReturnMacroById(ByVal IdSrv As String, ByVal MacroId As String) As Macro Implements IHoMIDom.ReturnMacroById
             Try
                 If VerifIdSrv(IdSrv) = False Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnMacroById", "Idsrv incorrect, macro will not be returnned : " & MacroId)
                     Return Nothing
                 End If
 
@@ -7932,6 +7937,7 @@ Namespace HoMIDom
         Public Sub RunMacro(ByVal IDSrv As String, ByVal Id As String) Implements IHoMIDom.RunMacro
             Try
                 If VerifIdSrv(IDSrv) = False Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "RunMacro", "Idsrv incorrect, macro will not be runned : " & Id)
                     Exit Sub
                 End If
 
