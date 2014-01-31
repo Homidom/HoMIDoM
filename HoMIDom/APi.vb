@@ -300,8 +300,8 @@ Namespace HoMIDom
 
             Dim resultatSTR As String = Valeur & Formule
             Try
-                Dim startcmd As Integer = InStr(1, Command, "<")
-                Dim endcmd As Integer = InStr(1, Command, ">")
+                Dim startcmd As Integer = InStr(1, resultatSTR, "<")
+                Dim endcmd As Integer = InStr(1, resultatSTR, ">")
                 Dim newcmd As String = resultatSTR
 
                 Do While startcmd > 0 And endcmd > 0
