@@ -1,5 +1,4 @@
 <?php
-
 class HomidomSoap {
     public $_port = "7999";
     public $_ip = "localhost";
