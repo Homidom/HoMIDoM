@@ -659,7 +659,8 @@ Imports Driver_Zibase.ZibaseDllvb
                 Case "XDD868_INTER_SHUTTER" : protocole = ZiBase.Protocol.PROTOCOL_X2D868_INTER_SHUTTER
                 Case "XDD868_BOILER_AC" : protocole = ZiBase.Protocol.PROTOCOL_XDD868_BOILER_AC
                 Case "XDD868_PILOT_WIRE" : protocole = ZiBase.Protocol.PROTOCOL_XDD868_PILOT_WIRE
-                Case Else : Return ("ERR: protocole incorrect : " & Modele(0))
+                Case Else : Return ("ERR: protocole incorrect : " & UCase(composants_modele_nom))
+                    'Case Else : Return ("ERR: protocole incorrect : " & Modele(0))
             End Select
 
             'verification Adresse
@@ -715,6 +716,18 @@ Imports Driver_Zibase.ZibaseDllvb
                     'valeur = STRGS.Left(valeur, (valeur.Length - 2))
                     valeur = CStr(CInt(valeur) / 100)
                     type = "THC" 'Température de consigne (Thermostat : °C)
+                Case "LEV"
+                    valeur = CStr(CInt(valeur) / 10)
+                    type = "LEV" 'signal level
+                Case "KWH"
+                    valeur = CStr(CInt(valeur) / 100)
+                    type = "KWH" 'comsommation totale
+                Case "KW"
+                    valeur = CStr(CInt(valeur) / 100)
+                    type = "KW" 'comsommation totale
+                Case "W"
+                    valeur = CStr(CInt(valeur))
+                    type = "KW" 'comsommation totale
                 Case "XSE", "BAT", "LNK", "STA", "" : valeur = valeurstring 'on utilise la valeur normale et non l'entier
             End Select
             'dans le cas des adresse du type M5

@@ -495,6 +495,85 @@ Namespace HoMIDom
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device Refresh", ex.Message)
                 End Try
             End Sub
+
+
+            Protected Function EvaluationDevice(ByVal Formule As String, ByVal Valeur As Double) As Double
+                Dim resultatSTR As String = Valeur & Formule
+                Try
+
+                    _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "EvaluationDevice", "Evaluation de : " & resultatSTR)
+
+                    Dim startcmd As Integer = InStr(1, resultatSTR, "<")
+                    Dim endcmd As Integer = InStr(1, resultatSTR, ">")
+                    Dim newcmd As String = resultatSTR
+
+                    Do While startcmd > 0 And endcmd > 0
+                        Dim _device As String = Mid(newcmd, startcmd + 1, endcmd - startcmd - 1)
+                        'Dim Tabl() As String = _device.Split(".")
+                        Dim Tabl() As String = _device.Split(System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        If Tabl.Length = 1 Then
+                            Select Case _device
+                                Case "SYSTEM_DATE"
+                                    _device = Now.Date.ToShortDateString
+                                Case "SYSTEM_LONG_DATE"
+                                    _device = Now.Date.ToLongDateString
+                                Case "SYSTEM_TIME"
+                                    _device = Now.ToShortTimeString
+                                Case "SYSTEM_LONG_TIME"
+                                    _device = Now.ToLongTimeString
+                                Case "SYSTEM_SOLEIL_COUCHE"
+                                    Dim _date As Date = _Server.GetHeureCoucherSoleil
+                                    _device = _date.ToShortTimeString
+                                Case "SYSTEM_SOLEIL_LEVE"
+                                    Dim _date As Date = _Server.GetHeureLeverSoleil
+                                    _device = _date.ToShortTimeString
+                                Case Else
+                                    Dim x As Object = _Server.ReturnRealDeviceByName(Tabl(0))
+                                    If x IsNot Nothing Then
+                                        _device = x.Value
+                                    Else
+                                        _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "EvaluationDevice", "Composant: " & Tabl(0) & " non trouvé --> Arrêt du traitement")
+                                        Return -1
+                                    End If
+                            End Select
+                        ElseIf Tabl.Length = 2 Then
+                            Dim x As Object = _Server.ReturnRealDeviceByName(Tabl(0))
+                            If x IsNot Nothing Then
+                                Dim value As Object = CallByName(x, Tabl(1), CallType.Get)
+                                _device = value
+                            End If
+                        End If
+
+                        Dim start As String = Mid(newcmd, 1, startcmd - 1)
+                        Dim fin As String = Mid(newcmd, endcmd + 1, newcmd.Length - endcmd)
+                        newcmd = start & _device & fin
+                        resultatSTR = newcmd
+                        startcmd = InStr(1, newcmd, "<")
+                        endcmd = InStr(1, newcmd, ">")
+                    Loop
+
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "EvaluationDevice Conversion", "Exception: " & ex.Message)
+                    Return -1
+                End Try
+
+
+                'On fait le calcul
+                Try
+                    If Text.RegularExpressions.Regex.IsMatch(resultatSTR, "^[0-9+\-*/\^().,]*$") Then
+                        Dim dt = New DataTable()
+                        Dim resultat As Double = CDbl(dt.Compute(resultatSTR, ""))
+                        dt = Nothing
+                        Return resultat
+                    Else
+                        Return resultatSTR
+                    End If
+                Catch ex As Exception
+                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "EvaluationDevice Calcul", "Erreur : " & ex.ToString)
+                    Return Valeur
+                End Try
+            End Function
+
         End Class
 
         ''' <summary>Classe valeur Double avec min/max/def/correction...</summary>
@@ -633,10 +712,11 @@ Namespace HoMIDom
                                 tmp = _ValueMax
                             End If
                             If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
+
                             If IsNumeric(_Correction) Then
                                 tmp += _Correction
                             Else
-                                tmp = Evaluation(_Correction, tmp)
+                                tmp = EvaluationDevice(_Correction, tmp)
                             End If
 
                             'si ALLVALUE On enregistre TOUTES les valeurs
@@ -918,7 +998,7 @@ Namespace HoMIDom
                             If IsNumeric(_Correction) Then
                                 tmp += _Correction
                             Else
-                                tmp = Evaluation(_Correction, tmp)
+                                tmp = EvaluationDevice(_Correction, tmp)
                             End If
 
                             'si ALLVALUE On enregistre TOUTES les valeurs

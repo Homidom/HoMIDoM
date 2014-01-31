@@ -232,144 +232,155 @@ Namespace HoMIDom
             End Try
         End Function
 
-        ''' <summary>
-        ''' Retourne le résultat d'un calcul (formule, ex: *2 +3) en se basant sur une valeur de base (Valeur)
-        ''' </summary>
-        ''' <param name="Formule"></param>
-        ''' <param name="Valeur"></param>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
-        Public Function Evaluation(ByVal Formule As String, ByVal Valeur As Double) As Double
-            'Dim PosSep As Integer
-            'Dim PosCour As Integer
-            'Dim PosAV As Integer
-            'Dim PosAP As Integer
-            'Dim Av, Ap As String
-            'Dim Res As Double
-            'Dim Separateurs(3) As String
-            'Dim NumSep As Integer
+        ' ''' <summary>
+        ' ''' Retourne le résultat d'un calcul (formule, ex: *2 +3) en se basant sur une valeur de base (Valeur)
+        ' ''' </summary>
+        ' ''' <param name="Formule"></param>
+        ' ''' <param name="Valeur"></param>
+        ' ''' <returns></returns>
+        ' ''' <remarks></remarks>
+        'Public Function EvaluationDevice(ByVal Formule As String, ByVal Valeur As Double) As Double
+        '    'Dim PosSep As Integer
+        '    'Dim PosCour As Integer
+        '    'Dim PosAV As Integer
+        '    'Dim PosAP As Integer
+        '    'Dim Av, Ap As String
+        '    'Dim Res As Double
+        '    'Dim Separateurs(3) As String
+        '    'Dim NumSep As Integer
 
-            ''liste des separateurs
-            'Formule = Valeur & Formule
-            'Formule = Replace(Formule, " ", "")
+        '    ''liste des separateurs
+        '    'Formule = Valeur & Formule
+        '    'Formule = Replace(Formule, " ", "")
 
-            'Separateurs(0) = "/"
-            'Separateurs(1) = "*"
-            'Separateurs(2) = "+"
-            'Separateurs(3) = "-"
+        '    'Separateurs(0) = "/"
+        '    'Separateurs(1) = "*"
+        '    'Separateurs(2) = "+"
+        '    'Separateurs(3) = "-"
 
-            'For NumSep = 0 To 3
+        '    'For NumSep = 0 To 3
 
-            '    PosSep = InStr(1, Formule, Separateurs(NumSep))
-            '    While PosSep > 0
-            '        'on determine le nombre AVANT le separateur
-            '        PosCour = PosSep - 1
-            '        While (IsNumeric(Mid(Formule, PosCour, 1)))
-            '            PosCour = PosCour - 1
-            '            If PosCour = 0 Then Exit While
-            '        End While
+        '    '    PosSep = InStr(1, Formule, Separateurs(NumSep))
+        '    '    While PosSep > 0
+        '    '        'on determine le nombre AVANT le separateur
+        '    '        PosCour = PosSep - 1
+        '    '        While (IsNumeric(Mid(Formule, PosCour, 1)))
+        '    '            PosCour = PosCour - 1
+        '    '            If PosCour = 0 Then Exit While
+        '    '        End While
 
-            '        PosAV = PosCour + 1
-            '        Av = Mid(Formule, PosAV, PosSep - PosAV)
-            '        'on determine le nombre APRES le separateur
-            '        PosCour = PosSep + 1
-            '        While IsNumeric(Mid(Formule, PosCour, 1))
-            '            PosCour = PosCour + 1
-            '        End While
-            '        PosAP = PosCour
-            '        Ap = Mid(Formule, PosSep + 1, PosAP - PosSep - 1)
+        '    '        PosAV = PosCour + 1
+        '    '        Av = Mid(Formule, PosAV, PosSep - PosAV)
+        '    '        'on determine le nombre APRES le separateur
+        '    '        PosCour = PosSep + 1
+        '    '        While IsNumeric(Mid(Formule, PosCour, 1))
+        '    '            PosCour = PosCour + 1
+        '    '        End While
+        '    '        PosAP = PosCour
+        '    '        Ap = Mid(Formule, PosSep + 1, PosAP - PosSep - 1)
 
-            '        'On calcule la sous-partie isolée
-            '        Select Case NumSep
-            '            Case 0 '/
-            '                Res = Val(Av) / Val(Ap)
-            '            Case 1 '*
-            '                Res = Val(Av) * Val(Ap)
-            '            Case 2 '+
-            '                Res = Val(Av) + Val(Ap)
-            '            Case 3 '-
-            '                Res = Val(Av) - Val(Ap)
-            '        End Select
+        '    '        'On calcule la sous-partie isolée
+        '    '        Select Case NumSep
+        '    '            Case 0 '/
+        '    '                Res = Val(Av) / Val(Ap)
+        '    '            Case 1 '*
+        '    '                Res = Val(Av) * Val(Ap)
+        '    '            Case 2 '+
+        '    '                Res = Val(Av) + Val(Ap)
+        '    '            Case 3 '-
+        '    '                Res = Val(Av) - Val(Ap)
+        '    '        End Select
 
-            '        'on réécrit la formule avec la sous-partie calculée
-            '        Formule = Left(Formule, PosAV - 1) & Trim(Str(Res)) & Mid(Formule, PosAP)
-            '        PosSep = InStr(1, Formule, Separateurs(NumSep))
-            '    End While
-            'Next
-            'Evaluation = Val(Formule)
+        '    '        'on réécrit la formule avec la sous-partie calculée
+        '    '        Formule = Left(Formule, PosAV - 1) & Trim(Str(Res)) & Mid(Formule, PosAP)
+        '    '        PosSep = InStr(1, Formule, Separateurs(NumSep))
+        '    '    End While
+        '    'Next
+        '    'Evaluation = Val(Formule)
 
-            Dim resultatSTR As String = Valeur & Formule
-            Try
-                Dim startcmd As Integer = InStr(1, resultatSTR, "<")
-                Dim endcmd As Integer = InStr(1, resultatSTR, ">")
-                Dim newcmd As String = resultatSTR
+        '    _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "API Evaluation", "test")
 
-                Do While startcmd > 0 And endcmd > 0
-                    Dim _device As String = Mid(newcmd, startcmd + 1, endcmd - startcmd - 1)
-                    'Dim Tabl() As String = _device.Split(".")
-                    Dim Tabl() As String = _device.Split(System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                    If Tabl.Length = 1 Then
-                        Select Case _device
-                            Case "SYSTEM_DATE"
-                                _device = Now.Date.ToShortDateString
-                            Case "SYSTEM_LONG_DATE"
-                                _device = Now.Date.ToLongDateString
-                            Case "SYSTEM_TIME"
-                                _device = Now.ToShortTimeString
-                            Case "SYSTEM_LONG_TIME"
-                                _device = Now.ToLongTimeString
-                            Case "SYSTEM_SOLEIL_COUCHE"
-                                Dim _date As Date = _Server.GetHeureCoucherSoleil
-                                _device = _date.ToShortTimeString
-                            Case "SYSTEM_SOLEIL_LEVE"
-                                Dim _date As Date = _Server.GetHeureLeverSoleil
-                                _device = _date.ToShortTimeString
-                            Case Else
-                                Dim x As Object = _Server.ReturnRealDeviceByName(Tabl(0))
-                                If x IsNot Nothing Then
-                                    _device = x.Value
-                                Else
-                                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "API Evaluation", "Composant: " & Tabl(0) & " non trouvé --> Arrêt du traitement")
-                                    Return -1
-                                End If
-                        End Select
-                    ElseIf Tabl.Length = 2 Then
-                        Dim x As Object = _Server.ReturnRealDeviceByName(Tabl(0))
-                        If x IsNot Nothing Then
-                            Dim value As Object = CallByName(x, Tabl(1), CallType.Get)
-                            _device = value
-                        End If
-                    End If
+        '    _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "API Evaluation", "Evaluation de : " & Valeur & " " & Formule)
 
-                    Dim start As String = Mid(newcmd, 1, startcmd - 1)
-                    Dim fin As String = Mid(newcmd, endcmd + 1, newcmd.Length - endcmd)
-                    newcmd = start & _device & fin
-                    resultatSTR = newcmd
-                    startcmd = InStr(1, newcmd, "<")
-                    endcmd = InStr(1, newcmd, ">")
-                Loop
+        '    Dim resultatSTR As String = Valeur & Formule
+        '    Try
+        '        Dim startcmd As Integer = InStr(1, resultatSTR, "<")
+        '        Dim endcmd As Integer = InStr(1, resultatSTR, ">")
+        '        Dim newcmd As String = resultatSTR
 
-            Catch ex As Exception
-                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "API Evaluation Conversion", "Exception: " & ex.Message)
-                Return -1
-            End Try
+        '        Do While startcmd > 0 And endcmd > 0
+        '            Dim _device As String = Mid(newcmd, startcmd + 1, endcmd - startcmd - 1)
+
+        '            _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "API Evaluation Conversion", "Remplacement de " & _device & " par sa valeur")
+
+        '            'Dim Tabl() As String = _device.Split(".")
+        '            Dim Tabl() As String = _device.Split(System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+        '            If Tabl.Length = 1 Then
+        '                Select Case _device
+        '                    Case "SYSTEM_DATE"
+        '                        _device = Now.Date.ToShortDateString
+        '                    Case "SYSTEM_LONG_DATE"
+        '                        _device = Now.Date.ToLongDateString
+        '                    Case "SYSTEM_TIME"
+        '                        _device = Now.ToShortTimeString
+        '                    Case "SYSTEM_LONG_TIME"
+        '                        _device = Now.ToLongTimeString
+        '                    Case "SYSTEM_SOLEIL_COUCHE"
+        '                        Dim _date As Date = _Server.GetHeureCoucherSoleil
+        '                        _device = _date.ToShortTimeString
+        '                    Case "SYSTEM_SOLEIL_LEVE"
+        '                        Dim _date As Date = _Server.GetHeureLeverSoleil
+        '                        _device = _date.ToShortTimeString
+        '                    Case Else
+        '                        Dim x As Object = _Server.ReturnRealDeviceByName(Tabl(0))
+        '                        If x IsNot Nothing Then
+        '                            _device = x.Value
+        '                        Else
+        '                            _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "API Evaluation", "Composant: " & Tabl(0) & " non trouvé --> Arrêt du traitement")
+        '                            Return -1
+        '                        End If
+        '                End Select
+        '            ElseIf Tabl.Length = 2 Then
+        '                Dim x As Object = _Server.ReturnRealDeviceByName(Tabl(0))
+        '                If x IsNot Nothing Then
+        '                    Dim value As Object = CallByName(x, Tabl(1), CallType.Get)
+        '                    _device = value
+        '                End If
+        '            End If
+
+        '            Dim start As String = Mid(newcmd, 1, startcmd - 1)
+        '            Dim fin As String = Mid(newcmd, endcmd + 1, newcmd.Length - endcmd)
+        '            newcmd = start & _device & fin
+        '            resultatSTR = newcmd
+        '            startcmd = InStr(1, newcmd, "<")
+        '            endcmd = InStr(1, newcmd, ">")
+        '        Loop
+
+        '    Catch ex As Exception
+        '        _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "API Evaluation Conversion", "Exception: " & ex.Message)
+        '        Return -1
+        '    End Try
 
 
-            'On fait le calcul
-            Try
-                If Text.RegularExpressions.Regex.IsMatch(resultatSTR, "^[0-9+\-*/\^().,]*$") Then
-                    Dim dt = New DataTable()
-                    Dim resultat As Double = CDbl(dt.Compute(resultatSTR, ""))
-                    dt = Nothing
-                    Return resultat
-                Else
-                    Return resultatSTR
-                End If
-            Catch ex As Exception
-                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "API Evaluation Calcul", "Erreur : " & ex.ToString)
-                Return Valeur
-            End Try
-        End Function
+        '    'On fait le calcul
+        '    Try
+
+        '        _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "API Evaluation CALCUL", "Calcul de " & resultatSTR)
+
+
+        '        If Text.RegularExpressions.Regex.IsMatch(resultatSTR, "^[0-9+\-*/\^().,]*$") Then
+        '            Dim dt = New DataTable()
+        '            Dim resultat As Double = CDbl(dt.Compute(resultatSTR, ""))
+        '            dt = Nothing
+        '            Return resultat
+        '        Else
+        '            Return resultatSTR
+        '        End If
+        '    Catch ex As Exception
+        '        _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "API Evaluation Calcul", "Erreur : " & ex.ToString)
+        '        Return Valeur
+        '    End Try
+        'End Function
 
         Public Function ConvertArrayToImage(ByVal value As Object) As Object
             Try

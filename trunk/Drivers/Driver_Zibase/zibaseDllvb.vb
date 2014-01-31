@@ -389,7 +389,7 @@ Namespace ZibaseDllvb
                             seInfo.sName = "Chacon"
                         End If
 
-                        RaiseEvent WriteMessage("TEST DEBUG VISONIC BEFORE (" & seInfo.sID.Substring(0, 2).ToUpper & ") : ID: " & seInfo.sID & " NAME: " & seInfo.sName, MSG_DEBUG)
+                        'RaiseEvent WriteMessage("TEST DEBUG VISONIC BEFORE (" & seInfo.sID.Substring(0, 2).ToUpper & ") : ID: " & seInfo.sID & " NAME: " & seInfo.sName, MSG_DEBUG)
                         If (seInfo.sID.Substring(0, 2).ToUpper = "VS") Then
                             'seInfo.sID = "VS" & ((Convert.ToInt32(seInfo.sID.Substring(2), System.Globalization.CultureInfo.InvariantCulture)) And Not &HF)
                             seInfo.sName = "Visonic"
@@ -663,6 +663,27 @@ Namespace ZibaseDllvb
                         If (Not String.IsNullOrEmpty(sValue)) Then
                             seInfo.dwValue = CLng(Math.Truncate(Convert.ToDouble(sValue, CultureInfo.InvariantCulture) * 100))
                             seInfo.sValue = (seInfo.dwValue / 100.0) & " kW"
+                            seInfo.sHTMLValue = sValue
+                            If (_SensorList.Keys.Contains(sId & sType)) Then
+                                seInfo.sHSName = _SensorList(sId & sType).sHSName
+                                seInfo.sDevice = _SensorList(sId & sType).sDevice
+                                _SensorList(sId & sType) = seInfo
+                            Else
+                                _SensorList.Add(sId & sType, seInfo)
+                                RaiseEvent NewSensorDetected(seInfo)
+                            End If
+                            RaiseEvent UpdateSensorInfo(seInfo)
+                        End If
+                        '#End Region
+
+                        '#Region "w"
+                        sType = "w"
+                        seInfo.sType = sType
+                        seInfo.sDevice = ""
+                        sValue = GetValue(s, sType)
+                        If (Not String.IsNullOrEmpty(sValue)) Then
+                            seInfo.dwValue = CLng(Math.Truncate(Convert.ToDouble(sValue, CultureInfo.InvariantCulture)))
+                            seInfo.sValue = (seInfo.dwValue) & " W"
                             seInfo.sHTMLValue = sValue
                             If (_SensorList.Keys.Contains(sId & sType)) Then
                                 seInfo.sHSName = _SensorList(sId & sType).sHSName
