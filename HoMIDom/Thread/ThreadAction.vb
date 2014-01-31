@@ -233,7 +233,7 @@ Namespace HoMIDom
                                 End If
                                 'On travail sur un jour
                                 If (_tim(0) = "*" And _tim(1) = "*" And _tim(2) = "*") And _tim(3) = "*" And _tim(4) = "*" And _tim(5) <> "" And _tim(6) <> "1" And _tim(7) <> "1" Then
-                                    flag = True
+                                    Flagjour = True
                                     a1 = Now
                                 End If
                                 'On travail sur heure levé du soleil

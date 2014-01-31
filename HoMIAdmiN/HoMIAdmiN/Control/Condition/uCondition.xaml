@@ -44,7 +44,7 @@
                 </StackPanel>
                 <StackPanel Margin="5">
                     <StackPanel Orientation="Horizontal" >
-                        <StackPanel Name="Stk1">
+                        <StackPanel Name="Stk1" Visibility="Hidden">
                             <StackPanel Orientation="Horizontal" >
                                 <Label Content="Hr" HorizontalAlignment="Center" Margin="1" Name="LblH" VerticalAlignment="Top" Width="35" Foreground="White" HorizontalContentAlignment="Center" FontSize="10" />
                                 <Label Content="Mn" Foreground="White" HorizontalAlignment="Center" Margin="1" Name="LBLM" VerticalAlignment="Top" Width="35" HorizontalContentAlignment="Center" FontSize="10" />
