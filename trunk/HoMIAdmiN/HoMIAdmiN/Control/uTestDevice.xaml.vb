@@ -111,6 +111,9 @@ Partial Public Class uTestDevice
                             txt.Height = 20
                             txt.Width = 250
                             txt.ToolTip = _Device.DeviceAction.Item(i).Parametres.Item(j).Type
+                            txt.Background = Brushes.DarkGray
+                            txt.Foreground = Brushes.White
+                            txt.BorderBrush = Brushes.Black
                             stk.Children.Add(txt)
 
                             StkParam.Children.Add(stk)
