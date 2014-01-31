@@ -957,171 +957,175 @@ Class Window1
             Dim ListeZones As List(Of Zone) = myService.GetAllZones(IdSrv)
             Dim DevicesAsHisto As Dictionary(Of String, Boolean) = myService.DevicesAsHisto
 
-            CntDevice.Content = ListeDevices.Count & " Device(s)"
-            For Each Dev As TemplateDevice In ListeDevices
+            If ListeDevices IsNot Nothing Then
+                CntDevice.Content = ListeDevices.Count & " Device(s)"
+                For Each Dev As TemplateDevice In ListeDevices
 
-                Dim newchild As New TreeViewItem
-                Dim stack As New StackPanel
-                Dim img As New Image
-                Dim FlagZone As Boolean = False
-                Dim nomdriver As String = myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom
-                Dim _nbhisto As Long = 0
+                    Dim newchild As New TreeViewItem
+                    Dim stack As New StackPanel
+                    Dim img As New Image
+                    Dim FlagZone As Boolean = False
+                    Dim nomdriver As String = myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom
+                    Dim _nbhisto As Long = 0
 
-                stack.Orientation = Orientation.Horizontal
+                    stack.Orientation = Orientation.Horizontal
 
-                If DevicesAsHisto.ContainsKey(Dev.ID) Then
-                    _nbhisto = myService.DeviceAsHisto(Dev.ID)
-                End If
-
-                'gestion de l'image du composant dans le menu
-                img.Height = 20
-                img.Width = 20
-                If String.IsNullOrEmpty(Trim(Dev.Picture)) = False Then
-                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(Dev.Picture), 20)
-                Else
-                    Dim bmpImage As New BitmapImage()
-                    Dim uri As String = MyRep & "\Images\Icones\Composant_32.png"
-                    img.Source = ImageFromUri(uri)
-                End If
-                stack.Children.Add(img)
-
-                'creation du label
-                Dim label As New Label
-                If Dev.Enable = True Then
-                    label.Foreground = New SolidColorBrush(Colors.White)
-                    'on verifie si la composant n'est pas à jour depuis au moins lastchangeduree
-                    If Dev.LastChangeDuree > 0 Then
-                        If DateTime.Compare(Dev.LastChange.AddMinutes(CInt(Dev.LastChangeDuree)), Now) < 0 Then
-                            label.Foreground = New SolidColorBrush(Colors.Red)
-                        End If
+                    If DevicesAsHisto.ContainsKey(Dev.ID) Then
+                        _nbhisto = myService.DeviceAsHisto(Dev.ID)
                     End If
-                Else
-                    label.Foreground = New SolidColorBrush(Colors.Black)
-                End If
-                label.Content = Dev.Name & " (" & nomdriver & ")"
 
-                'verification si le device fait parti d'une zone
-                For Each Zon In ListeZones
-                    If FlagZone = False Then
-                        For Each elemnt In Zon.ListElement
-                            If elemnt.ElementID = Dev.ID Then
-                                FlagZone = True
-                                Exit For
-                            End If
-                        Next
+                    'gestion de l'image du composant dans le menu
+                    img.Height = 20
+                    img.Width = 20
+                    If String.IsNullOrEmpty(Trim(Dev.Picture)) = False Then
+                        img.Source = ConvertArrayToImage(myService.GetByteFromImage(Dev.Picture), 20)
                     Else
-                        Exit For
+                        Dim bmpImage As New BitmapImage()
+                        Dim uri As String = MyRep & "\Images\Icones\Composant_32.png"
+                        img.Source = ImageFromUri(uri)
                     End If
+                    stack.Children.Add(img)
+
+                    'creation du label
+                    Dim label As New Label
+                    If Dev.Enable = True Then
+                        label.Foreground = New SolidColorBrush(Colors.White)
+                        'on verifie si la composant n'est pas à jour depuis au moins lastchangeduree
+                        If Dev.LastChangeDuree > 0 Then
+                            If DateTime.Compare(Dev.LastChange.AddMinutes(CInt(Dev.LastChangeDuree)), Now) < 0 Then
+                                label.Foreground = New SolidColorBrush(Colors.Red)
+                            End If
+                        End If
+                    Else
+                        label.Foreground = New SolidColorBrush(Colors.Black)
+                    End If
+                    label.Content = Dev.Name & " (" & nomdriver & ")"
+
+                    'verification si le device fait parti d'une zone
+                    For Each Zon In ListeZones
+                        If FlagZone = False Then
+                            For Each elemnt In Zon.ListElement
+                                If elemnt.ElementID = Dev.ID Then
+                                    FlagZone = True
+                                    Exit For
+                                End If
+                            Next
+                        Else
+                            Exit For
+                        End If
+                    Next
+
+                    If FlagZone = False Then
+                        Dim uri2 As String = MyRep & "\Images\Icones\ZoneNo_32.png"
+                        Dim imgNoZone As New Image
+                        imgNoZone.Height = 20
+                        imgNoZone.Width = 20
+                        imgNoZone.Source = ImageFromUri(uri2)
+                        imgNoZone.ToolTip = "Ce composant ne fait pas partie d'une zone"
+                        stack.Children.Add(imgNoZone)
+                        imgNoZone = Nothing
+                    End If
+
+                    '*************************** TOOL TIP **************************
+                    Dim tl As New ToolTip
+                    tl.Foreground = System.Windows.Media.Brushes.White
+                    tl.Background = System.Windows.Media.Brushes.WhiteSmoke
+                    tl.BorderBrush = System.Windows.Media.Brushes.Black
+
+                    Dim stkpopup As New StackPanel
+
+                    Dim imgpopup As New Image
+                    imgpopup.Width = 45
+                    imgpopup.Height = 45
+                    imgpopup.Source = img.Source
+                    stkpopup.Children.Add(imgpopup)
+                    imgpopup = Nothing
+
+                    Dim tool As New Label
+                    tool.Content = "Nom: " & Dev.Name & vbCrLf
+                    tool.Content &= "Enable: " & Dev.Enable & vbCrLf
+                    tool.Content &= "Description: " & Dev.Description & vbCrLf
+                    tool.Content &= "Type: " & Dev.Type.ToString & vbCrLf
+                    tool.Content &= "Driver: " & nomdriver & vbCrLf
+                    tool.Content &= "Date MAJ: " & Dev.LastChange & vbCrLf
+                    tool.Content &= "Nb Histo: " & _nbhisto & vbCrLf
+                    tool.Content &= "Value: " & Dev.Value
+                    stkpopup.Children.Add(tool)
+                    tool = Nothing
+
+                    tl.Content = stkpopup
+                    stkpopup = Nothing
+
+                    label.ToolTip = tl
+
+                    '*************************** CLIC DROIT **************************
+                    Dim ctxMenu As New ContextMenu
+                    ctxMenu.Foreground = System.Windows.Media.Brushes.Black
+                    ctxMenu.Background = System.Windows.Media.Brushes.LightGray
+                    ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
+                    Dim mnu0 As New MenuItem
+                    mnu0.Header = "Modifier"
+                    mnu0.Tag = 0
+                    mnu0.Uid = Dev.ID
+                    AddHandler mnu0.Click, AddressOf MnuitemDev_Click
+                    ctxMenu.Items.Add(mnu0)
+                    If Dev.Enable = False Then
+                        Dim mnu1 As New MenuItem
+                        mnu1.Header = "Enable"
+                        mnu1.Tag = 1
+                        mnu1.Uid = Dev.ID
+                        AddHandler mnu1.Click, AddressOf MnuitemDev_Click
+                        ctxMenu.Items.Add(mnu1)
+                        mnu1 = Nothing
+                    Else
+                        Dim mnu2 As New MenuItem
+                        mnu2.Header = "Disable"
+                        mnu2.Tag = 2
+                        mnu2.Uid = Dev.ID
+                        AddHandler mnu2.Click, AddressOf MnuitemDev_Click
+                        ctxMenu.Items.Add(mnu2)
+                        mnu2 = Nothing
+                    End If
+                    Dim mnu4 As New MenuItem
+                    mnu4.Header = "Historique"
+                    mnu4.Tag = 4
+                    mnu4.Uid = Dev.ID
+                    'If _nbhisto <= 0 Then mnu4.IsEnabled = False
+                    If _nbhisto <= 0 Then mnu4.FontStyle = System.Windows.FontStyles.Italic
+                    AddHandler mnu4.Click, AddressOf MnuitemDev_Click
+                    ctxMenu.Items.Add(mnu4)
+                    mnu4 = Nothing
+                    Dim mnu5 As New MenuItem
+                    mnu5.Header = "Supprimer"
+                    mnu5.Tag = 5
+                    mnu5.Uid = Dev.ID
+                    AddHandler mnu5.Click, AddressOf MnuitemDev_Click
+                    ctxMenu.Items.Add(mnu5)
+                    mnu5 = Nothing
+
+                    label.ContextMenu = ctxMenu
+
+
+                    '********************** Ajout du label au stackpanel puis treeview *********************
+                    stack.Children.Add(label)
+                    newchild.Header = stack
+                    newchild.Foreground = New SolidColorBrush(Colors.White)
+                    newchild.Uid = Dev.ID
+                    newchild.Margin = New Thickness(-12, 0, 0, 0)
+                    TreeViewDevice.Items.Add(newchild)
+
+                    img = Nothing
+                    ctxMenu = Nothing
+                    label = Nothing
+                    newchild = Nothing
+                    stack = Nothing
+                    tl = Nothing
                 Next
 
-                If FlagZone = False Then
-                    Dim uri2 As String = MyRep & "\Images\Icones\ZoneNo_32.png"
-                    Dim imgNoZone As New Image
-                    imgNoZone.Height = 20
-                    imgNoZone.Width = 20
-                    imgNoZone.Source = ImageFromUri(uri2)
-                    imgNoZone.ToolTip = "Ce composant ne fait pas partie d'une zone"
-                    stack.Children.Add(imgNoZone)
-                    imgNoZone = Nothing
-                End If
-
-                '*************************** TOOL TIP **************************
-                Dim tl As New ToolTip
-                tl.Foreground = System.Windows.Media.Brushes.White
-                tl.Background = System.Windows.Media.Brushes.WhiteSmoke
-                tl.BorderBrush = System.Windows.Media.Brushes.Black
-
-                Dim stkpopup As New StackPanel
-
-                Dim imgpopup As New Image
-                imgpopup.Width = 45
-                imgpopup.Height = 45
-                imgpopup.Source = img.Source
-                stkpopup.Children.Add(imgpopup)
-                imgpopup = Nothing
-
-                Dim tool As New Label
-                tool.Content = "Nom: " & Dev.Name & vbCrLf
-                tool.Content &= "Enable: " & Dev.Enable & vbCrLf
-                tool.Content &= "Description: " & Dev.Description & vbCrLf
-                tool.Content &= "Type: " & Dev.Type.ToString & vbCrLf
-                tool.Content &= "Driver: " & nomdriver & vbCrLf
-                tool.Content &= "Date MAJ: " & Dev.LastChange & vbCrLf
-                tool.Content &= "Nb Histo: " & _nbhisto & vbCrLf
-                tool.Content &= "Value: " & Dev.Value
-                stkpopup.Children.Add(tool)
-                tool = Nothing
-
-                tl.Content = stkpopup
-                stkpopup = Nothing
-
-                label.ToolTip = tl
-
-                '*************************** CLIC DROIT **************************
-                Dim ctxMenu As New ContextMenu
-                ctxMenu.Foreground = System.Windows.Media.Brushes.Black
-                ctxMenu.Background = System.Windows.Media.Brushes.LightGray
-                ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
-                Dim mnu0 As New MenuItem
-                mnu0.Header = "Modifier"
-                mnu0.Tag = 0
-                mnu0.Uid = Dev.ID
-                AddHandler mnu0.Click, AddressOf MnuitemDev_Click
-                ctxMenu.Items.Add(mnu0)
-                If Dev.Enable = False Then
-                    Dim mnu1 As New MenuItem
-                    mnu1.Header = "Enable"
-                    mnu1.Tag = 1
-                    mnu1.Uid = Dev.ID
-                    AddHandler mnu1.Click, AddressOf MnuitemDev_Click
-                    ctxMenu.Items.Add(mnu1)
-                    mnu1 = Nothing
-                Else
-                    Dim mnu2 As New MenuItem
-                    mnu2.Header = "Disable"
-                    mnu2.Tag = 2
-                    mnu2.Uid = Dev.ID
-                    AddHandler mnu2.Click, AddressOf MnuitemDev_Click
-                    ctxMenu.Items.Add(mnu2)
-                    mnu2 = Nothing
-                End If
-                Dim mnu4 As New MenuItem
-                mnu4.Header = "Historique"
-                mnu4.Tag = 4
-                mnu4.Uid = Dev.ID
-                'If _nbhisto <= 0 Then mnu4.IsEnabled = False
-                If _nbhisto <= 0 Then mnu4.FontStyle = System.Windows.FontStyles.Italic
-                AddHandler mnu4.Click, AddressOf MnuitemDev_Click
-                ctxMenu.Items.Add(mnu4)
-                mnu4 = Nothing
-                Dim mnu5 As New MenuItem
-                mnu5.Header = "Supprimer"
-                mnu5.Tag = 5
-                mnu5.Uid = Dev.ID
-                AddHandler mnu5.Click, AddressOf MnuitemDev_Click
-                ctxMenu.Items.Add(mnu5)
-                mnu5 = Nothing
-
-                label.ContextMenu = ctxMenu
-
-
-                '********************** Ajout du label au stackpanel puis treeview *********************
-                stack.Children.Add(label)
-                newchild.Header = stack
-                newchild.Foreground = New SolidColorBrush(Colors.White)
-                newchild.Uid = Dev.ID
-                newchild.Margin = New Thickness(-12, 0, 0, 0)
-                TreeViewDevice.Items.Add(newchild)
-
-                img = Nothing
-                ctxMenu = Nothing
-                label = Nothing
-                newchild = Nothing
-                stack = Nothing
-                tl = Nothing
-            Next
-
-            ListeDevices = Nothing
+                ListeDevices = Nothing
+            Else
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub AffDevice: Le serveur n'a renvoyé aucun composant...", "ERREUR", "")
+            End If
             ListeZones = Nothing
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub AffDevice: " & ex.ToString, "ERREUR", "")
