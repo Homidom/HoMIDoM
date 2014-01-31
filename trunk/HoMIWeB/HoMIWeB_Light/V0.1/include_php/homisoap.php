@@ -18,9 +18,7 @@ class HomidomSoap {
         $this->_idserver=$idserver;
         $this->_trace=$trace;
         if(!extension_loaded('soap')) {
-            if(!@dl('soap')) {
-                die('Impossible d\'utiliser l\'extension SOAP');
-            }
+            die('Impossible d\'utiliser l\'extension SOAP');
         }
         $this->_extension = true;
     }
@@ -36,7 +34,7 @@ class HomidomSoap {
 
             if ($this->_trace) {
                 try {
-					$this->_client = @new SoapClient('http://'.$this->_ip.':'.$this->_port.'/ServiceModelSamples/service?wsdl', array('trace' => 1));
+					$this->_client = @new SoapClient('http://'.$this->_ip.':'.$this->_port.'/service?wsdl', array('trace' => 1));
 					$this->_connecte = true;
 					return $this->_connecte;
 					} catch(SoapFault $fault)
@@ -51,7 +49,7 @@ class HomidomSoap {
 					}
             } else {
                 try {
-					$this->_client = @new SoapClient('http://'.$this->_ip.':'.$this->_port.'/ServiceModelSamples/service?wsdl');
+					$this->_client = @new SoapClient('http://'.$this->_ip.':'.$this->_port.'/service?wsdl');
 					$this->_connecte = true;
 					return $this->_connecte;
 					} catch(SoapFault $fault)
@@ -63,6 +61,7 @@ class HomidomSoap {
             }
         } else {
             $this->_connecte = false;
+            return $this->_connecte;
         }
     } 
 
