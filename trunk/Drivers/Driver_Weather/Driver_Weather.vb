@@ -1,4 +1,5 @@
-﻿'Option Strict On
+﻿
+'Option Strict On
 Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
@@ -769,7 +770,6 @@ Imports System.Threading
             Return txt
         End Try
     End Function
-
 
     Public Function Traduct(Txt As String) As String
         Try

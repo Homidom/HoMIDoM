@@ -266,16 +266,16 @@
                                     <StackPanel >
                                         <Label Content="Permet d'exporter ou importer la configuration d'HoMIDoM" Foreground="Gray" Height="28" FontSize="11" />
                                         <StackPanel Orientation="Horizontal">
-                                            <Button  Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnExport" VerticalAlignment="Top" Width="88.75"  >
+                                            <Button Template="{DynamicResource GlassButton}" HorizontalAlignment="left" Margin="2" Name="BtnExport" VerticalAlignment="Top" Width="110">
                                                 <StackPanel Orientation="Horizontal" >
                                                     <Image Source="/HoMIAdmiN;component/Images/Export_32.png" Width="16" />
-                                                    <Label Content="Exporter" Foreground="White" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch" />
+                                                    <Label Content="Exporter" Foreground="White" VerticalContentAlignment=" Stretch" VerticalAlignment="Stretch" />
                                                 </StackPanel>
                                             </Button>
                                             <Label Content="Exporter la configuration pour par exemple la sauvegarder ou la transfèrer au support" Foreground="Gray" Height="28" FontSize="10" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="center">
-                                            <Button  Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnImport" VerticalAlignment="Top" Width="88.75"  >
+                                            <Button  Template="{DynamicResource GlassButton}" HorizontalAlignment="left" Margin="2" Name="BtnImport" VerticalAlignment="Top" Width="110"  >
                                                 <StackPanel Orientation="Horizontal" >
                                                     <Image Source="/HoMIAdmiN;component/Images/Import_32.png" Width="16" />
                                                     <Label Content="Importer" Foreground="White" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch" />
@@ -284,9 +284,13 @@
                                             <Label Content="Importer la configuration pour restaurer cette dernière" Foreground="Gray" Height="28" FontSize="10" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" >
-
-
-
+                                            <Button  Template="{DynamicResource GlassButton}" HorizontalAlignment="left" Margin="2" Name="BtnExportSarah" VerticalAlignment="Top" Width="110"  >
+                                                <StackPanel Orientation="Horizontal" >
+                                                    <Image Source="/HoMIAdmiN;component/Images/Import_32.png" Width="16" />
+                                                    <Label Content="Export SARAH" Foreground="White" VerticalContentAlignment="Stretch" VerticalAlignment="Stretch" />
+                                                </StackPanel>
+                                            </Button>
+                                            <Label Content="Exporter la configuration au format XML pour le plugin SARAH" Foreground="Gray" Height="28" FontSize="10" />
                                         </StackPanel>
                                     </StackPanel>
                                 </GroupBox>

@@ -2,6 +2,7 @@
 Imports System.IO
 Imports System.Threading
 Imports System.Globalization
+Imports System.Xml
 
 Partial Public Class uConfigServer
     Public Event CloseMe(ByVal MyObject As Object)
@@ -361,6 +362,140 @@ Partial Public Class uConfigServer
             Me.Cursor = Nothing
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnExport_Click: " & ex.Message, "ERREUR", "")
+        End Try
+    End Sub
+
+    Private Sub BtnExportSarah_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnExportSarah.Click
+        Try
+            If IsConnect = False Then
+                Exit Sub
+            End If
+
+            Me.Cursor = Cursors.Wait
+            'Exporter le fichier de config
+
+            ' Configure open file dialog box
+            Dim dlg As New Microsoft.Win32.SaveFileDialog()
+            dlg.FileName = "homisarah" ' Default file name
+            dlg.DefaultExt = ".xml" ' Default file extension
+            dlg.Filter = "Fichier de configuration (.xml)|*.xml" ' Filter files by extension
+
+            ' Show open file dialog box
+            Dim result As Boolean = dlg.ShowDialog()
+
+            ' Process open file dialog box results
+            If result = True Then
+                ' Open document
+                Dim filename As String = dlg.FileName
+
+                Dim FreeF As Integer
+                FreeF = FreeFile()
+                FileOpen(FreeF, filename, OpenMode.Output)
+
+                Print(FreeF, "<grammar version=""1.0"" xml:lang=""fr-FR"" mode=""voice"" root=""rulehomidom"" xmlns=""http://www.w3.org/2001/06/grammar"" tag-format=""semantics/1.0"">" & vbCrLf)
+                Print(FreeF, "<rule id=""rulehomidom"" scope=""public"">" & vbCrLf)
+                Print(FreeF, "<example>Sarah allume les lampes du salon</example>" & vbCrLf)
+                Print(FreeF, "<tag>out.action=new Object(); </tag>" & vbCrLf)
+                Print(FreeF, "<tag>out.action.param=""; </tag>" & vbCrLf)
+                Print(FreeF, "" & vbCrLf)
+                Print(FreeF, "<item>Sarah</item>" & vbCrLf)
+                Print(FreeF, "" & vbCrLf)
+                Print(FreeF, "<one-of>" & vbCrLf)
+                Print(FreeF, "" & vbCrLf)
+                Print(FreeF, "<item>allume<tag>out.action.type=""command"";out.action.command=""on"";out.action.ttsAction=""j'ai allumer""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>éteint<tag>out.action.type=""command"";out.action.command=""off"";out.action.ttsAction=""j'ai éteint""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>ouvre<tag>out.action.type=""command"";out.action.command=""on"";out.action.ttsAction=""j'ai ouvert"";</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>ferme<tag>out.action.type=""command"";out.action.command=""off"";out.action.ttsAction=""j'ai fermer"";</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>mode<tag>out.action.type=""command"";out.action.command=""run"";out.action.ttsAction=""  "";</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>donne moi<tag>out.action.type=""value"";out.action.command=""Value""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>mé<tag>out.action.type=""command"";out.action.command=""DIM""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>entre ouvre<tag>out.action.type=""command"";out.action.command=""OUVERTURE"";out.action.ttsAction=""j'ai entre ouvert"";</tag></item>" & vbCrLf)
+                Print(FreeF, "" & vbCrLf)
+                Print(FreeF, "</one-of>" & vbCrLf)
+                Print(FreeF, "" & vbCrLf)
+                Print(FreeF, "<one-of>" & vbCrLf)
+                Print(FreeF, "" & vbCrLf)
+                Print(FreeF, "<!-- ( Partie device on/off dim )-->" & vbCrLf)
+                Print(FreeF, "" & vbCrLf)
+
+                ' <item>le salon<tag>out.action.device="device";out.action.id_device="fc8a97ae-feaa-4f04-85e8-66721c163dd2";out.action.ttsDevice="le salon";</tag></item>
+                Dim listedevices = myService.GetAllDevices(IdSrv)
+                For Each Device In listedevices
+                    If Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.LAMPE Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.VOLET Then
+                        Print(FreeF, "<item>" & Device.Name & "<tag>out.action.device=""device"";out.action.id_device=""" & Device.ID & """;out.action.ttsDevice=""" & Device.Name & """;</tag></item>" & vbCrLf)
+                    End If
+                Next
+
+                Print(FreeF, "" & vbCrLf)
+                Print(FreeF, "<!--Partie Macro -->" & vbCrLf)
+                Print(FreeF, "" & vbCrLf)
+
+                '<item>éteindre tout<tag>out.action.device="macro";out.action.id_device="4a655c35-11b9-401f-8b43-31b77bf19ce5";out.action.ttsDevice="j'ai tout éteint";</tag></item>
+                Dim listemacros = myService.GetAllMacros(IdSrv)
+                For Each Macro In listemacros
+                    Print(FreeF, "<item>" & Macro.Nom & "<tag>out.action.device=""macro"";out.action.id_device=""" & Macro.ID & """;out.action.ttsDevice=""j'ai executé : " & Macro.Nom & """;</tag></item>" & vbCrLf)
+                Next
+
+                Print(FreeF, "" & vbCrLf)
+                Print(FreeF, "<!-- Partie lecture device T°, humidité, etc... -->" & vbCrLf)
+                Print(FreeF, "" & vbCrLf)
+
+                '<item>la température de lo chaude<tag>out.action.device="device";out.action.id_device="4438d227-a289-4661-a399-3e780399a2b2";out.action.ttsTmp=" la température de lo chaude et de";out.action.ttsDeg="degrés";</tag></item>
+                For Each Device In listedevices
+                    If Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.BAROMETRE Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.COMPTEUR Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.DETECTEUR Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.DIRECTIONVENT Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.ENERGIEINSTANTANEE Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.ENERGIETOTALE Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUESTRING Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.PLUIECOURANT Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.PLUIETOTAL Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.UV Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.VITESSEVENT Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.VOLET Then
+                        Dim unite As String = Device.Unit
+                        unite = Replace(unite, "%", "pour sans")
+                        unite = Replace(unite, "°", "degré")
+                        unite = Replace(unite, "°C", "degré")
+                        unite = Replace(unite, "wh", "Watt heure")
+                        unite = Replace(unite, "kwh", "KiloWatt heure")
+                        unite = Replace(unite, "mm", "millimetre")
+                        unite = Replace(unite, "€", "euro")
+                        Print(FreeF, "<item>" & Device.Name & "<tag>out.action.device=""device"";out.action.id_device=""" & Device.ID & """;out.action.ttsTmp=""La valeur de " & Device.Name & " et de"";out.action.ttsDeg=""" & unite & """;</tag></item>" & vbCrLf)
+                    End If
+                Next
+
+                Print(FreeF, "" & vbCrLf)
+                Print(FreeF, "</one-of>" & vbCrLf)
+                Print(FreeF, "" & vbCrLf)
+                Print(FreeF, "<one-of>" & vbCrLf)
+                Print(FreeF, "" & vbCrLf)
+                Print(FreeF, "<item>sil te plai<tag></tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a zéro pour sans<tag>out.action.param=""Variation=0""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a cinq<tag>out.action.param=""Variation=5""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a dis<tag>out.action.param=""Variation=10""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a quinze<tag>out.action.param=""Variation=15""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a vingt<tag>out.action.param=""Variation=20""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a vingt cinq<tag>out.action.param=""Variation=25""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a trente<tag>out.action.param=""Variation=30""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a trente cinq<tag>out.action.param=""Variation=35""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a quarante<tag>out.action.param=""Variation=40""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a quarante cinq<tag>out.action.param=""Variation=45""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a cinquante<tag>out.action.param=""Variation=50""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a cinquante cinq<tag>out.action.param=""Variation=55""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a soixante<tag>out.action.param=""Variation=60""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a soixante cinq<tag>out.action.param=""Variation=65""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a septante<tag>out.action.param=""Variation=70""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a septante cinq<tag>out.action.param=""Variation=75""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a quatre vingt<tag>out.action.param=""Variation=80""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a quatre vingt cinq<tag>out.action.param=""Variation=85""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a nonente<tag>out.action.param=""Variation=90""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a nonente cinq<tag>out.action.param=""Variation=95""</tag></item>" & vbCrLf)
+                Print(FreeF, "<item>a cent<tag>out.action.param=""Variation=100""</tag></item>" & vbCrLf)
+                Print(FreeF, "" & vbCrLf)
+                Print(FreeF, "</one-of>" & vbCrLf)
+                Print(FreeF, "" & vbCrLf)
+                Print(FreeF, "<tag>out.action._attributes.uri=""http://""" & myService.GetIPSOAP & """:""" & myService.GetPortServeurWeb & """/sarah/homidom"";</tag>" & vbCrLf)
+                Print(FreeF, "</rule>" & vbCrLf)
+                Print(FreeF, "</grammar>" & vbCrLf)
+
+                FileClose(FreeF)
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "L'export du fichier de configuration pour SARAH a été effectué", "Export config SARAH", "")
+            End If
+
+            Me.Cursor = Nothing
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnExportSarah_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
