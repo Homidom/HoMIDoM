@@ -392,8 +392,8 @@ Partial Public Class uConfigServer
                 FreeF = FreeFile()
                 FileOpen(FreeF, filename, OpenMode.Output)
 
-                Print(FreeF, "<grammar version=""1.0"" xml:lang=""fr-FR"" mode=""voice"" root=""rulehomidom"" xmlns=""http://www.w3.org/2001/06/grammar"" tag-format=""semantics/1.0"">" & vbCrLf)
-                Print(FreeF, "<rule id=""rulehomidom"" scope=""public"">" & vbCrLf)
+                Print(FreeF, "<grammar version=""1.0"" xml:lang=""fr-FR"" mode=""voice"" root=""rulehomisarah"" xmlns=""http://www.w3.org/2001/06/grammar"" tag-format=""semantics/1.0"">" & vbCrLf)
+                Print(FreeF, "<rule id=""rulehomisarah"" scope=""public"">" & vbCrLf)
                 Print(FreeF, "<example>Sarah allume les lampes du salon</example>" & vbCrLf)
                 Print(FreeF, "<tag>out.action=new Object(); </tag>" & vbCrLf)
                 Print(FreeF, "<tag>out.action.param=""; </tag>" & vbCrLf)
@@ -445,10 +445,13 @@ Partial Public Class uConfigServer
                     If Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.BAROMETRE Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.COMPTEUR Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.DETECTEUR Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.DIRECTIONVENT Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.ENERGIEINSTANTANEE Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.ENERGIETOTALE Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUESTRING Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.PLUIECOURANT Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.PLUIETOTAL Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.UV Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.VITESSEVENT Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.VOLET Then
                         Dim unite As String = Device.Unit
                         unite = Replace(unite, "%", "pour sans")
-                        unite = Replace(unite, "°", "degré")
+                        unite = Replace(unite, "°F", "degré Farenheit")
                         unite = Replace(unite, "°C", "degré")
+                        unite = Replace(unite, "°", "degré")
                         unite = Replace(unite, "wh", "Watt heure")
                         unite = Replace(unite, "kwh", "KiloWatt heure")
+                        unite = Replace(unite, "w", "Watt")
+                        unite = Replace(unite, "kw", "KiloWatt")
                         unite = Replace(unite, "mm", "millimetre")
                         unite = Replace(unite, "€", "euro")
                         Print(FreeF, "<item>" & Device.Name & "<tag>out.action.device=""device"";out.action.id_device=""" & Device.ID & """;out.action.ttsTmp=""La valeur de " & Device.Name & " et de"";out.action.ttsDeg=""" & unite & """;</tag></item>" & vbCrLf)
@@ -485,7 +488,7 @@ Partial Public Class uConfigServer
                 Print(FreeF, "" & vbCrLf)
                 Print(FreeF, "</one-of>" & vbCrLf)
                 Print(FreeF, "" & vbCrLf)
-                Print(FreeF, "<tag>out.action._attributes.uri=""http://""" & myService.GetIPSOAP & """:""" & myService.GetPortServeurWeb & """/sarah/homidom"";</tag>" & vbCrLf)
+                Print(FreeF, "<tag>out.action._attributes.uri=""http://""" & myService.GetIPSOAP & """:""" & myService.GetPortServeurWeb & """/sarah/homisarah"";</tag>" & vbCrLf)
                 Print(FreeF, "</rule>" & vbCrLf)
                 Print(FreeF, "</grammar>" & vbCrLf)
 
