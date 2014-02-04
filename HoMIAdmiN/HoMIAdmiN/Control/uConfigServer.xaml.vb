@@ -148,10 +148,12 @@ Partial Public Class uConfigServer
 
                 myService.SetTypeLogEnable(_list)
 
-                If ChKDisableAnimations.IsChecked = True Then
-                    My.Settings.AnimationDuration = 0
-                Else
+                If Not IsNumeric(TxtAnimationTime.Text) Then
                     My.Settings.AnimationDuration = 650
+                Else
+                    If TxtAnimationTime.Text < 0 Then TxtAnimationTime.Text = 0
+                    If TxtAnimationTime.Text < 0 Then TxtAnimationTime.Text = 1000
+                    My.Settings.AnimationDuration = TxtAnimationTime.Text
                 End If
 
                 My.Settings.SaveRealTime = ChKSaveRealTime.IsChecked
@@ -243,11 +245,12 @@ Partial Public Class uConfigServer
 
                 ChKSaveRealTime.IsChecked = My.Settings.SaveRealTime
 
-                If My.Settings.AnimationDuration = 650 Then
-                    ChKDisableAnimations.IsChecked = False
+                If Not IsNumeric(My.Settings.AnimationDuration) Then
+                    TxtAnimationTime.Text = 650
                 Else
-                    ChKDisableAnimations.IsChecked = True
+                    TxtAnimationTime.Text = My.Settings.AnimationDuration
                 End If
+
 
                 Dim idx = -1
                 For i As Integer = 0 To myService.GetAllVoice.Count - 1
@@ -260,6 +263,20 @@ Partial Public Class uConfigServer
 
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uconfigserver New: " & ex.Message, "ERREUR", "")
+        End Try
+    End Sub
+
+    Private Sub TxtAnimationTime_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtAnimationTime.TextChanged
+        Try
+            If IsNumeric(TxtAnimationTime.Text) = False Then
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez saisir un chiffre entre 0 et 1000 pour la durée d'animation", "Admin", "")
+                TxtAnimationTime.Text = "650"
+            End If
+            If TxtAnimationTime.Text > 1000 Then TxtAnimationTime.Text = 1000
+            If TxtAnimationTime.Text < 0 Then TxtAnimationTime.Text = 0
+
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uConfigServer TxtAnimationTime_TextChanged: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 

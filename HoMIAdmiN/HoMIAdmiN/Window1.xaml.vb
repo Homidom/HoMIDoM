@@ -2766,27 +2766,31 @@ Class Window1
     ''' <remarks></remarks>
     Private Sub AffControlPage(ByVal Objet As Object)
         Try
-            If CanvasRight.Children.Count > 0 Then
+            If CanvasRight.Children.Count > 0 And Objet IsNot Nothing Then
+
+                Objet3 = Objet
 
                 For i As Integer = 0 To CanvasRight.Children.Count - 1
-                    Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
-                    myDoubleAnimation.From = 1.0
-                    myDoubleAnimation.To = 0.0
-                    myDoubleAnimation.Duration = New Duration(TimeSpan.FromMilliseconds(My.Settings.AnimationDuration))
-                    Dim myStoryboard As Storyboard = New Storyboard()
-                    myStoryboard.Children.Add(myDoubleAnimation)
-                    AddHandler myStoryboard.Completed, AddressOf AffControlPageSuite
+                    If My.Settings.AnimationDuration > 0 Then
+                        Dim myDoubleAnimation As DoubleAnimation = New DoubleAnimation()
+                        myDoubleAnimation.From = 1.0
+                        myDoubleAnimation.To = 0.0
+                        myDoubleAnimation.Duration = New Duration(TimeSpan.FromMilliseconds(My.Settings.AnimationDuration))
+                        Dim myStoryboard As Storyboard = New Storyboard()
+                        myStoryboard.Children.Add(myDoubleAnimation)
+                        AddHandler myStoryboard.Completed, AddressOf AffControlPageSuite
 
-                    Storyboard.SetTarget(myDoubleAnimation, CanvasRight.Children.Item(i))
-                    Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
-                    myStoryboard.Begin()
+                        Storyboard.SetTarget(myDoubleAnimation, CanvasRight.Children.Item(i))
+                        Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
+                        myStoryboard.Begin()
 
-                    myStoryboard = Nothing
+                        myStoryboard = Nothing
+                    Else
+                        AffControlPageSuite()
+                    End If
                 Next
             End If
 
-
-            Objet3 = Objet
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub AffControlPage: " & ex.Message, "ERREUR", "")
         End Try
