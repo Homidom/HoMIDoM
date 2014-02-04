@@ -820,7 +820,7 @@ Namespace HoMIDom
                             _Value = tmp
                             _ValueLast = tmp
                         Else
-                           _LastChange = Now
+                            _LastChange = Now
                             'si ALLVALUE On enregistre TOUTES les valeurs
                             If _AllValue Then
                                 _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceBool Value", _Name & " : " & _Adresse1 & " : " & tmp.ToString)

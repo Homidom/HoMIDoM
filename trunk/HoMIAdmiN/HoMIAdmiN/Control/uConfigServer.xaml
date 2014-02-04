@@ -326,7 +326,7 @@
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" >
                                             <Label Content="Port :" Foreground=" White" />
-                                            <TextBox Name="TxtPortSrvWeb" Text="8080" Width="40" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
+                                            <TextBox Name="TxtPortSrvWeb" Text="8080" Width="40" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20"/>
                                             <Label Content="   Port utilisé par le serveur web (il faut l'ouvrir sur votre firewall windows et/ou box internet), défaut : 8080" Foreground="Gray" Height="28" FontSize="10" />
                                         </StackPanel>
                                         <Button HorizontalAlignment="left" Height="25" Template="{DynamicResource GlassButton}" Margin="8,2,2,2" Name="BtnStartSrvWeb" VerticalAlignment="Top" Width="160" Foreground="White">Redémarrer le serveur WEB</Button>
@@ -339,8 +339,9 @@
                                     <StackPanel >
                                         <Label Content="Paramètres d'affichage de la console d'administration." Foreground="Gray" Height="28" FontSize="11" />
                                         <StackPanel Orientation="Horizontal" >
-                                            <Label Content="Désactiver les fondus à l'ouverture et fermeture des fenêtres :" Foreground=" White" />
-                                            <CheckBox Name="ChKDisableAnimations" IsChecked="True" Background="DarkGray" BorderBrush="Black" Foreground="White" VerticalAlignment="center" Content="" />
+                                            <Label Content="Durée Animation :" Foreground=" White" />
+                                            <TextBox Name="TxtAnimationTime" Text="650" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" />
+                                            <Label Content="   Durée de l'animation des fenêtres (0 pour désactiver, max 1000), défaut : 650" Foreground="Gray" Height="28" FontSize="10"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </GroupBox>
