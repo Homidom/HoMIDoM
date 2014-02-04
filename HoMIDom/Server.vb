@@ -7342,7 +7342,7 @@ Namespace HoMIDom
                     Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "non effectué car le composant n'a pas été trouvé : " & DeviceId)
                 End If
             Catch ex As Exception
-                Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "Erreur lors du traitemant : " & ex.Message)
+                Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDevicecommand", "Erreur lors du traitement : " & ex.Message)
             End Try
         End Sub
 
@@ -7408,7 +7408,7 @@ Namespace HoMIDom
                     Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDeviceCommandSimple", "ExecuteDeviceCommandSimple non effectué car le composant n'a pas été trouvé : " & DeviceId)
                 End If
             Catch ex As Exception
-                Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDeviceCommandSimple", "Erreur lors du traitemant : " & ex.Message)
+                Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ExecuteDeviceCommandSimple", "Erreur lors du traitement : " & ex.Message)
             End Try
         End Sub
 

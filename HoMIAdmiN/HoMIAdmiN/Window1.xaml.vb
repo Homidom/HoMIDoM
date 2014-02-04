@@ -200,33 +200,46 @@ Class Window1
 
     Private Sub AffIsConnect()
         'Modifie l'adresse/port du serveur connecté
-        Dim serveurcomplet As String = myChannelFactory.Endpoint.Address.ToString()
-        serveurcomplet = Mid(serveurcomplet, 8, serveurcomplet.Length - 8)
-        serveurcomplet = Split(serveurcomplet, "/", 2)(0)
-        Dim srblbl As String = Split(serveurcomplet, ":", 2)(0) & ":" & Split(serveurcomplet, ":", 2)(1)
-        LblConnect.ToolTip = "Serveur connecté adresse utilisée: " & srblbl
-        LblConnect.Content = srblbl
-        serveurcomplet = Nothing
-        srblbl = ""
+        Try
+            Dim serveurcomplet As String = myChannelFactory.Endpoint.Address.ToString()
+            serveurcomplet = Mid(serveurcomplet, 8, serveurcomplet.Length - 8)
+            serveurcomplet = Split(serveurcomplet, "/", 2)(0)
+            Dim srblbl As String = Split(serveurcomplet, ":", 2)(0) & ":" & Split(serveurcomplet, ":", 2)(1)
+            LblConnect.ToolTip = "Serveur connecté adresse utilisée: " & srblbl
+            LblConnect.Content = srblbl
+            serveurcomplet = Nothing
+            srblbl = ""
 
-        Ellipse1.Fill = myBrushVert
+            Ellipse1.Fill = myBrushVert
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR AffIsConnect: " & ex.Message, "ERREUR", "")
+        End Try
+
     End Sub
 
     Private Sub AffIsDisconnect()
-        Ellipse1.Fill = myBrushRouge
-        LblConnect.Content = "Serveur non connecté"
-        LblConnect.ToolTip = Nothing
+        Try
+            Ellipse1.Fill = myBrushRouge
+            LblConnect.Content = "Serveur non connecté"
+            LblConnect.ToolTip = Nothing
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR AffIsDisconnect: " & ex.Message, "ERREUR", "")
+        End Try
     End Sub
 
     Private Sub StoryBoardFinish(ByVal sender As Object, ByVal e As System.EventArgs)
-        CanvasRight.Children.Clear()
-        CanvasRight.UpdateLayout()
+        Try
+            CanvasRight.Children.Clear()
+            CanvasRight.UpdateLayout()
 
-        GC.Collect()
-        GC.WaitForPendingFinalizers()
-        GC.Collect()
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            GC.Collect()
 
-        ShowMainMenu()
+            ShowMainMenu()
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR StoryBoardFinish: " & ex.Message, "ERREUR", "")
+        End Try
     End Sub
 
     Protected Overrides Sub Finalize()
@@ -2779,11 +2792,11 @@ Class Window1
                         Dim myStoryboard As Storyboard = New Storyboard()
                         myStoryboard.Children.Add(myDoubleAnimation)
                         AddHandler myStoryboard.Completed, AddressOf AffControlPageSuite
-
-                        Storyboard.SetTarget(myDoubleAnimation, CanvasRight.Children.Item(i))
-                        Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
-                        myStoryboard.Begin()
-
+                        If CanvasRight.Children.Item(i) IsNot Nothing Then
+                            Storyboard.SetTarget(myDoubleAnimation, CanvasRight.Children.Item(i))
+                            Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
+                            myStoryboard.Begin()
+                        End If
                         myStoryboard = Nothing
                     Else
                         AffControlPageSuite()
@@ -2800,6 +2813,7 @@ Class Window1
 
     Private Sub AffControlPageSuite()
         Try
+
             CanvasRight.Children.Clear()
             CanvasRight.UpdateLayout()
 
@@ -2808,10 +2822,11 @@ Class Window1
             GC.Collect()
 
             Me.UpdateLayout()
-
-            CanvasRight.Children.Add(Objet3)
-            AnimationApparition(Objet3)
-            Objet3 = Nothing
+            If Objet3 IsNot Nothing Then
+                CanvasRight.Children.Add(Objet3)
+                AnimationApparition(Objet3)
+                Objet3 = Nothing
+            End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub AffControlPageSuite: " & ex.Message, "ERREUR", "")
         End Try
