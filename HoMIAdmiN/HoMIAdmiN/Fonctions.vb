@@ -258,4 +258,24 @@ Module Fonctions
         End Try
     End Function
 
+    Public Function GetWeatherCityID() As Dictionary(Of String, String)
+        Try
+            Dim Retour As New Dictionary(Of String, String)
+            Dim lines() As String = My.Resources.WeatherCityID.Split(System.Environment.NewLine)
+            For Each Line In lines
+                If String.IsNullOrEmpty(Line) = False Then
+                    Dim tab() As String = Line.Split(";")
+                    If tab.Count = 2 Then
+                        Retour.Add(tab(0), tab(1))
+                    End If
+                End If
+            Next
+            Retour = Retour.OrderBy(Function(x) x.Key).ToDictionary(Function(x) x.Key, Function(y) y.Value)
+
+            Return Retour
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR GetWeatherCityID: " & ex.Message, "ERREUR", "")
+            Return Nothing
+        End Try
+    End Function
 End Module

@@ -382,6 +382,15 @@ Namespace HoMIDom
 
 #Region "Historisation"
         ''' <summary>
+        ''' Permet d'exécuter une requete SQL sur la table histo
+        ''' </summary>
+        ''' <param name="IdSrv">ID du serveur</param>
+        ''' <param name="Requete">Requête SQL</param>
+        ''' <returns>Résultat de la requête sous un type DataTable</returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function RequeteSqLHisto(ByVal IdSrv As String, Requete As String) As DataTable
+
+        ''' <summary>
         ''' Modifie un historique
         ''' </summary>
         ''' <param name="idsrv"></param>

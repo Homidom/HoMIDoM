@@ -88,5 +88,40 @@ Namespace My.Resources
                 Return ResourceManager.GetString("ExempleVBS", resourceCulture)
             End Get
         End Property
+        
+        '''<summary>
+        '''  Recherche une chaîne localisée semblable à FRXX0001;Aix-en-Provence
+        '''FRXX0002;Albi
+        '''FRXX0003;Annemasse
+        '''FRXX0004;Antibes
+        '''FRXX0005;Arnage
+        '''FRXX0006;Aubagne
+        '''FRXX0007;Aubervilliers
+        '''FRXX0008;Auxerre
+        '''FRXX0009;Aytre
+        '''FRXX0010;Bayeux
+        '''FRXX0011;Beauvais
+        '''FRXX0012;Belfort
+        '''FRXX0013;Beziers
+        '''FRXX0014;Blois
+        '''FRXX0015;Bobigny
+        '''FRXX0016;Bordeaux
+        '''FRXX0017;Bourg-en-Bresse
+        '''FRXX0018;Bourges
+        '''FRXX0019;Brest
+        '''FRXX0020;Caen
+        '''FRXX0021;Cagnes-sur-Mer
+        '''FRXX0022;Cahors
+        '''FRXX0023;Cannes
+        '''FRXX0024;Carbon-Blanc
+        '''FRXX0025;Carcassonne
+        '''FRXX0026;Carquefou
+        '''FRXX0027;Casteln [le reste de la chaîne a été tronqué]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property WeatherCityID() As String
+            Get
+                Return ResourceManager.GetString("WeatherCityID", resourceCulture)
+            End Get
+        End Property
     End Module
 End Namespace
