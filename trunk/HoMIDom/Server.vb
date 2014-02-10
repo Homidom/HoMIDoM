@@ -4865,6 +4865,7 @@ Namespace HoMIDom
                 Dim retour As String
 
                 If VerifIdSrv(idsrv) = False Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "AddHisto", "Erreur ID du serveur")
                     Return 99
                 End If
 
@@ -4891,8 +4892,8 @@ Namespace HoMIDom
         Public Function GetAllListHisto(ByVal idsrv As String) As List(Of Historisation) Implements IHoMIDom.GetAllListHisto
             Try
                 If VerifIdSrv(idsrv) = False Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllListHisto", "Erreur ID du serveur")
                     Return Nothing
-
                 End If
 
                 Dim result As New DataTable
@@ -4973,6 +4974,65 @@ Namespace HoMIDom
                 Return Nothing
             End Try
         End Function
+
+        ''' <summary>
+        ''' Permet d'exécuter une requete SQL sur la table histo
+        ''' </summary>
+        ''' <param name="IdSrv">ID du serveur</param>
+        ''' <param name="Requete">Requête SQL</param>
+        ''' <returns>Résultat de la requête sous un type DataTable</returns>
+        ''' <remarks></remarks>
+        Public Function RequeteSqLHisto(ByVal IdSrv As String, Requete As String) As DataTable Implements IHoMIDom.RequeteSqLHisto
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "RequeteSqLHisto", "Erreur ID du serveur")
+                    Return Nothing
+                End If
+
+                Dim result As New DataTable("SQLDB")
+                Dim retour As String
+                Dim commande As String = Requete '"select * from historiques where source='" & Source & "' and device_id='" & idDevice & "' ORDER BY dateheure;"
+
+                'on vérifie que la requête n'est pas vide
+                If String.IsNullOrEmpty(commande) Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "RequeteSqLHisto", "Erreur la requete est vide")
+                    Return Nothing
+                Else
+                    'on vérifie que la requête commence par select * from historiques
+                    If Command.ToUpper.StartsWith("SELECT * FROM HISTORIQUES") Then
+                        'on vérifie que la requête ne contient pas de ; pour que l'utilisateur en cherche pas à faire des requetes complexes cachées 
+                        If InStr(Mid(commande, 1, commande.Length - 1), ";") > 0 Then
+                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "RequeteSqLHisto", "Erreur la requete ne doit pas comporter de ; sauf à la fin")
+                            Return Nothing
+                        Else
+                            'si tous est ok on exécute la requete
+                            Log(TypeLog.DEBUG, TypeSource.SERVEUR, "RequeteSqLHisto", "Execution de la requete: " & commande)
+                            retour = sqlite_homidom.query(commande, result, "")
+                        End If
+                    Else
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "RequeteSqLHisto", "Erreur la requete doit commencer par select * from historiques")
+                        Return Nothing
+                    End If
+                End If
+
+                If UCase(Mid(retour, 1, 3)) <> "ERR" Then
+                    If result IsNot Nothing Then
+                        Return result
+                    Else
+                        result = Nothing
+                        Return Nothing
+                    End If
+                Else
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "RequeteSqLHisto", retour)
+                    result = Nothing
+                    Return Nothing
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "RequeteSqLHisto", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
 
         ''' <summary>
         ''' Retourne un datatable d'historique d'un device suivant sa propriété (source) puis suivant une date de début et de fin

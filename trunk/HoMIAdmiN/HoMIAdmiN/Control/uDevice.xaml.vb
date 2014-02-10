@@ -4,6 +4,7 @@ Imports HoMIDom.HoMIDom.Api
 Imports System.IO
 Imports System.Threading
 Imports System.Text.RegularExpressions
+Imports System.ComponentModel
 
 
 Partial Public Class uDevice
@@ -103,6 +104,7 @@ Partial Public Class uDevice
                     CbType.IsEnabled = False
                     CbType.Foreground = Brushes.Black
                     TxtAdresse1.Text = x.Adresse1
+                    'CbAdresse1.Text = x.Adresse1
                     TxtAdresse2.Text = x.Adresse2
                     CBModele.Text = x.Modele
                     TxtModele.Text = x.Modele
@@ -283,7 +285,7 @@ Partial Public Class uDevice
     Private Sub MaJDriver()
         Try
             Dim _Driver As Object = Nothing
-
+            Me.Cursor = Cursors.Wait
             'on cherche le driver
 
             If CbDriver.SelectedItem IsNot Nothing Then
@@ -308,6 +310,27 @@ Partial Public Class uDevice
                     Next
                     CbType.IsEnabled = True
                     CbType.Text = mem
+                End If
+
+                If _Driver.ID = "8B8EFC7E-F66D-11E1-AD40-71AF6188709B" And CbAdresse1.Tag <> "WEATHERMETEO" Then
+                    CbAdresse1.Tag = "WEATHERMETEO"
+                    CbAdresse1.Items.Clear()
+
+                    Dim CityID As New Dictionary(Of String, String)
+                    CityID = GetWeatherCityID()
+
+                    CbAdresse1.ItemsSource = New Forms.BindingSource(CityID, Nothing)
+                    CbAdresse1.DisplayMemberPath = "Value"
+                    CbAdresse1.SelectedValuePath = "Key"
+
+                    TxtAdresse1.Visibility = Windows.Visibility.Collapsed
+                    CbAdresse1.Visibility = Windows.Visibility.Visible
+                Else
+                    CbAdresse1.Text = ""
+                    CbAdresse1.Items.Clear()
+                    CbAdresse1.Tag = Nothing
+                    TxtAdresse1.Visibility = Windows.Visibility.Visible
+                    CbAdresse1.Visibility = Windows.Visibility.Collapsed
                 End If
 
                 'Suivant le driver, on change les champs (personnalisation des Labels, affichage suivant @...
@@ -414,6 +437,7 @@ Partial Public Class uDevice
                     Next
                 End If
             End If
+            Me.Cursor = Nothing
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString, "Erreur", "")
         End Try
@@ -1042,6 +1066,33 @@ Partial Public Class uDevice
                         LabelAdresse2.Content = "Paramètres"
                         TxtAdresse2.Text = "9600,0,8,1"
                 End Select
+            End If
+        End If
+    End Sub
+
+    Private Sub CbAdresse1_SelectionChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbAdresse1.SelectionChanged
+        If CbAdresse1.Tag = "WEATHERMETEO" Then
+            TxtAdresse1.Text = CbAdresse1.SelectedValue
+        End If
+    End Sub
+
+    Private Sub TxtAdresse1_TextChanged(sender As System.Object, e As System.Windows.Controls.TextChangedEventArgs) Handles TxtAdresse1.TextChanged
+        If CbAdresse1.Tag = "WEATHERMETEO" Then
+            Dim flagTrouv As Boolean = False
+            Dim idx As Integer = 0
+
+            For Each item In CbAdresse1.Items
+                If TxtAdresse1.Text.ToUpper.Trim = item.key.ToString.ToUpper.Trim Then
+                    flagTrouv = True
+                    Exit For
+                End If
+                idx += 1
+            Next
+
+            If flagTrouv Then
+                CbAdresse1.SelectedIndex = idx
+            Else
+                CbAdresse1.Text = TxtAdresse1.Text
             End If
         End If
     End Sub
