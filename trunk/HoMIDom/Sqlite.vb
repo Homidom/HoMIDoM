@@ -185,7 +185,7 @@ Namespace HoMIDom
                                 If SQLreader.HasRows = True Then
                                     'SQLreader.Read() 'lecture de la premiere ligne      
                                     Dim x As DataColumn
-                                    Dim resultattemp As New DataTable
+                                    Dim resultattemp As New DataTable("HistoDB")
                                     For i = 0 To SQLreader.FieldCount - 1 'pour chaque colonne, on va créer la même dans le datable 
                                         x = New DataColumn("col_" & i)
                                         resultattemp.Columns.Add(x)

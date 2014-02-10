@@ -4999,7 +4999,7 @@ Namespace HoMIDom
                     Return Nothing
                 Else
                     'on vérifie que la requête commence par select * from historiques
-                    If Command.ToUpper.StartsWith("SELECT * FROM HISTORIQUES") Then
+                    If commande.ToUpper.StartsWith("SELECT * FROM HISTORIQUES") Then
                         'on vérifie que la requête ne contient pas de ; pour que l'utilisateur en cherche pas à faire des requetes complexes cachées 
                         If InStr(Mid(commande, 1, commande.Length - 1), ";") > 0 Then
                             Log(TypeLog.ERREUR, TypeSource.SERVEUR, "RequeteSqLHisto", "Erreur la requete ne doit pas comporter de ; sauf à la fin")
