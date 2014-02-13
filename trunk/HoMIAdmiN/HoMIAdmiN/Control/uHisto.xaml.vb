@@ -110,7 +110,6 @@ Public Class uHisto
             ' Set automatic zooming
             Chart2.ChartAreas("Default").AxisX.ScaleView.Zoomable = True
             Chart2.ChartAreas("Default").AxisY.ScaleView.Zoomable = True
-
             'Chart2.ChartAreas("Default").AxisX.MajorGrid.Interval = 1
             'Chart2.ChartAreas("Default").AxisX.MajorGrid.IntervalType = DateTimeIntervalType.Hours
             'Chart2.ChartAreas("Default").AxisX.MajorTickMark.Interval = 1
@@ -167,7 +166,6 @@ Public Class uHisto
                         cnt += 1
                         If cnt > _MaxData Then Exit For
                     Next
-                    If cnt = 0 Then AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "Il n'y a pas de valeurs sur cette période pour " & _namedevice, "Information", "")
                     series.BorderWidth = 3
                     series.IsXValueIndexed = False
                     Chart2.Series.Add(series)
@@ -231,6 +229,16 @@ Public Class uHisto
                 Case 6 : Chart2.ChartAreas("Default").BackColor = Color.Transparent
             End Select
 
+            Select Case CbZoom.Text
+                Case "2 heures"
+                    Chart2.ChartAreas("Default").AxisX.ScaleView.Zoom(0, 1 / 2)
+                Case "1 heure"
+                    Chart2.ChartAreas("Default").AxisX.ScaleView.Zoom(0, 1 / 3)
+                Case "30 minutes"
+                    Chart2.ChartAreas("Default").AxisX.ScaleView.Zoom(0, 1 / 5)
+                Case "15 minutes"
+                    Chart2.ChartAreas("Default").AxisX.ScaleView.Zoom(0, 1 / 9)
+            End Select
 
             ' Add the chart to the Windows Form Host.
             Test.Child = Chart2
@@ -351,7 +359,7 @@ Public Class uHisto
                         Next kvp
                     Next
                     sw.Close()
-                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "Exportation terminée.", "HoMIAdmiN", "")
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Exportation terminée.", "HoMIAdmiN", "")
                 End If
             Else
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Aucune donnée!", "ERREUR", "")
