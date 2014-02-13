@@ -56,13 +56,13 @@
                                 </DockPanel>
                                 <DockPanel>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0">
-                                        <Label Content="Moyenne:" Foreground="White" Height="22" />
+                                        <Label Content="Moyenne:" Foreground="White" />
                                         <ComboBox Background="DarkGray" BorderBrush="Black" BorderThickness="2" Foreground="White" Name="ComboBoxMoyenne" SelectedIndex="0" Width="80" Height="24">
                                             <ComboBoxItem Content="Aucune" />
                                             <ComboBoxItem Content="Heure" />
                                             <ComboBoxItem Content="Jour" />
                                         </ComboBox>
-                                        <Label Content="Max Data:" Foreground="White" Height="22" />
+                                        <Label Content="Max Data:" Foreground="White" />
                                         <TextBox Name="TxtMaxData" Width="40" Text="2000" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" TextAlignment="Center" />
                                         <Label Content="BackColor:" Foreground="White" VerticalAlignment="Center" Margin="5,0,0,0" />
                                         <ComboBox Name="CbBackColor" Width="80" Height="24" VerticalAlignment="Center" SelectedIndex="5" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2">
@@ -73,6 +73,14 @@
                                             <ComboBoxItem Content="Vert" />
                                             <ComboBoxItem Content="Gris" />
                                             <ComboBoxItem Content="Transparent" />
+                                        </ComboBox>
+                                        <Label Content="Zoom:" Foreground="White" />
+                                        <ComboBox Background="DarkGray" BorderBrush="Black" BorderThickness="2" Foreground="White" Height="24" Name="CbZoom" SelectedIndex="5" Width="91">
+                                            <ComboBoxItem Content="Aucun" IsSelected="True" />
+                                            <ComboBoxItem Content="2 heures" />
+                                            <ComboBoxItem Content="1 heure" />
+                                            <ComboBoxItem Content="30 minutes" />
+                                            <ComboBoxItem Content="15 minutes" IsSelected="False" />
                                         </ComboBox>
                                     </StackPanel>
 
@@ -92,7 +100,7 @@
                     </StackPanel>
                 </DockPanel>
                 <StackPanel DockPanel.Dock="Bottom" >
-                    <TabControl  Name="TabControl1" Margin="2" Background="black">
+                    <TabControl  Name="TabControl1" Margin="2" Background="black" DataContext="{Binding}">
                         <TabControl.Resources>
                         <Style TargetType="{x:Type TabItem}">
                             <Setter Property="BorderThickness" Value="0"/>
@@ -169,7 +177,7 @@
                             </TabItem.ContextMenu>
                             <StackPanel Orientation="Horizontal" >
                                 <!--<chartingToolkit:Chart Name="Chart1" MinWidth="500" MinHeight="500" Margin="3" FontSize="9" />-->
-                                <WindowsFormsHost Name="Test" >
+                                <WindowsFormsHost Name="Test" AllowDrop="False">
                                    
                                 </WindowsFormsHost>
 
