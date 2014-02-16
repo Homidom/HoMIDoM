@@ -5,6 +5,8 @@ Imports HoMIDom.HoMIDom.Device
 
 Imports Q42.HueApi
 
+
+
 Imports AsyncCtpExtensions
 Imports AsyncCtpThreadingExtensions
 Imports Newtonsoft.Json
@@ -450,7 +452,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
     ''' <summary>Démarrer le driver</summary>
     ''' <remarks></remarks>
-    Public Async Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
+    Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Dim retour As String = ""
 
         'récupération des paramétres avancés
@@ -467,7 +469,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
                 client.Initialize("448123456789844")
 
                 Try
-                    Dim resultL2 = Await client.GetLightsAsync()
+                    Dim resultL2 = client.GetLightsAsync()
                 Catch ex As Exception
                     Register()
                 End Try
@@ -498,7 +500,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
     ''' <remarks></remarks>
     Public Sub Restart() Implements HoMIDom.HoMIDom.IDriver.Restart
         [Stop]()
-        Start()
+        start()
     End Sub
 
     ''' <summary>Intérroger un device</summary>
@@ -835,7 +837,8 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
         client.Initialize("448123456789844")
 
-        Dim resultgethuedevices = Await client.GetLightsAsync()
+        Dim resultgethuedevices = client.GetLightsAsync().Result
+
 
         For Each device As Object In resultgethuedevices
             '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "HomiHue Start", "Device Hue trouvé : " + device.Name)
@@ -970,12 +973,13 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
     End Function
 
-    Public Async Function Register() As Task
+    Public Function Register() As Task
 
-    Dim client As New HueClient(_IP_TCP)
+        Dim client As New HueClient(_IP_TCP)
 
         Try
-            Dim result = Await client.RegisterAsync("HomidomHue", "448123456789844")
+            Dim result = client.RegisterAsync("HomidomHue", "448123456789844").Result
+
 
             If result = True Then
 
