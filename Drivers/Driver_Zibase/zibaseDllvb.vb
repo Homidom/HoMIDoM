@@ -888,6 +888,8 @@ Namespace ZibaseDllvb
         End Sub
         Public Sub SendCommand(sZibaseName As String, sAddress As String, iState As State, Optional iDim As Integer = 0, Optional iProtocol As Protocol = Protocol.PROTOCOL_CHACON, Optional iNbBurst As Integer = 1)
             Try
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ZibaseDllVB SendCommand2", "SendCommand to " & sAddress & " command: " & iState.ToString & " protocol: " & iProtocol.ToString)
+
                 If (sAddress.Length < 2) Then Return
 
                 Dim ZBS = New ZBClass()

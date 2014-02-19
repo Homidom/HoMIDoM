@@ -645,14 +645,12 @@ Imports Driver_Zibase.ZibaseDllvb
                 Case "" : protocole = ZiBase.Protocol.PROTOCOL_BROADCAST
                 Case "aucun" : protocole = ZiBase.Protocol.PROTOCOL_BROADCAST
                 Case "BROADC" : protocole = ZiBase.Protocol.PROTOCOL_BROADCAST
-                Case "CHACON"
-                    protocole = ZiBase.Protocol.PROTOCOL_CHACON
-                    'adresse = composants_adresse2 'on a 2 adresses pour chacon : reception et emission dans le champ divers
+                Case "CHACON" : protocole = ZiBase.Protocol.PROTOCOL_CHACON 'adresse = composants_adresse2 'on a 2 adresses pour chacon : reception et emission dans le champ divers
                 Case "DOMIA" : protocole = ZiBase.Protocol.PROTOCOL_DOMIA
                 Case "VIS433" : protocole = ZiBase.Protocol.PROTOCOL_VISONIC433
                 Case "VIS868" : protocole = ZiBase.Protocol.PROTOCOL_VISONIC868
                 Case "X10" : protocole = ZiBase.Protocol.PROTOCOL_X10
-                Case "ZWAVE" : protocole = ZiBase.Protocol.PROTOCOL_ZWAVE
+                Case "ZWAVE" : protocole = ZiBase.Protocol.PROTOCOL_ZWAVE 'adresse = composants_adresse2 'on a 2 adresses pour chacon : reception et emission dans le champ divers
                 Case "RFS10" : protocole = ZiBase.Protocol.PROTOCOL_RFS10
                 Case "XDD433" : protocole = ZiBase.Protocol.PROTOCOL_X2D433
                 Case "XDD868" : protocole = ZiBase.Protocol.PROTOCOL_X2D868
