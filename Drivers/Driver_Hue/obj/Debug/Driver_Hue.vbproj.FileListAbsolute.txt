@@ -16,3 +16,12 @@ C:\HoMiDoM\Drivers\Driver_Hue\obj\Debug\Driver_hue.pdb
 C:\HoMiDoM\DEBUG\Drivers\Driver_hue.dll
 C:\HoMiDoM\DEBUG\Drivers\Driver_hue.pdb
 C:\HoMiDoM\DEBUG\Drivers\Driver_hue.xml
+C:\Homidom source O\Drivers\Driver_Hue\obj\Debug\Driver_Hue.vbprojResolveAssemblyReference.cache
+C:\Homidom source O\Drivers\Driver_Hue\obj\Debug\Driver_hue.Resources.resources
+C:\Homidom source O\Drivers\Driver_Hue\obj\Debug\Driver_Hue.vbproj.GenerateResource.Cache
+C:\Homidom source O\Drivers\Driver_Hue\obj\Debug\Driver_hue.dll
+C:\Homidom source O\Drivers\Driver_Hue\obj\Debug\Driver_hue.xml
+C:\Homidom source O\Drivers\Driver_Hue\obj\Debug\Driver_hue.pdb
+C:\Homidom source O\DEBUG\Drivers\Driver_hue.dll
+C:\Homidom source O\DEBUG\Drivers\Driver_hue.pdb
+C:\Homidom source O\DEBUG\Drivers\Driver_hue.xml
