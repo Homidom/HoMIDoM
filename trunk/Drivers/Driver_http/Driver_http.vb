@@ -784,7 +784,7 @@ Imports System.Xml
             'Libellé Device
             Add_LibelleDevice("ADRESSE1", "Début URL", "")
             Add_LibelleDevice("ADRESSE2", "Fin URL (Optionnel)", "")
-            Add_LibelleDevice("SOLO", "@", "")
+            Add_LibelleDevice("SOLO", "si décoché, les autres composants eco-device seront mis à jour en même temps que celui-ci automatiquement.", "")
             Add_LibelleDevice("MODELE", "Modele", "modèle du device: IPX800,RSS,Arduino,Eco Device""Arduino|EcoDevice|IPX800|RSS")
             'Add_LibelleDevice("REFRESH", "Refresh (sec)", "Valeur de rafraîchissement de la mesure en secondes")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
@@ -1018,7 +1018,7 @@ Imports System.Xml
     '        Return Nothing
     '    End Try
     'End Function
-    Public Function GET_ECODEVICE2(ByVal composant As Object)
+    Public Sub GET_ECODEVICE2(ByVal composant As Object)
         Try
             Dim valeur As String = ""
 
@@ -1071,9 +1071,8 @@ Imports System.Xml
                             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, nombalise, "", Me._ID, True)
                             If IsNothing(listedevices) Then
                                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GET_ECODEVICE", "Communication impossible avec le serveur, l'IDsrv est peut être erroné : " & _IdSrv)
-                                Exit Function
-                            End If
-                            If (listedevices.Count = 1) Then
+                                Exit Sub
+                            ElseIf (listedevices.Count = 1) Then
                                 'un device trouvé, on le met à jour
                                 If UCase(listedevices.Item(0).Type) = "ENERGIETOTALE" Or UCase(listedevices.Item(0).Type) = "ENERGIEINSTANTANEE" Or UCase(listedevices.Item(0).Type) = "GENERIQUEVALUE" Then
                                     If IsNumeric(valeur) Then
@@ -1084,7 +1083,7 @@ Imports System.Xml
                                 ElseIf UCase(listedevices.Item(0).Type) = "GENERIQUESTRING" Then
                                     listedevices.Item(0).Value = valeur
                                 End If
-                            Else
+                            ElseIf (listedevices.Count > 1) Then
                                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GET_ECODEVICE", "Plusieurs composants correspondent à : " & nombalise & ":" & valeur)
                             End If
                         End If
@@ -1094,9 +1093,8 @@ Imports System.Xml
             SR.Close()
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GET_ECODEVICE", ex.Message)
-            Return Nothing
         End Try
-    End Function
+    End Sub
 
     Public Sub SEND_ARDUINO(ByVal Command As String)
         Try
