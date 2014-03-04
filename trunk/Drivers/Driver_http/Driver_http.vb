@@ -485,6 +485,8 @@ Imports System.Xml
                         Dim url As String = "http://" & Objet.Adresse2
                         Dim elmt As String = "btn" & idx
                         Objet.Value = GET_IPX800(url, elmt)
+                    Else
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le type CONTACT n'est pas géré par " & Objet.Modele)
                     End If
                 Case "APPAREIL"
                     If Trim(UCase(Objet.Modele)) = "IPX800" Then
@@ -497,6 +499,8 @@ Imports System.Xml
                         Dim url As String = "http://" & Objet.Adresse2
                         Dim elmt As String = "led" & idx
                         Objet.Value = GET_IPX800(url, elmt)
+                    Else
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le type APPAREIL n'est pas géré par " & Objet.Modele)
                     End If
                 Case "GENERIQUEVALUE"
                     If Trim(UCase(Objet.Modele)) = "IPX800" Then
@@ -508,6 +512,17 @@ Imports System.Xml
                         Dim url As String = "http://" & Objet.Adresse2
                         Dim elmt As String = "analog" & idx
                         Objet.Value = GET_IPX800(url, elmt)
+                    ElseIf Trim(UCase(Objet.Modele)) = "ECODEVICE" Then
+                        Dim idx As String = Objet.Adresse1
+                        Dim url As String = "http://" & Objet.Adresse2 & "/teleinfo.xml"
+                        Dim objectretour As Object = GET_ECODEVICE(url, idx)
+                        If IsNumeric(objectretour) Then
+                            Objet.Value = CDbl(objectretour)
+                        Else
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: " & objectretour & " n'est pas au bon format pour " & Objet.Name & "(GENERIQUEVALUE)")
+                        End If
+                    Else
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le type GENERIQUEVALUE n'est pas géré par " & Objet.Modele)
                     End If
                 Case "GENERIQUESTRING"
                     If Trim(UCase(Objet.Modele)) = "RSS" Then
@@ -525,6 +540,39 @@ Imports System.Xml
                             result &= titleNode.InnerText & vbCrLf
                         Next
                         Objet.Value = result
+                    ElseIf Trim(UCase(Objet.Modele)) = "ECODEVICE" Then
+                        Dim idx As String = Objet.Adresse1
+                        Dim url As String = "http://" & Objet.Adresse2 & "/teleinfo.xml"
+                        Dim objectretour As Object = GET_ECODEVICE(url, idx)
+                        Objet.Value = CDbl(objectretour)
+                    Else
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le type GENERIQUESTRING n'est pas géré par " & Objet.Modele)
+                    End If
+                Case "ENERGIEINSTANTANEE"
+                    If Trim(UCase(Objet.Modele)) = "ECODEVICE" Then
+                        Dim idx As String = Objet.Adresse1
+                        Dim url As String = "http://" & Objet.Adresse2 & "/teleinfo.xml"
+                        Dim objectretour As Object = GET_ECODEVICE(url, idx)
+                        If IsNumeric(objectretour) Then
+                            Objet.Value = CDbl(objectretour)
+                        Else
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: " & objectretour & " n'est pas au bon format pour " & Objet.Name & "(ENERGIEINSTANTANEE)")
+                        End If
+                    Else
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le type GENERIQUEVALUE n'est pas géré par " & Objet.Modele)
+                    End If
+                Case "ENERGIETOTALE"
+                    If Trim(UCase(Objet.Modele)) = "ECODEVICE" Then
+                        Dim idx As String = Objet.Adresse1
+                        Dim url As String = "http://" & Objet.Adresse2 & "/teleinfo.xml"
+                        Dim objectretour As Object = GET_ECODEVICE(url, idx)
+                        If IsNumeric(objectretour) Then
+                            Objet.Value = CDbl(objectretour)
+                        Else
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: " & objectretour & " n'est pas au bon format pour " & Objet.Name & "(ENERGIEINSTANTANEE)")
+                        End If
+                    Else
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le type GENERIQUEVALUE n'est pas géré par " & Objet.Modele)
                     End If
                 Case Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le Device n'est pas reconnu pour ce type " & Objet.Type)
@@ -716,6 +764,8 @@ Imports System.Xml
             _DeviceSupport.Add(ListeDevices.APPAREIL)
             _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE)
             _DeviceSupport.Add(ListeDevices.GENERIQUESTRING)
+            _DeviceSupport.Add(ListeDevices.ENERGIEINSTANTANEE)
+            _DeviceSupport.Add(ListeDevices.ENERGIETOTALE)
 
             'Parametres avancés
             'add_paramavance("nom", "Description", valeupardefaut)
@@ -731,7 +781,7 @@ Imports System.Xml
             Add_LibelleDevice("ADRESSE1", "Début URL", "")
             Add_LibelleDevice("ADRESSE2", "Fin URL (Optionnel)", "")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "Modele", "modèle du device: IPX800,RSS,Arduino")
+            Add_LibelleDevice("MODELE", "Modele", "modèle du device: IPX800,RSS,Arduino,Eco Device""Arduino|EcoDevice|IPX800|RSS")
             'Add_LibelleDevice("REFRESH", "Refresh (sec)", "Valeur de rafraîchissement de la mesure en secondes")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
@@ -919,6 +969,48 @@ Imports System.Xml
             Return retour
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GET_IPX800", ex.Message)
+            Return Nothing
+        End Try
+    End Function
+
+    Public Function GET_ECODEVICE(ByVal Adresse As String, ByVal Element As String) As Object
+        Try
+            Dim retour As Object = Nothing
+
+            Dim url As New Uri(Adresse)
+            Dim Request As HttpWebRequest = CType(HttpWebRequest.Create(url), System.Net.HttpWebRequest)
+            Dim response As Net.HttpWebResponse = CType(Request.GetResponse(), Net.HttpWebResponse)
+            Dim flag As Boolean = False
+
+            Dim SR As New StreamReader(response.GetResponseStream)
+            Dim Line As String = ""
+            Dim a As String = "<" & Element & ">"
+
+            Do Until SR.Peek = -1
+                Line = SR.ReadLine()
+                Dim b As String = Trim(Line)
+                If b.StartsWith(a) Then
+                    Dim idx1 As Integer = InStr(2, b, ">")
+                    Dim idx2 As Integer = InStr(idx1, b, "<")
+                    If idx1 > 0 And idx2 > 0 And idx2 > idx1 Then
+                        Dim idx3 As Integer = idx1 + 1
+                        Dim c As String = ""
+                        Do While Mid(b, idx3, 1) <> "<"
+                            c &= Mid(b, idx3, 1)
+                            idx3 += 1
+                        Loop
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GET_ECODEVICE", "Trouvé " & c)
+                        retour = c
+                    End If
+                Else
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GET_ECODEVICE", "ligne: " & b)
+                End If
+            Loop
+
+            SR.Close()
+            Return retour
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GET_ECODEVICE", ex.Message)
             Return Nothing
         End Try
     End Function
