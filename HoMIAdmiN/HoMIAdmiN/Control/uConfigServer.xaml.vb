@@ -444,7 +444,10 @@ Partial Public Class uConfigServer
                 Next
 
                 Print(FreeF, "" & vbCrLf)
+                Print(FreeF, "</one-of>" & vbCrLf)
+                Print(FreeF, "" & vbCrLf)
                 Print(FreeF, "<!--Partie Macro -->" & vbCrLf)
+                Print(FreeF, "<one-of>" & vbCrLf)
                 Print(FreeF, "" & vbCrLf)
 
                 '<item>éteindre tout<tag>out.action.device="macro";out.action.id_device="4a655c35-11b9-401f-8b43-31b77bf19ce5";out.action.ttsDevice="j'ai tout éteint";</tag></item>
@@ -454,7 +457,10 @@ Partial Public Class uConfigServer
                 Next
 
                 Print(FreeF, "" & vbCrLf)
+                Print(FreeF, "</one-of>" & vbCrLf)
+                Print(FreeF, "" & vbCrLf)
                 Print(FreeF, "<!-- Partie lecture device T°, humidité, etc... -->" & vbCrLf)
+                Print(FreeF, "<one-of>" & vbCrLf)
                 Print(FreeF, "" & vbCrLf)
 
                 '<item>la température de lo chaude<tag>out.action.device="device";out.action.id_device="4438d227-a289-4661-a399-3e780399a2b2";out.action.ttsTmp=" la température de lo chaude et de";out.action.ttsDeg="degrés";</tag></item>
