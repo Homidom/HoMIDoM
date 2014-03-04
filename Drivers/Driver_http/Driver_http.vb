@@ -513,14 +513,15 @@ Imports System.Xml
                         Dim elmt As String = "analog" & idx
                         Objet.Value = GET_IPX800(url, elmt)
                     ElseIf Trim(UCase(Objet.Modele)) = "ECODEVICE" Then
-                        Dim idx As String = Objet.Adresse1
-                        Dim url As String = "http://" & Objet.Adresse2 & "/teleinfo.xml"
-                        Dim objectretour As Object = GET_ECODEVICE(url, idx)
-                        If IsNumeric(objectretour) Then
-                            Objet.Value = CDbl(objectretour)
-                        Else
-                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: " & objectretour & " n'est pas au bon format pour " & Objet.Name & "(GENERIQUEVALUE)")
-                        End If
+                        'Dim idx As String = Objet.Adresse1
+                        'Dim url As String = "http://" & Objet.Adresse2 & "/teleinfo.xml"
+                        'Dim objectretour As Object = GET_ECODEVICE(url, idx)
+                        'If IsNumeric(objectretour) Then
+                        '    Objet.Value = CDbl(objectretour)
+                        'Else
+                        '    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: " & objectretour & " n'est pas au bon format pour " & Objet.Name & "(GENERIQUEVALUE)")
+                        'End If
+                        GET_ECODEVICE2(Objet)
                     Else
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le type GENERIQUEVALUE n'est pas géré par " & Objet.Modele)
                     End If
@@ -541,36 +542,39 @@ Imports System.Xml
                         Next
                         Objet.Value = result
                     ElseIf Trim(UCase(Objet.Modele)) = "ECODEVICE" Then
-                        Dim idx As String = Objet.Adresse1
-                        Dim url As String = "http://" & Objet.Adresse2 & "/teleinfo.xml"
-                        Dim objectretour As Object = GET_ECODEVICE(url, idx)
-                        Objet.Value = CDbl(objectretour)
+                        'Dim idx As String = Objet.Adresse1
+                        'Dim url As String = "http://" & Objet.Adresse2 & "/teleinfo.xml"
+                        'Dim objectretour As Object = GET_ECODEVICE(url, idx)
+                        'Objet.Value = CDbl(objectretour)
+                        GET_ECODEVICE2(Objet)
                     Else
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le type GENERIQUESTRING n'est pas géré par " & Objet.Modele)
                     End If
                 Case "ENERGIEINSTANTANEE"
                     If Trim(UCase(Objet.Modele)) = "ECODEVICE" Then
-                        Dim idx As String = Objet.Adresse1
-                        Dim url As String = "http://" & Objet.Adresse2 & "/teleinfo.xml"
-                        Dim objectretour As Object = GET_ECODEVICE(url, idx)
-                        If IsNumeric(objectretour) Then
-                            Objet.Value = CDbl(objectretour)
-                        Else
-                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: " & objectretour & " n'est pas au bon format pour " & Objet.Name & "(ENERGIEINSTANTANEE)")
-                        End If
+                        'Dim idx As String = Objet.Adresse1
+                        'Dim url As String = "http://" & Objet.Adresse2 & "/teleinfo.xml"
+                        'Dim objectretour As Object = GET_ECODEVICE(url, idx)
+                        'If IsNumeric(objectretour) Then
+                        '    Objet.Value = CDbl(objectretour)
+                        'Else
+                        '    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: " & objectretour & " n'est pas au bon format pour " & Objet.Name & "(ENERGIEINSTANTANEE)")
+                        'End If
+                        GET_ECODEVICE2(Objet)
                     Else
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le type GENERIQUEVALUE n'est pas géré par " & Objet.Modele)
                     End If
                 Case "ENERGIETOTALE"
                     If Trim(UCase(Objet.Modele)) = "ECODEVICE" Then
-                        Dim idx As String = Objet.Adresse1
-                        Dim url As String = "http://" & Objet.Adresse2 & "/teleinfo.xml"
-                        Dim objectretour As Object = GET_ECODEVICE(url, idx)
-                        If IsNumeric(objectretour) Then
-                            Objet.Value = CDbl(objectretour)
-                        Else
-                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: " & objectretour & " n'est pas au bon format pour " & Objet.Name & "(ENERGIEINSTANTANEE)")
-                        End If
+                        'Dim idx As String = Objet.Adresse1
+                        'Dim url As String = "http://" & Objet.Adresse2 & "/teleinfo.xml"
+                        'Dim objectretour As Object = GET_ECODEVICE(url, idx)
+                        'If IsNumeric(objectretour) Then
+                        '    Objet.Value = CDbl(objectretour)
+                        'Else
+                        '    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: " & objectretour & " n'est pas au bon format pour " & Objet.Name & "(ENERGIEINSTANTANEE)")
+                        'End If
+                        GET_ECODEVICE2(Objet)
                     Else
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le type GENERIQUEVALUE n'est pas géré par " & Objet.Modele)
                     End If
@@ -973,42 +977,121 @@ Imports System.Xml
         End Try
     End Function
 
-    Public Function GET_ECODEVICE(ByVal Adresse As String, ByVal Element As String) As Object
-        Try
-            Dim retour As Object = Nothing
+    'Public Function GET_ECODEVICE(ByVal Adresse As String, ByVal Element As String) As Object
+    '    Try
+    '        Dim retour As Object = Nothing
 
-            Dim url As New Uri(Adresse)
+    '        Dim url As New Uri(Adresse) 'http://adresseip/teleinfo.xml
+    '        Dim Request As HttpWebRequest = CType(HttpWebRequest.Create(url), System.Net.HttpWebRequest)
+    '        Dim response As Net.HttpWebResponse = CType(Request.GetResponse(), Net.HttpWebResponse)
+    '        Dim flag As Boolean = False
+
+    '        Dim SR As New StreamReader(response.GetResponseStream)
+    '        Dim Line As String = ""
+    '        Dim a As String = "<" & Element & ">"
+
+    '        Do Until SR.Peek = -1
+    '            Line = SR.ReadLine()
+    '            Dim b As String = Trim(Line)
+    '            If b.StartsWith(a) Then
+    '                Dim idx1 As Integer = InStr(2, b, ">")
+    '                Dim idx2 As Integer = InStr(idx1, b, "<")
+    '                If idx1 > 0 And idx2 > 0 And idx2 > idx1 Then
+    '                    Dim idx3 As Integer = idx1 + 1
+    '                    Dim c As String = ""
+    '                    Do While Mid(b, idx3, 1) <> "<"
+    '                        c &= Mid(b, idx3, 1)
+    '                        idx3 += 1
+    '                    Loop
+    '                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GET_ECODEVICE", "Trouvé " & c)
+    '                    retour = c
+    '                End If
+    '            Else
+    '                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GET_ECODEVICE", "ligne: " & b)
+    '            End If
+    '        Loop
+
+    '        SR.Close()
+    '        Return retour
+    '    Catch ex As Exception
+    '        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GET_ECODEVICE", ex.Message)
+    '        Return Nothing
+    '    End Try
+    'End Function
+    Public Function GET_ECODEVICE2(ByVal composant As Object)
+        Try
+            Dim valeur As String = ""
+
+            Dim url As New Uri("http://" & composant.Adresse2 & "/teleinfo.xml")
             Dim Request As HttpWebRequest = CType(HttpWebRequest.Create(url), System.Net.HttpWebRequest)
             Dim response As Net.HttpWebResponse = CType(Request.GetResponse(), Net.HttpWebResponse)
             Dim flag As Boolean = False
 
             Dim SR As New StreamReader(response.GetResponseStream)
             Dim Line As String = ""
-            Dim a As String = "<" & Element & ">"
-
-            Do Until SR.Peek = -1
-                Line = SR.ReadLine()
-                Dim b As String = Trim(Line)
-                If b.StartsWith(a) Then
-                    Dim idx1 As Integer = InStr(2, b, ">")
-                    Dim idx2 As Integer = InStr(idx1, b, "<")
-                    If idx1 > 0 And idx2 > 0 And idx2 > idx1 Then
-                        Dim idx3 As Integer = idx1 + 1
-                        Dim c As String = ""
-                        Do While Mid(b, idx3, 1) <> "<"
-                            c &= Mid(b, idx3, 1)
-                            idx3 += 1
-                        Loop
-                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GET_ECODEVICE", "Trouvé " & c)
-                        retour = c
+            'si on met à jour uniquement ce composant
+            If composant.solo Then
+                Do Until SR.Peek = -1
+                    Line = Trim(SR.ReadLine())
+                    If Line.StartsWith("<" & composant.adresse1 & ">") Then
+                        valeur = Mid(Line, InStr(2, Line, ">") + 1, InStr(2, Line, "<") - InStr(2, Line, ">") - 1)
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GET_ECODEVICE", composant.Name & " Trouvé : " & valeur)
+                        'mise à jour du composant
+                        If UCase(composant.Type) = "ENERGIETOTALE" Or UCase(composant.Type) = "ENERGIEINSTANTANEE" Or UCase(composant.Type) = "GENERIQUEVALUE" Then
+                            If IsNumeric(valeur) Then
+                                composant.Value = CDbl(valeur)
+                            Else
+                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GET_ECODEVICE", "Erreur: " & valeur & " n'est pas au bon format pour " & composant.Name & "(" & UCase(composant.Type) & ")")
+                            End If
+                        ElseIf UCase(composant.Type) = "GENERIQUESTRING" Then
+                            composant.Value = valeur
+                        End If
                     End If
-                Else
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GET_ECODEVICE", "ligne: " & b)
-                End If
-            Loop
-
+                Loop
+            Else
+                Do Until SR.Peek = -1
+                    Line = Trim(SR.ReadLine())
+                    If Line.StartsWith("<T1_") Or Line.StartsWith("<T2_") Then
+                        Dim nombalise As String = Mid(Line, 2, InStr(2, Line, ">") - 2)
+                        valeur = Mid(Line, InStr(2, Line, ">") + 1, InStr(2, Line, "<") - InStr(2, Line, ">") - 1)
+                        'si c'est notre composant, on le met à jour directement
+                        If nombalise = composant.adresse1 Then
+                            If UCase(composant.Type) = "ENERGIETOTALE" Or UCase(composant.Type) = "ENERGIEINSTANTANEE" Or UCase(composant.Type) = "GENERIQUEVALUE" Then
+                                If IsNumeric(valeur) Then
+                                    composant.Value = CDbl(valeur)
+                                Else
+                                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GET_ECODEVICE", "Erreur: " & valeur & " n'est pas au bon format pour " & composant.Name & "(" & UCase(composant.Type) & ")")
+                                End If
+                            ElseIf UCase(composant.Type) = "GENERIQUESTRING" Then
+                                composant.Value = valeur
+                            End If
+                        Else
+                            'sinon on cherche si un autre composant pour adresse la balise avec le même driver
+                            Dim listedevices As New ArrayList
+                            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, nombalise, "", Me._ID, True)
+                            If IsNothing(listedevices) Then
+                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GET_ECODEVICE", "Communication impossible avec le serveur, l'IDsrv est peut être erroné : " & _IdSrv)
+                                Exit Function
+                            End If
+                            If (listedevices.Count = 1) Then
+                                'un device trouvé, on le met à jour
+                                If UCase(listedevices.Item(0).Type) = "ENERGIETOTALE" Or UCase(listedevices.Item(0).Type) = "ENERGIEINSTANTANEE" Or UCase(listedevices.Item(0).Type) = "GENERIQUEVALUE" Then
+                                    If IsNumeric(valeur) Then
+                                        listedevices.Item(0).Value = CDbl(valeur)
+                                    Else
+                                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GET_ECODEVICE", "Erreur: " & valeur & " n'est pas au bon format pour " & listedevices.Item(0).Name & "(" & UCase(listedevices.Item(0).Type) & ")")
+                                    End If
+                                ElseIf UCase(listedevices.Item(0).Type) = "GENERIQUESTRING" Then
+                                    listedevices.Item(0).Value = valeur
+                                End If
+                            Else
+                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GET_ECODEVICE", "Plusieurs composants correspondent à : " & nombalise & ":" & valeur)
+                            End If
+                        End If
+                    End If
+                Loop
+            End If
             SR.Close()
-            Return retour
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GET_ECODEVICE", ex.Message)
             Return Nothing

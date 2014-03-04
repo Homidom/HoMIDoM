@@ -28,14 +28,14 @@ Public Class DeviceController
         Return Me.GetField(Me.Get(id), field)
     End Function
 
-    ''' <summary>
-    ''' Permet d'executer une action avec des paramètres.
-    ''' </summary>
-    ''' <param name="id">GUID du composant (device)</param>
-    ''' <param name="command">Nom de l'action a exécuter</param>
-    ''' <param name="parameters">Listes de paramètres à passer à l'action. param1.nom:param1.value;param2.nom:param2.value</param>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
+    ' ''' <summary>
+    ' ''' Permet d'executer une action avec des paramètres.
+    ' ''' </summary>
+    ' ''' <param name="id">GUID du composant (device)</param>
+    ' ''' <param name="command">Nom de l'action a exécuter</param>
+    ' ''' <param name="parameters">Listes de paramètres à passer à l'action. param1.nom:param1.value;param2.nom:param2.value</param>
+    ' ''' <returns></returns>
+    ' ''' <remarks></remarks>
     '<HttpGet()>
     'Public Function ExecuteCommandWithParams(id As String, command As String, parameters As String) As Boolean
 

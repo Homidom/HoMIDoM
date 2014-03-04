@@ -90,7 +90,7 @@
                     <StackPanel Orientation="Horizontal" Name="StkValueCorrectionFormatage">
                             <StackPanel Name="StkCorrection">
                                 <Label Foreground="White" Name="LabelCorrection" Width="215">Correction:</Label>
-                                <TextBox Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtCorrection" Height="22" >0</TextBox>
+                                <TextBox Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtCorrection" Height="22" ToolTip="Permet de corriger la valeur récupéré (-10 ou +3.5) et il est possible d'utiliser '&lt;composantxnom&gt;*3.5'">0</TextBox>
                             </StackPanel>
                             <StackPanel Name="StkFormatage" Margin="10,0,0,0">
                                 <Label Foreground="White" Name="LabelFormatage" Width="76" HorizontalAlignment="Left">Formatage:</Label>
