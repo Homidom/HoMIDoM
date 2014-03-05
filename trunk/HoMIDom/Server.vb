@@ -83,14 +83,20 @@ Namespace HoMIDom
         <NonSerialized()> Shared _LastLogs(9) As String  'Table des derniers logs
         <NonSerialized()> Shared _LastLogsError(9) As String  'Table des derniers logs en alerte ou erreur
         <NonSerialized()> Shared _DevicesNoMAJ As New List(Of String)  'Table des devices non à jour
+        'Variable enregistrement de la config dans homidom.xml
+        <NonSerialized()> Shared _SaveRealTime As Boolean = True 'True si on enregistre en temps réel
         <NonSerialized()> Shared _CycleSave As Integer  'Enregistrer toute les X minutes
         <NonSerialized()> Shared _NextTimeSave As DateTime  'Enregistrer toute les X minutes
+        'Variable export de la config dans un dossier
+        <NonSerialized()> Shared _FolderSaveFolder As String 'chemin ou exporter la config
+        <NonSerialized()> Shared _CycleSaveFolder As Integer = 0  'export toutes les X heures
+        <NonSerialized()> Shared _NextTimeSaveFolder As DateTime  'Enregistrer toute les X minutes
+
         <NonSerialized()> Shared _Finish As Boolean  'Le serveur est prêt
         <NonSerialized()> Shared _Voice As String  'Voix par défaut
         <NonSerialized()> Private Shared _OsPlatForm As String  '32 ou 64 bits
         <NonSerialized()> Private Shared _CodePays As Integer = 12
         Private Shared lock_logwrite As New Object
-        <NonSerialized()> Shared _SaveRealTime As Boolean = True 'True si on enregistre en temps réel
         <NonSerialized()> Shared _Devise As String = "€"
         <NonSerialized()> Shared _IsWeekEnd As Boolean = False
 
@@ -351,6 +357,7 @@ Namespace HoMIDom
                 If ladate.Second = 0 Then
                     VerifIsJour()
 
+                    'on veirife si on doit enregistrer la config dans le xml
                     If _CycleSave > 0 And _Finish = True Then
                         If ladate >= _NextTimeSave Then
                             _NextTimeSave = Now.AddMinutes(_CycleSave)
@@ -362,6 +369,21 @@ Namespace HoMIDom
                 '---- Actions à effectuer toutes les heures ----
                 If ladate.Minute = 59 And ladate.Second = 59 Then
                     SearchDeviceNoMaJ()
+                    'on verifie si on doit exporter la config vers un folder
+                    If _CycleSaveFolder > 0 And _Finish = True Then
+                        If ladate >= _NextTimeSaveFolder Then
+                            _NextTimeSaveFolder = Now.AddMinutes(_CycleSaveFolder)
+
+
+
+
+                            SaveConfigFolder()
+
+
+
+
+                        End If
+                    End If
                 End If
 
                 '---- Actions à effectuer à minuit ----
@@ -730,6 +752,10 @@ Namespace HoMIDom
                                             End If
                                         Case "saverealtime"
                                             _SaveRealTime = list.Item(0).Attributes.Item(j).Value
+                                        Case "foldersavefolder"
+                                            _FolderSaveFolder = list.Item(0).Attributes.Item(j).Value
+                                        Case "cyclesavefolder"
+                                            _CycleSaveFolder = list.Item(0).Attributes.Item(j).Value
                                         Case "devise"
                                             _Devise = list.Item(0).Attributes.Item(j).Value
                                         Case "puissancemini"
@@ -1763,6 +1789,12 @@ Namespace HoMIDom
                 writer.WriteStartAttribute("codepays")
                 writer.WriteValue(CodePays)
                 writer.WriteEndAttribute()
+                writer.WriteStartAttribute("foldersavefolder")
+                writer.WriteValue(_FolderSaveFolder)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("cyclesavefolder")
+                writer.WriteValue(_CycleSaveFolder)
+                writer.WriteEndAttribute()
                 writer.WriteEndElement()
 
 
@@ -2174,6 +2206,27 @@ Namespace HoMIDom
                 Return True
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", " Erreur de sauvegarde de la configuration: " & ex.Message)
+                Return False
+            End Try
+
+        End Function
+
+        ''' <summary>Sauvegarde la config et BDD vers un dossier externe</summary>
+        ''' <remarks></remarks>
+        Private Function SaveConfigFolder() As Boolean
+            Try
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfigFolder", "Sauvegarde de la configuration vers le dossier " & _FolderSaveFolder)
+
+                'homidom.xml
+                If IO.File.Exists(_FolderSaveFolder & "\homidom.xml") = True Then IO.File.Delete(_FolderSaveFolder & "\homidom.xml")
+                IO.File.Copy(_MonRepertoire & "\config\homidom.xml", _FolderSaveFolder & "\homidom.xml")
+
+                'homidom.db
+                If IO.File.Exists(_FolderSaveFolder & "\homidom.db") = True Then IO.File.Delete(_FolderSaveFolder & "\homidom.db")
+                IO.File.Copy(_MonRepertoire & "\Bdd\homidom.db", _FolderSaveFolder & "\homidom.db")
+
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfigFolder", " Erreur de sauvegarde de la configuration vers le dossier externe: " & ex.Message)
                 Return False
             End Try
 
@@ -3169,6 +3222,9 @@ Namespace HoMIDom
                 'Si sauvegarde automatique
                 If _CycleSave > 0 Then _NextTimeSave = Now.AddMinutes(_CycleSave)
 
+                'Si sauvegarde automatique vers un folder
+                If _CycleSaveFolder > 0 Then _NextTimeSaveFolder = Now.AddHours(_CycleSaveFolder)
+
                 '----- Démarre les connexions Sqlite ----- 
                 'retour = sqlite_homidom.connect()
                 'If retour.StartsWith("ERR:") Then
@@ -4130,7 +4186,7 @@ Namespace HoMIDom
                     PuissanceTotaleActuel = _PuissanceMini
                 End If
                 _GererEnergie = value
-                Log(TypeLog.DEBUG ,TypeSource.SERVEUR ,"GererEnergie","Activation=" & value)
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "GererEnergie", "Activation=" & value)
             End Set
         End Property
 
@@ -4214,6 +4270,14 @@ Namespace HoMIDom
         End Sub
 
         ''' <summary>
+        ''' Demande au serveur si on sauvegarde en temps réel
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Function GetSaveRealTime() As Boolean Implements IHoMIDom.GetSaveRealTime
+            Return _SaveRealTime
+        End Function
+
+        ''' <summary>
         ''' Retourne le code du pays du CultureInfo
         ''' </summary>
         ''' <returns></returns>
@@ -4239,14 +4303,6 @@ Namespace HoMIDom
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetCodePays", "Erreur : " & ex.Message)
             End Try
         End Sub
-
-        ''' <summary>
-        ''' Demande au serveur si on sauvegarde en temps réel
-        ''' </summary>
-        ''' <remarks></remarks>
-        Public Function GetSaveRealTime() As Boolean Implements IHoMIDom.GetSaveRealTime
-            Return _SaveRealTime
-        End Function
 
         ''' <summary>
         ''' Retourne la liste des ports com dispo sur le serveur
@@ -4465,6 +4521,62 @@ Namespace HoMIDom
                 Return "ERR: exception"
             End Try
         End Function
+
+        ''' <summary>
+        ''' Fixe le chemin de sauvegarde de la config vers un folder
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        Public Sub SetFolderSaveFolder(ByVal Value As String) Implements IHoMIDom.SetFolderSaveFolder
+            _FolderSaveFolder = Value
+        End Sub
+
+        ''' <summary>
+        ''' Retourne le chemin de sauvegarde de la config vers un folder
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Function GetFolderSaveFolder() As String Implements IHoMIDom.GetFolderSaveFolder
+            Return _FolderSaveFolder
+        End Function
+
+
+        ''' <summary>
+        ''' Retourne le cycle de sauvegarde de la config vers un folder
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetTimeSaveFolder(ByVal IdSrv As String) As Integer Implements IHoMIDom.GetTimeSaveFolder
+            If VerifIdSrv(IdSrv) = False Then
+                Return "-1"
+            End If
+            Return _CycleSaveFolder
+        End Function
+
+        ''' <summary>
+        ''' Fixe le cycle de sauvegarde de la config vers un folder
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function SetTimeSaveFolder(ByVal IdSrv As String, ByVal Value As Integer) As String Implements IHoMIDom.SetTimeSaveFolder
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                End If
+
+                If IsNumeric(Value) = False Or Value < 0 Then
+                    Return "ERR: la valeur doit être numérique, positive et non nulle"
+                Else
+                    _CycleSaveFolder = Value
+                    _NextTimeSaveFolder = Now.AddHours(Value)
+                    Return 0
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetTimeSave", "Exception : " & ex.Message)
+                Return "ERR: exception"
+            End Try
+        End Function
+
 
         ''' <summary>
         ''' Retourne l'Id du serveur pour SOAP
@@ -8074,20 +8186,20 @@ Namespace HoMIDom
                 For i As Integer = 0 To _ListTriggers.Count - 1
                     Dim x As New Trigger
                     With x
-                            .Nom = _ListTriggers.Item(i).Nom
-                            .ID = _ListTriggers.Item(i).ID
-                            .Description = _ListTriggers.Item(i).Description
-                            .Enable = _ListTriggers.Item(i).Enable
-                            .Type = _ListTriggers.Item(i).Type
-                            Try
-                                If Not IsNothing(_ListTriggers.Item(i).Prochainedateheure) Then .Prochainedateheure = _ListTriggers.Item(i).Prochainedateheure
+                        .Nom = _ListTriggers.Item(i).Nom
+                        .ID = _ListTriggers.Item(i).ID
+                        .Description = _ListTriggers.Item(i).Description
+                        .Enable = _ListTriggers.Item(i).Enable
+                        .Type = _ListTriggers.Item(i).Type
+                        Try
+                            If Not IsNothing(_ListTriggers.Item(i).Prochainedateheure) Then .Prochainedateheure = _ListTriggers.Item(i).Prochainedateheure
                             If Not IsNothing(_ListTriggers.Item(i).ConditionTime) Then .ConditionTime = _ListTriggers.Item(i).ConditionTime
-                                If Not IsNothing(_ListTriggers.Item(i).ConditionDeviceId) Then .ConditionDeviceId = _ListTriggers.Item(i).ConditionDeviceId
-                                If Not IsNothing(_ListTriggers.Item(i).ConditionDeviceProperty) Then .ConditionDeviceProperty = _ListTriggers.Item(i).ConditionDeviceProperty
-                                If Not IsNothing(_ListTriggers.Item(i).ListMacro) Then .ListMacro = _ListTriggers.Item(i).ListMacro
-                            Catch ex As Exception
+                            If Not IsNothing(_ListTriggers.Item(i).ConditionDeviceId) Then .ConditionDeviceId = _ListTriggers.Item(i).ConditionDeviceId
+                            If Not IsNothing(_ListTriggers.Item(i).ConditionDeviceProperty) Then .ConditionDeviceProperty = _ListTriggers.Item(i).ConditionDeviceProperty
+                            If Not IsNothing(_ListTriggers.Item(i).ListMacro) Then .ListMacro = _ListTriggers.Item(i).ListMacro
+                        Catch ex As Exception
                             Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllTriggers", "Exception part2 : " & .Nom & " ---" & ex.Message)
-                            End Try
+                        End Try
 
                     End With
                     _list.Add(x)

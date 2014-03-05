@@ -20,7 +20,7 @@
 
 
                 <StackPanel DockPanel.Dock="Bottom" >
-                    <TabControl  Name="TabControl1" Margin="2" Background="black" Height="415">
+                    <TabControl  Name="TabControl1" Margin="2" Background="black" Height="450">
                         <TabControl.Resources>
                             <Style TargetType="{x:Type TabItem}">
                                 <Setter Property="BorderThickness" Value="0"/>
@@ -241,24 +241,42 @@
                             <StackPanel Orientation="Vertical" VerticalAlignment="top" HorizontalAlignment="left">
                                 <GroupBox Name="GroupBox10" Margin="2" HorizontalAlignment="left" Width="700">
                                     <GroupBox.Header>
-                                        <Label Foreground="White" FontWeight="Bold">Sauvegarde</Label>
+                                        <Label Foreground="White" FontWeight="Bold">Enregistrement automatique</Label>
                                     </GroupBox.Header>
                                     <StackPanel >
-                                        <Label Content="Paramétrer la sauvegarde automtique de la configuration d'HoMIDoM" Foreground="Gray" Height="28" FontSize="11" />
+                                        <Label Content="Paramétrer l'enregistrement automtaique de la configuration d'HoMIDoM de la mémoire vers homidom.xml" Foreground="Gray" Height="28" FontSize="11" />
                                          <StackPanel Orientation="Horizontal">
-                                            <Label Foreground="White" Name="Label15" Width="190">Sauvegarder automatiquement:</Label>
+                                            <Label Foreground="White" Width="170">Cycle d'enregistrement:</Label>
                                             <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="25" Name="TxtSave" Text="0"  TextAlignment="center" />
                                             <Label Foreground="White">(en minutes, 0=Inactif)</Label>
-                                            <Label Content="Sauvegarder toutes les x minutes la configuration, conseil : 0 (défaut : 0)" Foreground="Gray" Height="28" FontSize="10" />
+                                            <Label Content="Enregistrer toutes les x minutes la configuration, conseil : 0 (défaut : 0)" Foreground="Gray" Height="28" FontSize="10" />
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" VerticalAlignment="center">
-                                            <Label Foreground="White" Width="190">Sauvegarder en temps réel:</Label>
+                                            <Label Foreground="White" Width="170">Enregistrer en temps réel:</Label>
                                             <CheckBox Name="ChKSaveRealTime" IsChecked="True" Background="DarkGray" BorderBrush="Black" Foreground="White" VerticalAlignment="center" />
-                                            <Label Content="Sauvegarder la configuration à chaque modification la configuration, conseil : activé (défaut : activé)" Foreground="Gray" Height="28" FontSize="10" />
+                                            <Label Content="Enregistrer la configuration à chaque modification la configuration, conseil : activé (défaut : activé)" Foreground="Gray" Height="28" FontSize="10" />
                                         </StackPanel>
                                     </StackPanel>
                                 </GroupBox>
-
+                                <GroupBox Margin="2" HorizontalAlignment="left" Width="700">
+                                    <GroupBox.Header>
+                                        <Label Foreground="White" FontWeight="Bold">Sauvegarde externe</Label>
+                                    </GroupBox.Header>
+                                    <StackPanel >
+                                        <Label Content="Paramétrer de sauvegarder la configuration (fichiers xml) et la base de données vers un repertoire (ex: vers Dropbox ou un NAS)." Foreground="Gray" Height="28" FontSize="11" />
+                                        <StackPanel Orientation="Horizontal">
+                                            <Label Foreground="White" Width="170">Chemin de la sauvegarde:</Label>
+                                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="200" Name="TxtSaveFolder" Text="" TextAlignment="left" />
+                                            <Label Content="Chemin local, ex: D:\Dropbox\HomidomSauv" Foreground="Gray" Height="28" FontSize="10" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="center">
+                                            <Label Foreground="White" Width="170">Cycle de sauvegarde:</Label>
+                                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Width="25" Name="TxtSaveCycleFolder" Text="0"  TextAlignment="center" />
+                                            <Label Foreground="White">(en heures, 0=Inactif)</Label>
+                                            <Label Content="Sauvegarder la configuration toutes les X heures (défaut : 0)" Foreground="Gray" Height="28" FontSize="10" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </GroupBox>
                                 <GroupBox Name="GroupBox11" Margin="2" HorizontalAlignment="left" Width="700">
                                     <GroupBox.Header>
                                         <Label Foreground="White" FontWeight="Bold">Importer et exporter la configuration</Label>
