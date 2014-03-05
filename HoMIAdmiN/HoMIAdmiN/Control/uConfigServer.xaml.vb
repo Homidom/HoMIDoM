@@ -27,7 +27,11 @@ Partial Public Class uConfigServer
                     Exit Sub
                 End If
                 If IsNumeric(TxtSave.Text) = False Or String.IsNullOrEmpty(TxtSave.Text) = True Or CInt(TxtSave.Text) < 0 Then
-                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "La valeur de saubegarde doit être un chiffre et positif !!", "Erreur", "")
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "La valeur de sauvegarde doit être un chiffre et positif !!", "Erreur", "")
+                    Exit Sub
+                End If
+                If IsNumeric(TxtSaveCycleFolder.Text) = False Or String.IsNullOrEmpty(TxtSaveCycleFolder.Text) = True Or CInt(TxtSaveCycleFolder.Text) < 0 Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "La valeur de sauvegarde vers un dossier doit être un chiffre et positif !!", "Erreur", "")
                     Exit Sub
                 End If
                 If TxtSOAP.Text <> myService.GetPortSOAP Then
@@ -83,6 +87,8 @@ Partial Public Class uConfigServer
                 myService.SetPuissanceMini(TxtPuissMini.Text)
                 myService.SetTarifJour(CDbl(Regex.Replace(TxtTarifJour.Text, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)))
                 myService.SetTarifNuit(CDbl(Regex.Replace(TxtTarifNuit.Text, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)))
+                myService.SetFolderSaveFolder(TxtSaveFolder.Text)
+                myService.SetTimeSaveFolder(IdSrv, TxtSaveCycleFolder.Text)
 
                 myService.SetPortServeurWeb(TxtPortSrvWeb.Text)
                 myService.SetEnableServeurWeb(ChKEnableSrvWeb.IsChecked)
@@ -210,6 +216,8 @@ Partial Public Class uConfigServer
                 HCC.Text = myService.GetHeureCorrectionCoucher
                 TxtIdSrv.Text = IdSrv
                 TxtSave.Text = myService.GetTimeSave(IdSrv)
+                TxtSaveFolder.Text = myService.GetFolderSaveFolder()
+                TxtSaveCycleFolder.Text = myService.GetTimeSaveFolder(IdSrv)
                 TxtFile.Text = myService.GetMaxFileSizeLog
                 TxtMaxLogMonth.Text = myService.GetMaxMonthLog
 

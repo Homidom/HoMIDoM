@@ -51,6 +51,34 @@ Namespace HoMIDom
         <OperationContract()> Sub SetSaveRealTime(ByVal Value As Boolean)
 
         ''' <summary>
+        ''' Fixe le chemin de sauvegarde de la config vers un folder
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetFolderSaveFolder(ByVal Value As String)
+
+        ''' <summary>
+        ''' Retourne le chemin de sauvegarde de la config vers un folder
+        ''' </summary>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetFolderSaveFolder() As String
+
+        ''' <summary>
+        ''' Retourne le cycle de sauvegarde de la config vers un folder
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetTimeSaveFolder(ByVal IdSrv As String) As Integer
+
+        ''' <summary>
+        ''' Fixe le cycle de sauvegarde de la config vers un folder
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function SetTimeSaveFolder(ByVal IdSrv As String, ByVal Value As Integer) As String
+
+        ''' <summary>
         ''' Retourne la liste des ports com dispo sur le serveur
         ''' </summary>
         ''' <returns></returns>
