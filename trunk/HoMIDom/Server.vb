@@ -553,7 +553,7 @@ Namespace HoMIDom
             Get
                 Return _IsWeekEnd
             End Get
-            Set(value As Boolean)
+            Set(ByVal value As Boolean)
                 If _IsWeekEnd <> value Then
                     _IsWeekEnd = value
                     For i As Integer = 0 To _ListDevices.Count - 1
@@ -2217,13 +2217,27 @@ Namespace HoMIDom
             Try
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfigFolder", "Sauvegarde de la configuration vers le dossier " & _FolderSaveFolder)
 
-                'homidom.xml
-                If IO.File.Exists(_FolderSaveFolder & "\homidom.xml") = True Then IO.File.Delete(_FolderSaveFolder & "\homidom.xml")
-                IO.File.Copy(_MonRepertoire & "\config\homidom.xml", _FolderSaveFolder & "\homidom.xml")
+                'test du chemin avec tempo au cas ou les NAS sont en veille
+                Try
+                    If Not IO.Directory.Exists(_FolderSaveFolder) Then
+                        Thread.Sleep(1000)
+                    End If
+                Catch ex As Exception
 
-                'homidom.db
-                If IO.File.Exists(_FolderSaveFolder & "\homidom.db") = True Then IO.File.Delete(_FolderSaveFolder & "\homidom.db")
-                IO.File.Copy(_MonRepertoire & "\Bdd\homidom.db", _FolderSaveFolder & "\homidom.db")
+                End Try
+
+                If IO.Directory.Exists(_FolderSaveFolder) Then
+                    'homidom.xml
+                    If IO.File.Exists(_FolderSaveFolder & "\homidom.xml") = True Then IO.File.Delete(_FolderSaveFolder & "\homidom.xml")
+                    IO.File.Copy(_MonRepertoire & "\config\homidom.xml", _FolderSaveFolder & "\homidom.xml")
+
+                    'homidom.db
+                    If IO.File.Exists(_FolderSaveFolder & "\homidom.db") = True Then IO.File.Delete(_FolderSaveFolder & "\homidom.db")
+                    IO.File.Copy(_MonRepertoire & "\Bdd\homidom.db", _FolderSaveFolder & "\homidom.db")
+                Else
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfigFolder", " Erreur : le dossier de sauvegarde n'existe pas : " & _FolderSaveFolder)
+                End If
+
 
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfigFolder", " Erreur de sauvegarde de la configuration vers le dossier externe: " & ex.Message)
@@ -4181,7 +4195,7 @@ Namespace HoMIDom
             Get
                 Return _GererEnergie
             End Get
-            Set(value As Boolean)
+            Set(ByVal value As Boolean)
                 If value And _GererEnergie = False Then
                     PuissanceTotaleActuel = _PuissanceMini
                 End If
@@ -4194,7 +4208,7 @@ Namespace HoMIDom
             Get
                 Return _PuissanceMini
             End Get
-            Set(value As Integer)
+            Set(ByVal value As Integer)
                 If _PuissanceMini <> value Then
                     _PuissanceMini = value
                     PuissanceTotaleActuel = _PuissanceMini
@@ -4206,7 +4220,7 @@ Namespace HoMIDom
             Get
                 Return _PuissanceTotaleActuel
             End Get
-            Set(value As Integer)
+            Set(ByVal value As Integer)
                 _PuissanceTotaleActuel = value
 
                 If _PuissanceTotaleActuel <= 0 Then _PuissanceTotaleActuel = 0
@@ -5094,7 +5108,7 @@ Namespace HoMIDom
         ''' <param name="Requete">Requête SQL</param>
         ''' <returns>Résultat de la requête sous un type DataTable</returns>
         ''' <remarks></remarks>
-        Public Function RequeteSqLHisto(ByVal IdSrv As String, Requete As String) As DataTable Implements IHoMIDom.RequeteSqLHisto
+        Public Function RequeteSqLHisto(ByVal IdSrv As String, ByVal Requete As String) As DataTable Implements IHoMIDom.RequeteSqLHisto
             Try
                 If VerifIdSrv(IdSrv) = False Then
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "RequeteSqLHisto", "Erreur ID du serveur")
