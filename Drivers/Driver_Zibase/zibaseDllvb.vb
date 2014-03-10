@@ -881,6 +881,8 @@ Namespace ZibaseDllvb
 
         Public Sub SendCommand(sAddress As String, iState As State, Optional iDim As Integer = 0, Optional iProtocol As Protocol = Protocol.PROTOCOL_CHACON, Optional iNbBurst As Integer = 1)
             Try
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ZibaseDllVB SendCommand1", "SendCommand1 adreese:" & sAddress)
+
                 SendCommand("", sAddress, iState, iDim, iProtocol, iNbBurst)
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ZibaseDllVB SendCommand", ex.Message)
@@ -888,7 +890,7 @@ Namespace ZibaseDllvb
         End Sub
         Public Sub SendCommand(sZibaseName As String, sAddress As String, iState As State, Optional iDim As Integer = 0, Optional iProtocol As Protocol = Protocol.PROTOCOL_CHACON, Optional iNbBurst As Integer = 1)
             Try
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ZibaseDllVB SendCommand2", "SendCommand to " & sAddress & " command: " & iState.ToString & " protocol: " & iProtocol.ToString)
+                '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ZibaseDllVB SendCommand2", "SendCommand to " & sAddress & " command: " & iState.ToString & " protocol: " & iProtocol.ToString)
 
                 If (sAddress.Length < 2) Then Return
 
@@ -938,12 +940,15 @@ Namespace ZibaseDllvb
                 Dim sHouse As String = sAddress.Substring(0, 1)
                 Dim sCode As String = sAddress.Substring(1)
 
-                ZBS.param3 = CUInt(Convert.ToInt32(sCode)) - 1
-                ZBS.param4 = CUInt(Val(sHouse(0))) - 65
+                'ZBS.param3 = CUInt(Convert.ToInt32(sCode)) - 1
+                'ZBS.param4 = CUInt(Val(sHouse(0))) - 65
+                ZBS.param3 = Val(sCode) - 1
+                ZBS.param4 = Asc(sHouse) - 65
 
                 SendToZibase(sZibaseName, ZBS)
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ZibaseDllVB SendCommand2", ex.Message)
+                Diagnostics.EventLog.WriteEntry("HoMIDoM", "ZIBASEDLLVB SendCommand2: Exception : " & ex.Message)
             End Try
         End Sub
 
