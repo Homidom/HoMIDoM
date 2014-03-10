@@ -638,6 +638,7 @@ Imports Driver_Zibase.ZibaseDllvb
         Dim valeur As String = ""
 
         Try
+
             adresse = composants_adresse2 'adresse = Split(composants_adresse, "_")(0)
             If adresse = "" Then adresse = composants_adresse
 
@@ -667,21 +668,21 @@ Imports Driver_Zibase.ZibaseDllvb
             'ecriture sur la zibase
             Select Case UCase(ordre)
                 Case "ON"
-                    zba.SendCommand(adresse, ZiBase.State.STATE_ON, 0, protocole, 1)
+                    zba.SendCommand("", adresse, ZiBase.State.STATE_ON, 0, protocole, 1)
                     valeur = CStr(100)
                 Case "OFF"
-                    zba.SendCommand(adresse, ZiBase.State.STATE_OFF, 0, protocole, 1)
+                    zba.SendCommand("", adresse, ZiBase.State.STATE_OFF, 0, protocole, 1)
                     valeur = CStr(0)
                 Case "DIM"
                     If UCase(Modele(0)) <> "CHACON" Then
-                        zba.SendCommand(adresse, ZiBase.State.STATE_DIM, 0, protocole, 1)
+                        zba.SendCommand("", adresse, ZiBase.State.STATE_DIM, 0, protocole, 1)
                         valeur = CStr(100)
                     Else
-                        zba.SendCommand(adresse, ZiBase.State.STATE_DIM, iDim, protocole, 1)
+                        zba.SendCommand("", adresse, ZiBase.State.STATE_DIM, iDim, protocole, 1)
                         valeur = CStr(iDim)
                     End If
                 Case "OUVERTURE"
-                    zba.SendCommand(adresse, ZiBase.State.STATE_DIM, iDim, protocole, 1)
+                    zba.SendCommand("", adresse, ZiBase.State.STATE_DIM, iDim, protocole, 1)
                     valeur = CStr(iDim)
                 Case Else : Return ("ERR: ordre incorrect : " & ordre)
             End Select
