@@ -64,14 +64,6 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Api.Evaluation(System.String,System.Double)">
-	<summary>
- Retourne le résultat d'un calcul (formule, ex: *2 +3) en se basant sur une valeur de base (Valeur)
- </summary>
-	<param name="Formule"></param>
-	<param name="Valeur"></param>
-	<returns></returns>
-	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Api.HaveCaractSpecial(System.String)">
 	<summary>
  Retourne True si la chaine comporte un caractère spécial
@@ -87,6 +79,50 @@ HoMIDom
 	<summary>
   Remplace la propriété CurrentUICulture du thread actuel pour toutes
   les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="P:HoMIDom.My.Resources.Resources.Saint">
+	<summary>
+  Recherche une chaîne localisée semblable à JOUR DE L'AN
+St Basile
+Ste Geneviève
+St Odilon
+St Edouard
+St Mélaine
+St Raymond
+St Lucien
+Ste Alix
+St Guillaume
+St Paulin
+Ste Tatiana
+Ste Yvette
+Ste Nina
+St Rémi
+St Marcel
+Ste Roseline
+Ste Prisca
+St Marius
+St Sébastien
+Ste Agnès
+St Vincent
+St Barnard
+St Fr. de Sales
+Conv. de St Paul
+Ste Paule
+Ste Angèle
+St Thomas d'Aquin
+St Gildas
+Ste Martine
+Ste Marcelle
+Ste Ella
+Présentation
+St Blaise
+Ste Véronique
+Ste Agathe
+St Gaston
+Ste Eugénie
+Ste Jaqueline
+Ste Apolline
+St Arnau [le reste de la chaîne a été tronqué]";.
 </summary>
 </member><member name="T:HoMIDom.My.Resources.Resources">
 	<summary>
@@ -637,6 +673,11 @@ HoMIDom
  Liste des noms des variables IR (device IR)
  </summary>
 	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.TemplateDevice.VariablesOfDevice">
+	<summary>
+ Variables associées au device
+ </summary>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.TemplateDevice">
 	<summary>
  Template de class de type Device pour le service web
@@ -1097,6 +1138,184 @@ HoMIDom
  Classe de gestion Audio
  </summary>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.NCrontab.CrontabSchedule.GetNextOccurrence(System.DateTime)">
+	<summary>
+ Gets the next occurrence of this schedule starting with a base time.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabSchedule.GetNextOccurrence(System.DateTime,System.DateTime)">
+	<summary>
+ Gets the next occurrence of this schedule starting with a base 
+ time and up to an end time limit.
+ </summary>
+	<remarks>
+ This method does not return the value of <paramref name="baseTime"/>
+ itself if it falls on the schedule. For example, if <paramref name="baseTime"/>
+ is midnight and the schedule was created from the expression <c>* * * * *</c> 
+ (meaning every minute) then the next occurrence of the schedule 
+ will be at one minute past midnight and not midnight itself.
+ The method returns the <em>next</em> occurrence <em>after</em>
+		<paramref name="baseTime"/>. Also, <param name="endTime"/> is
+ exclusive.
+ </remarks>
+</member><member name="M:HoMIDom.NCrontab.CrontabSchedule.ToString">
+	<summary>
+ Returns a string in crontab expression (expanded) that represents 
+ this schedule.
+ </summary>
+</member><member name="T:HoMIDom.NCrontab.CrontabSchedule">
+	<summary>
+ Represents a schedule initialized from the crontab expression.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.Parse(HoMIDom.NCrontab.CrontabFieldKind,System.String)">
+	<summary>
+ Parses a crontab field expression given its kind.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.seconds(System.String)">
+	<summary>
+ Parses a crontab field expression representing seconds.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.Minutes(System.String)">
+	<summary>
+ Parses a crontab field expression representing minutes.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.Hours(System.String)">
+	<summary>
+ Parses a crontab field expression representing hours.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.Days(System.String)">
+	<summary>
+ Parses a crontab field expression representing days in any given month.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.Months(System.String)">
+	<summary>
+ Parses a crontab field expression representing months.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.DaysOfWeek(System.String)">
+	<summary>
+ Parses a crontab field expression representing days of a week.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.GetFirst">
+	<summary>
+ Gets the first value of the field or -1.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.Next(System.Int32)">
+	<summary>
+ Gets the next value of the field that occurs after the given 
+ start value or -1 if there is no next value available.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.GetNext(System.Int32)">
+	<summary>
+ Gets the first value of the field or -1.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.Contains(System.Int32)">
+	<summary>
+ Determines if the given value occurs in the field.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.CrontabField.Accumulate(System.Int32,System.Int32,System.Int32,HoMIDom.NCrontab.ExceptionHandler)">
+	<summary>
+ Accumulates the given range (start to end) and interval of values
+ into the current set of the field.
+ </summary>
+	<remarks>
+ To set the entire range of values representable by the field,
+ set <param name="start"/> and <param name="end"/> to -1 and
+ <param name="interval"/> to 1.
+ </remarks>
+</member><member name="T:HoMIDom.NCrontab.CrontabField">
+	<summary>
+ Represents a single crontab field.
+ </summary>
+</member><member name="T:HoMIDom.NCrontab.ExceptionHandler">
+	<summary>
+ Represents the method that will handle an <see cref="T:System.Exception"/> object.
+ </summary>
+</member><member name="T:HoMIDom.NCrontab.ExceptionProvider">
+	<summary>
+ Represents the method that will generate an <see cref="T:System.Exception"/> object.
+ </summary>
+</member><member name="F:HoMIDom.NCrontab.ErrorHandling.Throw">
+	<summary>
+ A stock <see cref="T:HoMIDom.NCrontab.ExceptionHandler"/> that throws.
+ </summary>
+</member><member name="T:HoMIDom.NCrontab.ErrorHandling">
+	<summary>
+ Defines error handling strategies.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.#ctor(`0)">
+	<summary>
+ Initializes the object with a defined value.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.#ctor(System.Exception)">
+	<summary>
+ Initializes the object with an error.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.#ctor(HoMIDom.NCrontab.ExceptionProvider)">
+	<summary>
+ Initializes the object with a handler that will provide
+ the error result when needed.
+ </summary>
+</member><member name="P:HoMIDom.NCrontab.ValueOrError`1.HasValue">
+	<summary>
+ Determines if object holds a defined value or not.
+ </summary>
+</member><member name="P:HoMIDom.NCrontab.ValueOrError`1.Value">
+	<summary>
+ Gets the value otherwise throws an error if undefined.
+ </summary>
+</member><member name="P:HoMIDom.NCrontab.ValueOrError`1.IsError">
+	<summary>
+ Determines if object identifies an error condition or not.
+ </summary>
+</member><member name="P:HoMIDom.NCrontab.ValueOrError`1.Error">
+	<summary>
+ Gets the <see cref="T:System.Exception"/> object if this object
+ represents an error condition otherwise it returns <c>null</c>.
+ </summary>
+</member><member name="P:HoMIDom.NCrontab.ValueOrError`1.ErrorProvider">
+	<summary>
+ Gets the <see cref="T:HoMIDom.NCrontab.ExceptionProvider"/> object if this 
+ object represents an error condition otherwise it returns <c>null</c>.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.TryGetValue(`0)">
+	<summary>
+ Attempts to get the defined value or another in case
+ of an error.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.op_Implicit(`0)~HoMIDom.NCrontab.ValueOrError{`0}">
+	<summary>
+ Implicitly converts a <typeparamref name="T"/> value to
+ an object of this type.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.op_Implicit(System.Exception)~HoMIDom.NCrontab.ValueOrError{`0}">
+	<summary>
+ Implicitly converts an <see cref="T:System.Exception"/> object to
+ an object of this type that represents the error condition.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.op_Implicit(HoMIDom.NCrontab.ExceptionProvider)~HoMIDom.NCrontab.ValueOrError{`0}">
+	<summary>
+ Implicitly converts an <see cref="T:HoMIDom.NCrontab.ExceptionProvider"/> object to
+ an object of this type that represents the error condition.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.op_Explicit(HoMIDom.NCrontab.ValueOrError{`0})~`0">
+	<summary>
+ Explicits converts this object to a <typeparamref name="T"/> value.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.op_Explicit(HoMIDom.NCrontab.ValueOrError{`0})~System.Exception">
+	<summary>
+ Explicits converts this object to an <see cref="T:System.Exception"/> object
+ if it represents an error condition. The conversion yields <c>null</c>
+ if this object does not represent an error condition.
+ </summary>
+</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.op_Explicit(HoMIDom.NCrontab.ValueOrError{`0})~HoMIDom.NCrontab.ExceptionProvider">
+	<summary>
+ Explicits converts this object to an <see cref="T:HoMIDom.NCrontab.ExceptionProvider"/> object
+ if it represents an error condition. The conversion yields <c>null</c>
+ if this object does not represent an error condition.
+ </summary>
+</member><member name="T:HoMIDom.NCrontab.ValueOrError`1">
+	<summary>
+ A generic type that either represents a value or an error condition.
+ </summary>
 </member><member name="M:HoMIDom.HoMIDom.Server.DriversEvent(System.String,System.String,System.Object)">
 	<summary>Evenement provenant des drivers </summary>
 	<param name="DriveName"></param>
@@ -1129,6 +1348,11 @@ HoMIDom
 	<param name="Value"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.VerifIsWeekEnd">
+	<summary>
+ Vérifie si c'est le weekend
+ </summary>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.MAJ_HeuresSoleil">
 	<summary>Initialisation des heures du soleil</summary>
 	<remarks></remarks>
@@ -1139,6 +1363,9 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.SaveConfig(System.String)">
 	<summary>Sauvegarde de la config dans le fichier XML</summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveConfigFolder">
+	<summary>Sauvegarde la config et BDD vers un dossier externe</summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.WriteListAction(System.Xml.XmlTextWriter,System.Collections.ArrayList)">
 	<summary>
@@ -1282,6 +1509,11 @@ HoMIDom
  </summary>
 	<param name="Value"></param>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetSaveRealTime">
+	<summary>
+ Demande au serveur si on sauvegarde en temps réel
+ </summary>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetCodePays">
 	<summary>
  Retourne le code du pays du CultureInfo
@@ -1293,11 +1525,6 @@ HoMIDom
  Fixe le code du pays suivant CultureInfo
  </summary>
 	<param name="Code"></param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.GetSaveRealTime">
-	<summary>
- Demande au serveur si on sauvegarde en temps réel
- </summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetPortComDispo">
 	<summary>
@@ -1340,6 +1567,30 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.Server.SetTimeSave(System.String,System.Int32)">
 	<summary>
  Fixe le paramètre de sauvegarde
+ </summary>
+	<param name="Value"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetFolderSaveFolder(System.String)">
+	<summary>
+ Fixe le chemin de sauvegarde de la config vers un folder
+ </summary>
+	<param name="Value"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetFolderSaveFolder">
+	<summary>
+ Retourne le chemin de sauvegarde de la config vers un folder
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetTimeSaveFolder(System.String)">
+	<summary>
+ Retourne le cycle de sauvegarde de la config vers un folder
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetTimeSaveFolder(System.String,System.Int32)">
+	<summary>
+ Fixe le cycle de sauvegarde de la config vers un folder
  </summary>
 	<param name="Value"></param>
 	<returns></returns>
@@ -1464,6 +1715,14 @@ HoMIDom
 	<param name="IdDevice">Id du composant</param>
 	<param name="Source">Value ou autre champ</param>
 	<returns>true si le composant a un historique</returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.RequeteSqLHisto(System.String,System.String)">
+	<summary>
+ Permet d'exécuter une requete SQL sur la table histo
+ </summary>
+	<param name="IdSrv">ID du serveur</param>
+	<param name="Requete">Requête SQL</param>
+	<returns>Résultat de la requête sous un type DataTable</returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetHistoDeviceSource(System.String,System.String,System.String,System.String,System.String,System.String)">
 	<summary>
@@ -1656,7 +1915,7 @@ HoMIDom
 	<summary>Retourne la liste de tous les devices</summary>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Server.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.String,System.String,System.Double,System.Double,System.Double,System.Double,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes},System.String,System.Int32,System.Boolean)">
+</member><member name="M:HoMIDom.HoMIDom.Server.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.String,System.String,System.Double,System.Double,System.Double,System.Double,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes},System.String,System.Int32,System.Boolean,System.Collections.Generic.Dictionary{System.String,System.String})">
 	<summary>
  Sauvegarder ou créer un device
  </summary>
@@ -1699,6 +1958,11 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.StartIrLearning(System.String)">
 	<summary>Commencer un apprentissage IR</summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ExistDeviceById(System.String)">
+	<summary>Vérifie si un device par son ID existe</summary>
+	<param name="DeviceId"></param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.ReturnDeviceById(System.String,System.String)">
@@ -2244,6 +2508,30 @@ HoMIDom
  </summary>
 	<param name="Value"></param>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetFolderSaveFolder(System.String)">
+	<summary>
+ Fixe le chemin de sauvegarde de la config vers un folder
+ </summary>
+	<param name="Value"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetFolderSaveFolder">
+	<summary>
+ Retourne le chemin de sauvegarde de la config vers un folder
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetTimeSaveFolder(System.String)">
+	<summary>
+ Retourne le cycle de sauvegarde de la config vers un folder
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetTimeSaveFolder(System.String,System.Int32)">
+	<summary>
+ Fixe le cycle de sauvegarde de la config vers un folder
+ </summary>
+	<param name="Value"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetPortComDispo">
 	<summary>
  Retourne la liste des ports com dispo sur le serveur
@@ -2524,6 +2812,14 @@ HoMIDom
  Redémarre ou démarre le serveur web
  </summary>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.RequeteSqLHisto(System.String,System.String)">
+	<summary>
+ Permet d'exécuter une requete SQL sur la table histo
+ </summary>
+	<param name="IdSrv">ID du serveur</param>
+	<param name="Requete">Requête SQL</param>
+	<returns>Résultat de la requête sous un type DataTable</returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.UpdateHisto(System.String,System.String,System.String,System.String,System.String,System.String,System.String)">
 	<summary>
  Modifie un historique
@@ -2672,6 +2968,13 @@ HoMIDom
 	<param name="CodePostal">Code Postal du user</param>
 	<returns>ID du user, -1 si erreur, message d'erreur, 99 si ID du serveur erroné</returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ExistDeviceById(System.String)">
+	<summary>
+ Vérifie si un device par son ID existe
+ </summary>
+	<param name="DeviceId"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.TypeOfPropertyOfDevice(System.String,System.String)">
 	<summary>
  Retourne le type d'une propriété d'un device (boolean, string, double...)
@@ -2765,7 +3068,7 @@ HoMIDom
 	<param name="DeviceType">Type de device</param>
 	<returns>List de device, Nothing si non trouvé ou ID du serveur erroné</returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.String,System.String,System.Double,System.Double,System.Double,System.Double,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes},System.String,System.Int32,System.Boolean)">
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveDevice(System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.Int32,System.Boolean,System.String,System.String,System.Double,System.Double,System.Double,System.Double,System.Collections.Generic.List{HoMIDom.HoMIDom.Telecommande.Commandes},System.String,System.Int32,System.Boolean,System.Collections.Generic.Dictionary{System.String,System.String})">
 	<summary>
  Créer un nouveau device ou sauvegarder la modif (si ID est complété)
  </summary>
@@ -3796,6 +4099,13 @@ HoMIDom
 	<param name="idsrv"></param>
 	<param name="namevar"></param>
 	<param name="Value"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Telecommande.Template.GetVariable(System.String)">
+	<summary>
+ Permet d'obtenir la valeur d'une variable associée au template
+ </summary>
+	<param name="namevar"></param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Telecommande.TemplateVar.Name">

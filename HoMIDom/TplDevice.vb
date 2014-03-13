@@ -888,5 +888,11 @@ Namespace HoMIDom
         ''' </summary>
         ''' <remarks></remarks>
         Public Variables As New List(Of Telecommande.TemplateVar)
+
+        ''' <summary>
+        ''' Variables associées au device
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public VariablesOfDevice As New Dictionary(Of String, String)
     End Class
 End Namespace

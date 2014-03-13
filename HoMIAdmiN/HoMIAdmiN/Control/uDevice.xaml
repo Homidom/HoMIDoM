@@ -98,17 +98,45 @@
                             </StackPanel>
                     </StackPanel>
                     
-                        <StackPanel HorizontalAlignment="Left" Margin="0,7,0,0">
-                            <Label Content="Zones:" Foreground="White" />
-                            <Label Content="Visible" Foreground="White" FontSize="10" HorizontalContentAlignment="Right" />
-                            <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="ListZone" Margin="5" Padding="2" Width="250" Height="120" ToolTip="Liste des zones pour lesquels le composant y est associé" />
-                            <StackPanel.Background>
-                                <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
-                                    <GradientStop Color="#35000000" Offset="0.576" />
-                                    <GradientStop Color="Gray" Offset="1" />
-                                    <GradientStop Color="#9A7F7F7F" Offset="0.788" />
-                                </LinearGradientBrush>
-                            </StackPanel.Background>
+                        <StackPanel Orientation="Horizontal" >
+                             <StackPanel HorizontalAlignment="Left" Margin="0,7,0,0">
+                                <Label Content="Zones:" Foreground="White" />
+                                <Label Content="Visible" Foreground="White" FontSize="10" HorizontalContentAlignment="Right" />
+                                <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="ListZone" Margin="5" Padding="2" Width="250" Height="120" ToolTip="Liste des zones pour lesquels le composant y est associé" />
+                                <StackPanel.Background>
+                                    <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                                        <GradientStop Color="#35000000" Offset="0.576" />
+                                        <GradientStop Color="Gray" Offset="1" />
+                                        <GradientStop Color="#9A7F7F7F" Offset="0.788" />
+                                    </LinearGradientBrush>
+                                </StackPanel.Background>
+                            </StackPanel>
+
+                            <StackPanel HorizontalAlignment="Left" Margin="5,7,0,0">
+                                <StackPanel.Background>
+                                    <LinearGradientBrush EndPoint="1,0.5" StartPoint="0,0.5">
+                                        <GradientStop Color="#35000000" Offset="0.576" />
+                                        <GradientStop Color="Gray" Offset="1" />
+                                        <GradientStop Color="#9A7F7F7F" Offset="0.788" />
+                                    </LinearGradientBrush>
+                                </StackPanel.Background>
+
+                                <Label Content="Variables:" Foreground="White" />
+                                <StackPanel Orientation="Horizontal" >
+                                    <ComboBox Name="CbVariables" Width="200" IsReadOnly="True" />
+                                    <Image Name="BtnNewVar" Width="25" Height="25" Margin="5,0,0,0" Source="/HoMIAdmiN;component/Images/ajouter_32.png" ToolTip="Nouvelle variable" />
+                                    <Image Name="BtnDelVar" Width="25" Height="25" Margin="5,0,0,0" Source="/HoMIAdmiN;component/Images/Supprimer_32.png" ToolTip="Supprimer" />
+                                    <Image Name="BtnApplyVar" Width="25" Height="25" Margin="5,0,0,0" Source="/HoMIAdmiN;component/Images/Refresh_32.png" ToolTip="Appliquer" Visibility="Collapsed" />
+
+                                </StackPanel>
+                                <StackPanel Name="StkVar" Visibility="Collapsed" >  
+                                    <Label Content="Name:" Foreground="White" Visibility="Visible" />
+                                    <TextBox Name="TxtVarName" />
+                                    <Label Content="Valeur:" Foreground="White" Visibility="Visible" />
+                                    <TextBox Name="TxtVarValue" />
+                                </StackPanel>
+                            </StackPanel>
+
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Name="StkID">
                             <Label Content="ID:" Foreground="LightGray" FontSize="10" />

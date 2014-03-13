@@ -18,6 +18,8 @@ Partial Public Class uDevice
     Dim x As HoMIDom.HoMIDom.TemplateDevice = Nothing
     Dim ListeDrivers As List(Of TemplateDriver)
     Dim flagnewdev As Boolean = False
+    Dim _ListVar As New Dictionary(Of String, String)
+
 
     Public Sub New(ByVal Action As Classe.EAction, ByVal DeviceId As String)
         Try
@@ -111,6 +113,9 @@ Partial Public Class uDevice
                     TxtRefresh.Text = x.Refresh
                     TxtLastChangeDuree.Text = x.LastChangeDuree
                     TxtID.Text = x.ID
+                    _ListVar = x.VariablesOfDevice
+
+                    Refresh_cbVar()
 
                     'affichage de l'image du composant
                     ImgDevice.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Picture))
@@ -254,7 +259,7 @@ Partial Public Class uDevice
 
                 For Each dev In myService.GetDeviceInZone(IdSrv, x1.Uid)
                     If dev IsNot Nothing Then
-                        If dev.ID = _DeviceId Then
+                        If dev = _DeviceId Then
                             trv = True
                             Exit For
                         End If
@@ -265,7 +270,6 @@ Partial Public Class uDevice
                     myService.DeleteDeviceToZone(IdSrv, x1.Uid, _DeviceId)
                 Else
                     If trv = True And x1.IsChecked = True Then
-                        myService.AddDeviceToZone(IdSrv, x1.Uid, _DeviceId, x2.IsChecked)
                     Else
                         If trv = False And x1.IsChecked = True Then myService.AddDeviceToZone(IdSrv, x1.Uid, _DeviceId, x2.IsChecked)
                     End If
@@ -747,13 +751,14 @@ Partial Public Class uDevice
                 '    _modele = x.Modele
                 'End If
                 If _Action = EAction.Modifier Then
-                    If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
+                    If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar)
                 Else
-                    retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
+                    retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar)
                 End If
             Else
-                retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
+                retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar)
             End If
+
             If retour = "98" Then
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du device: " & TxtNom.Text & " existe déjà impossible de l'enregister", "ERREUR", "")
                 Exit Sub
@@ -901,12 +906,12 @@ Partial Public Class uDevice
                     Exit Sub
                 End If
                 If _Action = EAction.Modifier Then
-                    If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
+                    If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar)
                 Else
-                    retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
+                    retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar)
                 End If
             Else
-                retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked)
+                retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar)
             End If
             If retour = "98" Then
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du device: " & TxtNom.Text & " existe déjà impossible de l'enregister", "ERREUR", "")
@@ -1043,8 +1048,6 @@ Partial Public Class uDevice
             If CBModele.SelectedItem IsNot Nothing Then
                 Dim selecttemplate As HoMIDom.HoMIDom.Telecommande.Template = CBModele.SelectedItem
 
-                MsgBox(CbDriver.SelectedValue)
-
                 Select Case selecttemplate.Type
                     Case 0 'http
                         CbDriver.SelectedValue = "HTTP"
@@ -1096,4 +1099,121 @@ Partial Public Class uDevice
             End If
         End If
     End Sub
+
+
+#Region "Variables"
+
+    ''' <summary>
+    ''' bouton nouvelle variable
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub BtnNewVar_MouseDown(sender As System.Object, e As System.Windows.Input.MouseButtonEventArgs) Handles BtnNewVar.MouseDown
+        Try
+            TxtVarName.Text = ""
+            TxtVarName.IsReadOnly = False
+            TxtVarValue.Text = ""
+            BtnNewVar.Visibility = Windows.Visibility.Collapsed
+            BtnDelVar.Visibility = Windows.Visibility.Collapsed
+            BtnApplyVar.Visibility = Windows.Visibility.Visible
+            StkVar.Visibility = Windows.Visibility.Visible
+            BtnNewVar.Tag = 1 '0=Modifier 1=New
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnNewVar_MouseDown: " & ex.ToString, "Erreur Admin", "BtnNewVar_MouseDown")
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Bouton supprimer variable
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub BtnDelVar_MouseDown(sender As System.Object, e As System.Windows.Input.MouseButtonEventArgs) Handles BtnDelVar.MouseDown
+        Try
+            If CbVariables.SelectedIndex >= 0 Then
+                If _ListVar.ContainsKey(CbVariables.SelectedItem.key) Then
+                    _ListVar.Remove(CbVariables.SelectedItem.key)
+                    Refresh_cbVar()
+                    StkVar.Visibility = Windows.Visibility.Collapsed
+                    BtnApplyVar.Visibility = Windows.Visibility.Collapsed
+                    BtnNewVar.Visibility = Windows.Visibility.Visible
+                    BtnDelVar.Visibility = Windows.Visibility.Visible
+                    BtnNewVar.Tag = Nothing
+                Else
+                    MessageBox.Show("Le nom de cette variable n'existe pas!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                End If
+            Else
+                MessageBox.Show("Veuillez sélectionner une variable à supprimer", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnDelVar_MouseDown: " & ex.ToString, "Erreur Admin", "BtnDelVar_MouseDown")
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Bouton appliquer variable
+    ''' </summary>
+    ''' <param name="sender"></param>
+    ''' <param name="e"></param>
+    ''' <remarks></remarks>
+    Private Sub BtnApplyVar_MouseDown(sender As System.Object, e As System.Windows.Input.MouseButtonEventArgs) Handles BtnApplyVar.MouseDown
+        Try
+
+            If BtnNewVar.Tag = 0 Then 'Modification de variable
+                If _ListVar.ContainsKey(TxtVarName.Text) Then
+                    _ListVar(TxtVarName.Text) = TxtVarValue.Text
+                    Refresh_cbVar()
+                Else
+                    MessageBox.Show("Le nom de cette variable n'existe pas!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                End If
+            Else 'Nouvelle variable
+                If String.IsNullOrEmpty(TxtVarName.Text) Then Exit Sub
+                If Not _ListVar.ContainsKey(TxtVarName.Text) Then
+                    _ListVar.Add(TxtVarName.Text, TxtVarValue.Text)
+                    Refresh_cbVar()
+                Else
+                    MessageBox.Show("Erreur cette variable existe déjà!!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                End If
+            End If
+            BtnApplyVar.Visibility = Windows.Visibility.Collapsed
+            BtnNewVar.Visibility = Windows.Visibility.Visible
+            BtnNewVar.Tag = Nothing
+            BtnDelVar.Visibility = Windows.Visibility.Visible
+            StkVar.Visibility = Windows.Visibility.Collapsed
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnApplyVar_MouseDown: " & ex.ToString, "Erreur Admin", "BtnApplyVar_MouseDown")
+        End Try
+    End Sub
+
+    Private Sub Refresh_cbVar()
+        Try
+            CbVariables.ItemsSource = New Forms.BindingSource(_ListVar, Nothing)
+            CbVariables.DisplayMemberPath = "Key"
+            CbVariables.SelectedValuePath = "Value"
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Refresh_cbVar: " & ex.ToString, "Erreur Admin", "Refresh_cbVar")
+        End Try
+    End Sub
+
+
+    Private Sub CbVariables_SelectionChanged(sender As Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbVariables.SelectionChanged
+        Try
+            TxtVarName.Text = CbVariables.SelectedItem.key
+            TxtVarName.IsReadOnly = True
+            TxtVarValue.Text = _ListVar(TxtVarName.Text)
+            StkVar.Visibility = Windows.Visibility.Visible
+            BtnApplyVar.Visibility = Windows.Visibility.Visible
+            BtnNewVar.Visibility = Windows.Visibility.Visible
+            BtnDelVar.Visibility = Windows.Visibility.Visible
+            BtnNewVar.Tag = 0 '0=Modifier 1=New
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur CbVariables_MouseUp: " & ex.ToString, "Erreur Admin", "CbVariables_MouseUp")
+        End Try
+    End Sub
+
+#End Region
+
+
 End Class

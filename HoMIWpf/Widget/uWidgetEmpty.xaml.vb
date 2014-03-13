@@ -1491,12 +1491,16 @@ Public Class uWidgetEmpty
 
             If vDiff.Seconds < 1 Then
                 If IsEmpty = True And _type <> TypeOfWidget.Device Then
-                    Traite_Action_OnClick()
+                    Dim thr As New Thread(AddressOf Traite_Action_OnClick)
+                    thr.Start()
+                    'Traite_Action_OnClick()
                 End If
                 RaiseEvent Click(Me, e)
             Else
                 If IsEmpty = True And _type = TypeOfWidget.Empty Then
-                    Traite_Action_OnLongClick()
+                    Dim thr As New Thread(AddressOf Traite_Action_OnLongClick)
+                    thr.Start()
+                    'Traite_Action_OnLongClick()
                 End If
                 RaiseEvent LongClick(Me, e)
             End If
@@ -1517,14 +1521,15 @@ Public Class uWidgetEmpty
             If _Show = False Then Exit Sub
 
             For Each _act As cWidget.Action In _Action_On_Click
-                Dim _dev As HoMIDom.HoMIDom.TemplateDevice
-                If frmMere.MaJWidgetFromServer Then
-                    _dev = myService.ReturnDeviceByID(IdSrv, _act.IdObject)
-                Else
-                    _dev = ReturnDeviceById(_act.IdObject)
-                End If
+                Dim _Existdev As Boolean = False
 
-                If _dev IsNot Nothing Then
+                'If frmMere.MaJWidgetFromServer Then
+                _Existdev = myService.ExistDeviceById(_act.IdObject)
+                'Else
+                '    _dev = ReturnDeviceById(_act.IdObject)
+                'End If
+
+                If _Existdev Then
                     Dim x As New HoMIDom.HoMIDom.DeviceAction
                     x.Nom = _act.Methode
                     If String.IsNullOrEmpty(_act.Value.ToString) = False Then
