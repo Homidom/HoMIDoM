@@ -830,7 +830,9 @@ Imports System.Xml
             Dim reader As StreamReader = Nothing
             Dim str As String = ""
             Dim _repeat As Integer = Repeat
+
             If _repeat < 0 Then _repeat = 0
+
             For i As Integer = 0 To Repeat
                 Dim request As WebRequest = WebRequest.Create(URL)
                 Dim response As WebResponse = request.GetResponse()
@@ -838,6 +840,7 @@ Imports System.Xml
                 str = reader.ReadToEnd
                 reader.Close()
             Next
+
             Return str
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " EnvoyerCode", ex.Message)

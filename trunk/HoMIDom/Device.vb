@@ -221,6 +221,8 @@ Namespace HoMIDom
             '<NonSerialized()> Protected _FirstTime As Boolean = True
             Public Commandes As New List(Of HoMIDom.Telecommande.Commandes)
 
+            Public Variables As New Dictionary(Of String, String)
+
             ''' <summary>
             ''' Retourne la liste de tous les fichiers image (png ou jpg) présents sur le serveur
             ''' </summary>
@@ -459,6 +461,8 @@ Namespace HoMIDom
                 End Get
             End Property
 
+
+
             Protected Overrides Sub Finalize()
                 MyBase.Finalize()
                 'RemoveHandler MyTimer.Elapsed, AddressOf read
@@ -473,6 +477,48 @@ Namespace HoMIDom
                 Catch ex As Exception
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Device ExecuteCommand", ex.Message)
                     Return False
+                End Try
+            End Function
+
+            Public Function AddVariable(Name As String, Optional Value As String = "") As String
+                Try
+                    If Not Variables.ContainsKey(Name) Then
+                        Variables.Add(Name, Value)
+                    Else
+                        Return "Erreur cette variable existe déjà!!"
+                    End If
+                    Return Nothing
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "AddVariable: ", ex.Message)
+                    Return ex.Message
+                End Try
+            End Function
+
+            Public Function GetValueOfVariable(Name As String) As String
+                Try
+                    Return Variables(Name)
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "GetValueOfValue: ", ex.Message)
+                    Return Nothing
+                End Try
+            End Function
+
+            Public Function SetValueOfVariable(Name As String, Value As String) As String
+                Try
+                    Variables(Name) = Value
+                    Return Nothing
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "GetValueOfValue: ", ex.Message)
+                    Return ex.Message
+                End Try
+            End Function
+
+            Public Function DeleteVariable(Name As String) As String
+                Try
+                    Return Variables.Remove(Name)
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeleteVariable: ", ex.Message)
+                    Return ex.Message
                 End Try
             End Function
 

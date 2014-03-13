@@ -1214,6 +1214,16 @@ Namespace HoMIDom
                                         End If
                                         If (Not list.Item(j).Attributes.GetNamedItem("solo") Is Nothing) Then .Solo = list.Item(j).Attributes.GetNamedItem("solo").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("lastetat") Is Nothing) Then .LastEtat = list.Item(j).Attributes.GetNamedItem("lastetat").Value
+
+                                        'on recup les variables
+                                        If list.Item(j).HasChildNodes = True Then
+                                            For k As Integer = 0 To list.Item(j).ChildNodes.Count - 1
+                                                If list.Item(j).ChildNodes.Item(k).Name = "var" Then
+                                                    .Variables.Add(list.Item(j).ChildNodes.Item(k).Attributes(0).Value, list.Item(j).ChildNodes.Item(k).Attributes(1).Value)
+                                                End If
+                                            Next
+                                        End If
+
                                         '-- propriétés generique value --
                                         If _Dev.Type = "BAROMETRE" _
                                         Or _Dev.Type = "COMPTEUR" _
@@ -1240,7 +1250,6 @@ Namespace HoMIDom
                                         If (Not list.Item(j).Attributes.GetNamedItem("value") Is Nothing) Then .Value = Regex.Replace(list.Item(j).Attributes.GetNamedItem("value").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                                         If (Not list.Item(j).Attributes.GetNamedItem("valuelast") Is Nothing) Then .ValueLast = Regex.Replace(list.Item(j).Attributes.GetNamedItem("valuelast").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
 
-                                        '-- cas spécifique du multimedia pour récupérer les commandes IR --
                                         'Verifie si prob de MaJ
                                         If .LastChangeDuree > 0 Then
                                             Dim X As Date = .LastChange
@@ -2077,6 +2086,18 @@ Namespace HoMIDom
                         writer.WriteValue(_ListDevices.Item(i).valuelast)
                         writer.WriteEndAttribute()
                     End If
+
+                    'écriture des variables
+                    For Each kvp As KeyValuePair(Of String, String) In _ListDevices.Item(i).Variables
+                        writer.WriteStartElement("var")
+                        writer.WriteStartAttribute("key")
+                        writer.WriteValue(kvp.Key)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("value")
+                        writer.WriteValue(kvp.Value)
+                        writer.WriteEndAttribute()
+                        writer.WriteEndElement()
+                    Next kvp
 
                     writer.WriteEndElement()
                 Next
@@ -5269,10 +5290,13 @@ Namespace HoMIDom
                 Else
                     commande = "SELECT COUNT(*) FROM historiques WHERE source='" & Source & "' and device_id='" & IdDevice & "' ;"
                 End If
+
                 retour = sqlite_homidom.count(commande, result)
+
                 If UCase(Mid(retour, 1, 3)) = "ERR" Then
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceAsHisto", "Erreur: " & retour)
                 End If
+
                 Return result
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceAsHisto", "Exception : " & ex.Message)
@@ -6611,7 +6635,7 @@ Namespace HoMIDom
                         .LastChangeDuree = _ListDevices.Item(i).LastChangeDuree
                         .Unit = _ListDevices.Item(i).Unit
                         .AllValue = _ListDevices.Item(i).AllValue
-
+                        .VariablesOfDevice = _ListDevices.Item(i).Variables
                         If IsNumeric(_ListDevices.Item(i).valuelast) Then .ValueLast = _ListDevices.Item(i).valuelast
 
                         _listact = ListMethod(_ListDevices.Item(i).id)
@@ -6746,7 +6770,7 @@ Namespace HoMIDom
         ''' <param name="valuedef"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0, Optional ByVal lastEtat As Boolean = True, Optional ByVal correction As String = "0", Optional ByVal formatage As String = "", Optional ByVal precision As Double = 0, Optional ByVal valuemax As Double = 9999, Optional ByVal valuemin As Double = -9999, Optional ByVal valuedef As Double = 0, Optional ByVal Commandes As List(Of Telecommande.Commandes) = Nothing, Optional ByVal Unit As String = "", Optional ByVal Puissance As Integer = 0, Optional ByVal AllValue As Boolean = False) As String Implements IHoMIDom.SaveDevice
+        Public Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0, Optional ByVal lastEtat As Boolean = True, Optional ByVal correction As String = "0", Optional ByVal formatage As String = "", Optional ByVal precision As Double = 0, Optional ByVal valuemax As Double = 9999, Optional ByVal valuemin As Double = -9999, Optional ByVal valuedef As Double = 0, Optional ByVal Commandes As List(Of Telecommande.Commandes) = Nothing, Optional ByVal Unit As String = "", Optional ByVal Puissance As Integer = 0, Optional ByVal AllValue As Boolean = False, Optional Variables As Dictionary(Of String, String) = Nothing) As String Implements IHoMIDom.SaveDevice
             Try
                 'Vérification de l'Id du serveur pour accepter le traitement
                 If VerifIdSrv(IdSrv) = False Then
@@ -6902,6 +6926,7 @@ Namespace HoMIDom
                         .Unit = Unit
                         .Puissance = Puissance
                         .AllValue = AllValue
+                        .Variables = Variables
                     End With
 
                     Select Case UCase(type)
@@ -6927,18 +6952,23 @@ Namespace HoMIDom
                     For i As Integer = 0 To _ListDevices.Count - 1
                         If _ListDevices.Item(i).ID = deviceId Then
 
+                            'propriétés modifiables pour tout device
+                            _ListDevices.Item(i).description = description
+                            _ListDevices.Item(i).picture = image
+                            _ListDevices.Item(i).Puissance = Puissance
+                            _ListDevices.Item(i).Variables = Variables
+
                             'on teste si c'est un device systeme pour ne pas le modifier
                             If Left(_ListDevices.Item(i).Name, 5) = "HOMI_" Then
                                 Return -2
                             End If
 
+                            'sauvegarde des propriétés
                             _ListDevices.Item(i).name = name
                             _ListDevices.Item(i).adresse1 = address1
                             _ListDevices.Item(i).adresse2 = address2
-                            _ListDevices.Item(i).picture = image
                             _ListDevices.Item(i).enable = enable
                             _ListDevices.Item(i).driverid = driverid
-                            _ListDevices.Item(i).description = description
                             _ListDevices.Item(i).modele = modele
                             _ListDevices.Item(i).refresh = refresh
                             _ListDevices.Item(i).solo = solo
@@ -6946,7 +6976,6 @@ Namespace HoMIDom
                             _ListDevices.Item(i).LastEtat = lastEtat
                             _ListDevices.Item(i).Driver.newdevice(deviceId)
                             _ListDevices.Item(i).Unit = Unit
-                            _ListDevices.Item(i).Puissance = Puissance
                             _ListDevices.Item(i).AllValue = AllValue
 
                             'si c'est un device de type double ou integer
@@ -7082,6 +7111,26 @@ Namespace HoMIDom
             End Try
         End Function
 
+        ''' <summary>Vérifie si un device par son ID existe</summary>
+        ''' <param name="DeviceId"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ExistDeviceById(ByVal DeviceId As String) As Boolean Implements IHoMIDom.ExistDeviceById
+            Try
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    If _ListDevices.Item(i).ID = DeviceId Then
+                        Return True
+                    End If
+                Next
+
+                Return False
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ExistDeviceById", "Exception : " & ex.Message)
+                Return False
+            End Try
+        End Function
+
+
         ''' <summary>Retourne un device par son ID</summary>
         ''' <param name="DeviceId"></param>
         ''' <returns></returns>
@@ -7101,6 +7150,7 @@ Namespace HoMIDom
                         retour.Name = _ListDevices.Item(i).name
                         retour.Enable = _ListDevices.Item(i).enable
                         retour.GetDeviceCommandePlus = _ListDevices.Item(i).GetCommandPlus
+                        retour.VariablesOfDevice = _ListDevices.Item(i).Variables
 
                         Select Case UCase(_ListDevices.Item(i).type)
                             Case "APPAREIL" : retour.Type = Device.ListeDevices.APPAREIL  'modules pour diriger un appareil  ON/OFF
@@ -7788,23 +7838,26 @@ Namespace HoMIDom
         ''' <param name="ZoneId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function GetDeviceInZone(ByVal IdSrv As String, ByVal zoneId As String) As List(Of TemplateDevice) Implements IHoMIDom.GetDeviceInZone
+        Function GetDeviceInZone(ByVal IdSrv As String, ByVal zoneId As String) As List(Of String) Implements IHoMIDom.GetDeviceInZone
             Try
                 If VerifIdSrv(IdSrv) = False Then
                     Return Nothing
                 End If
 
                 Dim x As Zone = ReturnZoneById(_IdSrv, zoneId)
-                Dim y As New List(Of TemplateDevice)
+                Dim y As New List(Of String) '(Of TemplateDevice)
+
                 If x IsNot Nothing Then
                     If x.ListElement.Count > 0 Then
                         For i As Integer = 0 To x.ListElement.Count - 1
-                            Dim z As TemplateDevice = ReturnDeviceById(IdSrv, x.ListElement.Item(i).ElementID)
-                            If z IsNot Nothing Then y.Add(z)
+                            'Dim z As TemplateDevice = ReturnDeviceById(IdSrv, x.ListElement.Item(i).ElementID)
+                            'If z IsNot Nothing Then
+                            y.Add(x.ListElement.Item(i).ElementID)
                         Next
                     End If
                 End If
                 Return y
+
                 y = Nothing
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetDeviceInZone", "Exception : " & ex.Message)
