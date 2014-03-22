@@ -630,10 +630,10 @@ Imports S22.Imap
 
             'Parametres avancés
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
-            Add_ParamAvance("POP Fournisseur", "Adresse POP3 de votre fournisseur de mail", "pop.gmail.com")
+            Add_ParamAvance("POP Fournisseur", "Adresse POP3 de votre fournisseur de mail", "imap.gmail.com")
             Add_ParamAvance("Utilisateur", "Utilisateur du compte mail", "")
             Add_ParamAvance("Mot de passe", "Mot de passe du compte mail", "")
-            Add_ParamAvance("Numéro du port", "Numéro du port du compte mail", "995")
+            Add_ParamAvance("Numéro du port", "Numéro du port du compte mail", "993")
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
