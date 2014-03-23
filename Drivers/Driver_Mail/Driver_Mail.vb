@@ -397,6 +397,7 @@ Imports S22.Imap
     ''' <param name="Param">tableau de paramétres</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
+
     Public Function ExecuteCommand(ByVal MyDevice As Object, ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
         Dim retour As Boolean = False
         Try
@@ -422,6 +423,7 @@ Imports S22.Imap
     ''' <param name="Value">Valeur à vérifier</param>
     ''' <returns>Retourne 0 si OK, sinon un message d'erreur</returns>
     ''' <remarks></remarks>
+
     Public Function VerifChamp(ByVal Champ As String, ByVal Value As Object) As String Implements HoMIDom.HoMIDom.IDriver.VerifChamp
         Try
             Dim retour As String = "0"
@@ -630,7 +632,7 @@ Imports S22.Imap
 
             'Parametres avancés
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
-            Add_ParamAvance("POP Fournisseur", "Adresse POP3 de votre fournisseur de mail", "imap.gmail.com")
+            Add_ParamAvance("Serveur Mail", "Adresse serveur de votre boite de mail", "imap.gmail.com")
             Add_ParamAvance("Utilisateur", "Utilisateur du compte mail", "")
             Add_ParamAvance("Mot de passe", "Mot de passe du compte mail", "")
             Add_ParamAvance("Numéro du port", "Numéro du port du compte mail", "993")
