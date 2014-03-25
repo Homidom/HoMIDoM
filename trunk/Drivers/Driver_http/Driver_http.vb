@@ -612,8 +612,8 @@ Imports System.Xml
                         Select Case Trim(UCase(Objet.modele))
                             Case "IPX800"
                                 Dim idx As Integer = CInt(Objet.Adresse1)
-                                If idx < 0 Or idx > 7 Then
-                                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 0 et 7 pour une sortie")
+                                If idx < 1 Or idx > 8 Then
+                                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 1 et 8 pour une sortie")
                                     Exit Sub
                                 End If
                                 Dim relais As Integer = idx

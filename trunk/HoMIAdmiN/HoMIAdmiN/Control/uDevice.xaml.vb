@@ -1200,14 +1200,16 @@ Partial Public Class uDevice
 
     Private Sub CbVariables_SelectionChanged(sender As Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbVariables.SelectionChanged
         Try
-            TxtVarName.Text = CbVariables.SelectedItem.key
-            TxtVarName.IsReadOnly = True
-            TxtVarValue.Text = _ListVar(TxtVarName.Text)
-            StkVar.Visibility = Windows.Visibility.Visible
-            BtnApplyVar.Visibility = Windows.Visibility.Visible
-            BtnNewVar.Visibility = Windows.Visibility.Visible
-            BtnDelVar.Visibility = Windows.Visibility.Visible
-            BtnNewVar.Tag = 0 '0=Modifier 1=New
+            If CbVariables.SelectedItem IsNot Nothing Then
+                TxtVarName.Text = CbVariables.SelectedItem.key
+                TxtVarName.IsReadOnly = True
+                TxtVarValue.Text = _ListVar(TxtVarName.Text)
+                StkVar.Visibility = Windows.Visibility.Visible
+                BtnApplyVar.Visibility = Windows.Visibility.Visible
+                BtnNewVar.Visibility = Windows.Visibility.Visible
+                BtnDelVar.Visibility = Windows.Visibility.Visible
+                BtnNewVar.Tag = 0 '0=Modifier 1=New
+            End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur CbVariables_MouseUp: " & ex.ToString, "Erreur Admin", "CbVariables_MouseUp")
         End Try

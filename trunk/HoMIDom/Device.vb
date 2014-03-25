@@ -461,8 +461,6 @@ Namespace HoMIDom
                 End Get
             End Property
 
-
-
             Protected Overrides Sub Finalize()
                 MyBase.Finalize()
                 'RemoveHandler MyTimer.Elapsed, AddressOf read
@@ -853,6 +851,7 @@ Namespace HoMIDom
 
                 Me.Value = Value
             End Sub
+
 
             'Valeur : ON/OFF = True/False
             Public Property Value As Boolean
@@ -2768,5 +2767,63 @@ Namespace HoMIDom
 
         End Class
 
+        <Serializable()> Class Thermostat
+            'Calcul:L'algorithme pour le calcul de la puissance en fonction des températures est : 
+            'Puissance (entre 0 et 100% du temps) = C x (différence entre la consigne et le température intérieure actuelle) + T x (différence entre la consigne et le température extérieure). 
+            'Les valeurs par défaut : C = 0,6 et T = 0,01 conviennent en général. Elles correspondent à une puissance installée de 100W/m2 et une isolation moyenne. Elles peuvent être ajustées (et T augmenté jusqu'à l'isolation du bâtiment Ubat rapporté à la puissance, jusqu'à 0,03). 
+            'Pour un chauffage de 1000 Watts, une consigne de 21°C, une température actuelle de 20°C, et une température extérieure de 11°C 
+            'P = 0,6 * (21 - 20) + 0,01 * (21 - 11) = 0,7 : le chauffage va chauffer à 70% de sa puissance (soit environ 700 W). 
+            'L'utilisation d'un pourcentage permet une pilotage plus doux qu'un simple ON/OFF. Si un ON/OFF est préféré, il suffit de mettre C=40 et T=0. 
+
+            'Cycle:La sortie Puissance est prévu pour piloter un relais "ON/OFF". La valeur est limitée entre 0 et 100%. Une valeur de 10% allume le relais 10% du temps, soit 1 minute (sur 10 minutes). Sauf changement dans la consigne, le calcul de la puissance nécessaire est réalisé toutes les 10 minutes 
+
+            Dim _TempIntNow As Double = 0 'température intérieure actuelle
+            Dim _TempExtNow As Double = 0 'température extérieure actuelle
+            Dim _Hysteresis As Integer = 1 'Hysteresis
+            Dim _Consigne As Integer 'Temperature de consigne du mode actuelle
+            Dim _Mode As TypeMode = TypeMode.Auto 'Mode de consigne actuel (CONFORT/ECO/HORSGEL/JOUR/NUIT/VACANCES/MANUEL)
+            Dim _ModeConsigne As ModeConsigne = ModeConsigne.Confort
+            Dim _ConsigneConfort As Double
+            Dim _ConsigneECO As Double
+            Dim _ConsigneHORSGEL As Double
+            Dim _ConsigneJOUR As Double
+            Dim _ConsigneNUIT As Double
+            Dim _ConsigneVACANCES As Double
+            Dim _ConsigneMANUEL As Double
+            Dim _CapteursTempInt As String 'Capteurs Temperature intérieur
+            Dim CapteursTempExt As String 'Capteurs Temperature extérieur
+            Dim _SortiesChaud As String 'Liste des Sorties à activer/désactiver pour refroidir séparées par ;
+            Dim _EtatThermosat As EtatThermo = EtatThermo.NA 'Etat de sortie du thermostat (aucune, chauffe, froid)
+            Dim _TimerForce As Integer = 15 'Durée pendant laquelle on reste en mode forcé après on reviens automatiquement en mode AUTO
+            Dim _PeriodeCalcul As Integer = 3600 'Durée(en seconde) entre deux calculs de puissance de chauffe (3600 par défaut)
+            Dim _PowerMin As Integer = 5 '% minimal de chauffage si le thermostat considère qu’il est nécessaire de chauffer (en fonction de la température intérieure et extérieure)
+            Dim _C As Double = 0.6 'Valeur de calcul à mulitplier entre la différence entre la consigne et le température intérieure actuelle
+            Dim _T As Double = 0.01 'Valeur de calcul à mulitplier entre la différence entre la consigne et le température extérieure
+
+
+            Public Enum TypeMode
+                Auto = 0
+                Manuel = 1
+                Force = 2
+            End Enum
+
+            Public Enum ModeConsigne
+                Confort = 0
+                Eco = 1
+                HorsGel = 2
+                Jour = 3
+                Nuit = 4
+                Vacances = 5
+                Manuel = 6
+            End Enum
+
+            Public Enum EtatThermo
+                NA = 0
+                Chauffe = 1
+                Froid = 2
+            End Enum
+
+
+        End Class
     End Class
 End Namespace

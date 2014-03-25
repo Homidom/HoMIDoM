@@ -38,6 +38,30 @@ InitializeComponent
 	<summary>
 uWidgetEmpty
 </summary>
+</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
+	<summary>
+CreateInstance
+</summary>
+</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
+	<summary>
+GetPropertyValue
+</summary>
+</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
+	<summary>
+SetPropertyValue
+</summary>
+</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
+	<summary>
+CreateDelegate
+</summary>
+</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
+	<summary>
+AddEventHandler
+</summary>
+</member><member name="T:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper">
+	<summary>
+GeneratedInternalTypeHelper
+</summary>
 </member><member name="M:HoMIWpF.keyboard.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -105,6 +129,10 @@ uReleve
 </member><member name="M:HoMIWpF.Customcontrols.Colorpicker.InitializeComponent">
 	<summary>
 InitializeComponent
+</summary>
+</member><member name="T:HoMIWpF.Customcontrols.Colorpicker">
+	<summary>
+Colorpicker
 </summary>
 </member><member name="M:HoMIWpF.uPrise.InitializeComponent">
 	<summary>
