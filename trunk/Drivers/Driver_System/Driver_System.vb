@@ -412,7 +412,7 @@ Imports System.Runtime.InteropServices
 
                     If _DEBUG Then
                         If reply.Status = System.Net.NetworkInformation.IPStatus.Success Then
-                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "System", "Ping " & Objet.adresse1.ToString & " : " & reply.RoundtripTime & "ms")
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "System", "Ping " & Objet.adresse1.ToString & " : OK : " & reply.RoundtripTime & "ms")
                         Else
                             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "System", "Ping " & Objet.adresse1.ToString & " : NOK")
                         End If
