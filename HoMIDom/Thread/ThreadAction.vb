@@ -464,6 +464,9 @@ Namespace HoMIDom
             '
             Dim objCompilerParameters As New CompilerParameters
             objCompilerParameters.ReferencedAssemblies.Add("System.dll")
+            objCompilerParameters.ReferencedAssemblies.Add("System.xml.dll")
+            objCompilerParameters.ReferencedAssemblies.Add("System.xml.linq.dll")
+            objCompilerParameters.ReferencedAssemblies.Add("System.net.dll")
             objCompilerParameters.ReferencedAssemblies.Add("System.Windows.Forms.dll")
             objCompilerParameters.ReferencedAssemblies.Add("Microsoft.VisualBasic.dll")
             objCompilerParameters.ReferencedAssemblies.Add(My.Application.Info.DirectoryPath + "\Homidom.dll")
