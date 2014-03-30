@@ -42,7 +42,7 @@
                             <StackPanel Name="StkAdr1">
                                 <Label Foreground="White" Name="LabelAdresse1" Width="215" >Adresse1:</Label>
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtAdresse1" Width="215" Height="21.978" />
-                                <ComboBox BorderBrush=" Black" HorizontalAlignment=" Left" Name="CbAdresse1" Width="215" Height="21.978" Visibility="Collapsed" IsEditable="True" />
+                                <ComboBox Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" HorizontalAlignment=" Left" Name="CbAdresse1" Width="215" Height="21.978" Visibility="Collapsed" IsEditable="True" />
                             </StackPanel>
                             <StackPanel Name="StkAdr2" Margin="10,0,0,0">
                                 <Label Foreground="White" Name="LabelAdresse2" >Adresse2:</Label>
@@ -121,9 +121,9 @@
                                     </LinearGradientBrush>
                                 </StackPanel.Background>
 
-                                <Label Content="Variables:" Foreground="White" />
+                                <Label Content="Variables:" Foreground="White" ToolTip="Ajouter des variables propres au composant et utilisables dans les macros"/>
                                 <StackPanel Orientation="Horizontal" >
-                                    <ComboBox Name="CbVariables" Width="200" IsReadOnly="True" />
+                                    <ComboBox Name="CbVariables" Width="200" IsReadOnly="True" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" />
                                     <Image Name="BtnNewVar" Width="25" Height="25" Margin="5,0,0,0" Source="/HoMIAdmiN;component/Images/ajouter_32.png" ToolTip="Nouvelle variable" />
                                     <Image Name="BtnDelVar" Width="25" Height="25" Margin="5,0,0,0" Source="/HoMIAdmiN;component/Images/Supprimer_32.png" ToolTip="Supprimer" />
                                     <Image Name="BtnApplyVar" Width="25" Height="25" Margin="5,0,0,0" Source="/HoMIAdmiN;component/Images/Refresh_32.png" ToolTip="Appliquer" Visibility="Collapsed" />
