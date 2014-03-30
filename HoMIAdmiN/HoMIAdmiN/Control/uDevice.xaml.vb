@@ -331,6 +331,7 @@ Partial Public Class uDevice
                     CbAdresse1.Visibility = Windows.Visibility.Visible
                 Else
                     CbAdresse1.Text = ""
+                    CbAdresse1.ItemsSource = Nothing
                     CbAdresse1.Items.Clear()
                     CbAdresse1.Tag = Nothing
                     TxtAdresse1.Visibility = Windows.Visibility.Visible
