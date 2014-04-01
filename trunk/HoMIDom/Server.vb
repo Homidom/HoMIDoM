@@ -6903,7 +6903,7 @@ Namespace HoMIDom
                         Case "TELECOMMANDE"
                             Dim o As New Device.TELECOMMANDE(Me)
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
-                            o.Driver.newdevice(deviceId)
+                            ' o.Driver.newdevice(deviceId)
                             MyNewObj = o
                     End Select
 
