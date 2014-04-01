@@ -1008,7 +1008,8 @@ Public Class uCondition
                             End Try
                         Case "double"
                             Try
-                                _obj = CDbl(TxtValue.Text)
+                                'pas de check pour permettre de saisir <componom.value> et des formulres
+                                '_obj = CDbl(TxtValue.Text)
                             Catch ex As Exception
                                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Double !!", "Erreur", "TxtValue.TextChanged")
                                 TxtValue.Text = "0"
