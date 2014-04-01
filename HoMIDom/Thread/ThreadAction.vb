@@ -160,6 +160,20 @@ Namespace HoMIDom
                                     retour2 = x.Conditions.Item(i).Value
                                 End If
 
+                                'Dim _var0 As String = x.Conditions.Item(i).Value.ToString
+                                '_var0 = _var0.Replace("&lt;", "<")
+                                '_var0 = _var0.Replace("&gt;", ">")
+                                '_var0 = DecodeCommand(_var0) 'decodage pour remplacement de <compnom> par la valeur
+                                'If STRGS.InStr(_var0, "ERR:") > 0 Then 'si il y a une erreur on n'ajoute pas le parametre et on logue l'erreur
+                                '    _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ThreadAction Execute ActionIf", STRGS.Right(_var0, _var0.Length - 5))
+                                'Else
+                                '    If String.IsNullOrEmpty(_var0) Then
+                                '        retour2 = x.Conditions.Item(i).Value
+                                '    Else
+                                '        retour2 = EvaluateCommand(_var0) 'on fait un calcul (par ex <comnom>*10)
+                                '    End If
+                                'End If
+
                                 Select Case x.Conditions.Item(i).Condition
                                     Case Action.TypeSigne.Egal : If retour = retour2 Then result = True Else result = False
                                     Case Action.TypeSigne.Different : If retour <> retour2 Then result = True Else result = False
@@ -180,100 +194,100 @@ Namespace HoMIDom
                                 End If
                             End If
 
-                            If x.Conditions.Item(i).Type = Action.TypeCondition.DateTime Then
-                                Dim a1 As DateTime
-                                Dim sc As Integer = 0
-                                Dim mn As Integer = 0
-                                Dim hr As Integer = 0
-                                Dim dd As Integer = 0
-                                Dim ms As Integer = 0
-                                Dim Flagjour As Boolean = False 'True si on travail sur un jour
-                                Dim _tim() As String = x.Conditions.Item(i).DateTime.Split("#")
+                                If x.Conditions.Item(i).Type = Action.TypeCondition.DateTime Then
+                                    Dim a1 As DateTime
+                                    Dim sc As Integer = 0
+                                    Dim mn As Integer = 0
+                                    Dim hr As Integer = 0
+                                    Dim dd As Integer = 0
+                                    Dim ms As Integer = 0
+                                    Dim Flagjour As Boolean = False 'True si on travail sur un jour
+                                    Dim _tim() As String = x.Conditions.Item(i).DateTime.Split("#")
 
 
-                                'On travail juste sur une heure
-                                If (_tim(0) <> "*" Or _tim(1) <> "*" Or _tim(2) <> "*") And _tim(3) = "*" And _tim(4) = "*" And _tim(5) = "" And _tim(6) <> "1" And _tim(7) <> "1" Then
-                                    If _tim(0) = "*" Then sc = Now.Second Else sc = CInt(_tim(0))
-                                    If _tim(1) = "*" Then mn = Now.Minute Else mn = CInt(_tim(1))
-                                    If _tim(2) = "*" Then hr = Now.Hour Else hr = CInt(_tim(2))
-                                    a1 = New Date(Now.Year, Now.Month, Now.Day, hr, mn, sc)
-                                End If
-                                'On travail sur une heure + date
-                                If (_tim(0) <> "*" Or _tim(1) <> "*" Or _tim(2) <> "*") And (_tim(3) <> "*" Or _tim(4) <> "*") And _tim(5) = "" And _tim(6) <> "1" And _tim(7) <> "1" Then
-                                    If _tim(0) = "*" Then sc = Now.Second Else sc = CInt(_tim(0))
-                                    If _tim(1) = "*" Then mn = Now.Minute Else mn = CInt(_tim(1))
-                                    If _tim(2) = "*" Then hr = Now.Hour Else hr = CInt(_tim(2))
-                                    If _tim(3) = "*" Then
-                                        dd = Now.Day
-                                    Else
-                                        dd = CInt(_tim(3))
-                                        If dd = 0 Then dd = Now.Day
+                                    'On travail juste sur une heure
+                                    If (_tim(0) <> "*" Or _tim(1) <> "*" Or _tim(2) <> "*") And _tim(3) = "*" And _tim(4) = "*" And _tim(5) = "" And _tim(6) <> "1" And _tim(7) <> "1" Then
+                                        If _tim(0) = "*" Then sc = Now.Second Else sc = CInt(_tim(0))
+                                        If _tim(1) = "*" Then mn = Now.Minute Else mn = CInt(_tim(1))
+                                        If _tim(2) = "*" Then hr = Now.Hour Else hr = CInt(_tim(2))
+                                        a1 = New Date(Now.Year, Now.Month, Now.Day, hr, mn, sc)
                                     End If
-                                    If _tim(4) = "*" Then
-                                        ms = Now.Month
-                                    Else
-                                        ms = CInt(_tim(4))
-                                        If ms = 0 Then ms = Now.Month
+                                    'On travail sur une heure + date
+                                    If (_tim(0) <> "*" Or _tim(1) <> "*" Or _tim(2) <> "*") And (_tim(3) <> "*" Or _tim(4) <> "*") And _tim(5) = "" And _tim(6) <> "1" And _tim(7) <> "1" Then
+                                        If _tim(0) = "*" Then sc = Now.Second Else sc = CInt(_tim(0))
+                                        If _tim(1) = "*" Then mn = Now.Minute Else mn = CInt(_tim(1))
+                                        If _tim(2) = "*" Then hr = Now.Hour Else hr = CInt(_tim(2))
+                                        If _tim(3) = "*" Then
+                                            dd = Now.Day
+                                        Else
+                                            dd = CInt(_tim(3))
+                                            If dd = 0 Then dd = Now.Day
+                                        End If
+                                        If _tim(4) = "*" Then
+                                            ms = Now.Month
+                                        Else
+                                            ms = CInt(_tim(4))
+                                            If ms = 0 Then ms = Now.Month
+                                        End If
+                                        a1 = New Date(Now.Year, ms, dd, hr, mn, sc)
                                     End If
-                                    a1 = New Date(Now.Year, ms, dd, hr, mn, sc)
-                                End If
-                                'On travail sur une heure + jour
-                                If (_tim(0) <> "*" Or _tim(1) <> "*" Or _tim(2) <> "*") And (_tim(3) = "*" And _tim(4) = "*") And _tim(5) <> "" And _tim(6) <> "1" And _tim(7) <> "1" Then
-                                    If _tim(0) = "*" Then sc = Now.Second Else sc = CInt(_tim(0))
-                                    If _tim(1) = "*" Then mn = Now.Minute Else mn = CInt(_tim(1))
-                                    If _tim(2) = "*" Then hr = Now.Hour Else hr = CInt(_tim(2))
-                                    a1 = New Date(Now.Year, Now.Month, Now.Day, hr, mn, sc)
-                                    Flagjour = True
-                                End If
-                                'On travail sur une date
-                                If (_tim(0) = "*" And _tim(1) = "*" And _tim(2) = "*") And (_tim(3) <> "*" Or _tim(4) <> "*") And _tim(5) = "" And _tim(6) <> "1" And _tim(7) <> "1" Then
-                                    If _tim(3) = "*" Then dd = Now.Day Else dd = CInt(_tim(3))
-                                    If _tim(4) = "*" Then ms = Now.Month Else ms = CInt(_tim(4))
-                                    a1 = New Date(Now.Year, ms, dd, Now.Hour, Now.Minute, Now.Second)
-                                End If
-                                'On travail sur un jour
-                                If (_tim(0) = "*" And _tim(1) = "*" And _tim(2) = "*") And _tim(3) = "*" And _tim(4) = "*" And _tim(5) <> "" And _tim(6) <> "1" And _tim(7) <> "1" Then
-                                    Flagjour = True
-                                    a1 = Now
-                                End If
-                                'On travail sur heure levé du soleil
-                                If (_tim(0) = "*" And _tim(1) = "*" And _tim(2) = "*") And _tim(3) = "*" And _tim(4) = "*" And _tim(5) = "" And _tim(6) = "1" And _tim(7) <> "1" Then
-                                    a1 = CDate(_Server.GetHeureLeverSoleil)
-                                End If
-                                'On travail sur heure couché du soleil
-                                If (_tim(0) = "*" And _tim(1) = "*" And _tim(2) = "*") And _tim(3) = "*" And _tim(4) = "*" And _tim(5) = "" And _tim(6) <> "1" And _tim(7) = "1" Then
-                                    a1 = CDate(_Server.GetHeureCoucherSoleil)
-                                End If
-
-                                Dim compare As Integer = DateTime.Compare(Now, a1)
-
-                                Select Case x.Conditions.Item(i).Condition
-                                    Case Action.TypeSigne.Egal : If compare = 0 Then result = True Else result = False
-                                    Case Action.TypeSigne.Different : If compare <> 0 Then result = True Else result = False
-                                    Case Action.TypeSigne.Inferieur : If compare < 0 Then result = True Else result = False
-                                    Case Action.TypeSigne.InferieurEgal : If compare <= 0 Then result = True Else result = False
-                                    Case Action.TypeSigne.Superieur : If compare > 0 Then result = True Else result = False
-                                    Case Action.TypeSigne.SuperieurEgal : If compare >= 0 Then result = True Else result = False
-                                End Select
-
-                                If Flagjour = True Then
-                                    If (InStr(_tim(5), "0") > 0 And Now.DayOfWeek = DayOfWeek.Sunday) Or (InStr(_tim(5), "1") > 0 And Now.DayOfWeek = DayOfWeek.Monday) Or (InStr(_tim(5), "2") > 0 And Now.DayOfWeek = DayOfWeek.Tuesday) Or (InStr(_tim(5), "3") > 0 And Now.DayOfWeek = DayOfWeek.Wednesday) Or (InStr(_tim(5), "4") > 0 And Now.DayOfWeek = DayOfWeek.Thursday) Or (InStr(_tim(5), "5") > 0 And Now.DayOfWeek = DayOfWeek.Friday) Or (InStr(_tim(5), "6") > 0 And Now.DayOfWeek = DayOfWeek.Saturday) Then
-                                        result = result And True
-                                    Else
-                                        result = result And False
+                                    'On travail sur une heure + jour
+                                    If (_tim(0) <> "*" Or _tim(1) <> "*" Or _tim(2) <> "*") And (_tim(3) = "*" And _tim(4) = "*") And _tim(5) <> "" And _tim(6) <> "1" And _tim(7) <> "1" Then
+                                        If _tim(0) = "*" Then sc = Now.Second Else sc = CInt(_tim(0))
+                                        If _tim(1) = "*" Then mn = Now.Minute Else mn = CInt(_tim(1))
+                                        If _tim(2) = "*" Then hr = Now.Hour Else hr = CInt(_tim(2))
+                                        a1 = New Date(Now.Year, Now.Month, Now.Day, hr, mn, sc)
+                                        Flagjour = True
                                     End If
-                                End If
+                                    'On travail sur une date
+                                    If (_tim(0) = "*" And _tim(1) = "*" And _tim(2) = "*") And (_tim(3) <> "*" Or _tim(4) <> "*") And _tim(5) = "" And _tim(6) <> "1" And _tim(7) <> "1" Then
+                                        If _tim(3) = "*" Then dd = Now.Day Else dd = CInt(_tim(3))
+                                        If _tim(4) = "*" Then ms = Now.Month Else ms = CInt(_tim(4))
+                                        a1 = New Date(Now.Year, ms, dd, Now.Hour, Now.Minute, Now.Second)
+                                    End If
+                                    'On travail sur un jour
+                                    If (_tim(0) = "*" And _tim(1) = "*" And _tim(2) = "*") And _tim(3) = "*" And _tim(4) = "*" And _tim(5) <> "" And _tim(6) <> "1" And _tim(7) <> "1" Then
+                                        Flagjour = True
+                                        a1 = Now
+                                    End If
+                                    'On travail sur heure levé du soleil
+                                    If (_tim(0) = "*" And _tim(1) = "*" And _tim(2) = "*") And _tim(3) = "*" And _tim(4) = "*" And _tim(5) = "" And _tim(6) = "1" And _tim(7) <> "1" Then
+                                        a1 = CDate(_Server.GetHeureLeverSoleil)
+                                    End If
+                                    'On travail sur heure couché du soleil
+                                    If (_tim(0) = "*" And _tim(1) = "*" And _tim(2) = "*") And _tim(3) = "*" And _tim(4) = "*" And _tim(5) = "" And _tim(6) <> "1" And _tim(7) = "1" Then
+                                        a1 = CDate(_Server.GetHeureCoucherSoleil)
+                                    End If
 
-                                If i = 0 Then
-                                    flag = result
-                                Else
-                                    Select Case x.Conditions.Item(i).Operateur
-                                        Case Action.TypeOperateur.AND : flag = flag And result
-                                        Case Action.TypeOperateur.OR : flag = flag Or result
-                                        Case Action.TypeOperateur.NONE : flag = result
+                                    Dim compare As Integer = DateTime.Compare(Now, a1)
+
+                                    Select Case x.Conditions.Item(i).Condition
+                                        Case Action.TypeSigne.Egal : If compare = 0 Then result = True Else result = False
+                                        Case Action.TypeSigne.Different : If compare <> 0 Then result = True Else result = False
+                                        Case Action.TypeSigne.Inferieur : If compare < 0 Then result = True Else result = False
+                                        Case Action.TypeSigne.InferieurEgal : If compare <= 0 Then result = True Else result = False
+                                        Case Action.TypeSigne.Superieur : If compare > 0 Then result = True Else result = False
+                                        Case Action.TypeSigne.SuperieurEgal : If compare >= 0 Then result = True Else result = False
                                     End Select
+
+                                    If Flagjour = True Then
+                                        If (InStr(_tim(5), "0") > 0 And Now.DayOfWeek = DayOfWeek.Sunday) Or (InStr(_tim(5), "1") > 0 And Now.DayOfWeek = DayOfWeek.Monday) Or (InStr(_tim(5), "2") > 0 And Now.DayOfWeek = DayOfWeek.Tuesday) Or (InStr(_tim(5), "3") > 0 And Now.DayOfWeek = DayOfWeek.Wednesday) Or (InStr(_tim(5), "4") > 0 And Now.DayOfWeek = DayOfWeek.Thursday) Or (InStr(_tim(5), "5") > 0 And Now.DayOfWeek = DayOfWeek.Friday) Or (InStr(_tim(5), "6") > 0 And Now.DayOfWeek = DayOfWeek.Saturday) Then
+                                            result = result And True
+                                        Else
+                                            result = result And False
+                                        End If
+                                    End If
+
+                                    If i = 0 Then
+                                        flag = result
+                                    Else
+                                        Select Case x.Conditions.Item(i).Operateur
+                                            Case Action.TypeOperateur.AND : flag = flag And result
+                                            Case Action.TypeOperateur.OR : flag = flag Or result
+                                            Case Action.TypeOperateur.NONE : flag = result
+                                        End Select
+                                    End If
                                 End If
-                            End If
                         Next
 
                         'La condition est vrai
@@ -522,6 +536,8 @@ Namespace HoMIDom
         Public Function DecodeCommand(ByVal Command As String) As String
             Dim retour As String = Command
             Try
+                _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "DecodeCommand", "Evaluation de : " & Command)
+
                 Dim startcmd As Integer = InStr(1, Command, "<")
                 Dim endcmd As Integer = InStr(1, Command, ">")
                 Dim newcmd As String = Command

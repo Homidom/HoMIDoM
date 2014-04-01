@@ -10,10 +10,10 @@ Imports System.Runtime.InteropServices
 
 <Assembly: AssemblyTitle("Driver_Mail")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("European Commission")> 
+<Assembly: AssemblyCompany("HoMIDoM")> 
 <Assembly: AssemblyProduct("Driver_Mail")> 
-<Assembly: AssemblyCopyright("Copyright © HoMIDoM 2013")> 
-<Assembly: AssemblyTrademark("")> 
+<Assembly: AssemblyCopyright("Copyright © HoMIDoM 2014")> 
+<Assembly: AssemblyTrademark("HoMIDoM")> 
 
 <Assembly: ComVisible(False)>
 
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' en utilisant '*', comme indiqué ci-dessous :
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.1.3.0")> 
-<Assembly: AssemblyFileVersion("1.1.3.0")> 
+<Assembly: AssemblyVersion("1.1.5.0")> 
+<Assembly: AssemblyFileVersion("1.1.5.0")> 
