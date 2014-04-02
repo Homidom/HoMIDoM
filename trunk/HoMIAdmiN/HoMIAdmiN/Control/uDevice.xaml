@@ -42,7 +42,7 @@
                             <StackPanel Name="StkAdr1">
                                 <Label Foreground="White" Name="LabelAdresse1" Width="215" >Adresse1:</Label>
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtAdresse1" Width="215" Height="21.978" />
-                                <ComboBox Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" HorizontalAlignment=" Left" Name="CbAdresse1" Width="215" Height="21.978" Visibility="Collapsed" IsEditable="True" />
+                                <ComboBox Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" HorizontalAlignment=" Left" Name="CbAdresse1" Width="215" Height="25" Visibility="Collapsed" IsEditable="True" />
                             </StackPanel>
                             <StackPanel Name="StkAdr2" Margin="10,0,0,0">
                                 <Label Foreground="White" Name="LabelAdresse2" >Adresse2:</Label>

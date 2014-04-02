@@ -289,7 +289,7 @@ Partial Public Class uDevice
     Private Sub MaJDriver()
         Try
             Dim _Driver As Object = Nothing
-            Me.Cursor = Cursors.Wait
+            Me.ForceCursor = True
             'on cherche le driver
 
             If CbDriver.SelectedItem IsNot Nothing Then

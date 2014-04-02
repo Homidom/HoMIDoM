@@ -270,7 +270,8 @@ Module Fonctions
                     End If
                 End If
             Next
-            Retour = Retour.OrderBy(Function(x) x.Key).ToDictionary(Function(x) x.Key, Function(y) y.Value)
+            'Retour = Retour.OrderBy(Function(x) x.Key).ToDictionary(Function(x) x.Key, Function(y) y.Value)
+            'Retour = Retour.OrderBy(Function(x) x.Value).ToDictionary(Function(x) x.Key, Function(y) y.Value)
 
             Return Retour
         Catch ex As Exception
