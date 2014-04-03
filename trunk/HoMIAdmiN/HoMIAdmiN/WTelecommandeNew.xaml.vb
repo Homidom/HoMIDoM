@@ -1,5 +1,6 @@
 ﻿Imports HoMIDom.HoMIDom.Telecommande
 Imports HoMIDom.HoMIDom.Api
+Imports System.IO
 
 Public Class WTelecommandeNew
 
@@ -398,27 +399,15 @@ Public Class WTelecommandeNew
     ''' <param name="TemplateName">Nom du template à afficher</param>
     ''' <param name="HaveDevice">Si le template est associé à un device (si oui on peut tester ou apprendre des commandes sinon non)</param>
     ''' <remarks></remarks>
-    Public Sub New(Optional TemplateName As String = "", Optional HaveDevice As Boolean = False)
+    Public Sub New(Optional TemplateName As String = "")
 
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
 
         Try
 
-            'Récupère la liste des template
-            Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
-            _list = myService.GetListOfTemplate
+            Call Refresh(TemplateName)
 
-            Dim idx As Integer = -1
-            For i As Integer = 0 To _list.Count - 1
-                cbTemplate.Items.Add(_list(i).Name) 'ajoute le nom du template dans la liste
-                If String.IsNullOrEmpty(TemplateName) = False Then
-                    If TemplateName = _list(i).Name Then idx = i
-                End If
-            Next
-            cbTemplate.SelectedIndex = idx
-
-            BtnSaveCmd.Visibility = Windows.Visibility.Collapsed
         Catch ex As Exception
             MessageBox.Show(ex.ToString)
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'ouverture de la fenêtre d'édition:" & ex.ToString, "Erreur", "")
@@ -463,14 +452,38 @@ Public Class WTelecommandeNew
 
 #End Region
 
-    Private Sub WTelecommande_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
-        Try
 
+    Private Sub Refresh(Optional TemplateName As String = "")
+        Try
+            'Récupère la liste des template
+            Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
+            _list = myService.GetListOfTemplate
+
+            Dim idx As Integer = -1
+            cbTemplate.Items.Clear()
+            For i As Integer = 0 To _list.Count - 1
+                cbTemplate.Items.Add(_list(i).Name) 'ajoute le nom du template dans la liste
+                If String.IsNullOrEmpty(TemplateName) = False Then
+                    If TemplateName = _list(i).Name Then idx = i
+                End If
+            Next
+            cbTemplate.SelectedIndex = idx
+
+            BtnSaveCmd.Visibility = Windows.Visibility.Collapsed
+            BtnDelCmd.Visibility = Windows.Visibility.Collapsed
+            BtnDeleteTemplate.Visibility = Windows.Visibility.Collapsed
+
+            TxtTplFab.Text = ""
+            TxtTplName.Text = ""
+            TxtTplMod.Text = ""
+            TxtCharEndReceive.Text = ""
+            TxtTrameInit.Text = ""
+            cbTemplate.Text = ""
         Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, ex.ToString)
+            MessageBox.Show(ex.ToString)
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'ouverture de la fenêtre d'édition:" & ex.ToString, "Erreur", "")
         End Try
     End Sub
-
 
     ''' <summary>
     ''' Sélection d'un template
@@ -515,7 +528,7 @@ Public Class WTelecommandeNew
 
                 StkCmd.Visibility = Windows.Visibility.Visible
                 StkVar.Visibility = Windows.Visibility.Visible
-
+                BtnDeleteTemplate.Visibility = Windows.Visibility.Visible
             End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString)
@@ -692,6 +705,120 @@ Public Class WTelecommandeNew
             End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur buttonOk_Click: " & ex.Message, "Erreur", "buttonOk_Click")
+        End Try
+    End Sub
+
+    Private Sub BtnDeleteTemplate_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles BtnDeleteTemplate.Click
+        Try
+            If cbTemplate.SelectedIndex < 0 Then
+                MessageBox.Show("Veuillez sélectionner un template à supprimer!", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+            Else
+                'Récupère la liste des templates
+                Dim _list As New List(Of HoMIDom.HoMIDom.Telecommande.Template)
+                _list = myService.GetListOfTemplate
+
+                'Recupère le template courant
+                _CurrentTemplate = _list.Item(cbTemplate.SelectedIndex)
+
+                'Supprime le template
+                Dim retour As String = myService.DeleteTemplate(IdSrv, _CurrentTemplate)
+
+                If retour <> "0" Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & retour, "Erreur", "DeleteTemplate")
+                Else
+                    Call Refresh()
+                End If
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString)
+        End Try
+    End Sub
+
+    Private Sub BtnImportTemplate_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles BtnImportTemplate.Click
+        Try
+            MessageBox.Show("Fonction non disponible pour le moment!", "Export", MessageBoxButton.OK, MessageBoxImage.Information)
+            Exit Sub
+
+            If IsConnect = False Then
+                Exit Sub
+            End If
+
+            Me.Cursor = Cursors.Wait
+            'Exporter le fichier de config
+
+            ' Configure open file dialog box
+            Dim dlg As New Microsoft.Win32.OpenFileDialog
+            dlg.FileName = "" ' Default file name
+            dlg.DefaultExt = ".xml" ' Default file extension
+            dlg.Filter = "Fichier de template (.xml)|*.xml" ' Filter files by extension
+
+            ' Show open file dialog box
+            Dim result As Boolean = dlg.ShowDialog()
+
+            ' Process open file dialog box results
+            If result = True Then
+                ' Open document
+                Dim filename As String = dlg.FileName
+                Dim retour As String = myService.ExportConfig(IdSrv)
+                If retour.StartsWith("ERREUR") Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, retour, "Erreur export template", "")
+                Else
+                    Dim TargetFile As StreamWriter
+                    TargetFile = New StreamWriter(filename, False)
+                    TargetFile.Write(retour)
+                    TargetFile.Close()
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "L'export du fichier de template a été effectué", "Export Template", "")
+                End If
+            End If
+
+            Me.Cursor = Nothing
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnExportTemplate_Click: " & ex.Message, "ERREUR", "")
+        End Try
+    End Sub
+
+    Private Sub BtnExportTemplate_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles BtnExportTemplate.Click
+        Try
+            If IsConnect = False Then
+                Exit Sub
+            End If
+
+            If cbTemplate.SelectedIndex < 0 Then
+                MessageBox.Show("Veuillez sélectionner un template à exporter", "Erreur", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+                Exit Sub
+            End If
+
+            Me.Cursor = Cursors.Wait
+            'Exporter le fichier de config
+
+            ' Configure open file dialog box
+            Dim dlg As New Microsoft.Win32.SaveFileDialog()
+            dlg.FileName = "" ' Default file name
+            dlg.DefaultExt = ".xml" ' Default file extension
+            dlg.Filter = "Fichier de template (.xml)|*.xml" ' Filter files by extension
+
+            ' Show open file dialog box
+            Dim result As Boolean = dlg.ShowDialog()
+
+            ' Process open file dialog box results
+            If result = True And _CurrentTemplate IsNot Nothing Then
+                ' Open document
+                Dim filename As String = dlg.FileName
+                Dim retour As String = myService.ExportTemplateMultimedia(IdSrv, _CurrentTemplate)
+                If retour.StartsWith("ERREUR") Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, retour, "Erreur export template", "")
+                Else
+                    Dim TargetFile As StreamWriter
+                    TargetFile = New StreamWriter(filename, False)
+                    TargetFile.Write(retour)
+                    TargetFile.Close()
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "L'export du fichier de template a été effectué", "Export Template", "")
+                End If
+            End If
+
+            Me.Cursor = Nothing
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnExportTemplate_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 End Class

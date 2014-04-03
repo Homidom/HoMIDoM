@@ -57,6 +57,11 @@
                         <StackPanel Name="menu_multimedia" Width="110" Height="110" Background="Black">
                             <Image Tag="tag_multimedia" Name="img_multimedia" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/multimedia_128.png" ToolTip="Gérer le multimedia" />
                             <Label Name="label_menu_multimedia" Content="Multimedia" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Image Tag="tag_multimedia_template" Name="img_multimedia_template" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/telecommande-defaut.png" ToolTip="Gérer les templates" />
+
+                            </StackPanel>
+
                         </StackPanel>
                     </Border>
                 </StackPanel>

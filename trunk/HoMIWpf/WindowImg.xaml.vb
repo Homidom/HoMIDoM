@@ -95,6 +95,10 @@ Public Class WindowImg
                 Dim array As Byte() = Nothing
                 Dim filename As String = dlg.FileName
                 Using fs As New IO.FileStream(dlg.FileName, IO.FileMode.Open, IO.FileAccess.Read)
+                    If fs.Length > 5000000 Then
+                        MessageBox.Show("La taille du fichier (" & fs.Length & " octets) est supérieur à la taille maximale autorisée (5000000 octets)", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                        Exit Sub
+                    End If
                     Dim reader As New IO.BinaryReader(fs)
                     If reader IsNot Nothing Then
                         array = reader.ReadBytes(CInt(fs.Length))
