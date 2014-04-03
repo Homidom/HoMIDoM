@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <homidom>
-  <server ipsoap="localhost" portsoap="7999" idsrv="123456789" longitude="6.052793" latitude="49.364016" heurecorrectionlever="0" heurecorrectioncoucher="0" smtpserver="" smtpmail="" smtplogin="" smtppassword="" smtpport="587" smtpssl="true" log0="false" log1="false" log2="false" log3="false" log4="false" log5="false" log6="false" log7="false" log8="false" log9="false" cyclesave="0" voice="Microsoft Sam" saverealtime="true" devise="€" puissancemini="0" gererenergie="false" tarifjour="0" tarifnuit="0" portweb="7980" enablesrvweb="false" modedecouverte="true" codepays="12" />
+  <server ipsoap="localhost" portsoap="7999" idsrv="123456789" longitude="6.052793" latitude="49.364016" heurecorrectionlever="0" heurecorrectioncoucher="0" smtpserver="" smtpmail="" smtplogin="" smtppassword="" smtpport="25" smtpssl="false" log0="false" log1="false" log2="false" log3="false" log4="false" log5="false" log6="false" log7="false" log8="false" log9="false" cyclesave="0" voice="Microsoft Sam" saverealtime="true" devise="€" puissancemini="0" gererenergie="false" tarifjour="0" tarifnuit="0" portweb="7980" enablesrvweb="false" modedecouverte="false" codepays="12" />
   <drivers>
     <driver id="DE96B466-2540-11E0-A321-65D7DFD72085" nom="Virtuel" enable="true" description="Driver Virtuel" startauto="true" protocol="Virtuel" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="" />
   </drivers>

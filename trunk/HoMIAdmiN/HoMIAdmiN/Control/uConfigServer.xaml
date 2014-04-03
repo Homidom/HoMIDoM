@@ -358,8 +358,8 @@
                                         <Label Content="Paramètres d'affichage de la console d'administration." Foreground="Gray" Height="28" FontSize="11" />
                                         <StackPanel Orientation="Horizontal" >
                                             <Label Content="Durée Animation :" Foreground=" White" />
-                                            <TextBox Name="TxtAnimationTime" Text="650" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" />
-                                            <Label Content="   Durée de l'animation des fenêtres (0 pour désactiver, max 1000), défaut : 650" Foreground="Gray" Height="28" FontSize="10"/>
+                                            <TextBox Name="TxtAnimationTime" Text="300" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" />
+                                            <Label Content="   Durée de l'animation des fenêtres (0 pour désactiver, max 1000), défaut : 300" Foreground="Gray" Height="28" FontSize="10"/>
                                         </StackPanel>
                                     </StackPanel>
                                 </GroupBox>
