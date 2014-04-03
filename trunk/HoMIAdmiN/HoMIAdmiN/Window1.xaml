@@ -303,6 +303,19 @@
                             </Setter.Value>
                         </Setter>
                     </Style>
+
+                    <Style x:Key="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}" TargetType="Label">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="Label">
+                                    <Border>
+                                        <ContentPresenter RecognizesAccessKey="False" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                    
                 </TabControl.Resources>
                 <TabItem Header="Driver">
                     <DockPanel >
