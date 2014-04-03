@@ -8849,7 +8849,6 @@ Namespace HoMIDom
             End Try
         End Function
 
-        '''' <param name="Commandes">Liste des commandes</param>
         ''' <summary>
         ''' Sauvegarde un template donné
         ''' </summary>
@@ -8893,6 +8892,36 @@ Namespace HoMIDom
                 Return ex.Message
             End Try
         End Function
+
+        ''' <summary>
+        ''' Supprimer un template donné
+        ''' </summary>
+        ''' <param name="IdSrv">Id du Serveur</param>
+        ''' <param name="Template">Nom du template</param>
+        ''' <returns>O si ok sinon message d'erreur</returns>
+        ''' <remarks></remarks>
+        Public Function DeleteTemplate(ByVal IdSrv As String, Template As Telecommande.Template) As String Implements IHoMIDom.DeleteTemplate
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                End If
+
+                Dim MyPath As String = _MonRepertoire & "\templates\"
+                Dim _Fichier As String = MyPath & Template.Name & ".xml"
+
+                If IO.File.Exists(_Fichier) = False Then
+                    Return "Le template " & Template.Name & ".xml n'existe pas!"
+                Else
+                    IO.File.Delete(_Fichier)
+                End If
+
+                Return "0"
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveTemplate", "Erreur : " & ex.Message)
+                Return ex.Message
+            End Try
+        End Function
+
 
         ''' <summary>
         ''' Efface la partie graphique du template
@@ -9091,6 +9120,56 @@ Namespace HoMIDom
                 Return "Erreur lors du traitement de la fonction TelecommandeSendCommand: " & ex.Message
             End Try
         End Function
+
+        ''' <summary>
+        ''' Exporte le template vers une destination
+        ''' </summary>
+        ''' <param name="IdSrv">Id du serveur</param>
+        ''' <returns>le fichier sous format text si ok sinon message d'erreur commençant par ERREUR</returns>
+        ''' <remarks></remarks>
+        Public Function ExportTemplateMultimedia(ByVal IdSrv As String, Template As Telecommande.Template) As String Implements IHoMIDom.ExportTemplateMultimedia
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return 99
+                End If
+
+                Dim retour As String
+                Dim SR As New StreamReader(Template.File)
+                retour = SR.ReadToEnd()
+                SR.Close()
+                Return retour
+            Catch ex As Exception
+                Return "ERREUR lors de l'exportation du fichier de template: " & ex.Message
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Importe un fichier de Template depuis une source
+        ''' </summary>
+        ''' <param name="Source">chemin + fichier (ww.xml)</param>
+        ''' <returns>"0" si ok sinon message d'erreur</returns>
+        ''' <remarks></remarks>
+        Public Function ImportTemplateMultimedia(ByVal IdSrv As String, Template As Telecommande.Template) As String Implements IHoMIDom.ImportTemplateMultimedia
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return "L'Id du serveur est incorrect!"
+                End If
+
+                If IO.File.Exists(Template.File) = False Then
+                    Return "Le serveur n'a pas trouvé le fichier de template !"
+                End If
+
+                'sauvegarde de l'ancien fichier sous .old
+                IO.File.Copy(Template.File, Template.File.Replace("xml", "old"), True)
+                IO.File.Copy(Template.File, _MonRepertoire & "\templates, True")
+
+                Return "0"
+            Catch ex As Exception
+                Return "Erreur lors de l'importation du fichier de config: " & ex.Message
+            End Try
+        End Function
+
+
 #End Region
 
 #Region "Log"

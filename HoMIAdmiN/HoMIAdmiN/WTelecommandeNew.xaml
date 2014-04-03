@@ -637,7 +637,7 @@
     <Grid x:Name="Layout_root" Margin="2" DataContext="{Binding Source={StaticResource ImageBrushDataSource}}">
    
         <StackPanel Orientation="Horizontal">
-            <StackPanel Name="StkCde" HorizontalAlignment="Left" MaxWidth="275">
+            <StackPanel Name="StkCde" HorizontalAlignment="Left" MaxWidth="875">
                 
                 <Label Content="Universal Driver" Foreground="White" FontStyle="Italic" FontWeight="SemiBold" />
                 <Expander Name="ExpdProperty" Header="Propriétés" Foreground=" White" IsExpanded="True">
@@ -645,8 +645,20 @@
                         <StackPanel Orientation="Horizontal" >
                             <Label Content="Template:" Width="75" Foreground="White" />
                              <ComboBox Width="150" Name="cbTemplate" />
-                                <Button Name="BtnNewTemplate" Width="25" Margin="2" Height="25" Content="+" Foreground="White" Template="{DynamicResource GlassButton}"/>
-                         </StackPanel>
+                                <Button Name="BtnNewTemplate" Width="25" Margin="2" Height="25" Foreground="White" Template="{DynamicResource GlassButton}">
+                                    <Image Source="/HoMIAdmiN;component/Images/ajouter_32.png" />
+                                </Button> 
+                                <Button Name="BtnDeleteTemplate" Width="25" Margin="2" Height="25" Foreground="White" Template="{DynamicResource GlassButton}" Visibility="Collapsed">
+                                    <Image Source="/HoMIAdmiN;component/Images/Supprimer_32.png" />
+                                </Button>
+                            <Button Name="BtnImportTemplate" Width="25" Margin="2" Height="25" Foreground="White" Template="{DynamicResource GlassButton}" Visibility="Collapsed">
+                                <Image Source="/HoMIAdmiN;component/Images/Import_32.png" />
+                            </Button>
+                            <Button Name="BtnExportTemplate" Width="25" Margin="2" Height="25" Foreground="White" Template="{DynamicResource GlassButton}" Visibility="Collapsed">
+                                <Image Source="/HoMIAdmiN;component/Images/Export_32.png" />
+                            </Button>
+                        </StackPanel>
+                        
                         <StackPanel Orientation="Horizontal" Name="StkTplBase" Visibility="Collapsed" >
                           <!--<Label Name="lbltplbase" Width="75" Content="Base:" Foreground="White"  />
                          <ComboBox Width="90" Name="cbBase" SelectedIndex="0">

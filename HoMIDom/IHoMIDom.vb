@@ -1210,6 +1210,24 @@ Namespace HoMIDom
 
 #Region "Telecommande"
         ''' <summary>
+        ''' Exporter un template multimedia
+        ''' </summary>
+        ''' <param name="IdSrv"></param>
+        ''' <param name="Template"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function ExportTemplateMultimedia(ByVal IdSrv As String, Template As Telecommande.Template) As String
+
+        ''' <summary>
+        ''' Importer un template multimedia
+        ''' </summary>
+        ''' <param name="IdSrv"></param>
+        ''' <param name="Template"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function ImportTemplateMultimedia(ByVal IdSrv As String, Template As Telecommande.Template) As String
+
+        ''' <summary>
         ''' Retourne la liste des templates télécommande (fichier xml), présents dans le répertoire templates
         ''' </summary>
         ''' <returns>List of Templates</returns>
@@ -1248,6 +1266,15 @@ Namespace HoMIDom
         ''' <returns>O si ok sinon message d'erreur</returns>
         ''' <remarks></remarks>
         <OperationContract()> Function SaveTemplate(ByVal IdSrv As String, Template As Telecommande.Template) As String
+
+        ''' <summary>
+        ''' Supprimer un template donné
+        ''' </summary>
+        ''' <param name="IdSrv">Id du Serveur</param>
+        ''' <param name="Template">Nom du template</param>
+        ''' <returns>O si ok sinon message d'erreur</returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function DeleteTemplate(ByVal IdSrv As String, Template As Telecommande.Template) As String
 
         ''' <summary>
         ''' Demande au device d'envoyer une commande (telecommande) à son driver

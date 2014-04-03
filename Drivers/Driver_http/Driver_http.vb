@@ -476,31 +476,39 @@ Imports System.Xml
 
             Select Case Objet.Type
                 Case "CONTACT"
-                    If Trim(UCase(Objet.Modele)) = "IPX800" Then
-                        Dim idx As Integer = CInt(Objet.Adresse1)
-                        If idx < 0 Or idx > 7 Then
-                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 0 et 7 pour une entrée")
-                            Exit Sub
-                        End If
-                        Dim url As String = "http://" & Objet.Adresse2
-                        Dim elmt As String = "btn" & idx
-                        Objet.Value = GET_IPX800(url, elmt)
+                    If String.IsNullOrEmpty(Trim(UCase(Objet.Modele))) Then
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le modèle du composant de type CONTACT n'a pas été renseigné (ex: IPX800)!")
                     Else
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le type CONTACT n'est pas géré par " & Objet.Modele)
+                        If Trim(UCase(Objet.Modele)) = "IPX800" Then
+                            Dim idx As Integer = CInt(Objet.Adresse1)
+                            If idx < 0 Or idx > 7 Then
+                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 0 et 7 pour une entrée")
+                                Exit Sub
+                            End If
+                            Dim url As String = "http://" & Objet.Adresse2
+                            Dim elmt As String = "btn" & idx
+                            Objet.Value = GET_IPX800(url, elmt)
+                        Else
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le type CONTACT n'est pas géré par " & Objet.Modele)
+                        End If
                     End If
                 Case "APPAREIL"
-                    If Trim(UCase(Objet.Modele)) = "IPX800" Then
-                        Dim idx As Integer = CInt(Objet.Adresse1)
-                        idx = idx - 1
-                        If idx < 0 Or idx > 7 Then
-                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 1 et 8 pour une sortie")
-                            Exit Sub
-                        End If
-                        Dim url As String = "http://" & Objet.Adresse2
-                        Dim elmt As String = "led" & idx
-                        Objet.Value = GET_IPX800(url, elmt)
+                    If String.IsNullOrEmpty(Trim(UCase(Objet.Modele))) Then
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le modèle du composant de type APPAREIL n'a pas été renseigné (ex: IPX800)!")
                     Else
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le type APPAREIL n'est pas géré par " & Objet.Modele)
+                        If Trim(UCase(Objet.Modele)) = "IPX800" Then
+                            Dim idx As Integer = CInt(Objet.Adresse1)
+                            idx = idx - 1
+                            If idx < 0 Or idx > 7 Then
+                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 1 et 8 pour une sortie")
+                                Exit Sub
+                            End If
+                            Dim url As String = "http://" & Objet.Adresse2
+                            Dim elmt As String = "led" & idx
+                            Objet.Value = GET_IPX800(url, elmt)
+                        Else
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le type APPAREIL n'est pas géré par " & Objet.Modele)
+                        End If
                     End If
                 Case "GENERIQUEVALUE"
                     If Trim(UCase(Objet.Modele)) = "IPX800" Then
@@ -634,7 +642,7 @@ Imports System.Xml
                         Select Case Trim(UCase(Objet.modele))
                             Case "IPX800"
                                 Dim idx As Integer = CInt(Objet.Adresse1)
-                                If idx < 0 Or idx > 7 Then
+                                If idx < 0 Or idx > 8 Then
                                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 0 et 7 pour une sortie")
                                     Exit Sub
                                 End If

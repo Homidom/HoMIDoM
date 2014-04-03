@@ -65,7 +65,7 @@
         img_config.MouseLeftButtonDown, img_config_log.MouseLeftButtonDown, _
         img_config_sauvegarder.MouseLeftButtonDown, img_aide.MouseLeftButtonDown, img_multimedia.MouseDown, _
         img_quitter.MouseLeftButtonDown, img_quitter_start.MouseLeftButtonDown, img_quitter_stop.MouseLeftButtonDown, img_composant_gerer_nvx.MouseLeftButtonDown, _
-        img_histo_import.MouseLeftButtonDown
+        img_histo_import.MouseLeftButtonDown, img_multimedia_template.MouseLeftButtonDown
         Try
             If e.ClickCount = 1 Then RaiseEvent menu_autre(sender.tag)
         Catch ex As Exception

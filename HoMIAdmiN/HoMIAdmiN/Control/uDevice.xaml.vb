@@ -539,7 +539,7 @@ Partial Public Class uDevice
                 StkModel.Visibility = Windows.Visibility.Visible
                 If CbType.SelectedValue = "MULTIMEDIA" Then
                     StkDriver.Visibility = Windows.Visibility.Collapsed
-
+                    ImgEditTemplate.Visibility = Windows.Visibility.Visible
                     LabelModele.Content = "Template"
                     LabelModele.ToolTip = "Template à utiliser"
                     CBModele.ToolTip = "Template à utiliser"
@@ -1028,13 +1028,19 @@ Partial Public Class uDevice
                 CBModele.Visibility = Windows.Visibility.Visible
 
                 Dim idx As Integer = 0
-                For Each itm In CBModele.Items
-                    If itm.id = x.Modele Then
-                        CBModele.SelectedIndex = idx
-                        Exit For
-                    End If
-                    idx += 1
-                Next
+                If CBModele.Items IsNot Nothing And x IsNot Nothing Then
+                    For Each itm In CBModele.Items
+                        If itm.id IsNot Nothing Then
+                            If String.IsNullOrEmpty(x.Modele) = False Then
+                                If itm.id = x.Modele Then
+                                    CBModele.SelectedIndex = idx
+                                    Exit For
+                                End If
+                                idx += 1
+                            End If
+                        End If
+                    Next
+                End If
             Else
                 frm.Close()
             End If
@@ -1071,6 +1077,12 @@ Partial Public Class uDevice
                         TxtAdresse2.Text = "9600,0,8,1"
                 End Select
             End If
+        End If
+    End Sub
+
+    Private Sub CbAdresse1_KeyUp(sender As Object, e As System.Windows.Input.KeyEventArgs) Handles CbAdresse1.KeyUp
+        If CbAdresse1.Tag = "WEATHERMETEO" Then
+            TxtAdresse1.Text = CbAdresse1.Text
         End If
     End Sub
 

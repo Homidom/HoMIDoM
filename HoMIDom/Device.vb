@@ -4,6 +4,7 @@ Imports HoMIDom.HoMIDom.Server
 Imports System.Reflection
 Imports System.CodeDom.Compiler
 Imports Microsoft.VisualBasic
+Imports System.Globalization
 
 Namespace HoMIDom
     '***********************************************
@@ -2791,7 +2792,7 @@ Namespace HoMIDom
             Dim _ConsigneVACANCES As Double
             Dim _ConsigneMANUEL As Double
             Dim _CapteursTempInt As String 'Capteurs Temperature intérieur
-            Dim CapteursTempExt As String 'Capteurs Temperature extérieur
+            Dim _CapteursTempExt As String 'Capteurs Temperature extérieur
             Dim _SortiesChaud As String 'Liste des Sorties à activer/désactiver pour refroidir séparées par ;
             Dim _EtatThermosat As EtatThermo = EtatThermo.NA 'Etat de sortie du thermostat (aucune, chauffe, froid)
             Dim _TimerForce As Integer = 15 'Durée pendant laquelle on reste en mode forcé après on reviens automatiquement en mode AUTO
@@ -2823,6 +2824,226 @@ Namespace HoMIDom
                 Froid = 2
             End Enum
 
+            Public ReadOnly Property TempIntNow As Double  'température intérieure actuelle
+                Get
+                    Return _TempIntNow
+                End Get
+            End Property
+
+            Public ReadOnly Property TempExtNow As Double  'température extérieure actuelle
+                Get
+                    Return _TempExtNow
+                End Get
+            End Property
+
+            Public Property Hysteresis As Integer  'Hysteresis
+                Get
+                    Return _Hysteresis
+                End Get
+                Set(value As Integer)
+                    If value < 0 Then value = 0
+                    If value > 5 Then value = 5
+
+                    _Hysteresis = CInt(value.ToString("0.0", CultureInfo.InvariantCulture))
+                End Set
+            End Property
+
+            Public Property Consigne As Integer 'Temperature de consigne du mode actuelle
+                Get
+                    Return _Consigne
+                End Get
+                Set(value As Integer)
+                    If value < 0 Then value = 0
+                    If value > 30 Then value = 30
+                    _Consigne = CInt(value.ToString("00", CultureInfo.InvariantCulture))
+                End Set
+            End Property
+
+            Public Property Mode As TypeMode 'Mode de consigne actuel (CONFORT/ECO/HORSGEL/JOUR/NUIT/VACANCES/MANUEL)
+                Get
+                    Return _Mode
+                End Get
+                Set(value As TypeMode)
+                    _Mode = value
+                End Set
+            End Property
+
+            Public Property ModeDeConsigne As ModeConsigne
+                Get
+                    Return _ModeConsigne
+                End Get
+                Set(value As ModeConsigne)
+                    _ModeConsigne = value
+                End Set
+            End Property
+
+            Public Property ConsigneConfort As Double
+                Get
+                    Return _ConsigneConfort
+                End Get
+                Set(value As Double)
+                    If value < 0 Then value = 0
+                    If value > 30 Then value = 30
+                    _ConsigneConfort = CDbl(value.ToString("00", CultureInfo.InvariantCulture))
+                End Set
+            End Property
+
+            Public Property ConsigneECO As Double
+                Get
+                    Return _ConsigneECO
+                End Get
+                Set(value As Double)
+                    If value < 0 Then value = 0
+                    If value > 30 Then value = 30
+                    _ConsigneECO = CDbl(value.ToString("00", CultureInfo.InvariantCulture))
+                End Set
+            End Property
+
+            Public Property ConsigneHORSGEL As Double
+                Get
+                    Return _ConsigneHORSGEL
+                End Get
+                Set(value As Double)
+                    If value < 0 Then value = 0
+                    If value > 30 Then value = 30
+                    _ConsigneHORSGEL = CDbl(value.ToString("00", CultureInfo.InvariantCulture))
+                End Set
+            End Property
+
+            Public Property ConsigneJOUR As Double
+                Get
+                    Return _ConsigneJOUR
+                End Get
+                Set(value As Double)
+                    If value < 0 Then value = 0
+                    If value > 30 Then value = 30
+                    _ConsigneJOUR = CDbl(value.ToString("00", CultureInfo.InvariantCulture))
+                End Set
+            End Property
+
+            Public Property ConsigneNUIT As Double
+                Get
+                    Return _ConsigneNUIT
+                End Get
+                Set(value As Double)
+                    If value < 0 Then value = 0
+                    If value > 30 Then value = 30
+                    _ConsigneNUIT = CDbl(value.ToString("00", CultureInfo.InvariantCulture))
+                End Set
+            End Property
+
+            Public Property ConsigneVACANCES As Double
+                Get
+                    Return _ConsigneVACANCES
+                End Get
+                Set(value As Double)
+                    If value < 0 Then value = 0
+                    If value > 30 Then value = 30
+                    _ConsigneVACANCES = CDbl(value.ToString("00", CultureInfo.InvariantCulture))
+                End Set
+            End Property
+
+            Public Property ConsigneMANUEL As Double
+                Get
+                    Return _ConsigneMANUEL
+                End Get
+                Set(value As Double)
+                    If value < 0 Then value = 0
+                    If value > 30 Then value = 30
+                    _ConsigneMANUEL = CDbl(value.ToString("00", CultureInfo.InvariantCulture))
+                End Set
+            End Property
+
+            Public Property CapteursTempInt As String 'Capteurs Temperature intérieur
+                Get
+                    Return _CapteursTempInt
+                End Get
+                Set(value As String)
+                    _CapteursTempInt = value
+                End Set
+            End Property
+
+            Public Property CapteursTempExt As String 'Capteurs Temperature extérieur
+                Get
+                    Return _CapteursTempExt
+                End Get
+                Set(value As String)
+                    _CapteursTempExt = value
+                End Set
+            End Property
+
+            Public Property SortiesChaud As String 'Liste des Sorties à activer/désactiver pour refroidir séparées par ;
+                Get
+                    Return _SortiesChaud
+                End Get
+                Set(value As String)
+                    _SortiesChaud = value
+                End Set
+            End Property
+
+            Public Property EtatThermosat As EtatThermo  'Etat de sortie du thermostat (aucune, chauffe, froid)
+                Get
+                    Return _EtatThermosat
+                End Get
+                Set(value As EtatThermo)
+                    _EtatThermosat = value
+                End Set
+            End Property
+
+            Public Property TimerForce As Integer  'Durée pendant laquelle on reste en mode forcé après on reviens automatiquement en mode AUTO
+                Get
+                    Return _TimerForce
+                End Get
+                Set(value As Integer)
+                    If value < 0 Then value = 0
+                    If value > 60 Then value = 60
+                    _TimerForce = CInt(value.ToString("00", CultureInfo.InvariantCulture))
+                End Set
+            End Property
+
+            Public Property PeriodeCalcul As Integer 'Durée(en seconde) entre deux calculs de puissance de chauffe (3600 par défaut)
+                Get
+                    Return _PeriodeCalcul
+                End Get
+                Set(value As Integer)
+                    If value < 0 Then value = 0
+                    If value > 3600 Then value = 3600
+                    _PeriodeCalcul = CInt(value.ToString("0000", CultureInfo.InvariantCulture))
+                End Set
+            End Property
+
+            Public Property PowerMin As Integer  '% minimal de chauffage si le thermostat considère qu’il est nécessaire de chauffer (en fonction de la température intérieure et extérieure)
+                Get
+                    Return _PowerMin
+                End Get
+                Set(value As Integer)
+                    If value < 0 Then value = 0
+                    If value > 100 Then value = 100
+                    _PowerMin = value
+                End Set
+            End Property
+
+            Public Property C As Double  'Valeur de calcul à mulitplier entre la différence entre la consigne et le température intérieure actuelle
+                Get
+                    Return _C
+                End Get
+                Set(value As Double)
+                    If value < 0 Then value = 0
+                    If value > 1 Then value = 1
+                    _C = CDbl(value.ToString("0.0", CultureInfo.InvariantCulture))
+                End Set
+            End Property
+
+            Public Property T As Double  'Valeur de calcul à mulitplier entre la différence entre la consigne et le température extérieure
+                Get
+                    Return _T
+                End Get
+                Set(value As Double)
+                    If value < 0 Then value = 0
+                    If value > 0.03 Then value = 0.03
+                    _T = CDbl(value.ToString("0.000", CultureInfo.InvariantCulture))
+                End Set
+            End Property
 
         End Class
     End Class
