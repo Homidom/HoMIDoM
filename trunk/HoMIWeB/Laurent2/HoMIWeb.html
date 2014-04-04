@@ -11,11 +11,12 @@
 		
 		
 		<!-- jQuery (necessary for Bootstrap's JavaScript plugins) --></!-->
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+		<!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>-->
+		<script src="js/jquery-1.11.0.min.js"></script>
 		<script src="js/bootstrap.js"></script>	
 		<script src="js/bootstrap-slider.js"></script>	
 		<script src="js/jquery.jsonp-2.4.0.min.js"></script>
-		<script src="js/jquery.signalR.min.js"></script>
+		<script src="js/jquery.signalr.min.js"></script>
 		
 		<script src="http://"+ServerName+":"+PortActuel+"/live/signalr/hubs/"></script>		
 	
@@ -72,14 +73,14 @@
 			</div>			
             <div class="col-md-7 col-lg-7">
 				<div class="navbar-text navbar-left">
-					<img  class="LogoHeader" alt="Information sur l'image" src="./images/Rond_64x64.png"/>   
+					<img  class="LogoHeader" alt="Information sur l'image" src="./images/rond_64x64.png"/>   
 					<h1> HoMIDoM - <small> Le système complet de domotique pour la maison</small></h1>
 				</div>
 			</div>
 			<div class="col-md-3 col-lg-3">
 				<span class="InfoSoleil" >
-					<span id="LeverSoleil"><div class="align_image"><img src="./Images/icones/01.png" /></div><p id="HeureLever">  :  </p></span>	
-					<span id="CoucherSoleil"><div class="align_image"><img src="./Images/icones/36.png" /></div><p id="HeureCoucher">  :  </p></span>	
+					<span id="LeverSoleil"><div class="align_image"><img src="./images/icones/01.png" /></div><p id="HeureLever">  :  </p></span>	
+					<span id="CoucherSoleil"><div class="align_image"><img src="./images/icones/36.png" /></div><p id="HeureCoucher">  :  </p></span>	
 					<span id="HeureTest"> :  </span>		
 			</span>	
 			</div>
@@ -206,7 +207,7 @@
 				ListZones = data;
 
 				$.each(ListZones, function(index, zone) {
-					items.push('<a href="#" class="list-group-item" onclick="AfficheZone(\''+zone._Id+'\');"><img src="images/icones/Defaut.png">' + zone._Name + '</a>');
+					items.push('<a href="#" class="list-group-item" onclick="AfficheZone(\''+zone._Id+'\');"><img src="images/icones/defaut.png">' + zone._Name + '</a>');
 				});
 
 				$('<div/>', {
@@ -219,7 +220,7 @@
 			function loadMacros(data) {
 				var items = [];
 				$.each(data, function(index, macro) {
-					items.push('<article class="align_macro"><h4>'+ macro._Nom + '</h4><div class="align_image"><img src="./images/icones/Macro_64.png" alt="" /><button class="btn btn-danger btn-lg" onClick="executeMacro(\''+macro._ID+'\')"> Lancer </button></div></article> ' );
+					items.push('<article class="align_macro"><h4>'+ macro._Nom + '</h4><div class="align_image"><img src="./images/icones/macro_64.png" alt="" /><button class="btn btn-danger btn-lg" onClick="executeMacro(\''+macro._ID+'\')"> Lancer </button></div></article> ' );
 					
 				});
 				$('<ul/>', {
@@ -283,7 +284,7 @@
 									{
 										// Widget Météo
 										if (ListDevices[a]._Type==17) {
-										items.push('<section id="WidMeteo"><h1>'+ListDevices[a]._Name + '</h1><h2>Actuellement</h2><div class="MeteoJour" title="Méteo actuelle"><article class="Info"><img src="./Images/meteo/'+ ListDevices[a]._IconActuel +'.png" /><h3>'+ListDevices[a]._JourToday + '</h3></article><article class="Info"><img src="./Images/meteo/temperature-defaut.png" /><h3>'+ListDevices[a]._TempActuel+ '°</h3></article><article class="Info"><img src="./Images/meteo/humidite-defaut.png" /><h3>'+ ListDevices[a]._HumActuel + '%</h3></article><article class="Info"><img src="./Images/meteo/vitessevent-defaut.png" /><h3>'+ListDevices[a]._VentActuel+ '</h3></article></div><div class="MeteoPrev" title="Prévisions"><article class="Prev"><img src="./Images/meteo/'+ListDevices[a]._IconActuel + '.png" /><h4>'+ListDevices[a]._JourToday + '</h4><span title="Min" class="TempMin">'+ ListDevices[a]._MinToday + '°</span><span title="Max" class="TempMax">'+ ListDevices[a]._MaxToday + '°</span></article><article class="Prev"><img src="./Images/meteo/'+ ListDevices[a]._IconJ1 + '.png" /><h4>'+ ListDevices[a]._JourJ1 + '</h4><span title="Min" class="TempMin">'+ ListDevices[a]._MinJ1 + '°</span><span title="Max" class="TempMax">'+ ListDevices[a]._MaxJ1 + '°</span></article><article class="Prev"><img src="./Images/meteo/'+ ListDevices[a]._IconJ2 + '.png" /><h4>'+ ListDevices[a]._JourJ2 + '</h4><span title="Min" class="TempMin">'+ ListDevices[a]._MinJ2 + '°</span><span title="Max" class="TempMax">'+ ListDevices[a]._MaxJ2 + '°</span></article><article class="Prev"><img src="./Images/meteo/'+ ListDevices[a]._IconJ3 + '.png" /><h4>'+ ListDevices[a]._JourJ3 + '</h4><span title="Min" class="TempMin">'+ ListDevices[a]._MinJ3 + '°</span><span title="Max" class="TempMax">'+ ListDevices[a]._MaxJ3 + '°</span></article></div>');
+										items.push('<section id="WidMeteo"><h1>'+ListDevices[a]._Name + '</h1><h2>Actuellement</h2><div class="MeteoJour" title="Méteo actuelle"><article class="Info"><img src="./images/meteo/'+ ListDevices[a]._IconActuel +'.png" /><h3>'+ListDevices[a]._JourToday + '</h3></article><article class="Info"><img src="./images/meteo/temperature-defaut.png" /><h3>'+ListDevices[a]._TempActuel+ '°</h3></article><article class="Info"><img src="./images/meteo/humidite-defaut.png" /><h3>'+ ListDevices[a]._HumActuel + '%</h3></article><article class="Info"><img src="./images/meteo/vitessevent-defaut.png" /><h3>'+ListDevices[a]._VentActuel+ '</h3></article></div><div class="MeteoPrev" title="Prévisions"><article class="Prev"><img src="./images/meteo/'+ListDevices[a]._IconActuel + '.png" /><h4>'+ListDevices[a]._JourToday + '</h4><span title="Min" class="TempMin">'+ ListDevices[a]._MinToday + '°</span><span title="Max" class="TempMax">'+ ListDevices[a]._MaxToday + '°</span></article><article class="Prev"><img src="./images/meteo/'+ ListDevices[a]._IconJ1 + '.png" /><h4>'+ ListDevices[a]._JourJ1 + '</h4><span title="Min" class="TempMin">'+ ListDevices[a]._MinJ1 + '°</span><span title="Max" class="TempMax">'+ ListDevices[a]._MaxJ1 + '°</span></article><article class="Prev"><img src="./images/meteo/'+ ListDevices[a]._IconJ2 + '.png" /><h4>'+ ListDevices[a]._JourJ2 + '</h4><span title="Min" class="TempMin">'+ ListDevices[a]._MinJ2 + '°</span><span title="Max" class="TempMax">'+ ListDevices[a]._MaxJ2 + '°</span></article><article class="Prev"><img src="./images/meteo/'+ ListDevices[a]._IconJ3 + '.png" /><h4>'+ ListDevices[a]._JourJ3 + '</h4><span title="Min" class="TempMin">'+ ListDevices[a]._MinJ3 + '°</span><span title="Max" class="TempMax">'+ ListDevices[a]._MaxJ3 + '°</span></article></div>');
 										items.push('</section>');		
 										} 
 										else {

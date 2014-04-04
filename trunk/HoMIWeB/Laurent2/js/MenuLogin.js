@@ -34,7 +34,7 @@ function ReadSites(){
 			key = localStorage.key(i);
 			InfosServeur = JSON.parse(localStorage.getItem(key));
 			ListeServeurs.push(InfosServeur);
-			document.getElementById('ListeServeurs').innerHTML += '<div><img src="Images/icones/Home_128.png" onclick="AfficheSite(' + i +')" /><span>'+ InfosServeur.SERVER + '</span></div>';
+			document.getElementById('ListeServeurs').innerHTML += '<div><img src="images/icones/home_128.png" onclick="AfficheSite(' + i +')" /><span>'+ InfosServeur.SERVER + '</span></div>';
 			document.getElementById('ListeServeurs').style.display = 'inline' ;
 		}
 	}
