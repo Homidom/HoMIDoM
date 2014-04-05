@@ -1088,7 +1088,8 @@ Partial Public Class uDevice
 
     Private Sub CbAdresse1_SelectionChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbAdresse1.SelectionChanged
         If CbAdresse1.Tag = "WEATHERMETEO" Then
-            TxtAdresse1.Text = CbAdresse1.SelectedValue
+            TxtAdresse1.Text = CbAdresse1.SelectedValue.ToString
+            MsgBox("x" & CbAdresse1.SelectedValue.ToString & "x")
         End If
     End Sub
 

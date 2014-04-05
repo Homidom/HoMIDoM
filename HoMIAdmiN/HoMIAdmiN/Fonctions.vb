@@ -266,7 +266,7 @@ Module Fonctions
                 If String.IsNullOrEmpty(Line) = False Then
                     Dim tab() As String = Line.Split(";")
                     If tab.Count = 2 Then
-                        Retour.Add(tab(0), tab(1))
+                        Retour.Add(tab(0).Replace(vbCr, "").Replace(vbLf, ""), tab(1).Replace(vbCr, "").Replace(vbLf, ""))
                     End If
                 End If
             Next
