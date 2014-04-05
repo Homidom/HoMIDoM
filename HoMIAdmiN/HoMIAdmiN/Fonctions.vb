@@ -261,8 +261,17 @@ Module Fonctions
     Public Function GetWeatherCityID() As Dictionary(Of String, String)
         Try
             Dim Retour As New Dictionary(Of String, String)
-            Dim lines() As String = My.Resources.WeatherCityID.Split(System.Environment.NewLine)
-            For Each Line In lines
+            Dim linesFR() As String = My.Resources.WeatherCityID_FR.Split(System.Environment.NewLine)
+            For Each Line In linesFR
+                If String.IsNullOrEmpty(Line) = False Then
+                    Dim tab() As String = Line.Split(";")
+                    If tab.Count = 2 Then
+                        Retour.Add(tab(0).Replace(vbCr, "").Replace(vbLf, ""), tab(1).Replace(vbCr, "").Replace(vbLf, ""))
+                    End If
+                End If
+            Next
+            Dim linesBE() As String = My.Resources.WeatherCityID_BE.Split(System.Environment.NewLine)
+            For Each Line In linesBE
                 If String.IsNullOrEmpty(Line) = False Then
                     Dim tab() As String = Line.Split(";")
                     If tab.Count = 2 Then
