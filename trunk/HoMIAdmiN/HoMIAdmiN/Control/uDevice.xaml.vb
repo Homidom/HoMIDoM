@@ -327,7 +327,7 @@ Partial Public Class uDevice
                     CbAdresse1.DisplayMemberPath = "Value"
                     CbAdresse1.SelectedValuePath = "Key"
 
-                    TxtAdresse1.Visibility = Windows.Visibility.Collapsed
+                    'TxtAdresse1.Visibility = Windows.Visibility.Collapsed
                     CbAdresse1.Visibility = Windows.Visibility.Visible
                 Else
                     CbAdresse1.Text = ""
@@ -1082,34 +1082,35 @@ Partial Public Class uDevice
 
     Private Sub CbAdresse1_KeyUp(sender As Object, e As System.Windows.Input.KeyEventArgs) Handles CbAdresse1.KeyUp
         If CbAdresse1.Tag = "WEATHERMETEO" Then
-            TxtAdresse1.Text = CbAdresse1.Text
+             If CbAdresse1.Text <> "" And Left(CbAdresse1.SelectedValue, 4) <> "XXXX" Then TxtAdresse1.Text = CbAdresse1.SelectedValue
         End If
     End Sub
 
     Private Sub CbAdresse1_SelectionChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbAdresse1.SelectionChanged
         If CbAdresse1.Tag = "WEATHERMETEO" Then
-            TxtAdresse1.Text = CbAdresse1.SelectedValue.ToString
-            MsgBox("x" & CbAdresse1.SelectedValue.ToString & "x")
+            If CbAdresse1.Text <> "" And Left(CbAdresse1.SelectedValue, 4) <> "XXXX" Then TxtAdresse1.Text = CbAdresse1.SelectedValue
         End If
     End Sub
 
     Private Sub TxtAdresse1_TextChanged(sender As System.Object, e As System.Windows.Controls.TextChangedEventArgs) Handles TxtAdresse1.TextChanged
         If CbAdresse1.Tag = "WEATHERMETEO" Then
-            Dim flagTrouv As Boolean = False
-            Dim idx As Integer = 0
+            If TxtAdresse1.Text.Trim.Length >= 8 Then 'on cherche dans la liste quand on a tapait l'ID complet
+                Dim flagTrouv As Boolean = False
+                Dim idx As Integer = 0
 
-            For Each item In CbAdresse1.Items
-                If TxtAdresse1.Text.ToUpper.Trim = item.key.ToString.ToUpper.Trim Then
-                    flagTrouv = True
-                    Exit For
+                For Each item In CbAdresse1.Items
+                    If TxtAdresse1.Text.ToUpper.Trim = item.key.ToString.ToUpper.Trim Then
+                        flagTrouv = True
+                        Exit For
+                    End If
+                    idx += 1
+                Next
+
+                If flagTrouv Then
+                    CbAdresse1.SelectedIndex = idx
+                Else
+                    CbAdresse1.Text = ""
                 End If
-                idx += 1
-            Next
-
-            If flagTrouv Then
-                CbAdresse1.SelectedIndex = idx
-            Else
-                CbAdresse1.Text = TxtAdresse1.Text
             End If
         End If
     End Sub

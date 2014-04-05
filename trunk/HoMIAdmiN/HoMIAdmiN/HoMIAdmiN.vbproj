@@ -613,7 +613,10 @@
     <Resource Include="Images\clear-left.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\WeatherCityID.txt" />
+    <None Include="Resources\WeatherCityID_FR.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\WeatherCityID_BE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
