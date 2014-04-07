@@ -1,3 +1,4 @@
+XXXX0000;-------- FRANCE ---------
 FRXX1438;Abancourt
 FRXX0111;Abbeville
 FRXX1570;Ablon-sur-Seine
