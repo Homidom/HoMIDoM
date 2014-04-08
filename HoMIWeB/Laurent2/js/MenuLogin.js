@@ -76,18 +76,20 @@ function AjouterSite(){
 
 	
 	var ServerName = document.getElementById('ServerName').value;
-	if (!ServerName=="") {	
+	var ServerID = document.getElementById('ServerID').value;
+	var ServerIP = document.getElementById('ServerIP').value;
+	var ServerPort = document.getElementById('ServerPort').value;
+	if (!ServerName=="" && !ServerID=="" && !ServerIP=="" && !ServerPort=="") {
 		var NomSite = "Site"+"::"+ Cpt ;
-	
 		InfosServeur.NomSite    = NomSite;
-		InfosServeur.SERVER    = document.getElementById('ServerName').value;
-		InfosServeur.IDSERVER  = document.getElementById('ServerID').value;
-		InfosServeur.AdresseIP = document.getElementById('ServerIP').value;
-		InfosServeur.Port      = document.getElementById('ServerPort').value;	
-		localStorage.setItem(NomSite, JSON.stringify(InfosServeur));	
-		ReadSites();  	
+		InfosServeur.SERVER    = ServerName;
+		InfosServeur.IDSERVER  = ServerID;
+		InfosServeur.AdresseIP = ServerIP;
+		InfosServeur.Port      = ServerPort;
+		localStorage.setItem(NomSite, JSON.stringify(InfosServeur));
+		ReadSites(); 
 	}
 	else {
-		alert('Veuillez saisir les informations ! ');
+		alert('Veuillez saisir tous les champs ! ');
 	}
 }  

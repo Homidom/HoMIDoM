@@ -674,12 +674,12 @@ Imports Driver_Zibase.ZibaseDllvb
                     zba.SendCommand("", adresse, ZiBase.State.STATE_OFF, 0, protocole, 1)
                     valeur = CStr(0)
                 Case "DIM"
-                    If UCase(Modele(0)) <> "CHACON" Then
-                        zba.SendCommand("", adresse, ZiBase.State.STATE_DIM, 0, protocole, 1)
-                        valeur = CStr(100)
-                    Else
+                    If UCase(Modele(0)) = "CHACON" Or UCase(Modele(0)) = "ZWAVE" Then
                         zba.SendCommand("", adresse, ZiBase.State.STATE_DIM, iDim, protocole, 1)
                         valeur = CStr(iDim)
+                    Else
+                        zba.SendCommand("", adresse, ZiBase.State.STATE_DIM, 0, protocole, 1)
+                        valeur = CStr(100)
                     End If
                 Case "OUVERTURE"
                     zba.SendCommand("", adresse, ZiBase.State.STATE_DIM, iDim, protocole, 1)
