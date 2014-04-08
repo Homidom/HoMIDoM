@@ -159,10 +159,14 @@ Public Class uHisto
                     Dim series As New System.Windows.Forms.DataVisualization.Charting.Series(_namedevice & ": " & kvp.Value)
                     series.XValueType = ChartValueType.DateTime
                     Dim cnt As Integer = 0
+                    Dim valeur As String
                     For Each data As Historisation In result
                         'series.Points.AddXY(data.DateTime.ToString("G"), data.Value.Replace(",", "."))
                         'series.Points.AddXY(data.DateTime, data.Value.Replace(",", "."))
-                        series.Points.AddXY(data.DateTime, data.Value.Replace(System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator, "."))
+                        valeur = data.Value.Replace(System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator, ".")
+                        If valeur.ToUpper = "TRUE" Then valeur = 100
+                        If valeur.ToUpper = "FALSE" Then valeur = 0
+                        series.Points.AddXY(data.DateTime, valeur)
                         cnt += 1
                         If cnt > _MaxData Then Exit For
                     Next
