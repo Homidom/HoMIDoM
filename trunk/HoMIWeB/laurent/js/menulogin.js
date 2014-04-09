@@ -16,17 +16,18 @@ function ClickBouton(){
 
 // stocke tous les informations de site dans un tableau
 function ReadSites(){
-	  if (!window.localStorage){
-        return;
-    }
+	// Vide le tableau contenant la definition des sites
+ 	ListeServeurs.splice(0, ListeServeurs.length);
 	// Supprime tous les icones deja exitantes
 	v_div_parent = document.getElementById("ListeServeurs");
 	while (v_div_parent.firstChild) {
   		v_div_parent.removeChild(v_div_parent.firstChild);
 }
-	
-	var Cpt = localStorage.length; 
-	
+	if(typeof(Storage)!=="undifined"){
+		var Cpt = localStorage.length;
+	}
+		
+	//alert ("le compteur est de " + Cpt);
 	if  (Cpt)  {
 	
 	// REdessine toutes les icones
@@ -34,7 +35,7 @@ function ReadSites(){
 			key = localStorage.key(i);
 			InfosServeur = JSON.parse(localStorage.getItem(key));
 			ListeServeurs.push(InfosServeur);
-			document.getElementById('ListeServeurs').innerHTML += '<div><img src="images/icones/home_128.png" onclick="AfficheSite(' + i +')" /><span>'+ InfosServeur.SERVER + '</span></div>';
+			document.getElementById('ListeServeurs').innerHTML += '<div><img src="Images/icones/Home_128.png" onclick="AfficheSite(' + i +')" /><span>'+ InfosServeur.SERVER + '</span></div>';
 			document.getElementById('ListeServeurs').style.display = 'inline' ;
 		}
 	}
@@ -68,28 +69,26 @@ function SupprimeSite(){
 // enregistre les informations d'un site
 function AjouterSite(){
 	var InfosServeur = new Object();
+	var storage = window.localStorage;
 
-	if (!window.localStorage){
-        return;
-    }
-    var Cpt = localStorage.length;	
-
+	if(typeof(Storage)!=="undifined"){
+		var Cpt = storage.length;
+	}
+	
 	
 	var ServerName = document.getElementById('ServerName').value;
-	var ServerID = document.getElementById('ServerID').value;
-	var ServerIP = document.getElementById('ServerIP').value;
-	var ServerPort = document.getElementById('ServerPort').value;
-	if (!ServerName=="" && !ServerID=="" && !ServerIP=="" && !ServerPort=="") {
-		var NomSite = "Site"+"::"+ Cpt ;
+	if (!ServerName=="") {	
+		var NomSite = "Site"+"::"+ ListeServeurs.length ;
+	
 		InfosServeur.NomSite    = NomSite;
-		InfosServeur.SERVER    = ServerName;
-		InfosServeur.IDSERVER  = ServerID;
-		InfosServeur.AdresseIP = ServerIP;
-		InfosServeur.Port      = ServerPort;
-		localStorage.setItem(NomSite, JSON.stringify(InfosServeur));
-		ReadSites(); 
+		InfosServeur.SERVER    = document.getElementById('ServerName').value;
+		InfosServeur.IDSERVER  = document.getElementById('ServerID').value;
+		InfosServeur.AdresseIP = document.getElementById('ServerIP').value;
+		InfosServeur.Port      = document.getElementById('ServerPort').value;	
+		localStorage.setItem(NomSite, JSON.stringify(InfosServeur));	
+		ReadSites();  	
 	}
 	else {
-		alert('Veuillez saisir tous les champs ! ');
+		alert('Veuillez saisir les informations ! ');
 	}
 }  
