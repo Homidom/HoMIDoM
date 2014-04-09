@@ -1,31 +1,36 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
   <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> 
-    <title>Bootstrap 101 Template</title>
+    <title>Homiweb - Connexion</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/homidom.css" rel="stylesheet">
+    <link href="css/Homidom.css" rel="stylesheet">
 	
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-    <![endif]-->
+    
   <!-- Include Fonctions pour la gestion des menus -->
     <script src="js/menulogin.js"></script> 
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="js/jquery-1.11.0.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
 	</head>
   
-	
+  <body> 
 
-  
-  <body>  
+	<script type="text/javascript">
+	$(document).ready(function() {
+	// Tooltip
+			$('[data-toggle="tooltip"]').tooltip();
+	});
+	</script>  
+	
   <header>
 
 	<div class="page-header container">
-		<img id="monlogo" class="media-object pull-left" src="images/rond_64x64.png" alt="Homidom"/>
+		<img id="monlogo" class="media-object pull-left" src="images\Rond_64x64.png" alt="Homidom"/>
 		<h1 id="Titre">HomiWeb</h1>
 		<small>Le système complet de domotique</small>
 	</div>
@@ -40,22 +45,35 @@
 	
 	<div class="ListeChamp">
 		<form>
+		<script>
+			function onBlur(el) {
+					if (el.value == '') {
+					el.value = el.defaultValue;
+				}
+			}
+			function onFocus(el) {
+					if (el.value == el.defaultValue) {
+					el.value = '';
+				}
+			}
+		</script>
+
 			<div class="input-group">
-			  <span class="input-group-addon">Nom</span>
-			  <input type="text" class="form-control" placeholder="Nom du site " id="ServerName">
+			  <span class="input-group-addon"  >Nom</span>
+			  <input type="text" class="form-control" placeholder="Nom du site" id="ServerName" data-toggle="tooltip" data-placement="top" title="Par ex : Serveur de test">
 			</div>
 
 			<div class="input-group">
-			  <span class="input-group-addon">ID Server</span>
-			  <input type="text" class="form-control" placeholder="123456789" id="ServerID">
+			  <span class="input-group-addon" >ID Server</span>
+			  <input type="text" class="form-control" value="123456789" id="ServerID" onblur="onBlur(this)" onfocus="onFocus(this)" data-toggle="tooltip" data-placement="top" title="Valeur par défaut : 123456789" >
 			</div>
 			<div class="input-group">
-			  <span class="input-group-addon">Adresse IP</span>
-			  <input type="text" class="form-control" placeholder="AdresseIP ou nom ordinateur" id="ServerIP">
+			  <span class="input-group-addon" >Adresse IP</span>
+			  <input type="text" class="form-control"  id="ServerIP" placeholder="AdresseIP ou nom ordinateur" data-toggle="tooltip" data-placement="top" title="par ex : localhost 192.168.1.1">
 			</div>
 			<div class="input-group">
-			  <span class="input-group-addon">Port</span>
-			  <input type="text" class="form-control" placeholder="7999" id="ServerPort">
+			  <span class="input-group-addon" >Port</span>
+			  <input type="text" class="form-control"  id="ServerPort" value="7999" onblur="onBlur(this)" onfocus="onFocus(this)" data-toggle="tooltip" data-placement="top" title="valeur par défaut : 7999" >
 			</div>
 		</form>
 		<div class="action">
@@ -65,16 +83,6 @@
 			<button type="button" class="btn btn-default btn-lg"  onClick="SupprimeSite();" >
 			  <span class="glyphicon glyphicon glyphicon glyphicon-remove-circle"></span> Suppresssion
 			</button>
-			<!--
-			<button type="button" class="btn btn-default btn-lg"  onClick="Test();" >
-			  <span class="glyphicon glyphicon glyphicon glyphicon-ok-sign"></span> Test
-			</button>
-			<script> 
-				function Test(){
-					$("#monlogo").attr('src','images\\logo-homidom.png');
-					$("#Titre").html('HomIDroid');
-				}
-			</script> -->
 		</div>
 	</div>
 	<div class="commandes">
@@ -85,13 +93,6 @@
 		  <span class="glyphicon glyphicon glyphicon glyphicon glyphicon-off"></span> Annulation
 		</button>
 	</div>
-	
-	
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="js/jquery-1.11.0.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="js/bootstrap.min.js"></script>
 
  </body>
 </html>
