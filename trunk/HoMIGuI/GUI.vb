@@ -218,7 +218,7 @@ Public Class HoMIGuI
             LogsToolStripMenuItem.Enabled = True
             LogsToolStripMenuItem.ToolTipText = "Visualiser les logs en temps réel"
             DriversToolStripMenuItem.Enabled = True
-            LogsToolStripMenuItem.ToolTipText = "Afficher la liste des drivers en temps réel"
+            DriversToolStripMenuItem.ToolTipText = "Afficher la liste des drivers en temps réel"
         Else
             LogsToolStripMenuItem.Enabled = False
             LogsToolStripMenuItem.ToolTipText = "Non disponible : Non connecté en SOAP au serveur"
