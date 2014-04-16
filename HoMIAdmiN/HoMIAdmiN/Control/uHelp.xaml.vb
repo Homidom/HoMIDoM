@@ -2,6 +2,7 @@
 Imports System.IO
 Imports System.Collections.ObjectModel
 Imports HoMIDom.HoMIDom
+Imports System.Net.Mail
 
 Partial Public Class uHelp
     Public Event CloseMe(ByVal MyObject As Object)
@@ -80,6 +81,61 @@ Partial Public Class uHelp
     End Sub
     Private Sub BtnSoutien_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnSoutien.Click
         Process.Start("http://www.homidom.com/Dons-c29.html")
+    End Sub
+    Private Sub BtnDownloadTeamViewer_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDownloadTeamViewer.Click
+        Process.Start("http://download.teamviewer.com/download/TeamViewerQS_fr.exe")
+    End Sub
+    Private Sub BtnSiteTeamViewer_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnSiteTeamViewer.Click
+        Process.Start("http://www.teamviewer.com")
+    End Sub
+    Private Sub BtnEnvoiEmailRapport_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnEnvoiEmailRapport.Click
+        Try
+
+            Dim _smtpsrv As String = myService.GetSMTPServeur(IdSrv)
+            Dim _smtpport As String = myService.GetSMTPPort(IdSrv)
+            Dim _Texte As String = ""
+
+            If TxtRapportMail.Text <> "" And TxtRapportNom.Text <> "" And _smtpsrv <> "" And _smtpport <> "" Then
+                'Creation du texte
+                _Texte = "Rapport Utilisateur de : " & TxtRapportNom.Text & vbCrLf & vbCrLf
+                _Texte &= "Versions des programmes: " & vbCrLf
+                _Texte &= listesversionsprogrammes.Text & vbCrLf & vbCrLf
+                _Texte &= "Liste des Drivers: " & vbCrLf
+                _Texte &= listesversionsdrivers.Text & vbCrLf & vbCrLf
+                _Texte &= "Informations diverses: " & vbCrLf
+                _Texte &= listesdivers.Text & vbCrLf & vbCrLf & vbCrLf & vbCrLf
+                _Texte &= "Logs: " & vbCrLf & myService.ReturnLog
+
+                'Envoi du mail
+                Dim Smtp As New SmtpClient(_smtpsrv, _smtpport) 'Simple Mail Transfer Protocol
+                Dim EmailMessage As New MailMessage
+                Try
+                    With (EmailMessage)
+                        .From = New MailAddress(TxtRapportMail.Text)
+                        .To.Add("contact@homidom.com")
+                        .CC.Add(TxtRapportMail.Text)
+                        .Subject = "Rapport Email Utilisateur"
+                        .Body = _Texte
+                    End With
+                Catch ex As Exception
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR BtnEnvoiEmailRapport_Click: Erreur lors de la préparation du mail: " & ex.ToString, "ERREUR", "")
+                End Try
+                With (Smtp)
+                    .UseDefaultCredentials = False
+                    .DeliveryMethod = SmtpDeliveryMethod.Network
+                    .Timeout = 100000
+                    .EnableSsl = myService.GetSMTPSSL(IdSrv)
+
+                    .Credentials = New Net.NetworkCredential(myService.GetSMTPLogin(IdSrv), myService.GetSMTPPassword(IdSrv))
+                    .Send(EmailMessage)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "Message envoyé", "Envoi du rapport par email", "BtnEnvoiEmailRapport_Click")
+                End With
+            Else
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Message NON envoyé, vérifiez votre configuration Email", "Envoi du rapport par email", "BtnEnvoiEmailRapport_Click")
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR BtnEnvoiEmailRapport_Click: " & ex.ToString, "ERREUR", "BtnEnvoiEmailRapport_Click")
+        End Try
     End Sub
 
 End Class
