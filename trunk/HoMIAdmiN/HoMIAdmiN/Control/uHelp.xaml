@@ -120,6 +120,48 @@
                             </StackPanel>
                         </TabItem >
 
+                        <TabItem Header="Assistance" >
+                            <StackPanel Orientation="Vertical" VerticalAlignment="top" HorizontalAlignment="left">
+                                <GroupBox Name="GroupBox10" Margin="2" HorizontalAlignment="left" Width="700">
+                                    <GroupBox.Header>
+                                        <Label Foreground="White" FontWeight="Bold">Prise en main à distance</Label>
+                                    </GroupBox.Header>
+                                    <StackPanel >
+                                        <Label Content="Pour nous permettre de vous aider plus rapidement dans la résolution d'incident, il est possible d'utiliser TeamViewer pour permettre à un" Foreground="Gray" Height="24" FontSize="11" />
+                                        <Label Content="membre de l'équipe de prendre la main à distance sur votre machine" Foreground="Gray" Height="24" FontSize="11" />
+                                        <Label Content="Une fois le programme téléchargé, il suffit de le lancer et de donner le code généré pour donner accés à votre machine temporairement." Foreground="Gray" Height="24" FontSize="11" />
+                                        <StackPanel Orientation="Horizontal"  VerticalAlignment="top">
+                                            <Button Height="24.293" Template="{DynamicResource GlassButton}" Name="BtnDownloadTeamViewer" Width="150" Foreground="White" Margin="0,0,10,0">Télécharger TeamViewer</Button>  
+                                            <Button Height="24.293" Template="{DynamicResource GlassButton}" Name="BtnSiteTeamViewer" Width="150" Foreground="White">Plus d'informations</Button>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Margin="2" HorizontalAlignment="left" Width="700">
+                                    <GroupBox.Header>
+                                        <Label Foreground="White" FontWeight="Bold">Envoyer un rapport par email</Label>
+                                    </GroupBox.Header>
+                                    <StackPanel >
+                                        <Label Content="A la demande d'un membre d'HoMIDoM, vous pouvez envoyer par email un rapport complet sur votre configuration en un clic, à " Foreground="Gray" Height="28" FontSize="11" />
+                                        <Label Content="contact@homidom.com en utilisant les paramétres SMTP configurés dans HoMIDoM (une copie vous est envoyé également)" Foreground="Gray" Height="28" FontSize="11" />
+                                        <StackPanel Orientation="Horizontal" >
+                                            <Label Content="Adresse Mail:" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Foreground="White" />
+                                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Name="TxtRapportMail" VerticalAlignment="Top" Width="230" />
+                                            <Label Content="Renseignez votre adresse email pour pouvoir vous répondre" Foreground="Gray" Height="28" FontSize="10" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" >
+                                            <Label Content="Prénom Nom:" Height="25" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Foreground="White" />
+                                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" HorizontalAlignment="Left" Name="TxtRapportNom" VerticalAlignment="Top" Width="230" />
+                                            <Label Content="Renseignez votre prénom et nom pour savoir qui vous êtes." Foreground="Gray" Height="28" FontSize="10" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal"  VerticalAlignment="top">
+                                            <Button Height="24.293" Template="{DynamicResource GlassButton}" Name="BtnEnvoiEmailRapport" Width="150" Foreground="White">Envoyer le rapport</Button>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </GroupBox>
+
+                            </StackPanel>
+                        </TabItem>
+
                         <TabItem Header="Aide" >
                             <StackPanel Orientation="Vertical" >
                                 <Label Height="50" Content="Il y a plusieurs endroits pour trouver de l'aide :" Name="texteAide" FontStretch="Normal" FontWeight="Bold" FontSize="12" Margin="3" Foreground="white"/>
