@@ -727,7 +727,7 @@ Imports Driver_Zibase.ZibaseDllvb
                 Case "W"
                     valeur = CStr(CInt(valeur))
                     type = "KW" 'comsommation totale
-                Case "XSE", "BAT", "LNK", "STA", "" : valeur = valeurstring 'on utilise la valeur normale et non l'entier
+                Case "XSE", "BU", "BAT", "LNK", "STA", "" : valeur = valeurstring 'on utilise la valeur normale et non l'entier
             End Select
             'dans le cas des adresse du type M5
             If adresse.Length = 2 Then valeur = valeurstring 'on utilise la valeur normale et non l'entier
@@ -751,6 +751,7 @@ Imports Driver_Zibase.ZibaseDllvb
                 Case "xse" : WriteRetour(adresse, "", valeur) 'detecteurs fumées/co... (Alert, Normal)
                 Case "Lnk" : WriteRetour(adresse, "", valeur) 'Etat de la connexion Zibase
                 Case "sta" : WriteRetour(adresse, ListeDevices.SWITCH.ToString, valeur) 'Status pour un switch (ON/OFF)
+                Case "bu" : WriteRetour(adresse, "", valeur) 'Status pour un switch (ON/OFF)
                 Case Else : WriteRetour(adresse & "_" & STRGS.UCase(type), "", valeur)
             End Select
         Catch ex As Exception

@@ -561,11 +561,31 @@ Namespace ZibaseDllvb
                         '#End Region
 
 
+                        sId = seInfo.sID
 
-
+                        '#Region "bu" Button
+                        sType = "bu"
+                        seInfo.sType = sType
+                        seInfo.sDevice = ""
+                        sValue = GetValue(s, sType)
+                        ' Declaration d'une variable de type état
+                        If (Not String.IsNullOrEmpty(sValue)) Then
+                            seInfo.sValue = "ON"
+                            seInfo.sHTMLValue = "ON"
+                            seInfo.dwValue = If(sValue = "ON", 2, 3)
+                            If (_SensorList.Keys.Contains(sId & sType)) Then
+                                seInfo.sHSName = _SensorList(sId & sType).sHSName
+                                seInfo.sDevice = _SensorList(sId & sType).sDevice
+                                _SensorList(sId & sType) = seInfo
+                            Else
+                                _SensorList.Add(sId & sType, seInfo)
+                                RaiseEvent NewSensorDetected(seInfo)
+                            End If
+                            RaiseEvent UpdateSensorInfo(seInfo)
+                        End If
+                        '#End Region
 
                         '#Region "sta"
-                        sId = seInfo.sID
                         sType = "sta"
                         seInfo.sType = sType
                         seInfo.sDevice = ""
