@@ -397,7 +397,6 @@ Public Class WTelecommandeNew
     ''' 
     ''' </summary>
     ''' <param name="TemplateName">Nom du template à afficher</param>
-    ''' <param name="HaveDevice">Si le template est associé à un device (si oui on peut tester ou apprendre des commandes sinon non)</param>
     ''' <remarks></remarks>
     Public Sub New(Optional TemplateName As String = "")
 

@@ -9146,7 +9146,6 @@ Namespace HoMIDom
         ''' <summary>
         ''' Importe un fichier de Template depuis une source
         ''' </summary>
-        ''' <param name="Source">chemin + fichier (ww.xml)</param>
         ''' <returns>"0" si ok sinon message d'erreur</returns>
         ''' <remarks></remarks>
         Public Function ImportTemplateMultimedia(ByVal IdSrv As String, Template As Telecommande.Template) As String Implements IHoMIDom.ImportTemplateMultimedia
