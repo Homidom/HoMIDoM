@@ -2104,6 +2104,12 @@ HoMIDom
 	<param name="IdSrv">Id du serveur</param>
 	<returns>le fichier sous format text si ok sinon message d'erreur commençant par ERREUR</returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ImportTemplateMultimedia(System.String,HoMIDom.HoMIDom.Telecommande.Template)">
+	<summary>
+ Importe un fichier de Template depuis une source
+ </summary>
+	<returns>"0" si ok sinon message d'erreur</returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetTypeLogEnable">
 	<summary>
  Retourne pour chaque type de log s'il doit être pris en compte ou non
