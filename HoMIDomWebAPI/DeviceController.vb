@@ -90,48 +90,58 @@ Public Class DeviceController
 
 
     Private Function ExecuteCommandWithParams(id As String, command As String, parameters As System.Collections.Specialized.NameValueCollection) As Boolean
+        Try
+            Dim action As DeviceAction = New DeviceAction() With {.Nom = command}
 
-        Dim action As DeviceAction = New DeviceAction() With {.Nom = command}
+            If Not parameters Is Nothing And parameters.Count > 0 Then
 
-        If Not parameters Is Nothing And parameters.Count > 0 Then
+                ' récupération du composant
+                Dim tplDevice As TemplateDevice = HoMIDomAPI.CurrentServer.ReturnDeviceByID(Me.ServerKey, id)
+                If tplDevice Is Nothing Then Throw New ArgumentException("Composant non trouvé !", "id")
 
-            ' récupération du composant
-            Dim tplDevice As TemplateDevice = HoMIDomAPI.CurrentServer.ReturnDeviceByID(Me.ServerKey, id)
-            If tplDevice Is Nothing Then Throw New ArgumentException("Composant non trouvé !", "id")
+                ' recherche de l'action invoquée
+                Dim devAction As DeviceAction = tplDevice.DeviceAction.Where(Function(t) t.Nom = command).FirstOrDefault()
+                If devAction Is Nothing Then Throw New ArgumentException("Action non trouvée pour ce composant !", "command")
 
-            ' recherche de l'action invoquée
-            Dim devAction As DeviceAction = tplDevice.DeviceAction.Where(Function(t) t.Nom = command).FirstOrDefault()
-            If devAction Is Nothing Then Throw New ArgumentException("Action non trouvée pour ce composant !", "command")
+                For Each pKey In parameters.AllKeys
+                    Dim parameterKey = pKey 'Utile pour l'expression lambda plus bas
+                    Dim parameterValue = parameters(parameterKey)
+                    ' vérification de la présente d'une valeur pour la paramètre 
+                    If Not String.IsNullOrEmpty(parameterValue) Then
+                        Dim devActionParameter As DeviceAction.Parametre = devAction.Parametres.Where(Function(t) t.Nom = parameterKey).FirstOrDefault()
+                        If Not devActionParameter Is Nothing Then
+                            Select Case devActionParameter.Type.ToLower()
+                                Case "int32"
+                                    Dim intVal As Integer
+                                    If Integer.TryParse(parameterValue, intVal) Then devActionParameter.Value = intVal
 
-            For Each pKey In parameters.AllKeys
-                Dim parameterKey = pKey 'Utile pour l'expression lambda plus bas
-                Dim parameterValue = parameters(parameterKey)
-                ' vérification de la présente d'une valeur pour la paramètre 
-                If Not String.IsNullOrEmpty(parameterValue) Then
-                    Dim devActionParameter As DeviceAction.Parametre = devAction.Parametres.Where(Function(t) t.Nom = parameterKey).FirstOrDefault()
-                    If Not devActionParameter Is Nothing Then
-                        Select Case devActionParameter.Type.ToLower()
-                            Case "int32"
-                                Dim intVal As Integer
-                                If Integer.TryParse(parameterValue, intVal) Then devActionParameter.Value = intVal
+                                Case "system.string"
+                                    devActionParameter.Value = parameterValue.ToString
+                                Case Else
+                                    Dim intVal As Integer
+                                    If Integer.TryParse(parameterValue, intVal) Then devActionParameter.Value = intVal
+                                    Dim intdbl As Double
+                                    If Double.TryParse(parameterValue, intdbl) Then devActionParameter.Value = intdbl
+                                    Dim intlng As Long
+                                    If Long.TryParse(parameterValue, intlng) Then devActionParameter.Value = intlng
+                            End Select
 
-                            Case "system.string"
-                                devActionParameter.Value = parameterValue.ToString
-
-                        End Select
-
-                        If Not devActionParameter.Value Is Nothing Then
-                            action.Parametres.Add(devActionParameter)
+                            If Not devActionParameter.Value Is Nothing Then
+                                action.Parametres.Add(devActionParameter)
+                            End If
                         End If
                     End If
-                End If
 
-            Next
+                Next
 
-        End If
+            End If
 
-        HoMIDomAPI.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, id, action)
-        Return True
+            HoMIDomAPI.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, id, action)
+            Return True
+        Catch ex As Exception
+            Return False
+        End Try
+
     End Function
 
 End Class
