@@ -110,21 +110,32 @@ Public Class DeviceController
                     If Not String.IsNullOrEmpty(parameterValue) Then
                         Dim devActionParameter As DeviceAction.Parametre = devAction.Parametres.Where(Function(t) t.Nom = parameterKey).FirstOrDefault()
                         If Not devActionParameter Is Nothing Then
-                            Select Case devActionParameter.Type.ToLower()
-                                Case "int32"
-                                    Dim intVal As Integer
-                                    If Integer.TryParse(parameterValue, intVal) Then devActionParameter.Value = intVal
+                            'Select Case devActionParameter.Type.ToLower()
+                            '    Case "system.int16"
+                            '        Dim intVal As Short
+                            '        If Short.TryParse(parameterValue, intVal) Then devActionParameter.Value = intVal
+                            '    Case "system.int32"
+                            '        Dim intVal As Integer
+                            '        If Integer.TryParse(parameterValue, intVal) Then devActionParameter.Value = intVal
+                            '    Case "system.int64"
+                            '        Dim intlng As Long
+                            '        If Long.TryParse(parameterValue, intlng) Then devActionParameter.Value = intlng
+                            '    Case "system.double"
+                            '        Dim intdbl As Double
+                            '        If Double.TryParse(parameterValue, intdbl) Then devActionParameter.Value = intdbl
+                            '    Case "system.boolean"
+                            '        Dim intbl As Boolean
+                            '        If Boolean.TryParse(parameterValue, intbl) Then devActionParameter.Value = intbl
+                            '    Case "system.string"
+                            '        devActionParameter.Value = parameterValue.ToString
+                            '    Case "system.char"
+                            '        devActionParameter.Value = parameterValue.ToString
+                            '    Case "system.single"
+                            '        Dim intsgl As Single
+                            '        If Single.TryParse(parameterValue, intsgl) Then devActionParameter.Value = intsgl
 
-                                Case "system.string"
-                                    devActionParameter.Value = parameterValue.ToString
-                                Case Else
-                                    Dim intVal As Integer
-                                    If Integer.TryParse(parameterValue, intVal) Then devActionParameter.Value = intVal
-                                    Dim intdbl As Double
-                                    If Double.TryParse(parameterValue, intdbl) Then devActionParameter.Value = intdbl
-                                    Dim intlng As Long
-                                    If Long.TryParse(parameterValue, intlng) Then devActionParameter.Value = intlng
-                            End Select
+                            'End Select
+                            devActionParameter.Value = parameterValue
 
                             If Not devActionParameter.Value Is Nothing Then
                                 action.Parametres.Add(devActionParameter)
