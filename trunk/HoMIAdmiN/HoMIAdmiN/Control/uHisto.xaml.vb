@@ -196,7 +196,7 @@ Public Class uHisto
                 Next
             ElseIf ChkHisto.IsChecked Then
                 For i As Integer = 0 To Chart2.Series.Count - 1
-                    Chart2.Series(i).ChartType = SeriesChartType.Bar
+                    Chart2.Series(i).ChartType = SeriesChartType.Column
                     Chart2.Series(i).ToolTip = "#VALX{dd/MM/yyyy HH:mm:ss}" & " Valeur:" & "#VALY"
                 Next
             ElseIf ChkStep.IsChecked Then

@@ -3,7 +3,6 @@ Imports HoMIDom.HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 Imports System.Net.Mail
-Imports NLog
 Imports S22.Imap
 
 ' Auteur : Mathieu
@@ -56,7 +55,7 @@ Imports S22.Imap
     Dim _UserName As String
     Dim _Password As String
     Dim _PortNm As String
-    Dim logger As NLog.Logger
+    Dim DmdStart As Boolean
     Dim boxmail As MailBoxHandler
 	
 #End Region
@@ -458,15 +457,25 @@ Imports S22.Imap
 
             'Vérifie si Mail est démarrer si non tentative de de connexion  
 
-            If _Refresh > 0 Then
-                MyTimer.Interval = Refresh
-                MyTimer.Enabled = True
-                AddHandler MyTimer.Elapsed, AddressOf TimerTick
+            boxmail = New MailBoxHandler(_PopHost, _PortNm, _UserName, _Password)
+
+            _IsConnect = boxmail.IsConnected
+
+            boxmail.Dispose()
+
+            If _IsConnect Then
+
+                If _Refresh > 0 Then
+                    Me.MyTimer.Interval = Refresh
+                    Me.MyTimer.Enabled = True
+                    AddHandler Me.MyTimer.Elapsed, AddressOf Me.TimerTick
+                End If
+
+                DmdStart = True
+
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Mail Start", "Demarré")
+
             End If
-
-            _IsConnect = True
-
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Mail Start", "Demarré")
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", ex.Message)
@@ -478,8 +487,9 @@ Imports S22.Imap
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Try
             MyTimer.Stop()
-            RemoveHandler MyTimer.Elapsed, AddressOf TimerTick
 
+            RemoveHandler Me.MyTimer.Elapsed, AddressOf Me.TimerTick
+            DmdStart = False
             _IsConnect = False
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Stop", "Driver " & Me.Nom & " arrêté")
         Catch ex As Exception
@@ -658,16 +668,31 @@ Imports S22.Imap
 
     ''' <summary>Si refresh >0 gestion du timer</summary>
     ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
-    Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
+    Private Sub TimerTick(ByVal sender As Object, ByVal e As System.Timers.ElapsedEventArgs)
 
-        boxmail = New MailBoxHandler(logger, _PopHost, _PortNm, _UserName, _Password)
-        AddHandler boxmail.HandleMessage, AddressOf receiveMsg
+        Try
 
-        boxmail.CheckExistingEmails()
+            If DmdStart = True Then
 
-        RemoveHandler boxmail.HandleMessage, AddressOf receiveMsg
-        boxmail.Dispose()
+                boxmail = New MailBoxHandler(_PopHost, _PortNm, _UserName, _Password)
 
+                AddHandler boxmail.HandleMessage, AddressOf receiveMsg
+
+                Dim checkmail = boxmail.CheckExistingEmails()
+
+                If checkmail <> "ok" Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Replication", checkmail)
+                End If
+
+                RemoveHandler boxmail.HandleMessage, AddressOf receiveMsg
+
+                boxmail.Dispose()
+
+            End If
+
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Replication", ex.Message)
+        End Try
     End Sub
 
 #End Region
@@ -706,6 +731,8 @@ Imports S22.Imap
                                             txt = e.Message.Subject
                                         Case "TEXTE"
                                             txt = e.Message.Body
+                                        Case Else
+                                            Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Reception Message Mail : ", "'Texte à rechercher' doit etre au format 'xxx@yyy.com,Objet' ou 'xxx@yyy.com,Texte' avec Texte ou Objet uniquement")
                                     End Select
 
                                     If InStr(txt, Avant) Or InStr(txt, Apres) Then
@@ -836,6 +863,7 @@ Imports S22.Imap
         End Try
 
         Return sortie
+
     End Function
 
 #End Region
@@ -848,78 +876,81 @@ Public Class MailBoxHandler
     Implements IDisposable
 
     Private _imapClient As ImapClient
-    Const CST_MAILBOX As String = "Handled"
-    Const CST_INBOX As String = "Inbox"
-
-    Public Property Logger() As Logger
-        Get
-            Return m_Logger
-        End Get
-        Private Set(ByVal value As Logger)
-            m_Logger = value
-        End Set
-    End Property
-    Private m_Logger As Logger
-
+    Private memUids As UInteger()
+    
     Public Event HandleMessage As EventHandler(Of HandleMessageEventArgs)
 
-    Public Sub New(ByVal logger As Logger, ByVal hostName As String, ByVal port As Integer, ByVal userName As String, ByVal password As String)
-        Me.Logger = logger
+    Public Sub New(ByVal hostName As String, ByVal port As Integer, ByVal userName As String, ByVal password As String)
+
         _imapClient = New ImapClient(hostName, port, True)
         _imapClient.Login(userName, password, AuthMethod.Login)
-        AddHandler _imapClient.NewMessage, AddressOf _imapClient_NewMessage
+
+    End Sub
+
+    Public Function CheckExistingEmails() As String
 
         Try
-            _imapClient.GetMailboxInfo(CST_MAILBOX)
-        Catch
-            _imapClient.CreateMailbox(CST_MAILBOX)
-            Me.Logger.Debug(String.Format("Folder '{0}' created.", CST_MAILBOX))
+
+            Dim uids As UInteger() = Me._imapClient.Search(SearchCondition.Unseen)
+
+            For Each uid As UInteger In uids
+
+                If memUids IsNot Nothing Then
+                    If memUids.Contains(uid) = False Then
+                        Dim message = Me._imapClient.GetMessage(uid)
+                        Me.ProcessMessage(uid, message)
+                        'Me._imapClient.AddMessageFlags(uid, S22.Imap.MessageFlag.Seen)
+                    End If
+                Else
+                    Dim message = Me._imapClient.GetMessage(uid)
+                    Me.ProcessMessage(uid, message)
+                End If
+
+            Next
+
+            memUids = uids
+            Return "ok"
+
+        Catch ex As Exception
+
+            Return "erreur dans CheckExistingEmails"
+
         End Try
-    End Sub
+    End Function
 
-    Public Sub CheckExistingEmails()
-        Dim uids As UInteger() = Me._imapClient.Search(SearchCondition.Unseen)
-
-        For Each uid As UInteger In uids
-            Dim message = Me._imapClient.GetMessage(uid)
-            Me.ProcessMessage(uid, message)
-            Me._imapClient.AddMessageFlags(uid, S22.Imap.MessageFlag.Seen)
-        Next
-    End Sub
+    Public Function IsConnected() As Boolean
+        Try
+            If _imapClient.Authed Then
+                Return True
+            Else
+                Return False
+            End If
+        Catch ex As Exception
+            Return False
+        End Try
+    End Function
 
     Protected Sub ProcessMessage(ByVal uid As UInteger, ByVal message As MailMessage)
         Try
             Dim hea = New HandleMessageEventArgs(message)
             RaiseEvent HandleMessage(Me, hea)
 
-            If hea.IsHandled Then
-                _imapClient.CopyMessage(uid, CST_MAILBOX, CST_INBOX)
-                _imapClient.DeleteMessage(uid, CST_INBOX)
-                _imapClient.Expunge(CST_INBOX)
-            End If
         Catch ex As Exception
-            'Me.Logger.ErrorException(String.Format("Error when processing message ID {0}", uid), ex)
+
         Finally
             message.Dispose()
             message = Nothing
         End Try
     End Sub
 
-    Private Sub _imapClient_NewMessage(ByVal sender As Object, ByVal e As IdleMessageEventArgs)
-        Dim message = _imapClient.GetMessage(e.MessageUID, True)
-        Me.ProcessMessage(e.MessageUID, message)
-    End Sub
-
-
     Public Sub Dispose() Implements IDisposable.Dispose
         If _imapClient IsNot Nothing Then
             Try
-                RemoveHandler _imapClient.NewMessage, AddressOf _imapClient_NewMessage
                 _imapClient.Logout()
                 _imapClient.Dispose()
                 _imapClient = Nothing
             Catch ex As Exception
-                Me.Logger.ErrorException("Error in Dispose", ex)
+                
             End Try
         End If
     End Sub
@@ -931,16 +962,7 @@ End Class
 
 Public Class HandleMessageEventArgs
     Inherits EventArgs
-    Public Property IsHandled() As Boolean
-        Get
-            Return m_IsHandled
-        End Get
-        Set(ByVal value As Boolean)
-            m_IsHandled = value
-        End Set
-    End Property
-    Private m_IsHandled As Boolean
-
+   
     Public Property Message() As MailMessage
         Get
             Return m_Message

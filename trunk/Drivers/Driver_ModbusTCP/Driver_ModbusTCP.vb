@@ -61,7 +61,10 @@ Imports System.Net.Sockets
     Private adressRead As Integer
     Private adressWrite As Integer
     Private unit As Integer
+    Private rID As UShort
+    Private MemID As UShort
     Private flagWrite As Boolean
+    Private dataMdb(225) As UInt16
 
     Dim str_to_bool As New Dictionary(Of String, Integer)
 
@@ -243,8 +246,6 @@ Imports System.Net.Sockets
 
 #Region "Fonctions génériques"
 
-    Private Property adr_read As String
-
     ''' <summary>
     ''' Retourne la liste des Commandes avancées
     ''' </summary>
@@ -338,6 +339,8 @@ Imports System.Net.Sockets
 
                 MyTimer.Interval = _Parametres.Item(0).Valeur '2000
                 MyTimer.Enabled = True
+                breading = False
+                cptsend = 0
 
                 AddHandler _Server.DeviceChanged, AddressOf DeviceChange
 
@@ -354,6 +357,7 @@ Imports System.Net.Sockets
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Dim retour As String
         Try
+            MyTimer.Enabled = False
             retour = fermer()
             RemoveHandler _Server.DeviceChanged, AddressOf DeviceChange
 
@@ -393,6 +397,14 @@ Imports System.Net.Sockets
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Impossible d'effectuer un Read car le driver n'est pas connecté à la carte")
                 Exit Sub
             End If
+            If Objet.Adresse1 <> "-1" And Objet.Adresse1 <> "" Then
+                If TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
+                    Objet.Value = dataMdb(Objet.adresse1 - 1)
+                End If
+                If TypeOf Objet.Value Is Boolean And dataMdb(Objet.adresse1) > -1 And dataMdb(Objet.adresse1) < 2 Then
+                    Objet.Value = CBool(dataMdb(Objet.adresse1 - 1))
+                End If
+            End If
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur : " & ex.ToString)
@@ -421,24 +433,25 @@ Imports System.Net.Sockets
 			If Objet.Adresse2 <> "-1" And Objet.Adresse2 <> "" Then
 			    If TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
 			
-			select commande
-			case "ON"
-				Parametre1=Objet.ValueMax
-			case "OFF"
-				Parametre1=Objet.ValueMin				
-			case "OPEN"
-				Parametre1=Objet.ValueMax
-			case "CLOSE"
-				Parametre1=Objet.ValueMin			
-			end select
+                    Select Case Commande
+                        Case "ON"
+                            Parametre1 = Objet.ValueMax
+                        Case "OFF"
+                            Parametre1 = Objet.ValueMin
+                        Case "OPEN"
+                            Parametre1 = Objet.ValueMax
+                        Case "CLOSE"
+                            Parametre1 = Objet.ValueMin
+
+                    End Select
 			
-	        ecrire(Objet.adresse2, Commande, Parametre1, Parametre2, sendtwice)			
-            End If
+                    ecrire(Objet.adresse2, Commande, Parametre1, Parametre2, sendtwice)
+                End If
 			
-            If TypeOf Objet.Value Is Boolean  Then
-                Parametre1 = str_to_bool(Commande)
-                ecrire(Objet.adresse2, Commande, Parametre1, Parametre2, sendtwice)
-            End If
+                If TypeOf Objet.Value Is Boolean Then
+                    Parametre1 = str_to_bool(Commande)
+                    ecrire(Objet.adresse2, Commande, Parametre1, Parametre2, sendtwice)
+                End If
 			End if
 			Select Case commande
                         Case "ON", "OFF"
@@ -592,7 +605,7 @@ Imports System.Net.Sockets
             Add_LibelleDevice("ADRESSE1", "Adresse Read", "Adresse de lecture du composant ou -1 si pas de lecture")
             Add_LibelleDevice("ADRESSE2", "Adresse Write", "Adresse d'écriture du composant ou -1 si pas de écriture")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("REFRESH", "@", "")
+            Add_LibelleDevice("REFRESH", "Refresh", "Interval en secondes entre les lectures")
             Add_LibelleDevice("LASTCHANGEDUREE", "@", "")
 
             'dictionnaire Commande STR -> INT
@@ -618,8 +631,9 @@ Imports System.Net.Sockets
                 cptsend += 1
                 If cptsend > 3 Then cptsend = 1
                 StartAddress = ReadStartAdr(adressStart + adressRead + ((cptsend - 1) * 75)) '%MW256 = 12288 + 256 = 12544
-                Length = ReadStartAdr(75)
-                MBmaster.ReadHoldingRegister(unit, 3, StartAddress, Length)
+                    Length = ReadStartAdr(75)
+                    rid = (Rnd() * 250)
+                    MBmaster.ReadHoldingRegister(unit, rid, StartAddress, Length)
 
                 If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Read", "ModbusTCP Demande de lecture")
 				Else
@@ -635,10 +649,12 @@ Imports System.Net.Sockets
     Sub DeviceChange(ByVal DeviceID, ByVal valeurString)
 		Try
         Dim genericDevice As templateDevice = _Server.ReturnDeviceById(_IdSrv, DeviceID)
-        If genericDevice.DriverID = _ID And  TypeOf genericDevice.Value Is Double Then
-            Write(genericDevice, "", CInt(valeurString))
-        End If
-		Catch ex As Exception
+            If genericDevice.DriverID = _ID Then
+                If TypeOf genericDevice.Value Is Double Or TypeOf genericDevice.Value Is Integer Then
+                    Write(genericDevice, "", CInt(valeurString))
+                End If
+            End If
+        Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP Device Change", ex.Message)
         End Try
     End Sub
@@ -822,33 +838,46 @@ Imports System.Net.Sockets
             ' ------------------------------------------------------------------------
             ' Identify requested data
 
-            If ID = 3 Then
+            msg = "ID = " & ID & " et Fonction = " & [function]
+
+            If ID = rid Then
+                msg += 75 * (cptsend - 1) & " et data = "
                 dataR = ShowAs(values)
 
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, "", "", Me._ID, True)
-				
+
                 For Each j As Object In listedevices
-                    If j.Adresse1 <> "-1" And j.Adresse1 <> ""  Then
+                    If j.Adresse1 <> "-1" And j.Adresse1 <> "" Then
                         adresse = j.adresse1 - ((cptsend - 1) * 75) - 1
                         If j.adresse1 > 75 * (cptsend - 1) And j.adresse1 <= 75 * cptsend Then
                             msg += j.adresse1 & "=" & dataR(adresse) & " ; " & j.Value & " ;"
                             If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
-                                j.Value = dataR(adresse)
+                                If j.Refresh = 0 Then
+                                    j.Value = dataR(adresse)
+                                End If
                             End If
                             If TypeOf j.Value Is Boolean And dataR(adresse) > -1 And dataR(adresse) < 2 Then
-                                j.Value = CBool(dataR(adresse))
+                                If j.Refresh = 0 Then
+                                    j.Value = CBool(dataR(adresse))
+                                End If
                             End If
+                            dataMdb(adresse) = dataR(adresse)
                         End If
                     End If
-                Next			
+                Next
+                MemID = ID
+            ElseIf ID = MemID Then
+                [Stop]()
+                Threading.Thread.Sleep(2000)
+                Start()
             End If
             breading = False
-            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Modbus slave receive", "MBmaster_OnResponseData : " & 75 * (cptsend - 1) & " et data = " & msg)
+            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Modbus slave receive", "MBmaster_OnResponseData : " & msg)
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Modbus slave exception", "MBmaster_OnResponseData : " & cptsend & " et data = " & msg)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Modbus slave exception", "MBmaster_OnResponseData : " & msg)
             breading = False
         End Try
     End Sub
@@ -1042,8 +1071,7 @@ Namespace ModbusTCP
 
         ' ------------------------------------------------------------------------
         ' Private declarations
-        Private Shared _timeout As UShort = 500
-        Private Shared _refresh As UShort = 10
+        Private Shared _timeout As UShort = 5000
         Private Shared _connected As Boolean = False
 
         Private tcpAsyCl As Sockets.Socket
@@ -1072,18 +1100,6 @@ Namespace ModbusTCP
             End Get
             Set(ByVal value As UShort)
                 _timeout = value
-            End Set
-        End Property
-
-        ' ------------------------------------------------------------------------
-        ''' <summary>Refresh timer for slave answer. The class is polling for answer every X ms.</summary>
-        ''' <value>The default value is 10ms.</value>
-        Public Property refresh() As UShort
-            Get
-                Return _refresh
-            End Get
-            Set(ByVal value As UShort)
-                _refresh = value
             End Set
         End Property
 
@@ -1122,10 +1138,13 @@ Namespace ModbusTCP
                 ' ----------------------------------------------------------------
                 ' Connect asynchronous client
                 tcpAsyCl = New Sockets.Socket(IPAddress.Parse(ip).AddressFamily, Sockets.SocketType.Stream, Sockets.ProtocolType.Tcp)
+
                 tcpAsyCl.Connect(New IPEndPoint(IPAddress.Parse(ip), port))
                 tcpAsyCl.SetSocketOption(Sockets.SocketOptionLevel.Socket, Sockets.SocketOptionName.SendTimeout, _timeout)
                 tcpAsyCl.SetSocketOption(Sockets.SocketOptionLevel.Socket, Sockets.SocketOptionName.ReceiveTimeout, _timeout)
                 tcpAsyCl.SetSocketOption(Sockets.SocketOptionLevel.Socket, Sockets.SocketOptionName.NoDelay, 1)
+
+
                 ' ----------------------------------------------------------------
                 ' Connect synchronous client
                 tcpSynCl = New Sockets.Socket(IPAddress.Parse(ip).AddressFamily, Sockets.SocketType.Stream, Sockets.ProtocolType.Tcp)
@@ -1553,6 +1572,7 @@ Namespace ModbusTCP
                 Try
                     tcpAsyCl.BeginSend(write_data, 0, write_data.Length, Sockets.SocketFlags.None, New AsyncCallback(AddressOf OnSend), Nothing)
                     tcpAsyCl.BeginReceive(tcpAsyClBuffer, 0, tcpAsyClBuffer.Length, Sockets.SocketFlags.None, New AsyncCallback(AddressOf OnReceive), tcpAsyCl)
+
                 Catch generatedExceptionName As SystemException
                     CallException(id, write_data(7), excExceptionConnectionLost)
                 End Try
@@ -1581,7 +1601,6 @@ Namespace ModbusTCP
 
                 Dim id As UShort = BitConverter.ToUInt16(tcpAsyClBuffer, 0)
 
-
                 Dim [function] As Byte = tcpAsyClBuffer(7)
                 Dim data As Byte()
 
@@ -1604,7 +1623,9 @@ Namespace ModbusTCP
                     ' ------------------------------------------------------------
                     ' Response data is regular data
                 Else
+
                     RaiseEvent OnResponseData(id, [function], data)
+
                 End If
 
             Catch ex As Exception
@@ -1654,5 +1675,6 @@ Namespace ModbusTCP
             End If
             Return Nothing
         End Function
+       
     End Class
 End Namespace
