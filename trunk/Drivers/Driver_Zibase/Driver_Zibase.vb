@@ -662,8 +662,15 @@ Imports Driver_Zibase.ZibaseDllvb
                     'Case Else : Return ("ERR: protocole incorrect : " & Modele(0))
             End Select
 
-            'verification Adresse
+            'verification Adresse du type X10
             If adresse = "" Then Return ("ERR: pas d'adresse renseignée")
+            If Not Char.IsLetter(adresse.Substring(0, 1).ToUpper) Then Return ("ERR: Adresse non correcte, elle doit etre du type x10: A1,D14... : " & adresse)
+            Dim adressetestint As Integer
+            If Integer.TryParse(adresse.Substring(1), adressetestint) Then
+                If adresse.Substring(1) < 0 Or adresse.Substring(1) > 16 Then Return ("ERR: Adresse non correcte, elle doit etre du type x10: A1,D14... : " & adresse)
+            Else
+                Return ("ERR: Adresse non correcte, elle doit etre du type x10: A1,D14... : " & adresse)
+            End If
 
             'ecriture sur la zibase
             Select Case UCase(ordre)
