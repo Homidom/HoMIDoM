@@ -32,7 +32,7 @@ Namespace HoMIDom
                 t = t.AddHours(_Action.timing.Hour)
 
                 Do While DateTime.Now < t
-
+                    Thread.Sleep(1000)
                 Loop
 
                 'On execute l'action
