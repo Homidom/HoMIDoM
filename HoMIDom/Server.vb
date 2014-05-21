@@ -1813,64 +1813,68 @@ Namespace HoMIDom
                 Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des drivers")
                 writer.WriteStartElement("drivers")
                 For i As Integer = 0 To _ListDrivers.Count - 1
-                    writer.WriteStartElement("driver")
-                    writer.WriteStartAttribute("id")
-                    writer.WriteValue(_ListDrivers.Item(i).ID)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("nom")
-                    writer.WriteValue(_ListDrivers.Item(i).Nom)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("enable")
-                    writer.WriteValue(_ListDrivers.Item(i).Enable)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("description")
-                    writer.WriteValue(_ListDrivers.Item(i).Description)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("startauto")
-                    writer.WriteValue(_ListDrivers.Item(i).StartAuto)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("protocol")
-                    writer.WriteValue(_ListDrivers.Item(i).Protocol)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("iptcp")
-                    writer.WriteValue(_ListDrivers.Item(i).IP_TCP)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("porttcp")
-                    writer.WriteValue(_ListDrivers.Item(i).Port_TCP)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("ipudp")
-                    writer.WriteValue(_ListDrivers.Item(i).IP_UDP)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("portudp")
-                    writer.WriteValue(_ListDrivers.Item(i).Port_UDP)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("com")
-                    writer.WriteValue(_ListDrivers.Item(i).Com)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("refresh")
-                    writer.WriteValue(_ListDrivers.Item(i).Refresh)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("modele")
-                    writer.WriteValue(_ListDrivers.Item(i).modele)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("autodiscover")
-                    writer.WriteValue(_ListDrivers.Item(i).autodiscover)
-                    writer.WriteEndAttribute()
-                    If _ListDrivers.Item(i).Parametres IsNot Nothing Then
-                        For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
-                            writer.WriteStartAttribute("parametre" & j)
-                            If _ListDrivers.Item(i).Parametres.Item(j).valeur IsNot Nothing Then
-                                writer.WriteValue(_ListDrivers.Item(i).Parametres.Item(j).valeur)
-                            Else
-                                writer.WriteValue(" ")
-                            End If
-                            writer.WriteEndAttribute()
-                        Next
-                    End If
-                    writer.WriteEndElement()
-                    'on met à jour l'ID du serveur dans les drivers au cas ou il aurait changé
-                    Dim _drv As IDriver = ReturnDrvById(_IdSrv, _ListDrivers.Item(i).ID)
-                    If _drv IsNot Nothing Then _drv.IdSrv = _IdSrv
+                    Try
+                        writer.WriteStartElement("driver")
+                        writer.WriteStartAttribute("id")
+                        writer.WriteValue(_ListDrivers.Item(i).ID)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("nom")
+                        writer.WriteValue(_ListDrivers.Item(i).Nom)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("enable")
+                        writer.WriteValue(_ListDrivers.Item(i).Enable)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("description")
+                        writer.WriteValue(_ListDrivers.Item(i).Description)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("startauto")
+                        writer.WriteValue(_ListDrivers.Item(i).StartAuto)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("protocol")
+                        writer.WriteValue(_ListDrivers.Item(i).Protocol)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("iptcp")
+                        writer.WriteValue(_ListDrivers.Item(i).IP_TCP)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("porttcp")
+                        writer.WriteValue(_ListDrivers.Item(i).Port_TCP)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("ipudp")
+                        writer.WriteValue(_ListDrivers.Item(i).IP_UDP)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("portudp")
+                        writer.WriteValue(_ListDrivers.Item(i).Port_UDP)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("com")
+                        writer.WriteValue(_ListDrivers.Item(i).Com)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("refresh")
+                        writer.WriteValue(_ListDrivers.Item(i).Refresh)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("modele")
+                        writer.WriteValue(_ListDrivers.Item(i).modele)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("autodiscover")
+                        writer.WriteValue(_ListDrivers.Item(i).autodiscover)
+                        writer.WriteEndAttribute()
+                        If _ListDrivers.Item(i).Parametres IsNot Nothing Then
+                            For j As Integer = 0 To _ListDrivers.Item(i).Parametres.count - 1
+                                writer.WriteStartAttribute("parametre" & j)
+                                If _ListDrivers.Item(i).Parametres.Item(j).valeur IsNot Nothing Then
+                                    writer.WriteValue(_ListDrivers.Item(i).Parametres.Item(j).valeur)
+                                Else
+                                    writer.WriteValue(" ")
+                                End If
+                                writer.WriteEndAttribute()
+                            Next
+                        End If
+                        writer.WriteEndElement()
+                        'on met à jour l'ID du serveur dans les drivers au cas ou il aurait changé
+                        Dim _drv As IDriver = ReturnDrvById(_IdSrv, _ListDrivers.Item(i).ID)
+                        If _drv IsNot Nothing Then _drv.IdSrv = _IdSrv
+                    Catch ex As Exception
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", " Erreur de sauvegarde de la configuration: Drivers: " & ex.ToString)
+                    End Try
                 Next
                 writer.WriteEndElement()
 
@@ -1880,32 +1884,36 @@ Namespace HoMIDom
                 Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des zones")
                 writer.WriteStartElement("zones")
                 For i As Integer = 0 To _ListZones.Count - 1
-                    writer.WriteStartElement("zone")
-                    writer.WriteStartAttribute("id")
-                    writer.WriteValue(_ListZones.Item(i).ID)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("name")
-                    writer.WriteValue(_ListZones.Item(i).Name)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("icon")
-                    writer.WriteValue(_ListZones.Item(i).Icon)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("image")
-                    writer.WriteValue(_ListZones.Item(i).Image)
-                    writer.WriteEndAttribute()
-                    If _ListZones.Item(i).ListElement IsNot Nothing Then
-                        For j As Integer = 0 To _ListZones.Item(i).ListElement.Count - 1
-                            writer.WriteStartElement("element")
-                            writer.WriteStartAttribute("elementid")
-                            writer.WriteValue(_ListZones.Item(i).ListElement.Item(j).ElementID)
-                            writer.WriteEndAttribute()
-                            writer.WriteStartAttribute("visible")
-                            writer.WriteValue(_ListZones.Item(i).ListElement.Item(j).Visible)
-                            writer.WriteEndAttribute()
-                            writer.WriteEndElement()
-                        Next
-                    End If
-                    writer.WriteEndElement()
+                    Try
+                        writer.WriteStartElement("zone")
+                        writer.WriteStartAttribute("id")
+                        writer.WriteValue(_ListZones.Item(i).ID)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("name")
+                        writer.WriteValue(_ListZones.Item(i).Name)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("icon")
+                        writer.WriteValue(_ListZones.Item(i).Icon)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("image")
+                        writer.WriteValue(_ListZones.Item(i).Image)
+                        writer.WriteEndAttribute()
+                        If _ListZones.Item(i).ListElement IsNot Nothing Then
+                            For j As Integer = 0 To _ListZones.Item(i).ListElement.Count - 1
+                                writer.WriteStartElement("element")
+                                writer.WriteStartAttribute("elementid")
+                                writer.WriteValue(_ListZones.Item(i).ListElement.Item(j).ElementID)
+                                writer.WriteEndAttribute()
+                                writer.WriteStartAttribute("visible")
+                                writer.WriteValue(_ListZones.Item(i).ListElement.Item(j).Visible)
+                                writer.WriteEndAttribute()
+                                writer.WriteEndElement()
+                            Next
+                        End If
+                        writer.WriteEndElement()
+                    Catch ex As Exception
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", " Erreur de sauvegarde de la configuration: Zones: " & ex.ToString)
+                    End Try
                 Next
                 writer.WriteEndElement()
 
@@ -1915,63 +1923,67 @@ Namespace HoMIDom
                 Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des users")
                 writer.WriteStartElement("users")
                 For i As Integer = 0 To _ListUsers.Count - 1
-                    writer.WriteStartElement("user")
-                    writer.WriteStartAttribute("id")
-                    writer.WriteValue(_ListUsers.Item(i).ID)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("username")
-                    writer.WriteValue(_ListUsers.Item(i).UserName)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("nom")
-                    writer.WriteValue(_ListUsers.Item(i).Nom)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("prenom")
-                    writer.WriteValue(_ListUsers.Item(i).Prenom)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("profil")
-                    Select Case _ListUsers.Item(i).Profil
-                        Case Users.TypeProfil.invite
-                            writer.WriteValue("0")
-                        Case Users.TypeProfil.user
-                            writer.WriteValue("1")
-                        Case Users.TypeProfil.admin
-                            writer.WriteValue("2")
-                    End Select
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("password")
-                    writer.WriteValue(_ListUsers.Item(i).Password)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("numberidentification")
-                    writer.WriteValue(_ListUsers.Item(i).NumberIdentification)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("image")
-                    writer.WriteValue(_ListUsers.Item(i).Image)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("email")
-                    writer.WriteValue(_ListUsers.Item(i).eMail)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("emailautre")
-                    writer.WriteValue(_ListUsers.Item(i).eMailAutre)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("telfixe")
-                    writer.WriteValue(_ListUsers.Item(i).TelFixe)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("telmobile")
-                    writer.WriteValue(_ListUsers.Item(i).TelMobile)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("telautre")
-                    writer.WriteValue(_ListUsers.Item(i).TelAutre)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("adresse")
-                    writer.WriteValue(_ListUsers.Item(i).Adresse)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("ville")
-                    writer.WriteValue(_ListUsers.Item(i).Ville)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("codepostal")
-                    writer.WriteValue(_ListUsers.Item(i).CodePostal)
-                    writer.WriteEndAttribute()
-                    writer.WriteEndElement()
+                    Try
+                        writer.WriteStartElement("user")
+                        writer.WriteStartAttribute("id")
+                        writer.WriteValue(_ListUsers.Item(i).ID)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("username")
+                        writer.WriteValue(_ListUsers.Item(i).UserName)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("nom")
+                        writer.WriteValue(_ListUsers.Item(i).Nom)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("prenom")
+                        writer.WriteValue(_ListUsers.Item(i).Prenom)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("profil")
+                        Select Case _ListUsers.Item(i).Profil
+                            Case Users.TypeProfil.invite
+                                writer.WriteValue("0")
+                            Case Users.TypeProfil.user
+                                writer.WriteValue("1")
+                            Case Users.TypeProfil.admin
+                                writer.WriteValue("2")
+                        End Select
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("password")
+                        writer.WriteValue(_ListUsers.Item(i).Password)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("numberidentification")
+                        writer.WriteValue(_ListUsers.Item(i).NumberIdentification)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("image")
+                        writer.WriteValue(_ListUsers.Item(i).Image)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("email")
+                        writer.WriteValue(_ListUsers.Item(i).eMail)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("emailautre")
+                        writer.WriteValue(_ListUsers.Item(i).eMailAutre)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("telfixe")
+                        writer.WriteValue(_ListUsers.Item(i).TelFixe)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("telmobile")
+                        writer.WriteValue(_ListUsers.Item(i).TelMobile)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("telautre")
+                        writer.WriteValue(_ListUsers.Item(i).TelAutre)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("adresse")
+                        writer.WriteValue(_ListUsers.Item(i).Adresse)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("ville")
+                        writer.WriteValue(_ListUsers.Item(i).Ville)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("codepostal")
+                        writer.WriteValue(_ListUsers.Item(i).CodePostal)
+                        writer.WriteEndAttribute()
+                        writer.WriteEndElement()
+                    Catch ex As Exception
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", " Erreur de sauvegarde de la configuration: Utilisateurs: " & ex.ToString)
+                    End Try
                 Next
                 writer.WriteEndElement()
 
@@ -1982,124 +1994,128 @@ Namespace HoMIDom
                 Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des devices")
                 writer.WriteStartElement("devices")
                 For i As Integer = 0 To _ListDevices.Count - 1
-                    'Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", " - " & _ListDevices.Item(i).name)
-                    writer.WriteStartElement("device")
-                    '-- propriétés génériques --
-                    writer.WriteStartAttribute("id")
-                    writer.WriteValue(_ListDevices.Item(i).id)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("name")
-                    writer.WriteValue(_ListDevices.Item(i).Name)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("enable")
-                    writer.WriteValue(_ListDevices.Item(i).enable)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("driverid")
-                    writer.WriteValue(_ListDevices.Item(i).driverid)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("description")
-                    writer.WriteValue(_ListDevices.Item(i).description)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("type")
-                    writer.WriteValue(_ListDevices.Item(i).type)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("adresse1")
-                    writer.WriteValue(_ListDevices.Item(i).adresse1)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("adresse2")
-                    writer.WriteValue(_ListDevices.Item(i).adresse2)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("datecreated")
-                    writer.WriteValue(_ListDevices.Item(i).datecreated)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("lastchange")
-                    writer.WriteValue(_ListDevices.Item(i).lastchange)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("lastchangeduree")
-                    writer.WriteValue(_ListDevices.Item(i).LastChangeDuree)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("refresh")
-                    writer.WriteValue(_ListDevices.Item(i).refresh)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("modele")
-                    writer.WriteValue(_ListDevices.Item(i).modele)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("allvalue")
-                    writer.WriteValue(_ListDevices.Item(i).allvalue)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("unit")
-                    writer.WriteValue(_ListDevices.Item(i).unit)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("puissance")
-                    writer.WriteValue(_ListDevices.Item(i).Puissance)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("picture")
-                    Dim _pict As String = _ListDevices.Item(i).picture
-                    If String.IsNullOrEmpty(_pict) = True Or _pict = Nothing Then _pict = " "
-                    writer.WriteValue(_pict)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("solo")
-                    writer.WriteValue(_ListDevices.Item(i).solo)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("value")
-                    If _ListDevices.Item(i).value IsNot Nothing Then writer.WriteValue(_ListDevices.Item(i).value)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("lastetat")
-                    writer.WriteValue(_ListDevices.Item(i).lastetat)
-                    writer.WriteEndAttribute()
-
-                    '-- propriétés generique value --
-                    If _ListDevices.Item(i).Type = "BAROMETRE" _
-                    Or _ListDevices.Item(i).Type = "COMPTEUR" _
-                    Or _ListDevices.Item(i).Type = "ENERGIEINSTANTANEE" _
-                    Or _ListDevices.Item(i).Type = "ENERGIETOTALE" _
-                    Or _ListDevices.Item(i).Type = "GENERIQUEVALUE" _
-                    Or _ListDevices.Item(i).Type = "HUMIDITE" _
-                    Or _ListDevices.Item(i).Type = "LAMPE" _
-                    Or _ListDevices.Item(i).Type = "PLUIECOURANT" _
-                    Or _ListDevices.Item(i).Type = "PLUIETOTAL" _
-                    Or _ListDevices.Item(i).Type = "TEMPERATURE" _
-                    Or _ListDevices.Item(i).Type = "TEMPERATURECONSIGNE" _
-                    Or _ListDevices.Item(i).Type = "VITESSEVENT" _
-                    Or _ListDevices.Item(i).Type = "UV" _
-                    Or _ListDevices.Item(i).Type = "VOLET" _
-                    Then
-                        writer.WriteStartAttribute("valuemin")
-                        writer.WriteValue(_ListDevices.Item(i).valuemin)
+                    Try
+                        'Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", " - " & _ListDevices.Item(i).name)
+                        writer.WriteStartElement("device")
+                        '-- propriétés génériques --
+                        writer.WriteStartAttribute("id")
+                        writer.WriteValue(_ListDevices.Item(i).id)
                         writer.WriteEndAttribute()
-                        writer.WriteStartAttribute("valuemax")
-                        writer.WriteValue(_ListDevices.Item(i).valuemax)
+                        writer.WriteStartAttribute("name")
+                        writer.WriteValue(_ListDevices.Item(i).Name)
                         writer.WriteEndAttribute()
-                        writer.WriteStartAttribute("precision")
-                        writer.WriteValue(_ListDevices.Item(i).precision)
+                        writer.WriteStartAttribute("enable")
+                        writer.WriteValue(_ListDevices.Item(i).enable)
                         writer.WriteEndAttribute()
-                        writer.WriteStartAttribute("correction")
-                        writer.WriteValue(_ListDevices.Item(i).correction)
+                        writer.WriteStartAttribute("driverid")
+                        writer.WriteValue(_ListDevices.Item(i).driverid)
                         writer.WriteEndAttribute()
-                        writer.WriteStartAttribute("valuedef")
-                        writer.WriteValue(_ListDevices.Item(i).valuedef)
+                        writer.WriteStartAttribute("description")
+                        writer.WriteValue(_ListDevices.Item(i).description)
                         writer.WriteEndAttribute()
-                        writer.WriteStartAttribute("formatage")
-                        writer.WriteValue(_ListDevices.Item(i).formatage)
+                        writer.WriteStartAttribute("type")
+                        writer.WriteValue(_ListDevices.Item(i).type)
                         writer.WriteEndAttribute()
-                        writer.WriteStartAttribute("valuelast")
-                        writer.WriteValue(_ListDevices.Item(i).valuelast)
+                        writer.WriteStartAttribute("adresse1")
+                        writer.WriteValue(_ListDevices.Item(i).adresse1)
                         writer.WriteEndAttribute()
-                    End If
-
-                    'écriture des variables
-                    For Each kvp As KeyValuePair(Of String, String) In _ListDevices.Item(i).Variables
-                        writer.WriteStartElement("var")
-                        writer.WriteStartAttribute("key")
-                        writer.WriteValue(kvp.Key)
+                        writer.WriteStartAttribute("adresse2")
+                        writer.WriteValue(_ListDevices.Item(i).adresse2)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("datecreated")
+                        writer.WriteValue(_ListDevices.Item(i).datecreated)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("lastchange")
+                        writer.WriteValue(_ListDevices.Item(i).lastchange)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("lastchangeduree")
+                        writer.WriteValue(_ListDevices.Item(i).LastChangeDuree)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("refresh")
+                        writer.WriteValue(_ListDevices.Item(i).refresh)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("modele")
+                        writer.WriteValue(_ListDevices.Item(i).modele)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("allvalue")
+                        writer.WriteValue(_ListDevices.Item(i).allvalue)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("unit")
+                        writer.WriteValue(_ListDevices.Item(i).unit)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("puissance")
+                        writer.WriteValue(_ListDevices.Item(i).Puissance)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("picture")
+                        Dim _pict As String = _ListDevices.Item(i).picture
+                        If String.IsNullOrEmpty(_pict) = True Or _pict = Nothing Then _pict = " "
+                        writer.WriteValue(_pict)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("solo")
+                        writer.WriteValue(_ListDevices.Item(i).solo)
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("value")
-                        writer.WriteValue(kvp.Value)
+                        If _ListDevices.Item(i).value IsNot Nothing Then writer.WriteValue(_ListDevices.Item(i).value)
                         writer.WriteEndAttribute()
-                        writer.WriteEndElement()
-                    Next kvp
+                        writer.WriteStartAttribute("lastetat")
+                        writer.WriteValue(_ListDevices.Item(i).lastetat)
+                        writer.WriteEndAttribute()
 
-                    writer.WriteEndElement()
+                        '-- propriétés generique value --
+                        If _ListDevices.Item(i).Type = "BAROMETRE" _
+                        Or _ListDevices.Item(i).Type = "COMPTEUR" _
+                        Or _ListDevices.Item(i).Type = "ENERGIEINSTANTANEE" _
+                        Or _ListDevices.Item(i).Type = "ENERGIETOTALE" _
+                        Or _ListDevices.Item(i).Type = "GENERIQUEVALUE" _
+                        Or _ListDevices.Item(i).Type = "HUMIDITE" _
+                        Or _ListDevices.Item(i).Type = "LAMPE" _
+                        Or _ListDevices.Item(i).Type = "PLUIECOURANT" _
+                        Or _ListDevices.Item(i).Type = "PLUIETOTAL" _
+                        Or _ListDevices.Item(i).Type = "TEMPERATURE" _
+                        Or _ListDevices.Item(i).Type = "TEMPERATURECONSIGNE" _
+                        Or _ListDevices.Item(i).Type = "VITESSEVENT" _
+                        Or _ListDevices.Item(i).Type = "UV" _
+                        Or _ListDevices.Item(i).Type = "VOLET" _
+                        Then
+                            writer.WriteStartAttribute("valuemin")
+                            writer.WriteValue(_ListDevices.Item(i).valuemin)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("valuemax")
+                            writer.WriteValue(_ListDevices.Item(i).valuemax)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("precision")
+                            writer.WriteValue(_ListDevices.Item(i).precision)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("correction")
+                            writer.WriteValue(_ListDevices.Item(i).correction)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("valuedef")
+                            writer.WriteValue(_ListDevices.Item(i).valuedef)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("formatage")
+                            writer.WriteValue(_ListDevices.Item(i).formatage)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("valuelast")
+                            writer.WriteValue(_ListDevices.Item(i).valuelast)
+                            writer.WriteEndAttribute()
+                        End If
+
+                        'écriture des variables
+                        For Each kvp As KeyValuePair(Of String, String) In _ListDevices.Item(i).Variables
+                            writer.WriteStartElement("var")
+                            writer.WriteStartAttribute("key")
+                            writer.WriteValue(kvp.Key)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("value")
+                            writer.WriteValue(kvp.Value)
+                            writer.WriteEndAttribute()
+                            writer.WriteEndElement()
+                        Next kvp
+
+                        writer.WriteEndElement()
+                    Catch ex As Exception
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", " Erreur de sauvegarde de la configuration: Composants: " & ex.ToString)
+                    End Try
                 Next
                 writer.WriteEndElement()
 
@@ -2109,52 +2125,56 @@ Namespace HoMIDom
                 Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des triggers")
                 writer.WriteStartElement("triggers")
                 For i As Integer = 0 To _ListTriggers.Count - 1
-                    writer.WriteStartElement("trigger")
-                    writer.WriteStartAttribute("id")
-                    writer.WriteValue(_ListTriggers.Item(i).ID)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("nom")
-                    writer.WriteValue(_ListTriggers.Item(i).Nom)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("description")
-                    writer.WriteValue(_ListTriggers.Item(i).Description)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("enable")
-                    writer.WriteValue(_ListTriggers.Item(i).Enable)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("type")
-                    If _ListTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
-                        writer.WriteValue("0")
-                    Else
-                        writer.WriteValue("1")
-                    End If
-                    writer.WriteEndAttribute()
-                    If _ListTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
-                        writer.WriteStartAttribute("conditiontime")
-                        writer.WriteValue(_ListTriggers.Item(i).ConditionTime)
-                        writer.WriteEndAttribute()
-                        writer.WriteStartAttribute("prochainedateheure")
-                        writer.WriteValue(_ListTriggers.Item(i).Prochainedateheure)
-                        writer.WriteEndAttribute()
-                    End If
-                    If _ListTriggers.Item(i).Type = Trigger.TypeTrigger.DEVICE Then
-                        writer.WriteStartAttribute("conditiondeviceid")
-                        writer.WriteValue(_ListTriggers.Item(i).ConditionDeviceId)
-                        writer.WriteEndAttribute()
-                        writer.WriteStartAttribute("conditiondeviceproperty")
-                        writer.WriteValue(_ListTriggers.Item(i).ConditionDeviceProperty)
-                        writer.WriteEndAttribute()
-                    End If
-                    writer.WriteStartElement("macros")
-                    For k = 0 To _ListTriggers.Item(i).ListMacro.Count - 1
-                        writer.WriteStartElement("macro")
+                    Try
+                        writer.WriteStartElement("trigger")
                         writer.WriteStartAttribute("id")
-                        writer.WriteValue(_ListTriggers.Item(i).ListMacro.Item(k))
+                        writer.WriteValue(_ListTriggers.Item(i).ID)
                         writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("nom")
+                        writer.WriteValue(_ListTriggers.Item(i).Nom)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("description")
+                        writer.WriteValue(_ListTriggers.Item(i).Description)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("enable")
+                        writer.WriteValue(_ListTriggers.Item(i).Enable)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("type")
+                        If _ListTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
+                            writer.WriteValue("0")
+                        Else
+                            writer.WriteValue("1")
+                        End If
+                        writer.WriteEndAttribute()
+                        If _ListTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
+                            writer.WriteStartAttribute("conditiontime")
+                            writer.WriteValue(_ListTriggers.Item(i).ConditionTime)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("prochainedateheure")
+                            writer.WriteValue(_ListTriggers.Item(i).Prochainedateheure)
+                            writer.WriteEndAttribute()
+                        End If
+                        If _ListTriggers.Item(i).Type = Trigger.TypeTrigger.DEVICE Then
+                            writer.WriteStartAttribute("conditiondeviceid")
+                            writer.WriteValue(_ListTriggers.Item(i).ConditionDeviceId)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("conditiondeviceproperty")
+                            writer.WriteValue(_ListTriggers.Item(i).ConditionDeviceProperty)
+                            writer.WriteEndAttribute()
+                        End If
+                        writer.WriteStartElement("macros")
+                        For k = 0 To _ListTriggers.Item(i).ListMacro.Count - 1
+                            writer.WriteStartElement("macro")
+                            writer.WriteStartAttribute("id")
+                            writer.WriteValue(_ListTriggers.Item(i).ListMacro.Item(k))
+                            writer.WriteEndAttribute()
+                            writer.WriteEndElement()
+                        Next
                         writer.WriteEndElement()
-                    Next
-                    writer.WriteEndElement()
-                    writer.WriteEndElement()
+                        writer.WriteEndElement()
+                    Catch ex As Exception
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", " Erreur de sauvegarde de la configuration: Triggers: " & ex.ToString)
+                    End Try
                 Next
                 writer.WriteEndElement()
 
@@ -2164,59 +2184,67 @@ Namespace HoMIDom
                 Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des macros")
                 writer.WriteStartElement("macros")
                 For i As Integer = 0 To _ListMacros.Count - 1
-                    writer.WriteStartElement("macro")
-                    writer.WriteStartAttribute("id")
-                    writer.WriteValue(_ListMacros.Item(i).ID)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("nom")
-                    writer.WriteValue(_ListMacros.Item(i).Nom)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("description")
-                    writer.WriteValue(_ListMacros.Item(i).Description)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("enable")
-                    writer.WriteValue(_ListMacros.Item(i).Enable)
-                    writer.WriteEndAttribute()
-                    WriteListAction(writer, _ListMacros.Item(i).ListActions)
-                    writer.WriteEndElement()
+                    Try
+                        writer.WriteStartElement("macro")
+                        writer.WriteStartAttribute("id")
+                        writer.WriteValue(_ListMacros.Item(i).ID)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("nom")
+                        writer.WriteValue(_ListMacros.Item(i).Nom)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("description")
+                        writer.WriteValue(_ListMacros.Item(i).Description)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("enable")
+                        writer.WriteValue(_ListMacros.Item(i).Enable)
+                        writer.WriteEndAttribute()
+                        WriteListAction(writer, _ListMacros.Item(i).ListActions)
+                        writer.WriteEndElement()
+                    Catch ex As Exception
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", " Erreur de sauvegarde de la configuration: Macros: " & ex.ToString)
+                    End Try
                 Next
                 writer.WriteEndElement()
 
                 ''------------
-                ''Sauvegarde des nouveaux devices
+                ''Sauvegarde des nouveaux composants
                 ''------------
-                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des newdevices")
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des nouveaux composants")
                 writer.WriteStartElement("newdevices")
                 For i As Integer = 0 To _ListNewDevices.Count - 1
-                    writer.WriteStartElement("newdevice")
-                    writer.WriteStartAttribute("id")
-                    writer.WriteValue(_ListNewDevices.Item(i).ID)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("iddriver")
-                    writer.WriteValue(_ListNewDevices.Item(i).IdDriver)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("adresse1")
-                    writer.WriteValue(_ListNewDevices.Item(i).Adresse1)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("adresse2")
-                    writer.WriteValue(_ListNewDevices.Item(i).Adresse2)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("name")
-                    writer.WriteValue(_ListNewDevices.Item(i).Name)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("type")
-                    writer.WriteValue(_ListNewDevices.Item(i).Type)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("ignore")
-                    writer.WriteValue(_ListNewDevices.Item(i).Ignore)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("value")
-                    writer.WriteValue(_ListNewDevices.Item(i).Value)
-                    writer.WriteEndAttribute()
-                    writer.WriteStartAttribute("datetetect")
-                    writer.WriteValue(_ListNewDevices.Item(i).DateTetect)
-                    writer.WriteEndAttribute()
-                    writer.WriteEndElement()
+                    Try
+                        writer.WriteStartElement("newdevice")
+                        writer.WriteStartAttribute("id")
+                        writer.WriteValue(_ListNewDevices.Item(i).ID)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("iddriver")
+                        writer.WriteValue(_ListNewDevices.Item(i).IdDriver)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("adresse1")
+                        writer.WriteValue(_ListNewDevices.Item(i).Adresse1)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("adresse2")
+                        writer.WriteValue(_ListNewDevices.Item(i).Adresse2)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("name")
+                        writer.WriteValue(_ListNewDevices.Item(i).Name)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("type")
+                        writer.WriteValue(_ListNewDevices.Item(i).Type)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("ignore")
+                        writer.WriteValue(_ListNewDevices.Item(i).Ignore)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("value")
+                        writer.WriteValue(_ListNewDevices.Item(i).Value)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("datetetect")
+                        writer.WriteValue(_ListNewDevices.Item(i).DateTetect)
+                        writer.WriteEndAttribute()
+                        writer.WriteEndElement()
+                    Catch ex As Exception
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", " Erreur de sauvegarde de la configuration: Nouveau composant: " & ex.ToString)
+                    End Try
                 Next
                 writer.WriteEndElement()
                 ''FIN DES ELEMENTS------------
