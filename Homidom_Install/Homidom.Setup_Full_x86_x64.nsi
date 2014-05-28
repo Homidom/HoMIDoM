@@ -519,7 +519,12 @@ Section "" HoMIDoM_SHORTCUTS
   
   ${If} $optStartServiceGUI == "1"
     SetOutPath "$INSTDIR"
-    CreateShortCut "$SMSTARTUP\HoMIDoM Service GUI.lnk" "$INSTDIR\HoMIGuI.exe"
+    ;CreateShortCut "$SMSTARTUP\HoMIDoM Service GUI.lnk" "$INSTDIR\HoMIGuI.exe"
+    ${If} ${RunningX64}
+      WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Run" "HoMIGuI" "$INSTDIR\HoMIGuI.exe"
+    ${Else}
+      WriteRegStr HKLM "SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Run" "HoMIGuI" "$INSTDIR\HoMIGuI.exe"
+    ${EndIf}
   ${EndIf}
   
   WriteINIStr "$SMPROGRAMS\${PRODUCT_NAME}\Visitez le site Web HoMIDoM.URL" "InternetShortcut" "URL" "http://www.homidom.com"
