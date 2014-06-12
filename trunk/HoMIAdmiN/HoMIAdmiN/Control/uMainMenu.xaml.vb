@@ -65,7 +65,7 @@
         img_config.MouseLeftButtonDown, img_config_log.MouseLeftButtonDown, _
         img_config_sauvegarder.MouseLeftButtonDown, img_aide.MouseLeftButtonDown, img_multimedia.MouseDown, _
         img_quitter.MouseLeftButtonDown, img_quitter_start.MouseLeftButtonDown, img_quitter_stop.MouseLeftButtonDown, img_composant_gerer_nvx.MouseLeftButtonDown, _
-        img_histo_import.MouseLeftButtonDown, img_multimedia_template.MouseLeftButtonDown
+        img_histo_import.MouseLeftButtonDown, img_multimedia_template.MouseLeftButtonDown, img_var_gerer.MouseLeftButtonDown
         Try
             If e.ClickCount = 1 Then RaiseEvent menu_autre(sender.tag)
         Catch ex As Exception
@@ -367,6 +367,12 @@
             mnu101.Uid = "mod_ajouter"
             AddHandler mnu101.Click, AddressOf menu_contextmenuclick
             ctxMenuModule.Items.Add(mnu101)
+            Dim mnu102 As New MenuItem
+            mnu102.Header = "Variables"
+            mnu102.Tag = "var"
+            mnu102.Uid = "var_gérer"
+            AddHandler mnu102.Click, AddressOf menu_contextmenuclick
+            ctxMenuModule.Items.Add(mnu102)
             menu_module.ContextMenu = ctxMenuModule
             ctxMenuModule = Nothing
 

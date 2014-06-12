@@ -48,14 +48,18 @@ Namespace HoMIDom
 #Region "Declaration des variables"
 
         Private Shared WithEvents _ListDrivers As New ArrayList 'Liste des drivers
-        Private Shared _ListImgDrivers As New List(Of Driver)
         Private Shared WithEvents _ListDevices As New ArrayList 'Liste des devices
         Private Shared WithEvents _ListNewDevices As New List(Of NewDevice) 'Liste des devices découverts
+
+        Private Shared _ListImgDrivers As New List(Of Driver)
+
         <NonSerialized()> Private Shared _ListZones As New List(Of Zone) 'Liste des zones
         <NonSerialized()> Private Shared _ListUsers As New List(Of Users.User) 'Liste des users
         <NonSerialized()> Private Shared _ListMacros As New List(Of Macro) 'Liste des macros
         <NonSerialized()> Private Shared _ListTriggers As New List(Of Trigger) 'Liste de tous les triggers
         <NonSerialized()> Private Shared _ListGroups As New List(Of Groupes) 'Liste de tous les groupes
+        <NonSerialized()> Private Shared _ListVars As New List(Of Variable) 'Liste de toutes les variables
+
         <NonSerialized()> Private sqlite_homidom As New Sqlite("homidom", Me) 'BDD sqlite pour Homidom
         <NonSerialized()> Private sqlite_medias As New Sqlite("medias", Me) 'BDD sqlite pour les medias
         <NonSerialized()> Shared Soleil As New Soleil 'Déclaration class Soleil
@@ -118,6 +122,14 @@ Namespace HoMIDom
         '********************************************************************
         'Gestion des Evènements
         '********************************************************************
+        Public Sub VarEvent(Nom As String, e As String)
+            Try
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "VarEvent", "La variable: " & Nom & " a changée de valeur=" & e)
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "VarEvent", "Exception : " & ex.Message)
+            End Try
+        End Sub
+        
 
         ''' <summary>Evenement provenant des drivers </summary>
         ''' <param name="DriveName"></param>
@@ -911,6 +923,41 @@ Namespace HoMIDom
                         End Try
 
                         '******************************************
+                        'on va chercher les variables
+                        '******************************************
+                        Try
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des variables :")
+                            list = Nothing
+                            list = myxml.SelectNodes("/homidom/variables/var")
+                            If list.Count > 0 Then 'présence des variables
+                                For i As Integer = 0 To list.Count - 1
+                                    Dim x As New Variable(Me)
+                                    For j As Integer = 0 To list.Item(i).Attributes.Count - 1
+                                        Select Case list.Item(i).Attributes.Item(j).Name
+                                            Case "id"
+                                                x.ID = list.Item(i).Attributes.Item(j).Value
+                                            Case "nom"
+                                                x.Nom = list.Item(i).Attributes.Item(j).Value
+                                            Case "enable"
+                                                x.Enable = list.Item(i).Attributes.Item(j).Value
+                                            Case "value"
+                                                x.Value = list.Item(i).Attributes.Item(j).Value
+                                            Case "description"
+                                                x.Description = list.Item(i).Attributes.Item(j).Value
+                                            Case Else
+                                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la variable est inconnu: nom:" & list.Item(i).Attributes.Item(j).Name & " Valeur: " & list.Item(0).Attributes.Item(j).Value)
+                                        End Select
+                                    Next
+                                    _ListVars.Add(x)
+                                    x = Nothing
+                                Next
+                            End If
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListVars.Count & " Variables(s) chargée(s)")
+                        Catch ex As Exception
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des variables : " & ex.Message)
+                        End Try
+
+                        '******************************************
                         'on va chercher les users
                         '******************************************
                         Try
@@ -1523,6 +1570,10 @@ Namespace HoMIDom
                                     Dim o As New Action.ActionSTOP
                                     _Act = o
                                     o = Nothing
+                                Case "ActionVar"
+                                    Dim o As New Action.ActionVar
+                                    _Act = o
+                                    o = Nothing
                             End Select
                             For j3 As Integer = 0 To list.ChildNodes.Item(j2).Attributes.Count - 1
                                 Select Case list.ChildNodes.Item(j2).Attributes.Item(j3).Name
@@ -1590,6 +1641,10 @@ Namespace HoMIDom
                                         End If
                                     Case "eventid"
                                         _Act.Eventid = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                    Case "nom"
+                                        _Act.Nom = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
+                                    Case "value"
+                                        _Act.Value = list.ChildNodes.Item(j2).Attributes.Item(j3).Value
                                 End Select
                             Next
                             If list.ChildNodes.Item(j2).HasChildNodes Then
@@ -1913,6 +1968,36 @@ Namespace HoMIDom
                         writer.WriteEndElement()
                     Catch ex As Exception
                         Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", " Erreur de sauvegarde de la configuration: Zones: " & ex.ToString)
+                    End Try
+                Next
+                writer.WriteEndElement()
+
+                ''------------
+                ''Sauvegarde des variables
+                ''------------
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde des variables")
+                writer.WriteStartElement("variables")
+                For i As Integer = 0 To _ListVars.Count - 1
+                    Try
+                        writer.WriteStartElement("var")
+                        writer.WriteStartAttribute("id")
+                        writer.WriteValue(_ListVars.Item(i).ID)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("nom")
+                        writer.WriteValue(_ListVars.Item(i).Nom)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("enable")
+                        writer.WriteValue(_ListVars.Item(i).Enable)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("value")
+                        writer.WriteValue(_ListVars.Item(i).Value)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("description")
+                        writer.WriteValue(_ListVars.Item(i).Description)
+                        writer.WriteEndAttribute()
+                        writer.WriteEndElement()
+                    Catch ex As Exception
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", " Erreur de sauvegarde de la configuration: Variables: " & ex.ToString)
                     End Try
                 Next
                 writer.WriteEndElement()
@@ -2364,6 +2449,13 @@ Namespace HoMIDom
                             writer.WriteEndAttribute()
                             writer.WriteStartAttribute("script")
                             writer.WriteValue(ListActions.Item(j).Script)
+                            writer.WriteEndAttribute()
+                        Case Action.TypeAction.ActionVar
+                            writer.WriteStartAttribute("nom")
+                            writer.WriteValue(ListActions.Item(j).Nom)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("value")
+                            writer.WriteValue(ListActions.Item(j).Value)
                             writer.WriteEndAttribute()
                         Case Action.TypeAction.ActionHttp
                             writer.WriteStartAttribute("commande")
@@ -9841,6 +9933,161 @@ Namespace HoMIDom
         End Function
 
 #End Region
+
+#Region "Variable"
+        Public Function GetAllVariables(idsrv As String) As List(Of Variable) Implements IHoMIDom.GetAllVariables
+            Try
+                If VerifIdSrv(idsrv) = False Then
+                    Return Nothing
+                End If
+
+                Dim _list As New List(Of Variable)
+                _list = _ListVars
+
+                Return _list
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetAllVariables: ", ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        Public Function AddVariable(ByVal idsrv As String, Name As String, Optional Enable As Boolean = True, Optional Value As String = "", Optional Description As String = "") As String Implements IHoMIDom.AddVariable
+            Try
+                If VerifIdSrv(idsrv) = False Then
+                    Return "ID du serveur erroné!!"
+                End If
+
+                If String.IsNullOrEmpty(Name) Then
+                    Return "Erreur le nom de la variable doit être définit!!"
+                End If
+
+                For Each _var In _ListVars
+                    If _var.Nom.ToLower = Name.ToLower Then
+                        Return "Erreur cette variable existe déjà!!"
+                    End If
+                Next
+
+                Dim _newvar As New Variable
+                With _newvar
+                    .ID = GenerateGUID()
+                    .Nom = Name
+                    .Enable = Enable
+                    .Value = Value
+                    .Description = Description
+                End With
+                _ListVars.Add(_newvar)
+
+                Return Nothing
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "AddVariable: ", ex.Message)
+                Return ex.Message
+            End Try
+        End Function
+
+        Public Function SaveVariable(ByVal idsrv As String, Name As String, Optional Enable As Boolean = True, Optional Value As String = "", Optional Description As String = "") As String Implements IHoMIDom.SaveVariable
+            Try
+                If VerifIdSrv(idsrv) = False Then
+                    Return "ID du serveur erroné!!"
+                End If
+
+                If String.IsNullOrEmpty(Name) Then
+                    Return "Erreur le nom de la variable doit être définit!!"
+                End If
+
+                Dim trv As Boolean
+
+                For Each _var In _ListVars
+                    If _var.Nom.ToLower = Name.ToLower Then
+                        _var.Enable = Enable
+                        _var.Description = Description
+                        _var.Value = Value
+                        trv = True
+                        Exit For
+                    End If
+                Next
+
+                If trv Then
+                    Return Nothing
+                Else
+                    Return "La variable " & Name & " n'a pas pu être modifiée car non trouvée!!"
+                End If
+
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveVariable: ", ex.Message)
+                Return ex.Message
+            End Try
+        End Function
+
+
+        Public Function GetValueOfVariable(ByVal idsrv As String, Name As String) As String Implements IHoMIDom.GetValueOfVariable
+            Try
+                If VerifIdSrv(idsrv) = False Then
+                    Return Nothing
+                End If
+
+                For Each _var In _ListVars
+                    If _var.Nom.ToLower = Name.ToLower Then
+                        Return _var.Value
+                    End If
+                Next
+
+                Return Nothing
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetValueOfVariable: ", ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        Public Function SetValueOfVariable(ByVal idsrv As String, Name As String, Value As String) As String Implements IHoMIDom.SetValueOfVariable
+            Try
+                If VerifIdSrv(idsrv) = False Then
+                    Return 99
+                End If
+
+                For Each _var In _ListVars
+                    If _var.Nom.ToLower = Name.ToLower Then
+                        _var.Value = Value
+                    End If
+                Next
+
+                Return Nothing
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetValueOfVariable: ", ex.Message)
+                Return ex.Message
+            End Try
+        End Function
+
+        Public Function DeleteVariable(ByVal idsrv As String, Name As String) As String Implements IHoMIDom.DeleteVariable
+            Try
+                If VerifIdSrv(idsrv) = False Then
+                    Return "ID du serveur erroné!!"
+                End If
+
+                Dim i As Integer = 0
+                Dim trv As Boolean
+
+                For Each _var In _ListVars
+                    If _var.Nom.ToLower = Name.ToLower Then
+                        _ListVars.RemoveAt(i)
+                        trv = True
+                        Exit For
+                    End If
+                    i += 1
+                Next
+
+                If trv Then
+                    Return Nothing
+                Else
+                    Return "La variable " & Name & " n'a pas pu être supprimée car non trouvée!!"
+                End If
+
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteVariable: ", ex.Message)
+                Return ex.Message
+            End Try
+        End Function
+#End Region
+
 #End Region
 
     End Class

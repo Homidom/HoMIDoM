@@ -1381,6 +1381,70 @@ Namespace HoMIDom
         Event HeureSoleilChanged() 'Evènement lorsque l'heure de lever/couché du soleil est modifié
 #End Region
 
+#Region "Variables"
+        ''' <summary>
+        ''' Retourne toutes les variables
+        ''' </summary>
+        ''' <param name="idsrv"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetAllVariables(idsrv As String) As List(Of Variable)
+
+        ''' <summary>
+        ''' Ajoute une nouvelle variable
+        ''' </summary>
+        ''' <param name="idsrv"></param>
+        ''' <param name="Name"></param>
+        ''' <param name="Enable"></param>
+        ''' <param name="Value"></param>
+        ''' <param name="Description"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function AddVariable(ByVal idsrv As String, Name As String, Optional Enable As Boolean = True, Optional Value As String = "", Optional Description As String = "") As String
+
+        ''' <summary>
+        ''' Modifier une variable
+        ''' </summary>
+        ''' <param name="idsrv"></param>
+        ''' <param name="Name"></param>
+        ''' <param name="Enable"></param>
+        ''' <param name="Value"></param>
+        ''' <param name="Description"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function SaveVariable(ByVal idsrv As String, Name As String, Optional Enable As Boolean = True, Optional Value As String = "", Optional Description As String = "") As String
+
+        ''' <summary>
+        ''' Retourne la valeur d'une variable donnée
+        ''' </summary>
+        ''' <param name="idsrv"></param>
+        ''' <param name="Name"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetValueOfVariable(ByVal idsrv As String, Name As String) As String
+
+        ''' <summary>
+        ''' Définit la valeur d'une variable donnée
+        ''' </summary>
+        ''' <param name="idsrv"></param>
+        ''' <param name="Name"></param>
+        ''' <param name="Value"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function SetValueOfVariable(ByVal idsrv As String, Name As String, Value As String) As String
+
+        ''' <summary>
+        ''' Supprime une variable
+        ''' </summary>
+        ''' <param name="idsrv"></param>
+        ''' <param name="Name"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function DeleteVariable(ByVal idsrv As String, Name As String) As String
+
+
+#End Region
+
     End Interface
 
     

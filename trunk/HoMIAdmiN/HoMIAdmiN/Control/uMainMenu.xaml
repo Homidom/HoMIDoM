@@ -151,6 +151,7 @@
                             <Image Tag="tag_module" Name="img_module" Width="60" Height="60" Margin="3" Source="/HoMIAdmiN;component/Images/module_128.png" ToolTip="Créer un module" />
                             <Label Name="label_menu_module" Content="Module" Foreground="White" HorizontalContentAlignment="Center" FontStyle="Italic" FontWeight="ExtraBlack" />
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <Image Tag="tag_var" Name="img_var_gerer" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/Debug-Variable-icon.png" ToolTip="Gérer les variables" />
                                 <Image Tag="tag_module" Name="img_module_ajouter" Margin="2" Height="15" Width="15" Source="/HoMIAdmiN;component/Images/ajouter_32.png" ToolTip="Créer un module" />
                             </StackPanel>
                         </StackPanel>

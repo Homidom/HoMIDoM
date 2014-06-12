@@ -179,6 +179,13 @@ Public Class uAction
 
                             Image1.Source = New BitmapImage(New Uri("/HoMIAdmiN;component/Images/Signal_stop.png", UriKind.RelativeOrAbsolute))
                             Image1.Visibility = Windows.Visibility.Visible
+                        Case Action.TypeAction.ActionVar
+                            Dim x As Action.ActionVar = _ObjAction
+                            Label1.Content = "Variable"
+                            Label2.Content = x.Nom & "=" & x.Value
+
+                            Image1.Source = New BitmapImage(New Uri("/HoMIAdmiN;component/Images/Debug-Variable-icon.png", UriKind.RelativeOrAbsolute))
+                            Image1.Visibility = Windows.Visibility.Visible
                     End Select
                     Refresh_Position()
                 End If

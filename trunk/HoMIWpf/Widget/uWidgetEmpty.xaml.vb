@@ -1124,7 +1124,9 @@ Public Class uWidgetEmpty
                 If _Visuel.Count > 0 Then
                     For Each _ElmtVisu As cWidget.Visu In _Visuel
                         If frmMere.MaJWidgetFromServer Then
-                            _dev = myService.ReturnDeviceByID(IdSrv, _ElmtVisu.IdObject)
+                            If IsConnect Then
+                                _dev = myService.ReturnDeviceByID(IdSrv, _ElmtVisu.IdObject)
+                            End If
                         Else
                             _dev = ReturnDeviceById(_ElmtVisu.IdObject)
                         End If
@@ -1189,7 +1191,9 @@ Public Class uWidgetEmpty
 
                 If String.IsNullOrEmpty(_Id) = False Then
                     If frmMere.MaJWidgetFromServer Then
-                        _dev = myService.ReturnDeviceByID(IdSrv, _Id)
+                        If IsConnect Then
+                            _dev = myService.ReturnDeviceByID(IdSrv, _Id)
+                        End If
                     Else
                         _dev = ReturnDeviceById(_Id)
                     End If
@@ -1305,7 +1309,7 @@ Public Class uWidgetEmpty
                             If MaJEtiquetteFromServeur Then Etiquette = _zone.Name
                             If Image.Tag <> _zone.Icon Then
                                 Image.Tag = _zone.Icon
-                                Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Icon))
+                                If IsConnect Then Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Icon))
                             End If
                         End If
                     ElseIf _macro IsNot Nothing Then

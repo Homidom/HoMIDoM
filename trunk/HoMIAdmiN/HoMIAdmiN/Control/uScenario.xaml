@@ -22,6 +22,7 @@
                         <Image Source="/HoMIAdmiN;component/Images/command_prompt_64.png" Height="32" Width="32" ToolTip="Executer une commande Dos" Name="ImgActDos"></Image>
                         <Image Source="/HoMIAdmiN;component/Images/VBS.png" Height="32" Width="32" ToolTip="Executer un Script VB" Name="ImgActVB"></Image>
                         <Image Source="/HoMIAdmiN;component/Images/Signal_stop.png" Height="32" Width="32" ToolTip="Arrêter la macro" Name="ImgActSTOP"></Image>
+                    <Image Source="/HoMIAdmiN;component/Images/Debug-Variable-icon.png" Height="32" Width="32" ToolTip="Définir la valeur d'une variable" Name="ImgActVAR"></Image>
                     <Image Name="ZoomPlus" Margin="50,0,0,0" Source="/HoMIAdmiN;component/Images/zoom_avant_32.png" Width="23" Height="23" />
                     <Image Name="ZoomMoins" Source="/HoMIAdmiN;component/Images/zoom_arriere_32.png" Width="23" Height="23" />
             </StackPanel>
