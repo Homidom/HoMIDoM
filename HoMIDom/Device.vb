@@ -2800,7 +2800,7 @@ Namespace HoMIDom
             Dim _PowerMin As Integer = 5 '% minimal de chauffage si le thermostat considère qu’il est nécessaire de chauffer (en fonction de la température intérieure et extérieure)
             Dim _C As Double = 0.6 'Valeur de calcul à mulitplier entre la différence entre la consigne et le température intérieure actuelle
             Dim _T As Double = 0.01 'Valeur de calcul à mulitplier entre la différence entre la consigne et le température extérieure
-
+            Dim _Puissance As Double = 0 'Resultat du Calcul
 
             Public Enum TypeMode
                 Auto = 0
@@ -3045,6 +3045,18 @@ Namespace HoMIDom
                 End Set
             End Property
 
+            Public Property Puissance As Double
+                Get
+                    Return _Puissance
+                End Get
+                Set(value As Double)
+                    _Puissance = value
+                End Set
+            End Property
+
+            Private Sub Calcul()
+                Puissance = C * (Consigne - TempIntNow) + T * (Consigne - _TempExtNow)
+            End Sub
         End Class
     End Class
 End Namespace

@@ -337,6 +337,7 @@ Public Class Driver_onewire
     ''' <remarks></remarks>
     Public Sub Restart() Implements HoMIDom.HoMIDom.IDriver.Restart
         [Stop]()
+        Thread.Sleep(2000)
         Start()
     End Sub
 

@@ -437,6 +437,12 @@ Namespace HoMIDom
             ''' </summary>
             ''' <remarks></remarks>
             ActionDriver = 11
+
+            ''' <summary>
+            ''' Action de type Var
+            ''' </summary>
+            ''' <remarks></remarks>
+            ActionVar = 12
         End Enum
 
         ''' <summary>
@@ -897,6 +903,50 @@ Namespace HoMIDom
 
         ''' <summary>
         ''' Action parler
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Class ActionVar
+            Dim _NomVar As String
+            Dim _Value As String
+            Dim _Timing As DateTime
+
+            Public Property Timing As DateTime
+                Get
+                    Return _Timing
+                End Get
+                Set(ByVal value As DateTime)
+                    _Timing = value
+                End Set
+            End Property
+
+            Public Property Nom As String
+                Get
+                    Return _NomVar
+                End Get
+                Set(ByVal value As String)
+                    _NomVar = value
+                End Set
+            End Property
+
+            Public Property Value As String
+                Get
+                    Return _Value
+                End Get
+                Set(ByVal value2 As String)
+                    _Value = value2
+                End Set
+            End Property
+
+            Public ReadOnly Property TypeAction As TypeAction
+                Get
+                    Return TypeAction.ActionVar
+                End Get
+            End Property
+
+        End Class
+
+        ''' <summary>
+        ''' Action http
         ''' </summary>
         ''' <remarks></remarks>
         Public Class ActionHttp

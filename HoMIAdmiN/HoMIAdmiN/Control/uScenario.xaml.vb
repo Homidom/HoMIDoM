@@ -143,6 +143,9 @@ Public Class uScenario
                     Case "ACTIONSTOP"
                         Dim y As New Action.ActionSTOP
                         x.ObjAction = y
+                    Case "ACTIONVAR"
+                        Dim y As New Action.ActionVar
+                        x.ObjAction = y
                 End Select
                 x.Span = Span
                 x.Zoom = _Zoom
@@ -402,6 +405,14 @@ Public Class uScenario
         Dim obj As New DataObject()
         obj.SetData(GetType(String), "ACTIONDOS")
         effects = DragDrop.DoDragDrop(Me.ImgActDos, obj, DragDropEffects.Copy Or DragDropEffects.Move)
+    End Sub
+
+    'Ajouter action Var
+    Private Sub ImgActVar_MouseLeftButtonDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgActVAR.MouseLeftButtonDown
+        Dim effects As DragDropEffects
+        Dim obj As New DataObject()
+        obj.SetData(GetType(String), "ACTIONVAR")
+        effects = DragDrop.DoDragDrop(Me.ImgActVAR, obj, DragDropEffects.Copy Or DragDropEffects.Move)
     End Sub
 
     'Ajouter action VB

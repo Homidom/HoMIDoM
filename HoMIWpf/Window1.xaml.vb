@@ -2221,6 +2221,7 @@ Class Window1
                             Canvas.SetLeft(x, _ListElement.Item(j).X)
                             Canvas.SetTop(x, _ListElement.Item(j).Y)
                             Canvas.SetZIndex(x, _ListElement.Item(j).ZIndex)
+                            Canvas1.UpdateLayout()
 
                             _flagTrouv = True
                             x = Nothing
@@ -2272,6 +2273,7 @@ Class Window1
                         Canvas1.Children.Add(x)
                         Canvas.SetLeft(x, _Left)
                         Canvas.SetTop(x, _Top)
+                        Canvas1.UpdateLayout()
 
                         _idx += 1
                         x = Nothing
@@ -2362,7 +2364,7 @@ Class Window1
                     Canvas.SetLeft(x, _ListElement.Item(i).X)
                     Canvas.SetTop(x, _ListElement.Item(i).Y)
                     Canvas.SetZIndex(x, _ListElement.Item(i).ZIndex)
-
+                    Canvas1.UpdateLayout()
                     x = Nothing
                     y = Nothing
                 End If
