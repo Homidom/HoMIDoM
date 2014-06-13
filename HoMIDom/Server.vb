@@ -9979,7 +9979,7 @@ Namespace HoMIDom
 
                 Return Nothing
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "AddVariable: ", ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "AddVariable: ", ex.ToString)
                 Return ex.Message
             End Try
         End Function

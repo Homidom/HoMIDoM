@@ -407,6 +407,9 @@ Namespace HoMIDom
                         Catch ex As Exception
                             _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute", "Erreur ActionDos : " & ex.ToString)
                         End Try
+                    Case Action.TypeAction.ActionVar
+                        Dim x As Action.ActionVar = _Action
+                        _Server.SetValueOfVariable(_IdSrv, x.Nom, x.Value)
                 End Select
             Catch ex As Exception
                 If ex.ToString.Contains("ThreadAbortException") = False Then _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute", "Exception: " & ex.ToString)
