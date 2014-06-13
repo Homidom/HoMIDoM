@@ -20,6 +20,7 @@ Public Class WActionParametrage
 
             If _ObjAction IsNot Nothing Then
                 _typ = _ObjAction.TypeAction
+
                 Select Case _typ
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionDevice
                         If Cb1.SelectedIndex < 0 Or Cb2.SelectedIndex < 0 Or (TxtValue.Visibility = Windows.Visibility.Visible And String.IsNullOrEmpty(TxtValue.Text) = True) Then
@@ -35,6 +36,7 @@ Public Class WActionParametrage
                         If String.IsNullOrEmpty(TxtValue.Text) = False Then obj.Parametres.Add(TxtValue.Text)
 
                         _ObjAction = obj
+
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionDriver
                         If Cb1.SelectedIndex < 0 Or Cb2.SelectedIndex < 0 Or (TxtValue.Visibility = Windows.Visibility.Visible And String.IsNullOrEmpty(TxtValue.Text) = True) Then
                             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez renseigner tous les champs !", "Erreur", "BtnOk.Click")
@@ -47,6 +49,17 @@ Public Class WActionParametrage
                         obj.Parametres.Clear()
 
                         If String.IsNullOrEmpty(TxtValue.Text) = False Then obj.Parametres.Add(TxtValue.Text)
+
+                        _ObjAction = obj
+                    Case HoMIDom.HoMIDom.Action.TypeAction.ActionVar
+                        If Cb1.SelectedIndex < 0 Then
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez renseigner tous les champs !", "Erreur", "BtnOk.Click")
+                            Exit Sub
+                        End If
+
+                        Dim obj As Action.ActionVar = _ObjAction
+                        obj.Nom = Cb1.SelectedItem.nom
+                        obj.Value = TxtValue.Text
 
                         _ObjAction = obj
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionMacro
@@ -517,6 +530,29 @@ Public Class WActionParametrage
 
                         StkProperty.Visibility = Windows.Visibility.Collapsed
                         TabControl1.Visibility = Windows.Visibility.Collapsed
+
+                    Case HoMIDom.HoMIDom.Action.TypeAction.ActionVar
+                        Dim obj As Action.ActionVar = _ObjAction
+
+                        'Mise en forme graphique
+                        Lbl1.Content = "Variable:"
+                        Lbl2.Visibility = Visibility.Collapsed
+                        Cb2.Visibility = Windows.Visibility.Collapsed
+                        Txt2.Visibility = Windows.Visibility.Collapsed
+                        TxtValue.Height = 25
+
+                        Cb1.ItemsSource = myService.GetAllVariables(IdSrv)
+                        Cb1.DisplayMemberPath = "Nom"
+
+                        If String.IsNullOrEmpty(obj.Nom) = False Then
+                            For i As Integer = 0 To Cb1.Items.Count - 1
+                                If obj.Nom = Cb1.Items(i).Nom Then
+                                    Cb1.SelectedIndex = i
+                                    Exit For
+                                End If
+                            Next
+                            TxtValue.Text = obj.Value
+                        End If
                 End Select
 
                 Dim t1 As Integer

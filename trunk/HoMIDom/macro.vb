@@ -902,7 +902,7 @@ Namespace HoMIDom
         End Class
 
         ''' <summary>
-        ''' Action parler
+        ''' Action Variable
         ''' </summary>
         ''' <remarks></remarks>
         Public Class ActionVar

@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="uVariables"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+            Width="638" Height="400" Tag="VARIABLE" Margin="20">
+
+    <Grid Background="#636060" Opacity="0.85">
+        <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Margin="0,0,0,0">
+            <StackPanel >
+                <Label HorizontalAlignment="Center"  Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange">Variables</Label>
+            </StackPanel>
+        </Border>
+        <Image Height="60" HorizontalAlignment="Left" Margin="11,11,0,0" Name="ImgIcon" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/Debug-Variable-icon.png">
+
+        </Image>
+        <StackPanel Orientation="Horizontal" >
+            <StackPanel Margin="5,85,0,0">
+                    <StackPanel Orientation="Horizontal" >
+                        <Label Height="25" HorizontalAlignment="Left" Name="Label22" VerticalAlignment="Top" Width="150" Foreground="White" Content="Variables:"></Label>
+                    <Image Height="25" Width="25" Name="BtnNew" Source="/HoMIAdmiN;component/Images/ajouter_32.png" />
+                    <Image Height="25" Width="25" Name="BtnDelete" Source="/HoMIAdmiN;component/Images/Supprimer_32.png" />
+                    <Image Height="25" Width="25" Name="BtnEdit" Source="/HoMIAdmiN;component/Images/Modifier_32.png" />
+                </StackPanel>
+                    <ListBox Name="ListBoxVar" Height="200"/>
+            </StackPanel>
+            <StackPanel Name="StkEditVar" Margin="5,85,0,0">
+            <StackPanel Orientation="Horizontal" >
+                <Label Height="25" HorizontalAlignment="Left" Name="Label2" VerticalAlignment="Top" Width="80" Foreground="White" Content="Nom :"></Label>
+                    <TextBox Height="22" BorderBrush="Black" Name="TxtVarName" VerticalAlignment="Top"  Width="223" HorizontalAlignment="Left" TabIndex="0" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label Foreground="White" Height="25" HorizontalAlignment="Left" Name="Label3" VerticalAlignment="Top" Width="80" Content="Enable :"></Label>
+                <CheckBox Name="ChkEnableVar" IsChecked=" True" VerticalAlignment="Center" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label Foreground="White" Height="25" HorizontalAlignment="Left" Name="Label5" VerticalAlignment="Top" Width="80" Content="Valeur :"></Label>
+                <TextBox  BorderBrush="Black"  Height="22" Name="TxtVarValue" VerticalAlignment="Top" Width="223" HorizontalAlignment="Left" TabIndex="2" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" >
+                <Label Foreground="White" Height="25" HorizontalAlignment="Left" Name="Label6" VerticalAlignment="Top" Width="80" Content="Description :"></Label>
+                <TextBox Height="22" Name="TxtVarDescription" VerticalAlignment="Top" BorderBrush="Black"  TabIndex="3" Width="280" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
+            </StackPanel>
+                <StackPanel  Orientation="Horizontal" >
+                    <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="2" Name="BtnValid" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="75">Ok</Button>
+                    <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="2" Name="BtnCancel" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="75">Annuler</Button>
+                </StackPanel>
+
+            </StackPanel>
+        </StackPanel>
+        
+        <Button Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,12,12,0" Name="BtnClose" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75">Fermer</Button>
+
+
+
+    </Grid>
+</UserControl>
