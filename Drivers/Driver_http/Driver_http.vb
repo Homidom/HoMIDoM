@@ -492,6 +492,23 @@ Imports System.Xml
                             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le type CONTACT n'est pas géré par " & Objet.Modele)
                         End If
                     End If
+                Case "COMPTEUR"
+                    If String.IsNullOrEmpty(Trim(UCase(Objet.Modele))) Then
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le modèle du composant de type COMPTEUR n'a pas été renseigné (ex: IPX800)!")
+                    Else
+                        If Trim(UCase(Objet.Modele)) = "IPX800" Then
+                            Dim idx As Integer = CInt(Objet.Adresse1)
+                            If idx < 1 Or idx > 8 Then
+                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 1 et 8 pour un compteur")
+                                Exit Sub
+                            End If
+                            Dim url As String = "http://" & Objet.Adresse2
+                            Dim elmt As String = "count" & idx
+                            Objet.Value = GET_IPX800(url, elmt)
+                        Else
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le type COMPTEUR n'est pas géré par " & Objet.Modele)
+                        End If
+                    End If
                 Case "APPAREIL"
                     If String.IsNullOrEmpty(Trim(UCase(Objet.Modele))) Then
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le modèle du composant de type APPAREIL n'a pas été renseigné (ex: IPX800)!")
