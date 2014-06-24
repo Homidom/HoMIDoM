@@ -2199,6 +2199,7 @@ Namespace HoMIDom
 
                         writer.WriteEndElement()
                     Catch ex As Exception
+                        writer.WriteEndElement()
                         Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", " Erreur de sauvegarde de la configuration: Composants: " & ex.ToString)
                     End Try
                 Next
