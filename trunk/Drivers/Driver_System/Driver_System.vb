@@ -426,6 +426,29 @@ Imports System.Runtime.InteropServices
                         If reply.Status = System.Net.NetworkInformation.IPStatus.Success Then Objet.Value = "OK" Else Objet.Value = "NOK"
                     End If
 
+                Case "REGI"
+                    'lire une valeur dans le registre
+                    If InStr(Objet.adresse1.ToString(), "#") > 0 Then
+                        Dim adresse_cle As String = Objet.adresse1.ToString().Split("#")(0)
+                        Dim adresse_valeur As String = Objet.adresse1.ToString().Split("#")(1)
+
+                        If My.Computer.Registry.GetValue(adresse_cle, adresse_valeur, Nothing) Is Nothing Then
+                            'la clé n'existe pas
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Registre: la clé " & adresse_cle & "\" & adresse_valeur & " n'existe pas. Composant: " & Objet.Name)
+                        Else
+                            Dim readValue = My.Computer.Registry.GetValue(adresse_cle, adresse_valeur, Nothing)
+                            If TypeOf Objet.Value Is Boolean Then
+                                If TypeOf readValue Is Boolean Then Objet.Value = readValue Else _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Registre: la clé " & adresse_cle & "\" & adresse_valeur & " n'est pas un booleen: " & readValue & ". Composant: " & Objet.Name)
+                            ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
+                                If TypeOf readValue Is Long Or TypeOf readValue Is Integer Or TypeOf readValue Is Double Then Objet.Value = readValue Else _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Registre: la clé " & adresse_cle & "\" & adresse_valeur & " n'est pas un nombre: " & readValue & ". Composant: " & Objet.Name)
+                            Else
+                                Objet.Value = CStr(readValue)
+                            End If
+                        End If
+                    Else
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Registre: la clé " & Objet.adresse1.ToString() & " n'est pas au bon format clé#valeur. Composant: " & Objet.Name)
+                    End If
+
                 Case "INFO"
                     '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "TotalPhysicalMemory:  " & System.Math.Round((My.Computer.Info.TotalPhysicalMemory) / (1024 * 1024), 2).ToString & " Mo")
                     '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "AvailablePhysicalMemory:  " & System.Math.Round((My.Computer.Info.AvailablePhysicalMemory) / (1024 * 1024), 2).ToString & " Mo")
@@ -720,11 +743,11 @@ Imports System.Runtime.InteropServices
             'Libellé Device
 
             '- adresse1=  type d'action : PING, INFO, UPDATE...
-            Add_LibelleDevice("ADRESSE1", "Paramètre (ou adresse virtuelle)", "Ping: <IP>-<Hostname>-<DomainName>, INFO-HDD: " & CheckHDD() & ", adresse virtuelle", "PING|INFO-ALL|INFO-MEMORY_USED|INFO-MEMORY_FREE|INFO-CPU|INFO-BATTERY_STATUS|INFO-BATTERY_PERCENT|INFO-HDD|WUAU")
+            Add_LibelleDevice("ADRESSE1", "Paramètre (ou adresse virtuelle)", "Ping: <IP>-<Hostname>-<DomainName>, REGI: <Clé#Valeur> ,INFO-HDD: " & CheckHDD() & ", adresse virtuelle", "PING|INFO-ALL|INFO-MEMORY_USED|INFO-MEMORY_FREE|INFO-CPU|INFO-BATTERY_STATUS|INFO-BATTERY_PERCENT|INFO-HDD|WUAU|REGI")
             Add_LibelleDevice("ADRESSE2", "@", "")
 
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "Type d'action", "PING, INFO-x, WUAU", "PING|INFO-ALL|INFO-MEMORY_USED|INFO-MEMORY_FREE|INFO-CPU|INFO-BATTERY_STATUS|INFO-BATTERY_PERCENT|INFO-HDD|WUAU")
+            Add_LibelleDevice("MODELE", "Type d'action", "PING, INFO-x, WUAU", "PING|INFO-ALL|INFO-MEMORY_USED|INFO-MEMORY_FREE|INFO-CPU|INFO-BATTERY_STATUS|INFO-BATTERY_PERCENT|INFO-HDD|WUAU|REGI")
 
             'Add_LibelleDevice("REFRESH", "Refresh (sec)", "Valeur de rafraîchissement de la mesure en secondes")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")

@@ -1153,6 +1153,60 @@ HoMIDom
 	<param name="NewDeviceId"></param>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetAllVariables(System.String)">
+	<summary>
+ Retourne toutes les variables
+ </summary>
+	<param name="idsrv"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.AddVariable(System.String,System.String,System.Boolean,System.String,System.String)">
+	<summary>
+ Ajoute une nouvelle variable
+ </summary>
+	<param name="idsrv"></param>
+	<param name="Name"></param>
+	<param name="Enable"></param>
+	<param name="Value"></param>
+	<param name="Description"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveVariable(System.String,System.String,System.Boolean,System.String,System.String)">
+	<summary>
+ Modifier une variable
+ </summary>
+	<param name="idsrv"></param>
+	<param name="Name"></param>
+	<param name="Enable"></param>
+	<param name="Value"></param>
+	<param name="Description"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetValueOfVariable(System.String,System.String)">
+	<summary>
+ Retourne la valeur d'une variable donnée
+ </summary>
+	<param name="idsrv"></param>
+	<param name="Name"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetValueOfVariable(System.String,System.String,System.String)">
+	<summary>
+ Définit la valeur d'une variable donnée
+ </summary>
+	<param name="idsrv"></param>
+	<param name="Name"></param>
+	<param name="Value"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DeleteVariable(System.String,System.String)">
+	<summary>
+ Supprime une variable
+ </summary>
+	<param name="idsrv"></param>
+	<param name="Name"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.IHoMIDom">
 	<summary>
  Liste toutes les functions et propriétés accessibles par les clients
@@ -3391,6 +3445,41 @@ St Arnau [le reste de la chaîne a été tronqué]";.
  Permet de regrouper un ensemble de devices du même type
  </summary>
 	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Variable.ID">
+	<summary>
+ ID de la variable
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Variable.Nom">
+	<summary>
+ Nom de la variable, pas de doublon autorisé
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Variable.Value">
+	<summary>
+ Valeur de la variable
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Variable.Enable">
+	<summary>
+ Activation ou Non de la variable, par défaut activée
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Variable.Description">
+	<summary>
+ Description de la variable
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Macro.ID">
 	<summary>
  ID de la macro
@@ -3589,6 +3678,11 @@ St Arnau [le reste de la chaîne a été tronqué]";.
  Action de type Driver
  </summary>
 	<remarks></remarks>
+</member><member name="F:HoMIDom.HoMIDom.Action.TypeAction.ActionVar">
+	<summary>
+ Action de type Var
+ </summary>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action.TypeAction">
 	<summary>
  Enumération des types d'actions
@@ -3704,9 +3798,14 @@ St Arnau [le reste de la chaîne a été tronqué]";.
  Action parler
  </summary>
 	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.Action.ActionVar">
+	<summary>
+ Action Variable
+ </summary>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action.ActionHttp">
 	<summary>
- Action parler
+ Action http
  </summary>
 	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Action.ActionLogEvent">
