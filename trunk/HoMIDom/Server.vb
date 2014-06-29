@@ -434,6 +434,13 @@ Namespace HoMIDom
                         MAJ_HeuresSoleil()
                         VerifIsWeekEnd()
                         MaJSaint()
+                        'affichage des timersectick si il y en a plus d'un
+                        If table_TimerSecTickthread.Rows.Count > 1 Then
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "TimerSecTick", "Plusieurs Timers sont en cours (au lieu d'un seul) :")
+                            For Each thread As DataRow In table_TimerSecTickthread.Rows
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "TimerSecTick", " - " & thread("nom") & " lancé à " & thread("datetime") & " - ")
+                            Next
+                        End If
                     End If
 
                     '---- Actions à effectuer à midi ----
