@@ -18,6 +18,8 @@ Partial Public Class uLog
             Dim _LigneIgnorees As Integer = 0
             Me.Cursor = Cursors.Wait
 
+            ligneLog.Clear()
+
             If IsConnect = True Then
                 Dim MyRepAppData As String = System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData) & "\HoMIAdmiN"
                 Dim TargetFile As StreamWriter
@@ -28,32 +30,25 @@ Partial Public Class uLog
                 Dim tr As TextReader = New StreamReader(MyRepAppData & "\log.txt")
                 'Dim lineCount As Integer = 1
 
+                'lecture de la premiere ligne souvent incomplete ou avec un message du serveur
+                Dim line As String = tr.ReadLine()
+                If line <> "" Then
+                    Dim tmp As String() = line.Trim.Split(vbTab)
+                    If tmp.Length > 3 Then
+                        If tmp(3) = "ReturnLog" Then
+                            MessageBox.Show(tmp(4), "Message du serveur", MessageBoxButton.OK, MessageBoxImage.Information)
+                            line = tr.ReadLine()
+                            line = tr.ReadLine()
+                        End If
+                    End If
+                End If
+
                 While tr.Peek() >= 0
                     Try
-                        Dim line As String = tr.ReadLine()
+                        line = tr.ReadLine()
 
                         If line <> "" Then
                             Dim tmp As String() = line.Trim.Split(vbTab)
-                            'Dim data As String() = Nothing
-                            'If tmp.Length < 6 And tmp.Length > 3 Then
-                            '    If tmp(4).Length > 255 Then tmp(4) = Mid(tmp(4), 1, 255)
-                            '    data = tmp
-                            'Else
-                            '    _LigneIgnorees += 1
-                            'End If
-
-                            '' creates a dictionary where the column name is the key and
-                            ''    and the data is the value
-                            'Dim sensorData As New Dictionary(Of String, Object)
-
-                            'If data IsNot Nothing Then
-                            '    For i As Integer = 0 To data.Length - 1
-                            '        sensorData(keys(i)) = data(i)
-                            '    Next
-                            '    ligneLog.Add(sensorData)
-                            'End If
-
-                            'sensorData = Nothing
 
                             If tmp.Length < 6 And tmp.Length > 3 Then
                                 If tmp(4).Length > 255 Then tmp(4) = Mid(tmp(4), 1, 255)
@@ -61,10 +56,19 @@ Partial Public Class uLog
                                 For i As Integer = 0 To tmp.Length - 1
                                     sensorData(keys(i)) = tmp(i)
                                 Next
-                                ligneLog.Add(sensorData)
+                                'ligneLog.Add(sensorData)
+                                ligneLog.Insert(0, sensorData)
                                 sensorData = Nothing
                             Else
                                 _LigneIgnorees += 1
+
+                                ''test david ligne ignorée contenu
+                                'Dim strintemp As String = ""
+                                'For i As Integer = 0 To tmp.Length - 1
+                                '    strintemp = strintemp & "---" & tmp(i)
+                                'Next
+                                'MessageBox.Show("ligne ignorée: " & strintemp, "Test David", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+
                             End If
                             'lineCount += 1
                         End If
@@ -198,5 +202,76 @@ Partial Public Class uLog
 
     Private Sub BtnExportLog_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnExportLog.Click
         ExportLog()
+    End Sub
+
+    Private Sub BtnRefreshLocal_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnRefreshLocal.Click
+        Try
+            'Variables
+            Dim _LigneIgnorees As Integer = 0
+            Me.Cursor = Cursors.Wait
+
+            If System.IO.File.Exists(My.Application.Info.DirectoryPath & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt") Then
+                ligneLog.Clear()
+
+                If IsConnect = True Then
+                    Dim tr As TextReader = New StreamReader(My.Application.Info.DirectoryPath & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt")
+                    'Dim lineCount As Integer = 1
+
+                    Dim line As String
+                    While tr.Peek() >= 0
+                        Try
+                            line = tr.ReadLine()
+
+                            If line <> "" Then
+                                Dim tmp As String() = line.Trim.Split(vbTab)
+
+                                If tmp.Length < 6 And tmp.Length > 3 Then
+                                    If tmp(4).Length > 255 Then tmp(4) = Mid(tmp(4), 1, 255)
+                                    Dim sensorData As New Dictionary(Of String, Object) ' creates a dictionary where column name is the key and data is the value
+                                    For i As Integer = 0 To tmp.Length - 1
+                                        sensorData(keys(i)) = tmp(i)
+                                    Next
+                                    'ligneLog.Add(sensorData)
+                                    ligneLog.Insert(0, sensorData)
+                                    sensorData = Nothing
+                                Else
+                                    _LigneIgnorees += 1
+
+                                    ''test david ligne ignorée contenu
+                                    'Dim strintemp As String = ""
+                                    'For i As Integer = 0 To tmp.Length - 1
+                                    '    strintemp = strintemp & "---" & tmp(i)
+                                    'Next
+                                    'MessageBox.Show("ligne ignorée: " & strintemp, "Test David", MessageBoxButton.OK, MessageBoxImage.Exclamation)
+
+                                End If
+                                'lineCount += 1
+                            End If
+                        Catch ex As Exception
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la ligne du fichier log: " & ex.ToString, "ERREUR", "")
+                        End Try
+                    End While
+                    tr.Close()
+                End If
+
+                Try
+                    If _LigneIgnorees > 0 Then
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, _LigneIgnorees & " ligne(s) du log ne seront pas prises en compte car elles ne respectent pas le format attendu, veuillez consultez le fichier log sur le serveur pour avoir la totalité", "INFO", "")
+                    End If
+
+                    DGW.DataContext = ligneLog
+                Catch ex As Exception
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString)
+                End Try
+
+
+                Me.Cursor = Nothing
+            Else
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Fichier log local non trouvé : " & My.Application.Info.DirectoryPath & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt")
+            End If
+            
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la récuppération du fichier log: " & ex.ToString, "ERREUR", "")
+        End Try
     End Sub
 End Class
