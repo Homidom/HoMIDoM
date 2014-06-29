@@ -242,7 +242,7 @@ Namespace HoMIDom
                 If Etat_server Then
                     Dim valeur = Parametres
                     '--- on logue tout ce qui arrive en mode debug
-                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", "Le device " & Device.name & " a changé : " & [Property] & " = " & valeur.ToString)
+                    'Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", "Le device " & Device.name & " a changé : " & [Property] & " = " & valeur.ToString)
 
                     If Mid(valeur.ToString, 1, 4) <> "ERR:" Then 'si y a pas erreur d'acquisition
 
@@ -438,7 +438,7 @@ Namespace HoMIDom
                         If table_TimerSecTickthread.Rows.Count > 1 Then
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "TimerSecTick", "Plusieurs Timers sont en cours (au lieu d'un seul) :")
                             For Each thread As DataRow In table_TimerSecTickthread.Rows
-                                Log(TypeLog.INFO, TypeSource.SERVEUR, "TimerSecTick", " - " & thread("nom") & " lancé à " & thread("datetime") & " - ")
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "TimerSecTick", " - " & thread("name") & " lancé à " & thread("datetime") & " - ")
                             Next
                         End If
                     End If
@@ -462,7 +462,7 @@ Namespace HoMIDom
                         Else
                             Dim listethreads As String = ""
                             For Each thread As DataRow In table_TimerSecTickthread.Rows
-                                listethreads += thread("nom") & "-"
+                                listethreads += thread("name") & "-"
                             Next
                             Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Thread non trouvé pour suppression : TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss") & " (liste: " & listethreads & ")")
                         End If
@@ -472,7 +472,7 @@ Namespace HoMIDom
                 Else
                     Dim listethreads As String = ""
                     For Each thread As DataRow In table_TimerSecTickthread.Rows
-                        listethreads += thread("nom") & "-"
+                        listethreads += thread("name") & "-"
                     Next
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Il y a déjà " & table_TimerSecTickthread.Rows.Count & " Threads en cours, TimerSick annulé (liste: " & listethreads & ")")
                 End If

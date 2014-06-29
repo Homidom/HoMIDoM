@@ -543,6 +543,9 @@ Namespace HoMIDom
 
 
             Protected Function EvaluationDevice(ByVal Formule As String, ByVal Valeur As Double) As Double
+
+                If (Formule = "") Then Return Valeur
+
                 Dim resultatSTR As String = Valeur & Formule
                 Try
 
