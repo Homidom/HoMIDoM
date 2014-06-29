@@ -9663,7 +9663,7 @@ Namespace HoMIDom
 
                 Dim dirInfo As New System.IO.DirectoryInfo(_MonRepertoire & "\logs\")
                 Dim file As System.IO.FileInfo
-                Dim files() As System.IO.FileInfo = dirInfo.GetFiles("*.xml", System.IO.SearchOption.AllDirectories)
+                Dim files() As System.IO.FileInfo = dirInfo.GetFiles("*.txt", System.IO.SearchOption.AllDirectories)
                 Dim DateRef As DateTime = Now.AddMonths(-1 * Mois)
                 Dim cnt As Integer = 0
 
