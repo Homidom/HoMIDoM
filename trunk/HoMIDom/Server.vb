@@ -116,6 +116,11 @@ Namespace HoMIDom
         <NonSerialized()> Shared _GererEnergie As Boolean = False
         <NonSerialized()> Shared _TarifJour As Double = 0
         <NonSerialized()> Shared _TarifNuit As Double = 0
+
+        'Gestion des threads
+        Private Shared lock_table_TimerSecTickthread As New Object
+        Public Shared table_TimerSecTickthread As New DataTable
+
 #End Region
 
 #Region "Event"
@@ -360,65 +365,110 @@ Namespace HoMIDom
             Try
                 Dim ladate As DateTime = Now 'on récupére la date/heure
 
-                '---- Action à effectuer toutes les secondes ----
-                Dim thr As New Thread(AddressOf VerifTimeDevice)
-                thr.IsBackground = True
-                thr.Start()
+                'verif si pas déjà trop de thread
+                If (table_TimerSecTickthread.Rows.Count < 1) Then
+                    'ajout a la table des thread
+                    Try
+                        Dim newRow As DataRow
+                        newRow = table_TimerSecTickthread.NewRow()
+                        newRow.Item("name") = "TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss")
+                        newRow.Item("comment") = ""
+                        newRow.Item("datetime") = ladate.ToString("yyyy-MM-dd HH:mm:ss")
+                        newRow.Item("thread") = ""
+                        SyncLock lock_table_TimerSecTickthread
+                            table_TimerSecTickthread.Rows.Add(newRow)
+                        End SyncLock
+                    Catch ex As Exception
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "thread_ajout", "Exception : " & ex.Message)
+                    End Try
 
-                '---- Actions à effectuer toutes les minutes ----
-                If ladate.Second = 0 Then
-                    VerifIsJour()
+                    '---- Action à effectuer toutes les secondes ----
+                    Dim thr As New Thread(AddressOf VerifTimeDevice)
+                    thr.IsBackground = True
+                    thr.Name = "VerifTimeDevice"
+                    thr.Start()
 
-                    'on veirife si on doit enregistrer la config dans le xml
-                    If _CycleSave > 0 And _Finish = True Then
-                        If ladate >= _NextTimeSave Then
-                            _NextTimeSave = Now.AddMinutes(_CycleSave)
-                            SaveConfig(_MonRepertoire & "\config\homidom.xml")
+                    '---- Actions à effectuer toutes les minutes ----
+                    If ladate.Second = 0 Then
+                        VerifIsJour()
+
+                        'on veirife si on doit enregistrer la config dans le xml
+                        If _CycleSave > 0 And _Finish = True Then
+                            If ladate >= _NextTimeSave Then
+                                _NextTimeSave = Now.AddMinutes(_CycleSave)
+                                SaveConfig(_MonRepertoire & "\config\homidom.xml")
+                            End If
                         End If
                     End If
-                End If
 
-                '---- Actions à effectuer toutes les heures ----
-                If ladate.Minute = 59 And ladate.Second = 59 Then
-                    SearchDeviceNoMaJ()
-                    'on verifie si on doit exporter la config vers un folder
-                    If _CycleSaveFolder > 0 And _Finish = True Then
-                        If ladate >= _NextTimeSaveFolder Then
-                            _NextTimeSaveFolder = Now.AddMinutes(_CycleSaveFolder)
-
-
-
-
-                            SaveConfigFolder()
+                    '---- Actions à effectuer toutes les heures ----
+                    If ladate.Minute = 59 And ladate.Second = 59 Then
+                        SearchDeviceNoMaJ()
+                        'on verifie si on doit exporter la config vers un folder
+                        If _CycleSaveFolder > 0 And _Finish = True Then
+                            If ladate >= _NextTimeSaveFolder Then
+                                _NextTimeSaveFolder = Now.AddMinutes(_CycleSaveFolder)
 
 
 
 
+                                SaveConfigFolder()
+
+
+
+
+                            End If
                         End If
                     End If
-                End If
 
-                '---- Actions à effectuer à minuit ----
-                If ladate.Hour = 0 And ladate.Minute = 0 And ladate.Second = 0 Then
-                    MAJ_HeuresSoleil()
-                    CleanLog(_MaxMonthLog)
-                    VerifIsWeekEnd()
-                    MaJSaint()
-                End If
+                    '---- Actions à effectuer à minuit ----
+                    If ladate.Hour = 0 And ladate.Minute = 0 And ladate.Second = 0 Then
+                        MAJ_HeuresSoleil()
+                        CleanLog(_MaxMonthLog)
+                        VerifIsWeekEnd()
+                        MaJSaint()
+                    End If
 
-                '---- Actions à effectuer à 3h du mat (au cas où qu'à minuit non maj) ----
-                If ladate.Hour = 3 And ladate.Minute = 0 And ladate.Second = 0 Then
-                    MAJ_HeuresSoleil()
-                    VerifIsWeekEnd()
-                    MaJSaint()
-                End If
+                    '---- Actions à effectuer à 3h du mat (au cas où qu'à minuit non maj) ----
+                    If ladate.Hour = 3 And ladate.Minute = 0 And ladate.Second = 0 Then
+                        MAJ_HeuresSoleil()
+                        VerifIsWeekEnd()
+                        MaJSaint()
+                    End If
 
-                '---- Actions à effectuer à midi ----
-                If ladate.Hour = 12 And ladate.Minute = 0 And ladate.Second = 0 Then
-                    MAJ_HeuresSoleil()
-                End If
+                    '---- Actions à effectuer à midi ----
+                    If ladate.Hour = 12 And ladate.Minute = 0 And ladate.Second = 0 Then
+                        MAJ_HeuresSoleil()
+                    End If
 
-                'ladate = Nothing
+                    'suppresion de la table des threads
+                    Try
+                        '--- suppresion du thread de la liste des threads lancés ---
+                        Dim tabletmp As DataRow()
+                        SyncLock lock_table_TimerSecTickthread
+                            tabletmp = table_TimerSecTickthread.Select("name = 'TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss") & "'")
+                        End SyncLock
+                        If tabletmp.GetLength(0) >= 1 Then
+                            SyncLock lock_table_TimerSecTickthread
+                                tabletmp(0).Delete()
+                            End SyncLock
+                        Else
+                            Dim listethreads As String = ""
+                            For Each thread As DataRow In table_TimerSecTickthread.Rows
+                                listethreads += thread("nom") & "-"
+                            Next
+                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Thread non trouvé pour suppression : TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss") & " (liste: " & listethreads & ")")
+                        End If
+                    Catch ex As Exception
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception : " & ex.Message)
+                    End Try
+                Else
+                    Dim listethreads As String = ""
+                    For Each thread As DataRow In table_TimerSecTickthread.Rows
+                        listethreads += thread("nom") & "-"
+                    Next
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Il y a déjà " & table_TimerSecTickthread.Rows.Count & " Threads en cours, TimerSick annulé (liste: " & listethreads & ")")
+                End If
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception : " & ex.Message)
             End Try
@@ -428,6 +478,7 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Private Sub VerifTimeDevice()
             Try
+
                 Dim _m As Macro
                 For i As Integer = 0 To _ListTriggers.Count() - 1
                     If _ListTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
@@ -3157,6 +3208,9 @@ Namespace HoMIDom
 
                 If _TypeLogEnable(TypLog - 1) = True Then Exit Sub
                 Dim _Message As String = DelRep(Message)
+                Dim sourcestring As String = Source.ToString
+                If Fonction = "" Then Fonction = "Divers"
+                If sourcestring = "" Then sourcestring = "Divers"
 
                 'on affiche dans la console
                 Console.WriteLine(Now & " " & TypLog.ToString & " " & Source.ToString & " " & Fonction & " " & _Message)
@@ -3174,15 +3228,12 @@ Namespace HoMIDom
                 'écriture dans un fichier texte
                 _FichierLog = _MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt"
                 Dim FreeF As Integer
-                Dim texte As String = Now & vbTab & TypLog.ToString & vbTab & Source.ToString & vbTab & Fonction & vbTab & _Message
-
                 Try
                     FreeF = FreeFile()
-                    texte = Replace(texte, vbLf, vbCrLf)
                     SyncLock lock_logwrite
                         FileOpen(FreeF, FichierLog, OpenMode.Append)
-                        Print(FreeF, texte & vbCrLf)
-                        'WriteLine(FreeF, texte & vbCrLf)
+                        Print(FreeF, Replace(Now & vbTab & TypLog.ToString & vbTab & sourcestring & vbTab & Fonction & vbTab & _Message, vbLf, vbCrLf) & vbCrLf)
+                        'WriteLine(FreeF, Replace(Now & vbTab & TypLog.ToString & vbTab & sourcestring & vbTab & Fonction & vbTab & _Message, vbLf, vbCrLf) & vbCrLf)
                         FileClose(FreeF)
                     End SyncLock
                 Catch ex As IOException
@@ -3192,7 +3243,6 @@ Namespace HoMIDom
                     'wait(500)
                     Console.WriteLine(Now & " " & TypLog & " SERVER LOG ERROR Exception : " & ex.Message)
                 End Try
-                texte = Nothing
                 FreeF = Nothing
             Catch ex As Exception
                 Console.WriteLine("Erreur lors de l'écriture d'un log: " & ex.Message, MsgBoxStyle.Exclamation, "Erreur Serveur")
@@ -3365,6 +3415,7 @@ Namespace HoMIDom
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Création du dossier templates")
                 End If
 
+
                 'Indique la version de la dll
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Version de la dll Homidom: " & GetServerVersion())
                 If System.Environment.Is64BitOperatingSystem = True Then
@@ -3374,6 +3425,21 @@ Namespace HoMIDom
                 End If
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Version du Framework: " & System.Runtime.InteropServices.RuntimeEnvironment.GetSystemVersion())
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Répertoire utilisé: " & My.Application.Info.DirectoryPath.ToString)
+
+                '---------- Creation table des threads ----------
+                table_TimerSecTickthread.Dispose()
+                Dim x As New DataColumn
+                x.ColumnName = "name"
+                table_TimerSecTickthread.Columns.Add(x)
+                x = New DataColumn
+                x.ColumnName = "comment"
+                table_TimerSecTickthread.Columns.Add(x)
+                x = New DataColumn
+                x.ColumnName = "datetime"
+                table_TimerSecTickthread.Columns.Add(x)
+                x = New DataColumn
+                x.ColumnName = "thread"
+                table_TimerSecTickthread.Columns.Add(x)
 
                 'Si sauvegarde automatique
                 If _CycleSave > 0 Then _NextTimeSave = Now.AddMinutes(_CycleSave)
@@ -9426,7 +9492,7 @@ Namespace HoMIDom
                 End If
                 If retour.Length > 1000000 Then
                     Dim retour2 As String = Mid(retour, retour.Length - 1000001, 1000000)
-                    retour = "Erreur, trop de ligne à traiter depuis le log seules les dernières lignes seront affichées, merci de consulter le fichier sur le serveur par en avoir la totalité!!" & vbCrLf & vbCrLf & retour2
+                    retour = Now & vbTab & "ERREUR" & vbTab & "SERVER" & vbTab & "ReturnLog" & vbTab & "Trop de lignes à traiter dans le log du jour, seules les dernières lignes seront affichées, merci de consulter le fichier sur le serveur par en avoir la totalité." & vbCrLf & vbCrLf & retour2
                     Return retour
                 End If
                 Return retour
