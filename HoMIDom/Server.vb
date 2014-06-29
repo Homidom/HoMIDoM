@@ -366,7 +366,7 @@ Namespace HoMIDom
                 Dim ladate As DateTime = Now 'on récupére la date/heure
 
                 'verif si pas déjà trop de thread
-                If (table_TimerSecTickthread.Rows.Count < 1) Then
+                If (table_TimerSecTickthread.Rows.Count < 5) Then
                     'ajout a la table des thread
                     Try
                         Dim newRow As DataRow
