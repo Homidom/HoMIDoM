@@ -9665,50 +9665,39 @@ Namespace HoMIDom
 #End Region
 
 #Region "Maintenance"
-        Public Function CleanLog(ByVal Mois As Integer) As String
+        Public Sub CleanLog(ByVal Mois As Integer)
             Try
 
                 Dim dirInfo As New System.IO.DirectoryInfo(_MonRepertoire & "\logs\")
-                Dim file As System.IO.FileInfo
                 Dim files() As System.IO.FileInfo = dirInfo.GetFiles("*.txt", System.IO.SearchOption.AllDirectories)
                 Dim DateRef As DateTime = Now.AddMonths(-1 * Mois)
                 Dim cnt As Integer = 0
 
+                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "CleanLog", " Nettoyage des fichiers logs < " & Mois & " mois = " & DateRef.ToString("dd-MM-yyyy"))
                 If (files IsNot Nothing) Then
                     For Each file In files
-                        Dim x As New ImageFile
-
-                        'C'est un log archivé
                         If InStr(file.Name, "_") > 0 Then
                             Dim a() As String = file.Name.Split("_")
                             If a IsNot Nothing Then
-                                If a.Count > 2 Then
-                                    If a(0) = "log" Then
-                                        Dim filedate As String = a(1)
-                                        Dim fileyear As String = Mid(filedate, 1, 4)
-                                        Dim filemonth As String = Mid(filedate, 5, 2)
-                                        If DateRef.Year > fileyear Then
+                                If a.Count = 2 And a(0) = "log" Then
+                                    Try
+                                        If CDate(Mid(a(1), 1, 4) & "-" & Mid(a(1), 5, 2) & "-" & Mid(a(1), 7, 2)) < DateRef Then
                                             file.Delete()
                                             cnt += 1
-                                        Else
-                                            If DateRef.Month >= filemonth Then
-                                                file.Delete()
-                                                cnt += 1
-                                            End If
                                         End If
-                                    End If
+                                    Catch ex As Exception
+                                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CleanLog", "  - Erreur: " & ex.Message)
+                                    End Try
                                 End If
                             End If
                         End If
                     Next
                 End If
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "CleanLog", cnt & " Fichier(s) log supprimé(s)")
-                Return 0
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "CleanLog", cnt & " Fichier(s) log supprimé(s) (" & Mois & " mois)")
             Catch ex As Exception
-                Return "ERR:" & ex.Message
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CleanLog", "Erreur: " & ex.Message)
             End Try
-        End Function
+        End Sub
 #End Region
 
 #Region "Energie"
