@@ -9673,7 +9673,6 @@ Namespace HoMIDom
                 Dim DateRef As DateTime = Now.AddMonths(-1 * Mois)
                 Dim cnt As Integer = 0
 
-                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "CleanLog", " Nettoyage des fichiers logs < " & Mois & " mois = " & DateRef.ToString("dd-MM-yyyy"))
                 If (files IsNot Nothing) Then
                     For Each file In files
                         If InStr(file.Name, "_") > 0 Then
@@ -9693,7 +9692,7 @@ Namespace HoMIDom
                         End If
                     Next
                 End If
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "CleanLog", cnt & " Fichier(s) log supprimé(s) (" & Mois & " mois)")
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "CleanLog", cnt & " Fichier(s) log supprimé(s) ( < " & Mois & " mois = " & DateRef.ToString("dd/MM/yyyy") & ")")
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CleanLog", "Erreur: " & ex.Message)
             End Try
