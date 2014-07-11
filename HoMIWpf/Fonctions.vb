@@ -412,7 +412,12 @@ Module Fonctions
                             Return ""
                         End If
                     Case Else
-                        Return " "
+                        Dim a As String = myService.GetValueOfVariable(IdSrv, _val)
+                        If String.IsNullOrEmpty(a) = False Then
+                            Return a
+                        Else
+                            Return " "
+                        End If
                 End Select
             Else
                 Return ValueTxt

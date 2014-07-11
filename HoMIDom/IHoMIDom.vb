@@ -17,6 +17,20 @@ Namespace HoMIDom
 
 #Region "Serveur"
         ''' <summary>
+        ''' Retourne: Sauvegader les backups et sauvegardes suivant différents fichiers
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetSaveDiffBackup() As Boolean
+
+        ''' <summary>
+        ''' Définit: Sauvegader les backups et sauvegardes suivant différents fichiers
+        ''' </summary>
+        ''' <param name="Value"></param>
+        ''' <remarks></remarks>
+        <OperationContract()> Sub SetSaveDiffBackup(Value As Boolean)
+
+        ''' <summary>
         ''' Retourne le code du pays du CultureInfo
         ''' </summary>
         ''' <returns></returns>

@@ -240,6 +240,7 @@
             Dim _LabelChamp As String
             Dim _ToolTip As String
             Dim _Param As String
+            Dim _Type As String
 
             Public Property NomChamp As String
                 Get
@@ -276,6 +277,16 @@
                     _Param = value
                 End Set
             End Property
+
+            Public Property TypeDevice As String
+                Get
+                    Return _Type
+                End Get
+                Set(value As String)
+                    _Type = value
+                End Set
+            End Property
+
         End Class
     End Class
 End Namespace
