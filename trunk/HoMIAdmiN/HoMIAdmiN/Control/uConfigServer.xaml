@@ -20,7 +20,7 @@
 
 
                 <StackPanel DockPanel.Dock="Bottom" >
-                    <TabControl  Name="TabControl1" Margin="2" Background="black" Height="450">
+                    <TabControl  Name="TabControl1" Margin="2" Background="black" Height="550">
                         <TabControl.Resources>
                             <Style TargetType="{x:Type TabItem}">
                                 <Setter Property="BorderThickness" Value="0"/>
@@ -239,6 +239,19 @@
                         <TabItem Header="Configuration" >
                           
                             <StackPanel Orientation="Vertical" VerticalAlignment="top" HorizontalAlignment="left">
+                                <GroupBox Name="GroupBox2" Margin="2" HorizontalAlignment="left" Width="700">
+                                    <GroupBox.Header>
+                                        <Label Foreground="White" FontWeight="Bold">Options d'enregistrement</Label>
+                                    </GroupBox.Header>
+                                    <StackPanel >
+                                        <StackPanel Orientation="Horizontal" VerticalAlignment="center">
+                                            <Label Foreground="White" Width="170">Suivant différents fichiers:</Label>
+                                            <CheckBox Name="ChKSaveDiffBackup" Background="DarkGray" BorderBrush="Black" Foreground="White" VerticalAlignment="center" />
+                                            <Label Content="Sauvegader les backups et sauvegardes suivant différents fichiers (Défaut: désactivé)" Foreground="Gray" Height="28" FontSize="10" />
+                                        </StackPanel>
+                                    </StackPanel>
+                                </GroupBox>
+
                                 <GroupBox Name="GroupBox10" Margin="2" HorizontalAlignment="left" Width="700">
                                     <GroupBox.Header>
                                         <Label Foreground="White" FontWeight="Bold">Enregistrement automatique</Label>

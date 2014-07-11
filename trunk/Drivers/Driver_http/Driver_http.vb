@@ -480,6 +480,7 @@ Imports System.Xml
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le modèle du composant de type CONTACT n'a pas été renseigné (ex: IPX800)!")
                     Else
                         If Trim(UCase(Objet.Modele)) = "IPX800" Then
+
                             Dim idx As Integer = CInt(Objet.Adresse1)
                             If idx < 0 Or idx > 7 Then
                                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 0 et 7 pour une entrée")
@@ -497,6 +498,7 @@ Imports System.Xml
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le modèle du composant de type COMPTEUR n'a pas été renseigné (ex: IPX800)!")
                     Else
                         If Trim(UCase(Objet.Modele)) = "IPX800" Then
+
                             Dim idx As Integer = CInt(Objet.Adresse1)
                             If idx < 0 Or idx > 7 Then
                                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 0 et 7 pour un compteur")
@@ -514,6 +516,17 @@ Imports System.Xml
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le modèle du composant de type APPAREIL n'a pas été renseigné (ex: IPX800)!")
                     Else
                         If Trim(UCase(Objet.Modele)) = "IPX800" Then
+                            For Each lbl As HoMIDom.HoMIDom.Driver.cLabels In _LabelsDevice
+                                If lbl.NomChamp = "ADRESSE1" Then
+                                    lbl.LabelChamp = "Numéro de sortie (1 à 8)"
+                                    lbl.Tooltip = "Numéro de sortie comprise entre 1 et 8"
+                                End If
+                                If lbl.NomChamp = "ADRESSE2" Then
+                                    lbl.LabelChamp = "Adresse IP de l'IPX800"
+                                    lbl.Tooltip = "Adresse IP de l'IPX800"
+                                End If
+                            Next
+
                             Dim idx As Integer = CInt(Objet.Adresse1)
                             idx = idx - 1
                             If idx < 0 Or idx > 7 Then
@@ -529,6 +542,7 @@ Imports System.Xml
                     End If
                 Case "GENERIQUEVALUE"
                     If Trim(UCase(Objet.Modele)) = "IPX800" Then
+
                         Dim idx As Integer = CInt(Objet.Adresse1)
                         If idx < 0 Or idx > 3 Then
                             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: l'adresse du device (Adresse1) doit être comprise entre 0 et 3 pour une entrée analogique")
@@ -552,7 +566,8 @@ Imports System.Xml
                     End If
                 Case "GENERIQUESTRING"
                     If Trim(UCase(Objet.Modele)) = "RSS" Then
-                        If Objet.Adresse1 = "" Or Objet.Adresse2 = "" Then
+
+                        If String.IsNullOrEmpty(Objet.Adresse1) Or String.IsNullOrEmpty(Objet.Adresse2) Then
                             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: les adresses du device Adresse1 (adresse http du flux rss) et Adresse2 (nom de l'item à lire) doivent être renseignés")
                             Exit Sub
                         End If
@@ -572,6 +587,48 @@ Imports System.Xml
                         'Dim objectretour As Object = GET_ECODEVICE(url, idx)
                         'Objet.Value = CDbl(objectretour)
                         GET_ECODEVICE2(Objet)
+                    ElseIf Trim(UCase(Objet.Modele)) = "VIGILANCE" Then
+
+                        Dim _departement As Integer = 0
+                        Dim item As String = ""
+
+                        If String.IsNullOrEmpty(Objet.Adresse1) Or String.IsNullOrEmpty(Objet.Adresse2) Then
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: les adresses du device Adresse1 (département) et Adresse2 (niveau, alerte, risque, crues) doivent être renseignés")
+                            Exit Sub
+                        End If
+                        If IsNumeric(Objet.Adresse1) = False Then
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: l'Adresse1 doit comporter un chiffre représentant le département sur 2 chiffres")
+                            Exit Sub
+                        Else
+                            _departement = Objet.Adresse1
+                        End If
+
+                        item = Objet.Adresse2.ToString.ToLower
+
+                        Dim doc As New XmlDocument
+                        Dim nodes As XmlNodeList
+                        Dim niveau As String = ""
+                        Dim alerte As String = ""
+                        Dim risque As String = ""
+                        Dim crues As String = ""
+
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Read Vigilance", "Chargement de  http://www2.fmaurel.fr/data/carte_vigilance_meteo.xml")
+                        doc = New XmlDocument()
+                        Dim url As New Uri("http://www2.fmaurel.fr/data/carte_vigilance_meteo.xml")
+                        Dim Request As HttpWebRequest = CType(HttpWebRequest.Create(url), System.Net.HttpWebRequest)
+                        ' Request.UserAgent = "Mozilla/5.0 (windows; U; windows NT 5.1; fr; rv:1.8.0.7) Gecko/20060909 Firefox/1.5.0.7"
+                        Dim response As Net.HttpWebResponse = CType(Request.GetResponse(), Net.HttpWebResponse)
+
+                        doc.Load(response.GetResponseStream)
+                        nodes = doc.SelectNodes("/vigilance/dep_" & _departement)
+                        For Each node As XmlNode In nodes
+                            For Each _child As XmlNode In node
+                                Select Case _child.Name
+                                    Case item : Objet.Value = _child.FirstChild.Value 'niveau/alerte/risque/crues
+                                End Select
+                            Next
+                        Next
+
                     Else
                         _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur: Le type GENERIQUESTRING n'est pas géré par " & Objet.Modele)
                     End If
@@ -808,10 +865,10 @@ Imports System.Xml
             'add_libelledriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            Add_LibelleDevice("ADRESSE1", "Début URL", "")
-            Add_LibelleDevice("ADRESSE2", "Fin URL (Optionnel)", "")
+            Add_LibelleDevice("ADRESSE1", "Adresse1", "")
+            Add_LibelleDevice("ADRESSE2", "Adresse2", "")
             Add_LibelleDevice("SOLO", "si décoché, les autres composants eco-device seront mis à jour en même temps que celui-ci automatiquement.", "")
-            Add_LibelleDevice("MODELE", "Modele", "modèle du device: IPX800,RSS,Arduino,Eco Device""Arduino|EcoDevice|IPX800|RSS")
+            Add_LibelleDevice("MODELE", "Modele", "modèle du device: IPX800,RSS,Arduino,Eco Device,Vigilance","Arduino|EcoDevice|IPX800|RSS|VIGILANCE")
             'Add_LibelleDevice("REFRESH", "Refresh (sec)", "Valeur de rafraîchissement de la mesure en secondes")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 

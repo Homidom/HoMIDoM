@@ -148,6 +148,7 @@ Partial Public Class uDevice
                         LabelModele.Visibility = Windows.Visibility.Visible
                         LabelModele.Content = "Template"
                         TxtModele.Visibility = Windows.Visibility.Collapsed
+                        CBModele.Items.Clear()
                         CBModele.ItemsSource = myService.GetListOfTemplate
                         CBModele.DisplayMemberPath = "Name"
                         CBModele.Visibility = Windows.Visibility.Visible
@@ -441,6 +442,7 @@ Partial Public Class uDevice
                         End Select
                     Next
                 End If
+
             End If
             Me.Cursor = Nothing
         Catch ex As Exception

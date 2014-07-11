@@ -2145,8 +2145,9 @@ Class Window1
             'Desgin
             ChkMove.Visibility = Windows.Visibility.Visible
             ChkEdit.Visibility = Windows.Visibility.Visible
-            MnuTemplate.Visibility = Windows.Visibility.Collapsed
             Chk3.Visibility = Windows.Visibility.Visible
+            MnuTemplate.Visibility = Windows.Visibility.Collapsed
+
             If ChkMove.IsChecked = True Then ChkMove.IsChecked = False
             If ChkEdit.IsChecked = True Then ChkEdit.IsChecked = False
 
@@ -2217,6 +2218,7 @@ Class Window1
                             AddHandler y.ShowZone, AddressOf ElementShowZone
                             AddHandler y.ShowTemplate, AddressOf ShowTemplate
                             x.Content = y
+
                             Canvas1.Children.Add(x)
                             Canvas.SetLeft(x, _ListElement.Item(j).X)
                             Canvas.SetTop(x, _ListElement.Item(j).Y)
@@ -2361,9 +2363,11 @@ Class Window1
                     AddHandler y.ShowTemplate, AddressOf ShowTemplate
                     x.Content = y
                     Canvas1.Children.Add(x)
+
                     Canvas.SetLeft(x, _ListElement.Item(i).X)
                     Canvas.SetTop(x, _ListElement.Item(i).Y)
                     Canvas.SetZIndex(x, _ListElement.Item(i).ZIndex)
+
                     Canvas1.UpdateLayout()
                     x = Nothing
                     y = Nothing

@@ -68,6 +68,7 @@ Partial Public Class uConfigServer
 
                 'myService.SetLongitude(IdSrv, CDbl(TxtLong.Text.Replace(".", ",")))
                 'myService.SetLatitude(IdSrv, CDbl(TxtLat.Text.Replace(".", ",")))
+                myService.SetSaveDiffBackup(ChKSaveDiffBackup.IsChecked)
                 myService.SetLongitude(IdSrv, CDbl(Regex.Replace(TxtLong.Text, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)))
                 myService.SetLatitude(IdSrv, CDbl(Regex.Replace(TxtLat.Text, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)))
                 myService.SetHeureCorrectionLever(IdSrv, CInt(HCL.Text))
@@ -220,6 +221,7 @@ Partial Public Class uConfigServer
                 TxtSaveCycleFolder.Text = myService.GetTimeSaveFolder(IdSrv)
                 TxtFile.Text = myService.GetMaxFileSizeLog
                 TxtMaxLogMonth.Text = myService.GetMaxMonthLog
+                ChKSaveDiffBackup.IsChecked = myService.GetSaveDiffBackup
 
                 TxtAdresse.Text = myService.GetSMTPServeur(IdSrv)
                 TxtMail.Text = myService.GetSMTPMailServeur(IdSrv)

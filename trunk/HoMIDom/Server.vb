@@ -83,6 +83,7 @@ Namespace HoMIDom
         '<NonSerialized()> Public Shared Etat_server As Boolean 'etat du serveur : true = démarré
         <NonSerialized()> Dim fsw As FileSystemWatcher
         <NonSerialized()> Dim _MaxMonthLog As Integer = 2
+        <NonSerialized()> Dim _SaveDiffBackup As Boolean = False 'Sauvegader les backups et sauvegardes suivant différents fichiers
         <NonSerialized()> Private Shared _TypeLogEnable As New List(Of Boolean) 'True si on doit pas prendre en compte le type de log
         <NonSerialized()> Shared _LastLogs(9) As String  'Table des derniers logs
         <NonSerialized()> Shared _LastLogsError(9) As String  'Table des derniers logs en alerte ou erreur
@@ -173,11 +174,12 @@ Namespace HoMIDom
 
             'Gestion Energies
             If GererEnergie Then
-                Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", "Calcul Energie ")
+
                 Try
                     'Si le composant permet de donner la puissance instantanée totale ou une partie on la récupère 
                     If genericDevice.Type = "ENERGIEINSTANTANEE" Then
                         PuissanceTotaleActuel = CInt(Device.Value)
+                        Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", "Calcul Energie ")
                     End If
 
                     If CInt(genericDevice.Puissance) > 0 Then
@@ -408,15 +410,7 @@ Namespace HoMIDom
                         If _CycleSaveFolder > 0 And _Finish = True Then
                             If ladate >= _NextTimeSaveFolder Then
                                 _NextTimeSaveFolder = Now.AddMinutes(_CycleSaveFolder)
-
-
-
-
                                 SaveConfigFolder()
-
-
-
-
                             End If
                         End If
                     End If
@@ -697,16 +691,40 @@ Namespace HoMIDom
         ''' <returns></returns>
         ''' <remarks></remarks>
         Public Function LoadConfig(ByVal Fichier As String) As String
+            Dim _file As String = Fichier & "homidom.xml"
+
             'Copy du fichier de config avant chargement
             Try
-                Dim _file As String = Fichier & "homidom"
-                If IO.File.Exists(_file & ".bak") = True Then IO.File.Delete(_file & ".bak")
-                IO.File.Copy(_file & ".xml", Mid(_file & ".xml", 1, Len(_file & ".xml") - 4) & ".bak")
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Création du backup (.bak) du fichier de config avant chargement")
-                _file = Nothing
+                If _SaveDiffBackup = False Then
+                    If IO.File.Exists(_file.Replace(".xml", ".bak")) = True Then IO.File.Delete(_file.Replace(".xml", ".bak"))
+                End If
+                If IO.File.Exists(_file) = True Then
+                    If _SaveDiffBackup = False Then
+                        IO.File.Copy(_file, _file.Replace(".xml", ".bak"))
+                    Else
+                        Dim fich As String = _file.Replace(".xml", ".bak")
+                        fich = fich.Replace(".", Now.Year & Now.Month & Now.Day & Now.Hour & Now.Minute & Now.Second & ".")
+                        IO.File.Copy(_file, fich)
+                    End If
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Création du backup (.bak) du fichier de config avant chargement")
+                Else
+                    LoadConfig = "Fichier de configuration (" & _file & ") inexistant."
+                    Exit Function
+                End If
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
             End Try
+
+            'Copy du fichier de config avant chargement
+            'Try
+            '    Dim _file As String = Fichier & "homidom"
+            '    If IO.File.Exists(_file & ".bak") = True Then IO.File.Delete(_file & ".bak")
+            '    IO.File.Copy(_file & ".xml", Mid(_file & ".xml", 1, Len(_file & ".xml") - 4) & ".bak")
+            '    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Création du backup (.bak) du fichier de config avant chargement")
+            '    _file = Nothing
+            'Catch ex As Exception
+            '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
+            'End Try
 
             Try
                 Dim dirInfo As New System.IO.DirectoryInfo(Fichier)
@@ -759,6 +777,8 @@ Namespace HoMIDom
                             If list.Count > 0 Then 'présence des paramètres du server
                                 For j As Integer = 0 To list.Item(0).Attributes.Count - 1
                                     Select Case list.Item(0).Attributes.Item(j).Name
+                                        Case "savediff"
+                                            _SaveDiffBackup = list.Item(0).Attributes.Item(j).Value
                                         Case "longitude"
                                             '_Longitude = list.Item(0).Attributes.Item(j).Value.Replace(".", ",")
                                             _Longitude = Regex.Replace(list.Item(0).Attributes.Item(j).Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
@@ -854,7 +874,7 @@ Namespace HoMIDom
                             End If
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Paramètres du serveur chargés")
                         Catch ex As Exception
-                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement de la configuraion du serveur : " & ex.message)
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement de la configuraion du serveur : " & ex.Message)
                         End Try
 
                         '********************************
@@ -917,7 +937,7 @@ Namespace HoMIDom
                                 Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Aucun driver n'est enregistré dans le fichier de config")
                             End If
                         Catch ex As Exception
-                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des drivers : " & ex.message)
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des drivers : " & ex.Message)
                         End Try
 
                         '******************************************
@@ -977,7 +997,7 @@ Namespace HoMIDom
                             End If
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListZones.Count & " Zone(s) chargée(s)")
                         Catch ex As Exception
-                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des zones : " & ex.message)
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des zones : " & ex.Message)
                         End Try
 
                         '******************************************
@@ -1080,7 +1100,7 @@ Namespace HoMIDom
                             End If
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListUsers.Count & " Utilisateur(s) chargé(s)")
                         Catch ex As Exception
-                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des utilisateurs : " & ex.message)
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des utilisateurs : " & ex.Message)
                         End Try
 
 
@@ -1124,7 +1144,7 @@ Namespace HoMIDom
                             End If
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListNewDevices.Count & " nouveau(x) chargé(s)")
                         Catch ex As Exception
-                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des nouveaux devices : " & ex.message)
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des nouveaux devices : " & ex.Message)
                         End Try
 
 
@@ -1460,7 +1480,7 @@ Namespace HoMIDom
                             End If
                             list = Nothing
                         Catch ex As Exception
-                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des Composants : " & ex.message)
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des Composants : " & ex.Message)
                         End Try
 
                         '******************************************
@@ -1513,7 +1533,7 @@ Namespace HoMIDom
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListTriggers.Count & " Trigger(s) chargé(s)")
                             list = Nothing
                         Catch ex As Exception
-                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des triggers : " & ex.message)
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des triggers : " & ex.Message)
                         End Try
 
                         '******************************************
@@ -1545,7 +1565,7 @@ Namespace HoMIDom
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListMacros.Count & " Macro(s) chargée(s)")
                             list = Nothing
                         Catch ex As Exception
-                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des macros : " & ex.message)
+                            Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des macros : " & ex.Message)
                         End Try
 
                         Exit For
@@ -1565,7 +1585,7 @@ Namespace HoMIDom
                 Return " Chargement de la configuration terminée"
 
             Catch ex As Exception
-                Return " Erreur de chargement de la config: " & ex.message
+                Return " Erreur de chargement de la config: " & ex.Message
             End Try
         End Function
 
@@ -1781,13 +1801,29 @@ Namespace HoMIDom
 
                 ''Copy du fichier de config avant sauvegarde
                 Try
-                    Dim _file As String = Fichier.Replace(".xml", "")
-                    If IO.File.Exists(_file & ".sav") = True Then IO.File.Delete(_file & ".sav")
-                    IO.File.Copy(_file & ".xml", _file & ".sav")
-                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "LoadConfig", "Création de sauvegarde (.sav) du fichier de config avant sauvegarde")
+                    If _SaveDiffBackup = False Then
+                        If IO.File.Exists(Fichier.Replace(".xml", ".sav")) = True Then IO.File.Delete(Fichier.Replace(".xml", ".sav"))
+                        IO.File.Copy(Fichier, Fichier.Replace(".xml", ".sav"))
+                    Else
+                        Dim fich As String = Fichier.Replace(".xml", ".sav")
+                        fich = fich.Replace(".", Now.Year & Now.Month & Now.Day & Now.Hour & Now.Minute & Now.Second & ".")
+                        IO.File.Copy(Fichier, fich)
+                    End If
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfig", "Création de sauvegarde (.sav) du fichier de config avant sauvegarde")
                 Catch ex As Exception
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
                 End Try
+
+
+                ''Copy du fichier de config avant sauvegarde
+                'Try
+                '    Dim _file As String = Fichier.Replace(".xml", "")
+                '    If IO.File.Exists(_file & ".sav") = True Then IO.File.Delete(_file & ".sav")
+                '    IO.File.Copy(_file & ".xml", _file & ".sav")
+                '    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "LoadConfig", "Création de sauvegarde (.sav) du fichier de config avant sauvegarde")
+                'Catch ex As Exception
+                '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfig", "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
+                'End Try
 
                 ''Creation du fichier XML
                 Dim writer As New XmlTextWriter(Fichier, System.Text.Encoding.UTF8)
@@ -1808,6 +1844,9 @@ Namespace HoMIDom
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("idsrv")
                 writer.WriteValue(_IdSrv)
+                writer.WriteEndAttribute()
+                writer.WriteStartAttribute("savediff")
+                writer.WriteValue(_SaveDiffBackup)
                 writer.WriteEndAttribute()
                 writer.WriteStartAttribute("longitude")
                 writer.WriteValue(_Longitude)
@@ -4475,6 +4514,32 @@ Namespace HoMIDom
 
         '*** FONCTIONS ******************************************
 #Region "Serveur"
+        ''' <summary>
+        ''' Retourne: Sauvegader les backups et sauvegardes suivant différents fichiers
+        ''' </summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetSaveDiffBackup() As Boolean Implements IHoMIDom.GetSaveDiffBackup
+            Try
+                Return _SaveDiffBackup
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSaveDiffBackup", "Erreur : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' Définit: Sauvegader les backups et sauvegardes suivant différents fichiers
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub SetSaveDiffBackup(Value As Boolean) Implements IHoMIDom.SetSaveDiffBackup
+            Try
+                _SaveDiffBackup = Value
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SetSaveDiffBackup", "Erreur : " & ex.Message)
+            End Try
+        End Sub
+
         ''' <summary>
         ''' Retourne le répertoire courant du serveur
         ''' </summary>
