@@ -104,6 +104,11 @@ header span, header p {
 	color:white;
 	text-align:center;
 }
+header li {
+	font-size:large;
+	color:black;
+
+}
 
 .row {
 margin : 1px;
@@ -162,6 +167,8 @@ h4 {
 	display : inline;
 	vertical-align:middle;
 }
+
+.InfoSoleil { display : inline; }
 
 #WidMeteo {
 	height: 250px;
@@ -226,7 +233,7 @@ h4 {
 
 .TempMax,  .TempMin {
 	display: block;	
-	text-align: center;	
+	
 	margin : auto;
 	margin-left: 1px;
 	margin-bottom: 2px;
@@ -252,3 +259,71 @@ margin-top : 5px;
 margin:  10px; 
 
 }
+
+#CloseZones {float : left; margin-top : 5px; margin-left : -5px; z-index : 20}
+
+#modalLogin  {
+		margin : 10px auto; 
+		width : 450px;
+		z-index: 10;
+		background-color: #606060 ; 
+		border: 1px groove #777777;
+-webkit-border-radius: 10px;
+ border-radius: 10px;
+ padding : 15px;
+}
+#modalLogin  h1 { color: red; font-weight:bold; text-align: center; border: 1px groove #777777;
+-webkit-border-radius: 10px; border-radius: 10px; background-color:  rgba(190, 190, 190, 0.75); 	}
+
+
+
+#ListeServeurs  img{width : 50px; height :50px;}
+
+#ListeServeurs {width : 98%;	height :90px;	margin :10px 0 10px 5px; overflow:auto;}
+
+#ListeServeurs div {
+	text-align: center;
+	display : inline-table;
+	margin : 2px;
+	width : 70px;
+	height :70px;	
+	border : 2px;
+	border-style : solid; 
+	border-color : gray;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+}
+
+#ListeServeurs div:hover{
+	border-style : solid; 
+	border-color : red;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+}
+
+#ListeServeurs span {
+	font-size: 7pt;
+	display : block;	
+	color : white;overflow:auto
+}
+
+#ListeServeurs img, #ListeServeurs span {
+	margin : auto;
+}
+
+.ListeChamp {
+    border: 3px solid white;
+    border-radius: 5px;
+    margin: 5px;
+}
+
+.action button {margin : 10px 20px; min-width : 150px; color: black; }
+.action button span { color: black; }
+
+.commandes button {margin-left : 35%; background-image:linear-gradient(to bottom  , white,  red); 	vertical-align:middle;}
+.commandes button:hover { background: red }
+
+.input-group   {margin : 10px }
+.input-group-addon { min-width : 100px; color:darkred ; font-weight:bold;}
+
+#events { overflow:auto}
