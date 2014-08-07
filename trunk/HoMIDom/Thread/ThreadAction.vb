@@ -179,9 +179,9 @@ Namespace HoMIDom
                                     Case Action.TypeSigne.Egal : If retour = retour2 Then result = True Else result = False
                                     Case Action.TypeSigne.Different : If retour <> retour2 Then result = True Else result = False
                                     Case Action.TypeSigne.Inferieur : If retour < retour2 Then result = True Else result = False
-                                    Case Action.TypeSigne.InferieurEgal : If retour <= retour2 Then result = True Else  : result = False
-                                    Case Action.TypeSigne.Superieur : If retour > retour2 Then result = True Else  : result = False
-                                    Case Action.TypeSigne.SuperieurEgal : If retour >= retour2 Then result = True Else  : result = False
+                                    Case Action.TypeSigne.InferieurEgal : If retour <= retour2 Then result = True Else result = False
+                                    Case Action.TypeSigne.Superieur : If retour > retour2 Then result = True Else result = False
+                                    Case Action.TypeSigne.SuperieurEgal : If retour >= retour2 Then result = True Else result = False
                                 End Select
 
                                 If i = 0 Then 'c le 1er donc pas prendre en compte l'operateur
