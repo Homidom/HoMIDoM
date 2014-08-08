@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
              mc:Ignorable="d" 
-            Margin="10" Width="970">
+            Margin="10" Width="1203">
 
     <DockPanel Background="#636060" Opacity="0.90">
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Margin="0">
@@ -65,7 +65,7 @@
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="2,2,2,10">
                             <Label Content="Graphique   " Foreground="White" VerticalAlignment="Center" />
                             <Label Content="BackColor:" Foreground="White" VerticalAlignment="Center" />
-                            <ComboBox Name="CbBackColor" Width="80" VerticalAlignment="Center" SelectedIndex="5" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2">
+                            <ComboBox VerticalAlignment="Center" BorderBrush="Black" BorderThickness="2" Name="CbBackColor" SelectedIndex="0" Width="80">
                                 <ComboBoxItem Content="Blanc" />
                                 <ComboBoxItem Content="Bleu" />
                                 <ComboBoxItem Content="Jaune" />
@@ -75,7 +75,7 @@
                                 <ComboBoxItem Content="Transparent" />
                             </ComboBox>
                             <Label Content="Zoom:" Foreground="White" />
-                            <ComboBox Background="DarkGray" BorderBrush="Black" BorderThickness="2" Foreground="White" Height="24" Name="ComboBox1" SelectedIndex="5" Width="91">
+                            <ComboBox VerticalAlignment="Center" BorderBrush="Black" BorderThickness="2" Name="CbZoom" SelectedIndex="0" Width="80">
                                 <ComboBoxItem Content="Aucun" IsSelected="True" />
                                 <ComboBoxItem Content="2 heures" />
                                 <ComboBoxItem Content="1 heure" />
@@ -173,14 +173,6 @@
                 </StackPanel>
             </DockPanel>
         </Border>
-        <Label Content="Zoom:" Foreground="White" />
-        <ComboBox Background="DarkGray" BorderBrush="Black" BorderThickness="2" Foreground="White" Height="24" Name="CbZoom" SelectedIndex="5" Width="91">
-            <ComboBoxItem Content="Aucun" IsSelected="True" />
-            <ComboBoxItem Content="2 heures" />
-            <ComboBoxItem Content="1 heure" />
-            <ComboBoxItem Content="30 minutes" />
-            <ComboBoxItem Content="15 minutes" IsSelected="False" />
-        </ComboBox>
     </DockPanel>
 
 </UserControl>
