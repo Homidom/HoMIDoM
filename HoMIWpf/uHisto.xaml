@@ -74,6 +74,14 @@
                                 <ComboBoxItem Content="Gris" />
                                 <ComboBoxItem Content="Transparent" />
                             </ComboBox>
+                            <Label Content="Zoom:" Foreground="White" />
+                            <ComboBox Background="DarkGray" BorderBrush="Black" BorderThickness="2" Foreground="White" Height="24" Name="ComboBox1" SelectedIndex="5" Width="91">
+                                <ComboBoxItem Content="Aucun" IsSelected="True" />
+                                <ComboBoxItem Content="2 heures" />
+                                <ComboBoxItem Content="1 heure" />
+                                <ComboBoxItem Content="30 minutes" />
+                                <ComboBoxItem Content="15 minutes" IsSelected="False" />
+                            </ComboBox>
                         </StackPanel>
                     </StackPanel>
                 </DockPanel>
@@ -165,8 +173,14 @@
                 </StackPanel>
             </DockPanel>
         </Border>
-        
-            
+        <Label Content="Zoom:" Foreground="White" />
+        <ComboBox Background="DarkGray" BorderBrush="Black" BorderThickness="2" Foreground="White" Height="24" Name="CbZoom" SelectedIndex="5" Width="91">
+            <ComboBoxItem Content="Aucun" IsSelected="True" />
+            <ComboBoxItem Content="2 heures" />
+            <ComboBoxItem Content="1 heure" />
+            <ComboBoxItem Content="30 minutes" />
+            <ComboBoxItem Content="15 minutes" IsSelected="False" />
+        </ComboBox>
     </DockPanel>
 
 </UserControl>
