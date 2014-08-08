@@ -168,7 +168,7 @@ Public Class uHisto
                 Next
             ElseIf ChkHisto.IsChecked Then
                 For i As Integer = 0 To Chart2.Series.Count - 1
-                    Chart2.Series(i).ChartType = SeriesChartType.Bar
+                    Chart2.Series(i).ChartType = SeriesChartType.Column
                     Chart2.Series(i).ToolTip = "#VALX{dd/MM/yyyy HH:mm:ss}" & " Valeur:" & "#VALY"
                 Next
             Else
@@ -198,6 +198,17 @@ Public Class uHisto
                     Chart2.ChartAreas("Default").BackGradientStyle = GradientStyle.TopBottom
                     Chart2.ChartAreas("Default").BackSecondaryColor = Color.WhiteSmoke
                 Case 6 : Chart2.ChartAreas("Default").BackColor = Color.Transparent
+            End Select
+
+            Select Case CbZoom.Text
+                Case "2 heures"
+                    Chart2.ChartAreas("Default").AxisX.ScaleView.Zoom(0, 1 / 2)
+                Case "1 heure"
+                    Chart2.ChartAreas("Default").AxisX.ScaleView.Zoom(0, 1 / 3)
+                Case "30 minutes"
+                    Chart2.ChartAreas("Default").AxisX.ScaleView.Zoom(0, 1 / 5)
+                Case "15 minutes"
+                    Chart2.ChartAreas("Default").AxisX.ScaleView.Zoom(0, 1 / 9)
             End Select
 
             ' Add the chart to the Windows Form Host.
