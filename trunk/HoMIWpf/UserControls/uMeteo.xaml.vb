@@ -106,7 +106,7 @@ Partial Public Class uMeteo
             '_dev = x
             'x = Nothing
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uMeteo.GetMeteo: " & ex.ToString, "Erreur", "uMeteo.GetMeteo")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uMeteo.GetMeteo: " & ex.ToString, "Erreur", "uMeteo.GetMeteo")
         End Try
 
     End Sub

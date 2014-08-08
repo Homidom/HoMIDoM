@@ -478,7 +478,7 @@ Public Class uWidgetEmpty
                 AddHandler _dt.Tick, AddressOf dispatcherTimer_Tick
                 _dt.Start()
             Catch ex As Exception
-                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Type: " & ex.Message, "Erreur", " uWidgetEmpty.Type")
+                AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Type: " & ex.Message, "Erreur", " uWidgetEmpty.Type")
             End Try
         End Set
     End Property
@@ -558,7 +558,7 @@ Public Class uWidgetEmpty
                 If _Show = False Then Exit Property
                 Lbl.FontSize = value
             Catch ex As Exception
-                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.TailleEtiquette Set: " & ex.Message, "Erreur", " uWidgetEmpty.TailleEtiquette Set")
+                AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.TailleEtiquette Set: " & ex.Message, "Erreur", " uWidgetEmpty.TailleEtiquette Set")
             End Try
         End Set
     End Property
@@ -692,9 +692,9 @@ Public Class uWidgetEmpty
                 If _Show = True Then
                     Image.Tag = _Picture
                     LoadPicture()
-                    End If
+                End If
             Catch ex As Exception
-                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Set Picture: " & ex.Message, "Erreur", " uWidgetEmpty.Set Picture")
+                AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Set Picture: " & ex.Message, "Erreur", " uWidgetEmpty.Set Picture")
             End Try
         End Set
     End Property
@@ -906,7 +906,7 @@ Public Class uWidgetEmpty
                     End If
                 End If
             Catch ex As Exception
-                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Empty.URL: " & ex.Message, "Erreur", " uWidgetEmpty.Empty.URL")
+                AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Empty.URL: " & ex.Message, "Erreur", " uWidgetEmpty.Empty.URL")
             End Try
         End Set
     End Property
@@ -1112,7 +1112,7 @@ Public Class uWidgetEmpty
             Storyboard.SetTarget(myDoubleAnimation, Me)
             Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.New: " & ex.Message, "Erreur", " uWidgetEmpty.New")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.New: " & ex.Message, "Erreur", " uWidgetEmpty.New")
         End Try
     End Sub
 
@@ -1338,7 +1338,7 @@ Public Class uWidgetEmpty
 
             Me.UpdateLayout()
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.TraiteRefresh: " & ex.Message, "Erreur", " uWidgetEmpty.TraiteRefresh")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.TraiteRefresh: " & ex.Message, "Erreur", " uWidgetEmpty.TraiteRefresh")
             _dt.Stop()
         End Try
     End Sub
@@ -1396,7 +1396,7 @@ Public Class uWidgetEmpty
             End If
 
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Loaded: " & ex.Message, "Erreur", " uWidgetEmpty.Loaded")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Loaded: " & ex.Message, "Erreur", " uWidgetEmpty.Loaded")
         End Try
     End Sub
 
@@ -1447,7 +1447,7 @@ Public Class uWidgetEmpty
                 Exit Sub
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.MouseLeave: " & ex.Message, "Erreur", " uWidgetEmpty.MouseLeave")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.MouseLeave: " & ex.Message, "Erreur", " uWidgetEmpty.MouseLeave")
         End Try
     End Sub
 
@@ -1509,7 +1509,7 @@ Public Class uWidgetEmpty
                 RaiseEvent LongClick(Me, e)
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Image_MouseLeftButtonUp: " & ex.Message, "Erreur", " uWidgetEmpty.Image_MouseLeftButtonUp")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Image_MouseLeftButtonUp: " & ex.Message, "Erreur", " uWidgetEmpty.Image_MouseLeftButtonUp")
         End Try
     End Sub
 
@@ -1568,7 +1568,7 @@ Public Class uWidgetEmpty
                 End If
             Next
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Traite_Action_OnClick: " & ex.Message, "Erreur", " uWidgetEmpty.Traite_Action_OnClick")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Traite_Action_OnClick: " & ex.Message, "Erreur", " uWidgetEmpty.Traite_Action_OnClick")
         End Try
     End Sub
 
@@ -1614,7 +1614,7 @@ Public Class uWidgetEmpty
                 End If
             Next
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Traite_Action_OnLongClick: " & ex.Message, "Erreur", " uWidgetEmpty.Traite_Action_OnLongClick")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Traite_Action_OnLongClick: " & ex.Message, "Erreur", " uWidgetEmpty.Traite_Action_OnLongClick")
         End Try
     End Sub
 
@@ -1663,7 +1663,7 @@ Public Class uWidgetEmpty
                 End If
             Next
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Traite_Action_HautBas: " & ex.Message, "Erreur", " uWidgetEmpty.Traite_Action_HautBas")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Traite_Action_HautBas: " & ex.Message, "Erreur", " uWidgetEmpty.Traite_Action_HautBas")
         End Try
     End Sub
 
@@ -1712,7 +1712,7 @@ Public Class uWidgetEmpty
                 End If
             Next
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Traite_Action_BasHaut: " & ex.Message, "Erreur", " uWidgetEmpty.Traite_Action_BasHaut")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Traite_Action_BasHaut: " & ex.Message, "Erreur", " uWidgetEmpty.Traite_Action_BasHaut")
         End Try
     End Sub
 
@@ -1761,7 +1761,7 @@ Public Class uWidgetEmpty
                 End If
             Next
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Traite_Action_GaucheDroite: " & ex.Message, "Erreur", " uWidgetEmpty.Traite_Action_GaucheDroite")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Traite_Action_GaucheDroite: " & ex.Message, "Erreur", " uWidgetEmpty.Traite_Action_GaucheDroite")
         End Try
     End Sub
 
@@ -1810,7 +1810,7 @@ Public Class uWidgetEmpty
                 End If
             Next
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Traite_Action_DroiteGauche: " & ex.Message, "Erreur", " uWidgetEmpty.Traite_Action_DroiteGauche")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Traite_Action_DroiteGauche: " & ex.Message, "Erreur", " uWidgetEmpty.Traite_Action_DroiteGauche")
         End Try
     End Sub
 #End Region
@@ -1830,7 +1830,7 @@ Public Class uWidgetEmpty
 
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.FreeTouch: " & ex.Message, "Erreur", " uWidgetEmpty.FreeTouch")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.FreeTouch: " & ex.Message, "Erreur", " uWidgetEmpty.FreeTouch")
             _FlagBlock = False
         End Try
     End Sub
@@ -1857,7 +1857,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.ClickOn: " & ex.Message, "Erreur", " uWidgetEmpty.ClickOn")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.ClickOn: " & ex.Message, "Erreur", " uWidgetEmpty.ClickOn")
             _FlagBlock = False
         End Try
     End Sub
@@ -1884,7 +1884,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.ClickOff: " & ex.Message, "Erreur", " uWidgetEmpty.ClickOff")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.ClickOff: " & ex.Message, "Erreur", " uWidgetEmpty.ClickOff")
             _FlagBlock = False
         End Try
     End Sub
@@ -1909,7 +1909,7 @@ Public Class uWidgetEmpty
                 _FlagBlock = False
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.ValueChange: " & ex.Message, "Erreur", " uWidgetEmpty.ValueChange")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.ValueChange: " & ex.Message, "Erreur", " uWidgetEmpty.ValueChange")
             _FlagBlock = False
         End Try
     End Sub
@@ -1920,7 +1920,7 @@ Public Class uWidgetEmpty
             If _dev IsNot Nothing Then
                 Dim retour As String = myService.TelecommandeSendCommand(IdSrv, _dev.ID, Commande)
                 If retour <> 0 Then
-                    AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.SendCommand: " & retour, "Erreur", " uWidgetEmpty.SendCommand")
+                    AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.SendCommand: " & retour, "Erreur", " uWidgetEmpty.SendCommand")
                 End If
 
                 If StkPopup.Children.Count > 0 Then
@@ -1930,7 +1930,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.SendCommand: " & ex.Message, "Erreur", " uWidgetEmpty.SendCommand")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.SendCommand: " & ex.Message, "Erreur", " uWidgetEmpty.SendCommand")
             _FlagBlock = False
         End Try
     End Sub
@@ -1948,7 +1948,7 @@ Public Class uWidgetEmpty
                         _value = Value
                         _flag = True
                     Catch ex As Exception
-                        AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.ChangeValue: " & ex.Message, "Erreur", " uWidgetEmpty.ChangeValue")
+                        AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.ChangeValue: " & ex.Message, "Erreur", " uWidgetEmpty.ChangeValue")
                         _flag = False
                     End Try
                 End If
@@ -1979,7 +1979,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.ChangeValue: " & ex.Message, "Erreur", " uWidgetEmpty.ChangeValue")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.ChangeValue: " & ex.Message, "Erreur", " uWidgetEmpty.ChangeValue")
             _FlagBlock = False
         End Try
     End Sub
@@ -2008,7 +2008,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.AudioPlay: " & ex.Message, "Erreur", " uWidgetEmpty.AudioPlay")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.AudioPlay: " & ex.Message, "Erreur", " uWidgetEmpty.AudioPlay")
         End Try
     End Sub
 
@@ -2028,7 +2028,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.AudioPause: " & ex.Message, "Erreur", " uWidgetEmpty.AudioPause")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.AudioPause: " & ex.Message, "Erreur", " uWidgetEmpty.AudioPause")
         End Try
     End Sub
 
@@ -2048,7 +2048,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.AudioStop: " & ex.Message, "Erreur", " uWidgetEmpty.AudioStop")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.AudioStop: " & ex.Message, "Erreur", " uWidgetEmpty.AudioStop")
         End Try
     End Sub
 
@@ -2076,7 +2076,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.AudioNextChap: " & ex.Message, "Erreur", " uWidgetEmpty.AudioNextChap")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.AudioNextChap: " & ex.Message, "Erreur", " uWidgetEmpty.AudioNextChap")
         End Try
     End Sub
 
@@ -2096,7 +2096,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.AudioPreviousChap: " & ex.Message, "Erreur", " uWidgetEmpty.AudioPreviousChap")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.AudioPreviousChap: " & ex.Message, "Erreur", " uWidgetEmpty.AudioPreviousChap")
         End Try
     End Sub
 
@@ -2116,7 +2116,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.AudioMute: " & ex.Message, "Erreur", " uWidgetEmpty.AudioMute")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.AudioMute: " & ex.Message, "Erreur", " uWidgetEmpty.AudioMute")
         End Try
     End Sub
 
@@ -2133,7 +2133,7 @@ Public Class uWidgetEmpty
             myService.ExecuteDeviceCommand(IdSrv, Id, x)
 
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.AudioSetFile: " & ex.Message, "Erreur", " uWidgetEmpty.AudioSetFile")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.AudioSetFile: " & ex.Message, "Erreur", " uWidgetEmpty.AudioSetFile")
         End Try
     End Sub
 
@@ -2153,7 +2153,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.AudioVolumeUp: " & ex.Message, "Erreur", " uWidgetEmpty.AudioVolumeUp")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.AudioVolumeUp: " & ex.Message, "Erreur", " uWidgetEmpty.AudioVolumeUp")
         End Try
     End Sub
 
@@ -2173,7 +2173,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.AudioVolumeDown: " & ex.Message, "Erreur", " uWidgetEmpty.AudioVolumeDown")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.AudioVolumeDown: " & ex.Message, "Erreur", " uWidgetEmpty.AudioVolumeDown")
         End Try
     End Sub
 #End Region
@@ -2202,11 +2202,11 @@ Public Class uWidgetEmpty
                         ' sur l 'icône de la zone pour faire un refresh manuel
                         'frmMere.ShowZone(frmMere._CurrentIdZone)
                     End If
-            X.Close()
+                    X.Close()
 
-        Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Stk1_MouseDown: " & ex.Message, "Erreur", " uWidgetEmpty.Stk1_MouseDown")
-        End Try
+                Catch ex As Exception
+                    AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Stk1_MouseDown: " & ex.Message, "Erreur", " uWidgetEmpty.Stk1_MouseDown")
+                End Try
             Else
                 If IsEmpty = False Then
                     If e.ClickCount > 1 Then Exit Sub
@@ -2274,10 +2274,10 @@ Public Class uWidgetEmpty
                             Popup1.IsOpen = False
                         End If
                     End If
-                    End If
+                End If
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Stk1_MouseDown: " & ex.ToString, "Erreur", " uWidgetEmpty.Stk1_MouseDown")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Stk1_MouseDown: " & ex.ToString, "Erreur", " uWidgetEmpty.Stk1_MouseDown")
         End Try
     End Sub
 
@@ -2318,10 +2318,14 @@ Public Class uWidgetEmpty
                 If _MOTEUR IsNot Nothing Then _MOTEUR.Height = Me.ActualHeight
                 If _PRISE IsNot Nothing Then _PRISE.Height = Me.ActualHeight
             End If
+
+            Dim W As Double
             If ShowStatus And (ShowPicture Or _type = TypeOfWidget.Moteur Or Type = TypeOfWidget.Prise) And LblStatus.ActualHeight > 0 And Me.ActualWidth > 0 Then
-                If ShowPicture Then Image.Width = Me.ActualWidth - LblStatus.ActualWidth
-                If _MOTEUR IsNot Nothing Then _MOTEUR.Width = Me.ActualWidth - LblStatus.ActualWidth
-                If _PRISE IsNot Nothing Then _PRISE.Width = Me.ActualWidth - LblStatus.ActualWidth
+                W = Me.ActualWidth - LblStatus.ActualWidth
+                If W < 0 Then W = 0
+                If ShowPicture Then Image.Width = W
+                If _MOTEUR IsNot Nothing Then _MOTEUR.Width = W
+                If _PRISE IsNot Nothing Then _PRISE.Width = W
             End If
             If ShowStatus = False And (ShowPicture Or _type = TypeOfWidget.Moteur Or _type = TypeOfWidget.Prise) Then
                 If ShowPicture Then Image.Width = Me.ActualWidth
@@ -2337,7 +2341,7 @@ Public Class uWidgetEmpty
                 If _PRISE IsNot Nothing Then If _PRISE.Height < _PRISE.Width Then _PRISE.Width = _PRISE.Height
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.SizeChanged: " & ex.Message, "Erreur", " uWidgetEmpty.SizeChanged")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.SizeChanged: " & ex.Message, "Erreur", " uWidgetEmpty.SizeChanged")
         End Try
     End Sub
 
@@ -2345,7 +2349,7 @@ Public Class uWidgetEmpty
         Try
             MyBase.Finalize()
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Finalize: " & ex.Message, "Erreur", " uWidgetEmpty.Finalize")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Finalize: " & ex.Message, "Erreur", " uWidgetEmpty.Finalize")
         End Try
     End Sub
 
@@ -2374,7 +2378,7 @@ Public Class uWidgetEmpty
             _MOTEUR = Nothing
             _PRISE = Nothing
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Unloaded: " & ex.Message, "Erreur", " uWidgetEmpty.Unloaded")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Unloaded: " & ex.Message, "Erreur", " uWidgetEmpty.Unloaded")
         End Try
 
     End Sub
@@ -2517,7 +2521,7 @@ Public Class uWidgetEmpty
             End If
 
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.GetStatusPicture: " & ex.Message, "Erreur", " uWidgetEmpty.GetStatusPicture")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.GetStatusPicture: " & ex.Message, "Erreur", " uWidgetEmpty.GetStatusPicture")
             Return Filename
         End Try
     End Function
@@ -2557,7 +2561,7 @@ Public Class uWidgetEmpty
                 End If
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.LoadPicture: " & ex.Message, "Erreur", " uWidgetEmpty.LoadPicture")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.LoadPicture: " & ex.Message, "Erreur", " uWidgetEmpty.LoadPicture")
         End Try
 
     End Sub

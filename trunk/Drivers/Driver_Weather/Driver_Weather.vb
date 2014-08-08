@@ -315,6 +315,7 @@ Imports System.Threading
                 For Each _Dev As HoMIDom.HoMIDom.TemplateDevice In _Server.GetAllDevices(_IdSrv)
                     If _Dev.Type = ListeDevices.METEO Then
                         Read(_Server.ReturnRealDeviceById(_Dev.ID))
+                        Thread.Sleep(5000)
                     End If
                 Next
             End If
@@ -538,6 +539,7 @@ Imports System.Threading
             doc.Load(response.GetResponseStream)
 
             nodes = doc.SelectNodes("/weather/cc")
+
             For Each node As XmlNode In nodes
                 If node.HasChildNodes = True Then
                     For Each _child As XmlNode In node
@@ -713,7 +715,7 @@ Imports System.Threading
             url = Nothing
             _Obj.LastChange = Now
 
-            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GOOGLEMETEO", "MAJ Meteo effectuée pour " & _Obj.name)
+            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEOWeather", "MAJ Meteo effectuée pour " & _Obj.name)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "METEOWeather", "Erreur Lors de la MaJ de " & _Obj.name & " : " & ex.ToString)
         End Try

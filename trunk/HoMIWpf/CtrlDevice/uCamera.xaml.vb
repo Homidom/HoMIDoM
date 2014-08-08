@@ -56,7 +56,7 @@ Public Class uCamera
                     Next
                 End If
             Catch ex As Exception
-                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.ListButton.set: " & ex.Message, "Erreur", "uCamera.ListButton.set")
+                AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uCamera.ListButton.set: " & ex.Message, "Erreur", "uCamera.ListButton.set")
             End Try
         End Set
     End Property
@@ -78,7 +78,7 @@ Public Class uCamera
                 MessageBox.Show("Erreur l'url: " & x.URL & " n'est pas valide", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.Button_Click: " & ex.Message, "Erreur", "uCamera.Button_Click")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uCamera.Button_Click: " & ex.Message, "Erreur", "uCamera.Button_Click")
         End Try
     End Sub
 
@@ -94,7 +94,7 @@ Public Class uCamera
             AddHandler _mjpeg.FrameReady, AddressOf mjpeg_FrameReady
 
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.New: " & ex.Message, "Erreur", "uCamera.New")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uCamera.New: " & ex.Message, "Erreur", "uCamera.New")
         End Try
     End Sub
 
@@ -112,7 +112,7 @@ Public Class uCamera
             image.Height = y
 
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.uCamera_SizeChanged: " & ex.ToString, "Erreur", "uCamera.uCamera_SizeChanged")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uCamera.uCamera_SizeChanged: " & ex.ToString, "Erreur", "uCamera.uCamera_SizeChanged")
         End Try
     End Sub
 
@@ -123,7 +123,7 @@ Public Class uCamera
                 _mjpeg = Nothing
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.Finalize: " & ex.ToString, "Erreur", "uCamera.Finalize")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uCamera.Finalize: " & ex.ToString, "Erreur", "uCamera.Finalize")
         End Try
         MyBase.Finalize()
     End Sub
@@ -135,7 +135,7 @@ Public Class uCamera
                 _mjpeg = Nothing
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.uCamera_Unloaded: " & ex.ToString, "Erreur", "uCamera.uCamera_Unloaded")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uCamera.uCamera_Unloaded: " & ex.ToString, "Erreur", "uCamera.uCamera_Unloaded")
         End Try
     End Sub
 
@@ -143,7 +143,7 @@ Public Class uCamera
         Try
             image.Source = e.BitmapImage
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uCamera.mjpeg_FrameReady: " & ex.ToString, "Erreur", "uCamera.mjpeg_FrameReady")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uCamera.mjpeg_FrameReady: " & ex.ToString, "Erreur", "uCamera.mjpeg_FrameReady")
         End Try
     End Sub
 
