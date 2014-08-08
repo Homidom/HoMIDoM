@@ -14,6 +14,9 @@
 
     'Ecriture dans le fichier log
     Public _Debug As Boolean
+
+    'Image des Devices/zones
+    Public _AllZones As New List(Of HoMIDom.HoMIDom.Zone)
     Private _AllDevices As New List(Of HoMIDom.HoMIDom.TemplateDevice)
 
     'Animation des ScrollViewer

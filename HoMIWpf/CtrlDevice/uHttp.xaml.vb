@@ -23,7 +23,7 @@ Public Class uHttp
                     End If
                 End If
             Catch ex As Exception
-                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uHttp.URL: " & ex.ToString, "Erreur", "uHttp.URL")
+                AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uHttp.URL: " & ex.ToString, "Erreur", "uHttp.URL")
             End Try
         End Set
     End Property
@@ -49,7 +49,7 @@ Public Class uHttp
                     End If
                 End If
             Catch ex As Exception
-                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uHttp.Refresh.set: " & ex.ToString, "Erreur", "uHttp.Refresh.set")
+                AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uHttp.Refresh.set: " & ex.ToString, "Erreur", "uHttp.Refresh.set")
             End Try
         End Set
     End Property
@@ -79,7 +79,7 @@ Public Class uHttp
                     Next
                 End If
             Catch ex As Exception
-                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uHttp.ListButton.set: " & ex.ToString, "Erreur", "uHttp.ListButton.set")
+                AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uHttp.ListButton.set: " & ex.ToString, "Erreur", "uHttp.ListButton.set")
             End Try
         End Set
     End Property
@@ -97,7 +97,7 @@ Public Class uHttp
                 End If
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uHttp.Button_Click: " & ex.ToString, "Erreur", "uHttp.Button_Click")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uHttp.Button_Click: " & ex.ToString, "Erreur", "uHttp.Button_Click")
         End Try
     End Sub
 
@@ -107,7 +107,7 @@ Public Class uHttp
             GC.Collect()
 
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uHttp.wb_Navigated: " & ex.ToString, "Erreur", "uHttp.wb_Navigated")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uHttp.wb_Navigated: " & ex.ToString, "Erreur", "uHttp.wb_Navigated")
         End Try
     End Sub
 
@@ -115,7 +115,7 @@ Public Class uHttp
         Try
             SuppressScriptErrors(sender, True)
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uHttp.wb_Navigating: " & ex.ToString, "Erreur", "uHttp.wb_Navigating")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uHttp.wb_Navigating: " & ex.ToString, "Erreur", "uHttp.wb_Navigating")
         End Try
     End Sub
 
@@ -131,7 +131,7 @@ Public Class uHttp
             End If
             objComWebBrowser.[GetType]().InvokeMember("Silent", BindingFlags.SetProperty, Nothing, objComWebBrowser, New Object() {Hide})
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uHttp.SuppressScriptErrors: " & ex.ToString, "Erreur", "uHttp.SuppressScriptErrors")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uHttp.SuppressScriptErrors: " & ex.ToString, "Erreur", "uHttp.SuppressScriptErrors")
         End Try
     End Sub
 
@@ -139,7 +139,7 @@ Public Class uHttp
         Try
             If WebBrowser1.Document IsNot Nothing Then WebBrowser1.Dispatcher.BeginInvoke(System.Windows.Threading.DispatcherPriority.Normal, DirectCast(Sub() WebBrowser1.Refresh(), ThreadStart))
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uHttp.dispatcherTimer_Tick: " & ex.ToString, "Erreur", "uHttp.dispatcherTimer_Tick")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uHttp.dispatcherTimer_Tick: " & ex.ToString, "Erreur", "uHttp.dispatcherTimer_Tick")
         End Try
     End Sub
 
@@ -184,7 +184,7 @@ Public Class uHttp
 
             WebBrowser1.Height = y
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uHttp.uHttp_SizeChanged: " & ex.ToString, "Erreur", "uHttp.uHttp_SizeChanged")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uHttp.uHttp_SizeChanged: " & ex.ToString, "Erreur", "uHttp.uHttp_SizeChanged")
         End Try
 
     End Sub

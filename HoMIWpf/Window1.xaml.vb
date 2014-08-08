@@ -1,5 +1,6 @@
 ﻿#Region "Imports"
 Imports System
+Imports System.ComponentModel
 Imports System.Collections.Generic
 Imports System.Linq
 Imports System.Text
@@ -523,7 +524,7 @@ Class Window1
             ImageBackGround = _ImageBackGroundDefault
             AfficheStartDefautPage()
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur UnloadControl: " & ex.Message, "Erreur", "UnloadControl")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur UnloadControl: " & ex.Message, "Erreur", "UnloadControl")
         End Try
     End Sub
 
@@ -607,7 +608,7 @@ Class Window1
             If IsConnect = True Then
                 LoadZones()
             Else
-                AfficheMessageAndLog(Fonctions.TypeLog.MESSAGE, "Pas de connexion au serveur. Veuillez entrer les informations de connexion dans l'onglet serveur de la fenêtre de configuration.", "Information", "New")
+                AfficheMessageAndLog(FctLog.TypeLog.MESSAGE, "Pas de connexion au serveur. Veuillez entrer les informations de connexion dans l'onglet serveur de la fenêtre de configuration.", "Information", "New")
                 _ImageBackGroundDefault = _MonRepertoire & "\Images\Fond-logo.png"
                 Me.Show()
                 MnuConfig_Click(Me, Nothing)
@@ -633,7 +634,11 @@ Class Window1
                 LblCouche.Content = mydate.ToShortTimeString
             End If
 
-            If IsConnect Then Refresh()
+            If IsConnect Then
+                Refresh_Zone()
+                Refresh()
+            End If
+
             'MaJ Liste des devices
             'Dim x As New Thread(AddressOf Refresh)
             'x.Priority = ThreadPriority.Highest
@@ -656,7 +661,7 @@ Class Window1
             spl.Close()
             spl = Nothing
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur lors du lancement de l'application: " & ex.ToString, "Erreur", "New")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur lors du lancement de l'application: " & ex.ToString, "Erreur", "New")
         End Try
     End Sub
 
@@ -690,7 +695,7 @@ Class Window1
                 lock_dev = False
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Event DeviceChanged: " & ex.ToString, "Erreur", " Event DeviceChanged")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Event DeviceChanged: " & ex.ToString, "Erreur", " Event DeviceChanged")
         End Try
     End Sub
 
@@ -753,7 +758,7 @@ Class Window1
             Destination.ValueMax = Source.ValueMax
             Destination.ValueMin = Source.ValueMin
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Sub MaJ_Device: " & ex.ToString, "Erreur", " Sub MaJ_Device")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Sub MaJ_Device: " & ex.ToString, "Erreur", " Sub MaJ_Device")
         End Try
     End Sub
 
@@ -770,7 +775,7 @@ Class Window1
     '            Next
     '        End If
     '    Catch ex As Exception
-    '        AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Sub NewLog: " & ex.ToString, "Erreur", " Sub NewLog")
+    '        AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Sub NewLog: " & ex.ToString, "Erreur", " Sub NewLog")
     '    End Try
     'End Sub
 
@@ -796,7 +801,7 @@ Class Window1
                 mydate = Nothing
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Sub HeureSoleilChanged: " & ex.ToString, "Erreur", " Sub HeureSoleilChanged")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Sub HeureSoleilChanged: " & ex.ToString, "Erreur", " Sub HeureSoleilChanged")
         End Try
     End Sub
 
@@ -832,7 +837,7 @@ Class Window1
                 Exit Function
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur lors du lancement de l'application: " & ex.Message, "Erreur", "LoadConfig")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur lors du lancement de l'application: " & ex.Message, "Erreur", "LoadConfig")
         End Try
 
         Try
@@ -860,7 +865,7 @@ Class Window1
                     End Select
                 Next
             Else
-                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Il manque les paramètres du client WPF dans le fichier de config !!", "Erreur", "LoadConfig")
+                AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Il manque les paramètres du client WPF dans le fichier de config !!", "Erreur", "LoadConfig")
             End If
             Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Paramètres du client WPF chargés")
 
@@ -888,7 +893,7 @@ Class Window1
                     End Select
                 Next
             Else
-                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Il manque les paramètres du client WPF dans le fichier de config !!", "Erreur", "LoadConfig")
+                AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Il manque les paramètres du client WPF dans le fichier de config !!", "Erreur", "LoadConfig")
             End If
             Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Paramètres tactiles chargés")
 
@@ -943,7 +948,7 @@ Class Window1
                     End Select
                 Next
             Else
-                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Il manque les paramètres du client WPF dans le fichier de config !!", "Erreur", "LoadConfig")
+                AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Il manque les paramètres du client WPF dans le fichier de config !!", "Erreur", "LoadConfig")
             End If
             Log(TypeLog.INFO, TypeSource.CLIENT, "LoadConfig", "Paramètres de l'interface chargés")
 
@@ -1189,7 +1194,7 @@ Class Window1
             Return " Chargement de la configuration terminée"
 
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "ERREUR LOADCONFIG " & ex.Message, "Erreur", "LoadConfig")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "ERREUR LOADCONFIG " & ex.Message, "Erreur", "LoadConfig")
             Return " Erreur de chargement de la config: " & ex.Message
         End Try
     End Function
@@ -1713,7 +1718,7 @@ Class Window1
             writer.Close()
             Log(TypeLog.INFO, TypeSource.CLIENT, "SaveConfig", "Sauvegarde terminée")
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "ERREUR SAVECONFIG " & ex.Message, "Erreur", "SaveConfig")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "ERREUR SAVECONFIG " & ex.Message, "Erreur", "SaveConfig")
         End Try
     End Sub
 
@@ -1742,7 +1747,7 @@ Class Window1
 
             Try
                 If myService.GetIdServer(IdSrv) = "99" Then
-                    AfficheMessageAndLog(Fonctions.TypeLog.MESSAGE, "L'ID du serveur est erroné, impossible de communiquer avec celui-ci", "Erreur", "ConnectToHomidom")
+                    AfficheMessageAndLog(FctLog.TypeLog.MESSAGE, "L'ID du serveur est erroné, impossible de communiquer avec celui-ci", "Erreur", "ConnectToHomidom")
                     IsConnect = False
                 Else
                     myService.GetTime()
@@ -1760,7 +1765,7 @@ Class Window1
         Catch ex As Exception
             myChannelFactory.Abort()
             IsConnect = False
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur lors de la connexion au Serveur (ConnectToHomidom): " & ex.Message, "Erreur", "ConnectToHomidom")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur lors de la connexion au Serveur (ConnectToHomidom): " & ex.Message, "Erreur", "ConnectToHomidom")
         End Try
     End Sub
 #End Region
@@ -1790,7 +1795,7 @@ Class Window1
             End If
 
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur lors de la création du bouton menu: " & ex.Message, "Erreur", "NewBtnMnu")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur lors de la création du bouton menu: " & ex.Message, "Erreur", "NewBtnMnu")
         End Try
     End Sub
 
@@ -1849,7 +1854,7 @@ Class Window1
             IsConnect = False
 
             If FlagMsgDeconnect = False Then
-                AfficheMessageAndLog(Fonctions.TypeLog.INFO, "La communication a été perdue avec le serveur, veuillez vérifier que celui-ci est toujours actif et redémarrer le client", "Erreur")
+                AfficheMessageAndLog(FctLog.TypeLog.INFO, "La communication a été perdue avec le serveur, veuillez vérifier que celui-ci est toujours actif et redémarrer le client", "Erreur")
                 FlagMsgDeconnect = True
             End If
 
@@ -1858,7 +1863,7 @@ Class Window1
             LblLeve.Content = "?"
             LblCouche.Content = "?"
 
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur: " & ex.Message, "Erreur")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur: " & ex.Message, "Erreur")
         End Try
     End Sub
 
@@ -1927,7 +1932,7 @@ Class Window1
                             x.Width = Canvas1.ActualWidth
                             x.Height = Canvas1.ActualHeight
                         Else
-                            AfficheMessageAndLog(Fonctions.TypeLog.INFO, "Le serveur Homidom n'est pas connecté, impossible d'afficher les météos", "Information", "IconMnuDoubleClick")
+                            AfficheMessageAndLog(FctLog.TypeLog.INFO, "Le serveur Homidom n'est pas connecté, impossible d'afficher les météos", "Information", "IconMnuDoubleClick")
                         End If
 
                     Case uCtrlImgMnu.TypeOfMnu.Zone
@@ -1941,7 +1946,7 @@ Class Window1
             Me.UpdateLayout()
             Me.Cursor = Nothing
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur IconMnuDoubleClick: " & ex.Message, "Erreur", "IconMnuDoubleClick")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur IconMnuDoubleClick: " & ex.Message, "Erreur", "IconMnuDoubleClick")
         End Try
     End Sub
 
@@ -1958,7 +1963,7 @@ Class Window1
 
             ShowZone(Zoneid)
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ElementShowZone: " & ex.Message, "Erreur", "ElementShowZone")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur ElementShowZone: " & ex.Message, "Erreur", "ElementShowZone")
         End Try
     End Sub
 
@@ -1966,7 +1971,7 @@ Class Window1
         Try
             MyBase.Finalize()
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Finalize Window1: " & ex.Message, "Erreur", "Finalize")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Finalize Window1: " & ex.Message, "Erreur", "Finalize")
         End Try
     End Sub
 
@@ -2047,10 +2052,10 @@ Class Window1
             Next
 
             If cntNewZone > 0 Then
-                AfficheMessageAndLog(Fonctions.TypeLog.INFO, cntNewZone & " nouvelle(s) zone(s) ajoutée(s)", "Information", "LoadZones")
+                AfficheMessageAndLog(FctLog.TypeLog.INFO, cntNewZone & " nouvelle(s) zone(s) ajoutée(s)", "Information", "LoadZones")
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur LoadZones: " & ex.Message, "Erreur", "LoadZones")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur LoadZones: " & ex.Message, "Erreur", "LoadZones")
         End Try
     End Sub
 
@@ -2061,7 +2066,7 @@ Class Window1
 
             'Gestion de l'erreur si le serveur n'est pas connecté
             If IsConnect = False Then
-                AfficheMessageAndLog(Fonctions.TypeLog.INFO, "Le serveur Homidom n'est pas connecté, impossible d'afficher les éléments de la zone sélectionnée", "Information", "ShowZone")
+                AfficheMessageAndLog(FctLog.TypeLog.INFO, "Le serveur Homidom n'est pas connecté, impossible d'afficher les éléments de la zone sélectionnée", "Information", "ShowZone")
                 Exit Sub
             End If
 
@@ -2074,7 +2079,15 @@ Class Window1
 
             'Init des variables communes
             _CurrentIdZone = IdZone
-            _zone = myService.ReturnZoneByID(IdSrv, IdZone)
+
+            If (From Zone In _AllZones Where Zone.ID = IdZone Select Zone).Count > 0 Then
+                Dim Resultat = (From Zone In _AllZones Where Zone.ID = IdZone Select Zone).First
+                _zone = Resultat
+            Else
+                Exit Sub
+            End If
+
+            '_zone = myService.ReturnZoneByID(IdSrv, IdZone)
 
             'Affiche l'image background de la zone
             ImgBackground.Source = Nothing
@@ -2375,7 +2388,7 @@ Class Window1
             Next
 
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ShowZone: " & ex.ToString, "Erreur", "ShowZone")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur ShowZone: " & ex.ToString, "Erreur", "ShowZone")
         End Try
     End Sub
 
@@ -2383,7 +2396,7 @@ Class Window1
         Try
             'Gestion de l'erreur si le serveur n'est pas connecté
             If IsConnect = False Then
-                AfficheMessageAndLog(Fonctions.TypeLog.INFO, "Le serveur Homidom n'est pas connecté, impossible d'afficher les éléments de la zone sélectionnée", "Information", "ShowZone")
+                AfficheMessageAndLog(FctLog.TypeLog.INFO, "Le serveur Homidom n'est pas connecté, impossible d'afficher les éléments de la zone sélectionnée", "Information", "ShowZone")
                 Exit Sub
             End If
 
@@ -2541,7 +2554,7 @@ Class Window1
             Next
 
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ShowTemplate: " & ex.ToString, "Erreur", "ShowZone")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur ShowTemplate: " & ex.ToString, "Erreur", "ShowZone")
         End Try
     End Sub
 
@@ -2617,7 +2630,7 @@ Class Window1
 
             Me.UpdateLayout()
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Chk1: " & ex.Message, "Erreur", "Chk1")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Chk1: " & ex.Message, "Erreur", "Chk1")
         End Try
     End Sub
 
@@ -2629,7 +2642,7 @@ Class Window1
                 obj.Height = e.NewSize.Height
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Resize: " & ex.Message, "Erreur", "Resize")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Resize: " & ex.Message, "Erreur", "Resize")
         End Try
     End Sub
 
@@ -2702,7 +2715,7 @@ Class Window1
 
             Me.UpdateLayout()
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Chk2: " & ex.Message, "Erreur", "Chk2")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Chk2: " & ex.Message, "Erreur", "Chk2")
         End Try
     End Sub
 
@@ -2761,7 +2774,7 @@ Class Window1
                 lbl.IsHitTestVisible = True
             Next
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Resize: " & ex.Message, "Erreur", "Resize")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Resize: " & ex.Message, "Erreur", "Resize")
         End Try
     End Sub
 
@@ -2811,7 +2824,7 @@ Class Window1
             Canvas.SetTop(x, elmt.Y)
 
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetEmpty: " & ex.Message, "Erreur", "NewWidgetEmpty")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur NewWidgetEmpty: " & ex.Message, "Erreur", "NewWidgetEmpty")
         End Try
     End Sub
 
@@ -2853,7 +2866,7 @@ Class Window1
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetWeb: " & ex.Message, "Erreur", "NewWidgetWeb")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur NewWidgetWeb: " & ex.Message, "Erreur", "NewWidgetWeb")
         End Try
     End Sub
 
@@ -2896,7 +2909,7 @@ Class Window1
             Canvas.SetTop(x, 300)
 
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetRss: " & ex.Message, "Erreur", "NewWidgetRss")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur NewWidgetRss: " & ex.Message, "Erreur", "NewWidgetRss")
         End Try
     End Sub
 
@@ -2940,7 +2953,7 @@ Class Window1
             Canvas.SetTop(x, 300)
 
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetMeteo: " & ex.Message, "Erreur", "NewWidgetMeteo")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur NewWidgetMeteo: " & ex.Message, "Erreur", "NewWidgetMeteo")
         End Try
     End Sub
 
@@ -2983,7 +2996,7 @@ Class Window1
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetKeyPad: " & ex.Message, "Erreur", "NewWidgetKeyPad")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur NewWidgetKeyPad: " & ex.Message, "Erreur", "NewWidgetKeyPad")
         End Try
     End Sub
 
@@ -3028,7 +3041,7 @@ Class Window1
 
             elmt = Nothing
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetLabel_Click: " & ex.Message, "Erreur", "NewWidgetLabel_Click")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur NewWidgetLabel_Click: " & ex.Message, "Erreur", "NewWidgetLabel_Click")
         End Try
     End Sub
 
@@ -3071,7 +3084,7 @@ Class Window1
 
             elmt = Nothing
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetLabel_Click: " & ex.Message, "Erreur", "NewWidgetLabel_Click")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur NewWidgetLabel_Click: " & ex.Message, "Erreur", "NewWidgetLabel_Click")
         End Try
     End Sub
 
@@ -3114,7 +3127,7 @@ Class Window1
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetCamera: " & ex.Message, "Erreur", "NewWidgetCamera")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur NewWidgetCamera: " & ex.Message, "Erreur", "NewWidgetCamera")
         End Try
     End Sub
 
@@ -3156,7 +3169,7 @@ Class Window1
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetVolet: " & ex.Message, "Erreur", "NewWidgetVolet")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur NewWidgetVolet: " & ex.Message, "Erreur", "NewWidgetVolet")
         End Try
     End Sub
 
@@ -3198,7 +3211,7 @@ Class Window1
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetMoteur: " & ex.Message, "Erreur", "NewWidgetMoteur")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur NewWidgetMoteur: " & ex.Message, "Erreur", "NewWidgetMoteur")
         End Try
     End Sub
 
@@ -3241,7 +3254,7 @@ Class Window1
             Canvas.SetLeft(x, 300)
             Canvas.SetTop(x, 300)
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur NewWidgetPrise: " & ex.Message, "Erreur", "NewWidgetPrise")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur NewWidgetPrise: " & ex.Message, "Erreur", "NewWidgetPrise")
         End Try
     End Sub
 
@@ -3285,7 +3298,7 @@ Class Window1
             Me.Cursor = Nothing
         Catch ex As Exception
             Me.Cursor = Nothing
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ViewLog: " & ex.Message, "Erreur", "ViewLog")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur ViewLog: " & ex.Message, "Erreur", "ViewLog")
         End Try
     End Sub
 
@@ -3295,7 +3308,7 @@ Class Window1
             x.Owner = Me
             x.ShowDialog()
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur ViewCalendar: " & ex.Message, "Erreur", "ViewCalendar")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur ViewCalendar: " & ex.Message, "Erreur", "ViewCalendar")
         End Try
     End Sub
 
@@ -3311,7 +3324,7 @@ Class Window1
             Canvas1.Children.Add(x)
         Catch ex As Exception
             Me.Cursor = Nothing
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur MnuHisto: " & ex.Message, "Erreur", "MnuHisto")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur MnuHisto: " & ex.Message, "Erreur", "MnuHisto")
         End Try
     End Sub
 
@@ -3319,7 +3332,7 @@ Class Window1
         Try
             myService.RunMacro(IdSrv, sender.tag)
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur MnuMacro_MouseDown: " & ex.Message, "Erreur", "MnuMacro_MouseDown")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur MnuMacro_MouseDown: " & ex.Message, "Erreur", "MnuMacro_MouseDown")
         End Try
     End Sub
 
@@ -3366,10 +3379,21 @@ Class Window1
 
             AfficheStartDefautPage()
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur MnuConfig_Click: " & ex.Message, "Erreur", "MnuConfig_Click")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur MnuConfig_Click: " & ex.Message, "Erreur", "MnuConfig_Click")
         End Try
     End Sub
 
+
+    Private Sub MnuRefresh_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles MnuRefresh.Click
+        Try
+            If IsConnect Then
+                Refresh_Zone()
+                Refresh()
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur MnuRefresh_Click: " & ex.Message, "Erreur", "MnuConfig_Click")
+        End Try
+    End Sub
 #End Region
 
 
@@ -3381,7 +3405,7 @@ Class Window1
             dtstart.Interval = New TimeSpan(0, 0, 2)
             dtstart.Start()
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Window1_Loaded: " & ex.Message, "Erreur", "Window1_Loaded")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Window1_Loaded: " & ex.Message, "Erreur", "Window1_Loaded")
         End Try
     End Sub
 
@@ -3420,7 +3444,7 @@ Class Window1
             Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermeture de l'application")
             End
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Quitter: " & ex.Message, "Erreur", "Quitter")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Quitter: " & ex.Message, "Erreur", "Quitter")
             End
         End Try
     End Sub
@@ -3429,7 +3453,7 @@ Class Window1
         Try
             If _WithPassword And String.IsNullOrEmpty(_PassWord) = False Then
                 If InputBox("Veuillez saisir le mot de passe:", "Homidom") <> _PassWord Then
-                    AfficheMessageAndLog(Fonctions.TypeLog.MESSAGE, "Mot de passe erroné!", "Erreur", "VerifPassword")
+                    AfficheMessageAndLog(FctLog.TypeLog.MESSAGE, "Mot de passe erroné!", "Erreur", "VerifPassword")
                     Return False
                 Else
                     Return True
@@ -3438,7 +3462,7 @@ Class Window1
                 Return True
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur VerifPassword: " & ex.Message, "Erreur", "VerifPassword")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur VerifPassword: " & ex.Message, "Erreur", "VerifPassword")
             Return True
         End Try
     End Function
@@ -3492,7 +3516,7 @@ Class Window1
                 list = Nothing
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Menu1_MouseDown: " & ex.Message, "Erreur", "Menu1_MouseDown")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Menu1_MouseDown: " & ex.Message, "Erreur", "Menu1_MouseDown")
         End Try
 
         Try
@@ -3518,7 +3542,7 @@ Class Window1
             End If
             MnuMacro.UpdateLayout()
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur Menu1_MouseDown: " & ex.Message, "Erreur", "Menu1_MouseDown")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Menu1_MouseDown: " & ex.Message, "Erreur", "Menu1_MouseDown")
         End Try
     End Sub
 
@@ -3563,7 +3587,7 @@ Class Window1
         Try
             SaveConfig(_ConfigFile)
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur MnuSave_Click: " & ex.Message, "Erreur", "MnuSave_Click")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur MnuSave_Click: " & ex.Message, "Erreur", "MnuSave_Click")
         End Try
     End Sub
 
@@ -3587,7 +3611,7 @@ Class Window1
 
             Return stk
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur AffMessage: " & ex.Message, "Erreur", "AffMessage")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur AffMessage: " & ex.Message, "Erreur", "AffMessage")
             Return Nothing
         End Try
     End Function
@@ -3674,7 +3698,7 @@ Class Window1
                 myService.SaveTemplate(IdSrv, _template)
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur SaveTemplate_Click: " & ex.ToString, "Erreur", "SaveTemplate_Click")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur SaveTemplate_Click: " & ex.ToString, "Erreur", "SaveTemplate_Click")
         End Try
     End Sub
 
@@ -3706,7 +3730,7 @@ Class Window1
                 Exit Sub
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.MouseLeave: " & ex.Message, "Erreur", " uWidgetEmpty.MouseLeave")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.MouseLeave: " & ex.Message, "Erreur", " uWidgetEmpty.MouseLeave")
         End Try
     End Sub
 
@@ -3744,7 +3768,7 @@ Class Window1
             End If
 
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWidgetEmpty.Image_MouseLeftButtonUp: " & ex.Message, "Erreur", " uWidgetEmpty.Image_MouseLeftButtonUp")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Image_MouseLeftButtonUp: " & ex.Message, "Erreur", " uWidgetEmpty.Image_MouseLeftButtonUp")
         End Try
     End Sub
 

@@ -193,6 +193,7 @@
     <Compile Include="CtrlDevice\uRSS.xaml.vb">
       <DependentUpon>uRSS.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Fonctions\FctLog.vb" />
     <Compile Include="PushNotification.vb" />
     <Compile Include="Splash.xaml.vb">
       <DependentUpon>Splash.xaml</DependentUpon>
@@ -720,7 +721,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="True" BuildVersion_IncrementBeforeBuild="True" />
+      <UserProperties BuildVersion_IncrementBeforeBuild="True" BuildVersion_UseGlobalSettings="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

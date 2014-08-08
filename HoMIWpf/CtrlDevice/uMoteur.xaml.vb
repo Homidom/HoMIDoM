@@ -57,7 +57,7 @@ Public Class uMoteur
                     rt.BeginAnimation(RotateTransform.AngleProperty, da)
                 End If
             Catch ex As Exception
-                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uMoteur.Value: " & ex.ToString & vbCrLf & "Value=" & _value, "Erreur", "uMoteur.Value")
+                AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uMoteur.Value: " & ex.ToString & vbCrLf & "Value=" & _value, "Erreur", "uMoteur.Value")
             End Try
         End Set
     End Property

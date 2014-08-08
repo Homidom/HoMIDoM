@@ -16,7 +16,7 @@
                     ImgOFF.Visibility = Windows.Visibility.Visible
                 End If
             Catch ex As Exception
-                AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uPrise.Value: " & ex.ToString & vbCrLf & "Value=" & _val, "Erreur", "uPrise.Value")
+                AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uPrise.Value: " & ex.ToString & vbCrLf & "Value=" & _val, "Erreur", "uPrise.Value")
             End Try
         End Set
     End Property

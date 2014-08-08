@@ -7491,20 +7491,6 @@ Namespace HoMIDom
 
                         Dim _retour1 As Boolean = True
                         Select Case retour.Type
-                            Case Device.ListeDevices.BAROMETRE
-                            Case Device.ListeDevices.COMPTEUR
-                            Case Device.ListeDevices.ENERGIEINSTANTANEE
-                            Case Device.ListeDevices.ENERGIETOTALE
-                            Case Device.ListeDevices.GENERIQUEVALUE
-                            Case Device.ListeDevices.HUMIDITE
-                            Case Device.ListeDevices.LAMPE
-                            Case Device.ListeDevices.PLUIECOURANT
-                            Case Device.ListeDevices.PLUIETOTAL
-                            Case Device.ListeDevices.TEMPERATURE
-                            Case Device.ListeDevices.TEMPERATURECONSIGNE
-                            Case Device.ListeDevices.VITESSEVENT
-                            Case Device.ListeDevices.UV
-                            Case Device.ListeDevices.VOLET
                             Case Device.ListeDevices.METEO
                                 _retour1 = False
                                 retour.ConditionActuel = _ListDevices.Item(i).ConditionActuel
@@ -7536,6 +7522,20 @@ Namespace HoMIDom
                             Case Device.ListeDevices.MULTIMEDIA
                                 retour.Commandes = _ListDevices.Item(i).Commandes
                                 _retour1 = False
+                            Case Device.ListeDevices.BAROMETRE
+                            Case Device.ListeDevices.COMPTEUR
+                            Case Device.ListeDevices.ENERGIEINSTANTANEE
+                            Case Device.ListeDevices.ENERGIETOTALE
+                            Case Device.ListeDevices.GENERIQUEVALUE
+                            Case Device.ListeDevices.HUMIDITE
+                            Case Device.ListeDevices.LAMPE
+                            Case Device.ListeDevices.PLUIECOURANT
+                            Case Device.ListeDevices.PLUIETOTAL
+                            Case Device.ListeDevices.TEMPERATURE
+                            Case Device.ListeDevices.TEMPERATURECONSIGNE
+                            Case Device.ListeDevices.VITESSEVENT
+                            Case Device.ListeDevices.UV
+                            Case Device.ListeDevices.VOLET
                             Case Else
                                 _retour1 = False
                         End Select
@@ -7561,8 +7561,6 @@ Namespace HoMIDom
                     Return Nothing
                 End If
 
-                retour = Nothing
-                _listact = Nothing
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDeviceById", "Exception : " & ex.Message)
                 Return Nothing
@@ -9542,7 +9540,7 @@ Namespace HoMIDom
         End Function
 
         ''' <summary>renvoi le fichier log suivant une requête xml si besoin</summary>
-        ''' <param name="Requete"></param>
+        ''' <param name="Requete">X représentant le nombre des derniers historiques à renvoyer, si non définit renvoi tout</param>
         ''' <returns></returns>
         ''' <remarks></remarks>
         Function ReturnLog(Optional ByVal Requete As String = "") As String Implements IHoMIDom.ReturnLog

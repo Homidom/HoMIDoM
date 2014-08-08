@@ -48,7 +48,7 @@ Public Class WConfig
             Frm.TransparenceHaut = SliderTranspHaut.Value
             DialogResult = True
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur WConfig.BtnOk: " & ex.ToString, "Erreur", "WConfig_New")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur WConfig.BtnOk: " & ex.ToString, "Erreur", "WConfig_New")
         End Try
     End Sub
 
@@ -138,7 +138,7 @@ Public Class WConfig
             listesversionsprogrammes.Text &= " Répertoire utilisé par le client WPF: " & My.Application.Info.DirectoryPath.ToString & vbCrLf
             listesversionsprogrammes.Text &= " Fichier de configuration chargé : " & Frm.ConfigFile & vbCrLf
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur New WConfig: " & ex.ToString, "Erreur", "WConfig_New")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur New WConfig: " & ex.ToString, "Erreur", "WConfig_New")
         End Try
     End Sub
 
@@ -228,7 +228,7 @@ Public Class WConfig
             End If
 
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur: " & ex.Message, "Erreur", "ListMnu_SelectionChanged")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur: " & ex.Message, "Erreur", "ListMnu_SelectionChanged")
         End Try
     End Sub
 
@@ -246,7 +246,7 @@ Public Class WConfig
                 End If
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur WConfig.Button1_Click: " & ex.ToString, "Erreur", "WConfig.Button1_Click")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur WConfig.Button1_Click: " & ex.ToString, "Erreur", "WConfig.Button1_Click")
         End Try
     End Sub
 
@@ -299,7 +299,7 @@ Public Class WConfig
             End Select
             StkProperty.Visibility = Windows.Visibility.Hidden
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur WConfig.BtnOkMnu_Click: " & ex.ToString, "Erreur", "WConfig.BtnOkMnu_Click")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur WConfig.BtnOkMnu_Click: " & ex.ToString, "Erreur", "WConfig.BtnOkMnu_Click")
         End Try
     End Sub
 
@@ -437,7 +437,7 @@ Public Class WConfig
             ListMnu.Items.RemoveAt(ListMnu.SelectedIndex)
             StkProperty.Visibility = Windows.Visibility.Hidden
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur WConfig.MenuItem1_Click: " & ex.ToString, "Erreur", "WConfig.MenuItem1_Click")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur WConfig.MenuItem1_Click: " & ex.ToString, "Erreur", "WConfig.MenuItem1_Click")
         End Try
     End Sub
 
@@ -469,7 +469,7 @@ Public Class WConfig
     Private Sub BtnDeleteCache_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDeleteCache.Click
         Dim retour As String = Cache.DeleteAllFileOffPath(_MonRepertoire & "\cache\images\")
         If retour IsNot Nothing Then
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur DeleteAllFileOffPath: " & retour, "Erreur", "BtnDeleteCache_Click")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur DeleteAllFileOffPath: " & retour, "Erreur", "BtnDeleteCache_Click")
         End If
     End Sub
 

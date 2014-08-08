@@ -95,7 +95,7 @@ Public Class uWMeteo
                 End If
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur UWMeteo.GetMeteo: " & ex.ToString, "Erreur", "UWMeteo.GetMeteo")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur UWMeteo.GetMeteo: " & ex.ToString, "Erreur", "UWMeteo.GetMeteo")
         End Try
 
     End Sub
@@ -121,7 +121,7 @@ Public Class uWMeteo
             IconJ3.Source = Nothing
             IconJ4.Source = Nothing
         Catch ex As Exception
-            AfficheMessageAndLog(Fonctions.TypeLog.ERREUR, "Erreur uWMeteo_Unloaded: " & ex.ToString, "Erreur", "uWMeteo_Unloaded")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWMeteo_Unloaded: " & ex.ToString, "Erreur", "uWMeteo_Unloaded")
         End Try
     End Sub
 
