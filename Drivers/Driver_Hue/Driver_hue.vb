@@ -2,26 +2,22 @@
 Imports HoMIDom.HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
-
 Imports Q42.HueApi
 
+'Imports AsyncCtpExtensions
+'Imports AsyncCtpThreadingExtensions
+'Imports Newtonsoft.Json
+'Imports System
+'Imports System.IO
+'Imports System.Net
+'Imports System.Data
+'Imports System.Linq
+'Imports System.ComponentModel
+'Imports System.Threading.Tasks
+'Imports System.Collections.Generic
+'Imports System.Runtime.Serialization
+'Imports STRGS = Microsoft.VisualBasic.Strings
 
-
-Imports AsyncCtpExtensions
-Imports AsyncCtpThreadingExtensions
-Imports Newtonsoft.Json
-
-Imports System
-Imports System.IO
-Imports System.Net
-Imports System.Data
-Imports System.Linq
-Imports System.ComponentModel
-Imports System.Threading.Tasks
-Imports System.Collections.Generic
-Imports System.Runtime.Serialization
-
-Imports STRGS = Microsoft.VisualBasic.Strings
 ' Auteur : Alamata
 ' Date : 01/11/2013
 
@@ -105,6 +101,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             _Com = value
         End Set
     End Property
+
     Public ReadOnly Property Description() As String Implements HoMIDom.HoMIDom.IDriver.Description
         Get
             Return _Description
@@ -377,11 +374,13 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             _StartAuto = value
         End Set
     End Property
+
     Public ReadOnly Property OsPlatform() As String Implements HoMIDom.HoMIDom.IDriver.OsPlatform
         Get
             Return _OsPlatform
         End Get
     End Property
+
     Public Property AutoDiscover() As Boolean Implements HoMIDom.HoMIDom.IDriver.AutoDiscover
         Get
             Return _AutoDiscover
@@ -532,13 +531,34 @@ Imports STRGS = Microsoft.VisualBasic.Strings
                 Exit Sub
             End If
 
-            If UCase(Command) = "ONONE" Then
+            If UCase(Command) = "ON" Then
+                ONone(Objet.adresse1.ToString())
+                SetColor(Objet.adresse2.ToString(), Objet.adresse1.ToString())
+                OneSaturation(Objet.modele.ToString(), Objet.adresse1.ToString())
+            End If
+           
+            If UCase(Command) = "OFF" Then
+                OFFone(Objet.adresse1.ToString())
+            End If
+
+            If UCase(Command) = "DIM" Then
+                If Parametre1 IsNot Nothing Then
+                    Objet.Value = Parametre1
+                    OneBrightness(Parametre1, Objet.adresse1.ToString())
+                    SetColor(Objet.adresse2.ToString(), Objet.adresse1.ToString())
+                    OneSaturation(Objet.modele.ToString(), Objet.adresse1.ToString())
+                End If
+            End If
+
+            'FIN
+
+            If UCase(Command) = "ONone" Then
                 ONone(Objet.adresse1.ToString())
             End If
             If UCase(Command) = "ONALL" Then
                 ONall()
             End If
-            If UCase(Command) = "OFFONE" Then
+            If UCase(Command) = "OFF" Then
                 OFFone(Objet.adresse1.ToString())
             End If
             If UCase(Command) = "OFFALL" Then
@@ -829,9 +849,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
     End Function
 
     'Public Async Function GetAllHueDevices() As Task
-    Public Function GetAllHueDevices() As Task
-
-
+    Public Sub GetAllHueDevices() 'As Task
 
         Dim client As New HueClient(_IP_TCP)
 
@@ -847,7 +865,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, device.ID.ToString(), "GENERIQUESTRING", Me._ID, True)
             If IsNothing(listedevices) Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ERR: Communication impossible avec le serveur, l'IDsrv est peut être erroné : ", _IdSrv)
-                Exit Function
+                Exit Sub
             End If
             If (listedevices.Count = 0) Then
                 gen.SaveDevice(_IdSrv, "", "Hue" + device.Name, device.ID.ToString(), True, False, _ID, "GENERIQUESTRING", 0, device.State.Hue.ToString(), "", device.State.ColorTemperature.ToString(), "Devices et Valeurs recuperées du Bridge Hue", 0, False, "0", "", 0, 9999, -9999, 0.0, Nothing, "", 0, True)
@@ -862,9 +880,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
         _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Driver " & Me.Nom & " démarré")
 
 
-    End Function
+    End Sub
 
-    Public Function ONone(ByVal ParametreID As String)
+    Public Sub ONone(ByVal ParametreID As String)
 
         Dim command = New LightCommand()
         Dim client As New HueClient(_IP_TCP)
@@ -874,9 +892,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
          ParametreID _
         })
 
-    End Function
+    End Sub
 
-    Public Function ONall()
+    Public Sub ONall()
 
         Dim command = New LightCommand()
         Dim client As New HueClient(_IP_TCP)
@@ -885,9 +903,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
         client.SendCommandAsync(command.TurnOn())
 
-    End Function
+    End Sub
 
-    Public Function OFFone(ByVal ParametreID As String)
+    Public Sub OFFone(ByVal ParametreID As String)
 
         Dim command = New LightCommand()
         Dim client As New HueClient(_IP_TCP)
@@ -898,9 +916,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
          ParametreID _
         })
 
-    End Function
+    End Sub
 
-    Public Function OFFall()
+    Public Sub OFFall()
 
         Dim command = New LightCommand()
         Dim client As New HueClient(_IP_TCP)
@@ -909,9 +927,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
         client.SendCommandAsync(command.TurnOff())
 
-    End Function
+    End Sub
 
-    Public Function ONoneSetColor(ByVal ParametreRGB As String, ByVal ParametreID As String)
+    Public Sub ONoneSetColor(ByVal ParametreRGB As String, ByVal ParametreID As String)
 
         Dim command = New LightCommand()
         Dim client As New HueClient(_IP_TCP)
@@ -930,9 +948,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
 
 
-    End Function
+    End Sub
 
-    Public Function ONallSetColor(ByVal ParametreRGB As String)
+    Public Sub ONallSetColor(ByVal ParametreRGB As String)
 
         Dim command = New LightCommand()
         Dim client As New HueClient(_IP_TCP)
@@ -949,9 +967,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
 
 
-    End Function
+    End Sub
 
-    Public Function SetColor(ByVal ParametreRGB As String, ByVal ParametreID As String)
+    Public Sub SetColor(ByVal ParametreRGB As String, ByVal ParametreID As String)
 
 
         Dim command = New LightCommand()
@@ -971,9 +989,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
 
 
-    End Function
+    End Sub
 
-    Public Function Register() As Task
+    Public Sub Register()  'As Task
 
         Dim client As New HueClient(_IP_TCP)
 
@@ -996,9 +1014,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Enregistrement", "Driver " & Me.Nom & "Adresse Ip Bridge INCorrect !!")
         End Try
 
-    End Function
+    End Sub
 
-    Public Function OneSaturation(ByVal ParametreSat As String, ByVal ParametreID As String)
+    Public Sub OneSaturation(ByVal ParametreSat As String, ByVal ParametreID As String)
 
         Dim command = New LightCommand()
         Dim client As New HueClient(_IP_TCP)
@@ -1009,9 +1027,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
    })
 
 
-    End Function
+    End Sub
 
-    Public Function OneBrightness(ByVal ParametreBri As String, ByVal ParametreID As String)
+    Public Sub OneBrightness(ByVal ParametreBri As String, ByVal ParametreID As String)
 
         Dim command = New LightCommand()
         Dim client As New HueClient(_IP_TCP)
@@ -1045,9 +1063,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
 
 
-    End Function
+    End Sub
 
-    Public Function AllSaturation(ByVal ParametreSat As String)
+    Public Sub AllSaturation(ByVal ParametreSat As String)
 
         Dim command = New LightCommand()
         Dim client As New HueClient(_IP_TCP)
@@ -1056,9 +1074,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
         client.SendCommandAsync(command)
 
 
-    End Function
+    End Sub
 
-    Public Function AllBrightness(ByVal ParametreBri As String)
+    Public Sub AllBrightness(ByVal ParametreBri As String)
 
         Dim command = New LightCommand()
         Dim client As New HueClient(_IP_TCP)
@@ -1090,7 +1108,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
 
 
-    End Function
+    End Sub
 
 
 #End Region
