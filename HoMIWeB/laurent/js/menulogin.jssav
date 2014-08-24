@@ -19,14 +19,15 @@ function ClickBouton(){
 	AdresseIPActuel = ListeServeurs()[SiteActuel].AdresseIP;
 	IDSERVERActuel = ListeServeurs()[SiteActuel].IDSERVER;
 	ConnectServer();
+
 }  
+
 
 // stocke tous les informations de site dans un tableau
 function ReadSites(){
 	var key;
 	// Vide le tableau contenant la definition des sites
 	$('#ListeServeurs').empty();
-	$("#modalLogin").modal('show');	
 	
 	if(typeof(Storage)!=="undifined"){
 		var Cpt = localStorage.length;
@@ -41,20 +42,15 @@ function ReadSites(){
 			console.log("Valeurs Site: "+i+" "+InfosServeur.SERVER);			
 			ListeServeurs.push(InfosServeur);
 			if  (InfosServeur.ServerDef) {
-				// AfficheSite(i);
-				SiteActuel = i;
+				AfficheSite(i);
 				ClickBouton();
-				return false;
 			} 
 		}
-		console.log("passage par Aucun site par defaut -Affichage de la modal");
 		//Aucun site par defaut -Affichage de la modal
-//		$('#modalLogin').modal('show');
+		$('#modalLogin').modal('show')
 	}
-	else {
-		console.log("passage par Aucun site -Affichage de la modal");
-		//Aucun site par defaut -Affichage de la modal
-//		$('#modalLogin').modal('show');
+	else { //Aucun site - Affichage de la modal
+		$('#modalLogin').modal('show');
 	}
 }	
 
@@ -80,7 +76,7 @@ function SupprimeSite(){
 
 // enregistre les informations d'un site
 function AjouterSite(){
-	
+
 	var InfosServeur = new Object();
 	var ServerName = document.getElementById('ServerName').value.toUpperCase();
 	var ServerDefaut = $('#ServerDef').is(":checked");
@@ -88,6 +84,7 @@ function AjouterSite(){
 	
 	console.log("Le nom du serveur est : "+ ServerName+ " / "+ "\"SERVER\":\""+ServerName+"\"");
 	console.log("Le serveur est trouvé en : "+ ListeServeurs.indexOf("SERVER:\""+ServerName+"\""));
+
 	if (!ServerName=="") {	
 		//suppression des definitions existantes 
 		for (i=0;i<localStorage.length;i++) {localStorage.removeItem(ListeServeurs()[i].SERVER);}	
@@ -102,7 +99,7 @@ function AjouterSite(){
 		
 			console.log("Debug ToLowCase : "+ ListeServeurs()[i].SERVER.toLowerCase()+" / "+ServerName.toLowerCase());
 				// Mise a jour definition existante
-				ListeServeurs()[i].SERVER = capitaliseFirstLetter(ServerName);
+				ListeServeurs()[i].SERVER = ServerName;
 				ListeServeurs()[i].IDSERVER = InfosServeur.IDSERVER ;
 				ListeServeurs()[i].AdresseIP = InfosServeur.AdresseIP ;
 				ListeServeurs()[i].Port = InfosServeur.Port  ;
@@ -120,7 +117,10 @@ function AjouterSite(){
 		for (i=0; i < ListeServeurs().length; i++) {localStorage.setItem(ListeServeurs()[i].SERVER, JSON.stringify(ListeServeurs()[i]));}	}
 	else {
 		alert('Veuillez saisir les informations ! ');
-	}}  
+	}
+
+
+}  
 
 function onBlur(el) {
 		if (el.value == '') {
@@ -132,8 +132,8 @@ function onFocus(el) {
 		el.value = '';
 	}
 }
+
 function capitaliseFirstLetter(string)
 {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
-

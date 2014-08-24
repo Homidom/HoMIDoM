@@ -1,0 +1,17 @@
+1.0
+- Creation d'une page en HTML5 + CSS3
+
+2.0
+- Creation de la page avec la bibliophile Javascript BOOTSTRAP
+
+3.0 
+- Ajout de la page Modal de login, Ajout bouton d'ouverture de cette modal
+- Ajout de la gestion du site par defaut
+
+3.1
+- Ajout de la modal Boostrap de dialogue "A propos"
+- Refonte de la modal Boostrap connexion
+- Utilisation des Template KNOCKOUT pour Zones et Macros
+- Lmitation de la hauteur de Event Log (Ascenceur)
+- Reprise des noms des fichiers images (necessaire pour PhoneGap)
+- Amelioration site par defaut (Update - 1 seul site par defaut)
