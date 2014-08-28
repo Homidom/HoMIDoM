@@ -909,7 +909,23 @@ Imports System.Threading
                     Dim endIndex As Integer = sIncomming.IndexOf(")")
                     Dim result As String = sIncomming.Substring(startIndex, endIndex - startIndex)
                     '_Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM PORT", "Read:" & result)
-                    MODES = result.Split(New Char() {","c})
+
+
+                    'Il faudra effectuer une recherche  afin de connaitre a partir de quand les modem ( ou pourquoi ) certain modeme repondent
+                    ' avec un caractere de separation "," ou "-"
+                    ' en attendant nous effectuons une verif de la chaine de caractère
+                    ' reponse du modeme lors de AT+CMGF? : +CMGF: (x-x) , nous traiton le 10eme caractère
+
+                    ' MODES = result.Split(New Char() {","c})
+
+
+                    Dim charSeparators As Char = Mid(result, 10, 1)
+                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM Mode", "   * result " & result)
+                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM Mode", "   * Seperator: " & charSeparators)
+
+                    MODES = result.Split(charSeparators)
+
+
                     Dim SuportedMode As Boolean = False
                     For m = 0 To (MODES.Length - 1)
                         Select Case MODES(m).ToString
