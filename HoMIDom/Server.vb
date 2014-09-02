@@ -421,13 +421,6 @@ Namespace HoMIDom
                         CleanLog(_MaxMonthLog)
                         VerifIsWeekEnd()
                         MaJSaint()
-                    End If
-
-                    '---- Actions à effectuer à 3h du mat (au cas où qu'à minuit non maj) ----
-                    If ladate.Hour = 3 And ladate.Minute = 0 And ladate.Second = 0 Then
-                        MAJ_HeuresSoleil()
-                        VerifIsWeekEnd()
-                        MaJSaint()
                         'affichage des timersectick si il y en a plus d'un
                         If table_TimerSecTickthread.Rows.Count > 1 Then
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "TimerSecTick", "Plusieurs Timers sont en cours (au lieu d'un seul) :")
@@ -435,6 +428,13 @@ Namespace HoMIDom
                                 Log(TypeLog.INFO, TypeSource.SERVEUR, "TimerSecTick", " - " & thread("name") & " lancé à " & thread("datetime") & " - ")
                             Next
                         End If
+                    End If
+
+                    '---- Actions à effectuer à 3h du mat (au cas où qu'à minuit non maj) ----
+                    If ladate.Hour = 3 And ladate.Minute = 0 And ladate.Second = 0 Then
+                        MAJ_HeuresSoleil()
+                        VerifIsWeekEnd()
+                        MaJSaint()
                     End If
 
                     '---- Actions à effectuer à midi ----
