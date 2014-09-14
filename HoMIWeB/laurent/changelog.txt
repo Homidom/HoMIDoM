@@ -2,7 +2,7 @@
 - Creation d'une page en HTML5 + CSS3
 
 2.0
-- Creation de la page avec la bibliophile Javascript BOOTSTRAP
+- Creation de la page avec la bibliotheque Javascript BOOTSTRAP
 
 3.0 
 - Ajout de la page Modal de login, Ajout bouton d'ouverture de cette modal
@@ -15,3 +15,6 @@
 - Lmitation de la hauteur de Event Log (Ascenceur)
 - Reprise des noms des fichiers images (necessaire pour PhoneGap)
 - Amelioration site par defaut (Update - 1 seul site par defaut)
+
+3.1.1
+Correction du nom de l'image fairedons (minuscule)
