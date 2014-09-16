@@ -4035,9 +4035,9 @@ Imports System.Media
             'WriteMessage("Count         = " & recbuf(CURRENT_ENERGY.count).ToString)
             valeur = ((recbuf(CURRENT_ENERGY.ch1h) * 256 + recbuf(CURRENT_ENERGY.ch1l)) / 10).ToString 'ampere channel 1
             WriteRetour(adresse & "-1", ListeDevices.ENERGIEINSTANTANEE.ToString, valeur)
-            valeur = ((recbuf(CURRENT_ENERGY.ch2h) * 256 + recbuf(CURRENT_ENERGY.ch2h)) / 10).ToString 'ampere channel 2
+            valeur = ((recbuf(CURRENT_ENERGY.ch2h) * 256 + recbuf(CURRENT_ENERGY.ch2l)) / 10).ToString 'ampere channel 2
             WriteRetour(adresse & "-2", ListeDevices.ENERGIEINSTANTANEE.ToString, valeur)
-            valeur = ((recbuf(CURRENT_ENERGY.ch3l) * 256 + recbuf(CURRENT_ENERGY.ch3l)) / 10).ToString 'ampere channel 3
+            valeur = ((recbuf(CURRENT_ENERGY.ch3h) * 256 + recbuf(CURRENT_ENERGY.ch3l)) / 10).ToString 'ampere channel 3
             WriteRetour(adresse & "-3", ListeDevices.ENERGIEINSTANTANEE.ToString, valeur)
 
             valeur = Math.Round(((CDbl(recbuf(CURRENT_ENERGY.total1)) * &H10000000000 + CDbl(recbuf(CURRENT_ENERGY.total2)) * &H100000000 + CDbl(recbuf(CURRENT_ENERGY.total3)) * &H1000000 + recbuf(CURRENT_ENERGY.total4) * &H10000 + recbuf(CURRENT_ENERGY.total5) * &H100 + recbuf(CURRENT_ENERGY.total6)) / 223.666), 1).ToString 'Watt / h

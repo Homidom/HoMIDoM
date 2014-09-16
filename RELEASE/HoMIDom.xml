@@ -6,7 +6,19 @@ HoMIDom
 </name>
 </assembly>
 <members>
-<member name="M:HoMIDom.HoMIDom.IHoMIDom.GetCodePays">
+<member name="M:HoMIDom.HoMIDom.IHoMIDom.GetSaveDiffBackup">
+	<summary>
+ Retourne: Sauvegader les backups et sauvegardes suivant différents fichiers
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SetSaveDiffBackup(System.Boolean)">
+	<summary>
+ Définit: Sauvegader les backups et sauvegardes suivant différents fichiers
+ </summary>
+	<param name="Value"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.GetCodePays">
 	<summary>
  Retourne le code du pays du CultureInfo
  </summary>
@@ -1393,6 +1405,17 @@ HoMIDom
  </summary>
 	<returns></returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.GetSaveDiffBackup">
+	<summary>
+ Retourne: Sauvegader les backups et sauvegardes suivant différents fichiers
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.SetSaveDiffBackup(System.Boolean)">
+	<summary>
+ Définit: Sauvegader les backups et sauvegardes suivant différents fichiers
+ </summary>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetRepertoireOfServer">
 	<summary>
  Retourne le répertoire courant du serveur
@@ -2202,7 +2225,7 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.ReturnLog(System.String)">
 	<summary>renvoi le fichier log suivant une requête xml si besoin</summary>
-	<param name="Requete"></param>
+	<param name="Requete">X représentant le nombre des derniers historiques à renvoyer, si non définit renvoi tout</param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.SetMaxFileSizeLog(System.Int64)">
@@ -3038,11 +3061,11 @@ St Arnau [le reste de la chaîne a été tronqué]";.
  Class pour gérer les télécommandes
  </summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.NCrontab.CrontabSchedule.GetNextOccurrence(System.DateTime)">
+</member><member name="M:HoMIDom.HoMIDom.CrontabSchedule.GetNextOccurrence(System.DateTime)">
 	<summary>
  Gets the next occurrence of this schedule starting with a base time.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.CrontabSchedule.GetNextOccurrence(System.DateTime,System.DateTime)">
+</member><member name="M:HoMIDom.HoMIDom.CrontabSchedule.GetNextOccurrence(System.DateTime,System.DateTime)">
 	<summary>
  Gets the next occurrence of this schedule starting with a base 
  time and up to an end time limit.
@@ -3057,61 +3080,61 @@ St Arnau [le reste de la chaîne a été tronqué]";.
 		<paramref name="baseTime"/>. Also, <param name="endTime"/> is
  exclusive.
  </remarks>
-</member><member name="M:HoMIDom.NCrontab.CrontabSchedule.ToString">
+</member><member name="M:HoMIDom.HoMIDom.CrontabSchedule.ToString">
 	<summary>
  Returns a string in crontab expression (expanded) that represents 
  this schedule.
  </summary>
-</member><member name="T:HoMIDom.NCrontab.CrontabSchedule">
+</member><member name="T:HoMIDom.HoMIDom.CrontabSchedule">
 	<summary>
  Represents a schedule initialized from the crontab expression.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.CrontabField.Parse(HoMIDom.NCrontab.CrontabFieldKind,System.String)">
+</member><member name="M:HoMIDom.HoMIDom.CrontabField.Parse(HoMIDom.HoMIDom.CrontabFieldKind,System.String)">
 	<summary>
  Parses a crontab field expression given its kind.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.CrontabField.seconds(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.CrontabField.seconds(System.String)">
 	<summary>
  Parses a crontab field expression representing seconds.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.CrontabField.Minutes(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.CrontabField.Minutes(System.String)">
 	<summary>
  Parses a crontab field expression representing minutes.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.CrontabField.Hours(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.CrontabField.Hours(System.String)">
 	<summary>
  Parses a crontab field expression representing hours.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.CrontabField.Days(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.CrontabField.Days(System.String)">
 	<summary>
  Parses a crontab field expression representing days in any given month.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.CrontabField.Months(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.CrontabField.Months(System.String)">
 	<summary>
  Parses a crontab field expression representing months.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.CrontabField.DaysOfWeek(System.String)">
+</member><member name="M:HoMIDom.HoMIDom.CrontabField.DaysOfWeek(System.String)">
 	<summary>
  Parses a crontab field expression representing days of a week.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.CrontabField.GetFirst">
+</member><member name="M:HoMIDom.HoMIDom.CrontabField.GetFirst">
 	<summary>
  Gets the first value of the field or -1.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.CrontabField.Next(System.Int32)">
+</member><member name="M:HoMIDom.HoMIDom.CrontabField.Next(System.Int32)">
 	<summary>
  Gets the next value of the field that occurs after the given 
  start value or -1 if there is no next value available.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.CrontabField.GetNext(System.Int32)">
+</member><member name="M:HoMIDom.HoMIDom.CrontabField.GetNext(System.Int32)">
 	<summary>
  Gets the first value of the field or -1.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.CrontabField.Contains(System.Int32)">
+</member><member name="M:HoMIDom.HoMIDom.CrontabField.Contains(System.Int32)">
 	<summary>
  Determines if the given value occurs in the field.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.CrontabField.Accumulate(System.Int32,System.Int32,System.Int32,HoMIDom.NCrontab.ExceptionHandler)">
+</member><member name="M:HoMIDom.HoMIDom.CrontabField.Accumulate(System.Int32,System.Int32,System.Int32,HoMIDom.HoMIDom.ExceptionHandler)">
 	<summary>
  Accumulates the given range (start to end) and interval of values
  into the current set of the field.
@@ -3121,98 +3144,98 @@ St Arnau [le reste de la chaîne a été tronqué]";.
  set <param name="start"/> and <param name="end"/> to -1 and
  <param name="interval"/> to 1.
  </remarks>
-</member><member name="T:HoMIDom.NCrontab.CrontabField">
+</member><member name="T:HoMIDom.HoMIDom.CrontabField">
 	<summary>
  Represents a single crontab field.
  </summary>
-</member><member name="T:HoMIDom.NCrontab.ExceptionHandler">
+</member><member name="T:HoMIDom.HoMIDom.ExceptionHandler">
 	<summary>
  Represents the method that will handle an <see cref="T:System.Exception"/> object.
  </summary>
-</member><member name="T:HoMIDom.NCrontab.ExceptionProvider">
+</member><member name="T:HoMIDom.HoMIDom.ExceptionProvider">
 	<summary>
  Represents the method that will generate an <see cref="T:System.Exception"/> object.
  </summary>
-</member><member name="F:HoMIDom.NCrontab.ErrorHandling.Throw">
+</member><member name="F:HoMIDom.HoMIDom.ErrorHandling.Throw">
 	<summary>
- A stock <see cref="T:HoMIDom.NCrontab.ExceptionHandler"/> that throws.
+ A stock <see cref="T:HoMIDom.HoMIDom.ExceptionHandler"/> that throws.
  </summary>
-</member><member name="T:HoMIDom.NCrontab.ErrorHandling">
+</member><member name="T:HoMIDom.HoMIDom.ErrorHandling">
 	<summary>
  Defines error handling strategies.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.#ctor(`0)">
+</member><member name="M:HoMIDom.HoMIDom.ValueOrError`1.#ctor(`0)">
 	<summary>
  Initializes the object with a defined value.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.#ctor(System.Exception)">
+</member><member name="M:HoMIDom.HoMIDom.ValueOrError`1.#ctor(System.Exception)">
 	<summary>
  Initializes the object with an error.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.#ctor(HoMIDom.NCrontab.ExceptionProvider)">
+</member><member name="M:HoMIDom.HoMIDom.ValueOrError`1.#ctor(HoMIDom.HoMIDom.ExceptionProvider)">
 	<summary>
  Initializes the object with a handler that will provide
  the error result when needed.
  </summary>
-</member><member name="P:HoMIDom.NCrontab.ValueOrError`1.HasValue">
+</member><member name="P:HoMIDom.HoMIDom.ValueOrError`1.HasValue">
 	<summary>
  Determines if object holds a defined value or not.
  </summary>
-</member><member name="P:HoMIDom.NCrontab.ValueOrError`1.Value">
+</member><member name="P:HoMIDom.HoMIDom.ValueOrError`1.Value">
 	<summary>
  Gets the value otherwise throws an error if undefined.
  </summary>
-</member><member name="P:HoMIDom.NCrontab.ValueOrError`1.IsError">
+</member><member name="P:HoMIDom.HoMIDom.ValueOrError`1.IsError">
 	<summary>
  Determines if object identifies an error condition or not.
  </summary>
-</member><member name="P:HoMIDom.NCrontab.ValueOrError`1.Error">
+</member><member name="P:HoMIDom.HoMIDom.ValueOrError`1.Error">
 	<summary>
  Gets the <see cref="T:System.Exception"/> object if this object
  represents an error condition otherwise it returns <c>null</c>.
  </summary>
-</member><member name="P:HoMIDom.NCrontab.ValueOrError`1.ErrorProvider">
+</member><member name="P:HoMIDom.HoMIDom.ValueOrError`1.ErrorProvider">
 	<summary>
- Gets the <see cref="T:HoMIDom.NCrontab.ExceptionProvider"/> object if this 
+ Gets the <see cref="T:HoMIDom.HoMIDom.ExceptionProvider"/> object if this 
  object represents an error condition otherwise it returns <c>null</c>.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.TryGetValue(`0)">
+</member><member name="M:HoMIDom.HoMIDom.ValueOrError`1.TryGetValue(`0)">
 	<summary>
  Attempts to get the defined value or another in case
  of an error.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.op_Implicit(`0)~HoMIDom.NCrontab.ValueOrError{`0}">
+</member><member name="M:HoMIDom.HoMIDom.ValueOrError`1.op_Implicit(`0)~HoMIDom.HoMIDom.ValueOrError{`0}">
 	<summary>
  Implicitly converts a <typeparamref name="T"/> value to
  an object of this type.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.op_Implicit(System.Exception)~HoMIDom.NCrontab.ValueOrError{`0}">
+</member><member name="M:HoMIDom.HoMIDom.ValueOrError`1.op_Implicit(System.Exception)~HoMIDom.HoMIDom.ValueOrError{`0}">
 	<summary>
  Implicitly converts an <see cref="T:System.Exception"/> object to
  an object of this type that represents the error condition.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.op_Implicit(HoMIDom.NCrontab.ExceptionProvider)~HoMIDom.NCrontab.ValueOrError{`0}">
+</member><member name="M:HoMIDom.HoMIDom.ValueOrError`1.op_Implicit(HoMIDom.HoMIDom.ExceptionProvider)~HoMIDom.HoMIDom.ValueOrError{`0}">
 	<summary>
- Implicitly converts an <see cref="T:HoMIDom.NCrontab.ExceptionProvider"/> object to
+ Implicitly converts an <see cref="T:HoMIDom.HoMIDom.ExceptionProvider"/> object to
  an object of this type that represents the error condition.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.op_Explicit(HoMIDom.NCrontab.ValueOrError{`0})~`0">
+</member><member name="M:HoMIDom.HoMIDom.ValueOrError`1.op_Explicit(HoMIDom.HoMIDom.ValueOrError{`0})~`0">
 	<summary>
  Explicits converts this object to a <typeparamref name="T"/> value.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.op_Explicit(HoMIDom.NCrontab.ValueOrError{`0})~System.Exception">
+</member><member name="M:HoMIDom.HoMIDom.ValueOrError`1.op_Explicit(HoMIDom.HoMIDom.ValueOrError{`0})~System.Exception">
 	<summary>
  Explicits converts this object to an <see cref="T:System.Exception"/> object
  if it represents an error condition. The conversion yields <c>null</c>
  if this object does not represent an error condition.
  </summary>
-</member><member name="M:HoMIDom.NCrontab.ValueOrError`1.op_Explicit(HoMIDom.NCrontab.ValueOrError{`0})~HoMIDom.NCrontab.ExceptionProvider">
+</member><member name="M:HoMIDom.HoMIDom.ValueOrError`1.op_Explicit(HoMIDom.HoMIDom.ValueOrError{`0})~HoMIDom.HoMIDom.ExceptionProvider">
 	<summary>
- Explicits converts this object to an <see cref="T:HoMIDom.NCrontab.ExceptionProvider"/> object
+ Explicits converts this object to an <see cref="T:HoMIDom.HoMIDom.ExceptionProvider"/> object
  if it represents an error condition. The conversion yields <c>null</c>
  if this object does not represent an error condition.
  </summary>
-</member><member name="T:HoMIDom.NCrontab.ValueOrError`1">
+</member><member name="T:HoMIDom.HoMIDom.ValueOrError`1">
 	<summary>
  A generic type that either represents a value or an error condition.
  </summary>
