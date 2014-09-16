@@ -1032,29 +1032,33 @@ Public Class Driver_onewire
     Private Function counter(ByVal adresse As String, ByVal countera As Boolean) As String
         'recupere la valeur du compteur A (true) ou B (false)
         Dim retour As String = ""
+        Dim result As Boolean = False
         SyncLock lock_portwrite
             Try
                 Dim CounterContainer As com.dalsemi.onewire.container.OneWireContainer1D
                 Dim owd As com.dalsemi.onewire.container.OneWireContainer
                 Dim counterstate As Long
                 If _IsConnect Then
-                    wir_adapter.beginExclusive(True)
-                    'owd = wir_adapter.getDeviceContainer(adresse)
-                    'CounterContainer = New com.dalsemi.onewire.container.OneWireContainer1D(wir_adapter, adresse)
-                    'If countera Then
-                    '    counterstate = CounterContainer.readCounter(14)
-                    'Else
-                    '    counterstate = CounterContainer.readCounter(15)
-                    'End If
-                    owd = wir_adapter.getDeviceContainer(adresse)
-                    CounterContainer = DirectCast(owd, com.dalsemi.onewire.container.OneWireContainer1D)
-                    If countera Then
-                        counterstate = CounterContainer.readCounter(14)
+                    result = wir_adapter.beginExclusive(True)
+                    If result Then
+                        owd = wir_adapter.getDeviceContainer(adresse)
+                        CounterContainer = DirectCast(owd, com.dalsemi.onewire.container.OneWireContainer1D)
+                        If owd.isPresent() Then
+                            If countera Then
+                                counterstate = CounterContainer.readCounter(14)
+                            Else
+                                counterstate = CounterContainer.readCounter(15)
+                            End If
+                        Else
+                            retour = 9999
+                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire counter", "ERR: counter : Capteur non présent")
+                        End If
+                        retour = counterstate.ToString
                     Else
-                        counterstate = CounterContainer.readCounter(15)
+                        retour = 9999
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire counter", "ERR: counter : Acces Exclusif refusé")
                     End If
                     wir_adapter.endExclusive()
-                    retour = counterstate.ToString
                 Else
                     retour = 9999
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "1-Wire counter", "ERR: counter : Adaptateur non présent")
