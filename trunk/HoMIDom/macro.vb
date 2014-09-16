@@ -1,6 +1,5 @@
 ﻿Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
-Imports HoMIDom.NCrontab
 Imports STRGS = Microsoft.VisualBasic.Strings
 Imports System.Net.Mail
 Imports System.Threading
@@ -342,7 +341,7 @@ Namespace HoMIDom
                         If _ConditionTime.Length >= 11 Then 'on verifie si au moins = à "*#*#*#*#*#*"
                             Dim conditions() As String = STRGS.Split(_ConditionTime, "#")
                             If conditions.Count = 6 Then
-                                Dim s = NCrontab.CrontabSchedule.Parse(conditions(0) & " " & conditions(1) & " " & conditions(2) & " " & conditions(3) & " " & conditions(4) & " " & conditions(5))
+                                Dim s = CrontabSchedule.Parse(conditions(0) & " " & conditions(1) & " " & conditions(2) & " " & conditions(3) & " " & conditions(4) & " " & conditions(5))
                                 _Prochainedateheure = s.GetNextOccurrence(DateAndTime.Now).ToString("yyyy-MM-dd HH:mm:ss")
                                 _Server.Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Trigger:Maj_Cron", _Nom & " : Prochaine execution : " & _Prochainedateheure)
                             Else

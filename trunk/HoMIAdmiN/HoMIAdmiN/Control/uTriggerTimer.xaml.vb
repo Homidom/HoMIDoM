@@ -1,4 +1,4 @@
-﻿Imports HoMIDom.NCrontab
+﻿Imports HoMIDom.HoMIDom
 Imports HoMIDom.HoMIDom.Api
 
 Public Class uTriggerTimer
@@ -774,10 +774,10 @@ Public Class uTriggerTimer
             Try
                 Dim nextcron As Date
                 listeprochainscronssimple.Text = ""
-                nextcron = NCrontab.CrontabSchedule.Parse(_myconditiontime).GetNextOccurrence(DateAndTime.Now)
+                nextcron = CrontabSchedule.Parse(_myconditiontime).GetNextOccurrence(DateAndTime.Now)
                 listeprochainscronssimple.Text &= nextcron.ToString("yyyy-MM-dd HH:mm:ss") & vbCrLf
                 For i As Integer = 1 To 7
-                    nextcron = NCrontab.CrontabSchedule.Parse(_myconditiontime).GetNextOccurrence(nextcron)
+                    nextcron = CrontabSchedule.Parse(_myconditiontime).GetNextOccurrence(nextcron)
                     listeprochainscronssimple.Text &= nextcron.ToString("yyyy-MM-dd HH:mm:ss") & vbCrLf
                 Next
             Catch ex As Exception
@@ -964,10 +964,10 @@ Public Class uTriggerTimer
                 Dim nextcron As Date
                 listeprochainscrons.Text = ""
                 'listeprochainscrons.Text = _myconditiontime_avance & vbCrLf
-                nextcron = NCrontab.CrontabSchedule.Parse(_myconditiontime_avance).GetNextOccurrence(DateAndTime.Now)
+                nextcron = CrontabSchedule.Parse(_myconditiontime_avance).GetNextOccurrence(DateAndTime.Now)
                 listeprochainscrons.Text &= nextcron.ToString("yyyy-MM-dd HH:mm:ss") & vbCrLf
                 For i As Integer = 1 To 7
-                    nextcron = NCrontab.CrontabSchedule.Parse(_myconditiontime_avance).GetNextOccurrence(nextcron)
+                    nextcron = CrontabSchedule.Parse(_myconditiontime_avance).GetNextOccurrence(nextcron)
                     listeprochainscrons.Text &= nextcron.ToString("yyyy-MM-dd HH:mm:ss") & vbCrLf
                 Next
             Catch ex As Exception

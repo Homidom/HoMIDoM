@@ -23,6 +23,7 @@
 
 #Region "Imports"
 
+Imports HoMIDom.HoMIDom
 Imports System.Collections.Generic
 Imports System.Globalization
 Imports System.IO
@@ -31,7 +32,7 @@ Imports Debug = System.Diagnostics.Debug
 
 #End Region
 
-Namespace NCrontab
+Namespace HoMIDom
 
 #Region "CrontabSchedule"
 
@@ -40,13 +41,16 @@ Namespace NCrontab
     ''' </summary>
 
     <Serializable()> _
-    Public NotInheritable Class CrontabSchedule
+    Public Class CrontabSchedule 'NotInheritable
         Private ReadOnly _seconds As CrontabField
         Private ReadOnly _minutes As CrontabField
         Private ReadOnly _hours As CrontabField
         Private ReadOnly _days As CrontabField
         Private ReadOnly _months As CrontabField
         Private ReadOnly _daysOfWeek As CrontabField
+
+        <NonSerialized()> Public Shared _Server As Server
+
 
         Private Shared ReadOnly _separators As Char() = {" "c}
 
@@ -72,7 +76,9 @@ Namespace NCrontab
         '
 
         Public Shared Function Parse(ByVal expression As String) As CrontabSchedule
+
             Return TryParse(expression, ErrorHandling.[Throw]).Value
+
         End Function
 
         Public Shared Function TryParse(ByVal expression As String) As ValueOrError(Of CrontabSchedule)
@@ -80,31 +86,36 @@ Namespace NCrontab
         End Function
 
         Private Shared Function TryParse(ByVal expression As String, ByVal onError As ExceptionHandler) As ValueOrError(Of CrontabSchedule)
-            If expression Is Nothing Then
-                Throw New ArgumentNullException("expression")
-            End If
-
-            Dim tokens = expression.Split(_separators, StringSplitOptions.RemoveEmptyEntries)
-
-            If tokens.Length <> 6 Then
-                Return ErrorHandling.OnError(Function() New CrontabException(String.Format("'{0}' is not a valid crontab expression. It must contain at least 6 components of a schedule " & "(in the sequence of seconds,minutes, hours, days, months, days of week).", expression)), onError)
-            End If
-
-            Dim fields = New CrontabField(5) {}
-
-            For i As Integer = 0 To fields.Length - 1
-                Dim field = CrontabField.TryParse(DirectCast(i, CrontabFieldKind), tokens(i), onError)
-                If field.IsError Then
-                    Return field.ErrorProvider
+            Try
+                If expression Is Nothing Then
+                    Throw New ArgumentNullException("expression")
                 End If
 
-                fields(i) = field.Value
-            Next
+                Dim tokens = expression.Split(_separators, StringSplitOptions.RemoveEmptyEntries)
 
-            Return New CrontabSchedule(fields(0), fields(1), fields(2), fields(3), fields(4), fields(5))
+                If tokens.Length <> 6 Then
+                    Return ErrorHandling.OnError(Function() New CrontabException(String.Format("'{0}' is not a valid crontab expression. It must contain at least 6 components of a schedule " & "(in the sequence of seconds,minutes, hours, days, months, days of week).", expression)), onError)
+                End If
+
+                Dim fields = New CrontabField(5) {}
+
+                For i As Integer = 0 To fields.Length - 1
+                    Dim field = CrontabField.TryParse(DirectCast(i, CrontabFieldKind), tokens(i), onError)
+                    If field.IsError Then
+                        Return field.ErrorProvider
+                    End If
+
+                    fields(i) = field.Value
+                Next
+
+                Return New CrontabSchedule(_Server, fields(0), fields(1), fields(2), fields(3), fields(4), fields(5))
+            Catch ex As Exception
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, " TryParse Cron Execute", "Exception: " & ex.ToString)
+            End Try
         End Function
 
-        Private Sub New(ByVal seconds As CrontabField, ByVal minutes As CrontabField, ByVal hours As CrontabField, ByVal days As CrontabField, ByVal months As CrontabField, ByVal daysOfWeek As CrontabField)
+        Private Sub New( ByVal server As Server,ByVal seconds As CrontabField, ByVal minutes As CrontabField, ByVal hours As CrontabField, ByVal days As CrontabField, ByVal months As CrontabField, ByVal daysOfWeek As CrontabField)
+            _Server = server
             Debug.Assert(seconds IsNot Nothing)
             Debug.Assert(minutes IsNot Nothing)
             Debug.Assert(hours IsNot Nothing)
@@ -145,182 +156,189 @@ Namespace NCrontab
         ''' </remarks>
 
         Public Function GetNextOccurrence(ByVal baseTime As DateTime, ByVal endTime As DateTime) As DateTime
-            Const nil As Integer = -1
 
-            Dim baseYear = baseTime.Year
-            Dim baseMonth = baseTime.Month
-            Dim baseDay = baseTime.Day
-            Dim baseHour = baseTime.Hour
-            Dim baseMinute = baseTime.Minute
-            Dim baseSecond = baseTime.Second
+            Try
 
-            Dim endYear = endTime.Year
-            Dim endMonth = endTime.Month
-            Dim endDay = endTime.Day
+                Const nil As Integer = -1
 
-            Dim year = baseYear
-            Dim month = baseMonth
-            Dim day = baseDay
-            Dim hour = baseHour
-            Dim minute = baseMinute
-            Dim second = baseSecond + 1
+                Dim baseYear = baseTime.Year
+                Dim baseMonth = baseTime.Month
+                Dim baseDay = baseTime.Day
+                Dim baseHour = baseTime.Hour
+                Dim baseMinute = baseTime.Minute
+                Dim baseSecond = baseTime.Second
 
-            '
-            ' Second
-            '
+                Dim endYear = endTime.Year
+                Dim endMonth = endTime.Month
+                Dim endDay = endTime.Day
 
-            Dim secondM = _seconds.[Next](second)
+                Dim year = baseYear
+                Dim month = baseMonth
+                Dim day = baseDay
+                Dim hour = baseHour
+                Dim minute = baseMinute
+                Dim second = baseSecond + 1
 
-            If secondM = nil Then
-                minute += 1
-                second = _seconds.GetNext(second)
-            Else
-                second = secondM
-            End If
-            If second = nil Then
-                second = _seconds.GetFirst()
-            End If
+                '
+                ' Second
+                '
 
-            '
-            ' Minute
-            '
+                Dim secondM = _seconds.[Next](second)
 
-            Dim minuteM = _minutes.[Next](minute)
+                If secondM = nil Then
+                    minute += 1
+                    second = _seconds.GetNext(second)
+                Else
+                    second = secondM
+                End If
+                If second = nil Then
+                    second = _seconds.GetFirst()
+                End If
 
-            If minuteM = nil Then
-                minute = _minutes.GetNext(minute)
-                hour += 1
-            Else
-                minute = minuteM
-            End If
-            If minute = nil Then
-                'second = _seconds.GetFirst();
-                minute = _minutes.GetFirst()
-            End If
+                '
+                ' Minute
+                '
 
-            '
-            ' Hour
-            '
+                Dim minuteM = _minutes.[Next](minute)
 
-            Dim hourm = _hours.[Next](hour)
+                If minuteM = nil Then
+                    minute = _minutes.GetNext(minute)
+                    hour += 1
+                Else
+                    minute = minuteM
+                End If
+                If minute = nil Then
+                    'second = _seconds.GetFirst();
+                    minute = _minutes.GetFirst()
+                End If
 
-            If hourm = nil Then
-                hour = _hours.GetNext(hour)
-                day += 1
-            Else
-                hour = hourm
-            End If
-            If hour = nil Then
-                'second = _seconds.GetFirst();
-                'minute = _minutes.GetFirst();
-                hour = _hours.GetFirst()
-                'second = _seconds.GetFirst();
-                'minute = _minutes.GetFirst();
-            ElseIf hour > baseHour Then
-            End If
+                '
+                ' Hour
+                '
 
-            '
-            ' Day
-            '
+                Dim hourm = _hours.[Next](hour)
 
-            Dim dayM = _days.[Next](day)
+                If hourm = nil Then
+                    hour = _hours.GetNext(hour)
+                    day += 1
+                Else
+                    hour = hourm
+                End If
+                If hour = nil Then
+                    'second = _seconds.GetFirst();
+                    'minute = _minutes.GetFirst();
+                    hour = _hours.GetFirst()
+                    'second = _seconds.GetFirst();
+                    'minute = _minutes.GetFirst();
+                ElseIf hour > baseHour Then
+                End If
+
+                '
+                ' Day
+                '
+
+                Dim dayM = _days.[Next](day)
 RetryDayMonth:
-            'Dim dayM = _days.[Next](day)
-            If dayM = nil Then
-                day = _days.GetNext(day)
-                month += 1
-            Else
-                day = dayM
-            End If
-            If day = nil Then
-                'second = _seconds.GetFirst();
-                'minute = _minutes.GetFirst();
-                'hour = _hours.GetFirst();
-                day = _days.GetFirst()
-                'second = _seconds.GetFirst();
-                'minute = _minutes.GetFirst();
-                'hour = _hours.GetFirst();
-            ElseIf day > baseDay Then
-            End If
+                'Dim dayM = _days.[Next](day)
+                If dayM = nil Then
+                    day = _days.GetNext(day)
+                    month += 1
+                Else
+                    day = dayM
+                End If
+                If day = nil Then
+                    'second = _seconds.GetFirst();
+                    'minute = _minutes.GetFirst();
+                    'hour = _hours.GetFirst();
+                    day = _days.GetFirst()
+                    'second = _seconds.GetFirst();
+                    'minute = _minutes.GetFirst();
+                    'hour = _hours.GetFirst();
+                ElseIf day > baseDay Then
+                End If
 
-            '
-            ' Month
-            '
+                '
+                ' Month
+                '
 
-            Dim monthM = _months.[Next](month)
+                Dim monthM = _months.[Next](month)
 
-            If monthM = nil Then
-                month = _months.GetNext(day)
-                year += 1
-            Else
-                month = monthM
-            End If
-            If month = nil Then
-                'second = _seconds.GetFirst();
-                'minute = _minutes.GetFirst();
-                'hour = _hours.GetFirst();
-                'day = _days.GetFirst();
-                month = _months.GetFirst()
-                'second = _seconds.GetFirst();
-                'minute = _minutes.GetFirst();
-                'hour = _hours.GetFirst();
-                'day = _days.GetFirst();
-            ElseIf month > baseMonth Then
-            End If
+                If monthM = nil Then
+                    month = _months.GetNext(day)
+                    year += 1
+                Else
+                    month = monthM
+                End If
+                If month = nil Then
+                    'second = _seconds.GetFirst();
+                    'minute = _minutes.GetFirst();
+                    'hour = _hours.GetFirst();
+                    'day = _days.GetFirst();
+                    month = _months.GetFirst()
+                    'second = _seconds.GetFirst();
+                    'minute = _minutes.GetFirst();
+                    'hour = _hours.GetFirst();
+                    'day = _days.GetFirst();
+                ElseIf month > baseMonth Then
+                End If
 
-            '
-            ' The day field in a cron expression spans the entire range of days
-            ' in a month, which is from 1 to 31. However, the number of days in
-            ' a month tend to be variable depending on the month (and the year
-            ' in case of February). So a check is needed here to see if the
-            ' date is a border case. If the day happens to be beyond 28
-            ' (meaning that we're dealing with the suspicious range of 29-31)
-            ' and the date part has changed then we need to determine whether
-            ' the day still makes sense for the given year and month. If the
-            ' day is beyond the last possible value, then the day/month part
-            ' for the schedule is re-evaluated. So an expression like "0 0
-            ' 15,31 * *" will yield the following sequence starting on midnight
-            ' of Jan 1, 2000:
-            '
-            '  Jan 15, Jan 31, Feb 15, Mar 15, Apr 15, Apr 31, ...
-            '
+                '
+                ' The day field in a cron expression spans the entire range of days
+                ' in a month, which is from 1 to 31. However, the number of days in
+                ' a month tend to be variable depending on the month (and the year
+                ' in case of February). So a check is needed here to see if the
+                ' date is a border case. If the day happens to be beyond 28
+                ' (meaning that we're dealing with the suspicious range of 29-31)
+                ' and the date part has changed then we need to determine whether
+                ' the day still makes sense for the given year and month. If the
+                ' day is beyond the last possible value, then the day/month part
+                ' for the schedule is re-evaluated. So an expression like "0 0
+                ' 15,31 * *" will yield the following sequence starting on midnight
+                ' of Jan 1, 2000:
+                '
+                '  Jan 15, Jan 31, Feb 15, Mar 15, Apr 15, Apr 31, ...
+                '
 
-DOW:        Dim dateChanged = day <> baseDay OrElse month <> baseMonth OrElse year <> baseYear
+DOW:            Dim dateChanged = day <> baseDay OrElse month <> baseMonth OrElse year <> baseYear
 
 
-            If day > 28 AndAlso dateChanged AndAlso day > Calendar.GetDaysInMonth(year, month) Then
-                If year >= endYear AndAlso month >= endMonth AndAlso day >= endDay Then
+                If day > 28 AndAlso dateChanged AndAlso day > Calendar.GetDaysInMonth(year, month) Then
+                    If year >= endYear AndAlso month >= endMonth AndAlso day >= endDay Then
+                        Return endTime
+                    End If
+
+                    day = nil
+                    dayM = nil
+                    GoTo RetryDayMonth
+                End If
+
+                If Not _daysOfWeek.Contains(Convert.ToInt32(New DateTime(year, month, day, hour, minute, second, _
+                0, baseTime.Kind).DayOfWeek)) Then
+                    day += 1
+                    GoTo DOW
+                End If
+
+                Dim nextTime = New DateTime(year, month, day, hour, minute, second, _
+                 0, baseTime.Kind)
+
+                If nextTime >= endTime Then
                     Return endTime
                 End If
 
-                day = nil
-                dayM = nil
-                GoTo RetryDayMonth
-            End If
+                '
+                ' Day of week
+                '
 
-            If Not _daysOfWeek.Contains(Convert.ToInt32(New DateTime(year, month, day, hour, minute, second, _
-            0, baseTime.Kind).DayOfWeek)) Then
-                day += 1
-                GoTo DOW
-            End If
+                If _daysOfWeek.Contains(Convert.ToInt32(nextTime.DayOfWeek)) Then
+                    Return nextTime
+                End If
 
-            Dim nextTime = New DateTime(year, month, day, hour, minute, second, _
-             0, baseTime.Kind)
+                Return GetNextOccurrence(New DateTime(year, month, day, 23, 59, 0, _
+                 0, baseTime.Kind), endTime)
 
-            If nextTime >= endTime Then
-                Return endTime
-            End If
-
-            '
-            ' Day of week
-            '
-
-            If _daysOfWeek.Contains(Convert.ToInt32(nextTime.DayOfWeek)) Then
-                Return nextTime
-            End If
-
-            Return GetNextOccurrence(New DateTime(year, month, day, 23, 59, 0, _
-             0, baseTime.Kind), endTime)
+            Catch ex As Exception
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "GetNextOccurence Cron Execute", "Exception: " & ex.ToString)
+            End Try
         End Function
 
         ''' <summary>
@@ -1031,7 +1049,7 @@ DOW:        Dim dateChanged = day <> baseDay OrElse month <> baseMonth OrElse ye
 
             handler(provider())
 
-            Return provider
+            Return (provider)
         End Function
     End Class
 
