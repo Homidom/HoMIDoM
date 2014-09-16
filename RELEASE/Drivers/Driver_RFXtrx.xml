@@ -6,20 +6,7 @@ Driver_RFXtrx
 </name>
 </assembly>
 <members>
-<member name="P:Driver_RFXtrx.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:Driver_RFXtrx.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:Driver_RFXtrx.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
-</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.GetCommandPlus">
+<member name="M:Driver_RFXtrx.Driver_RFXtrx.GetCommandPlus">
 	<summary>
  Retourne la liste des Commandes avancées
  </summary>
@@ -161,6 +148,19 @@ Driver_RFXtrx
 </member><member name="T:Driver_RFXtrx.Driver_RFXtrx">
 	<summary>Class Driver_RFXTrx, permet de communiquer avec le RFXtrx Ethernet/COM</summary>
 	<remarks>Pour la version USB, necessite l'installation du driver USB RFXCOM</remarks>
+</member><member name="P:Driver_RFXtrx.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_RFXtrx.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_RFXtrx.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
 </member>
 </members>
 </doc>

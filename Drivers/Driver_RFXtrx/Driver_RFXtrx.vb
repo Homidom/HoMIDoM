@@ -1454,7 +1454,7 @@ Imports System.Media
                 _PARAMMODE_13_meiantech = _Parametres.Item(13).Valeur
                 _PARAMMODE_14_heeu = _Parametres.Item(14).Valeur
                 _PARAMMODE_15_ac = _Parametres.Item(15).Valeur
-                _PARAMMODE_16_arc = _Parametres.Item(19).Valeur
+                _PARAMMODE_16_arc = _Parametres.Item(16).Valeur
                 _PARAMMODE_17_x10 = _Parametres.Item(17).Valeur
                 _PARAMMODE_18_blindst0 = _Parametres.Item(18).Valeur
                 _PARAMMODE_19_rfu6 = _Parametres.Item(19).Valeur
