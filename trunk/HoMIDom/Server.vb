@@ -364,8 +364,9 @@ Namespace HoMIDom
         ''' <summary>Traitement à effectuer toutes les secondes/minutes/heures/minuit/midi</summary>
         ''' <remarks></remarks>
         Sub TimerSecTick()
+            Dim ladate As DateTime = Now 'on récupére la date/heure
+
             Try
-                Dim ladate As DateTime = Now 'on récupére la date/heure
 
                 'verif si pas déjà trop de thread
                 If (table_TimerSecTickthread.Rows.Count < 5) Then
@@ -472,6 +473,28 @@ Namespace HoMIDom
                 End If
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception : " & ex.Message)
+
+                'suppresion de la table des threads
+                Try
+                    '--- suppresion du thread de la liste des threads lancés ---
+                    Dim tabletmp As DataRow()
+                    SyncLock lock_table_TimerSecTickthread
+                        tabletmp = table_TimerSecTickthread.Select("name = 'TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss") & "'")
+                    End SyncLock
+                    If tabletmp.GetLength(0) >= 1 Then
+                        SyncLock lock_table_TimerSecTickthread
+                            tabletmp(0).Delete()
+                        End SyncLock
+                    Else
+                        Dim listethreads As String = ""
+                        For Each thread As DataRow In table_TimerSecTickthread.Rows
+                            listethreads += thread("name") & "-"
+                        Next
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Thread non trouvé pour suppression : TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss") & " (liste: " & listethreads & ")")
+                    End If
+                Catch ex2 As Exception
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception : " & ex2.Message)
+                End Try
             End Try
         End Sub
 
