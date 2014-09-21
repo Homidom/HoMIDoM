@@ -22,7 +22,7 @@
                                 <Button Height="24.293" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnExportLog" VerticalAlignment="Top" Width="87.169" Foreground="White">Exporter</Button>
                          </StackPanel> 
                 </StackPanel>
-                <Label FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Name="Label1" VerticalAlignment="Top" HorizontalContentAlignment="Center">Log</Label>
+                <Label FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Name="Label1" VerticalAlignment="Top" HorizontalContentAlignment="Center">Log (Aujourd'hui)</Label>
 
             </DockPanel>
             <DataGrid Name="DGW"  AutoGenerateColumns="False" ItemsSource="{Binding}" Margin="2"/>
