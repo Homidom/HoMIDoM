@@ -60,15 +60,15 @@ Partial Public Class uLog
                                 ligneLog.Insert(0, sensorData)
                                 sensorData = Nothing
                             Else
-                                _LigneIgnorees += 1
-
-                                ''test david ligne ignorée contenu
-                                'Dim strintemp As String = ""
-                                'For i As Integer = 0 To tmp.Length - 1
-                                '    strintemp = strintemp & "---" & tmp(i)
-                                'Next
-                                'MessageBox.Show("ligne ignorée: " & strintemp, "Test David", MessageBoxButton.OK, MessageBoxImage.Exclamation)
-
+                                'ligne au format incorrect 
+                                Dim sensorData As New Dictionary(Of String, Object) ' creates a dictionary where column name is the key and data is the value
+                                sensorData(keys(0)) = ""
+                                sensorData(keys(1)) = ""
+                                sensorData(keys(2)) = ""
+                                sensorData(keys(3)) = ""
+                                sensorData(keys(4)) = line.Trim.ToString
+                                ligneLog.Insert(0, sensorData)
+                                sensorData = Nothing
                             End If
                             'lineCount += 1
                         End If
@@ -88,9 +88,9 @@ Partial Public Class uLog
             End If
 
             Try
-                If _LigneIgnorees > 0 Then
-                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, _LigneIgnorees & " ligne(s) du log ne seront pas prises en compte car elles ne respectent pas le format attendu, veuillez consultez le fichier log sur le serveur pour avoir la totalité", "INFO", "")
-                End If
+                'If _LigneIgnorees > 0 Then
+                '    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, _LigneIgnorees & " ligne(s) du log ne seront pas prises en compte car elles ne respectent pas le format attendu, veuillez consultez le fichier log sur le serveur pour avoir la totalité", "INFO", "")
+                'End If
 
                 DGW.DataContext = ligneLog
             Catch ex As Exception
