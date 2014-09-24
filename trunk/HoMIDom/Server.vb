@@ -462,7 +462,7 @@ Namespace HoMIDom
                             Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Thread non trouvé pour suppression : TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss") & " (liste: " & listethreads & ")")
                         End If
                     Catch ex As Exception
-                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception : " & ex.Message)
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception 1 : " & ex.ToString & " --> Erreur pendant la suppression du thread de la liste")
                     End Try
                 Else
                     Dim listethreads As String = ""
@@ -472,7 +472,7 @@ Namespace HoMIDom
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Il y a déjà " & table_TimerSecTickthread.Rows.Count & " Threads en cours, TimerSick annulé (liste: " & listethreads & ")")
                 End If
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception : " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception 2 : " & ex.ToString & " --> Exception donc suppression du thread de la liste")
 
                 'suppresion de la table des threads
                 Try
@@ -493,7 +493,7 @@ Namespace HoMIDom
                         Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Thread non trouvé pour suppression : TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss") & " (liste: " & listethreads & ")")
                     End If
                 Catch ex2 As Exception
-                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception : " & ex2.Message)
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception 3 : " & ex2.ToString & " --> Erreur pendant la suppression du thread de la liste en cas de'exception")
                 End Try
             End Try
         End Sub
