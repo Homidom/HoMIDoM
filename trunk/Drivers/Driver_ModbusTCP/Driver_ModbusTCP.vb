@@ -54,17 +54,36 @@ Imports System.Net.Sockets
 #Region "Variables internes"
 
     Private WithEvents MBmaster As ModbusTCP.Master
+
     Private breading As Boolean = False
     Private cptsend As Integer = 0
+    Private typeRead As String = "MW"
+    Private flagWrite As Boolean = False
+    Private cptWaitReponse As Integer = 0
+    Private offsetModele As Integer = 12288
+    Private rcvIX As Boolean = False
 
-    Private adressStart As Integer
-    Private adressRead As Integer
-    Private adressWrite As Integer
-    Private unit As Integer
     Private rID As UShort
     Private MemID As UShort
-    Private flagWrite As Boolean
-    Private dataMdb(225) As UInt16
+
+    Private adressReadMW As Integer
+    Private longReadMW As Integer
+    Private adressReadIW As Integer
+    Private longReadIW As Integer
+    Private adressReadMX As Integer
+    Private longReadMX As Integer
+    Private adressWriteMW As Integer
+    Private adressWriteMX As Integer
+    Private unit As Integer
+
+    Private nbsendMW As Integer
+    Private nbsendIW As Integer
+    Private nbsendMX As Integer
+
+    Private dataMdbMW() As UInt16
+    Private dataMdbIW() As UInt16
+    Private dataMdbMX() As Boolean
+    Private dataMdbIX() As Boolean
 
     Dim str_to_bool As New Dictionary(Of String, Integer)
 
@@ -325,27 +344,52 @@ Imports System.Net.Sockets
                 _IsConnect = True
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "ModbusTCP", retour)
 
-                 Select _Modele.ToUpper
+                Select Case _Modele.ToUpper
                     Case "WAGO"
-                        adressStart = 12288
+                        offsetModele = 12288
                     Case Else
-                        adressStart = 0
+                        offsetModele = 0
                 End Select
 
-                adressRead = _Parametres.Item(1).Valeur
-                adressWrite = _Parametres.Item(2).Valeur
-                unit = _Parametres.Item(3).Valeur
-                _DEBUG = _Parametres.Item(4).Valeur
+                If TypeOf _Parametres.Item(4).Valeur Is Boolean Then
+                    _Parametres.Item(9).Valeur = _Parametres.Item(3).Valeur
+                    _Parametres.Item(10).Valeur = _Parametres.Item(4).Valeur
+                    _Parametres.Item(3).Valeur = _Parametres.Item(1).Valeur
+                    _Parametres.Item(8).Valeur = _Parametres.Item(2).Valeur
+                    _Parametres.Item(1).Valeur = 0
+                    _Parametres.Item(2).Valeur = 0
+                    _Parametres.Item(4).Valeur = 225
+                End If
+
+                adressReadMX = _Parametres.Item(1).Valeur
+                longReadMX = _Parametres.Item(2).Valeur
+                adressReadMW = _Parametres.Item(3).Valeur
+                longReadMW = _Parametres.Item(4).Valeur
+                adressReadIW = _Parametres.Item(5).Valeur
+                longReadIW = _Parametres.Item(6).Valeur
+                adressWriteMX = _Parametres.Item(7).Valeur
+                adressWriteMW = _Parametres.Item(8).Valeur
+                unit = _Parametres.Item(9).Valeur
+                _DEBUG = _Parametres.Item(10).Valeur
 
                 MyTimer.Interval = _Parametres.Item(0).Valeur '2000
                 MyTimer.Enabled = True
                 breading = False
                 cptsend = 0
 
+                If longReadMW <> 0 Then nbsendMW = Math.Floor((longReadMW - 1) / 75) + 1 Else nbsendMW = 0
+                If longReadIW <> 0 Then nbsendIW = Math.Floor((longReadIW - 1) / 75) + 1 Else nbsendIW = 0
+                If longReadMX <> 0 Then nbsendMX = Math.Floor((longReadMX - 1) / 512) + 1 Else nbsendMX = 0
+
+                ReDim dataMdbMW(nbsendMW * 75)
+                ReDim dataMdbIW(nbsendIW * 75)
+                ReDim dataMdbMX(nbsendMX * 512)
+                ReDim dataMdbIX(512)
+
                 AddHandler _Server.DeviceChanged, AddressOf DeviceChange
 
             End If
-			
+
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP Start", ex.Message)
             _IsConnect = False
@@ -397,12 +441,51 @@ Imports System.Net.Sockets
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Impossible d'effectuer un Read car le driver n'est pas connecté à la carte")
                 Exit Sub
             End If
-            If Objet.Adresse1 <> "-1" And Objet.Adresse1 <> "" Then
-                If TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
-                    Objet.Value = dataMdb(Objet.adresse1 - 1)
+            If CInt(Objet.Adresse1) > "-1" And Objet.Adresse1 <> "" Then
+                If (Objet.Model = "MX" And CInt(Objet.Adresse1) < adressReadMX + longReadMX And CInt(Objet.Adresse1) >= adressReadMX) Then
+               
+                    If TypeOf Objet.Value Is Boolean And dataMdbMX(Objet.adresse1) > -1 And dataMdbMX(Objet.adresse1) < 2 Then
+                        Objet.Value = CBool(dataMdbMX(Objet.adresse1 - 1))
+                    End If
+                Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "L'adresse du composant n'est pas dans la plage de lecture du driver")
+
                 End If
-                If TypeOf Objet.Value Is Boolean And dataMdb(Objet.adresse1) > -1 And dataMdb(Objet.adresse1) < 2 Then
-                    Objet.Value = CBool(dataMdb(Objet.adresse1 - 1))
+
+                If (Objet.Model = "IX" And CInt(Objet.Adresse1) < 512 And CInt(Objet.Adresse1) >= 0) Then
+
+                    If TypeOf Objet.Value Is Boolean And dataMdbIX(Objet.adresse1) > -1 And dataMdbIX(Objet.adresse1) < 2 Then
+                        Objet.Value = CBool(dataMdbIX(Objet.adresse1 - 1))
+                    End If
+                Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "L'adresse du composant n'est pas dans la plage de lecture du driver")
+
+                End If
+
+                If (Objet.Model = "MW" And CInt(Objet.Adresse1) < adressReadMW + longReadMW And CInt(Objet.Adresse1) >= adressReadMW) Then
+
+                    If TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
+                        Objet.Value = dataMdbMW(Objet.adresse1 - 1)
+                    End If
+                    If TypeOf Objet.Value Is Boolean And dataMdbMW(Objet.adresse1) > -1 And dataMdbMW(Objet.adresse1) < 2 Then
+                        Objet.Value = CBool(dataMdbMW(Objet.adresse1 - 1))
+                    End If
+                Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "L'adresse du composant n'est pas dans la plage de lecture du driver")
+
+                End If
+
+                If (Objet.Model = "IW" And CInt(Objet.Adresse1) < adressReadIW + longReadIW And CInt(Objet.Adresse1) >= adressReadIW) Then
+
+                    If TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
+                        Objet.Value = dataMdbIW(Objet.adresse1 - 1)
+                    End If
+                    If TypeOf Objet.Value Is Boolean And dataMdbIW(Objet.adresse1) > -1 And dataMdbIW(Objet.adresse1) < 2 Then
+                        Objet.Value = CBool(dataMdbIW(Objet.adresse1 - 1))
+                    End If
+                Else
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "L'adresse du composant n'est pas dans la plage de lecture du driver")
+
                 End If
             End If
 
@@ -429,10 +512,21 @@ Imports System.Net.Sockets
             End If
             If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Write", "Ecriture de " & Objet.Name)
             If Parametre1 Is Nothing Then Parametre1 = 0
-            If Parametre2 Is Nothing Then Parametre2 = 0
-			If Objet.Adresse2 <> "-1" And Objet.Adresse2 <> "" Then
-			    If TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
-			
+
+            Select Case Objet.modele
+                Case "MX"
+                    Parametre2 = 1
+                Case "QX"
+                    Parametre2 = 2
+                Case "MW"
+                    Parametre2 = 3
+                Case "QW"
+                    Parametre2 = 4
+            End Select
+
+            If Objet.Adresse2 <> "-1" And Objet.Adresse2 <> "" Then
+                If TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
+
                     Select Case Commande
                         Case "ON"
                             Parametre1 = Objet.ValueMax
@@ -444,20 +538,22 @@ Imports System.Net.Sockets
                             Parametre1 = Objet.ValueMin
 
                     End Select
-			
+
                     ecrire(Objet.adresse2, Commande, Parametre1, Parametre2, sendtwice)
                 End If
-			
-                If TypeOf Objet.Value Is Boolean Then
+
+                If TypeOf Objet.Value Is Boolean Or Parametre2 = 1 Or Parametre2 = 2 Then
                     Parametre1 = str_to_bool(Commande)
                     ecrire(Objet.adresse2, Commande, Parametre1, Parametre2, sendtwice)
                 End If
-			End if
-			Select Case commande
-                        Case "ON", "OFF"
+            End If
+            Select Case Commande
+                Case "ON", "OFF"
                     If Parametre1 = 0 Then traitement("OFF", Objet.adresse2, Commande, True) Else traitement("ON", Objet.adresse2, Commande, True)
-                        Case "DIM", "OUVERTURE"
+                Case "DIM", "OUVERTURE"
                     traitement(CStr(Parametre1), Objet.adresse2, Commande, True)
+                Case Else
+                    traitement(Commande, Objet.adresse2, Commande, True)
             End Select
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP Write", ex.Message)
@@ -584,9 +680,15 @@ Imports System.Net.Sockets
             _DeviceSupport.Add(ListeDevices.VOLET.ToString)
 			
             'Parametres avancés
-            add_paramavance("Rafraichissement de lecture", "le temps en millisecondes entre les demandes de lecture", 2000)
-            add_paramavance("Premier mot de lecture", "Adresse du premier mot à lire dans l'automate", 256)
-            add_paramavance("Premier mot d'écriture", "Adresse du premier mot à écrire dans l'automate", 100)
+            add_paramavance("Rafraichissement de lecture", "le temps en millisecondes entre les demandes de lecture", 500)
+            add_paramavance("Premier bit interne de lecture", "Adresse du premier bit interne MX à lire dans l'automate", 0)
+            add_paramavance("Nombre de bits interne à lire", "Nombre de bits interne MX à lire dans l'automate", 0)
+            add_paramavance("Premier mot interne de lecture", "Adresse du premier mot interne MW à lire dans l'automate", 256)
+            add_paramavance("Nombre de mots interne à lire", "Nombre de mots interne MW à lire dans l'automate", 225)
+            add_paramavance("Premier mot d'entrée de lecture", "Adresse du premier mot d'entrée IW à lire dans l'automate", 0)
+            add_paramavance("Nombre de mots d'entrée à lire", "Nombre de mots d'entrée IW à lire dans l'automate", 0)
+            add_paramavance("Premier bit interne d'ecriture", "Adresse du premier bit interne MX à écrire dans l'automate", 0)
+            add_paramavance("Premier mot interne d'ecriture", "Adresse du premier mot interne MW à écrire dans l'automate", 700)
             add_paramavance("Numéro Unit", "Numéro d'identification de l'unité a accéder", 0)
             add_paramavance("Debug", "Activer le Debug complet (True/False)", False)
 
@@ -600,13 +702,16 @@ Imports System.Net.Sockets
 
             'Libellé Driver
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
+            Add_LibelleDriver("MODELE", "@", "")
 
             'Libellé Device
-            Add_LibelleDevice("ADRESSE1", "Adresse Read", "Adresse de lecture du composant ou -1 si pas de lecture")
-            Add_LibelleDevice("ADRESSE2", "Adresse Write", "Adresse d'écriture du composant ou -1 si pas de écriture")
+            Add_LibelleDevice("ADRESSE1", "Adresse Lecture", "Adresse de lecture du composant (dans la plage de lecture declaré dans le driver) ou -1 si pas de lecture", "-1")
+            Add_LibelleDevice("ADRESSE2", "Adresse Ecriture", "Adresse d'écriture du composant ou -1 si pas de écriture", "-1")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("REFRESH", "Refresh", "Interval en secondes entre les lectures")
+            Add_LibelleDevice("REFRESH", "@", "")
             Add_LibelleDevice("LASTCHANGEDUREE", "@", "")
+            Add_LibelleDevice("MODELE", "Type de variable", "Type de variable à utiliser : MW/IW(lecture seul)/QW(ecriture seul)/MX/IX(lecture seul)/QX(ecriture seul)", "MX|IX|QX|MW|IW|QW")
+
 
             'dictionnaire Commande STR -> INT
             str_to_bool.Add("OFF", 0)
@@ -626,18 +731,90 @@ Imports System.Net.Sockets
 
         Try
             If Not breading Then
-                breading = True
 				If Not flagwrite Then
-                cptsend += 1
-                If cptsend > 3 Then cptsend = 1
-                StartAddress = ReadStartAdr(adressStart + adressRead + ((cptsend - 1) * 75)) '%MW256 = 12288 + 256 = 12544
-                    Length = ReadStartAdr(75)
-                    rid = (Rnd() * 250)
-                    MBmaster.ReadHoldingRegister(unit, rid, StartAddress, Length)
+                    cptsend += 1
 
-                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Read", "ModbusTCP Demande de lecture")
-				Else
-                    flagwrite = False
+                    Select Case typeRead
+                       
+
+                        Case "MW"
+                            If nbsendMW > 0 And cptsend <= nbsendMW Then
+
+                                breading = True
+                                StartAddress = ReadStartAdr(offsetModele + adressReadMW + ((cptsend - 1) * 75)) '%MW0 = 12288 
+                                Length = ReadStartAdr(75)
+                                rID = (Rnd() * 256)
+                                MBmaster.ReadHoldingRegister(unit, rID, StartAddress, Length)
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Read", "Demande de lecture MW" & StartAddress & " , Envoi n°" & cptsend & "/" & nbsendMW)
+
+                            Else
+                                typeRead = "IW"
+                                cptsend = 0
+                                breading = False
+                            End If
+                       
+                        Case "IW"
+                            If nbsendIW > 0 And cptsend <= nbsendIW Then
+
+                                breading = True
+                                StartAddress = ReadStartAdr(adressReadIW + ((cptsend - 1) * 75))
+                                Length = ReadStartAdr(75)
+                                rID = (Rnd() * 256)
+                                MBmaster.ReadHoldingRegister(unit, rID, StartAddress, Length)
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Read", "Demande de lecture IW" & StartAddress & " , Envoi n°" & cptsend & "/" & nbsendIW)
+
+                            Else
+                                typeRead = "MX"
+                                cptsend = 0
+                                breading = False
+                            End If
+
+                        Case "MX"
+                            If nbsendMX > 0 And cptsend <= nbsendMX Then
+
+                                breading = True
+                                StartAddress = ReadStartAdr(offsetModele + adressReadMX + ((cptsend - 1) * 512)) '%MX0.0 = 12288
+                                Length = ReadStartAdr(512)
+                                rID = (Rnd() * 256)
+                                MBmaster.ReadDiscreteInputs(unit, rID, StartAddress, Length)
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Read", "Demande de lecture MX" & StartAddress & " , Envoi n°" & cptsend & "/" & nbsendMX)
+
+                            Else
+                                typeRead = "IX"
+                                cptsend = 0
+                                breading = False
+                            End If
+
+                        Case "IX"
+
+                            breading = True
+                           
+                            If rcvIX Then
+                                rcvIX = False
+                                typeRead = "MW"
+                                cptsend = 0
+                                breading = False
+                            Else
+                                StartAddress = ReadStartAdr(0)
+                                Length = ReadStartAdr(512) '64 octet
+                                rID = (Rnd() * 256)
+                                MBmaster.ReadDiscreteInputs(unit, rID, StartAddress, Length)
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Read", "Demande de lecture IX" & StartAddress)
+                            End If
+
+                    End Select
+                Else
+                    flagWrite = False
+                End If
+                cptWaitReponse = 0
+            Else
+                If cptWaitReponse = 3 Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP Read", "Time Out Reponse")
+
+                    cptWaitReponse = 0
+                    breading = False
+                Else
+                    cptWaitReponse += 1
                 End If
             End If
         Catch ex As Exception
@@ -776,28 +953,41 @@ Imports System.Net.Sockets
     ''' <remarks></remarks>
 
     Private Function ecrire(ByVal adresse As String, ByVal commande As String, Optional ByVal data1 As Integer = 0, Optional ByVal data2 As Integer = 0, Optional ByVal ecriretwice As Boolean = False) As String
-        Dim _adresse = 0
-        Dim _cmd = 0
-        Dim cmdtmp As String = ""
-        'Dim checksum = &H3
-        'Dim tblack() As DataRow
+
         Try
             If _IsConnect Then
 
-                '--- usercode ---
-
-                Dim StartAddress As UShort = ReadStartAdr(adressStart + adressWrite) '%MW0 = 12288 --> %MW100 = 12288 + 100 = 12388
-                Dim dataE(2) As UInteger
+                Dim StartAddress As UShort
+                Dim DataM(1) As UInteger
+                Dim DataB As Boolean
+                Dim Data() As Byte
 
                 Try
-                    dataE(0) = adresse
-                    dataE(1) = data1
+                    If data2 = 3 Then
+                        StartAddress = ReadStartAdr(CInt(adresse) + adressWriteMW + offsetModele - 1)
+                    End If
+                    If data2 = 1 Then
+                        StartAddress = ReadStartAdr(CInt(adresse) + adressWriteMX + offsetModele - 1)
+                    End If
+                    If data2 = 2 Or data2 = 4 Then
+                        StartAddress = ReadStartAdr(CInt(adresse) - 1)
+                    End If
 
-                    Dim Data() As Byte = GetData(dataE)
+                    If data2 = 3 Or data2 = 4 Then 'MW ou QW
+                        DataM(0) = data1
+                        Data = GetData(DataM)
+                        MBmaster.WriteSingleRegister(unit, 16, StartAddress, Data)
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Modbus slave receive", "MBmaster_WriteSingleRegister : " & "Debut MW ou QW" & StartAddress & " a la valeur " & data1)
 
-                    MBmaster.WriteMultipleRegister(unit, 16, StartAddress, Data)
-					flagWrite = True
-					
+                    End If
+                    If data2 = 1 Or data2 = 2 Then 'MX ou QX
+                        DataB = CBool(data1)
+                        MBmaster.WriteSingleCoils(unit, 16, StartAddress, DataB)
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Modbus slave receive", "MBmaster_WriteSingleCoils : " & "Debut MX ou QX" & StartAddress & " a la valeur " & CBool(data1))
+
+                    End If
+                    flagWrite = True
+                    
                 Catch ex As Exception
                     Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP", "ModbusTCP Ecrire startadress=" & StartAddress)
                 End Try
@@ -824,7 +1014,6 @@ Imports System.Net.Sockets
     ' ------------------------------------------------------------------------
     Private Sub MBmaster_OnResponseData(ByVal ID As UShort, ByVal [function] As Byte, ByVal values As Byte()) Handles MBmaster.OnResponseData
 
-        Dim dataR(75) As UInt16
         Dim msg As String = ""
         Dim adresse As Integer = 0
         ' ------------------------------------------------------------------
@@ -841,30 +1030,87 @@ Imports System.Net.Sockets
             msg = "ID = " & ID & " et Fonction = " & [function]
 
             If ID = rid Then
-                msg += 75 * (cptsend - 1) & " et data = "
-                dataR = ShowAs(values)
+
 
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, "", "", Me._ID, True)
 
+                If typeRead = "MW" Then
+                    dataMdbMW = ShowAsW(values)
+                    msg += " Debut MW" & adressReadMW + (75 * (cptsend - 1)) & " et data = "
+                End If
+
+                If typeRead = "IW" Then
+                    dataMdbIW = ShowAsW(values)
+                    msg += " Debut IW" & adressReadIW + (75 * (cptsend - 1)) & " et data = "
+                End If
+
+                If typeRead = "MX" Then
+                    dataMdbMX = ShowAsB(values)
+                    msg += " Debut MX" & adressReadMX + (512 * (cptsend - 1)) & ".0 et data = "
+                    For i = 0 To values.Length - 1
+                        msg += CStr(values(i)) & "; "
+                    Next
+                End If
+
+                If typeRead = "IX" Then
+                    dataMdbIX = ShowAsB(values)
+                    msg += " Debut IX0.0 et data = "
+                    For i = 0 To values.Length - 1
+                        msg += CStr(values(i)) & "; "
+                    Next
+                    rcvIX = True
+                End If
+
                 For Each j As Object In listedevices
                     If j.Adresse1 <> "-1" And j.Adresse1 <> "" Then
-                        adresse = j.adresse1 - ((cptsend - 1) * 75) - 1
-                        If j.adresse1 > 75 * (cptsend - 1) And j.adresse1 <= 75 * cptsend Then
-                            msg += j.adresse1 & "=" & dataR(adresse) & " ; " & j.Value & " ;"
-                            If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
-                                If j.Refresh = 0 Then
-                                    j.Value = dataR(adresse)
+
+                        If j.modele = typeRead And j.Refresh = 0 Then
+
+                            If j.modele = "MW" Then
+                                adresse = j.adresse1 - ((cptsend - 1) * 75) - 1
+                                If j.adresse1 > 75 * (cptsend - 1) And j.adresse1 <= 75 * cptsend Then
+                                    msg += j.adresse1 & "=" & dataMdbMW(adresse) & " / " & j.Value & " ;"
+                                    If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
+                                        j.Value = dataMdbMW(adresse)
+                                    End If
+                                    If TypeOf j.Value Is Boolean And dataMdbMW(adresse) > -1 And dataMdbMW(adresse) < 2 Then
+                                        j.Value = CBool(dataMdbMW(adresse))
+                                    End If
                                 End If
                             End If
-                            If TypeOf j.Value Is Boolean And dataR(adresse) > -1 And dataR(adresse) < 2 Then
-                                If j.Refresh = 0 Then
-                                    j.Value = CBool(dataR(adresse))
+
+                            If j.modele = "IW" Then
+                                If j.adresse1 > 75 * (cptsend - 1) And j.adresse1 <= 75 * cptsend Then
+                                    msg += j.adresse1 & "=" & dataMdbIW(j.adresse1) & " / " & j.Value & " ;"
+                                    If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
+                                        j.Value = dataMdbIW(j.adresse1)
+                                    End If
+                                    If TypeOf j.Value Is Boolean And dataMdbIW(j.adresse1) > -1 And dataMdbIW(j.adresse1) < 2 Then
+                                        j.Value = CBool(dataMdbIW(j.adresse1))
+                                    End If
                                 End If
                             End If
-                            dataMdb(adresse) = dataR(adresse)
+
+                            If TypeOf j.Value Is Boolean Then
+                                If j.modele = "MX" Then
+                                    adresse = j.adresse1 - ((cptsend - 1) * 512) - 1
+                                    If j.adresse1 > 512 * (cptsend - 1) And j.adresse1 <= 512 * cptsend Then
+                                        msg += j.adresse1 & "=" & dataMdbMX(adresse) & " / " & j.Value & " ; "
+                                        j.Value = dataMdbMX(adresse)
+                                    End If
+                                End If
+                                If j.modele = "IX" Then
+                                    If j.adresse1 > 0 And j.adresse1 <= 512 Then
+                                        msg += j.adresse1 & "=" & dataMdbIX(j.adresse1) & " / " & j.Value & " ; "
+                                        j.Value = dataMdbIX(j.adresse1)
+                                    End If
+                                End If
+                            End If
+
                         End If
+
                     End If
                 Next
                 MemID = ID
@@ -981,7 +1227,7 @@ Imports System.Net.Sockets
     ' ------------------------------------------------------------------------
     ' Show values in selected way
     ' ------------------------------------------------------------------------
-    Private Function ShowAs(ByVal dataR() As Byte) As UInt16()
+    Private Function ShowAsW(ByVal dataR() As Byte) As UInt16()
 
         Dim word As UInt16() = New UInt16(0) {}
         Try
@@ -1000,6 +1246,37 @@ Imports System.Net.Sockets
             Return word
         Catch ex As Exception
             Return word
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Modbus slave exception", "ShowAs")
+        End Try
+    End Function
+
+    Private Function ShowAsB(ByVal dataR() As Byte) As Boolean()
+
+        Dim bool As Boolean() = New Boolean(0) {}
+        Try
+            ' Convert data to selected data type
+            If dataR.Length < 1 Then
+                Return Nothing
+                Exit Function
+            End If
+            bool = New Boolean(CInt(dataR.Length * 8 - 1)) {}
+            Dim x As Integer = 0
+
+            While x < dataR.Length
+                bool(CInt(x * 8)) = CType(dataR(x) And Hex(("&h" & 1)), Boolean)
+                bool(CInt(x * 8) + 1) = CType(dataR(x) And Hex(("&h" & 2)), Boolean)
+                bool(CInt(x * 8) + 2) = CType(dataR(x) And Hex(("&h" & 4)), Boolean)
+                bool(CInt(x * 8) + 3) = CType(dataR(x) And Hex(("&h" & 8)), Boolean)
+                bool(CInt(x * 8) + 4) = CType(dataR(x) And Hex(("&h" & 16)), Boolean)
+                bool(CInt(x * 8) + 5) = CType(dataR(x) And Hex(("&h" & 32)), Boolean)
+                bool(CInt(x * 8) + 6) = CType(dataR(x) And Hex(("&h" & 64)), Boolean)
+                bool(CInt(x * 8) + 7) = CType(dataR(x) And Hex(("&h" & 128)), Boolean)
+                x = x + 1
+            End While
+
+            Return bool
+        Catch ex As Exception
+            Return bool
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Modbus slave exception", "ShowAs")
         End Try
     End Function
