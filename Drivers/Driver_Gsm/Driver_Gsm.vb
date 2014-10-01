@@ -915,16 +915,17 @@ Imports System.Threading
                     ' avec un caractere de separation "," ou "-"
                     ' en attendant nous effectuons une verif de la chaine de caractère
                     ' reponse du modeme lors de AT+CMGF? : +CMGF: (x-x) , nous traiton le 10eme caractère
-
+                    ' +CMGF: (0-1)
                     ' MODES = result.Split(New Char() {","c})
 
 
-                    Dim charSeparators As Char = Mid(result, 10, 1)
+                    Dim charSeparators As String = Mid(result, 2, 1)
+
                     If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM Mode", "   * result " & result)
-                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM Mode", "   * Seperator: " & charSeparators)
+                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM Mode", "   * Seperator: " & charSeparators.ToString)
 
-                    MODES = result.Split(charSeparators)
-
+                    MODES = result.Split(charSeparators.ToString)
+                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "GSM Mode", "   * nb mode " & MODES.Length)
 
                     Dim SuportedMode As Boolean = False
                     For m = 0 To (MODES.Length - 1)
