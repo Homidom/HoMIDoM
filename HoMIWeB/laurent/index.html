@@ -8,7 +8,7 @@
 	<script type='text/javascript' src='js/jquery-1.11.0.min.js'></script>
 	<script type='text/javascript' src='js/knockout-3.1.0.js'></script>
 	<script type='text/javascript' src='js/jquery.jsonp-2.4.0.min.js' ></script>
-	<script type='text/javascript' src='js/jquery.signalR.min.js' ></script>
+	<script type='text/javascript' src='js/jquery.signalr.min.js' ></script>
    	<script type='text/javascript' src="js/menulogin.js"></script>  
 	
 	<!-- Include all compiled plugins (below), or include individual files as needed 
@@ -213,7 +213,7 @@
 <script>
 
 var ServerName = "";
-var PortActuel = ""; 
+var AdresseIPActuel = ""; 
 var PortActuel = "";	
 var IDSERVERActuel = "";
 var ListDevices = [];
@@ -254,45 +254,45 @@ $('[data-toggle="tooltip"]').tooltip();
 		$("#ZoneDate").append("<h3>Nous sommes le :</h3>");
 		$("#ZoneDate").append("<h2>"+d.toLocaleDateString().charAt(0).toUpperCase()+ d.toLocaleDateString().slice(1)+"</h2>");
 	
-		urlapi   = 'http://'+ AdresseIPActuel + ':'+ PortActuel + '/api/'+ IDSERVERActuel ;
+		urlapi   = 'http://'+ AdresseIPActuel + ':'+ PortActuel + '/api/'+ IDSERVERActuel;
 		console.log("debug : "+urlapi);
 		
 		var connection = $.hubConnection('http://'+ AdresseIPActuel + ':' + PortActuel + '/live');
 
-				var nHubProxy = connection.createHubProxy('NotificationHub');
-				// Gestion du changement d'un Device
-				nHubProxy.on('DeviceChanged', function (id, value) {
-					console.log(id + ' = ' + value);
-					var dName = getDeviceName(id, value);
-					var d = new Date(); 
-					var time = ("0" + (d.getHours())).slice(-2)+":"+("0" + (d.getMinutes())).slice(-2)+":"+("0" + (d.getSeconds())).slice(-2);
-					console.log("Info recue : "+time+' / '+dName+' = ' + value);
-					$('#events').prepend(time+' / '+dName+' = ' + value + '<br/>');
-				});
-				
-				// Gestion des heures de lever et coucher du Soleil
-				nHubProxy.on('HeureSoleilChanged', function (id, value) {
-								console.log(' Changement de l heure du soleil '+ id + ' = ' + value);
-				});
-							
-				nHubProxy.on('NewLog', function (TypLog,Source ,Fonction ,Message) {
-					console.log(' Nouveau log recu ' + TypLog + ' = ' + Source + ' = ' + Fonction + ' = ' + Message);
-					if (Fonction == 'MAJ_HeuresSoleil') {
-						 var tempval = Message.split(":");
-						 var TypeInfo = tempval[0];
-						 console.log('Info recue : '+ TypeInfo);
-						 switch (TypeInfo)
-						{
-							case 'Heure du lever ':
-								HeureLever(Message.substr(Message.length-9,9)) ;     
-							break;
-							
-							case 'Heure du coucher ':
-								HeureCoucher(Message.substr(Message.length-9,9));			
-							break;
-						}	
-					}
-				});			
+		var nHubProxy = connection.createHubProxy('NotificationHub');
+		// Gestion du changement d'un Device
+		nHubProxy.on('DeviceChanged', function (id, value) {
+			console.log(id + ' = ' + value);
+			var dName = getDeviceName(id, value);
+			var d = new Date(); 
+			var time = ("0" + (d.getHours())).slice(-2)+":"+("0" + (d.getMinutes())).slice(-2)+":"+("0" + (d.getSeconds())).slice(-2);
+			console.log("Info recue : "+time+' / '+dName+' = ' + value);
+			$('#events').prepend(time+' / '+dName+' = ' + value + '<br/>');
+		});
+		
+		// Gestion des heures de lever et coucher du Soleil
+		nHubProxy.on('HeureSoleilChanged', function (id, value) {
+						console.log(' Changement de l heure du soleil '+ id + ' = ' + value);
+		});
+					
+		nHubProxy.on('NewLog', function (TypLog,Source ,Fonction ,Message) {
+			console.log(' Nouveau log recu ' + TypLog + ' = ' + Source + ' = ' + Fonction + ' = ' + Message);
+			if (Fonction == 'MAJ_HeuresSoleil') {
+				 var tempval = Message.split(":");
+				 var TypeInfo = tempval[0];
+				 console.log('Info recue : '+ TypeInfo);
+				 switch (TypeInfo)
+				{
+					case 'Heure du lever ':
+						HeureLever(Message.substr(Message.length-9,9)) ;     
+					break;
+					
+					case 'Heure du coucher ':
+						HeureCoucher(Message.substr(Message.length-9,9));			
+					break;
+				}	
+			}
+		});			
 				
 		// Connexion sur la gestion des events -  en cas d'erreur de connexion 
 		connection.qs = { "sKey" : IDSERVERActuel };
