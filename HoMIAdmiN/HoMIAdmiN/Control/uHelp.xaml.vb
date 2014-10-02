@@ -104,6 +104,16 @@ Partial Public Class uHelp
                 _Texte &= listesversionsdrivers.Text & vbCrLf & vbCrLf
                 _Texte &= "Informations diverses: " & vbCrLf
                 _Texte &= listesdivers.Text & vbCrLf & vbCrLf & vbCrLf & vbCrLf
+
+                Dim ListeDevices As List(Of TemplateDevice) = myService.GetAllDevices(IdSrv)
+                If ListeDevices IsNot Nothing Then
+                    For Each Dev As TemplateDevice In ListeDevices
+                        Dim nomdriver As String = myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom
+                        _Texte &= "  - " & Dev.Name & " " & (nomdriver) & " Enable:" & Dev.Enable & " Type:" & Dev.Type.ToString & " ID:" & Dev.ID & " DateMaj" & Dev.LastChange & " Adresse:" & Dev.Adresse1 & " Modele:" & Dev.Modele & " Value:" & Dev.Value & " AllValue:" & Dev.AllValue & " Lastetat:" & Dev.LastEtat & " Lastchange:" & Dev.LastChange & vbCrLf
+                    Next
+                End If
+                _Texte &= "" & vbCrLf & vbCrLf & vbCrLf
+
                 _Texte &= "Logs: " & vbCrLf & myService.ReturnLog
 
                 'Envoi du mail
