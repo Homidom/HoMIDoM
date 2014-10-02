@@ -2306,16 +2306,20 @@ Namespace HoMIDom
                         End If
 
                         'écriture des variables
-                        For Each kvp As KeyValuePair(Of String, String) In _ListDevices.Item(i).Variables
-                            writer.WriteStartElement("var")
-                            writer.WriteStartAttribute("key")
-                            writer.WriteValue(kvp.Key)
-                            writer.WriteEndAttribute()
-                            writer.WriteStartAttribute("value")
-                            writer.WriteValue(kvp.Value)
-                            writer.WriteEndAttribute()
-                            writer.WriteEndElement()
-                        Next kvp
+                        If _ListDevices.Item(i).Variables IsNot Nothing Then
+                            For Each kvp As KeyValuePair(Of String, String) In _ListDevices.Item(i).Variables
+                                writer.WriteStartElement("var")
+                                writer.WriteStartAttribute("key")
+                                writer.WriteValue(kvp.Key)
+                                writer.WriteEndAttribute()
+                                writer.WriteStartAttribute("value")
+                                writer.WriteValue(kvp.Value)
+                                writer.WriteEndAttribute()
+                                writer.WriteEndElement()
+                            Next kvp
+                        End If
+
+
 
                         writer.WriteEndElement()
                     Catch ex As Exception
