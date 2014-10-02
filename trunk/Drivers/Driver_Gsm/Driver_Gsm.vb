@@ -322,7 +322,7 @@ Imports System.Threading
                 If Command = "" Then
                     Return False
                 Else
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & "ExecuteCommand", Command & " - " & Param(0))
+                    '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & "ExecuteCommand", Command & " - " & Param(0))
                     Write(MyDevice, Command, Param(0))
                     Return True
                 End If
