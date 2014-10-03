@@ -263,11 +263,6 @@ Imports System.Globalization
         End Get
         Set(ByVal value As Integer)
             _Refresh = value
-            If _Refresh > 0 Then
-                MyTimer.Interval = _Refresh
-                MyTimer.Enabled = True
-                AddHandler MyTimer.Elapsed, AddressOf TimerTick
-            End If
         End Set
     End Property
     Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
