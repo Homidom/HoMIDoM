@@ -464,7 +464,7 @@ Imports SKYPE4COMLib
             AddHandler oSkype.CallStatus, AddressOf CallStatus
 
             If _Refresh > 0 Then
-                MyTimer.Interval = Refresh
+                MyTimer.Interval = _Refresh * 1000
                 MyTimer.Enabled = True
                 AddHandler MyTimer.Elapsed, AddressOf TimerTick
             End If

@@ -55,7 +55,7 @@
                             <ComboBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtCom" Width="84" IsEditable="True">0</ComboBox>
                         </StackPanel>
                         <StackPanel Name="StkRefresh" Margin="0,0,10,0">
-                            <Label Foreground="White"  Name="Label9" VerticalAlignment="Top" HorizontalAlignment="Left">Refresh (ms):</Label>
+                            <Label Foreground="White"  Name="Label9" VerticalAlignment="Top" HorizontalAlignment="Left">Refresh (sec):</Label>
                             <TextBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtRefresh" HorizontalAlignment="Right" Width="84">0</TextBox>
                          </StackPanel>
                         <StackPanel Name="StkVersion" Margin="0,0,10,0">

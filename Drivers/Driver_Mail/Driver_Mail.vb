@@ -466,7 +466,7 @@ Imports S22.Imap
             If _IsConnect Then
 
                 If _Refresh > 0 Then
-                    Me.MyTimer.Interval = Refresh
+                    Me.MyTimer.Interval = _Refresh * 1000
                     Me.MyTimer.Enabled = True
                     AddHandler Me.MyTimer.Elapsed, AddressOf Me.TimerTick
                 End If
