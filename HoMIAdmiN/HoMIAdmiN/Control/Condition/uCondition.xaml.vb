@@ -12,6 +12,8 @@ Public Class uCondition
     Dim MyMenuItem As New MenuItem
     Dim mycontextmnu As New ContextMenu
 
+    Dim ListeDevices As List(Of TemplateDevice)
+
     Public Event DeleteCondition(ByVal uid As String)
     Public Event UpCondition(ByVal uid As String)
 
@@ -28,7 +30,7 @@ Public Class uCondition
                         StkDevice.Visibility = Visibility.Hidden
                         StkDevice.Children.Clear()
                     Case Action.TypeCondition.Device
-                        LblTitre.Content &= " Device"
+                        LblTitre.Content &= " Composant"
                         StkTime.Visibility = Visibility.Hidden
                         StkTime.Children.Clear()
                 End Select
@@ -198,21 +200,7 @@ Public Class uCondition
         Set(ByVal value As Object)
             Try
                 _Value = value
-
-                If value.ToString.StartsWith("<") And value.ToString.EndsWith(">") Then
-                    Dim a() As String = value.ToString.Split("|")
-                    If a.Length = 3 Then
-                        TxtValue.Tag = value
-                        TxtValue.Text = a(1) & "." & Mid(a(2), 1, Len(a(2)) - 1)
-                        TxtValue.ToolTip = "Veuillez passer par le menu via le clic droit pour changer le device ou sa propriété"
-                    Else
-                        TxtValue.Text = value
-                        TxtValue.Tag = ""
-                    End If
-                Else
-                    TxtValue.Text = value
-                    TxtValue.Tag = ""
-                End If
+                TxtValue.Text = value.ToString
             Catch ex As Exception
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uCondition Value: " & ex.ToString, "ERREUR", "")
             End Try
@@ -232,11 +220,15 @@ Public Class uCondition
             If CbDevice.SelectedIndex < 0 Then Exit Sub
 
             CbPropertyDevice.Items.Clear()
-            Select Case myService.GetAllDevices(IdSrv).Item(CbDevice.SelectedIndex).Type
+
+            'Select Case myService.GetAllDevices(IdSrv).Item(CbDevice.SelectedIndex).Type
+            Select Case ListeDevices.Item(CbDevice.SelectedIndex).Type
                 Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
                     CbPropertyDevice.Items.Add("Value")
+                    CbPropertyDevice.SelectedIndex = 0
                 Case 17
                     CbPropertyDevice.Items.Add("Value")
+                    CbPropertyDevice.SelectedIndex = 0
                     CbPropertyDevice.Items.Add("ConditionActuel")
                     CbPropertyDevice.Items.Add("TemperatureActuel")
                     CbPropertyDevice.Items.Add("HumiditeActuel")
@@ -275,139 +267,175 @@ Public Class uCondition
         InitializeComponent()
 
         Try
-
-            ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-            CbDevice.ItemsSource = myService.GetAllDevices(IdSrv)
+            ListeDevices = myService.GetAllDevices(IdSrv)
+            CbDevice.ItemsSource = ListeDevices
             CbDevice.DisplayMemberPath = "Name"
 
-            For Each _dev As TemplateDevice In myService.GetAllDevices(IdSrv)
-                Dim x As New MenuItem
-                x.Header = _dev.Name
-                x.Uid = _dev.ID
-
-                Select Case _dev.Type
-                    Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
-                        Dim y As New MenuItem
-                        y.Header = "Value"
-                        y.Uid = _dev.ID
-                        AddHandler y.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y)
-                    Case 17
-                        Dim y0 As New MenuItem
-                        y0.Header = ("Value")
-                        y0.Uid = _dev.ID
-                        AddHandler y0.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y0)
-                        Dim y1 As New MenuItem
-                        y1.Header = ("ConditionActuel")
-                        y1.Uid = _dev.ID
-                        AddHandler y1.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y1)
-                        Dim y2 As New MenuItem
-                        y2.Header = ("TemperatureActuel")
-                        y2.Uid = _dev.ID
-                        AddHandler y2.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y2)
-                        Dim y3 As New MenuItem
-                        y3.Header = ("HumiditeActuel")
-                        y3.Uid = _dev.ID
-                        AddHandler y3.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y3)
-                        Dim y4 As New MenuItem
-                        y4.Header = ("VentActuel")
-                        y4.Uid = _dev.ID
-                        AddHandler y4.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y4)
-                        Dim y5 As New MenuItem
-                        y5.Header = ("JourToday")
-                        y5.Uid = _dev.ID
-                        AddHandler y5.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y5)
-                        Dim y6 As New MenuItem
-                        y6.Header = ("MinToday")
-                        y6.Uid = _dev.ID
-                        AddHandler y6.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y6)
-                        Dim y7 As New MenuItem
-                        y7.Header = ("MaxToday")
-                        y7.Uid = _dev.ID
-                        AddHandler y7.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y7)
-                        Dim y8 As New MenuItem
-                        y8.Header = ("ConditionToday")
-                        y8.Uid = _dev.ID
-                        AddHandler y8.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y8)
-                        Dim y9 As New MenuItem
-                        y9.Header = ("JourJ1")
-                        y9.Uid = _dev.ID
-                        AddHandler y9.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y9)
-                        Dim y10 As New MenuItem
-                        y10.Header = ("MinJ1")
-                        y10.Uid = _dev.ID
-                        AddHandler y10.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y10)
-                        Dim y11 As New MenuItem
-                        y11.Header = ("MaxJ1")
-                        y11.Uid = _dev.ID
-                        AddHandler y11.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y11)
-                        Dim y12 As New MenuItem
-                        y12.Header = ("ConditionJ1")
-                        y12.Uid = _dev.ID
-                        AddHandler y12.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y12)
-                        Dim y13 As New MenuItem
-                        y13.Header = ("JourJ2")
-                        y13.Uid = _dev.ID
-                        AddHandler y13.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y13)
-                        Dim y14 As New MenuItem
-                        y14.Header = ("MinJ2")
-                        y14.Uid = _dev.ID
-                        AddHandler y14.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y14)
-                        Dim y15 As New MenuItem
-                        y15.Header = ("MaxJ2")
-                        y15.Uid = _dev.ID
-                        AddHandler y15.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y15)
-                        Dim y16 As New MenuItem
-                        y16.Header = ("ConditionJ2")
-                        y16.Uid = _dev.ID
-                        AddHandler y16.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y16)
-                        Dim y17 As New MenuItem
-                        y17.Header = ("JourJ3")
-                        y17.Uid = _dev.ID
-                        AddHandler y17.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y17)
-                        Dim y18 As New MenuItem
-                        y18.Header = ("MinJ3")
-                        y18.Uid = _dev.ID
-                        AddHandler y18.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y18)
-                        Dim y19 As New MenuItem
-                        y19.Header = ("MaxJ3")
-                        y19.Uid = _dev.ID
-                        AddHandler y19.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y19)
-                        Dim y20 As New MenuItem
-                        y20.Header = ("ConditionJ3")
-                        y20.Uid = _dev.ID
-                        AddHandler y20.Click, AddressOf MenuItemDev_Click
-                        x.Items.Add(y20)
-
-                End Select
-                mycontextmnu.Items.Add(x)
-            Next
+            Dim y98 As New MenuItem
+            y98.Header = "Effectuer un calcul"
+            y98.Uid = "CALCUL"
+            AddHandler y98.Click, AddressOf MenuItemDev_Click
+            mycontextmnu.Items.Add(y98)
 
             Dim y99 As New MenuItem
             y99.Header = "Effacer la valeur"
             y99.Uid = "delete99"
             AddHandler y99.Click, AddressOf MenuItemDev_Click
             mycontextmnu.Items.Add(y99)
+
+            For Each _dev As TemplateDevice In ListeDevices
+                Dim x As New MenuItem
+                x.Header = _dev.Name
+                x.Uid = _dev.ID
+
+                Select Case _dev.Type
+                    Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
+                        'Dim y As New MenuItem
+                        'y.Header = "Value"
+                        'y.Uid = _dev.ID
+                        'AddHandler y.Click, AddressOf MenuItemDev_Click
+                        'x.Items.Add(y)
+                        AddHandler x.Click, AddressOf MenuItemDev_Click
+                    Case 17
+                        Dim y0 As New MenuItem
+                        y0.Header = ("Value")
+                        y0.Uid = "SubItem"
+                        AddHandler y0.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y0)
+                        Dim y1 As New MenuItem
+                        y1.Header = ("ConditionActuel")
+                        y1.Uid = "SubItem"
+                        AddHandler y1.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y1)
+                        Dim y2 As New MenuItem
+                        y2.Header = ("TemperatureActuel")
+                        y2.Uid = "SubItem"
+                        AddHandler y2.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y2)
+                        Dim y3 As New MenuItem
+                        y3.Header = ("HumiditeActuel")
+                        y3.Uid = "SubItem"
+                        AddHandler y3.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y3)
+                        Dim y4 As New MenuItem
+                        y4.Header = ("VentActuel")
+                        y4.Uid = "SubItem"
+                        AddHandler y4.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y4)
+                        Dim y5 As New MenuItem
+                        y5.Header = ("JourToday")
+                        y5.Uid = "SubItem"
+                        AddHandler y5.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y5)
+                        Dim y6 As New MenuItem
+                        y6.Header = ("MinToday")
+                        y6.Uid = "SubItem"
+                        AddHandler y6.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y6)
+                        Dim y7 As New MenuItem
+                        y7.Header = ("MaxToday")
+                        y7.Uid = "SubItem"
+                        AddHandler y7.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y7)
+                        Dim y8 As New MenuItem
+                        y8.Header = ("ConditionToday")
+                        y8.Uid = "SubItem"
+                        AddHandler y8.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y8)
+                        Dim y9 As New MenuItem
+                        y9.Header = ("JourJ1")
+                        y9.Uid = "SubItem"
+                        AddHandler y9.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y9)
+                        Dim y10 As New MenuItem
+                        y10.Header = ("MinJ1")
+                        y10.Uid = "SubItem"
+                        AddHandler y10.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y10)
+                        Dim y11 As New MenuItem
+                        y11.Header = ("MaxJ1")
+                        y11.Uid = "SubItem"
+                        AddHandler y11.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y11)
+                        Dim y12 As New MenuItem
+                        y12.Header = ("ConditionJ1")
+                        y12.Uid = "SubItem"
+                        AddHandler y12.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y12)
+                        Dim y13 As New MenuItem
+                        y13.Header = ("JourJ2")
+                        y13.Uid = "SubItem"
+                        AddHandler y13.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y13)
+                        Dim y14 As New MenuItem
+                        y14.Header = ("MinJ2")
+                        y14.Uid = "SubItem"
+                        AddHandler y14.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y14)
+                        Dim y15 As New MenuItem
+                        y15.Header = ("MaxJ2")
+                        y15.Uid = "SubItem"
+                        AddHandler y15.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y15)
+                        Dim y16 As New MenuItem
+                        y16.Header = ("ConditionJ2")
+                        y16.Uid = "SubItem"
+                        AddHandler y16.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y16)
+                        Dim y17 As New MenuItem
+                        y17.Header = ("JourJ3")
+                        y17.Uid = "SubItem"
+                        AddHandler y17.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y17)
+                        Dim y18 As New MenuItem
+                        y18.Header = ("MinJ3")
+                        y18.Uid = "SubItem"
+                        AddHandler y18.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y18)
+                        Dim y19 As New MenuItem
+                        y19.Header = ("MaxJ3")
+                        y19.Uid = "SubItem"
+                        AddHandler y19.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y19)
+                        Dim y20 As New MenuItem
+                        y20.Header = ("ConditionJ3")
+                        y20.Uid = "SubItem"
+                        AddHandler y20.Click, AddressOf MenuItemDev_Click
+                        x.Items.Add(y20)
+
+                End Select
+                mycontextmnu.Items.Add(x)
+            Next
+            Dim S1 As New MenuItem
+            S1.Header = "SYSTEM_DATE"
+            S1.Uid = "SYSTEM"
+            AddHandler S1.Click, AddressOf MenuItemDev_Click
+            mycontextmnu.Items.Add(S1)
+            Dim S2 As New MenuItem
+            S2.Header = "SYSTEM_LONG_DATE"
+            S2.Uid = "SYSTEM"
+            AddHandler S2.Click, AddressOf MenuItemDev_Click
+            mycontextmnu.Items.Add(S2)
+            Dim S3 As New MenuItem
+            S3.Header = "SYSTEM_TIME"
+            S3.Uid = "SYSTEM"
+            AddHandler S3.Click, AddressOf MenuItemDev_Click
+            mycontextmnu.Items.Add(S3)
+            Dim S4 As New MenuItem
+            S4.Header = "SYSTEM_LONG_TIME"
+            S4.Uid = "SYSTEM"
+            AddHandler S4.Click, AddressOf MenuItemDev_Click
+            mycontextmnu.Items.Add(S4)
+            Dim S5 As New MenuItem
+            S5.Header = "SYSTEM_SOLEIL_COUCHE"
+            S5.Uid = "SYSTEM"
+            AddHandler S4.Click, AddressOf MenuItemDev_Click
+            mycontextmnu.Items.Add(S5)
+            Dim S6 As New MenuItem
+            S6.Header = "SYSTEM_SOLEIL_LEVE"
+            S6.Uid = "SYSTEM"
+            AddHandler S6.Click, AddressOf MenuItemDev_Click
+            mycontextmnu.Items.Add(S6)
 
             TxtValue.ContextMenu = mycontextmnu
 
@@ -418,15 +446,19 @@ Public Class uCondition
 
     Private Sub MenuItemDev_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
         Try
+            'TxtValue.ToolTip = "Veuillez passer par le menu via le clic droit pour changer le composant ou sa propriété"
             If sender.uid = "delete99" Then
                 TxtValue.Text = ""
-                TxtValue.Tag = ""
-                TxtValue.ToolTip = ""
+                'TxtValue.ToolTip = ""
+            ElseIf sender.uid = "CALCUL" Then
+                TxtValue.Text = TxtValue.Text & "{formule à calculer}"
+            ElseIf sender.uid = "SYSTEM" Then
+                TxtValue.Text = TxtValue.Text & "<" & sender.header & ">"
+            ElseIf sender.uid = "SubItem" Then
+                TxtValue.Text = TxtValue.Text & "<" & sender.parent.header & "." & sender.header & ">"
             Else
-                TxtValue.Text = sender.parent.header & "." & sender.header
-                TxtValue.Tag = "<" & sender.uid & "|" & sender.parent.header & "|" & sender.header & ">"
-                TxtValue.ToolTip = "Veuillez passer par le menu via le clic droit pour changer le device ou sa propriété"
-            End If
+                TxtValue.Text = TxtValue.Text & "<" & sender.header & ">"
+           End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: uCondition_MenuItemDev_Click" & ex.ToString)
         End Try
@@ -536,18 +568,11 @@ Public Class uCondition
                 _Signe = CbSigne1.SelectedIndex
             Else
                 If CbDevice.SelectedIndex >= 0 Then
-                    _IdDevice = myService.GetAllDevices(IdSrv).Item(CbDevice.SelectedIndex).ID
+                    '_IdDevice = myService.GetAllDevices(IdSrv).Item(CbDevice.SelectedIndex).ID
+                    _IdDevice = ListeDevices.Item(CbDevice.SelectedIndex).ID
                     _PropertyDevice = CbPropertyDevice.Text
                     _Signe = CbSigne2.SelectedIndex
-                    If TxtValue.Tag IsNot Nothing Then
-                        If String.IsNullOrEmpty(TxtValue.Tag.ToString) = True Then
-                            _Value = TxtValue.Text
-                        Else
-                            _Value = TxtValue.Tag
-                        End If
-                    Else
-                        _Value = TxtValue.Text
-                    End If
+                    _Value = TxtValue.Text
 
                 End If
             End If
@@ -559,7 +584,8 @@ Public Class uCondition
     Private Sub CbDevice_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbDevice.SelectionChanged
         Try
             CbPropertyDevice.Items.Clear()
-            Select Case myService.GetAllDevices(IdSrv).Item(CbDevice.SelectedIndex).Type
+            'Select Case myService.GetAllDevices(IdSrv).Item(CbDevice.SelectedIndex).Type
+            Select Case ListeDevices.Item(CbDevice.SelectedIndex).Type
                 Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
                     CbPropertyDevice.Items.Add("Value")
                 Case 17
@@ -940,123 +966,126 @@ Public Class uCondition
 
         Try
             If String.IsNullOrEmpty(CbDevice.Text) = False And String.IsNullOrEmpty(CbPropertyDevice.Text) = False And String.IsNullOrEmpty(TxtValue.Text) = False Then
-                Dim _ID As String = myService.GetAllDevices(IdSrv).Item(CbDevice.SelectedIndex).ID
+                'Dim _ID As String = myService.GetAllDevices(IdSrv).Item(CbDevice.SelectedIndex).ID
+                Dim _ID As String = ListeDevices.Item(CbDevice.SelectedIndex).ID
                 Dim _type As String = myService.TypeOfPropertyOfDevice(_ID, CbPropertyDevice.Text)
                 Dim _obj As Object = Nothing
 
-                If TxtValue.Tag IsNot Nothing Then
-                    If String.IsNullOrEmpty(TxtValue.Tag.ToString) = False Then
-                        If TxtValue.Tag.ToString.StartsWith("<") And TxtValue.Tag.ToString.EndsWith(">") And (TxtValue.Tag.ToString.Replace("|", ".").Contains(TxtValue.Text) Or TxtValue.Text.Contains(".")) Then
-                            Exit Sub
-                        End If
-                    End If
-                End If
+                'If TxtValue.Tag IsNot Nothing Then
+                '    If String.IsNullOrEmpty(TxtValue.Tag.ToString) = False Then
+                '        If TxtValue.Tag.ToString.StartsWith("<") And TxtValue.Tag.ToString.EndsWith(">") And (TxtValue.Tag.ToString.Replace("|", ".").Contains(TxtValue.Text) Or TxtValue.Text.Contains(".")) Then
+                '            Exit Sub
+                '        End If
+                '    End If
+                'End If
+                If (TxtValue.Text.IndexOf("<") < 0 And TxtValue.Text.IndexOf("{") < 0) Then 'si ce n'est pas un champ calculé
 
-                If String.IsNullOrEmpty(_type) = False Then
-                    Select Case _type
-                        Case "string"
-                            Try
-                                _obj = CStr(TxtValue.Text)
-                            Catch ex As Exception
-                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type String !!", "Erreur", "TxtValue.Changed")
-                                TxtValue.Text = ""
-                                _flag = True
-                            End Try
-                        Case "boolean"
-                            Try
-                                If IsNumeric(TxtValue.Text) Then
-                                    If CInt(TxtValue.Text) <= 0 Then TxtValue.Text = 0
-                                    If CInt(TxtValue.Text) > 0 Then TxtValue.Text = 1
-                                End If
-                                _obj = CBool(TxtValue.Text)
-                            Catch ex As Exception
-                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Boolean (0 pour False et 1 pour True)!!", "Erreur", "TxtValue.TextChanged")
-                                TxtValue.Text = 0
-                                _flag = True
-                            End Try
-                        Case "byte"
-                            Try
-                                _obj = CByte(TxtValue.Text)
-                            Catch ex As Exception
-                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Byte !!", "Erreur", "TxtValue.TextChanged")
-                                TxtValue.Text = 0
-                                _flag = True
-                            End Try
-                        Case "char"
-                            Try
-                                _obj = CChar(TxtValue.Text)
-                            Catch ex As Exception
-                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Char !!", "Erreur", "TxtValue.TextChanged")
-                                TxtValue.Text = ""
-                                _flag = True
-                            End Try
-                        Case "datetime"
-                            Try
-                                _obj = CDate(TxtValue.Text)
-                            Catch ex As Exception
-                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type DateTime !!", "Erreur", "TxtValue.TextChanged")
-                                TxtValue.Text = ""
-                                _flag = True
-                            End Try
-                        Case "decimal"
-                            Try
-                                _obj = CDec(TxtValue.Text)
-                            Catch ex As Exception
-                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Decimal !!", "Erreur", "TxtValue.TextChanged")
-                                TxtValue.Text = 0
-                                _flag = True
-                            End Try
-                        Case "double"
-                            Try
-                                'pas de check pour permettre de saisir <componom.value> et des formulres
-                                '_obj = CDbl(TxtValue.Text)
-                            Catch ex As Exception
-                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Double !!", "Erreur", "TxtValue.TextChanged")
-                                TxtValue.Text = "0"
-                                _flag = True
-                            End Try
-                        Case "integer"
-                            Try
-                                _obj = CInt(TxtValue.Text)
-                            Catch ex As Exception
-                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Integer !!", "Erreur", "TxtValue.TextChanged")
-                                TxtValue.Text = "0"
-                                _flag = True
-                            End Try
-                        Case "int16"
-                            Try
-                                _obj = CInt(TxtValue.Text)
-                            Catch ex As Exception
-                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Integer !!", "Erreur", "TxtValue.TextChanged")
-                                TxtValue.Text = "0"
-                                _flag = True
-                            End Try
-                        Case "int32"
-                            Try
-                                _obj = CInt(TxtValue.Text)
-                            Catch ex As Exception
-                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Integer !!", "Erreur", "TxtValue.TextChanged")
-                                TxtValue.Text = "0"
-                                _flag = True
-                            End Try
-                        Case "int64"
-                            Try
-                                _obj = CInt(TxtValue.Text)
-                            Catch ex As Exception
-                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Integer !!", "Erreur", "TxtValue.TextChanged")
-                                TxtValue.Text = "0"
-                                _flag = True
-                            End Try
-                        Case "single"
-                            Try
-                                _obj = CSng(TxtValue.Text)
-                            Catch ex As Exception
-                                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Single !!", "Erreur", "TxtValue.TextChanged")
-                                TxtValue.Text = "0"
-                                _flag = True
-                            End Try
-                    End Select
-                    TxtValue.Tag = ""
+                    If String.IsNullOrEmpty(_type) = False Then
+                        Select Case _type
+                            Case "string"
+                                Try
+                                    _obj = CStr(TxtValue.Text)
+                                Catch ex As Exception
+                                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type String !!", "Erreur", "TxtValue.Changed")
+                                    TxtValue.Text = ""
+                                    _flag = True
+                                End Try
+                            Case "boolean"
+                                Try
+                                    If IsNumeric(TxtValue.Text) Then
+                                        If CInt(TxtValue.Text) <= 0 Then TxtValue.Text = 0
+                                        If CInt(TxtValue.Text) > 0 Then TxtValue.Text = 1
+                                    End If
+                                    _obj = CBool(TxtValue.Text)
+                                Catch ex As Exception
+                                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Boolean (0 pour False et 1 pour True)!!", "Erreur", "TxtValue.TextChanged")
+                                    TxtValue.Text = 0
+                                    _flag = True
+                                End Try
+                            Case "byte"
+                                Try
+                                    _obj = CByte(TxtValue.Text)
+                                Catch ex As Exception
+                                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Byte !!", "Erreur", "TxtValue.TextChanged")
+                                    TxtValue.Text = 0
+                                    _flag = True
+                                End Try
+                            Case "char"
+                                Try
+                                    _obj = CChar(TxtValue.Text)
+                                Catch ex As Exception
+                                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Char !!", "Erreur", "TxtValue.TextChanged")
+                                    TxtValue.Text = ""
+                                    _flag = True
+                                End Try
+                            Case "datetime"
+                                Try
+                                    _obj = CDate(TxtValue.Text)
+                                Catch ex As Exception
+                                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type DateTime !!", "Erreur", "TxtValue.TextChanged")
+                                    TxtValue.Text = ""
+                                    _flag = True
+                                End Try
+                            Case "decimal"
+                                Try
+                                    _obj = CDec(TxtValue.Text)
+                                Catch ex As Exception
+                                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Decimal !!", "Erreur", "TxtValue.TextChanged")
+                                    TxtValue.Text = 0
+                                    _flag = True
+                                End Try
+                            Case "double"
+                                Try
+                                    'pas de check pour permettre de saisir <componom.value> et des formulres
+                                    '_obj = CDbl(TxtValue.Text)
+                                Catch ex As Exception
+                                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Double !!", "Erreur", "TxtValue.TextChanged")
+                                    TxtValue.Text = "0"
+                                    _flag = True
+                                End Try
+                            Case "integer"
+                                Try
+                                    _obj = CInt(TxtValue.Text)
+                                Catch ex As Exception
+                                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Integer !!", "Erreur", "TxtValue.TextChanged")
+                                    TxtValue.Text = "0"
+                                    _flag = True
+                                End Try
+                            Case "int16"
+                                Try
+                                    _obj = CInt(TxtValue.Text)
+                                Catch ex As Exception
+                                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Integer !!", "Erreur", "TxtValue.TextChanged")
+                                    TxtValue.Text = "0"
+                                    _flag = True
+                                End Try
+                            Case "int32"
+                                Try
+                                    _obj = CInt(TxtValue.Text)
+                                Catch ex As Exception
+                                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Integer !!", "Erreur", "TxtValue.TextChanged")
+                                    TxtValue.Text = "0"
+                                    _flag = True
+                                End Try
+                            Case "int64"
+                                Try
+                                    _obj = CInt(TxtValue.Text)
+                                Catch ex As Exception
+                                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Integer !!", "Erreur", "TxtValue.TextChanged")
+                                    TxtValue.Text = "0"
+                                    _flag = True
+                                End Try
+                            Case "single"
+                                Try
+                                    _obj = CSng(TxtValue.Text)
+                                Catch ex As Exception
+                                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.MESSAGE, "Veuillez saisir un type Single !!", "Erreur", "TxtValue.TextChanged")
+                                    TxtValue.Text = "0"
+                                    _flag = True
+                                End Try
+                        End Select
+                        'TxtValue.Tag = ""
+                    End If
                 End If
             End If
         Catch ex As Exception
@@ -1064,9 +1093,4 @@ Public Class uCondition
         End Try
     End Sub
 
-    Private Sub BtnDeleteBalise_MouseDown(sender As System.Object, e As System.Windows.Input.MouseButtonEventArgs) Handles BtnDeleteBalise.MouseDown
-        TxtValue.Text = ""
-        TxtValue.Tag = ""
-        TxtValue.ToolTip = ""
-    End Sub
 End Class
