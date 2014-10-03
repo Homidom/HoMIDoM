@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-              d:DesignWidth="589" Margin="5" Background="Gray">
+              d:DesignWidth="580" Margin="5" Background="Gray">
 
         <Grid>
         <StackPanel Orientation="Vertical">
@@ -119,11 +119,9 @@
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Name="StkDevice">
-                <Label Content="Composant:" Foreground="White" />
-                <ComboBox Height="23" Name="CbDevice" Width="163" BorderThickness="2" Background="DarkGray" BorderBrush="Black" />
-                <Label Content="Propriété:" Foreground="White" />
-                <ComboBox Name="CbPropertyDevice" Width="118" Height="23" BorderThickness="2" Background="DarkGray" BorderBrush="Black" />
-                <ComboBox Name="CbSigne2" SelectedIndex="0" Margin="3" Height="22" BorderThickness="2" Background="DarkGray" BorderBrush="Black" >
+                <ComboBox Height="23" Name="CbDevice" Width="155" BorderThickness="2" Background="DarkGray" BorderBrush="Black" Margin="3,0,0,0" ToolTip="Componsant" />
+                <ComboBox Name="CbPropertyDevice" Width="100" Height="23" BorderThickness="2" Background="DarkGray" BorderBrush="Black" Margin="3,0,0,0" ToolTip="Propriété" />
+                <ComboBox Name="CbSigne2" SelectedIndex="0" Width="45" Margin="3,0,0,0" Height="23" BorderThickness="2" Background="DarkGray" BorderBrush="Black" ToolTip="Signe">
                     <ComboBoxItem Content="=" />
                     <ComboBoxItem Content="&lt;" />
                     <ComboBoxItem Content="&lt;=" />
@@ -131,8 +129,7 @@
                     <ComboBoxItem Content="&gt;=" />
                     <ComboBoxItem Content="&lt;&gt;" />
                 </ComboBox>
-                <TextBox Name="TxtValue" Width="113" Height="20" BorderThickness="2" Background="DarkGray" BorderBrush="Black" Foreground="White" ToolTip="Renseigner une valeur correspondant au composant. Il est possible pour les doubles d'utiliser '&lt;composantnom&gt;*3.5'." />
-                <Image Name="BtnDeleteBalise" Height="20" Width="20" Source="/HoMIAdmiN;component/Images/clear-left.png" ToolTip="Effacer" />
+                <TextBox Name="TxtValue" Width="265" Height="23" BorderThickness="2" Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="3,0,0,0" ToolTip="Renseigner une valeur correspondant au composant. Calcul et valeur de composant possible '&lt;composantnom&gt;' '{&lt;composantnom&gt;*3}'. Menu disponible via Click-droit" />
             </StackPanel> 
         </StackPanel>
     </Grid>
