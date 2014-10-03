@@ -2530,9 +2530,12 @@ Namespace HoMIDom
                             writer.WriteValue(ListActions.Item(j).Method)
                             writer.WriteEndAttribute()
                             Dim a As String = ""
-                            For k As Integer = 0 To ListActions.Item(j).parametres.count - 1
-                                a = a & ListActions.Item(j).parametres.item(k) & "|"
-                            Next
+                            If ListActions.Item(j).parametres.count > 0 Then
+                                a = a & ListActions.Item(j).parametres.item(0)
+                                For k As Integer = 1 To ListActions.Item(j).parametres.count - 1
+                                    a = a & "|" & ListActions.Item(j).parametres.item(k)
+                                Next
+                            End If
                             writer.WriteStartAttribute("parametres")
                             writer.WriteValue(a)
                             writer.WriteEndAttribute()
@@ -2544,9 +2547,12 @@ Namespace HoMIDom
                             writer.WriteValue(ListActions.Item(j).Method)
                             writer.WriteEndAttribute()
                             Dim a As String = ""
-                            For k As Integer = 0 To ListActions.Item(j).parametres.count - 1
-                                a = a & ListActions.Item(j).parametres.item(k) & "|"
-                            Next
+                            If ListActions.Item(j).parametres.count > 0 Then
+                                a = a & ListActions.Item(j).parametres.item(0)
+                                For k As Integer = 1 To ListActions.Item(j).parametres.count - 1
+                                    a = a & "|" & ListActions.Item(j).parametres.item(k)
+                                Next
+                            End If
                             writer.WriteStartAttribute("parametres")
                             writer.WriteValue(a)
                             writer.WriteEndAttribute()
