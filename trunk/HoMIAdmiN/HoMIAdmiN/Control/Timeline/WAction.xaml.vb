@@ -4,6 +4,9 @@ Public Class WActionParametrage
     Dim _ObjAction As Object = Nothing
     Public _Parametres As New ArrayList
     Dim _ListuConditions As New List(Of uCondition)
+    Dim mycontextmnu As New ContextMenu
+    Dim mycontextmnu2 As New ContextMenu
+    Dim ListeDevices As List(Of TemplateDevice)
 
     Public Property ObjAction As Object
         Get
@@ -244,6 +247,336 @@ Public Class WActionParametrage
                 _typ = _ObjAction.TypeAction
 
                 TabControl1.Visibility = Windows.Visibility.Collapsed
+
+                'creation du menu Click droit
+                ListeDevices = myService.GetAllDevices(IdSrv)
+                Dim y98 As New MenuItem
+                y98.Header = "Effectuer un calcul"
+                y98.Uid = "CALCUL"
+                AddHandler y98.Click, AddressOf MenuItemDev_Click
+                mycontextmnu.Items.Add(y98)
+                Dim y99 As New MenuItem
+                y99.Header = "Effacer la valeur"
+                y99.Uid = "delete99"
+                AddHandler y99.Click, AddressOf MenuItemDev_Click
+                mycontextmnu.Items.Add(y99)
+                For Each _dev As TemplateDevice In ListeDevices
+                    Dim x As New MenuItem
+                    x.Header = _dev.Name
+                    x.Uid = _dev.ID
+                    Select Case _dev.Type
+                        Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
+                            'Dim y As New MenuItem
+                            'y.Header = "Value"
+                            'y.Uid = _dev.ID
+                            'AddHandler y.Click, AddressOf MenuItemDev_Click
+                            'x.Items.Add(y)
+                            AddHandler x.Click, AddressOf MenuItemDev_Click
+                        Case 17
+                            Dim y0 As New MenuItem
+                            y0.Header = ("Value")
+                            y0.Uid = "SubItem"
+                            AddHandler y0.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y0)
+                            Dim y1 As New MenuItem
+                            y1.Header = ("ConditionActuel")
+                            y1.Uid = "SubItem"
+                            AddHandler y1.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y1)
+                            Dim y2 As New MenuItem
+                            y2.Header = ("TemperatureActuel")
+                            y2.Uid = "SubItem"
+                            AddHandler y2.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y2)
+                            Dim y3 As New MenuItem
+                            y3.Header = ("HumiditeActuel")
+                            y3.Uid = "SubItem"
+                            AddHandler y3.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y3)
+                            Dim y4 As New MenuItem
+                            y4.Header = ("VentActuel")
+                            y4.Uid = "SubItem"
+                            AddHandler y4.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y4)
+                            Dim y5 As New MenuItem
+                            y5.Header = ("JourToday")
+                            y5.Uid = "SubItem"
+                            AddHandler y5.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y5)
+                            Dim y6 As New MenuItem
+                            y6.Header = ("MinToday")
+                            y6.Uid = "SubItem"
+                            AddHandler y6.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y6)
+                            Dim y7 As New MenuItem
+                            y7.Header = ("MaxToday")
+                            y7.Uid = "SubItem"
+                            AddHandler y7.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y7)
+                            Dim y8 As New MenuItem
+                            y8.Header = ("ConditionToday")
+                            y8.Uid = "SubItem"
+                            AddHandler y8.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y8)
+                            Dim y9 As New MenuItem
+                            y9.Header = ("JourJ1")
+                            y9.Uid = "SubItem"
+                            AddHandler y9.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y9)
+                            Dim y10 As New MenuItem
+                            y10.Header = ("MinJ1")
+                            y10.Uid = "SubItem"
+                            AddHandler y10.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y10)
+                            Dim y11 As New MenuItem
+                            y11.Header = ("MaxJ1")
+                            y11.Uid = "SubItem"
+                            AddHandler y11.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y11)
+                            Dim y12 As New MenuItem
+                            y12.Header = ("ConditionJ1")
+                            y12.Uid = "SubItem"
+                            AddHandler y12.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y12)
+                            Dim y13 As New MenuItem
+                            y13.Header = ("JourJ2")
+                            y13.Uid = "SubItem"
+                            AddHandler y13.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y13)
+                            Dim y14 As New MenuItem
+                            y14.Header = ("MinJ2")
+                            y14.Uid = "SubItem"
+                            AddHandler y14.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y14)
+                            Dim y15 As New MenuItem
+                            y15.Header = ("MaxJ2")
+                            y15.Uid = "SubItem"
+                            AddHandler y15.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y15)
+                            Dim y16 As New MenuItem
+                            y16.Header = ("ConditionJ2")
+                            y16.Uid = "SubItem"
+                            AddHandler y16.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y16)
+                            Dim y17 As New MenuItem
+                            y17.Header = ("JourJ3")
+                            y17.Uid = "SubItem"
+                            AddHandler y17.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y17)
+                            Dim y18 As New MenuItem
+                            y18.Header = ("MinJ3")
+                            y18.Uid = "SubItem"
+                            AddHandler y18.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y18)
+                            Dim y19 As New MenuItem
+                            y19.Header = ("MaxJ3")
+                            y19.Uid = "SubItem"
+                            AddHandler y19.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y19)
+                            Dim y20 As New MenuItem
+                            y20.Header = ("ConditionJ3")
+                            y20.Uid = "SubItem"
+                            AddHandler y20.Click, AddressOf MenuItemDev_Click
+                            x.Items.Add(y20)
+                    End Select
+                    mycontextmnu.Items.Add(x)
+                Next
+                Dim S1 As New MenuItem
+                S1.Header = "SYSTEM_DATE"
+                S1.Uid = "SYSTEM"
+                AddHandler S1.Click, AddressOf MenuItemDev_Click
+                mycontextmnu.Items.Add(S1)
+                Dim S2 As New MenuItem
+                S2.Header = "SYSTEM_LONG_DATE"
+                S2.Uid = "SYSTEM"
+                AddHandler S2.Click, AddressOf MenuItemDev_Click
+                mycontextmnu.Items.Add(S2)
+                Dim S3 As New MenuItem
+                S3.Header = "SYSTEM_TIME"
+                S3.Uid = "SYSTEM"
+                AddHandler S3.Click, AddressOf MenuItemDev_Click
+                mycontextmnu.Items.Add(S3)
+                Dim S4 As New MenuItem
+                S4.Header = "SYSTEM_LONG_TIME"
+                S4.Uid = "SYSTEM"
+                AddHandler S4.Click, AddressOf MenuItemDev_Click
+                mycontextmnu.Items.Add(S4)
+                Dim S5 As New MenuItem
+                S5.Header = "SYSTEM_SOLEIL_COUCHE"
+                S5.Uid = "SYSTEM"
+                AddHandler S5.Click, AddressOf MenuItemDev_Click
+                mycontextmnu.Items.Add(S5)
+                Dim S6 As New MenuItem
+                S6.Header = "SYSTEM_SOLEIL_LEVE"
+                S6.Uid = "SYSTEM"
+                AddHandler S6.Click, AddressOf MenuItemDev_Click
+                mycontextmnu.Items.Add(S6)
+                TxtValue.ContextMenu = mycontextmnu
+
+                Dim y198 As New MenuItem
+                y198.Header = "Effectuer un calcul"
+                y198.Uid = "CALCUL"
+                AddHandler y198.Click, AddressOf MenuItemDev2_Click
+                mycontextmnu2.Items.Add(y198)
+                Dim y199 As New MenuItem
+                y199.Header = "Effacer la valeur"
+                y199.Uid = "delete99"
+                AddHandler y199.Click, AddressOf MenuItemDev2_Click
+                mycontextmnu2.Items.Add(y199)
+                For Each _dev As TemplateDevice In ListeDevices
+                    Dim x As New MenuItem
+                    x.Header = _dev.Name
+                    x.Uid = _dev.ID
+                    Select Case _dev.Type
+                        Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
+                            'Dim y As New MenuItem
+                            'y.Header = "Value"
+                            'y.Uid = _dev.ID
+                            'AddHandler y.Click, AddressOf MenuItemDev_Click
+                            'x.Items.Add(y)
+                            AddHandler x.Click, AddressOf MenuItemDev2_Click
+                        Case 17
+                            Dim y0 As New MenuItem
+                            y0.Header = ("Value")
+                            y0.Uid = "SubItem"
+                            AddHandler y0.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y0)
+                            Dim y1 As New MenuItem
+                            y1.Header = ("ConditionActuel")
+                            y1.Uid = "SubItem"
+                            AddHandler y1.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y1)
+                            Dim y2 As New MenuItem
+                            y2.Header = ("TemperatureActuel")
+                            y2.Uid = "SubItem"
+                            AddHandler y2.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y2)
+                            Dim y3 As New MenuItem
+                            y3.Header = ("HumiditeActuel")
+                            y3.Uid = "SubItem"
+                            AddHandler y3.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y3)
+                            Dim y4 As New MenuItem
+                            y4.Header = ("VentActuel")
+                            y4.Uid = "SubItem"
+                            AddHandler y4.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y4)
+                            Dim y5 As New MenuItem
+                            y5.Header = ("JourToday")
+                            y5.Uid = "SubItem"
+                            AddHandler y5.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y5)
+                            Dim y6 As New MenuItem
+                            y6.Header = ("MinToday")
+                            y6.Uid = "SubItem"
+                            AddHandler y6.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y6)
+                            Dim y7 As New MenuItem
+                            y7.Header = ("MaxToday")
+                            y7.Uid = "SubItem"
+                            AddHandler y7.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y7)
+                            Dim y8 As New MenuItem
+                            y8.Header = ("ConditionToday")
+                            y8.Uid = "SubItem"
+                            AddHandler y8.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y8)
+                            Dim y9 As New MenuItem
+                            y9.Header = ("JourJ1")
+                            y9.Uid = "SubItem"
+                            AddHandler y9.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y9)
+                            Dim y10 As New MenuItem
+                            y10.Header = ("MinJ1")
+                            y10.Uid = "SubItem"
+                            AddHandler y10.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y10)
+                            Dim y11 As New MenuItem
+                            y11.Header = ("MaxJ1")
+                            y11.Uid = "SubItem"
+                            AddHandler y11.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y11)
+                            Dim y12 As New MenuItem
+                            y12.Header = ("ConditionJ1")
+                            y12.Uid = "SubItem"
+                            AddHandler y12.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y12)
+                            Dim y13 As New MenuItem
+                            y13.Header = ("JourJ2")
+                            y13.Uid = "SubItem"
+                            AddHandler y13.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y13)
+                            Dim y14 As New MenuItem
+                            y14.Header = ("MinJ2")
+                            y14.Uid = "SubItem"
+                            AddHandler y14.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y14)
+                            Dim y15 As New MenuItem
+                            y15.Header = ("MaxJ2")
+                            y15.Uid = "SubItem"
+                            AddHandler y15.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y15)
+                            Dim y16 As New MenuItem
+                            y16.Header = ("ConditionJ2")
+                            y16.Uid = "SubItem"
+                            AddHandler y16.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y16)
+                            Dim y17 As New MenuItem
+                            y17.Header = ("JourJ3")
+                            y17.Uid = "SubItem"
+                            AddHandler y17.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y17)
+                            Dim y18 As New MenuItem
+                            y18.Header = ("MinJ3")
+                            y18.Uid = "SubItem"
+                            AddHandler y18.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y18)
+                            Dim y19 As New MenuItem
+                            y19.Header = ("MaxJ3")
+                            y19.Uid = "SubItem"
+                            AddHandler y19.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y19)
+                            Dim y20 As New MenuItem
+                            y20.Header = ("ConditionJ3")
+                            y20.Uid = "SubItem"
+                            AddHandler y20.Click, AddressOf MenuItemDev2_Click
+                            x.Items.Add(y20)
+                    End Select
+                    mycontextmnu2.Items.Add(x)
+                Next
+                Dim S11 As New MenuItem
+                S11.Header = "SYSTEM_DATE"
+                S11.Uid = "SYSTEM"
+                AddHandler S11.Click, AddressOf MenuItemDev2_Click
+                mycontextmnu2.Items.Add(S11)
+                Dim S12 As New MenuItem
+                S12.Header = "SYSTEM_LONG_DATE"
+                S12.Uid = "SYSTEM"
+                AddHandler S12.Click, AddressOf MenuItemDev2_Click
+                mycontextmnu2.Items.Add(S12)
+                Dim S13 As New MenuItem
+                S13.Header = "SYSTEM_TIME"
+                S13.Uid = "SYSTEM"
+                AddHandler S13.Click, AddressOf MenuItemDev2_Click
+                mycontextmnu2.Items.Add(S13)
+                Dim S14 As New MenuItem
+                S14.Header = "SYSTEM_LONG_TIME"
+                S14.Uid = "SYSTEM"
+                AddHandler S14.Click, AddressOf MenuItemDev2_Click
+                mycontextmnu2.Items.Add(S14)
+                Dim S15 As New MenuItem
+                S15.Header = "SYSTEM_SOLEIL_COUCHE"
+                S15.Uid = "SYSTEM"
+                AddHandler S15.Click, AddressOf MenuItemDev2_Click
+                mycontextmnu2.Items.Add(S15)
+                Dim S16 As New MenuItem
+                S16.Header = "SYSTEM_SOLEIL_LEVE"
+                S16.Uid = "SYSTEM"
+                AddHandler S16.Click, AddressOf MenuItemDev2_Click
+                mycontextmnu2.Items.Add(S16)
+                Txt2.ContextMenu = mycontextmnu2
+
+
 
                 Select Case _typ
                     Case HoMIDom.HoMIDom.Action.TypeAction.ActionDevice
@@ -568,6 +901,42 @@ Public Class WActionParametrage
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur New: " & ex.ToString, "Erreur Admin", "")
         End Try
     End Sub
+
+    Private Sub MenuItemDev_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
+        Try
+            If sender.uid = "delete99" Then
+                TxtValue.Text = ""
+            ElseIf sender.uid = "CALCUL" Then
+                TxtValue.Text = TxtValue.Text & "{formule à calculer}"
+            ElseIf sender.uid = "SYSTEM" Then
+                TxtValue.Text = TxtValue.Text & "<" & sender.header & ">"
+            ElseIf sender.uid = "SubItem" Then
+                TxtValue.Text = TxtValue.Text & "<" & sender.parent.header & "." & sender.header & ">"
+            Else
+                TxtValue.Text = TxtValue.Text & "<" & sender.header & ">"
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: Waction_MenuItemDev_Click" & ex.ToString)
+        End Try
+    End Sub
+    Private Sub MenuItemDev2_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs)
+        Try
+            If sender.uid = "delete99" Then
+                Txt2.Text = ""
+            ElseIf sender.uid = "CALCUL" Then
+                Txt2.Text = Txt2.Text & "{formule à calculer}"
+            ElseIf sender.uid = "SYSTEM" Then
+                Txt2.Text = Txt2.Text & "<" & sender.header & ">"
+            ElseIf sender.uid = "SubItem" Then
+                Txt2.Text = Txt2.Text & "<" & sender.parent.header & "." & sender.header & ">"
+            Else
+                Txt2.Text = Txt2.Text & "<" & sender.header & ">"
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: Waction_MenuItemDev_Click" & ex.ToString)
+        End Try
+    End Sub
+
 
     Private Sub Cb2_SelectionChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles Cb2.SelectionChanged
         Try

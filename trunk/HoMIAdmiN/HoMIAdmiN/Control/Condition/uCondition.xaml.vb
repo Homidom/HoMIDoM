@@ -429,7 +429,7 @@ Public Class uCondition
             Dim S5 As New MenuItem
             S5.Header = "SYSTEM_SOLEIL_COUCHE"
             S5.Uid = "SYSTEM"
-            AddHandler S4.Click, AddressOf MenuItemDev_Click
+            AddHandler S5.Click, AddressOf MenuItemDev_Click
             mycontextmnu.Items.Add(S5)
             Dim S6 As New MenuItem
             S6.Header = "SYSTEM_SOLEIL_LEVE"
