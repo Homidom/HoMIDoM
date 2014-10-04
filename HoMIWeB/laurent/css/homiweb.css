@@ -3,6 +3,7 @@
    License: none (public domain)
 */
 
+  
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -25,8 +26,8 @@ time, mark, audio, video {
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
+footer, hgroup, menu, nav, section {
+	display: inline;
 }
 body {
 	margin-left: 5px;
@@ -62,6 +63,9 @@ body article h4{ color : white}
 body article {
 	width: 250Px;
 	height:100px;
+	
+	width : 15em;
+	height : 6em;
 	background-color : rgba(75,75,75,0.75);
 
  	border: 1px groove #777777;
@@ -93,30 +97,6 @@ footer {
 	
 }
 
-
-
-header h1 {
-color : rgba(230,30,30,0.75);
-}
-
-
-header span, header p {
-	display:inline-block;
-	font-size:small;
-	color:white;
-	text-align:center;
-}
-header li {
-	font-size:large;
-	color:black;
-
-}
-
-.col-xs-8 , .col-xs-2  {
-color: White;
-}
-
-
 .box {
 	background-color: rgba(190,190,190,0.75);
     border: 1px groove #777777;
@@ -127,44 +107,20 @@ color: White;
 }
 
 #devices , .MenuZone {
-	width: 95%;
 	background-color:  rgba(0,124,0,1);
-	margin-left: auto;
-  	margin-right: auto;
 	padding-bottom: 15px;
 	background: transparent none;
 }
 
-
-h1 {
-	font-size:32px;
-}
-
-h2 {
-	margin-top: 15px;
-	margin-bottom: 10px;
-	text-align: center;
-	font-size:24px;
-	color: White;
-	font-weight: bold;
-}
-h3 {	
-	margin-top: 15px;
-	text-align: center;
-	font-size:18px;
-	color: White;	
-	text-decoration:underline;
-}
-h4 {	
-	margin-top: 5px;
-	text-align: center;
-	font-weight: bold;
-}
+h1 {font-size:32px;}
+h2 {margin-top: 15px;margin-bottom: 10px;text-align: center;font-size:20px;color: White;font-weight: bold;}
+h3 {	margin-top: 15px;text-align: center;font-size:16px;color: White;	text-decoration:underline;}
+h4 {	margin-top: 5px;text-align: center;font-weight: bold;}
 
 .align_image img {
 	width:45px;
 	height:45px;
-	margin: 5% 8% 3% 2%; 
+	margin: 2%; 
  
 }
 .align_image img, .align_image button {
@@ -172,15 +128,45 @@ h4 {
 	vertical-align:middle;
 }
 
-.InfoSoleil { display : inline; margin-bottom : 10px;}
-.InfoSoleil button { display : inline;	margin-right: 15px;  }
+.HeaderInfo > div   {display : inline-block; margin-right : 10px; margin-left : 10px;}
 
-.ModalBoutons { margin-top : 10px; margin-bottom : 10px; }
-.ModalBoutons button {  margin-right : 30px; }
+.HeaderGauche {min-width : 10em;}
+.HeaderCentre {min-widthwidth : 40em;}
+.HeaderCentre h1 { color : rgba(230,30,30,0.75);}
+.HeaderDroit {vertical-align:top;margin-top : 1.5em; margin-left : 3em;}
+.HeaderDroit button {margin-right: 1.5em;  vertical-align: top; }
+.HeaderDroit span{	display:inline-block;	font-size:small;	color:white;	text-align:center;  width : 5em  }
+
+
+.ModalBoutons {display : inline;   margin-left : 2em; }
+.ModalBoutons button { margin-right : 2em; }
+.ModalBoutons button span { vertical-align:middle; }
+
+.contentInfo, .HeaderInfo {width : 100% ;margin : 0.3em;}
+.contentInfo > div   {margin : 0.5em; }
+
+.PartGauche  { margin : 0.3em;
+				background : -webkit-linear-gradient(0deg, black, grey); /* For Safari 5.1 to 6.0 */
+				background: -o-linear-gradient(0deg, black, grey); /* For Opera 11.1 to 12.0 */
+				background: -moz-linear-gradient(0deg, black, grey); /* For Firefox 3.6 to 15 */
+				background: linear-gradient(0deg, black, grey); /* Standard syntax (must be last) */
+}
+.PartGauche   button {padding : 0.3em; margin-right : 2em ;  width : 8em; }
+.PartGauche   button:focus { background-color: #D9534F;color : white;}
+.PartGauche   img { width : 30px; height : 30px; margin-right : 5px; }
+
+/*
+.PartCentrale { min-width : 70em}
+.PartDroite { min-width : 30em}
+*/
+
+
+
+
 
 #WidMeteo {
-	height: 250px;
-	width:  200px;
+	width : 15em;
+	height : 17em;
 	background-color : rgba(75,75,75,0.75);
  	border: 1px groove #777777;
 	margin: 5px;
@@ -254,8 +240,6 @@ h4 {
 	 color: yellow;
 }
 
-#PartCentrale { padding-left: 5px;
-    padding-right: 5px;}
 
 
 #zones  button img {width:50px;height:50px; }
@@ -331,3 +315,58 @@ h4 {
 .input-group-addon { min-width : 100px; color:darkred ; font-weight:bold;}
 
 #events { overflow:auto}
+
+@media screen and (max-width: 900px) {
+	.PartCentrale      {min-width: 2em ;}
+	.HeaderInfo > div {width : auto;  }
+	.HeaderGauche   {min-width: 0.5 em ;}
+   .HeaderGauche h2 { font-size: 10pt;}
+   .HeaderGauche h3 { font-size : 8pt;}
+   .HeaderCentre  h1{ font-size: 12pt; }
+   .HeaderCentre  h1 small{ display : none}
+   .HeaderCentre  img{ width : 50px;	height : 50px;}
+    /* .HeaderDroit {  background : pink;} */
+   .HeaderDroit  img { width : 15px;	height :15px;	}
+   .InfoSoleil { margin-bottom : 10px; }
+   .ModalBoutons {display : none;}
+   .contentInfo div { display: block;} 
+	#zonesTitle {font-size : 10pt; }
+	.PartGauche , .PartCentrale, .PartDroite { width : 100% ; margin-left : 0.2em; margin-right : 0.4em;}
+	
+	#zones img { display : none ;}
+	.align_image  img {  width : 30px;	height : 30px;  }
+	.devices h4 {font-size : 10pt;}
+	.PartGauche button {  margin : 0px; font-size : 10pt; color : white;}  /*  background-color :gray;  */
+	.align_image img, .align_image div { display : inline-block; vertical-align: baseline;}
+	.PartGauche img { display : none }
+   }
+
+
+@media screen and (min-width: 900px) and (max-width:1279px) {
+
+	.HeaderInfo > div {margin-left : 0px}
+	.HeaderGauche      {min-width: 6em;}
+	.HeaderGauche h1 { font-size: 14pt;}
+	.HeaderGauche h2 { font-size: 12pt;}
+	.HeaderGauche h3 { font-size : 10pt;}
+	.HeaderCentre  h1 small{  font-size: 10pt;}
+	 /* .HeaderDroit {  background : green;} */
+	.HeaderDroit span{   margin-right : 5px;}
+	.ModalBoutons button { margin-right : 5px;}
+	.InfoSoleil { margin-right : 5px; }
+	.HeaderCentre  .align_image img {margin-left : 2%;margin-right : 2%;}
+	.HeaderCentre small {display : none}
+		
+	.PartCentrale {min-width : 6em}
+
+   } 
+@media screen and (min-width: 1290px) and (max-width:1360px) {
+   .HeaderGauche      {min-width: 6em;}
+   .HeaderGauche h2 { font-size: 12pt;}
+   .HeaderGauche h3 { font-size : 10pt;}
+   /*.HeaderDroit {  background : yellow;} */
+   .PartGauche , .PartCentrale, .PartDroite { width : 100% ; padding-left: 1.5em; padding-right: 1.5em}
+   .contentInfo {display : block;}
+
+   }  
+   
