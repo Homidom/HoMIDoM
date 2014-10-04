@@ -21,38 +21,31 @@
 	<link href="css/homiweb.css" rel="stylesheet" />	
 
 	<!-- Definition constante -->
-	<script> var VersionHomiWeb = "3.1.1";</script>
+	<script> var VersionHomiWeb = "3.1.6";</script>
 
 </head>
 
 <body >
 	<header>
 		<!-- Definition de la partie haute de l'ecran ></!-->
-		
-		<div class="row" id="header">
-			<!-- Definition de la partie gauche ></!-->
-            <div id="ZoneDate" class="col-md-2">
 
+		<div class="HeaderInfo" >
+			<!-- Definition de la partie gauche ></!-->
+            <div class="HeaderGauche">
+				<p>Test du Header Gauche</p>
 			</div>	<!-- Fin partie gauche  ></!-->
-			<span>
-			</span>
-			
 
 			<!-- Definition de la partie centrale  ></!-->
-            <div class="col-xs-7">
-				<div class="navbar-text navbar-left">
+            <div class="HeaderCentre">
 					<img  class="LogoHeader" alt="Information sur l'image" src="./images/rond_64x64.png"/>   
-					<h1> HoMIDoM - <small> Le système complet de domotique pour la maison</small></h1>
-				</div>
+					<h1> HoMIDoM  <small> : Le système complet de domotique pour la maison</small></h1>
 			</div> <!-- Fin partie centrale  ></!-->
+			
 			<!-- Definition de la partie droite  ></    data-bind='text: name' !--> 
-			<div class="col-xs-3">
-				<div class="InfoSoleil" >
-					<span id="LeverSoleil"   class="align_image"><img alt="" src="./images/icones/01.png" /><strong data-bind="text: HeureLever">:</strong></span>
+			<div class="HeaderDroit">
+					<span id="LeverSoleil"   class="align_image"><img alt="" src="./images/icones/01.png" /><strong data-bind="text: HeureLever"></strong></span>
 					<span id="CoucherSoleil" class="align_image"><img alt="" src="./images/icones/36.png" /><strong data-bind="text: HeureCoucher"></strong></span>	
-					<span id="HeureTest"     class="align_image"><img alt="" src="./images/icones/horloge-icone-4138-48.png" /><strong data-bind="text: HeureAffiche"></strong></span>			
-				</div>	
-				</br>
+					<span id="HeureTest"     class="align_image"><img alt="" src="./images/icones/horloge-icone-4138-48.png" /><strong data-bind="text: HeureAffiche">00:00:00</strong></span>			
 				<div class="ModalBoutons"> 
 					<button class="btn btn-lg btn-default" data-toggle="modal" data-target="#modalLogin" title="Parametres de connexion"  ><span  style="color: gray;" class=" glyphicon glyphicon-home"></span></button>
 					<button class="btn btn-lg btn-danger" data-toggle="modal" data-target="#modalApropos" title="A propos de"  ><span class="glyphicon glyphicon-gift" style="color: white;"></span></button>
@@ -139,71 +132,86 @@
 		<!-- fin Modal A Propos  ></!-->
 		
 	</header>
-		<div class="content">		
-		<!-- Menu de gauche -->	
-			<div id="PartGauche" class="col-md-2">
-				<div class="box"> <!-- -->
-				<button id="CloseZones" class="btn btn-default btn-xs dropdown-toggle navbar-right" data-toggle="dropdown">
-					<span  class="caret"></span>
-				</button>
-				<script>
-					$("#CloseZones").click(function(){
-						$("#zones").toggle();
-						$("#zonesTitle").toggle();
-					});
-				</script>		
-					<h2 id="zonesTitle" class="text-center">Zones</h2>
-						<div id="zones" class="list-group" data-bind="template: { name: 'ZonesTemplate', foreach: zones }" ></div>
-						
-						<script type="text/html" id="ZonesTemplate">
-								<button class="btn btn-default btn-lg" data-bind="click: function(data, event) { AfficheZone(id, data, event) }"><img src="images/icones/defaut.png"><span data-bind='text: name' /></button>
-						</script>
-				</div>
-			</div>
-			
-			<div id="PartCentrale" class="col-xs-7">
-				<div>
-					<div class=" box ">
-						<h2 class="text-center" >Devices</h2>
-							<div id="devices">
-							</div>
-					</div>
-					<div class="box ">
-						<h2 class="text-center" >Macros</h2>
-						<div id="macros" >
-							<div data-bind="template: { name: 'MacrosTemplate', foreach: macros }" ></div>
-								<script type="text/html" id="MacrosTemplate">
-									<article class="align_macro"><h4 data-bind="text: name"/></h4>
-									<div class="align_image"><img src="./images/icones/macro_64.png" alt="" />
-									<button class="btn btn-danger btn-lg"  data-bind="click: function(data, event) { executeMacro(id, data, event) }">Lancer</button></div></article> 
-								</script>	
-						</div>	
-					</div>
-				</div>
-			</div>
-			
-		    <div id="PartDroite" class="col-xs-3 ">
-			   <div class="box"> 
+	
+	
+	<div  class="PartGauche navbar  navbar-inverse" role="navigation">
+	   <div class="navbar-header">
+		  <button type="button" class="navbar-toggle" alt="Afficher/Masquer les evenements" data-toggle="collapse" 
+			 data-target="#example-navbar-collapse">
+			 <span class="sr-only">Zones</span>
+			<span  class="caret"></span>
+		  </button>
+		  <a class="navbar-brand" href="#">Zones</a>
+	   </div>
+	   <div class="collapse navbar-collapse" id="example-navbar-collapse" data-bind="template: { name: 'ZonesTemplate', foreach: zones }" ></div>
+		  
+				<script type="text/html" id="ZonesTemplate">
+					<ul class="nav navbar-nav  "  >
+						 <button class="btn btn-default btn-lg navbar-btn" data-bind="click: function(data, event) { AfficheZone(id, data, event) }" ><img src="images/icones/defaut.png"><span data-bind='text: name' /></button>
+					</ul>	 
+				</script>
+	</div>	
+
+	<div class="contentInfo">	
+		<div class="PartCentrale" >
+				<div class=" box ">
 				<button id="CloseEvents" class="btn btn-default btn-xs dropdown-toggle navbar-right" data-toggle="dropdown">
-					<span  class="caret"></span>
-				</button>
-				<script>
-					$("#CloseEvents").click(function(){
-						$("#events").toggle();
-						$("#eventsTitle").toggle();
-					});
-				</script>		
+						<span  class="caret"></span>
+					</button>
+					<script>
+						$("#CloseEvents").click(function(){
+						$(".PartDroite").toggle(500);
 						
-					<h2 id="eventsTitle" class="text-center">Events Log</h2>	
-					<div id="events">
-							<p></p>	
-					</div>
+						/*	if ($(".PartDroite").hide()) { console.log("Passage par la PartDroite = 0"); $(".PartDroite").show();}
+							else {$(".PartDroite").hide();}
+						*/
+						});
+					</script>	
+					<h2 class="text-center" >Devices</h2>
+						
+	
+					
+					
+					
+					
+						<div id="devices">
+						</div>
+				</div>
+				<div class="box ">
+					<h2 class="text-center" >Macros</h2>
+					<div id="macros">
+						<div data-bind="template: { name: 'MacrosTemplate', foreach: macros }" ></div>
+							<script type="text/html" id="MacrosTemplate">
+								<article class="align_macro"><h4 data-bind="text: name"/></h4>
+								<div class="align_image"><img src="./images/icones/macro_64.png" alt="" />
+									<button class="btn btn-danger btn-lg"  data-bind="click: function(data, event) { executeMacro(id, data, event) }">Lancer</button>
+								</div>
+							</script>	
+					</div>	
+				</div>
+		</div>
+		
+		<div class="PartDroite">
+			<div class="box">
+				<h2 id="eventsTitle" class="text-center">Events Log</h2>	
+				<div id="events">
+						<p></p>	
 				</div>
 			</div>
 		</div>
+	</div>
 	
 	<footer id="footer">
 		<p id="ZoneID"></p>
+		<!--
+		<button type="button" class="btn btn-default btn-sm" onClick="PutDiv();">Ajout Div </button>
+
+		<button type="button" class="btn btn-default btn-sm" onClick="Ajouterdonnees();">Ajout Données </button>
+		-->
+		<script>
+
+		
+		</script>
 		<hr/>
 			<a href="http://homidom.com"> HoMIDoM © 2011</a>	
 			<br />
@@ -224,9 +232,10 @@ var devices = ko.observableArray([]);
 var macros = ko.observableArray([]);
 var ListeServeurs = ko.observableArray([]);
 
-var HeureLever = ko.observable();
-var HeureCoucher = ko.observable();
-var HeureAffiche = ko.observable();
+var HeureLever = ko.observable("00:00:00");
+var HeureCoucher = ko.observable("00:00:00");
+var HeureAffiche = ko.observable("00:00:00");
+
 
 
 var ErrorServer = false;
@@ -244,64 +253,128 @@ $('[data-toggle="tooltip"]').tooltip();
 		
 	// Affichage d'un message lors de l'execution d'une commande
 	function onExecuteSuccess(url) {
-		console.log("Commande envoyée sur l API HTTP avec l url "+ url);
+		console.log("Commande envoyée sur l API HTTP avec l url : "+ url);
+	}
+	// Recupere le nom du Device a partir de son ID
+	function getDeviceName(id, value) {
+		for (var a=0; a < ListDevices.length; a++)
+		{
+			 if (ListDevices[a]._ID == id) {
+				 ListDevices[a]._Value = value ; 
+				 if (ZoneActuel) {AfficheZone(ZoneActuel);} 
+				 return ListDevices[a]._Name;
+			}
+		}
+	}
+	function getDeviceId(Name) {
+		console.log ("Recherche de l id pour : "+ Name);
+		for (var a=0; a < ListDevices.length; a++)
+		{
+			console.log ("Valeur de l id pour : "+ListDevices[a]._Name);
+			 if (ListDevices[a]._Name == Name) {
+				
+				 return ListDevices[a]._ID;
+			}
+		}
+	}	
+
+	function execute(deviceId, command) {
+		var urltemp = urlapi + '/command/device/'+deviceId+'/'+command;
+		$.jsonp({
+			url: urlapi + '/command/device/'+deviceId+'/'+command,
+			
+			type: 'GET',
+			callbackParameter: "callback",
+			success: onExecuteSuccess,
+			error: onError
+		})
+		console.log("debug execute : "+ urltemp);
+		//execute(deviceId, "Read");
+	}
+	
+	function executeDIM(deviceId, valeur) {
+		console.log("debug executeDIM : "+ valeur);	
+		var urltemp = urlapi + '/command/device/'+deviceId+'/DIM/?Variation='+valeur;
+		$.jsonp({
+			url: urltemp,
+			
+			type: 'GET',
+			callbackParameter: "callback",
+			success: onExecuteSuccess,
+			error: onError
+		})
+		console.log("debug execute : "+ urltemp);
+		execute(deviceId, "Read");
 	}
 	
 	function ConnectServer (){
 	
 		var d = new Date();
-		$("#ZoneDate").empty();
-		$("#ZoneDate").append("<h3>Nous sommes le :</h3>");
-		$("#ZoneDate").append("<h2>"+d.toLocaleDateString().charAt(0).toUpperCase()+ d.toLocaleDateString().slice(1)+"</h2>");
+		$(".HeaderGauche").empty();
+		$(".HeaderGauche").append("<h3>Nous sommes le :</h3>");
+		$(".HeaderGauche").append("<h2>"+d.toLocaleDateString().charAt(0).toUpperCase()+ d.toLocaleDateString().slice(1)+"</h2>");
 	
-		urlapi   = 'http://'+ AdresseIPActuel + ':'+ PortActuel + '/api/'+ IDSERVERActuel;
+		urlapi   = 'http://'+ AdresseIPActuel + ':'+ PortActuel + '/api/'+ IDSERVERActuel ;
 		console.log("debug : "+urlapi);
 		
 		var connection = $.hubConnection('http://'+ AdresseIPActuel + ':' + PortActuel + '/live');
 
-		var nHubProxy = connection.createHubProxy('NotificationHub');
-		// Gestion du changement d'un Device
-		nHubProxy.on('DeviceChanged', function (id, value) {
-			console.log(id + ' = ' + value);
-			var dName = getDeviceName(id, value);
-			var d = new Date(); 
-			var time = ("0" + (d.getHours())).slice(-2)+":"+("0" + (d.getMinutes())).slice(-2)+":"+("0" + (d.getSeconds())).slice(-2);
-			console.log("Info recue : "+time+' / '+dName+' = ' + value);
-			$('#events').prepend(time+' / '+dName+' = ' + value + '<br/>');
-		});
-		
-		// Gestion des heures de lever et coucher du Soleil
-		nHubProxy.on('HeureSoleilChanged', function (id, value) {
-						console.log(' Changement de l heure du soleil '+ id + ' = ' + value);
-		});
-					
-		nHubProxy.on('NewLog', function (TypLog,Source ,Fonction ,Message) {
-			console.log(' Nouveau log recu ' + TypLog + ' = ' + Source + ' = ' + Fonction + ' = ' + Message);
-			if (Fonction == 'MAJ_HeuresSoleil') {
-				 var tempval = Message.split(":");
-				 var TypeInfo = tempval[0];
-				 console.log('Info recue : '+ TypeInfo);
-				 switch (TypeInfo)
-				{
-					case 'Heure du lever ':
-						HeureLever(Message.substr(Message.length-9,9)) ;     
-					break;
-					
-					case 'Heure du coucher ':
-						HeureCoucher(Message.substr(Message.length-9,9));			
-					break;
-				}	
-			}
-		});			
+				var nHubProxy = connection.createHubProxy('NotificationHub');
+				// Gestion du changement d'un Device
+				nHubProxy.on('DeviceChanged', function (id, value) {
+					console.log(id + ' = ' + value);
+					var dName = getDeviceName(id, value);
+					var d = new Date(); 
+					var time = ("0" + (d.getHours())).slice(-2)+":"+("0" + (d.getMinutes())).slice(-2)+":"+("0" + (d.getSeconds())).slice(-2);
+					console.log("Info recue : "+time+' / '+dName+' = ' + value);
+					$('#events').prepend(time+' / '+dName+' = ' + value + '<br/>');
+				});
+				
+				// Gestion des heures de lever et coucher du Soleil
+				nHubProxy.on('HeureSoleilChanged', function (id, value) {
+								console.log(' Changement de l heure du soleil '+ id + ' = ' + value);
+				});
+							
+				nHubProxy.on('NewLog', function (TypLog,Source ,Fonction ,Message) {
+					console.log(' Nouveau log recu ' + TypLog + ' = ' + Source + ' = ' + Fonction + ' = ' + Message);
+					var d = new Date(); 
+					var time = ("0" + (d.getHours())).slice(-2)+":"+("0" + (d.getMinutes())).slice(-2)+":"+("0" + (d.getSeconds())).slice(-2);
+					$('#events').prepend(time+' / '+Source+' = ' + Message + '<br/>');
+					if (Fonction == 'MAJ_HeuresSoleil') {
+						 var tempval = Message.split(":");
+						 var TypeInfo = tempval[0];
+						 console.log('Info recue : '+ TypeInfo);
+						 switch (TypeInfo)
+						{
+							case 'Heure du lever ':
+								HeureLever(Message.substr(Message.length-9,9)) ;     
+							break;
+							
+							case 'Heure du coucher ':
+								HeureCoucher(Message.substr(Message.length-9,9));			
+							break;
+						}	
+					}
+				});			
 				
 		// Connexion sur la gestion des events -  en cas d'erreur de connexion 
 		connection.qs = { "sKey" : IDSERVERActuel };
 		connection.start()	
 			.done(function(){ 
 
-				$("#ZoneDate").append("<h2>"+ServerName.toUpperCase() +' : '+ PortActuel + "</h2>");	
+				$(".HeaderGauche").append("<h2>"+ServerName.toUpperCase() +' : '+ PortActuel + "</h2>");	
 					$("#modalLogin").modal('hide');	
 				console.log('Now connected, connection ID=' + connection.id); 
+				var IdTemp = getDeviceId("soleil01");
+				console.log ("Envoi de la commande de lecture de soleil01 : "+IdTemp + " : "  );
+				execute("soleil01","Read");
+				execute(IdTemp,"Read");
+				
+				/*
+				execute(\''+IdTemp,\''read'\');
+				onClick="          execute(\''+ListDevices[a]._ID+'\', \''read'\')     "
+				*/
+				
 				$("#PartGauche").show();
 				$("#PartCentrale").show();
 				$("#PartDroite").show();
@@ -337,27 +410,7 @@ $('[data-toggle="tooltip"]').tooltip();
 	}
 
 
-	// Recupere le nom du Device a partir de son ID
-	function getDeviceName(id, value) {
-		for (var a=0; a < ListDevices.length; a++)
-		{
-			 if (ListDevices[a]._ID == id) {
-				 ListDevices[a]._Value = value; 
-				 return ListDevices[a]._Name;
-			}
-		}
-	}	
 
-	function execute(deviceId, command) {
-		$.jsonp({
-			url: urlapi + '/command/device/'+deviceId+'/'+command,
-			
-			type: 'GET',
-			callbackParameter: "callback",
-			success: onExecuteSuccess,
-			error: onError
-		})
-	}
 		
  	function loadDevices(data) {
 		var items = [];
@@ -410,15 +463,15 @@ $('[data-toggle="tooltip"]').tooltip();
 								
 								items.push('<article><h4>'+ListDevices[a]._Name + '</h4><div class="align_image"><img src="./images/devices/'+ListDevices[a]._Type+'-defaut.png" alt="" /> ' );
 								var actions = [];
-								actions.push('<div id="ListCommand" class="btn-group"><button class="btn btn-danger"> ' + ListDevices[a]._Value+ '</button>');
-								actions.push('<button class="btn btn-danger dropdown-toggle" data-toggle="dropdown">');
+								actions.push('<div id="ListCommand" class="btn-group"><button class="btn btn-danger  btn-lg"> ' + ListDevices[a]._Value+ '</button>');
+								actions.push('<button class="btn btn-danger  btn-lg dropdown-toggle" data-toggle="dropdown">');
 								actions.push('<span class="caret"></span></button>');
 								
 								actions.push('<ul class="dropdown-menu">');
 								$.each(ListDevices[a]._DeviceAction, function(i, command) {
 																				
 									if (command.Nom == "DIM"){
-										actions.push('<li class="command"><span id="Slider"><input type="range" min="0" max="100" step="5" value="50" onchange="document.getElementById(\''+ListDevices[a]._Name+"Slider"+'\').innerHTML =this.value; execute(\''+ListDevices[a]._ID+'\', \''+command.Nom+'?Variation=this.value\'); \"  /><span id=\''+ListDevices[a]._Name+"Slider" + '\'class="badge pull-right"></span></span></li>');
+										actions.push('<li class="command"><span id="Slider"><input type="range" min="0" max="100" step="5" value="50"  onchange="document.getElementById(\''+ListDevices[a]._Name+"Slider"+'\').innerHTML =this.value;executeDIM(\''+ListDevices[a]._ID+'\',this.value)"; /><span id=\''+ListDevices[a]._Name+"Slider" + '\'class="badge pull-right"></span></span></li>');
 									}
 									 
 									else {
@@ -489,6 +542,41 @@ $('[data-toggle="tooltip"]').tooltip();
 		$("#PartDroite").hide();
 		ReadSites();
 	});
+	
+	
+	function PutDiv() {
+		$("#device").append('<article><h4>Test Div</h4><div class="align_image"><img src="./images/devices/12-defaut.png" alt="" /> ');
+
+}	
+	function Ajouterdonnees() {
+		ErrorServer = false;
+		var devicetemp = {
+			 "_ID":  "1234E2",
+			 "_Value": "true",
+			 "_Type": "02",
+		};
+		ListDevices.push(devicetemp);	
+
+		var zonetemp = {
+			 "name":  "Salon",
+			 "id": "123456789"
+		};
+		zones.push(zonetemp);
+	//	ListeZones.push (zonetemp);
+		zonetemp = {
+			 "name":  "Bureau",
+			 "id": "987654321"
+		};
+		zones.push(zonetemp);
+	// 	ListeZones.push (zonetemp);
+
+
+
+
+		$("#PartGauche").show();
+		$("#PartCentrale").show();
+		$("#PartDroite").show();
+	};
 			
 </script>
 </body>

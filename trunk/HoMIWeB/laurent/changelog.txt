@@ -18,3 +18,11 @@
 
 3.1.1
 Correction du nom de l'image fairedons (minuscule)
+
+3.1.6
+Reprise de la structure pour etre Responsive 
+Modification de la structure du header - suppression de la grille
+Modification de la structure du content - suppression de la grille
+Ajout du menu des Zones en haut de la page
+Correction de l'envoi de la Commande DIM
+Modification de la taille des boutons des devices
