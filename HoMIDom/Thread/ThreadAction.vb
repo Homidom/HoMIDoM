@@ -58,21 +58,25 @@ Namespace HoMIDom
                                 For idx As Integer = 0 To x.Parametres.Count - 1
                                     Dim param1 As New DeviceAction.Parametre
                                     If x.Parametres.Item(idx) IsNot Nothing Then
-                                        'on recupere la valeur du parametre et on remplace les <compnom.value> et <comnom> par leur valeur
-                                        Dim _var0 As String = DecodeCommand(x.Parametres.Item(idx).ToString)
-                                        'si il y a une erreur on n'ajoute pas le parametre et on logue l'erreur
-                                        If STRGS.InStr(_var0, "ERR:") > 0 Then
-                                            _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ThreadAction Execute DeviceAction", STRGS.Right(_var0, _var0.Length - 5))
-                                        Else
-                                            If String.IsNullOrEmpty(_var0) Then
-                                                param1.Value = x.Parametres.Item(idx)
-                                            Else
-                                                'param1.Value = _var0
-                                                param1.Value = EvaluateCommand(_var0)
-                                            End If
-                                            _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "Execute", "param" & idx + 1 & ": " & param1.Value)
-                                            y.Parametres.Add(param1)
-                                        End If
+
+                                        ''on recupere la valeur du parametre et on remplace les <compnom.value> et <comnom> par leur valeur
+                                        'Dim _var0 As String = DecodeCommand(x.Parametres.Item(idx).ToString)
+                                        ''si il y a une erreur on n'ajoute pas le parametre et on logue l'erreur
+                                        'If STRGS.InStr(_var0, "ERR:") > 0 Then
+                                        '    _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ThreadAction Execute DeviceAction", STRGS.Right(_var0, _var0.Length - 5))
+                                        'Else
+                                        '    If String.IsNullOrEmpty(_var0) Then
+                                        '        param1.Value = x.Parametres.Item(idx)
+                                        '    Else
+                                        '        'param1.Value = _var0
+                                        '        param1.Value = EvaluateCommand(_var0)
+                                        '    End If
+                                        '    _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "Execute", "param" & idx + 1 & ": " & param1.Value)
+                                        '    y.Parametres.Add(param1)
+                                        'End If
+                                        param1.Value = Decodestring(x.Parametres.Item(idx).ToString)
+                                        y.Parametres.Add(param1)
+
                                     End If
                                 Next
                             End If
@@ -86,21 +90,24 @@ Namespace HoMIDom
                                     If x.Parametres.Item(0) IsNot Nothing Then
                                         If x.Parametres.Item(0) <> "" Then
                                             'on recupere la valeur du parametre et on remplace les <compnom.value> et <comnom> par leur valeur
-                                            Dim _var0 As String = DecodeCommand(x.Parametres.Item(0).ToString)
-                                            'si il y a une erreur on n'ajoute pas le parametre et on logue l'erreur
-                                            If STRGS.InStr(_var0, "ERR:") > 0 Then
-                                                _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ThreadAction Execute DeviceAction", STRGS.Right(_var0, _var0.Length - 5))
-                                            Else
-                                                Dim y2 As New HoMIDom.DeviceAction.Parametre
-                                                If String.IsNullOrEmpty(_var0) Then
-                                                    y2.Value = x.Parametres.Item(0)
-                                                Else
-                                                    'y2.Value = _var0
-                                                    y2.Value = EvaluateCommand(_var0)
+                                            'Dim _var0 As String = DecodeCommand(x.Parametres.Item(0).ToString)
+                                            ''si il y a une erreur on n'ajoute pas le parametre et on logue l'erreur
+                                            'If STRGS.InStr(_var0, "ERR:") > 0 Then
+                                            '    _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ThreadAction Execute DeviceAction", STRGS.Right(_var0, _var0.Length - 5))
+                                            'Else
+                                            '    Dim y2 As New HoMIDom.DeviceAction.Parametre
+                                            '    If String.IsNullOrEmpty(_var0) Then
+                                            '        y2.Value = x.Parametres.Item(0)
+                                            '    Else
+                                            '        'y2.Value = _var0
+                                            '        y2.Value = EvaluateCommand(_var0)
 
-                                                End If
-                                                y.Parametres.Add(y2)
-                                            End If
+                                            '    End If
+                                            '    y.Parametres.Add(y2)
+                                            'End If
+                                            Dim y2 As New HoMIDom.DeviceAction.Parametre
+                                            y2.Value = Decodestring(x.Parametres.Item(0).ToString)
+                                            y.Parametres.Add(y2)
                                         End If
                                     End If
                                 End If
@@ -179,98 +186,7 @@ Namespace HoMIDom
                                 'End If
 
                                 '========== Version 3 ========== 
-                                'remplacement de <composantnom> <composantnom.meteo> <SYSTEM_XXX>
-                                If String.IsNullOrEmpty(x.Conditions.Item(i).Value.ToString) Then
-                                    retour2 = ""
-                                Else
-                                    Dim resultatSTR As String = x.Conditions.Item(i).Value.ToString
-                                    Try
-                                        Dim startcmd As Integer = InStr(1, resultatSTR, "<")
-                                        Dim endcmd As Integer = InStr(1, resultatSTR, ">")
-                                        Dim newcmd As String = resultatSTR
-                                        If startcmd > 0 Then _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "ThreadAction Execute Replace", "Evaluation de : " & resultatSTR)
-                                        Do While startcmd > 0 And endcmd > 0
-                                            Dim _device As String = Mid(newcmd, startcmd + 1, endcmd - startcmd - 1)
-                                            'Dim Tabl() As String = _device.Split(".")
-                                            Dim Tabl() As String = _device.Split(System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                                            If Tabl.Length = 1 Then
-                                                Select Case _device
-                                                    Case "SYSTEM_DATE"
-                                                        _device = Now.Date.ToShortDateString
-                                                    Case "SYSTEM_LONG_DATE"
-                                                        _device = Now.Date.ToLongDateString
-                                                    Case "SYSTEM_TIME"
-                                                        _device = Now.ToShortTimeString
-                                                    Case "SYSTEM_LONG_TIME"
-                                                        _device = Now.ToLongTimeString
-                                                    Case "SYSTEM_SOLEIL_COUCHE"
-                                                        Dim _date As Date = _Server.GetHeureCoucherSoleil
-                                                        _device = _date.ToShortTimeString
-                                                    Case "SYSTEM_SOLEIL_LEVE"
-                                                        Dim _date As Date = _Server.GetHeureLeverSoleil
-                                                        _device = _date.ToShortTimeString
-                                                    Case Else
-                                                        Dim y As Object = _Server.ReturnRealDeviceByName(Tabl(0))
-                                                        If y IsNot Nothing Then
-                                                            _device = y.Value
-                                                        Else
-                                                            _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute Replace", "Composant: " & Tabl(0) & " non trouvé --> Arrêt du traitement")
-                                                            Exit Sub
-                                                        End If
-                                                End Select
-                                            ElseIf Tabl.Length = 2 Then
-                                                Dim y As Object = _Server.ReturnRealDeviceByName(Tabl(0))
-                                                If y IsNot Nothing Then
-                                                    Dim value As Object = CallByName(y, Tabl(1), CallType.Get)
-                                                    _device = value
-                                                End If
-                                            End If
-
-                                            Dim start As String = Mid(newcmd, 1, startcmd - 1)
-                                            Dim fin As String = Mid(newcmd, endcmd + 1, newcmd.Length - endcmd)
-                                            newcmd = start & _device & fin
-                                            resultatSTR = newcmd
-                                            startcmd = InStr(1, newcmd, "<")
-                                            endcmd = InStr(1, newcmd, ">")
-                                        Loop
-                                    Catch ex As Exception
-                                        _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "ThreadAction Execute Replace", "Exception: " & ex.Message)
-                                        Exit Sub
-                                    End Try
-                                    retour2 = resultatSTR
-                                End If
-                                ' Calcul de {xxxxxxxxxxxxxx}
-                                Try
-                                    Dim startcmd As Integer = InStr(1, retour2, "{")
-                                    Dim endcmd As Integer = InStr(1, retour2, "}")
-                                    Dim newcmd As String = retour2
-                                    If startcmd > 0 Then _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "ThreadAction Execute Replace", "Calcul de : " & retour2)
-                                    Do While startcmd > 0 And endcmd > 0
-                                        Dim _calculstring As String = Mid(newcmd, startcmd + 1, endcmd - startcmd - 1)
-
-                                        Try
-                                            If Text.RegularExpressions.Regex.IsMatch(_calculstring, "^[0-9+\-*/\^().,]*$") Then
-                                                Dim dt = New DataTable()
-                                                Dim resultat As Double = CDbl(dt.Compute(_calculstring, ""))
-                                                dt = Nothing
-                                                _calculstring = resultat
-                                            End If
-                                        Catch ex As Exception
-                                            _calculstring = Mid(newcmd, startcmd + 1, endcmd - startcmd - 1)
-                                            _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute Calcul", "Erreur dans le calcul de '" & _calculstring & "' : " & ex.Message)
-                                        End Try
-
-                                        Dim start As String = Mid(newcmd, 1, startcmd - 1)
-                                        Dim fin As String = Mid(newcmd, endcmd + 1, newcmd.Length - endcmd)
-                                        newcmd = start & _calculstring & fin
-                                        retour2 = newcmd
-                                        startcmd = InStr(1, newcmd, "{")
-                                        endcmd = InStr(1, newcmd, "}")
-                                    Loop
-                                Catch ex As Exception
-                                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute Calcul", "Exception: " & ex.Message)
-                                    Exit Sub
-                                End Try
+                                retour2 = Decodestring(x.Conditions.Item(i).Value.ToString)
 
                                 'on teste si les deux valeurs sont du meme type sinon impossible de tester et on retourn False
                                 If (retour.GetType = retour2.GetType) Then
@@ -291,7 +207,7 @@ Namespace HoMIDom
                                     _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "ThreadAction Execute Test", "Type de valeurs different: '" & retour & "' <-> '" & retour2 & "'  : Test annulé --> Faux")
                                     result = False
                                 End If
-                                
+
                                 If i = 0 Then 'c le 1er donc pas prendre en compte l'operateur
                                     flag = result
                                 Else
@@ -433,7 +349,7 @@ Namespace HoMIDom
                         Dim x As Action.ActionMail = _Action
                         Dim _user As Users.User = _Server.ReturnUserById(_IdSrv, x.UserId)
                         If _user IsNot Nothing Then
-                            Dim _action As New Mail(_Server, _Server.GetSMTPMailServeur(_IdSrv), _user.eMail, x.Sujet, x.Message, _Server.GetSMTPServeur(_IdSrv), _Server.GetSMTPPort(_IdSrv), _Server.GetSMTPSSL(_IdSrv), _Server.GetSMTPLogin(_IdSrv), _Server.GetSMTPPassword(_IdSrv))
+                            Dim _action As New Mail(_Server, _Server.GetSMTPMailServeur(_IdSrv), _user.eMail, Decodestring(x.Sujet), Decodestring(x.Message), _Server.GetSMTPServeur(_IdSrv), _Server.GetSMTPPort(_IdSrv), _Server.GetSMTPSSL(_IdSrv), _Server.GetSMTPLogin(_IdSrv), _Server.GetSMTPPassword(_IdSrv))
                             Dim y As New Thread(AddressOf _Action.Send_email)
                             y.Name = "Traitement du script"
                             y.Start()
@@ -491,23 +407,23 @@ Namespace HoMIDom
                         End If
                     Case Action.TypeAction.ActionSpeech
                         Dim x As Action.ActionSpeech = _Action
-                        Parler(x.Message)
+                        Parler(Decodestring(x.Message))
                     Case Action.TypeAction.ActionHttp
                         Dim x As Action.ActionHttp = _Action
-                        Sendhttp(x.Commande)
+                        Sendhttp(Decodestring(x.Commande))
                     Case Action.TypeAction.ActionLogEvent
                         Dim x As Action.ActionLogEvent = _Action
-                        _Server.LogEvent(x.Message, x.Type, x.Eventid)
+                        _Server.LogEvent(Decodestring(x.Message), x.Type, x.Eventid)
                     Case Action.TypeAction.ActionLogEventHomidom
                         Dim x As Action.ActionLogEventHomidom = _Action
-                        _Server.Log(x.Type, HoMIDom.Server.TypeSource.SCRIPT, x.Fonction, x.Message)
+                        _Server.Log(x.Type, HoMIDom.Server.TypeSource.SCRIPT, x.Fonction, Decodestring(x.Message))
                     Case Action.TypeAction.ActionDOS
                         Dim x As Action.ActionDos = _Action
                         Try
                             If File.Exists(x.Fichier) Then
                                 Dim process As Process = New Process()
                                 process.StartInfo.FileName = x.Fichier
-                                process.StartInfo.Arguments = x.Arguments
+                                process.StartInfo.Arguments = Decodestring(x.Arguments)
                                 process.Start()
                             Else
                                 _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute", "ActionDos : le fichier " & x.Fichier & " n'existe pas")
@@ -539,7 +455,7 @@ Namespace HoMIDom
             Try
                 Dim texte As String = Commande
                 'remplace les balises par la valeur
-                texte = DecodeCommand(texte)
+                texte = Decodestring(texte)
                 'texte = texte.Replace("{time}", Now.ToShortTimeString) '--> pb avec le format qui ne passe pas dans une URL
                 'texte = texte.Replace("{date}", Now.ToLongDateString) '--> pb avec le format qui ne passe pas dans une URL
 
@@ -561,7 +477,7 @@ Namespace HoMIDom
                 'remplace les balises par la valeur
                 texte = texte.Replace("{time}", Now.ToShortTimeString)
                 texte = texte.Replace("{date}", Now.ToLongDateString)
-                texte = DecodeCommand(texte)
+                texte = Decodestring(texte)
 
                 Dim lamachineaparler As New Speech.Synthesis.SpeechSynthesizer
                 _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "Parler", "Message: " & texte)
@@ -694,7 +610,6 @@ Namespace HoMIDom
                 Return retour
             End Try
         End Function
-
         Public Function EvaluateCommand(ByVal Command As String) As String
             'si la chaine ne contient que des chiffres et operateurs "+-*/^().," on calcule sinon on affecte
             Try
@@ -709,6 +624,105 @@ Namespace HoMIDom
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "EvaluateCommand", "Exception: " & ex.ToString)
                 Return Command
+            End Try
+        End Function
+
+        Public Function Decodestring(ByVal texte As String) As String
+            Try
+                If String.IsNullOrEmpty(texte) Then
+                    Return ""
+                Else
+                    Dim resultatSTR As String = texte
+                    'remplacement de <composant> et <composant.meteo> et <SYSTEM_xxx>
+                    Try
+                        Dim startcmd As Integer = InStr(1, resultatSTR, "<")
+                        Dim endcmd As Integer = InStr(1, resultatSTR, ">")
+                        Dim newcmd As String = resultatSTR
+                        If startcmd > 0 Then _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "Decodestring", "Evaluation de : " & resultatSTR)
+                        Do While startcmd > 0 And endcmd > 0
+                            Dim _device As String = Mid(newcmd, startcmd + 1, endcmd - startcmd - 1)
+                            'Dim Tabl() As String = _device.Split(".")
+                            Dim Tabl() As String = _device.Split(System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                            If Tabl.Length = 1 Then
+                                Select Case _device
+                                    Case "SYSTEM_DATE"
+                                        _device = Now.Date.ToShortDateString
+                                    Case "SYSTEM_LONG_DATE"
+                                        _device = Now.Date.ToLongDateString
+                                    Case "SYSTEM_TIME"
+                                        _device = Now.ToShortTimeString
+                                    Case "SYSTEM_LONG_TIME"
+                                        _device = Now.ToLongTimeString
+                                    Case "SYSTEM_SOLEIL_COUCHE"
+                                        Dim _date As Date = _Server.GetHeureCoucherSoleil
+                                        _device = _date.ToShortTimeString
+                                    Case "SYSTEM_SOLEIL_LEVE"
+                                        Dim _date As Date = _Server.GetHeureLeverSoleil
+                                        _device = _date.ToShortTimeString
+                                    Case Else
+                                        Dim y As Object = _Server.ReturnRealDeviceByName(Tabl(0))
+                                        If y IsNot Nothing Then
+                                            _device = y.Value
+                                        Else
+                                            _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "Decodestring", "Composant: " & Tabl(0) & " dans '" & texte & "' non trouvé")
+                                        End If
+                                End Select
+                            ElseIf Tabl.Length = 2 Then
+                                Dim y As Object = _Server.ReturnRealDeviceByName(Tabl(0))
+                                If y IsNot Nothing Then
+                                    Dim value As Object = CallByName(y, Tabl(1), CallType.Get)
+                                    _device = value
+                                End If
+                            End If
+
+                            Dim start As String = Mid(newcmd, 1, startcmd - 1)
+                            Dim fin As String = Mid(newcmd, endcmd + 1, newcmd.Length - endcmd)
+                            newcmd = start & _device & fin
+                            resultatSTR = newcmd
+                            startcmd = InStr(1, newcmd, "<")
+                            endcmd = InStr(1, newcmd, ">")
+                        Loop
+                    Catch ex As Exception
+                        _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Decodestring", "Exception: " & ex.Message)
+                        resultatSTR = texte
+                    End Try
+
+                    ' Calcul de {xxxxxxxxxxxxxx}
+                    Try
+                        Dim startcmd As Integer = InStr(1, resultatSTR, "{")
+                        Dim endcmd As Integer = InStr(1, resultatSTR, "}")
+                        Dim newcmd As String = resultatSTR
+                        If startcmd > 0 Then _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "Decodestring", "Calcul de : " & resultatSTR)
+                        Do While startcmd > 0 And endcmd > 0
+                            Dim _calculstring As String = Mid(newcmd, startcmd + 1, endcmd - startcmd - 1)
+
+                            Try
+                                If Text.RegularExpressions.Regex.IsMatch(_calculstring, "^[0-9+\-*/\^().,]*$") Then
+                                    Dim dt = New DataTable()
+                                    Dim resultat As Double = CDbl(dt.Compute(_calculstring, ""))
+                                    dt = Nothing
+                                    _calculstring = resultat
+                                End If
+                            Catch ex As Exception
+                                _calculstring = Mid(newcmd, startcmd + 1, endcmd - startcmd - 1)
+                                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "Decodestring", "Erreur dans le calcul de '" & _calculstring & "' de '" & texte & "' : " & ex.Message)
+                            End Try
+
+                            Dim start As String = Mid(newcmd, 1, startcmd - 1)
+                            Dim fin As String = Mid(newcmd, endcmd + 1, newcmd.Length - endcmd)
+                            newcmd = start & _calculstring & fin
+                            resultatSTR = newcmd
+                            startcmd = InStr(1, newcmd, "{")
+                            endcmd = InStr(1, newcmd, "}")
+                        Loop
+                    Catch ex As Exception
+                        _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "Decodestring", "Exception: " & ex.Message)
+                    End Try
+                    Return resultatSTR
+                End If
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Decodestring", "Exception: " & ex.ToString)
+                Return texte
             End Try
         End Function
     End Class
