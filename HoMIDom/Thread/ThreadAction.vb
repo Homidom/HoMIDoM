@@ -683,7 +683,7 @@ Namespace HoMIDom
                             endcmd = InStr(1, newcmd, ">")
                         Loop
                     Catch ex As Exception
-                        _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.DEVICE, "Decodestring", "Exception: " & ex.Message)
+                        _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "Decodestring", "Exception: " & ex.Message)
                         resultatSTR = texte
                     End Try
 
