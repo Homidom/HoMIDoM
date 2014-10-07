@@ -19,6 +19,8 @@ Public Class HoMIServicE
     Dim host As ServiceHost
     Dim hostFileServer As ServiceHost
 
+
+
     Protected Overrides Sub OnStart(ByVal args() As String)
         Try
             If (Environment.UserInteractive) Then
@@ -134,6 +136,7 @@ Public Class HoMIServicE
                 Console.WriteLine(" ")
                 Console.Read()
                 OnStop()
+                Environment.Exit(0)
             End If
         Catch ex As Exception
             Dim message As String = ex.ToString
@@ -177,8 +180,6 @@ Public Class HoMIServicE
             host.Close()
 
             log("****   SERVEUR ARRETE    ****")
-
-            Me.close()
         Catch ex As Exception
             Dim message As String = ex.ToString
             message = DelRep(message)

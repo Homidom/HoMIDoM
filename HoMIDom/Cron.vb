@@ -111,6 +111,7 @@ Namespace HoMIDom
                 Return New CrontabSchedule(_Server, fields(0), fields(1), fields(2), fields(3), fields(4), fields(5))
             Catch ex As Exception
                 _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, " TryParse Cron Execute", "Exception: " & ex.ToString)
+                Return Nothing
             End Try
         End Function
 
