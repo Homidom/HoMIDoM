@@ -31,6 +31,7 @@ Public Class uMacro
                     TxtNom.Text = x.Nom
                     TxtDescription.Text = x.Description
                     cEnable.IsChecked = x.Enable
+                    TxtID.Text = x.ID
                     UScenario1.Items = x.ListActions
                 End If
             End If

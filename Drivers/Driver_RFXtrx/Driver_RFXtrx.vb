@@ -1816,12 +1816,9 @@ Imports System.Media
                             WriteLog("ERR: WRITE Le parametre " & CStr(Parametre1) & " n'est pas un entier")
                         End If
                     End If
-                Case "ARC"
-                    send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeARC)
-                Case "BLYSS"
-                    send_lighting6(Objet.Adresse1, Command, LIGHTING6.sTypeBlyss)
-                Case "ELROAB400D"
-                        send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeAB400D)
+                Case "ARC" : send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeARC)
+                Case "BLYSS" : send_lighting6(Objet.Adresse1, Command, LIGHTING6.sTypeBlyss)
+                Case "ELROAB400D" : send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeAB400D)
                 Case "EMW100"
                     If Not IsNothing(Parametre1) Then
                         If IsNumeric(Parametre1) Then
@@ -1832,11 +1829,8 @@ Imports System.Media
                     Else
                         WriteLog("ERR: WRITE Il manque un parametre")
                     End If
-
-                Case "EMW200"
-                    send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeEMW200)
-                Case "IMPULS"
-                    send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeIMPULS)
+                Case "EMW200" : send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeEMW200)
+                Case "IMPULS" : send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeIMPULS)
                 Case "LIGHTWAVERF"
                     If Not IsNothing(Parametre1) Then
                         If IsNumeric(Parametre1) Then
@@ -1847,20 +1841,20 @@ Imports System.Media
                     Else
                         WriteLog("ERR: WRITE Il manque un parametre")
                     End If
-                Case "RISINGSUN"
-                    send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeRisingSun)
-                Case "PHILIPS"
-                    send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypePhilips)
-                Case "WAVEMAN"
-                    send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeWaveman)
-                Case "X10"
-                    send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeX10)
-                Case "aucun"
-                    WriteLog("ERR: WRITE Pas de protocole d'emission pour " & Objet.Name)
-                Case ""
-                    WriteLog("ERR: WRITE Pas de protocole d'emission pour " & Objet.Name)
-                Case Else
-                    WriteLog("ERR: WRITE Protocole non géré : " & Objet.Modele.ToString.ToUpper)
+                Case "PHILIPS" : send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypePhilips)
+                Case "RISINGSUN" : send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeRisingSun)
+                Case "SECURITY-KD101" : send_security(Objet.Adresse1, Command, SECURITY1.sTypeKD101)
+                Case "SECURITY-SA30" : send_security(Objet.Adresse1, Command, SECURITY1.sTypeSA30)
+                Case "SECURITY-X10" : send_security(Objet.Adresse1, Command, SECURITY1.sTypeSecX10)
+                Case "SECURITY-MEIANTECH" : send_security(Objet.Adresse1, Command, SECURITY1.sTypeMeiantech)
+                Case "SECURITY-VISONICDOOR" : send_security(Objet.Adresse1, Command, SECURITY1.sTypePowercodeSensor)
+                Case "SECURITY-VISONICMOTION" : send_security(Objet.Adresse1, Command, SECURITY1.sTypePowercodeMotion)
+                Case "SECURITY-VISONICCONTACT" : send_security(Objet.Adresse1, Command, SECURITY1.sTypePowercodeAux)
+                Case "WAVEMAN" : send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeWaveman)
+                Case "X10" : send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeX10)
+                Case "aucun" : WriteLog("ERR: WRITE Pas de protocole d'emission pour " & Objet.Name)
+                Case "" : WriteLog("ERR: WRITE Pas de protocole d'emission pour " & Objet.Name)
+                Case Else : WriteLog("ERR: WRITE Protocole non géré : " & Objet.Modele.ToString.ToUpper)
             End Select
         Catch ex As Exception
             WriteLog("ERR: WRITE" & ex.ToString)
@@ -1959,7 +1953,7 @@ Imports System.Media
             'add_paramavance("ParamMode", "Paramétres (ex: 20011111111111111011111111)", "20011111111111111011111111")
             'add_paramavance("AutoDiscover", "Permet de créer automatiquement des composants si ceux-ci n'existent pas encore (True/False)", False)
             add_paramavance("Frequence", "Frequence utilisée : 0=310, 1=315, 2=433, 3=868.30, 4=868.30 FSK, 5=868.35, 6=868.35 FSK, 7=868.95", 2)
-            add_paramavance("Protocole Undec", "Protocole UNDEC 0=disable 1=enable", 0)
+            add_paramavance("Protocole Undec", "Protocole UNDEC 0=disable 1=enable", 1)
             add_paramavance("Protocole Novatis", "0=disable 1=enable", 0)
             add_paramavance("Protocole Proguard", "0=disable 1=enable", 1)
             add_paramavance("Protocole FS20", "0=disable 1=enable", 1)
@@ -1976,10 +1970,10 @@ Imports System.Media
             add_paramavance("Protocole ARC", "0=disable 1=enable", 1)
             add_paramavance("Protocole X10", "0=disable 1=enable", 1)
             add_paramavance("Protocole Blinds t0", "0=disable 1=enable", 0)
-            add_paramavance("Protocole RFU", "0=disable 1=enable", 1)
+            add_paramavance("Protocole RFU", "0=disable 1=enable", 0)
             add_paramavance("Protocole SX", "0=disable 1=enable", 1)
             add_paramavance("Protocole RSL", "0=disable 1=enable", 1)
-            add_paramavance("Protocole Lighting4", "0=disable 1=enable", 1)
+            add_paramavance("Protocole Lighting4", "0=disable 1=enable", 0)
             add_paramavance("Protocole Fineoffset", "0=disable 1=enable", 1)
             add_paramavance("Protocole Rubicson", "0=disable 1=enable", 1)
             add_paramavance("Protocole AE", "0=disable 1=enable", 1)
@@ -2012,13 +2006,25 @@ Imports System.Media
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
-            add_devicecommande("GROUP_ON", "Protocole AC/ACEU/ARC/BLYSS : ON sur le groupe du composant", 2)
-            add_devicecommande("GROUP_OFF", "Protocole AC/ACEU/ARC/BLYSS : OFF sur le groupe du composant", 2)
-            add_devicecommande("GROUP_DIM", "Protocole AC/ACEU : DIM sur le groupe du composant", 2)
-            add_devicecommande("BRIGHT", "Protocole X10 : Bright", 2)
-            add_devicecommande("ALL_LIGHT_ON", "Protocole X10/EMW200/PHILIPS : ALL_LIGHT_ON", 2)
-            add_devicecommande("ALL_LIGHT_OFF", "Protocole X10/EMW200/PHILIPS : ALL_LIGHT_OFF", 2)
-            add_devicecommande("CHIME", "Protocole ARC : Chime", 2)
+            add_devicecommande("GROUP_ON", "Protocole AC/ACEU/ARC/BLYSS : ON sur le groupe du composant", 1)
+            add_devicecommande("GROUP_OFF", "Protocole AC/ACEU/ARC/BLYSS : OFF sur le groupe du composant", 1)
+            add_devicecommande("GROUP_DIM", "Protocole AC/ACEU : DIM sur le groupe du composant", 1)
+            add_devicecommande("BRIGHT", "Protocole X10 : Bright", 0)
+            add_devicecommande("ALL_LIGHT_ON", "Protocole X10/EMW200/PHILIPS : ALL_LIGHT_ON", 0)
+            add_devicecommande("ALL_LIGHT_OFF", "Protocole X10/EMW200/PHILIPS : ALL_LIGHT_OFF", 0)
+            add_devicecommande("CHIME", "Protocole ARC : Chime", 0)
+            add_devicecommande("PANIC", "Protocole SECURITY : Send PANIC alarm", 0)
+            add_devicecommande("END_PANIC", "Protocole SECURITY : Send END_PANIC command", 0)
+            add_devicecommande("MOTION", "Protocole SECURITY : Send MOTION alarm", 0)
+            add_devicecommande("NO_MOTION", "Protocole SECURITY : Send NO_MOTION command", 0)
+            add_devicecommande("PAIR", "Protocole SECURITY : Send PAIR command", 0)
+            add_devicecommande("ALARM", "Protocole SECURITY : Send ALARM command", 0)
+            add_devicecommande("NORMAL", "Protocole SECURITY : Send NORMAL command", 0)
+            add_devicecommande("DISARM", "Protocole SECURITY : Send ALARM command", 0)
+            add_devicecommande("ARM_AWAY", "Protocole SECURITY : Send ARM_AWAY command", 0)
+            add_devicecommande("ARM_HOME", "Protocole SECURITY : Send ARM_HOME command", 0)
+            add_devicecommande("DARK_DETECTED", "Protocole SECURITY : Send DARK_DETECTED command", 0)
+            add_devicecommande("LIGHT_DETECTED", "Protocole SECURITY : Send LIGHT_DETECTED command", 0)
 
             'Libellé Driver
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
@@ -2027,7 +2033,7 @@ Imports System.Media
             Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole")
             Add_LibelleDevice("ADRESSE2", "@", "")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : aucun/AC/ACEU/ANSLUT/ARC/BLYSS/ELROAB400D/EMW100/EMW200/LIGHTWAVERF/IMPULS/PHILIPS/RISINGSUN/WAVEMAN/X10", "aucun|AC|ACEU|ANSLUT|ARC|BLYSS|ELROAB400D|EMW100|EMW200|IMPULS|LIGHTWAVERF|PHILIPS|RISINGSUN|WAVEMAN|X10")
+            Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : aucun/AC/ACEU/ANSLUT/ARC/BLYSS/ELROAB400D/EMW100/EMW200/LIGHTWAVERF/IMPULS/PHILIPS/RISINGSUN/SECURITY-KD101/SECURITY-MEIANTECH/SECURITY-SA30/SECURITY-VISONICDOOR/SECURITY-VISONICMOTION/SECURITY-VISONICCONTACT/SECURITY-X10/WAVEMAN/X10", "aucun|AC|ACEU|ANSLUT|ARC|BLYSS|ELROAB400D|EMW100|EMW200|IMPULS|LIGHTWAVERF|PHILIPS|RISINGSUN|SECURITY-KD101|SECURITY-MEIANTECH|SECURITY-SA30|SECURITY-VISONICDOOR|SECURITY-VISONICMOTION|SECURITY-VISONICCONTACT|SECURITY-X10|WAVEMAN|X10")
             Add_LibelleDevice("REFRESH", "@", "")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
@@ -5520,6 +5526,87 @@ Imports System.Media
         End Try
     End Sub
 
+    ''' <summary>Gestion du protocole SECURITY</summary>
+    ''' <param name="adresse">Adresse du type FFFFA1 </param>
+    ''' <param name="commande">commande PANIC, PAIR, MOTION</param>
+    ''' <param name="type">protocole</param>
+    ''' <remarks></remarks>
+    Private Sub send_security(ByVal adresse As String, ByVal commande As String, ByVal type As Integer)
+        Try
+            Dim kar(SECURITY1.size) As Byte
+            Dim temp As String = ""
+
+            If Not (adresse.Length = 6) Then
+                WriteLog("ERR: Send Security : Adresse invalide : " & adresse)
+                Exit Sub
+            End If
+
+            kar(SECURITY1.packetlength) = SECURITY1.size
+            kar(SECURITY1.packettype) = SECURITY1.pTypeSecurity1
+            kar(SECURITY1.subtype) = type
+            'Select Case type
+            '    Case 0 : kar(SECURITY1.subtype) = SECURITY1.sTypeSecX10
+            '    Case 1 : kar(SECURITY1.subtype) = SECURITY1.sTypeKD101
+            '    Case 2 : kar(SECURITY1.subtype) = SECURITY1.sTypeSA30
+            '    Case 3 : kar(SECURITY1.subtype) = SECURITY1.sTypePowercodeSensor
+            '    Case 4 : kar(SECURITY1.subtype) = SECURITY1.sTypePowercodeMotion
+            '    Case 5 : kar(SECURITY1.subtype) = SECURITY1.sTypePowercodeAux
+            '    Case 6 : kar(SECURITY1.subtype) = SECURITY1.sTypeMeiantech
+            'End Select
+
+
+            kar(SECURITY1.seqnbr) = bytSeqNbr
+            kar(SECURITY1.id1) = CByte(Array.IndexOf(adressetoint, adresse.Substring(0, 2)))
+            kar(SECURITY1.id2) = CByte(Array.IndexOf(adressetoint, adresse.Substring(2, 2)))
+            kar(SECURITY1.id3) = CByte(Array.IndexOf(adressetoint, adresse.Substring(4, 2)))
+            Select Case commande
+                Case "NORMAL" : kar(SECURITY1.status) = 0
+                Case "NORMAL_DELAYED" : kar(SECURITY1.status) = 1
+                Case "ALARM" : kar(SECURITY1.status) = 2
+                Case "ALARM_DELAYED" : kar(SECURITY1.status) = 3
+                Case "MOTION" : kar(SECURITY1.status) = 4
+                Case "NO_MOTION" : kar(SECURITY1.status) = 5
+                Case "PANIC":kar(SECURITY1.status) = 6
+                Case "END_PANIC" : kar(SECURITY1.status) = 7
+                Case "ARM_AWAY" : kar(SECURITY1.status) = 9
+                Case "ARM_AWAY_DELAYED" : kar(SECURITY1.status) = &HA
+                Case "ARM_HOME" : kar(SECURITY1.status) = &HB
+                Case "ARM_HOME_DELAYED" : kar(SECURITY1.status) = &HC
+                Case "DISARM" : kar(SECURITY1.status) = &HD
+                Case "LIGHT1_OFF" : kar(SECURITY1.status) = &H10
+                Case "LIGHT1_ON" : kar(SECURITY1.status) = &H11
+                Case "LIGHT2_OFF" : kar(SECURITY1.status) = &H12
+                Case "LIGHT2_ON" : kar(SECURITY1.status) = &H13
+                Case "DARK_DETECTED" : kar(SECURITY1.status) = &H14
+                Case "LIGHT_DETECTED" : kar(SECURITY1.status) = &H15
+                Case "BATTERY_LOW" : kar(SECURITY1.status) = &H16
+                Case "PAIR" : kar(SECURITY1.status) = &H17
+                Case "NORMAL_TAMPER" : kar(SECURITY1.status) = &H80
+                Case "NORMAL_DELAYED_TAMPER" : kar(SECURITY1.status) = &H81
+                Case "ALARM_TAMPER" : kar(SECURITY1.status) = &H82
+                Case "ALARM_DELAYED_TAMPER" : kar(SECURITY1.status) = &H83
+                Case "MOTION_TAMPER" : kar(SECURITY1.status) = &H84
+                Case "NO_MOTION_TAMPER" : kar(SECURITY1.status) = &H85
+                Case Else
+                    WriteLog("ERR: Send Security : Commande invalide : " & commande)
+                    Exit Sub
+            End Select
+            kar(SECURITY1.filler) = 0
+            ecrire(kar)
+
+            WriteRetourSend(adresse, "", commande)
+
+            If _DEBUG Then
+                For Each bt As Byte In kar
+                    temp = temp & VB.Right("0" & Hex(bt), 2) & " "
+                Next
+                WriteLog("DBG: Send Security : commande envoyée : " & temp)
+            End If
+        Catch ex As Exception
+            WriteLog("ERR: Send Security Exception : " & ex.Message)
+        End Try
+    End Sub
+
     'OLD
     ' ''' <summary>Gestion du protocole X10 RF</summary>
     ' ''' <param name="adresse">Adresse du type A1</param>
@@ -6004,7 +6091,7 @@ Imports System.Media
             If _DEBUG Then WriteLog("DBG: WriteRetour : receive from " & adresse & " (" & type & ") -> " & valeur)
 
             If Not _IsConnect Then Exit Sub 'si on ferme le port on quitte
-            If DateTime.Now < DateAdd(DateInterval.Second, 10, dateheurelancement) Then Exit Sub 'on ne traite rien pendant les 10 premieres secondes
+            If DateTime.Now < DateAdd(DateInterval.Second, 6, dateheurelancement) Then Exit Sub 'on ne traite rien pendant les 6 premieres secondes
 
             'Recherche si un device affecté
             Dim listedevices As New ArrayList
