@@ -16,6 +16,7 @@ Partial Class HoMIServicE
         End Try
     End Sub
 
+
     ' Point d'entrée principal du processus
     <MTAThread()> _
     <System.Diagnostics.DebuggerNonUserCode()> _
@@ -34,12 +35,17 @@ Partial Class HoMIServicE
             'System.ServiceProcess.ServiceBase.Run(ServicesToRun)
 
             If (Environment.UserInteractive) Then
+
+                'handle du CTRL+C pour eviter de fermer le process à la barbare
+                AddHandler Console.CancelKeyPress, AddressOf myHandler
+
                 Dim service As New HoMIServicE
                 Dim args As String()
                 service.OnStart(args)
                 'Console.WriteLine("Press any key to stop program")
                 'Console.Read()
                 'service.OnStop()
+                Environment.Exit(0)
             Else
                 ServicesToRun = New System.ServiceProcess.ServiceBase() {New HoMIServicE}
                 System.ServiceProcess.ServiceBase.Run(ServicesToRun)
@@ -51,6 +57,11 @@ Partial Class HoMIServicE
             myEventLog = Nothing
         End Try
 
+    End Sub
+
+    Shared Sub myHandler(ByVal sender As Object, ByVal args As ConsoleCancelEventArgs)
+        args.Cancel = True
+        Console.WriteLine(Now & " INFO   CTRL+C -> Arrêt du service")
     End Sub
 
     'Requise par le Concepteur de composants
@@ -65,7 +76,6 @@ Partial Class HoMIServicE
         'HoMIServicE
         '
         Me.ServiceName = "HoMIServicE"
-
     End Sub
 
 End Class
