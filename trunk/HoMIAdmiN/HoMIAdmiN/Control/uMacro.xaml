@@ -18,7 +18,12 @@
                         <TextBox Height="21" HorizontalAlignment="Left" Name="TxtDescription" VerticalAlignment="Top" Width="349" Background="DarkGray" BorderBrush="Black" Foreground="White"/>
                     </StackPanel>
                     <my:uScenario HorizontalAlignment="Left" x:Name="UScenario1" VerticalAlignment="Top" Height="450" Width="585" Margin="5,10,5,5" />
-                    <Button Content="Tester" Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,0,5,5" Name="BtnTest" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" />
+                    <StackPanel Orientation="Horizontal" Name="StkID">
+                        <Button Content="Tester" Foreground="White" Height="25" HorizontalAlignment="Right" Margin="0,0,5,5" Name="BtnTest" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="88.75" />
+                        <Label Content="ID:" Foreground="LightGray" FontSize="10" />
+                        <TextBox Name="TxtID" MinWidth="300" FontSize="10" IsReadOnly="True" Foreground="White" Background="Transparent" BorderThickness="0" />
+                    </StackPanel>
+                    
                 </StackPanel >
             </StackPanel >
         </Border>
