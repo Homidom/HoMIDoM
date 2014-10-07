@@ -757,8 +757,8 @@ Imports System.Threading
                     ATport.Handshake = Handshake.RequestToSend
                     ATport.ReadBufferSize = CInt(4096)
                     'RS232Port.ReceivedBytesThreshold = 1
-                    ATport.ReadTimeout = 300
-                    ATport.WriteTimeout = 300
+                    ATport.ReadTimeout = 600
+                    ATport.WriteTimeout = 600
                     ATport.Open()
                     '  AddHandler ATport.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
                 Catch ex As Exception

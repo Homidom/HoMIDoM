@@ -188,25 +188,37 @@ Namespace HoMIDom
                                 '========== Version 3 ========== 
                                 retour2 = Decodestring(x.Conditions.Item(i).Value.ToString)
 
-                                'on teste si les deux valeurs sont du meme type sinon impossible de tester et on retourn False
-                                If (retour.GetType = retour2.GetType) Then
-                                    Try
-                                        Select Case x.Conditions.Item(i).Condition
-                                            Case Action.TypeSigne.Egal : If retour = retour2 Then result = True Else result = False
-                                            Case Action.TypeSigne.Different : If retour <> retour2 Then result = True Else result = False
-                                            Case Action.TypeSigne.Inferieur : If retour < retour2 Then result = True Else result = False
-                                            Case Action.TypeSigne.InferieurEgal : If retour <= retour2 Then result = True Else result = False
-                                            Case Action.TypeSigne.Superieur : If retour > retour2 Then result = True Else result = False
-                                            Case Action.TypeSigne.SuperieurEgal : If retour >= retour2 Then result = True Else result = False
-                                        End Select
-                                    Catch ex As Exception
-                                        _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute Test", "Erreur dans le test de '" & retour & "' <-> '" & retour2 & "'  : " & ex.Message)
-                                        result = False
-                                    End Try
-                                Else
-                                    _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "ThreadAction Execute Test", "Type de valeurs different: '" & retour & "' <-> '" & retour2 & "'  : Test annulé --> Faux")
+                                Try
+                                    'correction de la valeur testé suivant le type du composant
+                                    If TypeOf retour Is Boolean Then
+                                        If retour2 = "ON" Then retour2 = True
+                                        If retour2 = "100" Then retour2 = True
+                                        If retour2 = "OFF" Then retour2 = False
+                                        If retour2 = "0" Then retour2 = False
+                                    End If
+                                    If TypeOf retour Is Integer Or TypeOf retour Is Long Then
+                                        If retour2 = True Then retour2 = 100
+                                        If retour2 = False Then retour2 = 0
+                                        If retour2 = "ON" Then retour2 = 100
+                                        If retour2 = "OFF" Then retour2 = 0
+                                    End If
+                                    'test
+                                    Select Case x.Conditions.Item(i).Condition
+                                        Case Action.TypeSigne.Egal : If retour = retour2 Then result = True Else result = False
+                                        Case Action.TypeSigne.Different : If retour <> retour2 Then result = True Else result = False
+                                        Case Action.TypeSigne.Inferieur : If retour < retour2 Then result = True Else result = False
+                                        Case Action.TypeSigne.InferieurEgal : If retour <= retour2 Then result = True Else result = False
+                                        Case Action.TypeSigne.Superieur : If retour > retour2 Then result = True Else result = False
+                                        Case Action.TypeSigne.SuperieurEgal : If retour >= retour2 Then result = True Else result = False
+                                    End Select
+                                Catch ex As Exception
+                                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute Test", "Erreur dans le test de '" & retour & "' <-> '" & retour2 & "'  : " & ex.Message)
                                     result = False
-                                End If
+                                End Try
+                                'Else
+                                '    _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "ThreadAction Execute Test", "Type de valeurs different: '" & retour & "' <-> '" & retour2 & "'  : Test annulé --> Faux")
+                                '     result = False
+                                'End If
 
                                 If i = 0 Then 'c le 1er donc pas prendre en compte l'operateur
                                     flag = result

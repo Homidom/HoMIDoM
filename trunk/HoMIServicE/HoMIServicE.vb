@@ -177,6 +177,8 @@ Public Class HoMIServicE
             host.Close()
 
             log("****   SERVEUR ARRETE    ****")
+
+            Me.close()
         Catch ex As Exception
             Dim message As String = ex.ToString
             message = DelRep(message)
