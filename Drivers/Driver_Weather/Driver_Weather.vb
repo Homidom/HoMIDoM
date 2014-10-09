@@ -313,12 +313,13 @@ Imports System.Threading
 
             If _IsConnect Then
                 For Each _Dev As HoMIDom.HoMIDom.TemplateDevice In _Server.GetAllDevices(_IdSrv)
-                    If _Dev.Type = ListeDevices.METEO Then
+                    If _Dev.Type = ListeDevices.METEO And _Dev.Enable Then
                         Read(_Server.ReturnRealDeviceById(_Dev.ID))
-                        Thread.Sleep(5000)
+                        Thread.Sleep(2000)
                     End If
                 Next
             End If
+
         Catch ex As Exception
             _IsConnect = False
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", ex.Message)
@@ -349,6 +350,7 @@ Imports System.Threading
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
             If _Enable = False Then Exit Sub
+
             If Objet.type = "METEO" Then
                 _Obj = Objet
                 Dim y As New Thread(AddressOf MAJ)

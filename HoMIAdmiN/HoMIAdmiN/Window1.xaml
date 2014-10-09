@@ -236,6 +236,7 @@
             <Image Name="ImgLog" Margin="2" Height="20" Source="/HoMIAdmiN;component/Images/Logs_128.png" Tag="7" />
             <Label Name="LOG" Content="LOG" Foreground=" White" Tag="7" />
             <Rectangle Width="10"/>
+            <Label Name="LblDebug" Foreground="White"/>
         </StackPanel>
         
         <DockPanel Name="DKpanel">

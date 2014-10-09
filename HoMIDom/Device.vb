@@ -217,6 +217,7 @@ Namespace HoMIDom
             Protected _Unit As String = ""
             Protected _Puiss As Integer = 0
             Protected _AllValue As Boolean = False
+            Protected _CountHisto As Double = 0
             Protected _Template As HoMIDom.Telecommande.Template = Nothing
 
             '<NonSerialized()> Protected _FirstTime As Boolean = True
@@ -360,6 +361,16 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As Date)
                     _LastChange = value
+                End Set
+            End Property
+
+            'Nombre d'Historiques
+            Public Property CountHisto() As Double
+                Get
+                    Return _CountHisto
+                End Get
+                Set(ByVal value As Double)
+                    _CountHisto = value
                 End Set
             End Property
 

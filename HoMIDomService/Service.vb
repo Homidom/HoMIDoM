@@ -85,11 +85,8 @@ Module Service
                 Dim myChannelFactory As ServiceModel.ChannelFactory(Of IHoMIDom) = Nothing
 
                 Try
-                    'myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)("ConfigurationHttpHomidom")
-                    'Dim myadress As String = "http://" & _Addrip & ":" & PortSOAP & "/ServiceModelSamples/service"
                     Dim myadress As String = "http://" & Dns.GetHostName() & ":" & PortSOAP & "/service"
                     Dim binding As New ServiceModel.BasicHttpBinding
-                    'Dim Context As OperationContext = OperationContext.Current 'non utilisé donc commenté : DMS
                     binding.MaxBufferPoolSize = 250000000
                     binding.MaxReceivedMessageSize = Integer.MaxValue
                     binding.MaxBufferSize = Integer.MaxValue
@@ -121,8 +118,6 @@ Module Service
                     hostFileServer.Open()
                     Console.WriteLine(Now & " Serveur de fichiers démarré sur l'adresse: " & fileServerAddress.ToString())
 
-                    'démarrage OK
-                    '                    Console.Beep()
                     Console.WriteLine(" ")
                     Console.WriteLine("******************************")
                     Console.WriteLine("****   SERVEUR DEMARRE    ****")
@@ -289,4 +284,8 @@ Module Service
         End Try
     End Sub
 
+
+    Sub DeviceChange(a As String, b As String)
+        Console.WriteLine(Now & " WRITE EVENT : " & a & " : " & b)
+    End Sub
 End Module
