@@ -15,8 +15,15 @@
 
                     <StackPanel DockPanel.Dock="Right" >
                         <Button Height="24.293" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnClose" VerticalAlignment="Top" Width="87.169" Foreground="White">Fermer</Button>
+                        <Button Height="24.293" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnRefresh" VerticalAlignment="Top" Width="87.169" Foreground="White">Rafraichir</Button>
                         <StackPanel Orientation="Horizontal" >
-                            <Button Height="24.293" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" Margin="2" Name="BtnRefresh" VerticalAlignment="Top" Width="87.169" Foreground="White">Rafraichir</Button>
+                            <Label Content="Nombre de logs:" Foreground=" White" />
+                            <ComboBox Name="CbView" SelectedIndex="1" FontSize="14" Width="50">
+                            <ComboBoxItem Content="Tous" />
+                            <ComboBoxItem Content="16" />
+                            <ComboBoxItem Content="32" />
+                            <ComboBoxItem Content="64" />
+                        </ComboBox>
                         </StackPanel>
                     </StackPanel>
                     <Label FontSize="24" FontStyle="Italic" Foreground="DarkOrange" Name="Label1" VerticalAlignment="Top" HorizontalContentAlignment="Center">Log</Label>

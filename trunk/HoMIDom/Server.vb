@@ -37,6 +37,7 @@ Namespace HoMIDom
 
 #Region "Evènements"
         Public Event DeviceChanged(ByVal DeviceId As String, ByVal DeviceValue As String) Implements IHoMIDom.DeviceChanged 'Evènement lorsqu'un device change
+        Public Event DeviceDeleted(ByVal DeviceId As String) Implements IHoMIDom.DeviceDeleted 'Evènement lorsqu'un device change
         Public Event NewLog(ByVal TypLog As HoMIDom.Server.TypeLog, ByVal Source As HoMIDom.Server.TypeSource, ByVal Fonction As String, ByVal Message As String) Implements IHoMIDom.NewLog  'Evènement lorsqu'un nouveau log est écrit
         Public Event MessageFromServeur(ByVal Id As String, ByVal Time As DateTime, ByVal Message As String) Implements IHoMIDom.MessageFromServeur  'Message provenant du serveur
         Public Event DriverChanged(ByVal DriverId As String) Implements IHoMIDom.DriverChanged 'Evènement lorsq'un driver est modifié
@@ -50,7 +51,6 @@ Namespace HoMIDom
         Private Shared WithEvents _ListDrivers As New ArrayList 'Liste des drivers
         Private Shared WithEvents _ListDevices As New ArrayList 'Liste des devices
         Private Shared WithEvents _ListNewDevices As New List(Of NewDevice) 'Liste des devices découverts
-
         Private Shared _ListImgDrivers As New List(Of Driver)
 
         <NonSerialized()> Private Shared _ListZones As New List(Of Zone) 'Liste des zones
@@ -125,9 +125,6 @@ Namespace HoMIDom
 #End Region
 
 #Region "Event"
-        '********************************************************************
-        'Gestion des Evènements
-        '********************************************************************
         Public Sub VarEvent(Nom As String, e As String)
             Try
                 Log(TypeLog.DEBUG, TypeSource.SERVEUR, "VarEvent", "La variable: " & Nom & " a changée de valeur=" & e)
@@ -135,7 +132,7 @@ Namespace HoMIDom
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "VarEvent", "Exception : " & ex.Message)
             End Try
         End Sub
-        
+
 
         ''' <summary>Evenement provenant des drivers </summary>
         ''' <param name="DriveName"></param>
@@ -280,77 +277,13 @@ Namespace HoMIDom
                             retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString("yyyy-MM-dd HH:mm:ss"), valeur)
                             If Mid(retour, 1, 4) = "ERR:" Then
                                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur Requete sqlite : " & retour)
+                            Else
+                                Device.CountHisto += 1
                             End If
                         Catch ex As Exception
                             Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Historique Exception : " & ex.Message)
                         End Try
 
-                        'Ancienne gestion, maintenant directement dans les devices
-                        '--- si on teste la value (et non les autres propriétés d'un device) et si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
-                        'If [Property] = "Value" Then
-
-                        '    If TypeOf Device.value Is Double Or TypeOf Device.value Is Integer Then
-                        '        'le device est de type double/integer (nombre), on converti la valeur récupérée en string pour la traiter
-                        '        Dim valeurstring As String = valeur.ToString
-                        '        '--- Remplacement de , par .
-                        '        valeurstring = valeurstring.Replace(",", ".") '?encore besoin ???
-
-                        '        '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
-                        '        If Device.LastEtat And valeurstring = Device.ValueLast.ToString Then
-                        '            'log de "inchangé lastetat"
-                        '            Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeurstring & " (inchangé lastetat " & Device.ValueLast.ToString & ")")
-                        '        Else
-                        '            '--- on vérifie que la valeur a changé de plus de composants_precision sinon inchangé
-                        '            If (CDbl(valeur) + CDbl(Device.Precision)) >= CDbl(Device.Value) And (CDbl(valeur) - CDbl(Device.Precision)) <= CDbl(Device.Value) Then
-                        '                'log de "inchangé précision"
-                        '                Log(TypeLog.VALEUR_INCHANGE_PRECISION, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeurstring & " (inchangé precision " & Device.ValueLast.ToString & ")")
-                        '            Else
-                        '                'log de la nouvelle valeur
-                        '                Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeurstring)
-                        '                'On historise la nouvellevaleur
-                        '                retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeurstring)
-                        '                If Mid(retour, 1, 4) = "ERR:" Then
-                        '                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
-                        '                End If
-                        '            End If
-                        '        End If
-
-                        '    ElseIf TypeOf Device.value Is Boolean Or TypeOf Device.value Is String Then
-                        '        '--- Valeur est autre chose qu'un nombre
-                        '        '--- historise la valeur si ce n'est pas une simple info de config
-                        '        If Mid(valeur.ToString, 1, 4) <> "CFG:" Then
-                        '            '--- si lastetat=True, on vérifie que la valeur a changé par rapport a l'avant dernier etat (valuelast) 
-                        '            If Device.LastEtat And valeur.ToString = Device.ValueLast.ToString Then
-                        '                'log de "inchangé lastetat"
-                        '                Log(TypeLog.VALEUR_INCHANGE_LASTETAT, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur.ToString & " (inchangé lastetat " & Device.ValueLast.ToString & ")")
-                        '            Else
-                        '                'log de la nouvelle valeur
-                        '                Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur.ToString)
-                        '                'Ajout dans la BDD
-                        '                retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur.ToString)
-                        '                If Mid(retour, 1, 4) = "ERR:" Then
-                        '                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
-                        '                End If
-                        '            End If
-                        '        Else
-                        '            'log de l'info de config
-                        '            Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur.ToString)
-                        '        End If
-                        '    Else
-                        '        '-- Type non reconnu : ERREUR
-                        '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Type de device non reconnu " & Device.Name.ToString)
-                        '    End If
-
-
-                        'Else
-                        '    'C'est une autre propriété, on logue directement et stocke la modif
-                        '    Log(TypeLog.VALEUR_CHANGE, TypeSource.SERVEUR, "DeviceChange", Device.Name.ToString() & " : " & Device.Adresse1 & " : " & valeur & " (" & [Property] & ")")
-                        '    'Ajout dans la BDD
-                        '    retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString(), valeur)
-                        '    If Mid(retour, 1, 4) = "ERR:" Then
-                        '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur lors Requete sqlite : " & retour)
-                        '    End If
-                        'End If
                     Else
                         'erreur d'acquisition
                         Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur d'acquisition : " & Device.Name & " - " & valeur.ToString)
@@ -372,7 +305,7 @@ Namespace HoMIDom
                 If (table_TimerSecTickthread.Rows.Count < 5) Then
                     'ajout a la table des thread
                     Try
-                        Dim newRow As DataRow
+                        Dim newRow As DataRow = Nothing
                         newRow = table_TimerSecTickthread.NewRow()
                         newRow.Item("name") = "TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss")
                         newRow.Item("comment") = ""
@@ -390,6 +323,7 @@ Namespace HoMIDom
                     thr.IsBackground = True
                     thr.Name = "VerifTimeDevice"
                     thr.Start()
+                    '_SrvEvent.AddMessage("Test")
 
                     '---- Actions à effectuer toutes les minutes ----
                     If ladate.Second = 0 Then
@@ -503,22 +437,24 @@ Namespace HoMIDom
         Private Sub VerifTimeDevice()
             Try
 
-                Dim _m As Macro
-                For i As Integer = 0 To _ListTriggers.Count() - 1
-                    If _ListTriggers.Item(i).Type = Trigger.TypeTrigger.TIMER Then
-                        If _ListTriggers.Item(i).Enable = True Then
-                            If _ListTriggers.Item(i).Prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss") Then
-                                _ListTriggers.Item(i).maj_cron() 'reprogrammation du prochain shedule
+                For Each _Trigger In _ListTriggers
+                    If _Trigger.Enable Then
+                        If _Trigger.Type = Trigger.TypeTrigger.TIMER Then
+                            If _Trigger.Prochainedateheure <= DateAndTime.Now.ToString("yyyy-MM-dd HH:mm:ss") Then
+                                _Trigger.maj_cron() 'reprogrammation du prochain shedule
+
+                                Dim _m As Macro = Nothing
                                 'lancement des macros associées
-                                For j As Integer = 0 To _ListTriggers.Item(i).ListMacro.Count - 1
+                                For j As Integer = 0 To _Trigger.ListMacro.Count - 1
                                     'on cherche la macro et on la lance en testant ces conditions
-                                    _m = ReturnMacroById(_IdSrv, _ListTriggers.Item(i).ListMacro.Item(j))
+                                    _m = ReturnMacroById(_IdSrv, _Trigger.ListMacro.Item(j))
                                     If _m IsNot Nothing Then
-                                        Log(TypeLog.DEBUG, TypeSource.SERVEUR, "TriggerTimer", "Lancement de la macro: " & _m.Nom & " ,suite au déclenchement du trigger: " & _ListTriggers.Item(i).Nom)
+                                        Log(TypeLog.DEBUG, TypeSource.SERVEUR, "TriggerTimer", "Lancement de la macro: " & _m.Nom & " ,suite au déclenchement du trigger: " & _Trigger.Nom)
                                         _m.Execute(Me)
                                     End If
                                     _m = Nothing
                                 Next
+
                             End If
                         End If
                     End If
@@ -1134,7 +1070,7 @@ Namespace HoMIDom
                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Chargement des nouveaux devices détectés:")
                             list = Nothing
                             list = myxml.SelectNodes("/homidom/newdevices/newdevice")
-                            If list.Count > 0 Then 'présence des users
+                            If list.Count > 0 Then 'présence des devices
                                 For i As Integer = 0 To list.Count - 1
                                     Dim x As New NewDevice
                                     For j As Integer = 0 To list.Item(i).Attributes.Count - 1
@@ -1341,6 +1277,11 @@ Namespace HoMIDom
                                         If (Not list.Item(j).Attributes.GetNamedItem("lastchange") Is Nothing) Then .LastChange = list.Item(j).Attributes.GetNamedItem("lastchange").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("lastchangeduree") Is Nothing) Then .LastChangeDuree = list.Item(j).Attributes.GetNamedItem("lastchangeduree").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("refresh") Is Nothing) Then .Refresh = list.Item(j).Attributes.GetNamedItem("refresh").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("counthisto") Is Nothing) Then
+                                            .Counthisto = list.Item(j).Attributes.GetNamedItem("counthisto").Value
+                                        Else
+                                            .CountHisto = DeviceAsHisto(.ID)
+                                        End If
                                         If (Not list.Item(j).Attributes.GetNamedItem("modele") Is Nothing) Then .Modele = list.Item(j).Attributes.GetNamedItem("modele").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("allvalue") Is Nothing) Then .AllValue = list.Item(j).Attributes.GetNamedItem("allvalue").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("unit") Is Nothing) Then .Unit = list.Item(j).Attributes.GetNamedItem("unit").Value
@@ -2235,6 +2176,9 @@ Namespace HoMIDom
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("lastchangeduree")
                         writer.WriteValue(_ListDevices.Item(i).LastChangeDuree)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("counthisto")
+                        writer.WriteValue(_ListDevices.Item(i).CountHisto)
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("refresh")
                         writer.WriteValue(_ListDevices.Item(i).refresh)
@@ -5327,6 +5271,35 @@ Namespace HoMIDom
             End Try
         End Function
 
+        Public Function GetTableDBHisto(ByVal idsrv As String) As DataTable Implements IHoMIDom.GetTableDBHisto
+            Try
+                If VerifIdSrv(idsrv) = False Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetTableDBHisto", "Erreur ID du serveur")
+                    Return Nothing
+                End If
+
+                Dim result As New DataTable
+                result.TableName = "ListHisto"
+                Dim retour As String
+                Dim commande As String = "select * from historiques;"
+                retour = sqlite_homidom.query(commande, result, "")
+                If UCase(Mid(retour, 1, 3)) <> "ERR" Then
+                    If result IsNot Nothing Then
+                        Return result
+                    Else
+                        result = Nothing
+                        Return Nothing
+                    End If
+                Else
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetTableDBHisto", retour)
+                    Return Nothing
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetTableDBHisto", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
 
         Public Function GetAllListHisto(ByVal idsrv As String) As List(Of Historisation) Implements IHoMIDom.GetAllListHisto
             Try
@@ -5569,7 +5542,7 @@ Namespace HoMIDom
         ''' <summary>Permet de savoir si un device a des historiques associés dans la BDD</summary>
         ''' <param name="IdDevice"></param>
         ''' <param name="Source"></param>
-        ''' <returns>true si le composant a un historique</returns>
+        ''' <returns>nombre d'historique</returns>
         ''' <remarks></remarks>
         Public Function DeviceAsHisto(ByVal IdDevice As String, Optional ByVal Source As String = "") As Long Implements IHoMIDom.DeviceAsHisto
             Try
@@ -5578,7 +5551,7 @@ Namespace HoMIDom
                 Dim result As Long = 0
 
                 If Source = "" Then
-                    commande = "SELECT COUNT(*) FROM historiques WHERE device_id='" & IdDevice & "' ;"
+                    commande = "SELECT COUNT(*) FROM (SELECT 'rowid',* FROM 'historiques') WHERE device_id='" & IdDevice & "' ;"
                 Else
                     commande = "SELECT COUNT(*) FROM historiques WHERE source='" & Source & "' and device_id='" & IdDevice & "' ;"
                 End If
@@ -5601,27 +5574,23 @@ Namespace HoMIDom
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function DevicesAsHisto() As Dictionary(Of String, Boolean) Implements IHoMIDom.DevicesAsHisto
+        Public Function DevicesAsHisto() As Dictionary(Of String, Long) Implements IHoMIDom.DevicesAsHisto
             Try
-                Dim Retour As New Dictionary(Of String, Boolean)
+                Dim Retour As New Dictionary(Of String, Long)
                 Dim commande As String
                 Dim IdDevice As String
                 Dim result As Integer = 0
                 Dim retourDB As String
 
-                'Dim result As New DataTable("HistoDB")
-
-
                 For i As Integer = 0 To _ListDevices.Count - 1
                     IdDevice = _ListDevices.Item(i).ID
 
-                    commande = "SELECT COUNT(*) FROM historiques WHERE device_id='" & IdDevice & "' ;"
+                    commande = "SELECT COUNT(*) FROM (SELECT 'rowid',* FROM 'historiques') WHERE device_id='" & IdDevice & "' ;"
                     retourDB = sqlite_homidom.count(commande, result)
+
                     If UCase(Mid(retourDB, 1, 3)) <> "ERR" Then
-                        If result > 0 Then
-                            Retour.Add(IdDevice, True)
-                        Else
-                            Retour.Add(IdDevice, False)
+                        If result >= 0 Then
+                            Retour.Add(IdDevice, result)
                         End If
                     Else
                         Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DevicesAsHisto", "Erreur: " & retourDB)
@@ -6928,6 +6897,7 @@ Namespace HoMIDom
                         .Unit = _ListDevices.Item(i).Unit
                         .AllValue = _ListDevices.Item(i).AllValue
                         .VariablesOfDevice = _ListDevices.Item(i).Variables
+                        .CountHisto = _ListDevices.Item(i).CountHisto
                         If IsNumeric(_ListDevices.Item(i).valuelast) Then .ValueLast = _ListDevices.Item(i).valuelast
 
                         _listact = ListMethod(_ListDevices.Item(i).id)
@@ -7219,6 +7189,7 @@ Namespace HoMIDom
                         .Puissance = Puissance
                         .AllValue = AllValue
                         .Variables = Variables
+                        .CountHisto = 0
                     End With
 
                     Select Case UCase(type)
@@ -7443,6 +7414,7 @@ Namespace HoMIDom
                         retour.Enable = _ListDevices.Item(i).enable
                         retour.GetDeviceCommandePlus = _ListDevices.Item(i).GetCommandPlus
                         retour.VariablesOfDevice = _ListDevices.Item(i).Variables
+                        retour.CountHisto = _ListDevices.Item(i).CountHisto
 
                         Select Case UCase(_ListDevices.Item(i).type)
                             Case "APPAREIL" : retour.Type = Device.ListeDevices.APPAREIL  'modules pour diriger un appareil  ON/OFF
@@ -9589,9 +9561,28 @@ Namespace HoMIDom
                         retour = ""
                     End If
                 Else
-                    'creation d'une nouvelle instance du membre xmldocument
-                    Dim XmlDoc As XmlDocument = New XmlDocument()
-                    XmlDoc.Load(_MonRepertoire & "\logs\log.xml")
+                    If IsNumeric(Requete) Then
+                        Dim cnt As Integer = CInt(Requete)
+                        If cnt < 8 Then cnt = 0
+
+                        Dim lignes() As String = IO.File.ReadAllLines(_MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt")
+                        Dim cnt1 As Integer = lignes.Length - cnt
+
+                        If cnt1 <= 0 Then cnt1 = 0
+
+                        For i As Integer = 0 To lignes.Length - 1
+                            If i >= cnt1 Then
+                                retour &= lignes(i)
+                            End If
+                        Next
+
+                        retour = HtmlDecode(retour)
+                    Else
+                        'creation d'une nouvelle instance du membre xmldocument
+                        Dim XmlDoc As XmlDocument = New XmlDocument()
+                        XmlDoc.Load(_MonRepertoire & "\logs\log.xml")
+                    End If
+
                 End If
                 If retour.Length > 1000000 Then
                     Dim retour2 As String = Mid(retour, retour.Length - 1000001, 1000000)

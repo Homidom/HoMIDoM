@@ -61,7 +61,7 @@ Class Window1
     Dim _flagSave As Boolean = False 'True si première execution du client ou si on a changer un paramètre de config
 
     'User Graphic
-    Dim mypush As PushNotification()
+    Dim mypush As PushNotification
     Dim _ShowSoleil As Boolean
     Dim _ShowTemperature As Boolean
     Dim _ImageBackGroundDefault As String = ""
@@ -1753,7 +1753,7 @@ Class Window1
                     myService.GetTime()
                     IsConnect = True
 
-                    Dim mypush As New PushNotification("http://" & IP & ":" & PortSOAP & "/live", IdSrv, TimeOutServerLive)
+                    mypush = New PushNotification("http://" & IP & ":" & PortSOAP & "/live", IdSrv, TimeOutServerLive)
                     AddHandler mypush.DeviceChanged, AddressOf DeviceChanged
                     mypush.Open()
 
@@ -1969,6 +1969,7 @@ Class Window1
 
     Protected Overrides Sub Finalize()
         Try
+            mypush.Close()
             MyBase.Finalize()
         Catch ex As Exception
             AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Finalize Window1: " & ex.Message, "Erreur", "Finalize")

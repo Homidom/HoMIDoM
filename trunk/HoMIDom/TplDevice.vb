@@ -65,6 +65,7 @@ Namespace HoMIDom
         Dim _Puiss As Integer = 0
         Dim _AllValue As Boolean
         Dim _ListCommandPlus As New List(Of Device.DeviceCommande)
+        Dim _CountHisto As Double = 0
 
         ''' <summary>
         ''' Nom du device
@@ -183,6 +184,16 @@ Namespace HoMIDom
             End Get
             Set(ByVal value As Integer)
                 _Puiss = value
+            End Set
+        End Property
+
+        Public Property CountHisto As Double
+            Get
+                Return _CountHisto
+            End Get
+            Set(value As Double)
+                _CountHisto = value
+                If _CountHisto < 0 Then _CountHisto = 0
             End Set
         End Property
 

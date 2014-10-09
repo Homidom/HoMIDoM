@@ -26,8 +26,9 @@ Partial Public Class uZone
             End If
 
             SaveElement()
-            myservice.SaveZone(IdSrv, _ZoneId, TxtName.Text, _ListIdSelect, ImgIcon.Tag.ToString, ImgZone.Tag.ToString)
+            myService.SaveZone(IdSrv, _ZoneId, TxtName.Text, _ListIdSelect, ImgIcon.Tag.ToString, ImgZone.Tag.ToString)
             FlagChange = True
+            ManagerZones.LoadZones()
             RaiseEvent CloseMe(Me)
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de l'enregistrement de la zone, message: " & ex.ToString, "Erreur", "")

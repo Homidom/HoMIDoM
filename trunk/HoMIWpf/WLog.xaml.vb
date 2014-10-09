@@ -4,6 +4,7 @@ Imports System.Web.HttpUtility
 
 Public Class WLog
     Dim _IsClient As Boolean = False
+    Dim _NbView As Integer = 16
     ' Used when manually scrolling.
     Private scrollTarget As Point
     Private scrollStartPoint As Point
@@ -18,7 +19,12 @@ Public Class WLog
             'Variables
             Me.Cursor = Cursors.Wait
 
-            Stk.Children.Clear()
+            If Stk Is Nothing Then
+                Exit Sub
+            Else
+                Stk.Children.Clear()
+            End If
+
 
             If IsConnect = True Then
                 Dim TargetFile As StreamWriter
@@ -28,7 +34,7 @@ Public Class WLog
                     TargetFile.Write(ReturnLog)
                 Else
                     Label1.Content = "Log du Serveur"
-                    TargetFile.Write(myService.ReturnLog)
+                    TargetFile.Write(myService.ReturnLog(_NbView))
                 End If
                 TargetFile.Close()
                 TargetFile.Dispose()
@@ -129,4 +135,19 @@ Public Class WLog
         End If
     End Sub
 #End Region
+
+    Private Sub CbView_SelectionChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbView.SelectionChanged
+        Select Case CbView.SelectedIndex
+            Case 0
+                _NbView = 0
+            Case 1
+                _NbView = 16
+            Case 2
+                _NbView = 32
+            Case 3
+                _NbView = 64
+        End Select
+
+        RefreshLog()
+    End Sub
 End Class

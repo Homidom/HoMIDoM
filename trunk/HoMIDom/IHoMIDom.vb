@@ -424,6 +424,14 @@ Namespace HoMIDom
 
 #Region "Historisation"
         ''' <summary>
+        ''' Retourne la table d'historique sous forme de DataTable
+        ''' </summary>
+        ''' <param name="idsrv">ID du serveur</param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetTableDBHisto(ByVal idsrv As String) As DataTable
+
+        ''' <summary>
         ''' Permet d'exécuter une requete SQL sur la table histo
         ''' </summary>
         ''' <param name="IdSrv">ID du serveur</param>
@@ -468,7 +476,7 @@ Namespace HoMIDom
         ''' </summary>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function DevicesAsHisto() As Dictionary(Of String, Boolean)
+        <OperationContract()> Function DevicesAsHisto() As Dictionary(Of String, Long)
 
         ''' <summary>
         ''' Retourne un datatable d'historique d'un device suivant sa propriété (source) puis suivant une date de début et de fin
@@ -1387,6 +1395,7 @@ Namespace HoMIDom
 
 #Region "Evènements"
         Event DeviceChanged(ByVal DeviceId As String, ByVal DeviceValue As String) 'Evènement lorsqu'un device change
+        Event DeviceDeleted(ByVal DeviceId As String)
         Event NewLog(ByVal TypLog As HoMIDom.Server.TypeLog, ByVal Source As HoMIDom.Server.TypeSource, ByVal Fonction As String, ByVal Message As String) 'Evènement lorsqu'un nouveau log est écrit
         Event MessageFromServeur(Id As String, Time As DateTime, Message As String) 'Message provenant du serveur
         Event DriverChanged(DriverId As String) 'Evènement lorsq'un driver est modifié
