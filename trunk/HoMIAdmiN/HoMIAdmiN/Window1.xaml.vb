@@ -11,6 +11,7 @@ Imports System.Reflection.Assembly
 Imports System.Windows.Media.Animation
 Imports System.ComponentModel
 
+
 Class Window1
 
     Public Event menu_gerer(ByVal IndexMenu As Integer)
@@ -23,6 +24,7 @@ Class Window1
     Dim FlagStart As Boolean = False
     Dim MyRep As String = System.Environment.CurrentDirectory
     Dim MyRepAppData As String = System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData) & "\HoMIAdmiN"
+    Dim mypush As PushNotification
 
     Dim MainMenu As uMainMenu
     Dim WMainMenu As Double = 0
@@ -34,6 +36,7 @@ Class Window1
     Dim flagShowMainMenu As Boolean = False
     Dim FlagOK As Boolean = False
     Dim _IsConnect As Boolean = False
+    Dim _ShowNbHistoInDevice As Boolean = False
 
 #Region "Fonctions de base"
 
@@ -103,25 +106,46 @@ Class Window1
         Try
             If IsConnect = True Then
                 Try
+                    Dim _string As String
+                    Dim list As List(Of String)
 
                     'Modifie la date et Heure
-                    LblStatus.Content = Now.ToLongDateString & " " & myService.GetTime & " "
+                    LblStatus.Content = Now.ToLongDateString & " " & Now.ToLongTimeString
 
-                    'Modifie les heures du soleil
-                    LHS.Content = CDate(myService.GetHeureLeverSoleil).ToShortTimeString
-                    LCS.Content = CDate(myService.GetHeureCoucherSoleil).ToShortTimeString
+                    If Now.Second = 0 Then
+                        'Modifie les heures du soleil
+                        LHS.Content = CDate(myService.GetHeureLeverSoleil).ToShortTimeString
+                        LCS.Content = CDate(myService.GetHeureCoucherSoleil).ToShortTimeString
 
-                    'Vérifie si nouveau device
-                    If myService.AsNewDevice Then
-                        ImgNewDevice.ToolTip = "Afficher les nouveaux composants du mode découverte"
-                        ImgNewDevice.Visibility = Windows.Visibility.Visible
-                    Else
-                        ImgNewDevice.Visibility = Windows.Visibility.Collapsed
+                        'Vérifie si nouveau device
+                        If myService.AsNewDevice Then
+                            ImgNewDevice.ToolTip = "Afficher les nouveaux composants du mode découverte"
+                            ImgNewDevice.Visibility = Windows.Visibility.Visible
+                        Else
+                            If ImgNewDevice.Visibility = Windows.Visibility.Visible Then ImgNewDevice.Visibility = Windows.Visibility.Collapsed
+                        End If
+
+                        _string = "Liste des composants non à jour : " & vbCrLf
+                        list = myService.GetDeviceNoMaJ(IdSrv)
+                        If list.Count > 0 Then
+                            For Each logmsg As String In list
+                                If String.IsNullOrEmpty(logmsg) = False Then
+                                    _string &= logmsg & vbCrLf
+                                    If ImgDeviceNoMaj.Visibility <> Windows.Visibility.Visible Then ImgDeviceNoMaj.Visibility = Windows.Visibility.Visible
+                                    ImgDeviceNoMaj.ToolTip = _string
+                                End If
+                            Next
+                            _string = Nothing
+                        Else
+                            ImgDeviceNoMaj.Visibility = Windows.Visibility.Collapsed
+                        End If
+                        list.Clear()
                     End If
-                    
+
+
                     'Modifie les LOG
-                    Dim _string As String = "Liste des Logs du serveur : " & vbCrLf
-                    Dim list As List(Of String) = myService.GetLastLogs
+                    _string = "Liste des Logs du serveur : " & vbCrLf
+                    list = myService.GetLastLogs
                     If list.Count > 0 Then
                         For Each logmsg In list
                             If String.IsNullOrEmpty(logmsg) = False Then _string &= logmsg & vbCrLf
@@ -151,21 +175,7 @@ Class Window1
                     End If
                     list.Clear()
 
-                    _string = "Liste des composants non à jour : " & vbCrLf
-                    list = myService.GetDeviceNoMaJ(IdSrv)
-                    If list.Count > 0 Then
-                        For Each logmsg As String In list
-                            If String.IsNullOrEmpty(logmsg) = False Then
-                                _string &= logmsg & vbCrLf
-                                If ImgDeviceNoMaj.Visibility <> Windows.Visibility.Visible Then ImgDeviceNoMaj.Visibility = Windows.Visibility.Visible
-                                ImgDeviceNoMaj.ToolTip = _string
-                            End If
-                        Next
-                        _string = Nothing
-                    Else
-                        ImgDeviceNoMaj.Visibility = Windows.Visibility.Collapsed
-                    End If
-                    list.Clear()
+
                     _string = Nothing
 
                 Catch ex As Exception
@@ -200,50 +210,43 @@ Class Window1
 
     Private Sub AffIsConnect()
         'Modifie l'adresse/port du serveur connecté
-        Try
-            Dim serveurcomplet As String = myChannelFactory.Endpoint.Address.ToString()
-            serveurcomplet = Mid(serveurcomplet, 8, serveurcomplet.Length - 8)
-            serveurcomplet = Split(serveurcomplet, "/", 2)(0)
-            Dim srblbl As String = Split(serveurcomplet, ":", 2)(0) & ":" & Split(serveurcomplet, ":", 2)(1)
-            LblConnect.ToolTip = "Serveur connecté adresse utilisée: " & srblbl
-            LblConnect.Content = srblbl
-            serveurcomplet = Nothing
-            srblbl = ""
+        Dim serveurcomplet As String = myChannelFactory.Endpoint.Address.ToString()
+        serveurcomplet = Mid(serveurcomplet, 8, serveurcomplet.Length - 8)
+        serveurcomplet = Split(serveurcomplet, "/", 2)(0)
+        Dim srblbl As String = Split(serveurcomplet, ":", 2)(0) & ":" & Split(serveurcomplet, ":", 2)(1)
+        LblConnect.ToolTip = "Serveur connecté adresse utilisée: " & srblbl
+        LblConnect.Content = srblbl
 
-            Ellipse1.Fill = myBrushVert
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR AffIsConnect: " & ex.Message, "ERREUR", "")
-        End Try
+        'Modifie les heures du soleil
+        LHS.Content = CDate(myService.GetHeureLeverSoleil).ToShortTimeString
+        LCS.Content = CDate(myService.GetHeureCoucherSoleil).ToShortTimeString
+        serveurcomplet = Nothing
+        srblbl = ""
 
+        Ellipse1.Fill = myBrushVert
     End Sub
 
     Private Sub AffIsDisconnect()
-        Try
-            Ellipse1.Fill = myBrushRouge
-            LblConnect.Content = "Serveur non connecté"
-            LblConnect.ToolTip = Nothing
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR AffIsDisconnect: " & ex.Message, "ERREUR", "")
-        End Try
+        Ellipse1.Fill = myBrushRouge
+        LblConnect.Content = "Serveur non connecté"
+        LblConnect.ToolTip = Nothing
     End Sub
 
     Private Sub StoryBoardFinish(ByVal sender As Object, ByVal e As System.EventArgs)
-        Try
-            CanvasRight.Children.Clear()
-            CanvasRight.UpdateLayout()
+        CanvasRight.Children.Clear()
+        CanvasRight.UpdateLayout()
 
-            GC.Collect()
-            GC.WaitForPendingFinalizers()
-            GC.Collect()
+        GC.Collect()
+        GC.WaitForPendingFinalizers()
+        GC.Collect()
 
-            ShowMainMenu()
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR StoryBoardFinish: " & ex.Message, "ERREUR", "")
-        End Try
+        ShowMainMenu()
     End Sub
 
     Protected Overrides Sub Finalize()
         Try
+            mypush.Close()
+
             If ListServer.Count > 0 Then
                 'Serialize object to a text file.
                 Dim objStreamWriter As New StreamWriter(Myfile)
@@ -268,6 +271,7 @@ Class Window1
     ''' <remarks></remarks>
     Public Function Connect_Srv(ByVal Name As String, ByVal IP As String, ByVal Port As String) As Integer
         Try
+            Me.Cursor = Cursors.Wait
             myadress = "http://" & IP & ":" & Port & "/service"
             MyPort = Port
 
@@ -312,11 +316,21 @@ Class Window1
                 End If
 
                 IsConnect = True
+
+                mypush = New PushNotification("http://" & IP & ":" & Port & "/live", IdSrv)
+                AddHandler mypush.DeviceChanged, AddressOf DeviceChanged
+                mypush.Open()
+
                 Tabcontrol1.SelectedIndex = 0
                 My.Settings.SaveRealTime = myService.GetSaveRealTime
                 My.Settings.Save()
                 AffDriver()
                 ShowMainMenu()
+                ManagerDrivers.LoadDrivers()
+                ManagerZones.LoadZones()
+                ManagerDevices.LoadDevices()
+
+                '_TableDBHisto = myService.GetTableDBHisto(IdSrv)
             End If
 
             LblSrv.Content = Name
@@ -330,16 +344,31 @@ Class Window1
                 End If
             Next
             CanvasUser = CanvasRight
+            Me.Cursor = Nothing
 
             Return 0
             binding = Nothing
         Catch ex As Exception
+            Me.Cursor = Nothing
             myChannelFactory.Abort()
             IsConnect = False
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la connexion au serveur sélectionné: " & ex.Message, "Erreur Admin", "")
             Return -1
         End Try
     End Function
+
+    'Event lorsqu'un device change
+    Private Sub DeviceChanged(ByVal deviceid As String, ByVal DeviceValue As String)
+        Try
+            For Each _dev In _ListeDevices
+                If _dev.ID = deviceid Then
+                    _dev = myService.ReturnDeviceByID(IdSrv, deviceid)
+                End If
+            Next
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Event DeviceChanged: " & ex.ToString, "Erreur", " Event DeviceChanged")
+        End Try
+    End Sub
 
     Private Sub Window1_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles Me.Closing
         Try
@@ -421,15 +450,19 @@ Class Window1
             Dim frm As New Window3
             frm.Owner = Me
             frm.ShowDialog()
+
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
+                Me.Cursor = Cursors.Wait
                 If Connect_Srv(frm.TxtName.Text, frm.TxtIP.Text, frm.TxtPort.Text) <> 0 Then
                     frm.Close()
                     PageConnexion()
+                    Me.Cursor = Nothing
                     Exit Sub
                 Else
                     If myService.GetIdServer(IdSrv) = "99" Then
                         AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'ID du serveur est erroné, impossible de communiquer avec celui-ci", "Erreur", "")
                         frm.Close()
+                        Me.Cursor = Nothing
                         Exit Sub
                     End If
                     'If myService.VerifLogin(frm.TxtUsername.Text, frm.TxtPassword.Password) = False Then
@@ -438,6 +471,7 @@ Class Window1
                     frm.Close()
                     FlagStart = True
                     frm = Nothing
+                    Me.Cursor = Nothing
                     'End If
                 End If
             Else
@@ -966,26 +1000,25 @@ Class Window1
 
             If IsConnect = False Then Exit Sub
 
-            Dim ListeDevices As List(Of TemplateDevice) = myService.GetAllDevices(IdSrv)
-            Dim ListeZones As List(Of Zone) = myService.GetAllZones(IdSrv)
-            Dim DevicesAsHisto As Dictionary(Of String, Boolean) = myService.DevicesAsHisto
+            'ManagerDevices.LoadHisto()
 
-            If ListeDevices IsNot Nothing Then
-                CntDevice.Content = ListeDevices.Count & " Device(s)"
-                For Each Dev As TemplateDevice In ListeDevices
+            If _ListeDevices IsNot Nothing Then
+                CntDevice.Content = _ListeDevices.Count & " Device(s)"
 
+                For Each Dev As TemplateDevice In _ListeDevices
                     Dim newchild As New TreeViewItem
                     Dim stack As New StackPanel
                     Dim img As New Image
                     Dim FlagZone As Boolean = False
-                    Dim nomdriver As String = myService.ReturnDriverByID(IdSrv, Dev.DriverID).Nom
+                    Dim nomdriver As String = ManagerDrivers.ReturnDriverById(Dev.DriverID).Nom
                     Dim _nbhisto As Long = 0
-
+                    Dim uri2 As String = MyRep & "\Images\Icones\ZoneNo_32.png"
+                    Dim default_imgzone = ImageFromUri(uri2)
                     stack.Orientation = Orientation.Horizontal
 
-                    If DevicesAsHisto.ContainsKey(Dev.ID) Then
-                        _nbhisto = myService.DeviceAsHisto(Dev.ID)
-                    End If
+                    'If _DevicesAsHisto.ContainsKey(Dev.ID) Then
+                    _nbhisto = Dev.CountHisto  'myService.DeviceAsHisto(Dev.ID)
+                    'End If
 
                     'gestion de l'image du composant dans le menu
                     img.Height = 20
@@ -1015,7 +1048,7 @@ Class Window1
                     label.Content = Dev.Name & " (" & nomdriver & ")"
 
                     'verification si le device fait parti d'une zone
-                    For Each Zon In ListeZones
+                    For Each Zon In _ListeZones
                         If FlagZone = False Then
                             For Each elemnt In Zon.ListElement
                                 If elemnt.ElementID = Dev.ID Then
@@ -1029,11 +1062,10 @@ Class Window1
                     Next
 
                     If FlagZone = False Then
-                        Dim uri2 As String = MyRep & "\Images\Icones\ZoneNo_32.png"
                         Dim imgNoZone As New Image
                         imgNoZone.Height = 20
                         imgNoZone.Width = 20
-                        imgNoZone.Source = ImageFromUri(uri2)
+                        imgNoZone.Source = default_imgzone
                         imgNoZone.ToolTip = "Ce composant ne fait pas partie d'une zone"
                         stack.Children.Add(imgNoZone)
                         imgNoZone = Nothing
@@ -1044,7 +1076,9 @@ Class Window1
                     tl.Foreground = System.Windows.Media.Brushes.White
                     tl.Background = System.Windows.Media.Brushes.WhiteSmoke
                     tl.BorderBrush = System.Windows.Media.Brushes.Black
+                    tl.Tag = Dev.ID
 
+                    AddHandler tl.Opened, AddressOf MaJhistoToolTip
                     Dim stkpopup As New StackPanel
 
                     Dim imgpopup As New Image
@@ -1135,14 +1169,18 @@ Class Window1
                     tl = Nothing
                 Next
 
-                ListeDevices = Nothing
+                ' ListeDevices = Nothing
             Else
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub AffDevice: Le serveur n'a renvoyé aucun composant...", "ERREUR", "")
             End If
-            ListeZones = Nothing
+            'ListeZones = Nothing
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub AffDevice: " & ex.ToString, "ERREUR", "")
         End Try
+    End Sub
+
+    Private Sub MaJhistoToolTip(sender As Object, e As Windows.RoutedEventArgs)
+        'MsgBox(sender.tag)
     End Sub
 
     'Retourne True si le device a plusieurs histo sur des propriétés différents
@@ -1429,12 +1467,12 @@ Class Window1
             TreeViewHisto.UpdateLayout()
 
             Dim x As New List(Of HoMIDom.HoMIDom.Historisation)
-            Dim ListeDevices As List(Of TemplateDevice) = myService.GetAllDevices(IdSrv)
+            'Dim ListeDevices As List(Of TemplateDevice) = myService.GetAllDevices(IdSrv)
 
             x = myService.GetAllListHisto(IdSrv)
 
-            If ListeDevices IsNot Nothing Then
-                For Each _dev As TemplateDevice In ListeDevices
+            If _ListeDevices IsNot Nothing Then
+                For Each _dev As TemplateDevice In _ListeDevices ' ListeDevices
                     Dim IsNode As Boolean = False
                     Dim parent = New TreeViewItem
                     Dim y As New CheckBox
@@ -1485,7 +1523,7 @@ Class Window1
                                 tl.Foreground = System.Windows.Media.Brushes.White
                                 tl.Background = System.Windows.Media.Brushes.WhiteSmoke
                                 tl.BorderBrush = System.Windows.Media.Brushes.Black
-                                Dim _nbhisto As Long = myService.DeviceAsHisto(_dev.ID)
+                                Dim _nbhisto As Long = _dev.CountHisto
                                 Dim nomdriver As String = myService.ReturnDriverByID(IdSrv, _dev.DriverID).Nom
                                 Dim stkpopup As New StackPanel
                                 Dim tool As New Label
@@ -1554,7 +1592,7 @@ Class Window1
                 Next
 
                 x = Nothing
-                ListeDevices = Nothing
+                'ListeDevices = Nothing
             End If
 
             TreeViewHisto.Items.SortDescriptions.Clear()
@@ -2118,6 +2156,15 @@ Class Window1
                                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu START: " & ex.Message, "ERREUR", "")
                             End Try
                     End Select
+                Case "var"
+                    Try
+                        Dim x As New uVariables
+                        x.Uid = System.Guid.NewGuid.ToString()
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        AffControlPage(x)
+                    Catch ex As Exception
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu variables gérer: " & ex.Message, "ERREUR", "")
+                    End Try
                 Case "hst"
                     Tabcontrol1.SelectedIndex = 6
                     Select Case index
@@ -2146,6 +2193,8 @@ Class Window1
                                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuContextmenu Module ajouter: " & ex.Message, "ERREUR", "")
                             End Try
                     End Select
+
+
             End Select
             ShowTreeView()
             Me.Cursor = Nothing
@@ -2305,7 +2354,7 @@ Class Window1
             End If
 
             Me.Cursor = Cursors.Wait
-            Select Case index
+            Select Case index.ToLower
                 Case "tag_histo" : Tabcontrol1.SelectedIndex = 6
                 Case "tag_histo_import"
                     Try
@@ -2372,7 +2421,13 @@ Class Window1
                     Catch ex As Exception
                         AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuAutre Playlist: " & ex.Message, "ERREUR", "")
                     End Try
-
+                Case "tag_multimedia_template"
+                    Try
+                        Dim frm As New WTelecommandeNew()
+                        frm.ShowDialog()
+                    Catch ex As Exception
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuAutre: " & ex.Message, "ERREUR", "")
+                    End Try
                 Case "tag_config" 'Configurer le serveur
                     Try
                         Dim x As New uConfigServer
@@ -2382,7 +2437,15 @@ Class Window1
                     Catch ex As Exception
                         AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuAutre config: " & ex.Message, "ERREUR", "")
                     End Try
-
+                Case "tag_var" 'Configurer le serveur
+                    Try
+                        Dim x As New uVariables
+                        x.Uid = System.Guid.NewGuid.ToString()
+                        AddHandler x.CloseMe, AddressOf UnloadControl
+                        AffControlPage(x)
+                    Catch ex As Exception
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MainMenuAutre var: " & ex.Message, "ERREUR", "")
+                    End Try
                 Case "tag_aide" 'Aide
                     Try
                         Dim x As New uHelp
@@ -2792,11 +2855,11 @@ Class Window1
                         Dim myStoryboard As Storyboard = New Storyboard()
                         myStoryboard.Children.Add(myDoubleAnimation)
                         AddHandler myStoryboard.Completed, AddressOf AffControlPageSuite
-                        If CanvasRight.Children.Item(i) IsNot Nothing Then
-                            Storyboard.SetTarget(myDoubleAnimation, CanvasRight.Children.Item(i))
-                            Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
-                            myStoryboard.Begin()
-                        End If
+
+                        Storyboard.SetTarget(myDoubleAnimation, CanvasRight.Children.Item(i))
+                        Storyboard.SetTargetProperty(myDoubleAnimation, New PropertyPath(UserControl.OpacityProperty))
+                        myStoryboard.Begin()
+
                         myStoryboard = Nothing
                     Else
                         AffControlPageSuite()
@@ -2813,7 +2876,6 @@ Class Window1
 
     Private Sub AffControlPageSuite()
         Try
-
             CanvasRight.Children.Clear()
             CanvasRight.UpdateLayout()
 
@@ -2822,11 +2884,10 @@ Class Window1
             GC.Collect()
 
             Me.UpdateLayout()
-            If Objet3 IsNot Nothing Then
-                CanvasRight.Children.Add(Objet3)
-                AnimationApparition(Objet3)
-                Objet3 = Nothing
-            End If
+
+            CanvasRight.Children.Add(Objet3)
+            AnimationApparition(Objet3)
+            Objet3 = Nothing
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub AffControlPageSuite: " & ex.Message, "ERREUR", "")
         End Try
@@ -3019,6 +3080,8 @@ Class Window1
         End If
 
     End Sub
+
+
 End Class
 
 
