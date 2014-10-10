@@ -60,6 +60,13 @@ Namespace HoMIDom
         <NonSerialized()> Private Shared _ListGroups As New List(Of Groupes) 'Liste de tous les groupes
         <NonSerialized()> Private Shared _ListVars As New List(Of Variable) 'Liste de toutes les variables
 
+        <NonSerialized()> Private Shared _SequenceDriver As String 'N° de sequence en cours du dernier changement d'un driver
+        <NonSerialized()> Private Shared _SequenceDevice As String 'N° de sequence en cours du dernier changement d'un device
+        <NonSerialized()> Private Shared _SequenceTrigger As String 'N° de sequence en cours du dernier changement d'un trigger
+        <NonSerialized()> Private Shared _SequenceZone As String 'N° de sequence en cours du dernier changement d'une zone
+        <NonSerialized()> Private Shared _SequenceMacro As String 'N° de sequence en cours du dernier changement d'une macro
+        <NonSerialized()> Private Shared _SequenceServer As String 'N° de sequence en cours du dernier changement du server
+
         <NonSerialized()> Private sqlite_homidom As New Sqlite("homidom", Me) 'BDD sqlite pour Homidom
         <NonSerialized()> Private sqlite_medias As New Sqlite("medias", Me) 'BDD sqlite pour les medias
         <NonSerialized()> Shared Soleil As New Soleil 'Déclaration class Soleil
@@ -144,6 +151,7 @@ Namespace HoMIDom
                 If Etat_server Then
                     For Each _drv In GetAllDrivers(_IdSrv)
                         If _drv.Nom = DriveName Then
+                            _SequenceDriver = Api.GenerateGUID
                             RaiseEvent DriverChanged(_drv.ID)
                             Exit For
                         End If
@@ -235,6 +243,7 @@ Namespace HoMIDom
                 End Try
             End If
 
+            _SequenceDevice = Api.GenerateGUID
             RaiseEvent DeviceChanged(genericDevice.ID, valeurString)
 
             Try
@@ -2405,6 +2414,14 @@ Namespace HoMIDom
 
                 writer.WriteEndDocument()
                 writer.Close()
+
+                _SequenceDevice = Api.GenerateGUID
+                _SequenceDriver = Api.GenerateGUID
+                _SequenceMacro = Api.GenerateGUID
+                _SequenceTrigger = Api.GenerateGUID
+                _SequenceZone = Api.GenerateGUID
+                _SequenceServer = Api.GenerateGUID
+
                 Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde terminée")
                 Return True
             Catch ex As Exception
@@ -3372,6 +3389,7 @@ Namespace HoMIDom
                 Instance = Me
                 'Check If Homidom Run in 32 or 64 bits
                 If IntPtr.Size = 8 Then _OsPlatForm = "64" Else _OsPlatForm = "32"
+                _SequenceServer = Api.GenerateGUID
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New", "Exception : " & ex.Message)
             End Try
@@ -3470,32 +3488,25 @@ Namespace HoMIDom
                 'Si sauvegarde automatique vers un folder
                 If _CycleSaveFolder > 0 Then _NextTimeSaveFolder = Now.AddHours(_CycleSaveFolder)
 
-                '----- Démarre les connexions Sqlite ----- 
-                'retour = sqlite_homidom.connect()
-                'If retour.StartsWith("ERR:") Then
-                '    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Homidom : " & retour)
-                '    'on arrête tout
-
-
-                'Else
-                '    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Homidom : " & retour)
-                'End If
-                'retour = sqlite_medias.connect()
-                'If retour.StartsWith("ERR:") Then
-                '    Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "Start", "Erreur lors de la connexion à la BDD Medias : " & retour)
-                '    'on arrête tout
-
-
-                'Else
-                '    Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Connexion à la BDD Medias : " & retour)
-                'End If
-
                 '----- Charge les drivers ----- 
                 Drivers_Load()
 
                 '----- Chargement de la config ----- 
                 retour = LoadConfig(_MonRepertoire & "\Config\")
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", retour)
+
+                '----- Initialisation des sequences ----- 
+                _SequenceDevice = Api.GenerateGUID
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Initialisation des sequences", "Sequence Device=" & _SequenceDevice)
+                _SequenceDriver = Api.GenerateGUID
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Initialisation des sequences", "Sequence Driver=" & _SequenceDriver)
+                _SequenceMacro = Api.GenerateGUID
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Initialisation des sequences", "Sequence Macro=" & _SequenceMacro)
+                _SequenceTrigger = Api.GenerateGUID
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Initialisation des sequences", "Sequence Trigger=" & _SequenceTrigger)
+                _SequenceZone = Api.GenerateGUID
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "Initialisation des sequences", "SequenceZone=" & _SequenceZone)
+
 
                 '----- Démarre les drivers ----- 
                 Drivers_Start()
@@ -3803,6 +3814,9 @@ Namespace HoMIDom
 
             'Change l'etat du server
             Etat_server = True
+
+            'changement de sequence
+            _SequenceServer = Api.GenerateGUID
 
             'passage du composant HOMI_SERVER à True
             Try
@@ -6366,6 +6380,8 @@ Namespace HoMIDom
                         SaveRealTime()
                     End If
                 Next
+
+                _SequenceDriver = Api.GenerateGUID
                 'génération de l'event
                 Return myID
             Catch ex As Exception
@@ -7269,6 +7285,7 @@ Namespace HoMIDom
                     Next
                 End If
 
+                _SequenceDevice = Api.GenerateGUID
                 RaiseEvent DeviceChanged(myID, "")
 
                 Return myID
@@ -8087,6 +8104,7 @@ Namespace HoMIDom
                     Next
                 End If
 
+                _SequenceZone = Api.GenerateGUID
                 RaiseEvent ZoneChanged(myID)
 
                 Return myID
@@ -8403,6 +8421,7 @@ Namespace HoMIDom
                     Next
                 End If
 
+                _SequenceMacro = Api.GenerateGUID
                 RaiseEvent MacroChanged(myID)
 
                 Return myID
@@ -8625,6 +8644,7 @@ Namespace HoMIDom
                     Next
                 End If
 
+                _SequenceTrigger = Api.GenerateGUID
                 Return myID
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveTrigger", "Exception : " & ex.Message & vbCrLf & ex.Message)
