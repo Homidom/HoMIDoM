@@ -742,35 +742,35 @@ Public Class WTelecommandeNew
                 Exit Sub
             End If
 
-            Me.Cursor = Cursors.Wait
-            'Exporter le fichier de config
+        '    Me.Cursor = Cursors.Wait
+        '    'Exporter le fichier de config
 
-            ' Configure open file dialog box
-            Dim dlg As New Microsoft.Win32.OpenFileDialog
-            dlg.FileName = "" ' Default file name
-            dlg.DefaultExt = ".xml" ' Default file extension
-            dlg.Filter = "Fichier de template (.xml)|*.xml" ' Filter files by extension
+        '    ' Configure open file dialog box
+        '    Dim dlg As New Microsoft.Win32.OpenFileDialog
+        '    dlg.FileName = "" ' Default file name
+        '    dlg.DefaultExt = ".xml" ' Default file extension
+        '    dlg.Filter = "Fichier de template (.xml)|*.xml" ' Filter files by extension
 
-            ' Show open file dialog box
-            Dim result As Boolean = dlg.ShowDialog()
+        '    ' Show open file dialog box
+        '    Dim result As Boolean = dlg.ShowDialog()
 
-            ' Process open file dialog box results
-            If result = True Then
-                ' Open document
-                Dim filename As String = dlg.FileName
-                Dim retour As String = myService.ExportConfig(IdSrv)
-                If retour.StartsWith("ERREUR") Then
-                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, retour, "Erreur export template", "")
-                Else
-                    Dim TargetFile As StreamWriter
-                    TargetFile = New StreamWriter(filename, False)
-                    TargetFile.Write(retour)
-                    TargetFile.Close()
-                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "L'export du fichier de template a été effectué", "Export Template", "")
-                End If
-            End If
+        '    ' Process open file dialog box results
+        '    If result = True Then
+        '        ' Open document
+        '        Dim filename As String = dlg.FileName
+        '        Dim retour As String = myService.ExportConfig(IdSrv)
+        '        If retour.StartsWith("ERREUR") Then
+        '            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, retour, "Erreur export template", "")
+        '        Else
+        '            Dim TargetFile As StreamWriter
+        '            TargetFile = New StreamWriter(filename, False)
+        '            TargetFile.Write(retour)
+        '            TargetFile.Close()
+        '            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "L'export du fichier de template a été effectué", "Export Template", "")
+        '        End If
+        '    End If
 
-            Me.Cursor = Nothing
+        '    Me.Cursor = Nothing
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnExportTemplate_Click: " & ex.Message, "ERREUR", "")
         End Try
