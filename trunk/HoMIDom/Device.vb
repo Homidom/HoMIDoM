@@ -2251,12 +2251,14 @@ Namespace HoMIDom
                         If Not _Server.Etat_server Then
                             _ConditionToday = tmp
                         Else
-                            If _ConditionToday <> tmp Then
-                                _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionToday", Name & " : " & Adresse1 & " : " & tmp)
-                                _ConditionToday = tmp
-                                RaiseEvent DeviceChanged(Me, "ConditionToday", tmp)
-                            Else
-                                _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
+                            If _ConditionToday <> "" Then
+                                If _ConditionToday <> tmp Then
+                                    _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionToday", Name & " : " & Adresse1 & " : " & tmp)
+                                    _ConditionToday = tmp
+                                    RaiseEvent DeviceChanged(Me, "ConditionToday", tmp)
+                                Else
+                                    _Server.Log(TypeLog.VALEUR_INCHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionToday", Name & " : " & Adresse1 & " : " & tmp & " (inchangé)")
+                                End If
                             End If
                         End If
                     Catch ex As Exception
