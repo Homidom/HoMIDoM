@@ -70,6 +70,25 @@
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+<<<<<<< .mine
+    <Reference Include="Microsoft.AspNet.SignalR.Client">
+      <HintPath>..\..\Dll_externes\HoMIWpF\Microsoft.AspNet.SignalR.Client.dll</HintPath>
+    </Reference>
+    <Reference Include="NCrontab, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dll_externes\Homidom-32bits\NCrontab.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+=======
+>>>>>>> .r1673
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Partage\SignalR Server1\SignalR Server1\bin\Release\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Partage\SignalR Server1\SignalR Server1\bin\Release\Owin.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -149,6 +168,9 @@
     <Compile Include="Control\uHisto.xaml.vb">
       <DependentUpon>uHisto.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Control\uItemDevice.xaml.vb">
+      <DependentUpon>uItemDevice.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Control\uMacro.xaml.vb">
       <DependentUpon>uMacro.xaml</DependentUpon>
     </Compile>
@@ -167,6 +189,9 @@
     <Compile Include="Control\uTriggerTimer.xaml.vb">
       <DependentUpon>uTriggerTimer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Control\uVariables.xaml.vb">
+      <DependentUpon>uVariables.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Control\uZone.xaml.vb">
       <DependentUpon>uZone.xaml</DependentUpon>
     </Compile>
@@ -174,11 +199,15 @@
       <DependentUpon>WTelecommande.xaml</DependentUpon>
     </Compile>
     <Compile Include="Fonctions.vb" />
+    <Compile Include="ManagerDevices.vb" />
+    <Compile Include="ManagerDrivers.vb" />
+    <Compile Include="ManagerZones.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="PushNotification.vb" />
     <Compile Include="Splash.xaml.vb">
       <DependentUpon>Splash.xaml</DependentUpon>
     </Compile>
@@ -229,6 +258,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Control\uHisto.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Control\uItemDevice.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -299,6 +332,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Control\uElement.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Control\uVariables.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -611,7 +648,16 @@
     <None Include="Resources\WeatherCityID_FR.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\telecommande-defaut.png" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\WeatherCityID_BE.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Debug-Variable-icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ZoneNo_32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
