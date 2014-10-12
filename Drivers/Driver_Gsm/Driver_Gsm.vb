@@ -476,7 +476,7 @@ Imports System.Threading
                                         _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "SMS à envoyer vide, annulation")
                                     Else
                                         _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM Write", "SMS envoyé : " & Parametre1 & " à " & Objet.adresse1.ToString)
-                                        pdu = New SmsSubmitPdu(Parametre1, Objet.adresse1.ToString, "")
+                                        pdu = New SmsSubmitPdu(Parametre1, Objet.adresse1.ToString, "", DataCodingScheme.GeneralCoding.Alpha16Bit)
                                         comm.SendMessage(pdu, True)
                                         'on modifie la valeur du composant pour stocker les sms envoyés
                                         Objet.Value = "SEND: " & Parametre1
@@ -1044,7 +1044,7 @@ Imports System.Threading
                         _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "   * ouverture du port : " & port_name & " à " & _BAUD & " bauds")
                         Dim portnumber As Integer
                         If (Integer.TryParse(port_name.Substring(3), portnumber)) Then
-                            comm = New GsmCommMain(portnumber, _BAUD, 100) 'vitesse du port(300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200)
+                            comm = New GsmCommMain(portnumber, _BAUD, 300) 'vitesse du port(300, 600, 1200, 2400, 9600, 14400, 19200, 38400, 57600, 115200)
                         End If
                         comm.Open()
                         _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "GSM", "   * Activation des notifications")
@@ -1072,15 +1072,12 @@ Imports System.Threading
                         ATport.StopBits = StopBits.One '1 bit d'arrêt par octet
                         ATport.DataBits = 8 'nombre de bit par octet
                         ' ATport.Encoding = System.Text.Encoding.GetEncoding(1252)  
-
-                        'Extended ASCII (8-bits)
-                        '  ATport.Encoding = Encoding.GetEncoding("iso-8859-1")
+                        ATport.Encoding = Encoding.GetEncoding("iso-8859-1") 'Extended ASCII (8-bits)
                         ATport.Handshake = Handshake.RequestToSend
                         ATport.ReadBufferSize = CInt(4096)
-                        'ATport.Encoding = Encoding.GetEncoding("iso-8859-1")
                         'RS232Port.ReceivedBytesThreshold = 1
-                        ATport.ReadTimeout = 300
-                        ATport.WriteTimeout = 300
+                        ATport.ReadTimeout = 600
+                        ATport.WriteTimeout = 600
                         ATport.Open()
 
                         Thread.Sleep(200)
