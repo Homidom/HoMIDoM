@@ -2096,7 +2096,7 @@ Namespace HoMIDom
                             _TempActuel = tmp
                         Else
                             If _TempActuel <> tmp Then
-                                _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO ConditionActuel", Name & " : " & Adresse1 & " : " & tmp)
+                                _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DEVICE, "DeviceMETEO TemperatureActuel", Name & " : " & Adresse1 & " : " & tmp)
                                 _TempActuel = tmp
                                 RaiseEvent DeviceChanged(Me, "TemperatureActuel", tmp)
                             Else
