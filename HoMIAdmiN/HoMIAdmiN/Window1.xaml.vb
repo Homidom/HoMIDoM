@@ -1138,8 +1138,11 @@ Class Window1
                     mnu4.Tag = 4
                     mnu4.Uid = Dev.ID
                     'If _nbhisto <= 0 Then mnu4.IsEnabled = False
-                    If _nbhisto <= 0 Then mnu4.FontStyle = System.Windows.FontStyles.Italic
-                    AddHandler mnu4.Click, AddressOf MnuitemDev_Click
+                    If _nbhisto <= 0 Then
+                        mnu4.FontStyle = System.Windows.FontStyles.Italic
+                        AddHandler mnu4.Click, AddressOf MnuitemDev_Click
+                    End If
+                    
                     ctxMenu.Items.Add(mnu4)
                     mnu4 = Nothing
                     Dim mnu5 As New MenuItem
