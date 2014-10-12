@@ -1206,9 +1206,13 @@ Partial Public Class uDevice
 
     Private Sub Refresh_cbVar()
         Try
-            CbVariables.ItemsSource = New Forms.BindingSource(_ListVar, Nothing)
-            CbVariables.DisplayMemberPath = "Key"
-            CbVariables.SelectedValuePath = "Value"
+            If _ListVar.Count > 0 Then
+                CbVariables.ItemsSource = New Forms.BindingSource(_ListVar, Nothing)
+                CbVariables.DisplayMemberPath = "Key"
+                CbVariables.SelectedValuePath = "Value"
+            Else
+                CbVariables.ItemsSource = Nothing
+            End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Refresh_cbVar: " & ex.ToString, "Erreur Admin", "Refresh_cbVar")
         End Try
