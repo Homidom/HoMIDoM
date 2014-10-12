@@ -653,8 +653,15 @@ Namespace HoMIDom
                         If startcmd > 0 Then _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "Decodestring", "Evaluation de : " & resultatSTR)
                         Do While startcmd > 0 And endcmd > 0
                             Dim _device As String = Mid(newcmd, startcmd + 1, endcmd - startcmd - 1)
-                            'Dim Tabl() As String = _device.Split(".")
-                            Dim Tabl() As String = _device.Split(System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                            Dim Tabl() As String
+                            If _device.Contains(".") Then
+                                Tabl = _device.Split(".")
+                            ElseIf _device.Contains(",") Then
+                                Tabl = _device.Split(",")
+                            Else
+                                Tabl = _device.Split(System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                            End If
+
                             If Tabl.Length = 1 Then
                                 Select Case _device
                                     Case "SYSTEM_DATE"
