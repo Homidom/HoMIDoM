@@ -5240,6 +5240,15 @@ Namespace HoMIDom
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteHisto", "Erreur Requete sqlite : " & retour)
                 Else
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "DeleteHisto", "Suppression manuelle d'un relevé : " & IdDevice & " " & DateTime)
+
+                    'decrementation du nombre d'histo du composant
+                    Dim _dev As Object = ReturnRealDeviceById(IdDevice)
+                    If _dev IsNot Nothing Then
+                        _dev.CountHisto -= 1
+                        If _dev.CountHisto <= 0 Then _dev.CountHisto = 0
+                    End If
+
+
                 End If
 
                 Return 0
@@ -5275,7 +5284,7 @@ Namespace HoMIDom
                 If Mid(retour, 1, 4) = "ERR:" Then
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "AddHisto", "Erreur Requete sqlite : " & retour)
                 Else
-                    Log(TypeLog.INFO, TypeSource.SERVEUR, "UpdateHisto", "Ajout Manuel d'un relevé : " & IdDevice & " " & Value & " (" & DateTime & ")")
+                    Log(TypeLog.INFO, TypeSource.SERVEUR, "AddHisto", "Ajout Manuel d'un relevé : " & IdDevice & " " & Value & " (" & DateTime & ")")
                 End If
 
                 Return 0

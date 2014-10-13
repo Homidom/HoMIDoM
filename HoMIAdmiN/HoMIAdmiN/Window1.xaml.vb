@@ -1140,8 +1140,8 @@ Class Window1
                     'If _nbhisto <= 0 Then mnu4.IsEnabled = False
                     If _nbhisto <= 0 Then
                         mnu4.FontStyle = System.Windows.FontStyles.Italic
-                        AddHandler mnu4.Click, AddressOf MnuitemDev_Click
                     End If
+                    AddHandler mnu4.Click, AddressOf MnuitemDev_Click 'on ajoute le lien pour pouvoir ajouter des historiques manuellement sur un composant virtuel par ex (un compteur de gaz...)
                     
                     ctxMenu.Items.Add(mnu4)
                     mnu4 = Nothing
