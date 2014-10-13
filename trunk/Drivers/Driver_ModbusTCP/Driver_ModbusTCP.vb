@@ -314,7 +314,49 @@ Imports System.Net.Sockets
         Try
             Dim retour As String = "0"
             Select Case UCase(Champ)
-			
+                Case "ADRESSE1" ' Adresse Lecture 
+                    If Value > adressReadMX + longReadMX Then
+
+                    End If
+                    If Value > adressReadMW + longReadMW Then
+
+                    End If
+                    If Value > adressReadIW + longReadIW Then
+
+                    End If
+                    If Value > 511 Then
+
+                    End If
+                    If Value < adressReadMX Then
+
+                    End If
+                    If Value < adressReadMW Then
+
+                    End If
+                    If Value < adressReadIW Then
+
+                    End If
+                    
+
+                Case "ADRESSE2" 'Adresse Ecriture 
+                    If adressWriteMX + Value > 20479 Then
+
+                    End If
+                    If adressWriteMX + Value > 12287 Then
+
+                    End If
+                    If Value > 511 Then
+
+                    End If
+                    If Value > 255 Then
+
+                    End If
+                    If Value < adressWriteMX Then
+
+                    End If
+                    If Value < adressWriteMW Then
+
+                    End If
             End Select
             Return retour
         Catch ex As Exception
@@ -361,6 +403,18 @@ Imports System.Net.Sockets
                     _Parametres.Item(4).Valeur = 225
                 End If
 
+                If _Parametres.Item(2).Valeur > 20479 Then _Parametres.Item(2).Valeur = 20479
+                If _Parametres.Item(1).Valeur > 20479 Then _Parametres.Item(1).Valeur = 20478
+                If (CInt(_Parametres.Item(2).Valeur) + CInt(_Parametres.Item(1).Valeur)) > 20479 Then _Parametres.Item(2).Valeur = 20479 - _Parametres.Item(1).Valeur
+                If _Parametres.Item(4).Valeur > 12287 Then _Parametres.Item(4).Valeur = 12287
+                If _Parametres.Item(3).Valeur > 12287 Then _Parametres.Item(3).Valeur = 12286
+                If (CInt(_Parametres.Item(4).Valeur) + CInt(_Parametres.Item(3).Valeur)) > 12287 Then _Parametres.Item(4).Valeur = 12287 - _Parametres.Item(3).Valeur
+                If _Parametres.Item(6).Valeur > 255 Then _Parametres.Item(6).Valeur = 255
+                If _Parametres.Item(5).Valeur > 255 Then _Parametres.Item(5).Valeur = 254
+                If (CInt(_Parametres.Item(6).Valeur) + CInt(_Parametres.Item(5).Valeur)) > 12287 Then _Parametres.Item(6).Valeur = 255 - _Parametres.Item(5).Valeur
+                If _Parametres.Item(7).Valeur > 20479 Then _Parametres.Item(7).Valeur = 20479
+                If _Parametres.Item(8).Valeur > 12287 Then _Parametres.Item(8).Valeur = 12287
+
                 adressReadMX = _Parametres.Item(1).Valeur
                 longReadMX = _Parametres.Item(2).Valeur
                 adressReadMW = _Parametres.Item(3).Valeur
@@ -371,6 +425,12 @@ Imports System.Net.Sockets
                 adressWriteMW = _Parametres.Item(8).Valeur
                 unit = _Parametres.Item(9).Valeur
                 _DEBUG = _Parametres.Item(10).Valeur
+
+                Dim ConfigTxt As String = " Conf ModbusTCP= "
+                For i = 0 To 10
+                    ConfigTxt += i & "=" & _Parametres.Item(i).Valeur & " "
+                Next
+                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ModbusTCP Start", ConfigTxt)
 
                 MyTimer.Interval = _Parametres.Item(0).Valeur '2000
                 MyTimer.Enabled = True
