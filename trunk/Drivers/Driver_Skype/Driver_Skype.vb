@@ -442,8 +442,13 @@ Imports SKYPE4COMLib
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
             End Try
 
-            'Vérifie si Skype est démarrer si non tentative de de connexion  
+            Dim test As Microsoft.Win32.RegistryKey = My.Computer.Registry.ClassesRoot.OpenSubKey("CLSID\{830690FC-BF2F-47A6-AC2D-330BCB402664}", False)
+            If test Is Nothing Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Skype Start", "Veuillez installer Skype avant de démarrer et d'utiliser le driver")
+                Exit Sub
+            End If
 
+            'Vérifie si Skype est démarrer si non tentative de de connexion  
             oSkype = New Skype
             'oSkype = CreateObject("Skype4COM.Skype", "Skype_")
 
