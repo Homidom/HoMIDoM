@@ -26,3 +26,14 @@ Modification de la structure du content - suppression de la grille
 Ajout du menu des Zones en haut de la page
 Correction de l'envoi de la Commande DIM
 Modification de la taille des boutons des devices
+
+3.1.7
+Ajout bouton fermeture event en haut de la page
+Ajout "icone de la Zone" parametré dans l'Admin
+Suppression du texte "Nous sommes ....' et de la date 
+Modification du message d'erreur en cas de non connexion
+Refonte de l'affichage des composants pour etre responsive
+Reprise du CSS pour remplacer font-size et Tailles  en em au lieu de px (affichage responsive) 
+Reprise du CSS - suppression du type WidMeteo pour n'avoir qu'un seul style Composant
+Modification du composant "Météo"
+

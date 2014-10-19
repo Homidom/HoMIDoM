@@ -21,7 +21,7 @@
 	<link href="css/homiweb.css" rel="stylesheet" />	
 
 	<!-- Definition constante -->
-	<script> var VersionHomiWeb = "3.1.6";</script>
+	<script> var VersionHomiWeb = "3.1.7";</script>
 
 </head>
 
@@ -32,14 +32,11 @@
 		<div class="HeaderInfo" >
 			<!-- Definition de la partie gauche ></!-->
             <div class="HeaderGauche">
-				<p>Test du Header Gauche</p>
+				<img  class="LogoHeader"" alt="Information sur l'image" src="./images/rond_64x64.png"/>
+					
 			</div>	<!-- Fin partie gauche  ></!-->
 
-			<!-- Definition de la partie centrale  ></!-->
-            <div class="HeaderCentre">
-					<img  class="LogoHeader" alt="Information sur l'image" src="./images/rond_64x64.png"/>   
-					<h1> HoMIDoM  <small> : Le système complet de domotique pour la maison</small></h1>
-			</div> <!-- Fin partie centrale  ></!-->
+		
 			
 			<!-- Definition de la partie droite  ></    data-bind='text: name' !--> 
 			<div class="HeaderDroit">
@@ -50,7 +47,17 @@
 					<button class="btn btn-lg btn-default" data-toggle="modal" data-target="#modalLogin" title="Parametres de connexion"  ><span  style="color: gray;" class=" glyphicon glyphicon-home"></span></button>
 					<button class="btn btn-lg btn-danger" data-toggle="modal" data-target="#modalApropos" title="A propos de"  ><span class="glyphicon glyphicon-gift" style="color: white;"></span></button>
 				</div>
+				<button id="CloseEvents" class="btn btn-default dropdown-toggle navbar-right" data-toggle="dropdown" title="Fermeture de Events Log">
+					<span style="color: gray" class="glyphicon glyphicon-align-justify"></span>
+				</button>
+				<script>
+					$("#CloseEvents").click(function(){
+						$(".PartDroite").toggle(500);
+					});
+				</script>	
+	
 			</div> <!-- Fin partie droite  ></!-->
+		<h1> HoMIDoM  <small> : Le système complet de domotique pour la maison</small></h1>
 		</div><!-- Fin Definition de la partie haute de l'ecran ></!-->
 
 		
@@ -60,7 +67,7 @@
 			<div class="modal-content">
 			  <div class="modal-header">
 				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-				<h4 class="modal-title">CONNEXION</h4>
+				<h4	class="modal-title">CONNEXION</h4>
 			  </div>
 			  
 			  <div class="modal-body">
@@ -132,48 +139,23 @@
 		<!-- fin Modal A Propos  ></!-->
 		
 	</header>
-	
-	
-	<div  class="PartGauche navbar  navbar-inverse" role="navigation">
-	   <div class="navbar-header">
-		  <button type="button" class="navbar-toggle" alt="Afficher/Masquer les evenements" data-toggle="collapse" 
-			 data-target="#example-navbar-collapse">
-			 <span class="sr-only">Zones</span>
-			<span  class="caret"></span>
-		  </button>
-		  <a class="navbar-brand" href="#">Zones</a>
-	   </div>
-	   <div class="collapse navbar-collapse" id="example-navbar-collapse" data-bind="template: { name: 'ZonesTemplate', foreach: zones }" ></div>
+
+	   <div class="PartGauche navbar  navbar-inverse" id="zones" data-bind="template: { name: 'ZonesTemplate', foreach: zones }" ></div>
 		  
 				<script type="text/html" id="ZonesTemplate">
 					<ul class="nav navbar-nav  "  >
-						 <button class="btn btn-default btn-lg navbar-btn" data-bind="click: function(data, event) { AfficheZone(id, data, event) }" ><img src="images/icones/defaut.png"><span data-bind='text: name' /></button>
+						 <button class="btn btn-default btn-default" data-bind="click: function(data, event) { AfficheZone(id, data, event) }" ><img data-bind="attr:{ src: 'images/zones/icon/' + icon }" ><span data-bind='text: name' /></button>
+			<!-- 	 <button class="btn btn-default btn-default" data-bind="click: function(data, event) { AfficheZone(id, data, event) }" ><img src="images/icones/defaut.png"><span data-bind='text: name' /></button>
+			img data-bind="attr:{ src: 'images/icones/' + icon }" 
+			img data-bind="attr:{ src: '/imagefolder/' + PhotoName }" 
+			-->
 					</ul>	 
 				</script>
-	</div>	
 
 	<div class="contentInfo">	
 		<div class="PartCentrale" >
 				<div class=" box ">
-				<button id="CloseEvents" class="btn btn-default btn-xs dropdown-toggle navbar-right" data-toggle="dropdown">
-						<span  class="caret"></span>
-					</button>
-					<script>
-						$("#CloseEvents").click(function(){
-						$(".PartDroite").toggle(500);
-						
-						/*	if ($(".PartDroite").hide()) { console.log("Passage par la PartDroite = 0"); $(".PartDroite").show();}
-							else {$(".PartDroite").hide();}
-						*/
-						});
-					</script>	
-					<h2 class="text-center" >Devices</h2>
-						
-	
-					
-					
-					
-					
+					<h2 class="text-center" >Composants</h2>
 						<div id="devices">
 						</div>
 				</div>
@@ -226,6 +208,7 @@ var PortActuel = "";
 var IDSERVERActuel = "";
 var ListDevices = [];
 var urlapi  = "";
+var ZoneActuel = "";
 
 var zones = ko.observableArray([]);
 var devices = ko.observableArray([]);
@@ -310,10 +293,11 @@ $('[data-toggle="tooltip"]').tooltip();
 	function ConnectServer (){
 	
 		var d = new Date();
-		$(".HeaderGauche").empty();
-		$(".HeaderGauche").append("<h3>Nous sommes le :</h3>");
-		$(".HeaderGauche").append("<h2>"+d.toLocaleDateString().charAt(0).toUpperCase()+ d.toLocaleDateString().slice(1)+"</h2>");
-	
+		
+		$(".HeaderCentre").empty();
+		// $(".HeaderGauche").append("<h4>Nous sommes le :</h4>"); 
+		// $(".HeaderCentre").append("<h2>"+d.toLocaleDateString().charAt(0).toUpperCase()+ d.toLocaleDateString().slice(1)+"</h2>"); 
+		
 		urlapi   = 'http://'+ AdresseIPActuel + ':'+ PortActuel + '/api/'+ IDSERVERActuel ;
 		console.log("debug : "+urlapi);
 		
@@ -403,7 +387,7 @@ $('[data-toggle="tooltip"]').tooltip();
 			})
 			
 			.fail(function(){ 
-			alert('Erreur SignalR : Connexion impossible avec ' + urlapi);
+			alert('---- ERREUR : Connexion impossible avec ' + urlapi+" ----");
 			$('#modalLogin').modal('show');
 			console.log('Could not connect'+ urlapi); 
 		});		
@@ -422,10 +406,12 @@ $('[data-toggle="tooltip"]').tooltip();
 		ListZones = data;
 		$.each(data, function(index, zone) {
 				 var zonetemp = {
-					 "name":  zone._Name,
-					 "id": zone._Id
+					 "name": zone._Name,
+					 "id"  : zone._Id,
+					 "icon": zone._Icon.substring(zone._Icon.lastIndexOf("\\")+1) 
 				};
 				zones.push(zonetemp);
+				console.log("Extraction nom de l icon : "+ zonetemp.icon);
 		 });
 	}
 	
@@ -456,17 +442,29 @@ $('[data-toggle="tooltip"]').tooltip();
 							{
 								// Widget Météo
 								if (ListDevices[a]._Type==17) {
-								items.push('<section id="WidMeteo"><h1>'+ListDevices[a]._Name + '</h1><h2>Actuellement</h2><div class="MeteoJour" title="Méteo actuelle"><article class="Info"><img src="./images/meteo/'+ ListDevices[a]._IconActuel +'.png" /><h3>'+ListDevices[a]._JourToday + '</h3></article><article class="Info"><img src="./images/meteo/temperature-defaut.png" /><h3>'+ListDevices[a]._TempActuel+ '°</h3></article><article class="Info"><img src="./images/meteo/humidite-defaut.png" /><h3>'+ ListDevices[a]._HumActuel + '%</h3></article><article class="Info"><img src="./images/meteo/vitessevent-defaut.png" /><h3>'+ListDevices[a]._VentActuel+ '</h3></article></div><div class="MeteoPrev" title="Prévisions"><article class="Prev"><img src="./images/meteo/'+ListDevices[a]._IconActuel + '.png" /><h4>'+ListDevices[a]._JourToday + '</h4><span title="Min" class="TempMin">'+ ListDevices[a]._MinToday + '°</span><span title="Max" class="TempMax">'+ ListDevices[a]._MaxToday + '°</span></article><article class="Prev"><img src="./images/meteo/'+ ListDevices[a]._IconJ1 + '.png" /><h4>'+ ListDevices[a]._JourJ1 + '</h4><span title="Min" class="TempMin">'+ ListDevices[a]._MinJ1 + '°</span><span title="Max" class="TempMax">'+ ListDevices[a]._MaxJ1 + '°</span></article><article class="Prev"><img src="./images/meteo/'+ ListDevices[a]._IconJ2 + '.png" /><h4>'+ ListDevices[a]._JourJ2 + '</h4><span title="Min" class="TempMin">'+ ListDevices[a]._MinJ2 + '°</span><span title="Max" class="TempMax">'+ ListDevices[a]._MaxJ2 + '°</span></article><article class="Prev"><img src="./images/meteo/'+ ListDevices[a]._IconJ3 + '.png" /><h4>'+ ListDevices[a]._JourJ3 + '</h4><span title="Min" class="TempMin">'+ ListDevices[a]._MinJ3 + '°</span><span title="Max" class="TempMax">'+ ListDevices[a]._MaxJ3 + '°</span></article></div>');
-								items.push('</section>');		
+									items.push('<article class="Composant"><h4>'+ListDevices[a]._Name + '</h4><div title="Méteo actuelle" class="meteo"><img src="./images/meteo/'+ ListDevices[a]._IconActuel +'.png"></img><p><strong>'+ ListDevices[a]._JourToday +'</strong></p></div>');
+									items.push('<div class="meteo"><p class="TempMax">'+ListDevices[a]._MaxJ1 + ' °<br></br></p><p class="TempMin">'+ListDevices[a]._MinJ1 + ' °</p></div>');
+									items.push('<div class="meteo"><img src="./images/meteo/temperature-defaut.png"></img><p><strong>'+ListDevices[a]._TempActuel+ ' °</strong></p></div>');
+									items.push('<div class="meteo"><img src="./images/meteo/humidite-defaut.png"></img><p>'+ ListDevices[a]._HumActuel + ' %</p></div>');
+									items.push('<div class="meteo"><img src="./images/meteo/vitessevent-defaut.png"></img><p>'+ ListDevices[a]._VentActuel + ' m/s</p></div>');
+									items.push('</article>');
+									items.push('<article class="Composant"><h4>'+ListDevices[a]._Name + ' Prévisions</h4><div title="Méteo prévisions" class="meteo">');
+									items.push('<div class="meteo"><img src="./images/meteo/'+ ListDevices[a]._IconJ1 +'.png"></img><p><strong>'+ ListDevices[a]._JourJ1  +'</strong></p></div>');
+									items.push('<div class="meteo"><p class="TempMax">'+ListDevices[a]._MaxJ1 + ' °<br></br></p><p class="TempMin">'+ListDevices[a]._MinJ1 + ' °</p></div>');
+									items.push('<div class="meteo"><img src="./images/meteo/'+ ListDevices[a]._IconJ2 +'.png"></img><p><strong>'+ ListDevices[a]._JourJ2  +'</strong></p></div>');
+									items.push('<div class="meteo"><p class="TempMax">'+ListDevices[a]._MaxJ2 + ' °<br></br></p><p class="TempMin">'+ListDevices[a]._MinJ2 + ' °</p></div>');
+									items.push('<div class="meteo"><img src="./images/meteo/'+ ListDevices[a]._IconJ3 +'.png"></img><p><strong>'+ ListDevices[a]._JourJ3  +'</strong></p></div>');
+									items.push('<div class="meteo"><p class="TempMax">'+ListDevices[a]._MaxJ3 + ' °<br></br></p><p class="TempMin">'+ListDevices[a]._MinJ3 + ' °</p></div>');
+									items.push('</article>');
+
 								} 
 								else {
-								
-								items.push('<article><h4>'+ListDevices[a]._Name + '</h4><div class="align_image"><img src="./images/devices/'+ListDevices[a]._Type+'-defaut.png" alt="" /> ' );
+								var res = (ListDevices[a]._LastChange.substr(0,19));
+								var DateTemp = res.replace("T"," ") ;
+
+								items.push('<article class="Composant"><h4>'+ListDevices[a]._Name + '</h4><div><img src="./images/devices/'+ListDevices[a]._Type+'-defaut.png" alt=""></img><p></p></div> ' );
 								var actions = [];
-								actions.push('<div id="ListCommand" class="btn-group"><button class="btn btn-danger  btn-lg"> ' + ListDevices[a]._Value+ '</button>');
-								actions.push('<button class="btn btn-danger  btn-lg dropdown-toggle" data-toggle="dropdown">');
-								actions.push('<span class="caret"></span></button>');
-								
+								actions.push('<div id="ListCommand" class="btn-group"><button class="btn btn-lg btn-danger dropdown-toggle" data-toggle="dropdown"> ' + ListDevices[a]._Value+' ' +  ListDevices[a]._Unit +'     <span class="caret"></span></button>');
 								actions.push('<ul class="dropdown-menu">');
 								$.each(ListDevices[a]._DeviceAction, function(i, command) {
 																				
@@ -480,7 +478,9 @@ $('[data-toggle="tooltip"]').tooltip();
 								  
 								});
 								 items.push(actions.join(''));	
-								 items.push('</ul></div></article>');	
+								 items.push('</ul></div></article>');										
+								
+	
 								} 
 							}
 						}
