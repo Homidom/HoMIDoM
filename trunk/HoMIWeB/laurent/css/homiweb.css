@@ -2,10 +2,8 @@
    v2.0 | 20110126
    License: none (public domain)
 */
-
-  
 html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+h1, h2, h4, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
 del, dfn, em, img, ins, kbd, q, s, samp,
 small, strike, strong, sub, sup, tt, var,
@@ -29,28 +27,27 @@ article, aside, details, figcaption, figure,
 footer, hgroup, menu, nav, section {
 	display: inline;
 }
+
+header h1 {color : red}
+
 body {
+	font-size: 1em; /* Debug */
+
 	margin-left: 5px;
 	margin-right: 5px;
 	line-height: 1; 
 	font-family:Helvetica neue, Helvetica, "arial Black", Gadget, sans-serif;
 	background : transparent; 
 }
-ol, ul {
-	list-style: none;
-}
-blockquote, q {
-	quotes: none;
-}
+ol, ul {list-style: none;}
+blockquote, q {	quotes: none;}
 blockquote:before, blockquote:after,
 q:before, q:after {
 	content: '';
 	content: none;
 }
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
-}
+table {border-collapse: collapse;border-spacing: 0;}
+
 html {
 /* Background Cover */
 background: url(../images/fond-logo.png) no-repeat center center fixed;
@@ -58,18 +55,15 @@ background: url(../images/fond-logo.png) no-repeat center center fixed;
 	-o-background-size: cover;
 	background-size: cover;		
 } 
-body article h4{ color : white}
 
 body article {
-	width: 250Px;
-	height:100px;
-	
+
 	width : 15em;
-	height : 6em;
+	height : 6em; 
 	background-color : rgba(75,75,75,0.75);
 
  	border: 1px groove #777777;
-	margin: 5px;
+	margin: 0.4em;
 	display : inline-block; 
 	z-index: 5;
 
@@ -81,21 +75,9 @@ body article {
 }
 
 
-footer {
-	margin: auto;
-	width:100%;	
-	width:100%;	
-	float: left;
-	color : Red;
-}
+footer {margin: auto;width:100%;	width:100%;	float: left;color : Red;}
+footer a, footer a:hover  {float: left;color: White;}
 
-
- footer a, footer a:hover  {
-	float: left;
-	font-size: 10pt;
-	color: White;
-	
-}
 
 .box {
 	background-color: rgba(190,190,190,0.75);
@@ -106,34 +88,20 @@ footer {
 	margin: 0 5px 15px -5px;
 }
 
-#devices , .MenuZone {
-	background-color:  rgba(0,124,0,1);
-	padding-bottom: 15px;
-	background: transparent none;
-}
+h2 {margin-top: 15px;margin-bottom: 10px;text-align: center;font-size:1.5em;color: White;font-weight: bold;}
+h3 {	margin-left: 1.5em;margin-top: -3.8em;font-weight: bold;font-size:1em;color: white;}
+h4 {	margin-top: 5px;text-align: center;font-weight: bold;color: white;}
 
-h1 {font-size:32px;}
-h2 {margin-top: 15px;margin-bottom: 10px;text-align: center;font-size:20px;color: White;font-weight: bold;}
-h3 {	margin-top: 15px;text-align: center;font-size:16px;color: White;	text-decoration:underline;}
-h4 {	margin-top: 5px;text-align: center;font-weight: bold;}
+.align_image img {width:45px;height:45px;margin: 2%; }
+.align_image img, .align_image button {display : inline;vertical-align:bottom;}
 
-.align_image img {
-	width:45px;
-	height:45px;
-	margin: 2%; 
- 
-}
-.align_image img, .align_image button {
-	display : inline;
-	vertical-align:middle;
-}
 
-.HeaderInfo > div   {display : inline-block; margin-right : 10px; margin-left : 10px;}
-
-.HeaderGauche {min-width : 10em;}
-.HeaderCentre {min-widthwidth : 40em;}
+.HeaderInfo > div   {display : inline-block;} 
+.HeaderGauche {}
+.HeaderGauche img, .HeaderGauche h2 {display : inline;vertical-align:middle;}
+.HeaderCentre {display : none}
 .HeaderCentre h1 { color : rgba(230,30,30,0.75);}
-.HeaderDroit {vertical-align:top;margin-top : 1.5em; margin-left : 3em;}
+.HeaderDroit {vertical-align:top;margin-top : 0.5em; margin-left : 3em;}
 .HeaderDroit button {margin-right: 1.5em;  vertical-align: top; }
 .HeaderDroit span{	display:inline-block;	font-size:small;	color:white;	text-align:center;  width : 5em  }
 
@@ -145,128 +113,29 @@ h4 {	margin-top: 5px;text-align: center;font-weight: bold;}
 .contentInfo, .HeaderInfo {width : 100% ;margin : 0.3em;}
 .contentInfo > div   {margin : 0.5em; }
 
-.PartGauche  { margin : 0.3em;
+/* Parameters pour le menu des zones */
+.PartGauche  { margin : 0.3em;      /* definition du degradé */ 
 				background : -webkit-linear-gradient(0deg, black, grey); /* For Safari 5.1 to 6.0 */
 				background: -o-linear-gradient(0deg, black, grey); /* For Opera 11.1 to 12.0 */
 				background: -moz-linear-gradient(0deg, black, grey); /* For Firefox 3.6 to 15 */
 				background: linear-gradient(0deg, black, grey); /* Standard syntax (must be last) */
 }
-.PartGauche   button {padding : 0.3em; margin-right : 2em ;  width : 8em; }
+.PartGauche  .navbar-nav { margin-right : 0.05em ; margin-left : 0.1em ;}
+.PartGauche   ul {padding : 0.5em;  min-width : 1em; }
 .PartGauche   button:focus { background-color: #D9534F;color : white;}
 .PartGauche   img { width : 30px; height : 30px; margin-right : 5px; }
+.btn-lg {font-size: 0.9em; overflow:auto;}
 
-/*
-.PartCentrale { min-width : 70em}
-.PartDroite { min-width : 30em}
-*/
-
-
-
-
-
-#WidMeteo {
-	width : 15em;
-	height : 17em;
-	background-color : rgba(75,75,75,0.75);
- 	border: 1px groove #777777;
-	margin: 5px;
-	display : inline-block; 
-	z-index: 5;
-	
- 	-webkit-border-radius: 10px;
- 	border-radius: 10px;
-	
-	box-shadow:5px 7px 7px rgba(95,95,95,1);
- 	-webkit-box-shadow: 5px 7px 7px rgba(95,95,95,1);
-
-	text-align: center;	
-	color : white;
-	font-weight:bold;
-}
-#WidMeteo h1 {
-	margin : 0;
-	font-size: 12pt;
-	background-color : #1E90FF;
-}
-
-#WidMeteo h2 {
-	margin : 2px 0px 0px 5px;
-	font-size: 9pt;
-	text-align: left;	
-	font-style: italic;
-}
-
-#WidMeteo img {
-	margin-top: 5px; 
-	height: 35px;
-	width:  35px;
-}
-
-
-.MeteoPrev, .MeteoJour {
-	margin-top: 5px;
-}
-
-.Info, .Prev  {
-	display: inline-block;	
-	margin : auto;
-	width:  22%;
-	min-height: 40%;
-	}
-
-.Info span {
-	margin : 2px;
-	font-size: 11pt;
-}
-
-.Info  h3,.Prev h4 {
-	margin : 0;
-	margin-bottom: 2px;
-	font-size: 11pt;
-}
-
-.TempMax,  .TempMin {
-	display: block;	
-	
-	margin : auto;
-	margin-left: 1px;
-	margin-bottom: 2px;
-	font-size: 10pt;
-	font-style : italic;
-	color : #0723BB;
-}
-
-.TempMax {
-	 color: yellow;
-}
-
-
-
-#zones  button img {width:50px;height:50px; }
-#zones  button {margin-top : 5px; margin-left : 5% ; width : 90% } 
-
-#zones button:focus {
-    background-color: #D9534F;
-	color : white;
-}
-
-#Colmid {margin:  10px;}
-
-#CloseZones {float : left; margin-top : 5px; margin-left : -5px; z-index : 20}
-
-#modalLogin  h1, #modalApropos h1 { color: red; font-weight:bold; text-align: center; border: 1px groove #777777;
--webkit-border-radius: 10px; border-radius: 10px; background-color:  rgba(190, 190, 190, 0.75); 	}
-
+/*   Parametre pour les fenetres modal */
 #modalLogin  .modal-body , #ListeServeurs { background-color: #606060 ; }
+.modal-title {color : black}
 
-
-#modalApropos p   { color : black; display:table; margin:0 auto; margin-top : 10px;} 
+/*   Parametre pour le menu A propos */
 #modalApropos h2 { color : red} 
 #modalApropos img { display:table; margin:0 auto; margin-top : 10px;} 
 
-
+/*   Parametre pour le menu login */
 #ListeServeurs  img {width : 50px; height :50px;}
-
 #ListeServeurs {width : 98%;	height :90px;	margin :10px 0 10px 5px; overflow:auto;}
 
 #ListeServeurs div {
@@ -282,28 +151,13 @@ h4 {	margin-top: 5px;text-align: center;font-weight: bold;}
 	border-radius: 10px;
 }
 
-#ListeServeurs div:hover{
-	border-style : solid; 
-	border-color : red;
-	-webkit-border-radius: 10px;
-	border-radius: 10px;
-}
+#ListeServeurs div:hover{border-style : solid; border-color : red;-webkit-border-radius: 10px;border-radius: 10px;}
 
-#ListeServeurs span {
-	font-size: 7pt;
-	display : block;	
-	color : white;
-}
+#ListeServeurs span {font-size: 0.7em;display : block;	color : white;}
 
-#ListeServeurs img, #ListeServeurs span {
-	margin : auto;
-}
+#ListeServeurs img, #ListeServeurs span {	margin : auto;}
 
-.ListeChamp {
-    border: 3px solid white;
-    border-radius: 5px;
-    margin: 5px;
-}
+.ListeChamp { border: 3px solid white; border-radius: 5px;  margin: 5px;}
 
 .action button {margin : 10px 20px; min-width : 150px; color: black; }
 .action button span { color: black; }
@@ -313,60 +167,83 @@ h4 {	margin-top: 5px;text-align: center;font-weight: bold;}
 
 .input-group   {margin : 10px }
 .input-group-addon { min-width : 100px; color:darkred ; font-weight:bold;}
+/*   Fin Parametre pour le menu login */
 
 #events { overflow:auto}
 
+/* -----------Defintion d' un composant ------------------  */
+.Composant img,  .Composant p { display : block  }
+.Composant img,  .Composant button { display : inline  }
+.Composant div { display : inline-block ; margin-left : 0.4em }
+.Composant div, .Composant button { display : inline-block; vertical-align : top }
+.Composant img{ height:45px ; width:45px  }
+.meteo img{ height:40px ; width:40px  }
+.Composant p { font-size: 0.95em;color : yellow; text-align: center}
+
+.Composant .TempMax, .Composant  .TempMin {font-size: 0.8em;font-style : italic;}
+.Composant .TempMin {margin-left : -1.2em; color : white;}
+
+
+
+
+/* -----------Responsive media ------------------  */
+
 @media screen and (max-width: 900px) {
+body article {width : 9em;height : 5em;}
+	
 	.PartCentrale      {min-width: 2em ;}
 	.HeaderInfo > div {width : auto;  }
-	.HeaderGauche   {min-width: 0.5 em ;}
-   .HeaderGauche h2 { font-size: 10pt;}
-   .HeaderGauche h3 { font-size : 8pt;}
-   .HeaderCentre  h1{ font-size: 12pt; }
-   .HeaderCentre  h1 small{ display : none}
+	.HeaderGauche   {min-width: 0.5 em ; margin-left :0}
+    h2 { font-size: 0.8em;}
+    h4 { font-size : 0.7em;}
    .HeaderCentre  img{ width : 50px;	height : 50px;}
-    /* .HeaderDroit {  background : pink;} */
-   .HeaderDroit  img { width : 15px;	height :15px;	}
+   .HeaderDroit {  margin-left : 0} 
+   .HeaderDroit strong{  font-size: 0.8em;} 
+   .HeaderDroit  img { width : 10px;	height :10px;	}
    .InfoSoleil { margin-bottom : 10px; }
    .ModalBoutons {display : none;}
-   .contentInfo div { display: block;} 
-	#zonesTitle {font-size : 10pt; }
-	.PartGauche , .PartCentrale, .PartDroite { width : 100% ; margin-left : 0.2em; margin-right : 0.4em;}
-	
 	#zones img { display : none ;}
-	.align_image  img {  width : 30px;	height : 30px;  }
-	.devices h4 {font-size : 10pt;}
-	.PartGauche button {  margin : 0px; font-size : 10pt; color : white;}  /*  background-color :gray;  */
-	.align_image img, .align_image div { display : inline-block; vertical-align: baseline;}
+	.align_image  img,  .LogoHeader {  width : 30px;	height : 30px;  }
+	.PartGauche button {  margin : 0px; font-size : 10pt;} 
+	.align_image img, .align_image div { display : inline-table; vertical-align: baseline;}
 	.PartGauche img { display : none }
-   }
+	.PartGauche ul { display : inline-block ; margin-left : 0.5em}
+	.btn-lg {font-size: 0.6em;}
+	.meteo .TempMax, .meteo .TempMin, .Composant p{font-size: 0.6em}
+	.meteo img, .Composant img{ height:35px ; width:35px  } 
+	.Composant div {  margin-left : -0.2em }
+	.HeaderInfo h1, .HeaderInfo  small {display : none}
+  	}
 
 
 @media screen and (min-width: 900px) and (max-width:1279px) {
 
 	.HeaderInfo > div {margin-left : 0px}
 	.HeaderGauche      {min-width: 6em;}
-	.HeaderGauche h1 { font-size: 14pt;}
 	.HeaderGauche h2 { font-size: 12pt;}
-	.HeaderGauche h3 { font-size : 10pt;}
+	.HeaderGauche h4 { font-size : 10pt;}
 	.HeaderCentre  h1 small{  font-size: 10pt;}
-	 /* .HeaderDroit {  background : green;} */
+	 /* .HeaderDroit {  background : green;}    pour le debug*/
 	.HeaderDroit span{   margin-right : 5px;}
 	.ModalBoutons button { margin-right : 5px;}
 	.InfoSoleil { margin-right : 5px; }
 	.HeaderCentre  .align_image img {margin-left : 2%;margin-right : 2%;}
 	.HeaderCentre small {display : none}
-		
 	.PartCentrale {min-width : 6em}
+	.meteo .TempMax,  .TempMin {font-size: 0.7em}
 
    } 
 @media screen and (min-width: 1290px) and (max-width:1360px) {
    .HeaderGauche      {min-width: 6em;}
    .HeaderGauche h2 { font-size: 12pt;}
-   .HeaderGauche h3 { font-size : 10pt;}
+   .HeaderGauche h4 { font-size : 10pt;}
    /*.HeaderDroit {  background : yellow;} */
    .PartGauche , .PartCentrale, .PartDroite { width : 100% ; padding-left: 1.5em; padding-right: 1.5em}
    .contentInfo {display : block;}
-
    }  
+
+
+  
+   
+   
    
