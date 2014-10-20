@@ -34,6 +34,7 @@ Partial Class HoMIGuI
         Me.ServiceEtatToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ServiceConsoleToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ToolStripSeparator2 = New System.Windows.Forms.ToolStripSeparator()
+        Me.adminMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.LogsToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DossiersToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.DossierHomidomStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
@@ -42,13 +43,12 @@ Partial Class HoMIGuI
         Me.DriversToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.NotifyIcon1 = New System.Windows.Forms.NotifyIcon(Me.components)
-        Me.adminMenuItem = New System.Windows.Forms.ToolStripMenuItem()
         Me.homiguiContextMenuStrip.SuspendLayout()
         Me.SuspendLayout()
         '
         'homiguiContextMenuStrip
         '
-        Me.homiguiContextMenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AboutToolStripMenuItem, Me.CheckUpdateToolStripMenuItem, Me.ToolStripSeparator1, Me.ServiceStartToolStripMenuItem, Me.ServiceStopToolStripMenuItem, Me.ServiceRestartToolStripMenuItem, Me.ServiceEtatToolStripMenuItem, Me.ServiceConsoleToolStripMenuItem, Me.ToolStripSeparator2, Me.adminMenuItem, Me.LogsToolStripMenuItem, Me.DossiersToolStripMenuItem, Me.DriversToolStripMenuItem, Me.ExitToolStripMenuItem})
+        Me.homiguiContextMenuStrip.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AboutToolStripMenuItem, Me.CheckUpdateToolStripMenuItem, Me.ToolStripSeparator1, Me.ServiceEtatToolStripMenuItem, Me.ServiceStartToolStripMenuItem, Me.ServiceStopToolStripMenuItem, Me.ServiceRestartToolStripMenuItem, Me.ServiceConsoleToolStripMenuItem, Me.ToolStripSeparator2, Me.adminMenuItem, Me.LogsToolStripMenuItem, Me.DossiersToolStripMenuItem, Me.DriversToolStripMenuItem, Me.ExitToolStripMenuItem})
         Me.homiguiContextMenuStrip.Name = "ContextMenuStrip1"
         Me.homiguiContextMenuStrip.Size = New System.Drawing.Size(200, 302)
         '
@@ -115,6 +115,14 @@ Partial Class HoMIGuI
         Me.ToolStripSeparator2.Name = "ToolStripSeparator2"
         Me.ToolStripSeparator2.Size = New System.Drawing.Size(196, 6)
         '
+        'adminMenuItem
+        '
+        Me.adminMenuItem.Image = Global.HoMIGuI.My.Resources.Resources.Homidom_logo_128
+        Me.adminMenuItem.Name = "adminMenuItem"
+        Me.adminMenuItem.Size = New System.Drawing.Size(199, 22)
+        Me.adminMenuItem.Text = "HoMIAdmiN"
+        Me.adminMenuItem.ToolTipText = "Lancer l'interface d'administration"
+        '
         'LogsToolStripMenuItem
         '
         Me.LogsToolStripMenuItem.Image = Global.HoMIGuI.My.Resources.Resources.edit
@@ -175,14 +183,6 @@ Partial Class HoMIGuI
         Me.NotifyIcon1.Icon = CType(resources.GetObject("NotifyIcon1.Icon"), System.Drawing.Icon)
         Me.NotifyIcon1.Text = "HoMIGuI"
         Me.NotifyIcon1.Visible = True
-        '
-        'adminMenuItem
-        '
-        Me.adminMenuItem.Image = Global.HoMIGuI.My.Resources.Resources.Homidom_logo_128
-        Me.adminMenuItem.Name = "adminMenuItem"
-        Me.adminMenuItem.Size = New System.Drawing.Size(199, 22)
-        Me.adminMenuItem.Text = "HoMIAdmiN"
-        Me.adminMenuItem.ToolTipText = "Lancer l'interface d'administration"
         '
         'HoMIGuI
         '

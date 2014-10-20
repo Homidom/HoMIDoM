@@ -135,9 +135,11 @@ Public Class HoMIGuI
             Next
             If ServiceRunning Then
                 ServiceConsoleToolStripMenuItem.Enabled = False
+                ServiceConsoleToolStripMenuItem.Visible = False
                 ServiceConsoleToolStripMenuItem.ToolTipText = "Non disponible : HoMIService est déja démarré"
             Else
                 ServiceConsoleToolStripMenuItem.Enabled = True
+                ServiceConsoleToolStripMenuItem.Visible = True
                 ServiceConsoleToolStripMenuItem.ToolTipText = "Démarrer le service en mode Console"
             End If
 
