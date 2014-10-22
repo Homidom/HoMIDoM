@@ -467,7 +467,7 @@ Namespace HoMIDom
             Try
                 Dim texte As String = Commande
                 'remplace les balises par la valeur
-                texte = Decodestring(texte)
+                'texte = Decodestring(texte)
                 'texte = texte.Replace("{time}", Now.ToShortTimeString) '--> pb avec le format qui ne passe pas dans une URL
                 'texte = texte.Replace("{date}", Now.ToLongDateString) '--> pb avec le format qui ne passe pas dans une URL
 
@@ -487,9 +487,9 @@ Namespace HoMIDom
             Try
                 Dim texte As String = Message
                 'remplace les balises par la valeur
-                texte = texte.Replace("{time}", Now.ToShortTimeString)
-                texte = texte.Replace("{date}", Now.ToLongDateString)
-                texte = Decodestring(texte)
+                'texte = texte.Replace("{time}", Now.ToShortTimeString)
+                'texte = texte.Replace("{date}", Now.ToLongDateString)
+                'texte = Decodestring(texte)
 
                 Dim lamachineaparler As New Speech.Synthesis.SpeechSynthesizer
                 _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "Parler", "Message: " & texte)
@@ -558,86 +558,86 @@ Namespace HoMIDom
             End Try
         End Sub
 
-        Public Function DecodeCommand(ByVal Command As String) As String
-            Dim retour As String = Command
-            Try
-                _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "DecodeCommand", "Evaluation de : " & Command)
+        'Public Function DecodeCommand(ByVal Command As String) As String
+        '    Dim retour As String = Command
+        '    Try
+        '        _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.DEVICE, "DecodeCommand", "Evaluation de : " & Command)
 
-                Dim startcmd As Integer = InStr(1, Command, "<")
-                Dim endcmd As Integer = InStr(1, Command, ">")
-                Dim newcmd As String = Command
+        '        Dim startcmd As Integer = InStr(1, Command, "<")
+        '        Dim endcmd As Integer = InStr(1, Command, ">")
+        '        Dim newcmd As String = Command
 
-                Do While startcmd > 0 And endcmd > 0
-                    Dim _device As String = Mid(newcmd, startcmd + 1, endcmd - startcmd - 1)
-                    'Dim Tabl() As String = _device.Split(".")
-                    Dim Tabl() As String = _device.Split(System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+        '        Do While startcmd > 0 And endcmd > 0
+        '            Dim _device As String = Mid(newcmd, startcmd + 1, endcmd - startcmd - 1)
+        '            'Dim Tabl() As String = _device.Split(".")
+        '            Dim Tabl() As String = _device.Split(System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
 
-                    If Tabl.Length = 1 Then
-                        Select Case _device
-                            Case "SYSTEM_DATE"
-                                _device = Now.Date.ToShortDateString
-                            Case "SYSTEM_LONG_DATE"
-                                _device = Now.Date.ToLongDateString
-                            Case "SYSTEM_TIME"
-                                _device = Now.ToShortTimeString
-                            Case "SYSTEM_LONG_TIME"
-                                _device = Now.ToLongTimeString
-                            Case "SYSTEM_SOLEIL_COUCHE"
-                                Dim _date As Date = _Server.GetHeureCoucherSoleil
-                                _device = _date.ToShortTimeString
-                            Case "SYSTEM_SOLEIL_LEVE"
-                                Dim _date As Date = _Server.GetHeureLeverSoleil
-                                _device = _date.ToShortTimeString
-                            Case Else
-                                Dim x As Object = _Server.ReturnRealDeviceByName(Tabl(0))
-                                If x IsNot Nothing Then
-                                    _device = x.Value
-                                Else
-                                    _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "DecodeCommand", "Composant: " & Tabl(0) & " non trouvé --> Arrêt du traitement")
-                                    retour = "ERR: DecodeCommand Composant: " & Tabl(0) & " non trouvé --> Arrêt du traitement"
-                                    Return retour
-                                End If
-                        End Select
+        '            If Tabl.Length = 1 Then
+        '                Select Case _device
+        '                    Case "SYSTEM_DATE"
+        '                        _device = Now.Date.ToShortDateString
+        '                    Case "SYSTEM_LONG_DATE"
+        '                        _device = Now.Date.ToLongDateString
+        '                    Case "SYSTEM_TIME"
+        '                        _device = Now.ToShortTimeString
+        '                    Case "SYSTEM_LONG_TIME"
+        '                        _device = Now.ToLongTimeString
+        '                    Case "SYSTEM_SOLEIL_COUCHE"
+        '                        Dim _date As Date = _Server.GetHeureCoucherSoleil
+        '                        _device = _date.ToShortTimeString
+        '                    Case "SYSTEM_SOLEIL_LEVE"
+        '                        Dim _date As Date = _Server.GetHeureLeverSoleil
+        '                        _device = _date.ToShortTimeString
+        '                    Case Else
+        '                        Dim x As Object = _Server.ReturnRealDeviceByName(Tabl(0))
+        '                        If x IsNot Nothing Then
+        '                            _device = x.Value
+        '                        Else
+        '                            _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "DecodeCommand", "Composant: " & Tabl(0) & " non trouvé --> Arrêt du traitement")
+        '                            retour = "ERR: DecodeCommand Composant: " & Tabl(0) & " non trouvé --> Arrêt du traitement"
+        '                            Return retour
+        '                        End If
+        '                End Select
 
-                    ElseIf Tabl.Length = 2 Then
-                        Dim x As Object = _Server.ReturnRealDeviceByName(Tabl(0))
-                        If x IsNot Nothing Then
-                            Dim value As Object = CallByName(x, Tabl(1), CallType.Get)
-                            _device = value
-                        End If
-                    End If
+        '            ElseIf Tabl.Length = 2 Then
+        '                Dim x As Object = _Server.ReturnRealDeviceByName(Tabl(0))
+        '                If x IsNot Nothing Then
+        '                    Dim value As Object = CallByName(x, Tabl(1), CallType.Get)
+        '                    _device = value
+        '                End If
+        '            End If
 
-                    Dim start As String = Mid(newcmd, 1, startcmd - 1)
-                    Dim fin As String = Mid(newcmd, endcmd + 1, newcmd.Length - endcmd)
-                    newcmd = start & _device & fin
-                    retour = newcmd
-                    startcmd = InStr(1, newcmd, "<")
-                    endcmd = InStr(1, newcmd, ">")
-                Loop
+        '            Dim start As String = Mid(newcmd, 1, startcmd - 1)
+        '            Dim fin As String = Mid(newcmd, endcmd + 1, newcmd.Length - endcmd)
+        '            newcmd = start & _device & fin
+        '            retour = newcmd
+        '            startcmd = InStr(1, newcmd, "<")
+        '            endcmd = InStr(1, newcmd, ">")
+        '        Loop
 
-                Return retour
-            Catch ex As Exception
-                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "DecodeCommand", "Exception: " & ex.Message)
-                retour = "ERR: " & ex.ToString
-                Return retour
-            End Try
-        End Function
-        Public Function EvaluateCommand(ByVal Command As String) As String
-            'si la chaine ne contient que des chiffres et operateurs "+-*/^().," on calcule sinon on affecte
-            Try
-                If Text.RegularExpressions.Regex.IsMatch(Command, "^[0-9+\-*/\^().,]*$") Then
-                    Dim dt = New DataTable()
-                    Dim resultat As Double = CDbl(dt.Compute(Command, ""))
-                    dt = Nothing
-                    Return resultat
-                Else
-                    Return Command
-                End If
-            Catch ex As Exception
-                _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "EvaluateCommand", "Exception: " & ex.ToString)
-                Return Command
-            End Try
-        End Function
+        '        Return retour
+        '    Catch ex As Exception
+        '        _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "DecodeCommand", "Exception: " & ex.Message)
+        '        retour = "ERR: " & ex.ToString
+        '        Return retour
+        '    End Try
+        'End Function
+        'Public Function EvaluateCommand(ByVal Command As String) As String
+        '    'si la chaine ne contient que des chiffres et operateurs "+-*/^().," on calcule sinon on affecte
+        '    Try
+        '        If Text.RegularExpressions.Regex.IsMatch(Command, "^[0-9+\-*/\^().,]*$") Then
+        '            Dim dt = New DataTable()
+        '            Dim resultat As Double = CDbl(dt.Compute(Command, ""))
+        '            dt = Nothing
+        '            Return resultat
+        '        Else
+        '            Return Command
+        '        End If
+        '    Catch ex As Exception
+        '        _Server.Log(TypeLog.ERREUR, TypeSource.SERVEUR, "EvaluateCommand", "Exception: " & ex.ToString)
+        '        Return Command
+        '    End Try
+        'End Function
 
         Public Function Decodestring(ByVal texte As String) As String
             Try
