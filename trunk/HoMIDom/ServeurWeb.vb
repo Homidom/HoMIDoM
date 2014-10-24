@@ -340,7 +340,7 @@ Namespace HoMIDom
                                         Dim xdev1 As XmlNode = xdev.AppendChild(xDoc.CreateElement("id"))
                                         xdev1.InnerText = _zon.ID
                                         Dim xdev2 As XmlNode = xdev.AppendChild(xDoc.CreateElement("name"))
-                                        xdev1.InnerText = _zon.Name
+                                    xdev2.InnerText = _zon.Name
                                         Dim xdev3 As XmlNode = xdev.AppendChild(xDoc.CreateElement("icon"))
                                         xdev3.InnerText = _zon.Icon
                                         Dim xdev4 As XmlNode = xdev.AppendChild(xDoc.CreateElement("image"))
@@ -377,7 +377,7 @@ Namespace HoMIDom
                                         Dim xdev1 As XmlNode = xdev.AppendChild(xDoc.CreateElement("id"))
                                         xdev1.InnerText = _dev.ID
                                         Dim xdev2 As XmlNode = xdev.AppendChild(xDoc.CreateElement("name"))
-                                        xdev1.InnerText = _dev.Name
+                                        xdev2.InnerText = _dev.Name
                                         Dim xdev3 As XmlNode = xdev.AppendChild(xDoc.CreateElement("type"))
                                         xdev3.InnerText = _dev.Type.ToString
                                         Dim xdev5 As XmlNode = xdev.AppendChild(xDoc.CreateElement("enable"))
