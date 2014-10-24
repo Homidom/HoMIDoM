@@ -776,13 +776,12 @@ Namespace HoMIDom
                                 _Server.Log(TypeLog.DEBUG, TypeSource.DEVICE, "DeviceDBL Value", _Name & " a dépassé la valeur max : " & _ValueMax & " < " & tmp.ToString)
                                 tmp = _ValueMax
                             End If
-                            If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
-
                             If IsNumeric(_Correction) Then
                                 tmp += _Correction
                             Else
                                 tmp = EvaluationDevice(_Correction, tmp)
                             End If
+                            If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
 
                             'si ALLVALUE On enregistre TOUTES les valeurs
                             If _AllValue Then
@@ -1060,12 +1059,12 @@ Namespace HoMIDom
                                 _Server.Log(TypeLog.DEBUG, TypeSource.DEVICE, "DeviceDBL Value", _Name & " a dépassé la valeur max : " & _ValueMax & " < " & tmp.ToString)
                                 tmp = _ValueMax
                             End If
-                            If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
                             If IsNumeric(_Correction) Then
                                 tmp += _Correction
                             Else
                                 tmp = EvaluationDevice(_Correction, tmp)
                             End If
+                            If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
 
                             'si ALLVALUE On enregistre TOUTES les valeurs
                             If _AllValue Then
