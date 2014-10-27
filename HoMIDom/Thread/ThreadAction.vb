@@ -428,7 +428,7 @@ Namespace HoMIDom
                         _Server.LogEvent(Decodestring(x.Message), x.Type, x.Eventid)
                     Case Action.TypeAction.ActionLogEventHomidom
                         Dim x As Action.ActionLogEventHomidom = _Action
-                        _Server.Log(x.Type, HoMIDom.Server.TypeSource.SCRIPT, x.Fonction, Decodestring(x.Message))
+                        _Server.Log(x.Type, HoMIDom.Server.TypeSource.SCRIPT, Decodestring(x.Fonction), Decodestring(x.Message))
                     Case Action.TypeAction.ActionDOS
                         Dim x As Action.ActionDos = _Action
                         Try
