@@ -570,7 +570,7 @@ Partial Public Class uDevice
 
     Private Sub TxtLastChangeDuree_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtLastChangeDuree.TextChanged
         Try
-            If String.IsNullOrEmpty(TxtLastChangeDuree.Text) = False And IsNumeric(TxtLastChangeDuree.Text) = False Then
+            If String.IsNullOrEmpty(TxtLastChangeDuree.Text) = False Or IsNumeric(TxtLastChangeDuree.Text) = False Then
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez saisir une valeur numérique")
                 TxtLastChangeDuree.Text = 0
             End If
