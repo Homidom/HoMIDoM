@@ -555,7 +555,7 @@ Namespace HoMIDom
 
             Protected Function EvaluationDevice(ByVal Formule As String, ByVal Valeur As Double) As Double
 
-                If String.IsNullOrEmpty(Formule) = False Then Return Valeur
+                If String.IsNullOrEmpty(Formule) Then Return Valeur
 
                 Dim resultatSTR As String = Valeur & Formule
                 Try
@@ -781,6 +781,7 @@ Namespace HoMIDom
                             Else
                                 tmp = EvaluationDevice(_Correction, tmp)
                             End If
+
                             If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
 
                             'si ALLVALUE On enregistre TOUTES les valeurs
