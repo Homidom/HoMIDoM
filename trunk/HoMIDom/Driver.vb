@@ -26,23 +26,23 @@
             End Set
         End Property
 
-        Public Property LabelsDriver() As ArrayList
-            Get
-                Return _Server.ReturnDriver(_ID).Item(17)
-            End Get
-            Set(ByVal value As ArrayList)
-                _Server.WriteDriver(_ID, "LABELSDRIVER", value)
-            End Set
-        End Property
+        'Public Property LabelsDriver() As ArrayList
+        '    Get
+        '        Return _Server.ReturnDriver(_ID).Item(17)
+        '    End Get
+        '    Set(ByVal value As ArrayList)
+        '        _Server.WriteDriver(_ID, "LABELSDRIVER", value)
+        '    End Set
+        'End Property
 
-        Public Property LabelsDevice() As ArrayList
-            Get
-                Return _Server.ReturnDriver(_ID).Item(17)
-            End Get
-            Set(ByVal value As ArrayList)
-                _Server.WriteDriver(_ID, "LABELSDEVICE", value)
-            End Set
-        End Property
+        'Public Property LabelsDevice() As ArrayList
+        '    Get
+        '        Return _Server.ReturnDriver(_ID).Item(17)
+        '    End Get
+        '    Set(ByVal value As ArrayList)
+        '        _Server.WriteDriver(_ID, "LABELSDEVICE", value)
+        '    End Set
+        'End Property
 
         Public Property COM() As String
             Get
@@ -192,7 +192,7 @@
 
         Public ReadOnly Property OsPlatform() As String
             Get
-                Return _Server.ReturnDriver(_ID).Item(18)
+                Return _Server.ReturnDriver(_ID).Item(17)
             End Get
         End Property
 

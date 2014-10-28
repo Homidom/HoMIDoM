@@ -2867,7 +2867,7 @@ Namespace HoMIDom
                         tabl.Add(_ListDrivers.Item(i).Picture)
                         tabl.Add(_ListDrivers.Item(i).DeviceSupport)
                         tabl.Add(_ListDrivers.Item(i).Parametres)
-                        tabl.Add(_ListDrivers.Item(i).Labels)
+                        'tabl.Add(_ListDrivers.Item(i).Labels)
                         tabl.Add(_ListDrivers.Item(i).OsPlatform)
                         Return tabl
                     End If
@@ -2916,10 +2916,10 @@ Namespace HoMIDom
                                 For idx As Integer = 0 To Parametre.count - 1
                                     _ListDrivers.Item(i).Parametres.item(idx).valeur = Parametre(idx)
                                 Next
-                            Case "LABELS"
-                                For idx As Integer = 0 To Parametre.count - 1
-                                    _ListDrivers.Item(i).Labels.item(idx).tooltip = Parametre(idx)
-                                Next
+                                'Case "LABELS"
+                                '    For idx As Integer = 0 To Parametre.count - 1
+                                '        _ListDrivers.Item(i).Labels.item(idx).tooltip = Parametre(idx)
+                                '    Next
                             Case "DELETEDEVICE"
                                 _ListDrivers.Item(i).DeleteDevice(Parametre)
                             Case "NEWDEVICE"
@@ -9965,7 +9965,12 @@ Namespace HoMIDom
                 'get driver name
                 Dim drivernom As String = DriverId
                 Try
-                    drivernom = ReturnDriver(DriverId).Item(0)
+                    For i As Integer = 0 To _ListDrivers.Count - 1
+                        If _ListDrivers.Item(i).ID = DriverId Then
+                            drivernom = _ListDrivers.Item(i).nom
+                            Exit For
+                        End If
+                    Next
                 Catch ex As Exception
 
                 End Try
