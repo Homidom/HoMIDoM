@@ -10,7 +10,6 @@
 	<script type='text/javascript' src='js/jquery.jsonp-2.4.0.min.js' ></script>
 	<script type='text/javascript' src='js/jquery.signalr.min.js' ></script>
    	<script type='text/javascript' src="js/menulogin.js"></script>  
-	
 	<!-- Include all compiled plugins (below), or include individual files as needed 
 	     necessaire pour tooltip -->
     <script src="js/bootstrap.min.js"></script>
@@ -21,7 +20,7 @@
 	<link href="css/homiweb.css" rel="stylesheet" />	
 
 	<!-- Definition constante -->
-	<script> var VersionHomiWeb = "3.1.7";</script>
+	<script> var VersionHomiWeb = "3.1.8";</script>
 
 </head>
 
@@ -32,8 +31,9 @@
 		<div class="HeaderInfo" >
 			<!-- Definition de la partie gauche ></!-->
             <div class="HeaderGauche">
-				<img  class="LogoHeader"" alt="Information sur l'image" src="./images/rond_64x64.png"/>
-					
+				<img  class="LogoHeader" alt="Information sur l'image" src="./images/rond_64x64.png"/>
+				<h2 id="HeaderServer"></h2>	
+				<h1> HoMIDoM  <small> : Le système complet de domotique pour la maison</small></h1>
 			</div>	<!-- Fin partie gauche  ></!-->
 
 		
@@ -57,7 +57,7 @@
 				</script>	
 	
 			</div> <!-- Fin partie droite  ></!-->
-		<h1> HoMIDoM  <small> : Le système complet de domotique pour la maison</small></h1>
+		
 		</div><!-- Fin Definition de la partie haute de l'ecran ></!-->
 
 		
@@ -145,10 +145,6 @@
 				<script type="text/html" id="ZonesTemplate">
 					<ul class="nav navbar-nav  "  >
 						 <button class="btn btn-default btn-default" data-bind="click: function(data, event) { AfficheZone(id, data, event) }" ><img data-bind="attr:{ src: 'images/zones/icon/' + icon }" ><span data-bind='text: name' /></button>
-			<!-- 	 <button class="btn btn-default btn-default" data-bind="click: function(data, event) { AfficheZone(id, data, event) }" ><img src="images/icones/defaut.png"><span data-bind='text: name' /></button>
-			img data-bind="attr:{ src: 'images/icones/' + icon }" 
-			img data-bind="attr:{ src: '/imagefolder/' + PhotoName }" 
-			-->
 					</ul>	 
 				</script>
 
@@ -346,19 +342,14 @@ $('[data-toggle="tooltip"]').tooltip();
 		connection.start()	
 			.done(function(){ 
 
-				$(".HeaderGauche").append("<h2>"+ServerName.toUpperCase() +' : '+ PortActuel + "</h2>");	
+				$("#HeaderServer").text(ServerName.toUpperCase() +' : '+ PortActuel);	
 					$("#modalLogin").modal('hide');	
 				console.log('Now connected, connection ID=' + connection.id); 
 				var IdTemp = getDeviceId("soleil01");
 				console.log ("Envoi de la commande de lecture de soleil01 : "+IdTemp + " : "  );
 				execute("soleil01","Read");
 				execute(IdTemp,"Read");
-				
-				/*
-				execute(\''+IdTemp,\''read'\');
-				onClick="          execute(\''+ListDevices[a]._ID+'\', \''read'\')     "
-				*/
-				
+
 				$("#PartGauche").show();
 				$("#PartCentrale").show();
 				$("#PartDroite").show();
@@ -399,8 +390,16 @@ $('[data-toggle="tooltip"]').tooltip();
  	function loadDevices(data) {
 		var items = [];
 		ListDevices = data;
+		ListDevices = sortByKey(data, "_Name");
+		console.log("debug tri ListDevices : "+ListDevices);
 	}
-	
+	/* Function de tri par une clé */
+	function sortByKey(array, key) {
+		return array.sort(function(a, b) {
+			var x = a[key]; var y = b[key];
+			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+		});
+	}	
 	// Chargement de zones 
  	function loadZones(data) {
 		ListZones = data;
@@ -408,10 +407,11 @@ $('[data-toggle="tooltip"]').tooltip();
 				 var zonetemp = {
 					 "name": zone._Name,
 					 "id"  : zone._Id,
-					 "icon": zone._Icon.substring(zone._Icon.lastIndexOf("\\")+1) 
+					 "icon": zone._Icon.substring(zone._Icon.lastIndexOf("\\")+1).toLowerCase()
 				};
 				zones.push(zonetemp);
-				console.log("Extraction nom de l icon : "+ zonetemp.icon);
+				console.log("Extraction nom de l icon : ");
+				console.table(zonetemp);
 		 });
 	}
 	
@@ -442,13 +442,13 @@ $('[data-toggle="tooltip"]').tooltip();
 							{
 								// Widget Météo
 								if (ListDevices[a]._Type==17) {
-									items.push('<article class="Composant"><h4>'+ListDevices[a]._Name + '</h4><div title="Méteo actuelle" class="meteo"><img src="./images/meteo/'+ ListDevices[a]._IconActuel +'.png"></img><p><strong>'+ ListDevices[a]._JourToday +'</strong></p></div>');
+									items.push('<article class="Composant" ><h4 id=id'+ListDevices[a]._ID+ '>'+ListDevices[a]._Name + '</h4><div title="Méteo actuelle" class="meteo"><img src="./images/meteo/'+ ListDevices[a]._IconActuel +'.png"></img><p><strong>'+ ListDevices[a]._JourToday +'</strong></p></div>');
 									items.push('<div class="meteo"><p class="TempMax">'+ListDevices[a]._MaxJ1 + ' °<br></br></p><p class="TempMin">'+ListDevices[a]._MinJ1 + ' °</p></div>');
 									items.push('<div class="meteo"><img src="./images/meteo/temperature-defaut.png"></img><p><strong>'+ListDevices[a]._TempActuel+ ' °</strong></p></div>');
 									items.push('<div class="meteo"><img src="./images/meteo/humidite-defaut.png"></img><p>'+ ListDevices[a]._HumActuel + ' %</p></div>');
 									items.push('<div class="meteo"><img src="./images/meteo/vitessevent-defaut.png"></img><p>'+ ListDevices[a]._VentActuel + ' m/s</p></div>');
 									items.push('</article>');
-									items.push('<article class="Composant"><h4>'+ListDevices[a]._Name + ' Prévisions</h4><div title="Méteo prévisions" class="meteo">');
+									items.push('<article class="Composant"><h4 id=id'+ListDevices[a]._ID+'>'+ListDevices[a]._Name + ' Prévisions</h4><div title="Méteo prévisions" class="meteo">');
 									items.push('<div class="meteo"><img src="./images/meteo/'+ ListDevices[a]._IconJ1 +'.png"></img><p><strong>'+ ListDevices[a]._JourJ1  +'</strong></p></div>');
 									items.push('<div class="meteo"><p class="TempMax">'+ListDevices[a]._MaxJ1 + ' °<br></br></p><p class="TempMin">'+ListDevices[a]._MinJ1 + ' °</p></div>');
 									items.push('<div class="meteo"><img src="./images/meteo/'+ ListDevices[a]._IconJ2 +'.png"></img><p><strong>'+ ListDevices[a]._JourJ2  +'</strong></p></div>');
@@ -462,9 +462,9 @@ $('[data-toggle="tooltip"]').tooltip();
 								var res = (ListDevices[a]._LastChange.substr(0,19));
 								var DateTemp = res.replace("T"," ") ;
 
-								items.push('<article class="Composant"><h4>'+ListDevices[a]._Name + '</h4><div><img src="./images/devices/'+ListDevices[a]._Type+'-defaut.png" alt=""></img><p></p></div> ' );
+								items.push('<article class="Composant" ><h4 id=id'+ListDevices[a]._ID+'>'+ListDevices[a]._Name + '</h4><div><img src="./images/devices/'+ListDevices[a]._Type+'-defaut.png" alt=""></img><p></p></div> ' );
 								var actions = [];
-								actions.push('<div id="ListCommand" class="btn-group"><button class="btn btn-lg btn-danger dropdown-toggle" data-toggle="dropdown"> ' + ListDevices[a]._Value+' ' +  ListDevices[a]._Unit +'     <span class="caret"></span></button>');
+								actions.push('<div id="ListCommand" class="btn-group"><button class="btn btn-lg btn-danger dropdown-toggle" data-toggle="dropdown" title="'+ DateTemp +'" > ' + ListDevices[a]._Value+' ' +  ListDevices[a]._Unit +'     <span class="caret"></span></button>');
 								actions.push('<ul class="dropdown-menu">');
 								$.each(ListDevices[a]._DeviceAction, function(i, command) {
 																				
@@ -479,9 +479,7 @@ $('[data-toggle="tooltip"]').tooltip();
 								});
 								 items.push(actions.join(''));	
 								 items.push('</ul></div></article>');										
-								
-	
-								} 
+								}							
 							}
 						}
 					}			 
@@ -493,7 +491,23 @@ $('[data-toggle="tooltip"]').tooltip();
 			'class': 'devices',
 			html: items.join('')
 		}).appendTo('#devices');
+
+		$('h4').each(function() {
+			 CalcHeight($(this));
+		});
+		
+		$('button').each(function() {
+		 // 	 CalcHeight($(this));
+		});		
 	}	
+
+	function CalcHeight(elem) {
+		while (($(elem).css('line-height').replace('px','')) <= parseInt((elem).height()) ) {
+			$(elem).css('font-size', parseInt($(elem).css('font-size'))* 0.95 +"px") ;
+			console.log("La taille  est trop longue "+  $(elem).height() +" / " + $(elem).css('line-height').replace('px',''));	
+			console.log("La font Size est  " +  Math.round(parseInt($(elem).css('font-size'))* 0.9) +"px");
+		}
+	}
 	
 	// Chargement de macros 	
 	function loadMacros(data) {
