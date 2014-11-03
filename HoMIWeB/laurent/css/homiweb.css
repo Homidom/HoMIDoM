@@ -90,11 +90,10 @@ footer a, footer a:hover  {float: left;color: White;}
 
 h2 {margin-top: 15px;margin-bottom: 10px;text-align: center;font-size:1.5em;color: White;font-weight: bold;}
 h3 {	margin-left: 1.5em;margin-top: -3.8em;font-weight: bold;font-size:1em;color: white;}
-h4 {	margin-top: 5px;text-align: center;font-weight: bold;color: white;}
+h4 {	margin-top: 5px;text-align: center;font-weight: bold;color: white ; /*  white-space: nowrap ; overflow-x : hidden; font-size:0.90vw; */}
 
-.align_image img {width:45px;height:45px;margin: 2%; }
+.align_image img , .LogoHeader {width:45px;height:45px;margin: 2%; }
 .align_image img, .align_image button {display : inline;vertical-align:bottom;}
-
 
 .HeaderInfo > div   {display : inline-block;} 
 .HeaderGauche {}
