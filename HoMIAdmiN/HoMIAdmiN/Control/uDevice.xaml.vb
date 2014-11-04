@@ -214,7 +214,8 @@ Partial Public Class uDevice
             End If
 
             'Liste toutes les zones dans la liste
-            For i As Integer = 0 To myService.GetAllZones(IdSrv).Count - 1
+            Dim _listezone = myService.GetAllZones(IdSrv)
+            For i As Integer = 0 To _listezone.Count - 1
                 Dim ch1 As New CheckBox
                 Dim ch2 As New CheckBox
                 Dim ImgZone As New Image
@@ -223,20 +224,20 @@ Partial Public Class uDevice
                 ImgZone.Width = 32
                 ImgZone.Height = 32
                 ImgZone.Margin = New Thickness(2)
-                ImgZone.Source = ConvertArrayToImage(myService.GetByteFromImage(myService.GetAllZones(IdSrv).Item(i).Icon))
+                ImgZone.Source = ConvertArrayToImage(myService.GetByteFromImage(_listezone.Item(i).Icon))
                 ch1.Width = 80
-                ch1.Content = myService.GetAllZones(IdSrv).Item(i).Name
+                ch1.Content = _listezone.Item(i).Name
                 ch1.ToolTip = ch1.Content
-                ch1.Uid = myService.GetAllZones(IdSrv).Item(i).ID
+                ch1.Uid = _listezone.Item(i).ID
                 AddHandler ch1.Click, AddressOf ChkElement_Click
                 ch2.Content = "Visible"
                 ch2.ToolTip = "Visible dans la zone côté client"
                 ch2.Visibility = Windows.Visibility.Collapsed
-                For j As Integer = 0 To myService.GetAllZones(IdSrv).Item(i).ListElement.Count - 1
-                    If myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).ElementID = _DeviceId Then
+                For j As Integer = 0 To _listezone.Item(i).ListElement.Count - 1
+                    If _listezone.Item(i).ListElement.Item(j).ElementID = _DeviceId Then
                         ch1.IsChecked = True
                         ch2.Visibility = Windows.Visibility.Visible
-                        If myService.GetAllZones(IdSrv).Item(i).ListElement.Item(j).Visible = True Then ch2.IsChecked = True
+                        If _listezone.Item(i).ListElement.Item(j).Visible = True Then ch2.IsChecked = True
                         Exit For
                     End If
                 Next
@@ -271,6 +272,7 @@ Partial Public Class uDevice
                     myService.DeleteDeviceToZone(IdSrv, x1.Uid, _DeviceId)
                 Else
                     If trv = True And x1.IsChecked = True Then
+                        myService.AddDeviceToZone(IdSrv, x1.Uid, _DeviceId, x2.IsChecked)
                     Else
                         If trv = False And x1.IsChecked = True Then myService.AddDeviceToZone(IdSrv, x1.Uid, _DeviceId, x2.IsChecked)
                     End If
