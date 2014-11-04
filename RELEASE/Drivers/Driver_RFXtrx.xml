@@ -145,6 +145,12 @@ Driver_RFXtrx
 	<param name="commande">commande ON, OFF</param>
 	<param name="type">0=BLYSS</param>
 	<remarks></remarks>
+</member><member name="M:Driver_RFXtrx.Driver_RFXtrx.send_security(System.String,System.String,System.Int32)">
+	<summary>Gestion du protocole SECURITY</summary>
+	<param name="adresse">Adresse du type FFFFA1 </param>
+	<param name="commande">commande PANIC, PAIR, MOTION</param>
+	<param name="type">protocole</param>
+	<remarks></remarks>
 </member><member name="T:Driver_RFXtrx.Driver_RFXtrx">
 	<summary>Class Driver_RFXTrx, permet de communiquer avec le RFXtrx Ethernet/COM</summary>
 	<remarks>Pour la version USB, necessite l'installation du driver USB RFXCOM</remarks>
