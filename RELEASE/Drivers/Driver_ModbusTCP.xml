@@ -139,9 +139,6 @@ Driver_ModbusTCP
 </member><member name="P:Driver_ModbusTCP.ModbusTCP.Master.timeout">
 	<summary>Response timeout. If the slave didn't answers within in this time an exception is called.</summary>
 	<value>The default value is 500ms.</value>
-</member><member name="P:Driver_ModbusTCP.ModbusTCP.Master.refresh">
-	<summary>Refresh timer for slave answer. The class is polling for answer every X ms.</summary>
-	<value>The default value is 10ms.</value>
 </member><member name="P:Driver_ModbusTCP.ModbusTCP.Master.connected">
 	<summary>Shows if a connection is active.</summary>
 </member><member name="M:Driver_ModbusTCP.ModbusTCP.Master.#ctor">
