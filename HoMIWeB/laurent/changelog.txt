@@ -41,3 +41,6 @@ Modification du composant "Météo"
 Correction nom du serveur multiple - si appui sur Connexion plusieurs fois
 Ajout Date de mise a jour de la valeur en passant sur le bouton du composant (title)
 Calcul de la taille de la police en fonction du titre (reduction des grands titres)
+
+3.1.9
+Correction bug - Calcul de la taille nom composant (reduction des grands titres)
