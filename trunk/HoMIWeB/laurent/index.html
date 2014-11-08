@@ -20,7 +20,7 @@
 	<link href="css/homiweb.css" rel="stylesheet" />	
 
 	<!-- Definition constante -->
-	<script> var VersionHomiWeb = "3.1.8";</script>
+	<script> var VersionHomiWeb = "3.1.9";</script>
 
 </head>
 
@@ -492,20 +492,19 @@ $('[data-toggle="tooltip"]').tooltip();
 			html: items.join('')
 		}).appendTo('#devices');
 
-		$('h4').each(function() {
-			 CalcHeight($(this));
+		$('#devices article h4').each(function() {
+		  	 CalcHeight($(this));
 		});
 		
-		$('button').each(function() {
-		 // 	 CalcHeight($(this));
-		});		
+//		$('#macros article button').each(function() {
+//		  	 CalcHeight($(this));
+//		});		
 	}	
 
 	function CalcHeight(elem) {
-		while (($(elem).css('line-height').replace('px','')) <= parseInt((elem).height()) ) {
-			$(elem).css('font-size', parseInt($(elem).css('font-size'))* 0.95 +"px") ;
-			console.log("La taille  est trop longue "+  $(elem).height() +" / " + $(elem).css('line-height').replace('px',''));	
-			console.log("La font Size est  " +  Math.round(parseInt($(elem).css('font-size'))* 0.9) +"px");
+		while ( parseInt($(elem).css('font-size')) <  parseInt($(elem).height()) ) {
+			console.log("Debug Police titre : "+$(elem).text() + " - " +  parseInt($(elem).css('font-size')) + " | height " +   $(elem).height() ) ;
+			$(elem).css('font-size', parseInt($(elem).css('font-size'))-1 +"px") ;
 		}
 	}
 	
