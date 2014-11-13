@@ -465,7 +465,7 @@ Namespace HoMIDom
 
         Public Sub Sendhttp(ByVal Commande As String)
             Try
-                Dim texte As String = Commande
+                Dim texte As String = Web.HttpContext.Current.Server.UrlEncode(Commande)
                 'remplace les balises par la valeur
                 'texte = Decodestring(texte)
                 'texte = texte.Replace("{time}", Now.ToShortTimeString) '--> pb avec le format qui ne passe pas dans une URL
