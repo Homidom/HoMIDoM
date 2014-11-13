@@ -159,7 +159,7 @@ Public Class HoMIGuI
                     ServiceRestartToolStripMenuItem.Visible = False
                     ServiceRestartToolStripMenuItem.Enabled = False
                     ServiceEtatToolStripMenuItem.ToolTipText = "Etat du service Windows"
-                    ServiceEtatToolStripMenuItem.Text = "Service: Lancé en mode console"
+                    ServiceEtatToolStripMenuItem.Text = "Service: Lancé en mode console ou arrêt en cours"
                 Else
                     If controller.Status.Equals(ServiceControllerStatus.Running) Then
                         ServiceStartToolStripMenuItem.Visible = False
