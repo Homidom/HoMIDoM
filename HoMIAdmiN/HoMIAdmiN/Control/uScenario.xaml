@@ -27,24 +27,14 @@
                     <Image Name="ZoomMoins" Source="/HoMIAdmiN;component/Images/zoom_arriere_32.png" Width="23" Height="23" />
             </StackPanel>
             </StackPanel>
-            <!--
-            <StackPanel DockPanel.Dock="Bottom" Height="8" Orientation="Horizontal"> 
-            
-            </StackPanel>
 
-            <Canvas Width="15" DockPanel.Dock="Left"  />
-
-            <Canvas Width="15" DockPanel.Dock="Right"  /
->-->
-
-            <ScrollViewer DockPanel.Dock="Top"  Name="ScrollViewer2"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AllowDrop="True">
-                <StackPanel CanHorizontallyScroll="True" Margin="10">
-                    <StackPanel HorizontalAlignment="Left"  Name="StckPnlLib" VerticalAlignment="Top" Orientation="Horizontal" Background="DarkGray" CanHorizontallyScroll="True"/>
+            <ScrollViewer DockPanel.Dock="Top"  Name="ScrollViewer2"  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" AllowDrop="True"  >
+                <StackPanel Name="StkParent" CanHorizontallyScroll="True" Margin="10" CanVerticallyScroll="True" VerticalAlignment="Top"  >
+                    <StackPanel HorizontalAlignment="Left"  Name="StckPnlLib" VerticalAlignment="Top" Orientation="Horizontal" Background="DarkGray" CanHorizontallyScroll="True"  />
                     <StackPanel Background="DarkGray" Height="22" HorizontalAlignment="Left"  Name="StckPnlLibTr" Orientation="Horizontal" VerticalAlignment="Top" CanHorizontallyScroll="True"  />
-                    <StackPanel HorizontalAlignment="Left" MinHeight="350" Name="StackPanel1" VerticalAlignment="Top" CanVerticallyScroll=" True" CanHorizontallyScroll="True"/>
+                    <StackPanel HorizontalAlignment="Left" Name="StackPanel1" VerticalAlignment="Top" CanVerticallyScroll=" True" CanHorizontallyScroll="True" />
                 </StackPanel>
             </ScrollViewer>
-  
         </DockPanel>
     </Grid>
 </UserControl>

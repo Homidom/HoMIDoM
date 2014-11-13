@@ -196,6 +196,7 @@
     <Compile Include="Fonctions.vb" />
     <Compile Include="ManagerDevices.vb" />
     <Compile Include="ManagerDrivers.vb" />
+    <Compile Include="ManagerSequences.vb" />
     <Compile Include="ManagerZones.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -657,7 +658,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_IncrementBeforeBuild="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UseGlobalSettings="True" />
+      <UserProperties BuildVersion_UseGlobalSettings="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_IncrementBeforeBuild="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

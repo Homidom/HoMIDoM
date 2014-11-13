@@ -60,12 +60,6 @@ Namespace HoMIDom
         <NonSerialized()> Private Shared _ListGroups As New List(Of Groupes) 'Liste de tous les groupes
         <NonSerialized()> Private Shared _ListVars As New List(Of Variable) 'Liste de toutes les variables
 
-        <NonSerialized()> Private Shared _SequenceDriver As String 'N° de sequence en cours du dernier changement d'un driver
-        <NonSerialized()> Private Shared _SequenceDevice As String 'N° de sequence en cours du dernier changement d'un device
-        <NonSerialized()> Private Shared _SequenceTrigger As String 'N° de sequence en cours du dernier changement d'un trigger
-        <NonSerialized()> Private Shared _SequenceZone As String 'N° de sequence en cours du dernier changement d'une zone
-        <NonSerialized()> Private Shared _SequenceMacro As String 'N° de sequence en cours du dernier changement d'une macro
-        <NonSerialized()> Private Shared _SequenceServer As String 'N° de sequence en cours du dernier changement du server
 
         <NonSerialized()> Private sqlite_homidom As New Sqlite("homidom", Me) 'BDD sqlite pour Homidom
         <NonSerialized()> Private sqlite_medias As New Sqlite("medias", Me) 'BDD sqlite pour les medias
@@ -151,7 +145,7 @@ Namespace HoMIDom
                 If Etat_server Then
                     For Each _drv In GetAllDrivers(_IdSrv)
                         If _drv.Nom = DriveName Then
-                            _SequenceDriver = Api.GenerateGUID
+                            ManagerSequences.AddSequences(Sequence.TypeOfSequence.Driver, _drv.ID, "", Nothing)
                             RaiseEvent DriverChanged(_drv.ID)
                             Exit For
                         End If
@@ -243,7 +237,7 @@ Namespace HoMIDom
                 End Try
             End If
 
-            _SequenceDevice = Api.GenerateGUID
+            ManagerSequences.AddSequences(Sequence.TypeOfSequence.Device, genericDevice.ID, Nothing, valeurString)
             RaiseEvent DeviceChanged(genericDevice.ID, valeurString)
 
             Try
@@ -2415,13 +2409,6 @@ Namespace HoMIDom
                 writer.WriteEndDocument()
                 writer.Close()
 
-                _SequenceDevice = Api.GenerateGUID
-                _SequenceDriver = Api.GenerateGUID
-                _SequenceMacro = Api.GenerateGUID
-                _SequenceTrigger = Api.GenerateGUID
-                _SequenceZone = Api.GenerateGUID
-                _SequenceServer = Api.GenerateGUID
-
                 Log(TypeLog.DEBUG, TypeSource.SERVEUR, "SaveConfig", "Sauvegarde terminée")
                 Return True
             Catch ex As Exception
@@ -3389,7 +3376,7 @@ Namespace HoMIDom
                 Instance = Me
                 'Check If Homidom Run in 32 or 64 bits
                 If IntPtr.Size = 8 Then _OsPlatForm = "64" Else _OsPlatForm = "32"
-                _SequenceServer = Api.GenerateGUID
+                ManagerSequences.AddSequences(Sequence.TypeOfSequence.Server, Nothing, Nothing, Nothing)
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "New", "Exception : " & ex.Message)
             End Try
@@ -3496,17 +3483,11 @@ Namespace HoMIDom
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", retour)
 
                 '----- Initialisation des sequences ----- 
-                _SequenceDevice = Api.GenerateGUID
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Initialisation des sequences", "Sequence Device=" & _SequenceDevice)
-                _SequenceDriver = Api.GenerateGUID
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Initialisation des sequences", "Sequence Driver=" & _SequenceDriver)
-                _SequenceMacro = Api.GenerateGUID
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Initialisation des sequences", "Sequence Macro=" & _SequenceMacro)
-                _SequenceTrigger = Api.GenerateGUID
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Initialisation des sequences", "Sequence Trigger=" & _SequenceTrigger)
-                _SequenceZone = Api.GenerateGUID
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "Initialisation des sequences", "SequenceZone=" & _SequenceZone)
-
+                ManagerSequences.AddSequences(Sequence.TypeOfSequence.Device, Nothing, "", Nothing)
+                ManagerSequences.AddSequences(Sequence.TypeOfSequence.Driver, Nothing, "", Nothing)
+                ManagerSequences.AddSequences(Sequence.TypeOfSequence.Macro, Nothing, "", Nothing)
+                ManagerSequences.AddSequences(Sequence.TypeOfSequence.Trigger, Nothing, "", Nothing)
+                ManagerSequences.AddSequences(Sequence.TypeOfSequence.Zone, Nothing, "", Nothing)
 
                 '----- Démarre les drivers ----- 
                 Drivers_Start()
@@ -3816,7 +3797,13 @@ Namespace HoMIDom
             Etat_server = True
 
             'changement de sequence
-            _SequenceServer = Api.GenerateGUID
+            ManagerSequences.AddSequences(Sequence.TypeOfSequence.Server, Nothing, Nothing, Nothing)
+            Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Start SequenceServer", "N°: " & ManagerSequences.SequenceServer)
+            Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Start SequenceDriver", "N°: " & ManagerSequences.SequenceDriver)
+            Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Start SequenceDevice", "N°: " & ManagerSequences.SequenceDevice)
+            Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Start SequenceZone", "N°: " & ManagerSequences.SequenceZone)
+            Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Start SequenceTrigger", "N°: " & ManagerSequences.SequenceTrigger)
+            Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Start SequenceMacro", "N°: " & ManagerSequences.SequenceMacro)
 
             'passage du composant HOMI_SERVER à True
             Try
@@ -6390,7 +6377,8 @@ Namespace HoMIDom
                     End If
                 Next
 
-                _SequenceDriver = Api.GenerateGUID
+
+                ManagerSequences.AddSequences(Sequence.TypeOfSequence.Driver, myID, Nothing, Nothing)
                 'génération de l'event
                 Return myID
             Catch ex As Exception
@@ -7294,7 +7282,7 @@ Namespace HoMIDom
                     Next
                 End If
 
-                _SequenceDevice = Api.GenerateGUID
+                ManagerSequences.AddSequences(Sequence.TypeOfSequence.Device, myID, Nothing, Nothing)
                 RaiseEvent DeviceChanged(myID, "")
 
                 Return myID
@@ -8113,7 +8101,7 @@ Namespace HoMIDom
                     Next
                 End If
 
-                _SequenceZone = Api.GenerateGUID
+                ManagerSequences.AddSequences(Sequence.TypeOfSequence.Zone, myID, Nothing, Nothing)
                 RaiseEvent ZoneChanged(myID)
 
                 Return myID
@@ -8430,7 +8418,7 @@ Namespace HoMIDom
                     Next
                 End If
 
-                _SequenceMacro = Api.GenerateGUID
+                ManagerSequences.AddSequences(Sequence.TypeOfSequence.Macro, myID, Nothing, Nothing)
                 RaiseEvent MacroChanged(myID)
 
                 Return myID
@@ -8653,7 +8641,7 @@ Namespace HoMIDom
                     Next
                 End If
 
-                _SequenceTrigger = Api.GenerateGUID
+                ManagerSequences.AddSequences(Sequence.TypeOfSequence.Trigger, myID, Nothing, Nothing)
                 Return myID
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveTrigger", "Exception : " & ex.Message & vbCrLf & ex.Message)
@@ -10275,6 +10263,81 @@ Namespace HoMIDom
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteVariable: ", ex.Message)
                 Return ex.Message
+            End Try
+        End Function
+#End Region
+
+#Region "Sequences"
+
+        Public Function ReturnSequences() As List(Of Sequence) Implements IHoMIDom.ReturnSequences
+            Try
+                Return ManagerSequences.Sequences
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnSequences: ", ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        Public Function ReturnSequenceFromNumero(Numero As String) As Sequence Implements IHoMIDom.ReturnSequenceFromNumero
+            Try
+                Return ManagerSequences.ReturnSequenceFromNumero(Numero)
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnSequenceFromNumero: ", ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        Public Function GetSequenceDriver() As String Implements IHoMIDom.GetSequenceDriver
+            Try
+                Return ManagerSequences.SequenceDriver
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSequenceDriver: ", ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        Public Function GetSequenceDevice() As String Implements IHoMIDom.GetSequenceDevice
+            Try
+                Return ManagerSequences.SequenceDevice
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSequenceDevice: ", ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        Public Function GetSequenceTrigger() As String Implements IHoMIDom.GetSequenceTrigger
+            Try
+                Return ManagerSequences.SequenceTrigger
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSequenceTrigger: ", ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        Public Function GetSequenceZone() As String Implements IHoMIDom.GetSequenceZone
+            Try
+                Return ManagerSequences.SequenceZone
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSequenceZone: ", ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        Public Function GetSequenceMacro() As String Implements IHoMIDom.GetSequenceMacro
+            Try
+                Return ManagerSequences.SequenceMacro
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSequenceMacro: ", ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        Public Function GetSequenceServer() As String Implements IHoMIDom.GetSequenceServer
+            Try
+                Return ManagerSequences.SequenceServer
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSequenceServer: ", ex.Message)
+                Return Nothing
             End Try
         End Function
 #End Region

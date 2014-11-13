@@ -78,12 +78,12 @@ Public Class uMacro
     End Sub
 
     Private Sub UScenario1_Loaded(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles UScenario1.Loaded
-        UScenario1.Width = _Width - 15
+        UScenario1.Width = _Width - 50
         UScenario1.Height = _Height - 160
     End Sub
 
     Private Sub StackPanel1_Loaded(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles StackPanel1.Loaded
-        UScenario1.Width = _Width - 15
+        UScenario1.Width = _Width - 50
         UScenario1.Height = _Height - 160
     End Sub
 End Class
