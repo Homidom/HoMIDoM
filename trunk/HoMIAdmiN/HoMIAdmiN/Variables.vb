@@ -15,6 +15,7 @@ Module Variables
     'Public _DevicesAsHisto As New Dictionary(Of String, Long)
     Public _ListeDrivers As New List(Of TemplateDriver)
     Public _TableDBHisto As DataTable = Nothing
+    Public thdUDPServer As System.Threading.Thread
 
     'Sequences
     Public _SequenceDriver As String 'N° de sequence en cours du dernier changement d'un driver

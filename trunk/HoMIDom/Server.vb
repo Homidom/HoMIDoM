@@ -4921,7 +4921,7 @@ Namespace HoMIDom
             End Try
         End Function
 
-        ''' <summary>Permet d'envoyer un message d'un client vers le server</summary>
+        ''' <summary>Permet d'envoyer un message d'un client vers le server pour les renvoyer vers tous les clients</summary>
         ''' <param name="Message"></param>
         ''' <remarks></remarks>
         Public Sub MessageToServer(ByVal Message As String) Implements IHoMIDom.MessageToServer
