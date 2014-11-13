@@ -344,11 +344,11 @@ Class Window1
                 AffDriver()
                 ShowMainMenu()
 
-                LOG.Content = "Chargment des drivers...."
+                LOG.Content = "Chargement des drivers...."
                 ManagerDrivers.LoadDrivers()
-                LOG.Content = "Chargment des zones...."
+                LOG.Content = "Chargement des zones...."
                 ManagerZones.LoadZones()
-                LOG.Content = "Chargment des devices...."
+                LOG.Content = "Chargement des devices...."
                 ManagerDevices.LoadDevices()
 
                 '_TableDBHisto = myService.GetTableDBHisto(IdSrv)
@@ -1066,6 +1066,9 @@ Class Window1
 
             If IsConnect = False Then Exit Sub
 
+            'ajout David pour le bug de rafraichissement du treeview composant suite aux modifs de seb
+            ManagerDevices.LoadDevices()
+
             If _ListeDevices IsNot Nothing Then
                 CntDevice.Content = _ListeDevices.Count & " Device(s)"
 
@@ -1303,6 +1306,7 @@ Class Window1
 
                 Case 5 'Supprimer
                     DeleteElement(sender.uid, 1)
+                    AffDevice()
             End Select
 
         Catch ex As Exception

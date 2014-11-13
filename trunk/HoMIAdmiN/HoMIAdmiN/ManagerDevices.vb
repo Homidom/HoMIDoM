@@ -41,4 +41,12 @@
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur DisableDevice: " & ex.ToString, "Erreur", " Event DeviceChanged")
         End Try
     End Sub
+
+    Public Sub DeleteDevice(ID As String)
+        Try
+            _ListeDevices = myService.GetAllDevices(IdSrv)
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur DisableDevice: " & ex.ToString, "Erreur", " Event DeviceChanged")
+        End Try
+    End Sub
 End Module
