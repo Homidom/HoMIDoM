@@ -23,7 +23,8 @@ Module Fonctions
             Case HoMIDom.HoMIDom.Server.TypeLog.DEBUG : Icon = MessageBoxImage.Warning
             Case Else : Icon = MessageBoxImage.Error
         End Select
-        MessageBox.Show(Message, Title, MessageBoxButton.OK, Icon)
+
+        If Type <> HoMIDom.HoMIDom.Server.TypeLog.DEBUG Then MessageBox.Show(Message, Title, MessageBoxButton.OK, Icon)
 
         If IsConnect Then myService.Log(Type, HoMIDom.HoMIDom.Server.TypeSource.CLIENT, Fonction, Message)
     End Sub

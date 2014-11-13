@@ -81,6 +81,7 @@
         Public Sub AddSequences(Type As Sequence.TypeOfSequence, IDElement As String, [Property] As String, Value As Object)
             Dim x As New Sequence
             Dim ID As String = Api.GenerateGUID
+            Dim evt As String = ""
 
             With x
                 .Numero = ID
@@ -94,19 +95,29 @@
             Select Case Type
                 Case Sequence.TypeOfSequence.Device
                     _SequenceDevice = ID
+                    evt = "DEV"
                 Case Sequence.TypeOfSequence.Driver
                     _SequenceDriver = ID
+                    evt = "DRV"
                 Case Sequence.TypeOfSequence.Macro
                     _SequenceMacro = ID
+                    evt = "MAC"
                 Case Sequence.TypeOfSequence.Server
                     _SequenceServer = ID
+                    evt = "SRV"
                 Case Sequence.TypeOfSequence.Trigger
                     _SequenceTrigger = ID
+                    evt = "TRG"
                 Case Sequence.TypeOfSequence.Zone
                     _SequenceZone = ID
+                    evt = "ZON"
+                Case Else
+                    evt = "?"
             End Select
 
             _Sequences.Add(x)
+
+            If Server.Instance.Etat_server Then UDP.SendMessageToClient(evt & "|" & ID)
 
             If _Sequences.Count > _MaxSequences Then
                 _Sequences.RemoveAt(0)
