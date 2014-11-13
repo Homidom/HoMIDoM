@@ -6065,6 +6065,22 @@ Imports System.Media
                         Else
                             listedevices.Item(0).Value = "OFF"
                         End If
+                    ElseIf valeur = "PANIC" Or valeur = "ALARM" Or valeur = "ALARM DELAYED" Or valeur = "ALARM + TAMPER" Or valeur = "ALARM DELAYED + TAMPER" Or valeur = "MOTION" Or valeur = "MOTION + TAMPER" Then
+                        If TypeOf listedevices.Item(0).Value Is Boolean Then
+                            listedevices.Item(0).Value = True
+                        ElseIf TypeOf listedevices.Item(0).Value Is Long Or TypeOf listedevices.Item(0).Value Is Integer Then
+                            listedevices.Item(0).Value = 1
+                        Else
+                            listedevices.Item(0).Value = valeur
+                        End If
+                    ElseIf valeur = "NORMAL" Or valeur = "NORMAL + TAMPER" Or valeur = "NORMAL DELAYED + TAMPER" Or valeur = "NORMAL DELAYED" Or valeur = "NO MOTION" Or valeur = "NO MOTION + TAMPER" Or valeur = "PANIC END" Then
+                        If TypeOf listedevices.Item(0).Value Is Boolean Then
+                            listedevices.Item(0).Value = False
+                        ElseIf TypeOf listedevices.Item(0).Value Is Long Or TypeOf listedevices.Item(0).Value Is Integer Then
+                            listedevices.Item(0).Value = 0
+                        Else
+                            listedevices.Item(0).Value = valeur
+                        End If
                     Else
                         listedevices.Item(0).Value = valeur
                     End If
