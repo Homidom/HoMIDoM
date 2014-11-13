@@ -2,6 +2,8 @@
 
     Private Sub BtnOK_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         Try
+            Me.Cursor = Cursors.Wait
+
             'If TxtUsername.Text = "" Or TxtPassword.Password = "" Then
             '    AfficheMessageAndLog (HoMIDom.HoMIDom.Server.TypeLog.ERREUR,"Le username ou le password doivent être renseigné", "Erreur","")
             '    Exit Sub

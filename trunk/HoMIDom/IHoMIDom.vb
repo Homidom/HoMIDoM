@@ -1468,6 +1468,16 @@ Namespace HoMIDom
 
 #End Region
 
+#Region "Sequences"
+        <OperationContract()> Function GetSequenceDriver() As String
+        <OperationContract()> Function GetSequenceDevice() As String
+        <OperationContract()> Function GetSequenceTrigger() As String
+        <OperationContract()> Function GetSequenceZone() As String
+        <OperationContract()> Function GetSequenceMacro() As String
+        <OperationContract()> Function GetSequenceServer() As String
+        <OperationContract()> Function ReturnSequenceFromNumero(Numero As String) As Sequence
+        <OperationContract()> Function ReturnSequences() As List(Of Sequence)
+#End Region
     End Interface
 
     
