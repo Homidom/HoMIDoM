@@ -10,10 +10,12 @@ Imports System.Threading
 Imports System.Reflection.Assembly
 Imports System.Windows.Media.Animation
 Imports System.ComponentModel
+Imports System.Net
+Imports System.Text
 
 
 Class Window1
-
+#Region "Variables"
     Public Event menu_gerer(ByVal IndexMenu As Integer)
 
     Public Shared CanvasUser As Canvas
@@ -37,6 +39,8 @@ Class Window1
     Dim FlagOK As Boolean = False
     Dim _IsConnect As Boolean = False
     Dim _ShowNbHistoInDevice As Boolean = False
+
+#End Region
 
 #Region "Fonctions de base"
 
@@ -77,10 +81,9 @@ Class Window1
 
             'AddHandler Window1.menu_gerer, AddressOf MainMenuGerer
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
-            Dim dt As DispatcherTimer = New DispatcherTimer()
-            AddHandler dt.Tick, AddressOf dispatcherTimer_Tick
-            dt.Interval = New TimeSpan(0, 0, 1)
-            dt.Start()
+            AddHandler Timer_Sec.Tick, AddressOf dispatcherTimer_Tick
+            Timer_Sec.Interval = New TimeSpan(0, 0, 1)
+            Timer_Sec.Start()
 
             'si le repertoire appdata n'existe pas on le crée et copie la config depuis le repertoire courant
             If Not System.IO.Directory.Exists(System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData) & "\HoMIAdmiN") Then
@@ -103,11 +106,13 @@ Class Window1
 
     'Affiche la date et heure, heures levé et couché du soleil
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
+        Timer_Sec.Stop()
+
         Try
             If IsConnect = True Then
                 Try
                     Dim _string As String
-                    Dim list As List(Of String)
+                    Dim list As New List(Of String)
 
                     'Modifie la date et Heure
                     LblStatus.Content = Now.ToLongDateString & " " & Now.ToLongTimeString
@@ -144,37 +149,40 @@ Class Window1
 
 
                     'Modifie les LOG
-                    _string = "Liste des Logs du serveur : " & vbCrLf
                     list = myService.GetLastLogs
-                    If list.Count > 0 Then
-                        For Each logmsg In list
-                            If String.IsNullOrEmpty(logmsg) = False Then _string &= logmsg & vbCrLf
-                        Next
-                        LOG.ToolTip = _string
-                        ImgLog.ToolTip = _string
-                        LOG.Content = Mid(list(0), 1, 100) & "..."
-                    Else
-                        LOG.ToolTip = "Pas encore de logs..."
-                        ImgLog.ToolTip = "Pas encore de logs..."
-                        LOG.Content = "Pas encore de logs..."
+                    If list IsNot Nothing Then
+                        If list.Count > 0 Then
+                            _string = "Liste des Logs du serveur : " & vbCrLf
+                            For Each logmsg In list
+                                If String.IsNullOrEmpty(logmsg) = False Then _string &= logmsg & vbCrLf
+                            Next
+                            LOG.ToolTip = _string
+                            ImgLog.ToolTip = _string
+                            LOG.Content = Mid(list(0), 1, 100) & "..."
+                        Else
+                            LOG.ToolTip = "Pas encore de logs..."
+                            ImgLog.ToolTip = "Pas encore de logs..."
+                            LOG.Content = "Pas encore de logs..."
+                        End If
+                        list.Clear()
                     End If
-                    list.Clear()
 
-                    _string = "Liste des Erreurs du serveur : " & vbCrLf
                     list = myService.GetLastLogsError
-                    If list.Count > 0 Then
-                        For Each logerror As String In list
-                            If String.IsNullOrEmpty(logerror) = False Then
-                                _string &= logerror & vbCrLf
-                                If ImgError.Visibility <> Windows.Visibility.Visible Then ImgError.Visibility = Windows.Visibility.Visible
-                                ImgError.ToolTip = _string
-                            End If
-                        Next
-                    Else
-                        ImgError.Visibility = Windows.Visibility.Collapsed
+                    If list IsNot Nothing Then
+                        If list.Count > 0 Then
+                            _string = "Liste des Erreurs du serveur : " & vbCrLf
+                            For Each logerror As String In list
+                                If String.IsNullOrEmpty(logerror) = False Then
+                                    _string &= logerror & vbCrLf
+                                    If ImgError.Visibility <> Windows.Visibility.Visible Then ImgError.Visibility = Windows.Visibility.Visible
+                                    ImgError.ToolTip = _string
+                                End If
+                            Next
+                        Else
+                            ImgError.Visibility = Windows.Visibility.Collapsed
+                        End If
+                        list.Clear()
                     End If
-                    list.Clear()
-
 
                     _string = Nothing
 
@@ -206,6 +214,8 @@ Class Window1
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR dispatcherTimer_Tick: " & ex.Message, "ERREUR", "")
         End Try
+
+        Timer_Sec.Start()
     End Sub
 
     Private Sub AffIsConnect()
@@ -245,7 +255,7 @@ Class Window1
 
     Protected Overrides Sub Finalize()
         Try
-            mypush.Close()
+            'mypush.Close()
 
             If ListServer.Count > 0 Then
                 'Serialize object to a text file.
@@ -275,6 +285,7 @@ Class Window1
             myadress = "http://" & IP & ":" & Port & "/service"
             MyPort = Port
 
+            LOG.Content = "Connexion au serveur...."
             If UrlIsValid(myadress) = False Then
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la connexion au serveur sélectionné: " & Chr(10) & Name & " - " & IP & ":" & Port & vbCrLf & "Veuillez vérifier que celui-ci est démarré", "Erreur Admin", "")
                 Return -1
@@ -316,18 +327,28 @@ Class Window1
                 End If
 
                 IsConnect = True
+                LOG.Content = "Connexion au serveur effectuée...."
 
-                mypush = New PushNotification("http://" & IP & ":" & Port & "/live", IdSrv)
-                AddHandler mypush.DeviceChanged, AddressOf DeviceChanged
-                mypush.Open()
+                'LOG.Content = "Connexion au serveur live...."
+                'mypush = New PushNotification("http://" & IP & ":" & Port & "/live", IdSrv)
+                'AddHandler mypush.DeviceChanged, AddressOf DeviceChanged
+                'mypush.Open()
+
+                thdUDPServer = New Thread(New ThreadStart(AddressOf serverThread))
+                thdUDPServer.Start()
 
                 Tabcontrol1.SelectedIndex = 0
                 My.Settings.SaveRealTime = myService.GetSaveRealTime
                 My.Settings.Save()
+
                 AffDriver()
                 ShowMainMenu()
+
+                LOG.Content = "Chargment des drivers...."
                 ManagerDrivers.LoadDrivers()
+                LOG.Content = "Chargment des zones...."
                 ManagerZones.LoadZones()
+                LOG.Content = "Chargment des devices...."
                 ManagerDevices.LoadDevices()
 
                 '_TableDBHisto = myService.GetTableDBHisto(IdSrv)
@@ -357,12 +378,53 @@ Class Window1
         End Try
     End Function
 
+    'Ecoute UDP
+    Public Sub serverThread()
+        Try
+            Dim udpClient As New Net.Sockets.UdpClient((CInt(MyPort) - 1))
+            While True
+                Dim RemoteIpEndPoint As New IPEndPoint(IPAddress.Any, 0)
+                Dim receiveBytes As Byte()
+
+                receiveBytes = udpClient.Receive(RemoteIpEndPoint)
+                Dim returnData As String = Encoding.ASCII.GetString(receiveBytes)
+
+                If String.IsNullOrEmpty(returnData) = False Then
+                    Dim a() As String
+                    a = returnData.ToString.Split("|")
+                    If a.Length > 0 Then
+                        Select Case a(0).ToUpper
+                            Case "DEV"
+                                Dim seq As Sequence = myService.ReturnSequenceFromNumero(a(1))
+                                DeviceChanged(seq.ID, Nothing)
+                            Case "DRV"
+
+                            Case "SRV"
+
+                            Case "MAC"
+
+                            Case "TRG"
+
+                            Case "ZON"
+
+                            Case Else
+
+                        End Select
+                    End If
+                End If
+            End While
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur serverThread: " & ex.ToString, "Erreur", " serverThread")
+        End Try
+    End Sub
+
     'Event lorsqu'un device change
     Private Sub DeviceChanged(ByVal deviceid As String, ByVal DeviceValue As String)
         Try
             For Each _dev In _ListeDevices
                 If _dev.ID = deviceid Then
                     _dev = myService.ReturnDeviceByID(IdSrv, deviceid)
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.DEBUG, "Le device " & _dev.Name & " a été mis à jour", "Debug Admin", "")
                 End If
             Next
         Catch ex As Exception
@@ -452,7 +514,7 @@ Class Window1
             frm.ShowDialog()
 
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
-                Me.Cursor = Cursors.Wait
+                LOG.Content = "Connexion au serveur...."
                 If Connect_Srv(frm.TxtName.Text, frm.TxtIP.Text, frm.TxtPort.Text) <> 0 Then
                     frm.Close()
                     PageConnexion()
@@ -471,7 +533,7 @@ Class Window1
                     frm.Close()
                     FlagStart = True
                     frm = Nothing
-                    Me.Cursor = Nothing
+                    LOG.Content = "Connexion...."
                     'End If
                 End If
             Else
@@ -480,6 +542,8 @@ Class Window1
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Connexion: " & ex.Message, "ERREUR", "")
         End Try
+
+        Me.Cursor = Nothing
     End Sub
 
     'action à faire quand le serveur n'est pas connecté
@@ -794,7 +858,7 @@ Class Window1
             CntDriver.Content = ListeDrivers.Count & " Driver(s)"
 
             Dim Drv As TemplateDriver
-            For Each drv In ListeDrivers
+            For Each Drv In ListeDrivers
                 Dim newchild As New TreeViewItem
                 Dim stack As New StackPanel
                 stack.Orientation = Orientation.Horizontal
@@ -806,11 +870,11 @@ Class Window1
                 img.Height = 20
                 img.Width = 20
                 img.Margin = New Thickness(2)
-                If String.IsNullOrEmpty(drv.Picture) = False Then
-                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(drv.Picture), 20)
+                If String.IsNullOrEmpty(Drv.Picture) = False Then
+                    img.Source = ConvertArrayToImage(myService.GetByteFromImage(Drv.Picture), 20)
                 End If
 
-                If drv.IsConnect = True Then
+                If Drv.IsConnect = True Then
                     Dim Rect As New Polygon
                     Dim myPointCollection As PointCollection = New PointCollection
                     myPointCollection.Add(New Point(0, 0))
@@ -823,7 +887,7 @@ Class Window1
                     Rect.Height = 9
 
                     Rect.Fill = Brushes.DarkGreen 'myBrush
-                    Rect.Tag = drv.ID
+                    Rect.Tag = Drv.ID
                     Rect.ToolTip = "Arrêter le driver"
                     AddHandler Rect.MouseDown, AddressOf StopDriver
                     Graph = Rect
@@ -835,7 +899,7 @@ Class Window1
 
                     Rect.Fill = Brushes.Red 'myBrush
                     Rect.ToolTip = "Démarrer le driver"
-                    Rect.Tag = drv.ID
+                    Rect.Tag = Drv.ID
                     AddHandler Rect.MouseDown, AddressOf StartDriver
                     Graph = Rect
                     Rect = Nothing
@@ -844,16 +908,16 @@ Class Window1
 
                 '**************************** POPUP ***************************
                 Dim label As New Label
-                If drv.Enable = True Then
+                If Drv.Enable = True Then
                     label.Foreground = New SolidColorBrush(Colors.White)
                 Else
                     label.Foreground = New SolidColorBrush(Colors.Black)
                 End If
-                label.Content = drv.Nom
-                tool.Content = "Nom: " & drv.Nom & vbCrLf
-                tool.Content &= "Enable " & drv.Enable & vbCrLf
-                tool.Content &= "Description: " & drv.Description & vbCrLf
-                tool.Content &= "Version: " & drv.Version & vbCrLf
+                label.Content = Drv.Nom
+                tool.Content = "Nom: " & Drv.Nom & vbCrLf
+                tool.Content &= "Enable " & Drv.Enable & vbCrLf
+                tool.Content &= "Description: " & Drv.Description & vbCrLf
+                tool.Content &= "Version: " & Drv.Version & vbCrLf
                 If Drv.Modele <> "" And Drv.Modele <> "@" Then tool.Content &= "Modele: " & Drv.Modele & vbCrLf
 
                 Dim tl As New ToolTip
@@ -878,11 +942,11 @@ Class Window1
                 ctxMenu.Foreground = System.Windows.Media.Brushes.Black
                 ctxMenu.Background = System.Windows.Media.Brushes.LightGray
                 ctxMenu.BorderBrush = System.Windows.Media.Brushes.Black
-                If drv.Enable = False Then
+                If Drv.Enable = False Then
                     Dim mnu1 As New MenuItem
                     mnu1.Header = "Enable"
                     mnu1.Tag = 3
-                    mnu1.Uid = drv.ID
+                    mnu1.Uid = Drv.ID
                     AddHandler mnu1.Click, AddressOf MnuitemDrv_Click
                     ctxMenu.Items.Add(mnu1)
                     mnu1 = Nothing
@@ -890,25 +954,25 @@ Class Window1
                     Dim mnu2 As New MenuItem
                     mnu2.Header = "Disable"
                     mnu2.Tag = 4
-                    mnu2.Uid = drv.ID
+                    mnu2.Uid = Drv.ID
                     AddHandler mnu2.Click, AddressOf MnuitemDrv_Click
                     ctxMenu.Items.Add(mnu2)
                     mnu2 = Nothing
                 End If
-                If drv.IsConnect = False Then
+                If Drv.IsConnect = False Then
                     Dim mnu3 As New MenuItem
                     mnu3.Header = "Démarrer"
                     mnu3.Tag = 0
-                    mnu3.Uid = drv.ID
+                    mnu3.Uid = Drv.ID
                     AddHandler mnu3.Click, AddressOf MnuitemDrv_Click
                     ctxMenu.Items.Add(mnu3)
-                    If drv.Enable = False Then mnu3.IsEnabled = False
+                    If Drv.Enable = False Then mnu3.IsEnabled = False
                     mnu3 = Nothing
                 Else
                     Dim mnu4 As New MenuItem
                     mnu4.Header = "Arrêter"
                     mnu4.Tag = 1
-                    mnu4.Uid = drv.ID
+                    mnu4.Uid = Drv.ID
                     AddHandler mnu4.Click, AddressOf MnuitemDrv_Click
                     ctxMenu.Items.Add(mnu4)
                     mnu4 = Nothing
@@ -916,7 +980,7 @@ Class Window1
                 Dim mnu5 As New MenuItem
                 mnu5.Header = "Modifier"
                 mnu5.Tag = 2
-                mnu5.Uid = drv.ID
+                mnu5.Uid = Drv.ID
                 AddHandler mnu5.Click, AddressOf MnuitemDrv_Click
                 ctxMenu.Items.Add(mnu5)
                 mnu5 = Nothing
@@ -927,7 +991,7 @@ Class Window1
                 stack.Children.Add(label)
 
                 newchild.Header = stack
-                newchild.Uid = drv.ID
+                newchild.Uid = Drv.ID
 
                 Dim marg As New Thickness(-12, 0, 0, 0)
                 newchild.Margin = marg
@@ -980,10 +1044,12 @@ Class Window1
                 Case 3 'Enable
                     Dim x As TemplateDriver = myService.ReturnDriverByID(IdSrv, sender.uid)
                     myService.SaveDriver(IdSrv, sender.uid, x.Nom, True, x.StartAuto, x.IP_TCP, x.Port_TCP, x.IP_UDP, x.Port_UDP, x.COM, x.Refresh, x.Picture, x.Modele, x.AutoDiscover)
+                    If IsConnect Then ManagerDrivers.EnableDriver(sender.uid)
                     AffDriver()
                 Case 4 'Disable
                     Dim x As TemplateDriver = myService.ReturnDriverByID(IdSrv, sender.uid)
                     myService.SaveDriver(IdSrv, sender.uid, x.Nom, False, x.StartAuto, x.IP_TCP, x.Port_TCP, x.IP_UDP, x.Port_UDP, x.COM, x.Refresh, x.Picture, x.Modele, x.AutoDiscover)
+                    If IsConnect Then ManagerDrivers.DisableDriver(sender.uid)
                     AffDriver()
             End Select
 
@@ -1000,8 +1066,6 @@ Class Window1
 
             If IsConnect = False Then Exit Sub
 
-            'ManagerDevices.LoadHisto()
-
             If _ListeDevices IsNot Nothing Then
                 CntDevice.Content = _ListeDevices.Count & " Device(s)"
 
@@ -1010,7 +1074,7 @@ Class Window1
                     Dim stack As New StackPanel
                     Dim img As New Image
                     Dim FlagZone As Boolean = False
-                    Dim nomdriver As String = ManagerDrivers.ReturnDriverById(Dev.DriverID).Nom
+                    Dim nomdriver As String = ManagerDrivers.ReturnDriverByID(Dev.DriverID).Nom
                     Dim _nbhisto As Long = 0
                     Dim uri2 As String = MyRep & "\Images\Icones\ZoneNo_32.png"
                     Dim default_imgzone = ImageFromUri(uri2)
@@ -1078,7 +1142,6 @@ Class Window1
                     tl.BorderBrush = System.Windows.Media.Brushes.Black
                     tl.Tag = Dev.ID
 
-                    AddHandler tl.Opened, AddressOf MaJhistoToolTip
                     Dim stkpopup As New StackPanel
 
                     Dim imgpopup As New Image
@@ -1138,11 +1201,8 @@ Class Window1
                     mnu4.Tag = 4
                     mnu4.Uid = Dev.ID
                     'If _nbhisto <= 0 Then mnu4.IsEnabled = False
-                    If _nbhisto <= 0 Then
-                        mnu4.FontStyle = System.Windows.FontStyles.Italic
-                    End If
-                    AddHandler mnu4.Click, AddressOf MnuitemDev_Click 'on ajoute le lien pour pouvoir ajouter des historiques manuellement sur un composant virtuel par ex (un compteur de gaz...)
-                    
+                    If _nbhisto <= 0 Then mnu4.FontStyle = System.Windows.FontStyles.Italic
+                    AddHandler mnu4.Click, AddressOf MnuitemDev_Click
                     ctxMenu.Items.Add(mnu4)
                     mnu4 = Nothing
                     Dim mnu5 As New MenuItem
@@ -1182,10 +1242,6 @@ Class Window1
         End Try
     End Sub
 
-    Private Sub MaJhistoToolTip(sender As Object, e As Windows.RoutedEventArgs)
-        'MsgBox(sender.tag)
-    End Sub
-
     'Retourne True si le device a plusieurs histo sur des propriétés différents
     Private Function AsMultiHisto(ByVal Deviceid As String, ByVal x As List(Of HoMIDom.HoMIDom.Historisation)) As Boolean
         Dim retour As Boolean = False
@@ -1197,7 +1253,7 @@ Class Window1
                 If _histo.IdDevice = Deviceid And _name = "" Then
                     _name = _histo.Nom
                 ElseIf _histo.IdDevice = Deviceid And _name <> _histo.Nom Then
-                    retour = True
+                    Return True
                 End If
             Next
         Catch ex As Exception
@@ -1223,10 +1279,12 @@ Class Window1
                 Case 1 'Enable
                     Dim x As TemplateDevice = myService.ReturnDeviceByID(IdSrv, sender.uid)
                     myService.SaveDevice(IdSrv, sender.uid, x.Name, x.Adresse1, True, x.Solo, x.DriverID, x.Type.ToString, x.Refresh)
+                    If IsConnect Then ManagerDevices.EnableDevice(sender.uid)
                     AffDevice()
                 Case 2 'Disable
                     Dim x As TemplateDevice = myService.ReturnDeviceByID(IdSrv, sender.uid)
                     myService.SaveDevice(IdSrv, sender.uid, x.Name, x.Adresse1, False, x.Solo, x.DriverID, x.Type.ToString, x.Refresh)
+                    If IsConnect Then ManagerDevices.DisableDevice(sender.uid)
                     AffDevice()
                 Case 4 'Graphe
                     Dim Devices As New List(Of Dictionary(Of String, String))
@@ -1809,7 +1867,7 @@ Class Window1
             MainMenu = New uMainMenu
 
             MainMenu.Uid = "MAINMENU"
-            AddHandler MainMenu.menu_contextmenu, AddressOf MainMenucontextmenu
+            AddHandler MainMenu.menu_contextmenu, AddressOf MainMenuContextmenu
             AddHandler MainMenu.menu_gerer, AddressOf MainMenuGerer
             AddHandler MainMenu.menu_delete, AddressOf MainMenuDelete
             AddHandler MainMenu.menu_edit, AddressOf MainMenuEdit
@@ -3019,7 +3077,7 @@ Class Window1
         RefreshTreeView()
     End Sub
 
-    Private Sub LOG_PreviewMouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles LOG.PreviewMouseMove, ImgLog.PreviewMouseMove
+    Private Sub LOG_PreviewMouseMove(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Log.PreviewMouseMove, ImgLog.PreviewMouseMove
         Try
             If IsConnect = True Then
                 Dim list As List(Of String) = myService.GetLastLogs
@@ -3084,7 +3142,9 @@ Class Window1
 
     End Sub
 
-
+    Private Sub RfrDev_MouseDown(sender As System.Object, e As System.Windows.Input.MouseButtonEventArgs) Handles RfrDev.MouseDown
+        AffDevice()
+    End Sub
 End Class
 
 
