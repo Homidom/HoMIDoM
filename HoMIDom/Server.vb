@@ -111,6 +111,7 @@ Namespace HoMIDom
         <NonSerialized()> Shared _SrvWeb As ServeurWeb = Nothing
         <NonSerialized()> Shared _ModeDecouverte As Boolean = False 'Mode découverte des nouveaux devices
         <NonSerialized()> Shared _ListThread As New List(Of Thread)
+        <NonSerialized()> Shared _SrvUDPIsStart As Boolean = False 'indique si le serveur UDP est actif
 
         'Variables Energie
         <NonSerialized()> Shared _PuissanceTotaleActuel As Integer = 0
@@ -3453,6 +3454,8 @@ Namespace HoMIDom
                 End If
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Version du Framework: " & System.Runtime.InteropServices.RuntimeEnvironment.GetSystemVersion())
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Répertoire utilisé: " & My.Application.Info.DirectoryPath.ToString)
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Adresse IP du serveur: " & System.Net.Dns.GetHostByName(My.Computer.Name).AddressList(0).ToString())
+                _IPSOAP = System.Net.Dns.GetHostByName(My.Computer.Name).AddressList(0).ToString()
 
                 '---------- Creation table des threads ----------
                 table_TimerSecTickthread.Dispose()
@@ -3522,7 +3525,9 @@ Namespace HoMIDom
                     If _SrvWeb.IsStart Then Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Serveur Web démarré")
                 End If
 
-
+                '--- Démarre le serveur udp
+                _SrvUDPIsStart = UDP.StartServerUDP(_PortSOAP - 1)
+                If _SrvUDPIsStart Then Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Serveur UDP démarré sur le port:" & _PortSOAP - 1)
                 'test biblio
                 '
                 ' Create a FileSystemWatcher object passing it the folder to watch.

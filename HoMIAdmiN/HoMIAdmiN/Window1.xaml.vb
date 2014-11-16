@@ -334,8 +334,12 @@ Class Window1
                 'AddHandler mypush.DeviceChanged, AddressOf DeviceChanged
                 'mypush.Open()
 
-                thdUDPServer = New Thread(New ThreadStart(AddressOf serverThread))
-                thdUDPServer.Start()
+
+                LOG.Content = "Connexion au serveur UDP...."
+                ClientUDP = New HoMIDom.HoMIDom.UDPClient(myService)
+
+                ClientUDP.Connect("Application Admin", System.Net.Dns.GetHostByName(IP).AddressList(0).ToString(), CInt(Port) - 1)
+                AddHandler ClientUDP.OnMessageReceive, AddressOf OnMessageReceiveUDP
 
                 Tabcontrol1.SelectedIndex = 0
                 My.Settings.SaveRealTime = myService.GetSaveRealTime
@@ -373,48 +377,43 @@ Class Window1
             Me.Cursor = Nothing
             myChannelFactory.Abort()
             IsConnect = False
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la connexion au serveur sélectionné: " & ex.Message, "Erreur Admin", "")
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la connexion au serveur sélectionné: " & ex.ToString, "Erreur Admin", "")
             Return -1
         End Try
     End Function
 
-    'Ecoute UDP
-    Public Sub serverThread()
+    ''' <summary>
+    ''' Message UDP reçu
+    ''' </summary>
+    ''' <param name="Message"></param>
+    ''' <remarks></remarks>
+    Public Sub OnMessageReceiveUDP(Message As String)
         Try
-            Dim udpClient As New Net.Sockets.UdpClient((CInt(MyPort) - 1))
-            While True
-                Dim RemoteIpEndPoint As New IPEndPoint(IPAddress.Any, 0)
-                Dim receiveBytes As Byte()
+            If String.IsNullOrEmpty(Message) = False Then
+                Dim a() As String
+                a = Message.Split("|")
+                If a.Length > 0 Then
+                    Select Case a(0).ToUpper
+                        Case "DEV"
+                            Dim seq As Sequence = myService.ReturnSequenceFromNumero(a(1))
+                            DeviceChanged(seq.ID, Nothing)
+                        Case "DRV"
 
-                receiveBytes = udpClient.Receive(RemoteIpEndPoint)
-                Dim returnData As String = Encoding.ASCII.GetString(receiveBytes)
+                        Case "SRV"
 
-                If String.IsNullOrEmpty(returnData) = False Then
-                    Dim a() As String
-                    a = returnData.ToString.Split("|")
-                    If a.Length > 0 Then
-                        Select Case a(0).ToUpper
-                            Case "DEV"
-                                Dim seq As Sequence = myService.ReturnSequenceFromNumero(a(1))
-                                DeviceChanged(seq.ID, Nothing)
-                            Case "DRV"
+                        Case "MAC"
 
-                            Case "SRV"
+                        Case "TRG"
 
-                            Case "MAC"
+                        Case "ZON"
 
-                            Case "TRG"
+                        Case Else
 
-                            Case "ZON"
-
-                            Case Else
-
-                        End Select
-                    End If
+                    End Select
                 End If
-            End While
+            End If
         Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur serverThread: " & ex.ToString, "Erreur", " serverThread")
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur OnMessageReceiveUDP: " & ex.ToString, "Erreur", " OnMessageReceiveUDP")
         End Try
     End Sub
 
