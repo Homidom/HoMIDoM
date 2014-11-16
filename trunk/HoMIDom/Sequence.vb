@@ -1,5 +1,9 @@
 ﻿Namespace HoMIDom
     <Serializable()> Public Class Sequence
+        ''' <summary>
+        ''' Type de Sequence
+        ''' </summary>
+        ''' <remarks></remarks>
         Public Enum TypeOfSequence
             Server = 0
             Driver = 1
@@ -16,6 +20,12 @@
         Dim _ID As String = Nothing
         Dim _DateTime As Date
 
+        ''' <summary>
+        ''' Numero de la sequence
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Numero As String
             Get
                 Return _Number
@@ -25,6 +35,12 @@
             End Set
         End Property
 
+        ''' <summary>
+        ''' ID de l'élément concerné
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property ID As String
             Get
                 Return _ID
@@ -34,6 +50,12 @@
             End Set
         End Property
 
+        ''' <summary>
+        ''' Date/heure de l'évènement
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property DateTime As Date
             Get
                 Return _DateTime
@@ -43,6 +65,12 @@
             End Set
         End Property
 
+        ''' <summary>
+        ''' Propriété de l'évènement concerné
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property [Property] As String
             Get
                 Return _Property
@@ -52,6 +80,12 @@
             End Set
         End Property
 
+        ''' <summary>
+        ''' Valeur modifiée
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property Value As Object
             Get
                 Return _Value
@@ -61,6 +95,12 @@
             End Set
         End Property
 
+        ''' <summary>
+        ''' Type de séquence
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Property SequenceType As TypeOfSequence
             Get
                 Return _Type

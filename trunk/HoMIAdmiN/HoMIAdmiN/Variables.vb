@@ -16,6 +16,7 @@ Module Variables
     Public _ListeDrivers As New List(Of TemplateDriver)
     Public _TableDBHisto As DataTable = Nothing
     Public thdUDPServer As System.Threading.Thread
+    Public WithEvents ClientUDP As HoMIDom.HoMIDom.UDPClient
 
     'Sequences
     Public _SequenceDriver As String 'N° de sequence en cours du dernier changement d'un driver
