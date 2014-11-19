@@ -129,6 +129,7 @@ Namespace HoMIDom
 #Region "Event"
         Public Sub VarEvent(Nom As String, e As String)
             Try
+                ManagerSequences.AddSequences(Sequence.TypeOfSequence.VariableChange, Nom, "", e)
                 Log(TypeLog.DEBUG, TypeSource.SERVEUR, "VarEvent", "La variable: " & Nom & " a changée de valeur=" & e)
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "VarEvent", "Exception : " & ex.Message)
@@ -238,7 +239,7 @@ Namespace HoMIDom
                 End Try
             End If
 
-            ManagerSequences.AddSequences(Sequence.TypeOfSequence.Device, genericDevice.ID, Nothing, valeurString)
+            ManagerSequences.AddSequences(Sequence.TypeOfSequence.DeviceChange, genericDevice.ID, Nothing, valeurString)
             RaiseEvent DeviceChanged(genericDevice.ID, valeurString)
 
             Try
@@ -283,6 +284,7 @@ Namespace HoMIDom
                                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur Requete sqlite : " & retour)
                             Else
                                 Device.CountHisto += 1
+                                ManagerSequences.AddSequences(Sequence.TypeOfSequence.HistoryChange, Nothing, Nothing, Nothing)
                             End If
                         Catch ex As Exception
                             Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Historique Exception : " & ex.Message)
@@ -3802,7 +3804,7 @@ Namespace HoMIDom
             Etat_server = True
 
             'changement de sequence
-            ManagerSequences.AddSequences(Sequence.TypeOfSequence.Server, Nothing, Nothing, Nothing)
+            ManagerSequences.AddSequences(Sequence.TypeOfSequence.ServerStart, Nothing, Nothing, Nothing)
             Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Start SequenceServer", "N°: " & ManagerSequences.SequenceServer)
             Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Start SequenceDriver", "N°: " & ManagerSequences.SequenceDriver)
             Log(TypeLog.DEBUG, TypeSource.SERVEUR, "Start SequenceDevice", "N°: " & ManagerSequences.SequenceDevice)
@@ -3834,6 +3836,8 @@ Namespace HoMIDom
                 Dim _devstart As Object = ReturnRealDeviceById("startsrv01")
                 If _devstart IsNot Nothing Then _devstart.value = False
                 _devstart = Nothing
+
+                ManagerSequences.AddSequences(Sequence.TypeOfSequence.ServerShutDown, Nothing, Nothing, Nothing)
 
                 'on change l'etat du server pour ne plus lancer de traitement
                 Etat_server = False
@@ -4932,6 +4936,7 @@ Namespace HoMIDom
         Public Sub MessageToServer(ByVal Message As String) Implements IHoMIDom.MessageToServer
             Try
                 'traiter le message
+                ManagerSequences.AddSequences(Sequence.TypeOfSequence.Message, Nothing, Nothing, Message)
                 Log(TypeLog.MESSAGE, TypeSource.SERVEUR, "MessageToServer", "Message From client : " & Message)
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "MessageToServer", "Exception : " & ex.Message)
@@ -7287,7 +7292,7 @@ Namespace HoMIDom
                     Next
                 End If
 
-                ManagerSequences.AddSequences(Sequence.TypeOfSequence.Device, myID, Nothing, Nothing)
+                ManagerSequences.AddSequences(Sequence.TypeOfSequence.DeviceChange, myID, Nothing, Nothing)
                 RaiseEvent DeviceChanged(myID, "")
 
                 Return myID
@@ -7944,6 +7949,7 @@ Namespace HoMIDom
                     If _ListZones.Item(i).ID = zoneId Then
                         _ListZones.RemoveAt(i)
                         SaveRealTime()
+                        ManagerSequences.AddSequences(Sequence.TypeOfSequence.ZoneDelete, zoneId, Nothing, Nothing)
                         Return 0
                     End If
                 Next
@@ -8026,6 +8032,8 @@ Namespace HoMIDom
                     _retour = 0
                 End If
 
+                ManagerSequences.AddSequences(Sequence.TypeOfSequence.ZoneChange, ZoneId, Nothing, Nothing)
+
                 Return _retour
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "AddDeviceToZone", "Exception : " & ex.Message)
@@ -8055,7 +8063,11 @@ Namespace HoMIDom
                     Next
                     _retour = 0
                 End If
+
+                ManagerSequences.AddSequences(Sequence.TypeOfSequence.ZoneChange, ZoneId, Nothing, Nothing)
+
                 Return _retour
+
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDeviceToZone", "Exception : " & ex.Message)
                 Return "-1"
@@ -8092,6 +8104,7 @@ Namespace HoMIDom
                     myID = x.ID
                     _ListZones.Add(x)
                     SaveRealTime()
+                    ManagerSequences.AddSequences(Sequence.TypeOfSequence.ZoneAdd, myID, Nothing, Nothing)
                 Else
                     'zone Existante
                     myID = zoneId
@@ -8102,11 +8115,11 @@ Namespace HoMIDom
                             _ListZones.Item(i).Image = image
                             _ListZones.Item(i).ListElement = ListElement
                             SaveRealTime()
+                            ManagerSequences.AddSequences(Sequence.TypeOfSequence.ZoneChange, myID, Nothing, Nothing)
                         End If
                     Next
                 End If
 
-                ManagerSequences.AddSequences(Sequence.TypeOfSequence.Zone, myID, Nothing, Nothing)
                 RaiseEvent ZoneChanged(myID)
 
                 Return myID
@@ -8326,6 +8339,8 @@ Namespace HoMIDom
                     If _ListMacros.Item(i).ID = macroId Then
                         _ListMacros.RemoveAt(i)
                         SaveRealTime()
+                        ManagerSequences.AddSequences(Sequence.TypeOfSequence.MacroDelete, macroId, Nothing, Nothing)
+
                         Return 0
                     End If
                 Next
@@ -8423,7 +8438,7 @@ Namespace HoMIDom
                     Next
                 End If
 
-                ManagerSequences.AddSequences(Sequence.TypeOfSequence.Macro, myID, Nothing, Nothing)
+                ManagerSequences.AddSequences(Sequence.TypeOfSequence.MacroChange, myID, Nothing, Nothing)
                 RaiseEvent MacroChanged(myID)
 
                 Return myID
@@ -8492,6 +8507,8 @@ Namespace HoMIDom
                     _retour = 0
                 End If
 
+                ManagerSequences.AddSequences(Sequence.TypeOfSequence.TriggerChange, TriggerId, Nothing, Nothing)
+
                 Return _retour
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteDeviceToZone", "Exception : " & ex.Message)
@@ -8511,6 +8528,7 @@ Namespace HoMIDom
                     If _ListTriggers.Item(i).ID = triggerId Then
                         _ListTriggers.RemoveAt(i)
                         SaveRealTime()
+                        ManagerSequences.AddSequences(Sequence.TypeOfSequence.TriggerDelete, triggerId, Nothing, Nothing)
                         Return 0
                     End If
                 Next
@@ -8622,6 +8640,7 @@ Namespace HoMIDom
                     _ListTriggers.Add(x)
                     SaveRealTime()
                     x = Nothing
+                    ManagerSequences.AddSequences(Sequence.TypeOfSequence.TriggerAdd, myID, Nothing, Nothing)
                 Else
                     'trigger Existante
                     myID = triggerId
@@ -8642,11 +8661,11 @@ Namespace HoMIDom
                             If macro IsNot Nothing Then _ListTriggers.Item(i).ListMacro = macro
                             If TypeTrigger = Trigger.TypeTrigger.TIMER Then _ListTriggers.Item(i).maj_cron()
                             SaveRealTime()
+                            ManagerSequences.AddSequences(Sequence.TypeOfSequence.TriggerChange, triggerId, Nothing, Nothing)
                         End If
                     Next
                 End If
 
-                ManagerSequences.AddSequences(Sequence.TypeOfSequence.Trigger, myID, Nothing, Nothing)
                 Return myID
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveTrigger", "Exception : " & ex.Message & vbCrLf & ex.Message)
@@ -8688,6 +8707,7 @@ Namespace HoMIDom
                     If _ListUsers.Item(i).ID = userId Then
                         _ListUsers.RemoveAt(i)
                         SaveRealTime()
+                        ManagerSequences.AddSequences(Sequence.TypeOfSequence.UserDelete, userId, Nothing, Nothing)
                         Return 0
                     End If
                 Next
@@ -8827,6 +8847,7 @@ Namespace HoMIDom
                     myID = x.ID
                     _ListUsers.Add(x)
                     SaveRealTime()
+                    ManagerSequences.AddSequences(Sequence.TypeOfSequence.UserAdd, myID, Nothing, Nothing)
                 Else
                     'user Existant
                     myID = userId
@@ -8848,6 +8869,7 @@ Namespace HoMIDom
                             _ListUsers.Item(i).UserName = UserName
                             _ListUsers.Item(i).Ville = Ville
                             SaveRealTime()
+                            ManagerSequences.AddSequences(Sequence.TypeOfSequence.VariableChange, userId, Nothing, Nothing)
                         End If
                     Next
                 End If

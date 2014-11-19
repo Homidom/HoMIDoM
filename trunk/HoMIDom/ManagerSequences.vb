@@ -6,7 +6,6 @@
         Dim _SequenceZone As String = Api.GenerateGUID 'N° de sequence en cours du dernier changement d'une zone
         Dim _SequenceMacro As String = Api.GenerateGUID 'N° de sequence en cours du dernier changement d'une macro
         Dim _SequenceServer As String = Api.GenerateGUID 'N° de sequence en cours du dernier changement du server
-        Dim _SequenceLog As String = Api.GenerateGUID 'N° de sequence en cours du dernier changement du server
 
         Dim _MaxSequences As Integer = 32 'nombre max de séquences dans la liste
         Dim _Sequences As New List(Of Sequence) 'liste des dernières séquences
@@ -28,46 +27,58 @@
             End Set
         End Property
 
-        Public ReadOnly Property SequenceLog As String
-            Get
-                Return _SequenceLog
-            End Get
-        End Property
-
-        Public ReadOnly Property SequenceDriver As String
+        Public Property SequenceDriver As String
             Get
                 Return _SequenceDriver
             End Get
+            Set(value As String)
+                _SequenceDriver = value
+            End Set
         End Property
 
-        Public ReadOnly Property SequenceDevice As String
+        Public Property SequenceDevice As String
             Get
                 Return _SequenceDevice
             End Get
+            Set(value As String)
+                _SequenceDevice = value
+            End Set
         End Property
 
-        Public ReadOnly Property SequenceTrigger As String
+        Public Property SequenceTrigger As String
             Get
                 Return _SequenceTrigger
             End Get
+            Set(value As String)
+                _SequenceTrigger = value
+            End Set
         End Property
 
-        Public ReadOnly Property SequenceZone As String
+        Public Property SequenceZone As String
             Get
                 Return _SequenceZone
             End Get
+            Set(value As String)
+                _SequenceZone = value
+            End Set
         End Property
 
-        Public ReadOnly Property SequenceMacro As String
+        Public Property SequenceMacro As String
             Get
                 Return _SequenceMacro
             End Get
+            Set(value As String)
+                _SequenceMacro = value
+            End Set
         End Property
 
-        Public ReadOnly Property SequenceServer As String
+        Public Property SequenceServer As String
             Get
                 Return _SequenceServer
             End Get
+            Set(value As String)
+                _SequenceServer = value
+            End Set
         End Property
 
         ''' <summary>
@@ -81,7 +92,6 @@
         Public Sub AddSequences(Type As Sequence.TypeOfSequence, IDElement As String, [Property] As String, Value As Object)
             Dim x As New Sequence
             Dim ID As String = Api.GenerateGUID
-            Dim evt As String = ""
 
             With x
                 .Numero = ID
@@ -95,29 +105,79 @@
             Select Case Type
                 Case Sequence.TypeOfSequence.Device
                     _SequenceDevice = ID
-                    evt = "DEV"
+                Case Sequence.TypeOfSequence.DeviceAdd
+                    _SequenceDevice = ID
+                Case Sequence.TypeOfSequence.DeviceChange
+                    _SequenceDevice = ID
+                Case Sequence.TypeOfSequence.DeviceDelete
+                    _SequenceDevice = ID
                 Case Sequence.TypeOfSequence.Driver
                     _SequenceDriver = ID
-                    evt = "DRV"
+                Case Sequence.TypeOfSequence.DriverAdd
+                    _SequenceDriver = ID
+                Case Sequence.TypeOfSequence.DriverChange
+                    _SequenceDriver = ID
+                Case Sequence.TypeOfSequence.DriverDelete
+                    _SequenceDriver = ID
                 Case Sequence.TypeOfSequence.Macro
                     _SequenceMacro = ID
-                    evt = "MAC"
+                Case Sequence.TypeOfSequence.MacroAdd
+                    _SequenceMacro = ID
+                Case Sequence.TypeOfSequence.MacroChange
+                    _SequenceMacro = ID
+                Case Sequence.TypeOfSequence.MacroDelete
+                    _SequenceMacro = ID
+                Case Sequence.TypeOfSequence.Message
+                    _SequenceServer = ID
+                Case Sequence.TypeOfSequence.Notification
+                    _SequenceServer = ID
                 Case Sequence.TypeOfSequence.Server
                     _SequenceServer = ID
-                    evt = "SRV"
+                Case Sequence.TypeOfSequence.ServerShutDown
+                    _SequenceServer = ID
+                Case Sequence.TypeOfSequence.ServerStart
+                    _SequenceServer = ID
+                Case Sequence.TypeOfSequence.HistoryChange
+                    _SequenceServer = ID
+                Case Sequence.TypeOfSequence.Log
+                    _SequenceServer = ID
                 Case Sequence.TypeOfSequence.Trigger
                     _SequenceTrigger = ID
-                    evt = "TRG"
+                Case Sequence.TypeOfSequence.TriggerAdd
+                    _SequenceTrigger = ID
+                Case Sequence.TypeOfSequence.TriggerChange
+                    _SequenceTrigger = ID
+                Case Sequence.TypeOfSequence.TriggerDelete
+                    _SequenceTrigger = ID
+                Case Sequence.TypeOfSequence.User
+                    _SequenceServer = ID
+                Case Sequence.TypeOfSequence.UserAdd
+                    _SequenceServer = ID
+                Case Sequence.TypeOfSequence.UserChange
+                    _SequenceServer = ID
+                Case Sequence.TypeOfSequence.UserDelete
+                    _SequenceServer = ID
+                Case Sequence.TypeOfSequence.Variable
+                    _SequenceServer = ID
+                Case Sequence.TypeOfSequence.VariableAdd
+                    _SequenceServer = ID
+                Case Sequence.TypeOfSequence.VariableChange
+                    _SequenceServer = ID
+                Case Sequence.TypeOfSequence.VariableDelete
+                    _SequenceServer = ID
                 Case Sequence.TypeOfSequence.Zone
                     _SequenceZone = ID
-                    evt = "ZON"
-                Case Else
-                    evt = "?"
+                Case Sequence.TypeOfSequence.ZoneAdd
+                    _SequenceZone = ID
+                Case Sequence.TypeOfSequence.ZoneChange
+                    _SequenceZone = ID
+                Case Sequence.TypeOfSequence.ZoneDelete
+                    _SequenceZone = ID
             End Select
 
             _Sequences.Add(x)
 
-            If Server.Instance.Etat_server Then UDP.SendMessageToClient(evt & "|" & ID)
+            If Server.Instance.Etat_server Then UDP.SendMessageToClient(Type & "|" & ID)
 
             If _Sequences.Count > _MaxSequences Then
                 _Sequences.RemoveAt(0)
