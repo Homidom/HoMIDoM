@@ -118,7 +118,7 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Sub Connect(NameClient As String, IPServeur As String, Port As Integer)
             Try
-                _serveur.Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "Client UDP Connect", "Tentative de connexion UDP (" & IPServeur & ":" & Port & ")")
+                _serveur.Log(Server.TypeLog.INFO, Server.TypeSource.CLIENT, "Client UDP Connect", "Tentative de connexion UDP (" & IPServeur & ":" & Port & ")")
 
                 'Using UDP sockets
                 clientSocket = New Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp)

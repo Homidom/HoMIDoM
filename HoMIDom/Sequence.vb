@@ -1,7 +1,7 @@
 ﻿Namespace HoMIDom
     <Serializable()> Public Class Sequence
         ''' <summary>
-        ''' Type de Sequence
+        ''' Type de Sequence 
         ''' </summary>
         ''' <remarks></remarks>
         Public Enum TypeOfSequence
@@ -11,6 +11,35 @@
             Zone = 3
             Trigger = 4
             Macro = 5
+            DriverAdd = 6
+            DriverChange = 7
+            DriverDelete = 8
+            DeviceAdd = 9
+            DeviceChange = 10
+            DeviceDelete = 11
+            ZoneAdd = 12
+            ZoneChange = 13
+            ZoneDelete = 14
+            TriggerAdd = 15
+            TriggerChange = 16
+            TriggerDelete = 17
+            MacroAdd = 18
+            MacroChange = 19
+            MacroDelete = 20
+            User = 21
+            UserAdd = 22
+            UserChange = 23
+            UserDelete = 24
+            Notification = 25
+            Message = 26
+            Variable = 27
+            VariableAdd = 28
+            VariableChange = 29
+            VariableDelete = 30
+            ServerStart = 31
+            ServerShutDown = 32
+            HistoryChange = 33
+            Log = 34
         End Enum
 
         Dim _Number As String = Nothing
