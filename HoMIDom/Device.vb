@@ -768,6 +768,11 @@ Namespace HoMIDom
                             _ValueLast = tmp
                         Else
                             _LastChange = Now
+                            If IsNumeric(_Correction) Then
+                                tmp += _Correction
+                            Else
+                                tmp = EvaluationDevice(_Correction, tmp)
+                            End If
                             If tmp < _ValueMin Then
                                 _Server.Log(TypeLog.DEBUG, TypeSource.DEVICE, "DeviceDBL Value", _Name & " a dépassé la valeur min : " & _ValueMin & " > " & tmp.ToString)
                                 tmp = _ValueMin
@@ -775,11 +780,6 @@ Namespace HoMIDom
                             If tmp > _ValueMax Then
                                 _Server.Log(TypeLog.DEBUG, TypeSource.DEVICE, "DeviceDBL Value", _Name & " a dépassé la valeur max : " & _ValueMax & " < " & tmp.ToString)
                                 tmp = _ValueMax
-                            End If
-                            If IsNumeric(_Correction) Then
-                                tmp += _Correction
-                            Else
-                                tmp = EvaluationDevice(_Correction, tmp)
                             End If
 
                             If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
@@ -1050,6 +1050,11 @@ Namespace HoMIDom
                             _ValueLast = tmp
                         Else
                             _LastChange = Now
+                            If IsNumeric(_Correction) Then
+                                tmp += _Correction
+                            Else
+                                tmp = EvaluationDevice(_Correction, tmp)
+                            End If
                             'If tmp < _ValueMin Then tmp = _ValueMin 'If tmp < 0 Then tmp = 0
                             If tmp < _ValueMin Then
                                 _Server.Log(TypeLog.DEBUG, TypeSource.DEVICE, "DeviceDBL Value", _Name & " a dépassé la valeur min : " & _ValueMin & " > " & tmp.ToString)
@@ -1059,11 +1064,6 @@ Namespace HoMIDom
                             If tmp > _ValueMax Then
                                 _Server.Log(TypeLog.DEBUG, TypeSource.DEVICE, "DeviceDBL Value", _Name & " a dépassé la valeur max : " & _ValueMax & " < " & tmp.ToString)
                                 tmp = _ValueMax
-                            End If
-                            If IsNumeric(_Correction) Then
-                                tmp += _Correction
-                            Else
-                                tmp = EvaluationDevice(_Correction, tmp)
                             End If
                             If _Formatage <> "" Then tmp = Format(tmp, _Formatage)
 
