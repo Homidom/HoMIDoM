@@ -89,7 +89,7 @@ Page custom nsDialogsPage nsDialogsPageLeave
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}.${PRODUCT_BUILD} (${PRODUCT_REVISION})"
 OutFile "${PACKAGES_DIR}\${PRODUCT_NAME}.Setup.${PRODUCT_VERSION}.${PRODUCT_BUILD}.${PRODUCT_REVISION}_Full_x86_x64.exe"
 InstallDir $PROGRAMFILES\HoMIDoM
-BrandingText "HoMIDoM Installer v1.1"
+BrandingText "HoMIDoM Installer v1.2"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" "InstallDir"
 ShowInstDetails show
 ShowUnInstDetails show

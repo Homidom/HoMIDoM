@@ -1,0 +1,255 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Driver_hue
+</name>
+</assembly>
+<members>
+<member name="P:Driver_hue.My.Resources.Resources.ResourceManager">
+	<summary>
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member><member name="P:Driver_hue.My.Resources.Resources.Culture">
+	<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="T:Driver_hue.My.Resources.Resources">
+	<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
+</member><member name="E:Driver_hue.Driver_hue.DriverEvent">
+	<summary>
+ Evènement déclenché par le driver au serveur
+ </summary>
+	<param name="DriveName"></param>
+	<param name="TypeEvent"></param>
+	<param name="Parametre"></param>
+	<remarks></remarks>
+</member><member name="P:Driver_hue.Driver_hue.IdSrv">
+	<summary>
+ ID du serveur
+ </summary>
+	<value>ID du serveur</value>
+	<remarks>Permet d'accéder aux commandes du serveur pour lesquels il faut passer l'ID du serveur</remarks>
+</member><member name="P:Driver_hue.Driver_hue.COM">
+	<summary>
+ Port COM du driver
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_hue.Driver_hue.DeviceSupport">
+	<summary>
+ Retourne la liste des devices supportés par le driver
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks>Voir Sub New</remarks>
+</member><member name="P:Driver_hue.Driver_hue.Parametres">
+	<summary>
+ Liste des paramètres avancés du driver
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks>Voir Sub New</remarks>
+</member><member name="P:Driver_hue.Driver_hue.LabelsDriver">
+	<summary>
+ Liste les libellés et tooltip des champs associés au driver
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_hue.Driver_hue.LabelsDevice">
+	<summary>
+ Liste les libellés et tooltip des champs associés au device associé au driver
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_hue.Driver_hue.Enable">
+	<summary>
+ Active/Désactive le driver
+ </summary>
+	<value>True si actif</value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_hue.Driver_hue.ID">
+	<summary>
+ ID du driver
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_hue.Driver_hue.IP_TCP">
+	<summary>
+ Adresse IP TCP du driver
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_hue.Driver_hue.IP_UDP">
+	<summary>
+ Adresse IP UDP du driver
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_hue.Driver_hue.IsConnect">
+	<summary>
+ Permet de savoir si le driver est actif
+ </summary>
+	<value>Retourne True si le driver est démarré</value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_hue.Driver_hue.Modele">
+	<summary>
+ Modèle du driver
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_hue.Driver_hue.Nom">
+	<summary>
+ Nom du driver
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_hue.Driver_hue.Picture">
+	<summary>
+ Image du driver (non utilisé)
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_hue.Driver_hue.Port_TCP">
+	<summary>
+ Port TCP du driver
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_hue.Driver_hue.Port_UDP">
+	<summary>
+ Port UDP du driver
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_hue.Driver_hue.Protocol">
+	<summary>
+ Type de protocole utilisé par le driver
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_hue.Driver_hue.Refresh">
+	<summary>
+ Valeur de rafraichissement des devices
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_hue.Driver_hue.Server">
+	<summary>
+ Objet représentant le serveur
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_hue.Driver_hue.Version">
+	<summary>
+ Version du driver
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:Driver_hue.Driver_hue.StartAuto">
+	<summary>
+ True si le driver doit démarrer automatiquement
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_hue.Driver_hue.GetCommandPlus">
+	<summary>Retourne la liste des Commandes avancées de type DeviceCommande</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_hue.Driver_hue.ExecuteCommand(System.Object,System.String,System.Object[])">
+	<summary>Execute une commande avancée</summary>
+	<param name="MyDevice">Objet représentant le Device </param>
+	<param name="Command">Nom de la commande avancée à éxécuter</param>
+	<param name="Param">tableau de paramétres</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_hue.Driver_hue.VerifChamp(System.String,System.Object)">
+	<summary>Permet de vérifier si un champ est valide</summary>
+	<param name="Champ">Nom du champ à vérifier, ex ADRESSE1</param>
+	<param name="Value">Valeur à vérifier</param>
+	<returns>Retourne 0 si OK, sinon un message d'erreur</returns>
+	<remarks></remarks>
+</member><member name="M:Driver_hue.Driver_hue.Start">
+	<summary>Démarrer le driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_hue.Driver_hue.Stop">
+	<summary>Arrêter le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_hue.Driver_hue.Restart">
+	<summary>Re-Démarrer le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_hue.Driver_hue.Read(System.Object)">
+	<summary>Intérroger un device</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<remarks>Le device demande au driver d'aller le lire suivant son adresse</remarks>
+</member><member name="M:Driver_hue.Driver_hue.Write(System.Object,System.String,System.Object,System.Object)">
+	<summary>Commander un device</summary>
+	<param name="Objet">Objet représetant le device à commander</param>
+	<param name="Command">La commande à passer</param>
+	<param name="Parametre1">parametre 1 de la commande, optionnel</param>
+	<param name="Parametre2">parametre 2 de la commande, optionnel</param>
+	<remarks></remarks>
+</member><member name="M:Driver_hue.Driver_hue.DeleteDevice(System.String)">
+	<summary>Fonction lancée lors de la suppression d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_hue.Driver_hue.NewDevice(System.String)">
+	<summary>Fonction lancée lors de l'ajout d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_hue.Driver_hue.Add_DeviceCommande(System.String,System.String,System.Int32)">
+	<summary>ajout des commandes avancées pour les devices</summary>
+	<param name="nom">Nom de la commande avancée</param>
+	<param name="description">Description qui sera affichée dans l'admin</param>
+	<param name="nbparam">Nombre de parametres attendus</param>
+	<remarks></remarks>
+</member><member name="M:Driver_hue.Driver_hue.Add_LibelleDriver(System.String,System.String,System.String,System.String)">
+	<summary>ajout Libellé pour le Driver</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_hue.Driver_hue.Add_LibelleDevice(System.String,System.String,System.String,System.String)">
+	<summary>Ajout Libellé pour les Devices</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_hue.Driver_hue.Add_ParamAvance(System.String,System.String,System.Object)">
+	<summary>ajout de parametre avancés</summary>
+	<param name="nom">Nom du parametre (sans espace)</param>
+	<param name="description">Description du parametre</param>
+	<param name="valeur">Sa valeur</param>
+	<remarks></remarks>
+</member><member name="M:Driver_hue.Driver_hue.#ctor">
+	<summary>Creation d'un objet de type</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_hue.Driver_hue.TimerTick(System.Object,System.Timers.ElapsedEventArgs)">
+	<summary>Si refresh &gt;0 gestion du timer</summary>
+	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
+</member><member name="T:Driver_hue.Driver_hue">
+	<summary>Class Driver_Hue</summary>
+	<remarks></remarks>
+</member>
+</members>
+</doc>
