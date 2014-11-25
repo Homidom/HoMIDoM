@@ -63,6 +63,31 @@ HoMIDom
  Classe de gestion des base de données sqlite     
  </summary>   
     ''' <remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.UDPClient.SendMessage(System.String)">
+	<summary>
+ Envoyer un message au serveur
+ </summary>
+	<param name="Message"></param>
+	<remarks></remarks>
+</member><member name="E:HoMIDom.HoMIDom.UDPClient.OnMessageReceive">
+	<summary>
+ Evènement lorsqu'on reçoit un message
+ </summary>
+	<param name="message"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.UDPClient.Connect(System.String,System.String,System.Int32)">
+	<summary>
+ Permet de se connecter au serveur UDP
+ </summary>
+	<param name="NameClient">Nom du client</param>
+	<param name="IPServeur">Adresse IP du serveur</param>
+	<param name="Port">Port à utilisé (utilise celui actuel -1)</param>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.UDPClient">
+	<summary>
+ Client UDP
+ </summary>
+	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Telecommande.Template.Name">
 	<summary>
  Nom du template
@@ -592,6 +617,53 @@ HoMIDom
 	<summary>
  A generic type that either represents a value or an error condition.
  </summary>
+</member><member name="T:HoMIDom.HoMIDom.Sequence.TypeOfSequence">
+	<summary>
+ Type de Sequence 
+ </summary>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Sequence.Numero">
+	<summary>
+ Numero de la sequence
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Sequence.ID">
+	<summary>
+ ID de l'élément concerné
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Sequence.DateTime">
+	<summary>
+ Date/heure de l'évènement
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Sequence.Property">
+	<summary>
+ Propriété de l'évènement concerné
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Sequence.Value">
+	<summary>
+ Valeur modifiée
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:HoMIDom.HoMIDom.Sequence.SequenceType">
+	<summary>
+ Type de séquence
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.DeviceAction">
 	<summary>
  Class template pour lister les actions possibles sur un device
@@ -912,7 +984,7 @@ HoMIDom
 	<summary>Retourne l'heure du serveur</summary>
 	<returns>String : heure du serveur</returns>
 </member><member name="M:HoMIDom.HoMIDom.Server.MessageToServer(System.String)">
-	<summary>Permet d'envoyer un message d'un client vers le server</summary>
+	<summary>Permet d'envoyer un message d'un client vers le server pour les renvoyer vers tous les clients</summary>
 	<param name="Message"></param>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.GetByteFromImage(System.String)">
@@ -2794,6 +2866,22 @@ HoMIDom
 </member><member name="T:HoMIDom.HoMIDom.Action">
 	<summary>Class action, Défini les actions à réaliser depuis les macros...</summary>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.ManagerSequences.AddSequences(HoMIDom.HoMIDom.Sequence.TypeOfSequence,System.String,System.String,System.Object)">
+	<summary>
+ Ajouter une séquence
+ </summary>
+	<param name="Type"></param>
+	<param name="IDElement"></param>
+	<param name="Property"></param>
+	<param name="Value"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.ManagerSequences.ReturnSequenceFromNumero(System.String)">
+	<summary>
+ Retourne une séquence à partir de son numéro d'identifiant
+ </summary>
+	<param name="Numero"></param>
+	<returns></returns>
+	<remarks></remarks>
 </member><member name="P:HoMIDom.HoMIDom.Audio.ExtensionAudio.Extension">
 	<summary>
  Nom de l'extension ex: .wma
@@ -4371,6 +4459,24 @@ St Arnau [le reste de la chaîne a été tronqué]";.
 	<summary>
  Classe Zone, une zone peut représenter une maison, un étage, un groupe de pièces, une pièce, un endroit dans une pièce
  </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIDom.HoMIDom.UDP.ClientInfo">
+	<summary>
+ Structure ClientInfo
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.UDP.OnSend(System.IAsyncResult)">
+	<summary>
+ Réception d'un message UDP
+ </summary>
+	<param name="ar"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.UDP.SendMessageToClient(System.String,System.String)">
+	<summary>
+ Permet d'envoyer un message vers tous les clients
+ </summary>
+	<param name="Message">Message à envoyer</param>
+	<param name="TypeMessage">Type de message sur 3 alphanumérique en majuscule (ex: EVT, DEV, DRV....)</param>
 	<remarks></remarks>
 </member>
 </members>

@@ -1022,8 +1022,26 @@ Class Window1
             Select Case sender.tag
                 Case 0 'Démarrer
                     If myService.ReturnDriverByID(IdSrv, sender.uid).Enable = True Then
-                        myService.StartDriver(IdSrv, sender.uid)
-                        AffDriver()
+                        'myService.StartDriver(IdSrv, sender.uid)
+                        'AffDriver()
+
+                        Me.Cursor = Cursors.Wait
+                        myService.StartDriver(IdSrv, sender.tag)
+
+                        Dim OK As Boolean = False
+                        Dim t As DateTime = DateTime.Now
+                        Do While DateTime.Now < t.AddSeconds(10) And OK = False
+                            OK = myService.ReturnDriverByID(IdSrv, sender.tag).IsConnect
+                            Thread.Sleep(1000)
+                        Loop
+
+                        If OK = False Then
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le driver n'a pas pu être démarré, veuillez consulter le log pour en connaitre la raison", "INFO", "")
+                        Else
+                            AffDriver()
+                        End If
+
+                        Me.Cursor = Nothing
                     Else
                         AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le driver ne peut être démarré car sa propriété Enable est à False!", "Avertissement", "")
                     End If
@@ -1053,6 +1071,7 @@ Class Window1
             End Select
 
         Catch ex As Exception
+            Me.Cursor = Nothing
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub MnuitemDrv_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
@@ -1857,6 +1876,7 @@ Class Window1
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le driver ne peut être démarré car sa propriété Enable est à False!", "Avertissement", "")
             End If
         Catch ex As Exception
+            Me.Cursor = Nothing
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnStart_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub

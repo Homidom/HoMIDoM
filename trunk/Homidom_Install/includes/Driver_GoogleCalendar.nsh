@@ -2,8 +2,9 @@
     SectionIn 1 2
     SetOutPath "$INSTDIR\Drivers"
     File "..\RELEASE\Drivers\Driver_GoogleCalendar.dll"
-    File "..\RELEASE\Drivers\Google.GData.AccessControl.dll"
-    File "..\RELEASE\Drivers\Google.GData.Calendar.dll"
-    File "..\RELEASE\Drivers\Google.GData.Client.dll"
-    File "..\RELEASE\Drivers\Google.GData.Extensions.dll"
+    ${If} ${RunningX64}
+      File  "..\Dll_externes\Homidom-64bits\Drivers\Google.GData*.dll"
+    ${Else}
+      File  "..\Dll_externes\Homidom-32bits\Drivers\Google.GData*.dll"
+    ${EndIf}
   SectionEnd
