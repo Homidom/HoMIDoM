@@ -159,7 +159,7 @@ Namespace HoMIDom
                              clientInfo.endpoint)
                         End If
                     Next
-                    Server.Instance.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "UDP OnReceive", "Message UDP:" & msgToSend.strMessage)
+                    'Server.Instance.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "UDP OnReceive", "Message UDP:" & msgToSend.strMessage)
                 End If
 
                 'If the user is logging out then we need not listen from her
@@ -291,7 +291,7 @@ Namespace HoMIDom
                 End If
 
                 msgToSend.strName = "Serveur"
-                Server.Instance.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "SendMessageToClient", "Envoi du message UDP:" & Message)
+                'Server.Instance.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "SendMessageToClient", "Envoi du message UDP:" & Message)
 
                 _message = msgToSend.ToByte()
 
