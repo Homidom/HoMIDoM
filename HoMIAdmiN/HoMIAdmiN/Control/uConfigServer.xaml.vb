@@ -156,10 +156,10 @@ Partial Public Class uConfigServer
                 myService.SetTypeLogEnable(_list)
 
                 If Not IsNumeric(TxtAnimationTime.Text) Then
-                    My.Settings.AnimationDuration = 650
+                    My.Settings.AnimationDuration = 300
                 Else
                     If TxtAnimationTime.Text < 0 Then TxtAnimationTime.Text = 0
-                    If TxtAnimationTime.Text < 0 Then TxtAnimationTime.Text = 1000
+                    If TxtAnimationTime.Text > 1000 Then TxtAnimationTime.Text = 1000
                     My.Settings.AnimationDuration = TxtAnimationTime.Text
                 End If
 
@@ -256,7 +256,7 @@ Partial Public Class uConfigServer
                 ChKSaveRealTime.IsChecked = My.Settings.SaveRealTime
 
                 If Not IsNumeric(My.Settings.AnimationDuration) Then
-                    TxtAnimationTime.Text = 650
+                    TxtAnimationTime.Text = 300
                 Else
                     TxtAnimationTime.Text = My.Settings.AnimationDuration
                 End If
