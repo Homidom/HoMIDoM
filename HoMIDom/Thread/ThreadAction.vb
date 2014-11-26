@@ -465,7 +465,6 @@ Namespace HoMIDom
 
         Public Sub Sendhttp(ByVal Commande As String)
             Try
-                Dim texte As String = Web.HttpContext.Current.Server.UrlEncode(Commande)
                 'remplace les balises par la valeur
                 'texte = Decodestring(texte)
                 'texte = texte.Replace("{time}", Now.ToShortTimeString) '--> pb avec le format qui ne passe pas dans une URL
@@ -473,13 +472,13 @@ Namespace HoMIDom
 
                 Dim reader As StreamReader = Nothing
                 Dim str As String = ""
-                Dim request As WebRequest = WebRequest.Create(texte)
+                Dim request As WebRequest = WebRequest.Create(Commande)
                 Dim response As WebResponse = request.GetResponse()
                 reader = New StreamReader(response.GetResponseStream())
                 str = reader.ReadToEnd
                 reader.Close()
             Catch ex As Exception
-                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "Sendhttp", "Exception lors de l'envoi de la commande http: " & ex.Message)
+                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "Sendhttp", "Exception lors de l'envoi de la commande http: " & ex.Message)
             End Try
         End Sub
 
