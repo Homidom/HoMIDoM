@@ -39,7 +39,7 @@ Namespace HoMIDom
 
         Public Function StartServerUDP(Port As Integer) As Boolean
             Try
-                Server.Instance.Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "StartUDP", "Démarrage du serveur UDP")
+                Server.Instance.Log(Server.TypeLog.INFO, Server.TypeSource.SERVEUR, "StartUDP", "Démarrage du serveur UDP sur le port: " & Port)
 
                 'CheckForIllegalCrossThreadCalls = False
 
