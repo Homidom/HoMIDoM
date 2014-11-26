@@ -523,7 +523,8 @@ Section "" HoMIDoM_SHORTCUTS
     ${If} ${RunningX64}
       WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Run" "HoMIGuI" "$INSTDIR\HoMIGuI.exe"
     ${Else}
-      WriteRegStr HKLM "SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Run" "HoMIGuI" "$INSTDIR\HoMIGuI.exe"
+      ;WriteRegStr HKLM "SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Run" "HoMIGuI" "$INSTDIR\HoMIGuI.exe"
+      WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Run" "HoMIGuI" "$INSTDIR\HoMIGuI.exe"
     ${EndIf}
   ${EndIf}
   
