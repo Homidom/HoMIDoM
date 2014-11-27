@@ -1373,76 +1373,74 @@ Namespace HoMIDom
 
                                     _Dev = Nothing
                                 Next
-
-
-                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListDevices.Count & " composant(s) trouvé(s)")
                             Else
-                                If trvSoleil = False Then
-                                    Dim _Devs As New Device.GENERIQUEBOOLEEN(Me)
-                                    _Devs.ID = "soleil01"
-                                    _Devs.Name = "HOMI_Jour"
-                                    _Devs.Enable = True
-                                    _Devs.Adresse1 = "N/A"
-                                    _Devs.Description = "Levé/Couché du soleil : True si il fait jour"
-                                    _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
-                                    _ListDevices.Add(_Devs)
-                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
-                                    _Devs = Nothing
-                                End If
-                                If trvStartSrv = False Then
-                                    Dim _Devs As New Device.GENERIQUEBOOLEEN(Me)
-                                    _Devs.ID = "startsrv01"
-                                    _Devs.Name = "HOMI_StartServeur"
-                                    _Devs.Enable = True
-                                    _Devs.Adresse1 = "N/A"
-                                    _Devs.AllValue = True
-                                    _Devs.Description = "Serveur Démarré"
-                                    _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
-                                    _ListDevices.Add(_Devs)
-                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
-                                    _Devs = Nothing
-                                End If
-                                If trvnrjtot = False Then
-                                    Dim _Devs As New Device.GENERIQUEVALUE(Me)
-                                    _Devs.ID = "energietotale01"
-                                    _Devs.Name = "HOMI_EnergieTotaleInstantanee"
-                                    _Devs.Enable = True
-                                    _Devs.Adresse1 = "N/A"
-                                    _Devs.AllValue = True
-                                    _Devs.Description = "Energie Totale instantanee"
-                                    _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
-                                    _ListDevices.Add(_Devs)
-                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
-                                    _Devs = Nothing
-                                End If
-                                If trvisweekend = False Then
-                                    Dim _Devs As New Device.GENERIQUEBOOLEEN(Me)
-                                    _Devs.ID = "isweekend01"
-                                    _Devs.Name = "HOMI_IsWeekend"
-                                    _Devs.Enable = True
-                                    _Devs.Adresse1 = "N/A"
-                                    _Devs.AllValue = True
-                                    _Devs.Description = "Permet de savoir si c'est le week-end (samedi/dimanche)"
-                                    _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
-                                    _ListDevices.Add(_Devs)
-                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
-                                    _Devs = Nothing
-                                End If
-                                If trvsaint = False Then
-                                    Dim _Devs As New Device.GENERIQUESTRING(Me)
-                                    _Devs.ID = "saint01"
-                                    _Devs.Name = "HOMI_Saint"
-                                    _Devs.Enable = True
-                                    _Devs.Adresse1 = "N/A"
-                                    _Devs.AllValue = True
-                                    _Devs.Description = "Permet de connaitre le saint du jour"
-                                    _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
-                                    _ListDevices.Add(_Devs)
-                                    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
-                                    _Devs = Nothing
-                                End If
-                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucun composant enregistré dans le fichier de config ceux par défaut ont été créés")
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucun composant enregistré dans le fichier de config ceux par défaut vont être créés")
                             End If
+                            If trvSoleil = False Then
+                                Dim _Devs As New Device.GENERIQUEBOOLEEN(Me)
+                                _Devs.ID = "soleil01"
+                                _Devs.Name = "HOMI_Jour"
+                                _Devs.Enable = True
+                                _Devs.Adresse1 = "N/A"
+                                _Devs.Description = "Levé/Couché du soleil : True si il fait jour"
+                                _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
+                                _ListDevices.Add(_Devs)
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
+                                _Devs = Nothing
+                            End If
+                            If trvStartSrv = False Then
+                                Dim _Devs As New Device.GENERIQUEBOOLEEN(Me)
+                                _Devs.ID = "startsrv01"
+                                _Devs.Name = "HOMI_StartServeur"
+                                _Devs.Enable = True
+                                _Devs.Adresse1 = "N/A"
+                                _Devs.AllValue = True
+                                _Devs.Description = "Serveur Démarré"
+                                _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
+                                _ListDevices.Add(_Devs)
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
+                                _Devs = Nothing
+                            End If
+                            If trvnrjtot = False Then
+                                Dim _Devs As New Device.GENERIQUEVALUE(Me)
+                                _Devs.ID = "energietotale01"
+                                _Devs.Name = "HOMI_EnergieTotaleInstantanee"
+                                _Devs.Enable = True
+                                _Devs.Adresse1 = "N/A"
+                                _Devs.AllValue = True
+                                _Devs.Description = "Energie Totale instantanee"
+                                _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
+                                _ListDevices.Add(_Devs)
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
+                                _Devs = Nothing
+                            End If
+                            If trvisweekend = False Then
+                                Dim _Devs As New Device.GENERIQUEBOOLEEN(Me)
+                                _Devs.ID = "isweekend01"
+                                _Devs.Name = "HOMI_IsWeekend"
+                                _Devs.Enable = True
+                                _Devs.Adresse1 = "N/A"
+                                _Devs.AllValue = True
+                                _Devs.Description = "Permet de savoir si c'est le week-end (samedi/dimanche)"
+                                _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
+                                _ListDevices.Add(_Devs)
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
+                                _Devs = Nothing
+                            End If
+                            If trvsaint = False Then
+                                Dim _Devs As New Device.GENERIQUESTRING(Me)
+                                _Devs.ID = "saint01"
+                                _Devs.Name = "HOMI_Saint"
+                                _Devs.Enable = True
+                                _Devs.Adresse1 = "N/A"
+                                _Devs.AllValue = True
+                                _Devs.Description = "Permet de connaitre le saint du jour"
+                                _Devs.DriverID = "DE96B466-2540-11E0-A321-65D7DFD72085"
+                                _ListDevices.Add(_Devs)
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
+                                _Devs = Nothing
+                            End If
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListDevices.Count & " composant(s) trouvé(s)")
                             list = Nothing
                         Catch ex As Exception
                             Log(TypeLog.ERREUR_CRITIQUE, TypeSource.SERVEUR, "LoadConfig", "Erreur lors du chargement des Composants : " & ex.Message)
