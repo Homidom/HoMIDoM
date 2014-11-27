@@ -75,6 +75,11 @@ HoMIDom
  </summary>
 	<param name="message"></param>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.UDPClient.Disconnect">
+	<summary>
+ Se déconnecter du serveur
+ </summary>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.UDPClient.Connect(System.String,System.String,System.Int32)">
 	<summary>
  Permet de se connecter au serveur UDP

@@ -328,7 +328,7 @@ Function SaveConfig
   ${EndIf}
   nsisXML::select '/ArrayOfClServer/ClServer/Id'
   ${If} $2 != 0
-    nsisXML::setText "$cfg_portsoap"
+    nsisXML::setText "$cfg_idsrv"
   ${EndIf}
   nsisXML::save "$INSTDIR\Config\HoMIAdmiN.xml"
   
@@ -485,6 +485,8 @@ Section "HoMIDoM Admin" HoMIDoM_ADMIN
   File "..\RELEASE\HoMIAdmiN.exe"
   
   SetOverwrite off
+  File "..\RELEASE\HoMIAdmiN.exe.Config"
+  
   CreateDirectory "$INSTDIR\Images"
   SetOutPath "$INSTDIR\Images"
   File /r "..\RELEASE\Images\*"
