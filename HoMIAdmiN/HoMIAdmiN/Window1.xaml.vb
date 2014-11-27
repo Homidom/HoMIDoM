@@ -256,6 +256,7 @@ Class Window1
     Protected Overrides Sub Finalize()
         Try
             'mypush.Close()
+            If ClientUDP IsNot Nothing Then ClientUDP.Disconnect()
 
             If ListServer.Count > 0 Then
                 'Serialize object to a text file.
@@ -394,18 +395,21 @@ Class Window1
                 a = Message.Split("|")
                 If a.Length > 0 Then
                     Select Case a(0).ToUpper
-                        Case "DEV"
+                        Case HoMIDom.HoMIDom.Sequence.TypeOfSequence.Device
                             Dim seq As Sequence = myService.ReturnSequenceFromNumero(a(1))
                             DeviceChanged(seq.ID, Nothing)
-                        Case "DRV"
+                        Case HoMIDom.HoMIDom.Sequence.TypeOfSequence.DeviceChange
+                            Dim seq As Sequence = myService.ReturnSequenceFromNumero(a(1))
+                            DeviceChanged(seq.ID, Nothing)
+                        Case HoMIDom.HoMIDom.Sequence.TypeOfSequence.Driver
 
-                        Case "SRV"
+                        Case HoMIDom.HoMIDom.Sequence.TypeOfSequence.Server
 
-                        Case "MAC"
+                        Case HoMIDom.HoMIDom.Sequence.TypeOfSequence.Macro
 
-                        Case "TRG"
+                        Case HoMIDom.HoMIDom.Sequence.TypeOfSequence.Trigger
 
-                        Case "ZON"
+                        Case HoMIDom.HoMIDom.Sequence.TypeOfSequence.Zone
 
                         Case Else
 

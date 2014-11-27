@@ -102,6 +102,7 @@ Namespace HoMIDom
 
                         'Set the text of the message that we will broadcast to all users
                         msgToSend.strMessage = "<<<" & msgReceived.strName & " est connecté à Homidom>>>"
+                        Server.Instance.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "UDP OnReceive", "Message UDP:" & msgToSend.strMessage)
                         Exit Select
 
                     Case Command.Logout
@@ -119,6 +120,7 @@ Namespace HoMIDom
                         Next
 
                         msgToSend.strMessage = "<<<" & msgReceived.strName & " a quitté le réseau Homidom>>>"
+                        Server.Instance.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "UDP OnReceive", "Message UDP:" & msgToSend.strMessage)
                         Exit Select
 
                     Case Command.Message
