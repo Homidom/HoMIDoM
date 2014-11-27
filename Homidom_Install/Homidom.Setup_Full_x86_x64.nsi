@@ -752,12 +752,12 @@ Function AddFirewallRules
         Banner::show /NOUNLOAD "Configuration du pare-feu..."
         
         ; Add the port xxxxx/TCP to the firewall exception list - All Networks - All IP Version - Enabled
-        ;SimpleFC::AddPort $cfg_portsoap "HoMIDoM Service" 6 0 2 "" 1
+        SimpleFC::AddPort $cfg_portsoap "HoMIDoM Service" 6 0 2 "" 1
         ; Add an application to the firewall exception list - All Networks - All IP Version - Enabled
         SimpleFC::AddApplication "HoMIDoM Service" "$INSTDIR\HoMIServicE.exe" 0 2 "" 1
         Pop $0 ; return error(1)/success(0)
         
-        ;!insertmacro Log_String "Configuration du pare-feu. Ouverture du Port TCP $cfg_portsoap : $0"
+        !insertmacro Log_String "Configuration du pare-feu. Ouverture du Port TCP $cfg_portsoap : $0"
         !insertmacro Log_String "Configuration du pare-feu. Ajout de l'application $INSTDIR\HoMIServicE.exe : $0"
         Banner::destroy
         
