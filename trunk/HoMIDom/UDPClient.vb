@@ -110,6 +110,30 @@ Namespace HoMIDom
         End Sub
 
         ''' <summary>
+        ''' Se déconnecter du serveur
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Sub Disconnect()
+            Try
+                'Fill the info for the message to be send
+                Dim msgToSend As New Data()
+
+                msgToSend.strName = strName
+                msgToSend.strMessage = Nothing
+                msgToSend.cmdCommand = Command.Logout
+
+                Dim byteData As Byte() = msgToSend.ToByte()
+
+                'Send it to the server
+                clientSocket.BeginSendTo(byteData, 0, byteData.Length, SocketFlags.None, epServer, New AsyncCallback(AddressOf OnSend), _
+                 Nothing)
+
+            Catch generatedExceptionName As Exception
+                _serveur.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "Client UDP Disconnect", "Erreur UDP:" & generatedExceptionName.Message)
+            End Try
+        End Sub
+
+        ''' <summary>
         ''' Permet de se connecter au serveur UDP
         ''' </summary>
         ''' <param name="NameClient">Nom du client</param>
@@ -157,6 +181,8 @@ Namespace HoMIDom
                 'Start listening to the data asynchronously
                 clientSocket.BeginReceiveFrom(byteData, 0, byteData.Length, SocketFlags.None, epServer, New AsyncCallback(AddressOf OnReceive), _
                  Nothing)
+
+                _serveur.Log(Server.TypeLog.INFO, Server.TypeSource.CLIENT, "Client UDP Connect", "Connexion UDP effectuée")
             Catch ex As Exception
                 _serveur.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "Client UDP Connect", "Erreur UDP:" & ex.Message)
             End Try

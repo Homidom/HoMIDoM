@@ -60,12 +60,11 @@ Namespace HoMIDom
         <NonSerialized()> Private Shared _ListGroups As New List(Of Groupes) 'Liste de tous les groupes
         <NonSerialized()> Private Shared _ListVars As New List(Of Variable) 'Liste de toutes les variables
 
-
         <NonSerialized()> Private sqlite_homidom As New Sqlite("homidom", Me) 'BDD sqlite pour Homidom
         <NonSerialized()> Private sqlite_medias As New Sqlite("medias", Me) 'BDD sqlite pour les medias
         <NonSerialized()> Shared Soleil As New Soleil 'Déclaration class Soleil
-        <NonSerialized()> Shared _Longitude As Double = 0 'Longitude
-        <NonSerialized()> Shared _Latitude As Double = 0 'latitude
+        <NonSerialized()> Shared _Longitude As Double = 2.3488  'Longitude
+        <NonSerialized()> Shared _Latitude As Double = 48.85341  'latitude
         <NonSerialized()> Private Shared _HeureLeverSoleil As DateTime 'heure du levé du soleil
         <NonSerialized()> Private Shared _HeureCoucherSoleil As DateTime 'heure du couché du soleil
         <NonSerialized()> Shared _HeureLeverSoleilCorrection As Integer = 0 'correction à appliquer sur heure du levé du soleil
@@ -76,7 +75,7 @@ Namespace HoMIDom
         <NonSerialized()> Shared _SMTPmailEmetteur As String = "homidom@mail.com" 'adresse mail de l'émetteur
         <NonSerialized()> Shared _SMTPPort As Integer = 587 'port smtp à utiliser
         <NonSerialized()> Shared _SMTPSSL As Boolean = True 'mail avec SSL
-        <NonSerialized()> Private Shared _PortSOAP As String = "" 'Port IP de connexion SOAP
+        <NonSerialized()> Private Shared _PortSOAP As String = "7999" 'Port IP de connexion SOAP
         <NonSerialized()> Private Shared _IPSOAP As String = "localhost" 'IP de connexion SOAP
         <NonSerialized()> Dim TimerSecond As New Timers.Timer 'Timer à la seconde
         <NonSerialized()> Shared _DateTimeLastStart As Date = Now
@@ -501,13 +500,6 @@ Namespace HoMIDom
             End Try
         End Sub
 
-        'Public Function SaveFileToSrv(ByVal File As Object) As String
-        '    Try
-
-        '    Catch ex As Exception
-        '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveFileToSrv", "Exception : " & ex.message)
-        '    End Try
-        'End Function
 
         Private Property CodePays As Integer
             Get
@@ -680,17 +672,6 @@ Namespace HoMIDom
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
             End Try
 
-            'Copy du fichier de config avant chargement
-            'Try
-            '    Dim _file As String = Fichier & "homidom"
-            '    If IO.File.Exists(_file & ".bak") = True Then IO.File.Delete(_file & ".bak")
-            '    IO.File.Copy(_file & ".xml", Mid(_file & ".xml", 1, Len(_file & ".xml") - 4) & ".bak")
-            '    Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", "Création du backup (.bak) du fichier de config avant chargement")
-            '    _file = Nothing
-            'Catch ex As Exception
-            '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "LoadConfig", "Erreur impossible de créer une copie de backup du fichier de config: " & ex.Message)
-            'End Try
-
             Try
                 Dim dirInfo As New System.IO.DirectoryInfo(Fichier)
                 Dim file As System.IO.FileInfo
@@ -755,11 +736,22 @@ Namespace HoMIDom
                                         Case "heurecorrectioncoucher"
                                             _HeureCoucherSoleilCorrection = list.Item(0).Attributes.Item(j).Value
                                         Case "ipsoap"
-                                            _IPSOAP = list.Item(0).Attributes.Item(j).Value
+                                            If String.IsNullOrEmpty(list.Item(0).Attributes.Item(j).Value) Then
+                                                _IPSOAP = "localhost"
+                                            Else
+                                                _IPSOAP = list.Item(0).Attributes.Item(j).Value
+                                            End If
                                         Case "portsoap"
-                                            _PortSOAP = list.Item(0).Attributes.Item(j).Value
+                                            If String.IsNullOrEmpty(list.Item(0).Attributes.Item(j).Value) = False Or IsNumeric(CInt(list.Item(0).Attributes.Item(j).Value)) = True Then
+                                                _PortSOAP = list.Item(0).Attributes.Item(j).Value
+                                            Else
+                                                _PortSOAP = "7999"
+                                            End If
                                         Case "idsrv"
-                                            _IdSrv = list.Item(0).Attributes.Item(j).Value
+                                            If String.IsNullOrEmpty(list.Item(0).Attributes.Item(j).Value) Then
+                                            Else
+                                                _IdSrv = "123456789"
+                                            End If
                                         Case "smtpserver"
                                             _SMTPServeur = list.Item(0).Attributes.Item(j).Value
                                         Case "smtpmail"
@@ -1354,6 +1346,7 @@ Namespace HoMIDom
                                             End If
                                             X = Nothing
                                         End If
+
                                         If String.IsNullOrEmpty(.ID) = False And String.IsNullOrEmpty(.Name) = False And String.IsNullOrEmpty(.Adresse1) = False And String.IsNullOrEmpty(.DriverId) = False Then
                                             Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & .Name & " (" & .ID & " - " & .Adresse1 & " - " & .Type & ") --> " & .Value)
                                             If .ID = "soleil01" Then
@@ -1380,6 +1373,10 @@ Namespace HoMIDom
 
                                     _Dev = Nothing
                                 Next
+
+
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListDevices.Count & " composant(s) trouvé(s)")
+                            Else
                                 If trvSoleil = False Then
                                     Dim _Devs As New Device.GENERIQUEBOOLEEN(Me)
                                     _Devs.ID = "soleil01"
@@ -1431,7 +1428,7 @@ Namespace HoMIDom
                                     Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
                                     _Devs = Nothing
                                 End If
-                                If trvisweekend = False Then
+                                If trvsaint = False Then
                                     Dim _Devs As New Device.GENERIQUESTRING(Me)
                                     _Devs.ID = "saint01"
                                     _Devs.Name = "HOMI_Saint"
@@ -1444,9 +1441,7 @@ Namespace HoMIDom
                                     Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " - " & _Devs.Name & " (" & _Devs.ID & " - " & _Devs.Adresse1 & " - " & _Devs.Type & ")")
                                     _Devs = Nothing
                                 End If
-                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> " & _ListDevices.Count & " composant(s) trouvé(s)")
-                            Else
-                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucun composant enregistré dans le fichier de config")
+                                Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Aucun composant enregistré dans le fichier de config ceux par défaut ont été créés")
                             End If
                             list = Nothing
                         Catch ex As Exception

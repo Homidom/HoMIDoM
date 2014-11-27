@@ -54,7 +54,7 @@ Imports System.Threading
 #End Region
 
 #Region "Variables internes"
-    Dim _Obj As Object
+    Dim _Obj As Object = Nothing
 #End Region
 
 #Region "Propriétés génériques"
@@ -547,13 +547,13 @@ Imports System.Threading
                     For Each _child As XmlNode In node
                         Select Case _child.Name
                             Case "tmp" : If IsNumeric(_child.FirstChild.Value) Then
-                                    _Obj.TemperatureActuel = _child.FirstChild.Value
+                                    If _Obj IsNot Nothing Then _Obj.TemperatureActuel = _child.FirstChild.Value
                                     _StrTemp = _child.FirstChild.Value
                                 End If
                             Case "t" : _Obj.ConditionActuel = Traduire(_child.FirstChild.Value)
                             Case "icon" : _Obj.IconActuel = _child.FirstChild.Value
                             Case "hmid" : If IsNumeric(_child.FirstChild.Value) Then
-                                    _Obj.HumiditeActuel = _child.FirstChild.Value
+                                    If _Obj IsNot Nothing Then _Obj.HumiditeActuel = _child.FirstChild.Value
                                     _StrHum = _child.FirstChild.Value
                                 End If
                                 'Case "i" : _StrUv = _child.FirstChild.Value
@@ -567,7 +567,7 @@ Imports System.Threading
                                 For Each _child2 As XmlNode In _child
                                     Select Case _child2.Name
                                         Case "s"
-                                            _Obj.VentActuel = _child2.FirstChild.Value
+                                            If _Obj IsNot Nothing Then _Obj.VentActuel = _child2.FirstChild.Value
                                             _StrVitVent = _child2.FirstChild.Value
                                         Case "t" : _StrDirVent = _child2.FirstChild.Value
                                     End Select
@@ -591,10 +591,10 @@ Imports System.Threading
                 idx = idx + 1
 
                 Select Case idx
-                    Case 0 : _Obj.JourToday = TraduireJour(Mid(Now.DayOfWeek.ToString, 1, 3))
-                    Case 1 : _Obj.JourJ1 = TraduireJour(Mid(Now.AddDays(1).DayOfWeek.ToString, 1, 3))
-                    Case 2 : _Obj.JourJ2 = TraduireJour(Mid(Now.AddDays(2).DayOfWeek.ToString, 1, 3))
-                    Case 3 : _Obj.JourJ3 = TraduireJour(Mid(Now.AddDays(3).DayOfWeek.ToString, 1, 3))
+                    Case 0 : If _Obj IsNot Nothing Then _Obj.JourToday = TraduireJour(Mid(Now.DayOfWeek.ToString, 1, 3))
+                    Case 1 : If _Obj IsNot Nothing Then _Obj.JourJ1 = TraduireJour(Mid(Now.AddDays(1).DayOfWeek.ToString, 1, 3))
+                    Case 2 : If _Obj IsNot Nothing Then _Obj.JourJ2 = TraduireJour(Mid(Now.AddDays(2).DayOfWeek.ToString, 1, 3))
+                    Case 3 : If _Obj IsNot Nothing Then _Obj.JourJ3 = TraduireJour(Mid(Now.AddDays(3).DayOfWeek.ToString, 1, 3))
                 End Select
 
                 If node.HasChildNodes = True Then
@@ -604,28 +604,28 @@ Imports System.Threading
                                 Case "hi"
                                     If IsNumeric(_child.FirstChild.Value) Then
                                         Select Case idx
-                                            Case 0 : _Obj.MaxToday = _child.FirstChild.Value
-                                            Case 1 : _Obj.MaxJ1 = _child.FirstChild.Value
-                                            Case 2 : _Obj.MaxJ2 = _child.FirstChild.Value
-                                            Case 3 : _Obj.MaxJ3 = _child.FirstChild.Value
+                                            Case 0 : If _Obj IsNot Nothing Then _Obj.MaxToday = _child.FirstChild.Value
+                                            Case 1 : If _Obj IsNot Nothing Then _Obj.MaxJ1 = _child.FirstChild.Value
+                                            Case 2 : If _Obj IsNot Nothing Then _Obj.MaxJ2 = _child.FirstChild.Value
+                                            Case 3 : If _Obj IsNot Nothing Then _Obj.MaxJ3 = _child.FirstChild.Value
                                         End Select
                                     End If
                                 Case "low"
                                     If IsNumeric(_child.FirstChild.Value) Then
                                         Select Case idx
-                                            Case 0 : _Obj.MinToday = _child.FirstChild.Value
-                                            Case 1 : _Obj.MinJ1 = _child.FirstChild.Value
-                                            Case 2 : _Obj.MinJ2 = _child.FirstChild.Value
-                                            Case 3 : _Obj.MinJ3 = _child.FirstChild.Value
+                                            Case 0 : If _Obj IsNot Nothing Then _Obj.MinToday = _child.FirstChild.Value
+                                            Case 1 : If _Obj IsNot Nothing Then _Obj.MinJ1 = _child.FirstChild.Value
+                                            Case 2 : If _Obj IsNot Nothing Then _Obj.MinJ2 = _child.FirstChild.Value
+                                            Case 3 : If _Obj IsNot Nothing Then _Obj.MinJ3 = _child.FirstChild.Value
                                         End Select
                                     End If
                                 Case "icon"
                                 Case "t"
                                     Select Case idx
-                                        Case 0 : _Obj.ConditionToday = Traduire(_child.FirstChild.Value)
-                                        Case 1 : _Obj.ConditionJ1 = Traduire(_child.FirstChild.Value)
-                                        Case 2 : _Obj.ConditionJ2 = Traduire(_child.FirstChild.Value)
-                                        Case 3 : _Obj.ConditionJ3 = Traduire(_child.FirstChild.Value)
+                                        Case 0 : If _Obj IsNot Nothing Then _Obj.ConditionToday = Traduire(_child.FirstChild.Value)
+                                        Case 1 : If _Obj IsNot Nothing Then _Obj.ConditionJ1 = Traduire(_child.FirstChild.Value)
+                                        Case 2 : If _Obj IsNot Nothing Then _Obj.ConditionJ2 = Traduire(_child.FirstChild.Value)
+                                        Case 3 : If _Obj IsNot Nothing Then _Obj.ConditionJ3 = Traduire(_child.FirstChild.Value)
                                     End Select
                             End Select
                         End If
@@ -636,34 +636,34 @@ Imports System.Threading
                                     Case "hi"
                                         If IsNumeric(_child.FirstChild.InnerText) Then
                                             Select Case idx
-                                                Case 0 : _Obj.MaxToday = _child2.InnerText
-                                                Case 1 : _Obj.MaxJ1 = _child2.InnerText
-                                                Case 2 : _Obj.MaxJ2 = _child2.InnerText
-                                                Case 3 : _Obj.MaxJ3 = _child2.InnerText
+                                                Case 0 : If _Obj IsNot Nothing Then _Obj.MaxToday = _child2.InnerText
+                                                Case 1 : If _Obj IsNot Nothing Then _Obj.MaxJ1 = _child2.InnerText
+                                                Case 2 : If _Obj IsNot Nothing Then _Obj.MaxJ2 = _child2.InnerText
+                                                Case 3 : If _Obj IsNot Nothing Then _Obj.MaxJ3 = _child2.InnerText
                                             End Select
                                         End If
                                     Case "low"
                                         If IsNumeric(_child.FirstChild.InnerText) Then
                                             Select Case idx
-                                                Case 0 : _Obj.MinToday = _child2.InnerText
-                                                Case 1 : _Obj.MinJ1 = _child2.InnerText
-                                                Case 2 : _Obj.MinJ2 = _child2.InnerText
-                                                Case 3 : _Obj.MinJ3 = _child2.InnerText
+                                                Case 0 : If _Obj IsNot Nothing Then _Obj.MinToday = _child2.InnerText
+                                                Case 1 : If _Obj IsNot Nothing Then _Obj.MinJ1 = _child2.InnerText
+                                                Case 2 : If _Obj IsNot Nothing Then _Obj.MinJ2 = _child2.InnerText
+                                                Case 3 : If _Obj IsNot Nothing Then _Obj.MinJ3 = _child2.InnerText
                                             End Select
                                         End If
                                     Case "icon"
                                         Select Case idx
-                                            Case 0 : _Obj.IconToday = _child2.InnerText
-                                            Case 1 : _Obj.IconJ1 = _child2.InnerText
-                                            Case 2 : _Obj.IconJ2 = _child2.InnerText
-                                            Case 3 : _Obj.IconJ3 = _child2.InnerText
+                                            Case 0 : If _Obj IsNot Nothing Then _Obj.IconToday = _child2.InnerText
+                                            Case 1 : If _Obj IsNot Nothing Then _Obj.IconJ1 = _child2.InnerText
+                                            Case 2 : If _Obj IsNot Nothing Then _Obj.IconJ2 = _child2.InnerText
+                                            Case 3 : If _Obj IsNot Nothing Then _Obj.IconJ3 = _child2.InnerText
                                         End Select
                                     Case "t"
                                         Select Case idx
-                                            Case 0 : _Obj.ConditionToday = Traduire(_child2.InnerText)
-                                            Case 1 : _Obj.ConditionJ1 = Traduire(_child2.InnerText)
-                                            Case 2 : _Obj.ConditionJ2 = Traduire(_child2.InnerText)
-                                            Case 3 : _Obj.ConditionJ3 = Traduire(_child2.InnerText)
+                                            Case 0 : If _Obj IsNot Nothing Then _Obj.ConditionToday = Traduire(_child2.InnerText)
+                                            Case 1 : If _Obj IsNot Nothing Then _Obj.ConditionJ1 = Traduire(_child2.InnerText)
+                                            Case 2 : If _Obj IsNot Nothing Then _Obj.ConditionJ2 = Traduire(_child2.InnerText)
+                                            Case 3 : If _Obj IsNot Nothing Then _Obj.ConditionJ3 = Traduire(_child2.InnerText)
                                         End Select
                                 End Select
                                 'If _child2.Name.StartsWith("#text") = False Then Console.WriteLine(_child2.Name & ":" & _child2.InnerText)
