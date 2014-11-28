@@ -59,6 +59,7 @@ Namespace HoMIDom
         <NonSerialized()> Private Shared _ListTriggers As New List(Of Trigger) 'Liste de tous les triggers
         <NonSerialized()> Private Shared _ListGroups As New List(Of Groupes) 'Liste de tous les groupes
         <NonSerialized()> Private Shared _ListVars As New List(Of Variable) 'Liste de toutes les variables
+        <NonSerialized()> Private Shared _listImages As New List(Of ImageFile) 'Liste toutes les fichiers images sur le serveur
 
         <NonSerialized()> Private sqlite_homidom As New Sqlite("homidom", Me) 'BDD sqlite pour Homidom
         <NonSerialized()> Private sqlite_medias As New Sqlite("medias", Me) 'BDD sqlite pour les medias
@@ -3523,6 +3524,11 @@ Namespace HoMIDom
                 '--- Démarre le serveur udp
                 _SrvUDPIsStart = UDP.StartServerUDP(_PortSOAP - 1)
                 If _SrvUDPIsStart Then Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Serveur UDP démarré sur le port:" & _PortSOAP - 1)
+
+                '--- Scan les images
+                Dim _thr As New Thread(AddressOf mImages.ScanImage)
+                _thr.Start()
+
                 'test biblio
                 '
                 ' Create a FileSystemWatcher object passing it the folder to watch.
@@ -4492,6 +4498,15 @@ Namespace HoMIDom
             End Set
         End Property
 
+        Public Property Images As List(Of ImageFile)
+            Get
+                Return _listImages
+            End Get
+            Set(value As List(Of ImageFile))
+                _listImages = value
+            End Set
+        End Property
+
         '*** FONCTIONS ******************************************
 #Region "Serveur"
         ''' <summary>
@@ -4973,52 +4988,47 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Public Function GetListOfImage() As List(Of ImageFile) Implements IHoMIDom.GetListOfImage
             Try
-                Dim _list As New List(Of ImageFile)
-
-                Dim dirInfo As New System.IO.DirectoryInfo(_MonRepertoire & "\images\")
-                Dim files() As System.IO.FileInfo = dirInfo.GetFiles("*.*g*", System.IO.SearchOption.AllDirectories)
-
-                If (files IsNot Nothing) Then
-                    For Each file As System.IO.FileInfo In files
-                        Dim a As String = file.Extension.ToLower.Replace(".", "")
-                        If a = "jpg" Or a = "gif" Or a = "png" Then
-                            Dim x As New ImageFile
-                            x.Path = file.FullName
-                            x.FileName = file.Name
-                            _list.Add(x)
-                            x = Nothing
-                        End If
-                    Next
-                End If
-                files = Nothing
-                dirInfo = Nothing
-
-                Return _list
+                Return _listImages
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetListOfImage", "Exception : " & ex.Message)
                 Return Nothing
             End Try
         End Function
 
+        ''' <summary>
+        ''' Upload d'un fichier image vers le serveur
+        ''' </summary>
+        ''' <param name="IdSrv"></param>
+        ''' <param name="byteData"></param>
+        ''' <param name="Namefile"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
         Public Function UploadFile(ByVal IdSrv As String, ByVal byteData As Byte(), ByVal Namefile As String) As String Implements IHoMIDom.UploadFile
             Try
                 If VerifIdSrv(IdSrv) = False Then
                     Return 99
                 End If
 
+                Dim _fichier As String = _MonRepertoire & "\images\myimages\" & Namefile
+
                 If System.IO.Directory.Exists(_MonRepertoire & "\Images\myimages") = False Then
                     System.IO.Directory.CreateDirectory(_MonRepertoire & "\Images\myimages")
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "UploadFile", "Création du dossier myimages")
                 End If
 
-                If IO.File.Exists(_MonRepertoire & "\images\myimages\" & Namefile) Then
-                    Return "Le fichier " & Namefile & " exste déjà veuillez le renommer"
+                If IO.File.Exists(_fichier) Then
+                    Return "Le fichier " & Namefile & " existe déjà veuillez le renommer"
                 End If
 
                 Dim oFileStream As System.IO.FileStream
-                oFileStream = New System.IO.FileStream(_MonRepertoire & "\images\myimages\" & Namefile, System.IO.FileMode.Create)
+                oFileStream = New System.IO.FileStream(_fichier, System.IO.FileMode.Create)
                 oFileStream.Write(byteData, 0, byteData.Length)
                 oFileStream.Close()
+
+                Dim _file As New ImageFile
+                _file.FileName = Namefile
+                _file.Path = _fichier
+                _listImages.Add(_file)
 
                 Return 0
             Catch ex As Exception
