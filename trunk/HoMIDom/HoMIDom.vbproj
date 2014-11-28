@@ -144,7 +144,6 @@
     <Compile Include="Soleil.vb" />
     <Compile Include="Sqlite.vb" />
     <Compile Include="Telecommande.vb" />
-    <Compile Include="Thermostat.vb" />
     <Compile Include="Thread\ThreadAction.vb" />
     <Compile Include="TplDevice.vb" />
     <Compile Include="TplDriver.vb" />
@@ -207,7 +206,7 @@
   </PropertyGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_IncrementBeforeBuild="True" BuildVersion_UseGlobalSettings="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_AssemblyInfoFilename="" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_AssemblyInfoFilename="" BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UseGlobalSettings="True" BuildVersion_IncrementBeforeBuild="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
