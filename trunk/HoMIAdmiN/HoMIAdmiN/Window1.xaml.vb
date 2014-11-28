@@ -307,6 +307,7 @@ Class Window1
 
             myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
             myService = myChannelFactory.CreateChannel()
+
             If myChannelFactory.State <> CommunicationState.Opened Then
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la connexion au serveur", "Erreur Admin", "")
                 IsConnect = False
@@ -334,7 +335,6 @@ Class Window1
                 'mypush = New PushNotification("http://" & IP & ":" & Port & "/live", IdSrv)
                 'AddHandler mypush.DeviceChanged, AddressOf DeviceChanged
                 'mypush.Open()
-
 
                 LOG.Content = "Connexion au serveur UDP...."
                 ClientUDP = New HoMIDom.HoMIDom.UDPClient(myService)
@@ -466,6 +466,7 @@ Class Window1
                 My.Settings.Height = Me.Window1.Height
             End If
             My.Settings.Save()
+
             End
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Unloaded Quitter: " & ex.Message, "ERREUR", "")
