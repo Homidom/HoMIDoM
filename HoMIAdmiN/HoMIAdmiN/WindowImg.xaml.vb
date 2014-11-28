@@ -1,6 +1,5 @@
 ﻿
 Public Class WindowImg
-    Dim _ListImg As New List(Of HoMIDom.HoMIDom.ImageFile)
     Dim _oldstk As StackPanel = Nothing
     Public FileName As String
 
@@ -24,6 +23,8 @@ Public Class WindowImg
 
     Private Sub Affiche()
         Try
+            Dim _ListImg As New List(Of HoMIDom.HoMIDom.ImageFile)
+
             Wrp.Children.Clear()
             _ListImg = myService.GetListOfImage
 
