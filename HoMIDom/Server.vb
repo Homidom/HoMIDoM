@@ -749,7 +749,8 @@ Namespace HoMIDom
                                                 _PortSOAP = "7999"
                                             End If
                                         Case "idsrv"
-                                            If String.IsNullOrEmpty(list.Item(0).Attributes.Item(j).Value) Then
+                                            If String.IsNullOrEmpty(list.Item(0).Attributes.Item(j).Value) = False Then
+                                                _IdSrv = list.Item(0).Attributes.Item(j).Value
                                             Else
                                                 _IdSrv = "123456789"
                                             End If
