@@ -263,9 +263,16 @@ Namespace HoMIDom
                                         'on lance toutes les macros associés
                                         For j As Integer = 0 To _ListTriggers.Item(i).ListMacro.Count - 1
                                             _m = ReturnMacroById(_IdSrv, _ListTriggers.Item(i).ListMacro.Item(j))
-                                            Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", " --> " & _ListTriggers.Item(i).Nom & " Lance la macro : " & _m.Nom)
-                                            If _m IsNot Nothing Then _m.Execute(Me)
-                                            _m = Nothing
+                                            If _m IsNot Nothing Then
+                                                If _m.Enable Then
+                                                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", " --> " & _ListTriggers.Item(i).Nom & " Lance la macro : " & _m.Nom)
+                                                    _m.Execute(Me)
+                                                Else
+                                                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "DeviceChange", " --> " & _ListTriggers.Item(i).Nom & " Macro désactivé : " & _m.Nom)
+                                                End If
+                                                _m = Nothing
+                                            End If
+
                                         Next
                                     End If
                                 End If
@@ -455,10 +462,14 @@ Namespace HoMIDom
                                     'on cherche la macro et on la lance en testant ces conditions
                                     _m = ReturnMacroById(_IdSrv, _Trigger.ListMacro.Item(j))
                                     If _m IsNot Nothing Then
-                                        Log(TypeLog.DEBUG, TypeSource.SERVEUR, "TriggerTimer", "Lancement de la macro: " & _m.Nom & " ,suite au déclenchement du trigger: " & _Trigger.Nom)
-                                        _m.Execute(Me)
+                                        If _m.Enable Then
+                                            Log(TypeLog.DEBUG, TypeSource.SERVEUR, "TriggerTimer", "Lancement de la macro: " & _m.Nom & " ,suite au déclenchement du trigger: " & _Trigger.Nom)
+                                            _m.Execute(Me)
+                                        Else
+                                            Log(TypeLog.DEBUG, TypeSource.SERVEUR, "TriggerTimer", "Macro: " & _m.Nom & " non executée car Désactivée ,suite au déclenchement du trigger: " & _Trigger.Nom)
+                                        End If
                                     End If
-                                    _m = Nothing
+                                        _m = Nothing
                                 Next
 
                             End If
