@@ -295,70 +295,86 @@ Public Class WWidgetProperty
 
 #Region "Chargement des combos"
     Private Sub Charge_Device_InCombo()
-        For Each obj As TemplateDevice In myService.GetAllDevices(IdSrv)
-            Dim lbl1 As New ComboBoxItem
-            Dim lbl2 As New ComboBoxItem
-            lbl1.Content = obj.Name & " [Device]"
-            lbl1.Tag = "DEVICE"
-            lbl1.Uid = obj.ID
-            lbl2.Content = obj.Name & " [Device]"
-            lbl2.Tag = "DEVICE"
-            lbl2.Uid = obj.ID
-            CbObjet.Items.Add(lbl1)
-            CbObjetVisu.Items.Add(lbl2)
-            lbl1 = Nothing
-            lbl2 = Nothing
-        Next
+        Try
+            For Each obj As TemplateDevice In myService.GetAllDevices(IdSrv)
+                Dim lbl1 As New ComboBoxItem
+                Dim lbl2 As New ComboBoxItem
+                lbl1.Content = obj.Name & " [Device]"
+                lbl1.Tag = "DEVICE"
+                lbl1.Uid = obj.ID
+                lbl2.Content = obj.Name & " [Device]"
+                lbl2.Tag = "DEVICE"
+                lbl2.Uid = obj.ID
+                CbObjet.Items.Add(lbl1)
+                CbObjetVisu.Items.Add(lbl2)
+                lbl1 = Nothing
+                lbl2 = Nothing
+            Next
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Charge_Device_InCombo: " & ex.Message, "Erreur", " Charge_Device_InCombo")
+        End Try
     End Sub
 
     Private Sub Charge_Macro_InCombo()
-        For Each obj As Macro In myService.GetAllMacros(IdSrv)
-            Dim lbl1 As New ComboBoxItem
-            Dim lbl2 As New ComboBoxItem
-            lbl1.Content = obj.Nom & " [Macro]"
-            lbl1.Tag = "MACRO"
-            lbl1.Uid = obj.ID
-            lbl2.Content = obj.Nom & " [Macro]"
-            lbl2.Tag = "MACRO"
-            lbl2.Uid = obj.ID
-            CbObjet.Items.Add(lbl1)
-            CbObjetVisu.Items.Add(lbl2)
-            lbl1 = Nothing
-            lbl2 = Nothing
-        Next
+        Try
+            For Each obj As Macro In myService.GetAllMacros(IdSrv)
+                Dim lbl1 As New ComboBoxItem
+                Dim lbl2 As New ComboBoxItem
+                lbl1.Content = obj.Nom & " [Macro]"
+                lbl1.Tag = "MACRO"
+                lbl1.Uid = obj.ID
+                lbl2.Content = obj.Nom & " [Macro]"
+                lbl2.Tag = "MACRO"
+                lbl2.Uid = obj.ID
+                CbObjet.Items.Add(lbl1)
+                CbObjetVisu.Items.Add(lbl2)
+                lbl1 = Nothing
+                lbl2 = Nothing
+            Next
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Charge_Macro_InCombo: " & ex.Message, "Erreur", " Charge_Macro_InCombo")
+        End Try
     End Sub
 
     Private Sub Charge_Zone_InCombo()
-        For Each obj As Zone In myService.GetAllZones(IdSrv)
-            Dim lbl1 As New ComboBoxItem
-            Dim lbl2 As New ComboBoxItem
-            lbl1.Content = obj.Name & " [Zone]"
-            lbl1.Tag = "ZONE"
-            lbl1.Uid = obj.ID
-            lbl2.Content = obj.Name & " [Zone]"
-            lbl2.Tag = "ZONE"
-            lbl2.Uid = obj.ID
-            CbObjet.Items.Add(lbl1)
-            CbObjetVisu.Items.Add(lbl2)
-            lbl1 = Nothing
-            lbl2 = Nothing
-        Next
+        Try
+            For Each obj As Zone In myService.GetAllZones(IdSrv)
+                Dim lbl1 As New ComboBoxItem
+                Dim lbl2 As New ComboBoxItem
+                lbl1.Content = obj.Name & " [Zone]"
+                lbl1.Tag = "ZONE"
+                lbl1.Uid = obj.ID
+                lbl2.Content = obj.Name & " [Zone]"
+                lbl2.Tag = "ZONE"
+                lbl2.Uid = obj.ID
+                CbObjet.Items.Add(lbl1)
+                CbObjetVisu.Items.Add(lbl2)
+                lbl1 = Nothing
+                lbl2 = Nothing
+            Next
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Charge_Zone_InCombo: " & ex.Message, "Erreur", " Charge_Zone_InCombo")
+        End Try
     End Sub
 
     Private Sub Charge_Cmd_InCombo()
-        ' Commandes
-        Dim lb1 As New ComboBoxItem
-        Dim lb2 As New ComboBoxItem
-        lb1.Content = "Commandes"
-        lb1.Tag = "COMMAND"
-        lb1.Uid = Nothing
-        lb2.Content = "Commandes"
-        lb2.Tag = "COMMAND"
-        lb2.Uid = Nothing
-        CbObjet.Items.Add(lb1)
-        CbObjetVisu.Items.Add(lb2)
-        lb1 = Nothing
-        lb2 = Nothing
+        Try
+            ' Commandes
+            Dim lb1 As New ComboBoxItem
+            Dim lb2 As New ComboBoxItem
+            lb1.Content = "Commandes"
+            lb1.Tag = "COMMAND"
+            lb1.Uid = Nothing
+            lb2.Content = "Commandes"
+            lb2.Tag = "COMMAND"
+            lb2.Uid = Nothing
+            CbObjet.Items.Add(lb1)
+            CbObjetVisu.Items.Add(lb2)
+            lb1 = Nothing
+            lb2 = Nothing
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Charge_Cmd_InCombo: " & ex.Message, "Erreur", " Charge_Cmd_InCombo")
+        End Try
     End Sub
 #End Region
 
@@ -442,22 +458,27 @@ Public Class WWidgetProperty
 #End Region
 
     Private Function ShowDialog(ByVal color As Nullable(Of System.Windows.Media.Color)) As Nullable(Of System.Windows.Media.Color)
-        ' Instancier une boite de dilogue de Winform 
-        Dim dialogBox As New System.Windows.Forms.ColorDialog()
+        Try
+            ' Instancier une boite de dilogue de Winform 
+            Dim dialogBox As New System.Windows.Forms.ColorDialog()
 
-        ' Configurer cette boite
-        If color.HasValue Then
-            dialogBox.Color = System.Drawing.Color.FromArgb(color.Value.A, color.Value.R, color.Value.G, color.Value.B)
-        End If
+            ' Configurer cette boite
+            If color.HasValue Then
+                dialogBox.Color = System.Drawing.Color.FromArgb(color.Value.A, color.Value.R, color.Value.G, color.Value.B)
+            End If
 
-        ' Affichage de la boite de dialogue
-        If dialogBox.ShowDialog() = System.Windows.Forms.DialogResult.OK Then
-            ' Retourner la couleur choisie
-            Return System.Windows.Media.Color.FromArgb(dialogBox.Color.A, dialogBox.Color.R, dialogBox.Color.G, dialogBox.Color.B)
-        Else
-            ' Selection annulée
+            ' Affichage de la boite de dialogue
+            If dialogBox.ShowDialog() = System.Windows.Forms.DialogResult.OK Then
+                ' Retourner la couleur choisie
+                Return System.Windows.Media.Color.FromArgb(dialogBox.Color.A, dialogBox.Color.R, dialogBox.Color.G, dialogBox.Color.B)
+            Else
+                ' Selection annulée
+                Return Nothing
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur ShowDialog: " & ex.Message, "Erreur", " ShowDialog")
             Return Nothing
-        End If
+        End Try
     End Function
 
     ''' <summary>
@@ -467,12 +488,20 @@ Public Class WWidgetProperty
     ''' <param name="e"></param>
     ''' <remarks></remarks>
     Private Sub BtnEditAction_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnEditAction.Click
-        GrpEditAction.Visibility = Windows.Visibility.Visible
-        CbAction.SelectedIndex = 0
+        Try
+            GrpEditAction.Visibility = Windows.Visibility.Visible
+            CbAction.SelectedIndex = 0
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur BtnEditAction_Click: " & ex.Message, "Erreur", " BtnEditAction_Click")
+        End Try
     End Sub
 
     Private Sub BtnCloseEditAction_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnCloseEditAction.Click
-        GrpEditAction.Visibility = Windows.Visibility.Collapsed
+        Try
+            GrpEditAction.Visibility = Windows.Visibility.Collapsed
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur BtnCloseEditAction_Click: " & ex.Message, "Erreur", " BtnCloseEditAction_Click")
+        End Try
     End Sub
 
     ''' <summary>
@@ -482,425 +511,466 @@ Public Class WWidgetProperty
     ''' <param name="e"></param>
     ''' <remarks></remarks>
     Private Sub BtnEditVisu_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnEditVisu.Click
-        GrpEditVisu.Visibility = Windows.Visibility.Visible
+        Try
+            GrpEditVisu.Visibility = Windows.Visibility.Visible
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur BtnEditVisu_Click: " & ex.Message, "Erreur", " BtnEditVisu_Click")
+        End Try
     End Sub
 
     Private Sub BtnCloseEditVisu_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnCloseEditVisu.Click
-        GrpEditVisu.Visibility = Windows.Visibility.Collapsed
+        Try
+            GrpEditVisu.Visibility = Windows.Visibility.Collapsed
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur BtnCloseEditVisu_Click: " & ex.Message, "Erreur", " BtnCloseEditVisu_Click")
+        End Try
     End Sub
 
     Private Sub CbObjet_SelectionChanged(ByVal sender As System.Object, ByVal e As Object) Handles CbObjet.SelectionChanged, CbObjet.MouseLeftButtonUp
-        If CbObjet.SelectedItem IsNot Nothing Then
-            If CbObjet.SelectedItem.tag = "DEVICE" Then
-                Dim _DeviceId As String
-                Dim _Device As HoMIDom.HoMIDom.TemplateDevice
+        Try
+            If CbObjet.SelectedItem IsNot Nothing Then
+                If CbObjet.SelectedItem.tag = "DEVICE" Then
+                    Dim _DeviceId As String
+                    Dim _Device As HoMIDom.HoMIDom.TemplateDevice
 
-                _DeviceId = CbObjet.SelectedItem.uid
-                _Device = myService.ReturnDeviceByID(IdSrv, _DeviceId)
-                CbMethode.Items.Clear()
-                CbActionValue.Items.Clear()
+                    _DeviceId = CbObjet.SelectedItem.uid
+                    _Device = myService.ReturnDeviceByID(IdSrv, _DeviceId)
+                    CbMethode.Items.Clear()
+                    CbActionValue.Items.Clear()
 
-                If _Device.Type = Device.ListeDevices.MULTIMEDIA Then
-                    Dim lbl1 As New ComboBoxItem
-                    lbl1.Content = "EnvoyerCommande"
-                    lbl1.Tag = 0 'c une fonction de base
-                    CbMethode.Items.Add(lbl1)
-                    LblMethode.Visibility = Windows.Visibility.Visible
-                    TxtValue.Visibility = Windows.Visibility.Collapsed
-                    CbMethode.Visibility = Windows.Visibility.Visible
-                    CbMethode.SelectedIndex = 0
-
-                    If String.IsNullOrEmpty(_Device.Modele) = False Then
-                        TxtValue.Visibility = Windows.Visibility.Collapsed
-                        Dim tpl As Telecommande.Template = myService.GetTemplateFromID(_Device.Modele)
-                        If tpl IsNot Nothing Then
-                            For Each cmd In tpl.Commandes
-                                CbActionValue.Items.Add(cmd.Name)
-                            Next
-                        End If
-                    End If
-                Else
-                    For i As Integer = 0 To _Device.DeviceAction.Count - 1
+                    If _Device.Type = Device.ListeDevices.MULTIMEDIA Then
                         Dim lbl1 As New ComboBoxItem
-                        lbl1.Content = _Device.DeviceAction.Item(i).Nom
+                        lbl1.Content = "EnvoyerCommande"
                         lbl1.Tag = 0 'c une fonction de base
                         CbMethode.Items.Add(lbl1)
                         LblMethode.Visibility = Windows.Visibility.Visible
+                        TxtValue.Visibility = Windows.Visibility.Collapsed
                         CbMethode.Visibility = Windows.Visibility.Visible
-                    Next
-                    TxtValue.Visibility = Windows.Visibility.Visible
+                        CbMethode.SelectedIndex = 0
+
+                        If String.IsNullOrEmpty(_Device.Modele) = False Then
+                            TxtValue.Visibility = Windows.Visibility.Collapsed
+                            Dim tpl As Telecommande.Template = myService.GetTemplateFromID(_Device.Modele)
+                            If tpl IsNot Nothing Then
+                                For Each cmd In tpl.Commandes
+                                    CbActionValue.Items.Add(cmd.Name)
+                                Next
+                            End If
+                        End If
+                    Else
+                        For i As Integer = 0 To _Device.DeviceAction.Count - 1
+                            Dim lbl1 As New ComboBoxItem
+                            lbl1.Content = _Device.DeviceAction.Item(i).Nom
+                            lbl1.Tag = 0 'c une fonction de base
+                            CbMethode.Items.Add(lbl1)
+                            LblMethode.Visibility = Windows.Visibility.Visible
+                            CbMethode.Visibility = Windows.Visibility.Visible
+                        Next
+                        TxtValue.Visibility = Windows.Visibility.Visible
+                    End If
+
+                    _Device = Nothing
+                    TxtValue.Text = Nothing
+
                 End If
 
-                _Device = Nothing
-                TxtValue.Text = Nothing
+                If CbObjet.SelectedItem.tag = "MACRO" Then
+                    Dim _MacroId As String
+                    Dim _Macro As HoMIDom.HoMIDom.Macro
 
+                    _MacroId = CbObjet.SelectedItem.uid
+                    _Macro = myService.ReturnMacroById(IdSrv, _MacroId)
+                    CbMethode.Items.Clear()
+
+                    Dim lbl1 As New ComboBoxItem
+                    lbl1.Content = "Execute"
+                    lbl1.Tag = 8 'c une macro
+                    CbMethode.Items.Add(lbl1)
+                    CbMethode.SelectedIndex = 0
+                    _Macro = Nothing
+
+                    LblActionValue.Visibility = Windows.Visibility.Collapsed
+                    TxtValue.Visibility = Windows.Visibility.Collapsed
+                    TxtValue.Text = Nothing
+                End If
+
+                If CbObjet.SelectedItem.tag = "ZONE" Then
+                    Dim _ZoneId As String
+                    Dim _Zone As HoMIDom.HoMIDom.Zone
+
+                    _ZoneId = CbObjet.SelectedItem.uid
+                    _Zone = myService.ReturnZoneByID(IdSrv, _ZoneId)
+                    CbMethode.Items.Clear()
+
+                    Dim lbl1 As New ComboBoxItem
+                    lbl1.Content = "Afficher"
+                    lbl1.Tag = 9 'c une zone
+                    CbMethode.Items.Add(lbl1)
+                    CbMethode.SelectedIndex = 0
+                    _Zone = Nothing
+
+                    LblActionValue.Visibility = Windows.Visibility.Collapsed
+                    TxtValue.Visibility = Windows.Visibility.Collapsed
+                    TxtValue.Text = Nothing
+                End If
+
+                If CbObjet.SelectedItem.tag = "COMMAND" Then
+                    CbMethode.Items.Clear()
+
+                    Dim lbl1 As New ComboBoxItem
+                    lbl1.Content = "Exécuter commande DOS"
+                    lbl1.Tag = 10 'c une commande Shell
+                    CbMethode.Items.Add(lbl1)
+                    CbMethode.SelectedIndex = 0
+
+                    lbl1 = New ComboBoxItem
+                    lbl1.Content = "Charger configuration"
+                    lbl1.Tag = 11 'c une commande LoadConfig
+                    CbMethode.Items.Add(lbl1)
+                    CbMethode.SelectedIndex = 0
+
+                    lbl1 = New ComboBoxItem
+                    lbl1.Content = "Quitter HoMIWpF"
+                    lbl1.Tag = 12 'c une commande Quit
+                    CbMethode.Items.Add(lbl1)
+                    CbMethode.SelectedIndex = 0
+
+                    LblActionValue.Visibility = Windows.Visibility.Visible
+                    CbMethode.Visibility = Windows.Visibility.Visible
+
+                End If
             End If
-
-            If CbObjet.SelectedItem.tag = "MACRO" Then
-                Dim _MacroId As String
-                Dim _Macro As HoMIDom.HoMIDom.Macro
-
-                _MacroId = CbObjet.SelectedItem.uid
-                _Macro = myService.ReturnMacroById(IdSrv, _MacroId)
-                CbMethode.Items.Clear()
-
-                Dim lbl1 As New ComboBoxItem
-                lbl1.Content = "Execute"
-                lbl1.Tag = 8 'c une macro
-                CbMethode.Items.Add(lbl1)
-                CbMethode.SelectedIndex = 0
-                _Macro = Nothing
-
-                LblActionValue.Visibility = Windows.Visibility.Collapsed
-                TxtValue.Visibility = Windows.Visibility.Collapsed
-                TxtValue.Text = Nothing
-            End If
-
-            If CbObjet.SelectedItem.tag = "ZONE" Then
-                Dim _ZoneId As String
-                Dim _Zone As HoMIDom.HoMIDom.Zone
-
-                _ZoneId = CbObjet.SelectedItem.uid
-                _Zone = myService.ReturnZoneByID(IdSrv, _ZoneId)
-                CbMethode.Items.Clear()
-
-                Dim lbl1 As New ComboBoxItem
-                lbl1.Content = "Afficher"
-                lbl1.Tag = 9 'c une zone
-                CbMethode.Items.Add(lbl1)
-                CbMethode.SelectedIndex = 0
-                _Zone = Nothing
-
-                LblActionValue.Visibility = Windows.Visibility.Collapsed
-                TxtValue.Visibility = Windows.Visibility.Collapsed
-                TxtValue.Text = Nothing
-            End If
-
-            If CbObjet.SelectedItem.tag = "COMMAND" Then
-                CbMethode.Items.Clear()
-
-                Dim lbl1 As New ComboBoxItem
-                lbl1.Content = "Exécuter commande DOS"
-                lbl1.Tag = 10 'c une commande Shell
-                CbMethode.Items.Add(lbl1)
-                CbMethode.SelectedIndex = 0
-
-                lbl1 = New ComboBoxItem
-                lbl1.Content = "Charger configuration"
-                lbl1.Tag = 11 'c une commande LoadConfig
-                CbMethode.Items.Add(lbl1)
-                CbMethode.SelectedIndex = 0
-
-                lbl1 = New ComboBoxItem
-                lbl1.Content = "Quitter HoMIWpF"
-                lbl1.Tag = 12 'c une commande Quit
-                CbMethode.Items.Add(lbl1)
-                CbMethode.SelectedIndex = 0
-
-                LblActionValue.Visibility = Windows.Visibility.Visible
-                CbMethode.Visibility = Windows.Visibility.Visible
-
-            End If
-        End If
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur CbObjet_SelectionChanged: " & ex.Message, "Erreur", " CbObjet_SelectionChanged")
+        End Try
     End Sub
 
     Private Sub CbObjetVisu_SelectionChanged(ByVal sender As Object, ByVal e As Object) Handles CbObjetVisu.SelectionChanged, CbObjetVisu.MouseLeftButtonDown, CbObjetVisu.MouseDown
-        If CbObjetVisu.SelectedIndex < 0 Or CbObjetVisu.SelectedItem.tag <> "DEVICE" Then
-            Exit Sub
-        End If
+        Try
+            If CbObjetVisu.SelectedIndex < 0 Or CbObjetVisu.SelectedItem.tag <> "DEVICE" Then
+                Exit Sub
+            End If
 
-        CbPropertyVisu.Items.Clear()
-        Select Case AllDevices.Item(CbObjetVisu.SelectedIndex).Type
-            Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
-                CbPropertyVisu.Items.Add("Value")
-            Case 17
-                CbPropertyVisu.Items.Add("Value")
-                CbPropertyVisu.Items.Add("ConditionActuel")
-                CbPropertyVisu.Items.Add("TemperatureActuel")
-                CbPropertyVisu.Items.Add("HumiditeActuel")
-                CbPropertyVisu.Items.Add("VentActuel")
-                CbPropertyVisu.Items.Add("JourToday")
-                CbPropertyVisu.Items.Add("MinToday")
-                CbPropertyVisu.Items.Add("MaxToday")
-                CbPropertyVisu.Items.Add("ConditionToday")
-                CbPropertyVisu.Items.Add("JourJ1")
-                CbPropertyVisu.Items.Add("MinJ1")
-                CbPropertyVisu.Items.Add("MaxJ1")
-                CbPropertyVisu.Items.Add("ConditionJ1")
-                CbPropertyVisu.Items.Add("JourJ2")
-                CbPropertyVisu.Items.Add("MinJ2")
-                CbPropertyVisu.Items.Add("MaxJ2")
-                CbPropertyVisu.Items.Add("ConditionJ2")
-                CbPropertyVisu.Items.Add("JourJ3")
-                CbPropertyVisu.Items.Add("MinJ3")
-                CbPropertyVisu.Items.Add("MaxJ3")
-                CbPropertyVisu.Items.Add("ConditionJ3")
-            Case Else
-                CbPropertyVisu.Items.Add("Value")
-        End Select
-
+            CbPropertyVisu.Items.Clear()
+            Select Case AllDevices.Item(CbObjetVisu.SelectedIndex).Type
+                Case 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27
+                    CbPropertyVisu.Items.Add("Value")
+                Case 17
+                    CbPropertyVisu.Items.Add("Value")
+                    CbPropertyVisu.Items.Add("ConditionActuel")
+                    CbPropertyVisu.Items.Add("TemperatureActuel")
+                    CbPropertyVisu.Items.Add("HumiditeActuel")
+                    CbPropertyVisu.Items.Add("VentActuel")
+                    CbPropertyVisu.Items.Add("JourToday")
+                    CbPropertyVisu.Items.Add("MinToday")
+                    CbPropertyVisu.Items.Add("MaxToday")
+                    CbPropertyVisu.Items.Add("ConditionToday")
+                    CbPropertyVisu.Items.Add("JourJ1")
+                    CbPropertyVisu.Items.Add("MinJ1")
+                    CbPropertyVisu.Items.Add("MaxJ1")
+                    CbPropertyVisu.Items.Add("ConditionJ1")
+                    CbPropertyVisu.Items.Add("JourJ2")
+                    CbPropertyVisu.Items.Add("MinJ2")
+                    CbPropertyVisu.Items.Add("MaxJ2")
+                    CbPropertyVisu.Items.Add("ConditionJ2")
+                    CbPropertyVisu.Items.Add("JourJ3")
+                    CbPropertyVisu.Items.Add("MinJ3")
+                    CbPropertyVisu.Items.Add("MaxJ3")
+                    CbPropertyVisu.Items.Add("ConditionJ3")
+                Case Else
+                    CbPropertyVisu.Items.Add("Value")
+            End Select
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur CbObjetVisu_SelectionChanged: " & ex.Message, "Erreur", " CbObjetVisu_SelectionChanged")
+        End Try
     End Sub
 
     Private Sub CbAction_MouseLeftButtonDown(ByVal sender As System.Object, ByVal e As Object) Handles CbAction.MouseLeftButtonUp, CbAction.SelectionChanged
-        BtnOkAction.Visibility = Windows.Visibility.Collapsed
-        LblObjet.Visibility = Windows.Visibility.Collapsed
-        CbObjet.Visibility = Windows.Visibility.Collapsed
-        LblMethode.Visibility = Windows.Visibility.Collapsed
-        CbMethode.Visibility = Windows.Visibility.Collapsed
-        TxtValue.Visibility = Windows.Visibility.Collapsed
-        CbActionValue.Visibility = Windows.Visibility.Collapsed
-        LblActionValue.Visibility = Windows.Visibility.Collapsed
+        Try
+            BtnOkAction.Visibility = Windows.Visibility.Collapsed
+            LblObjet.Visibility = Windows.Visibility.Collapsed
+            CbObjet.Visibility = Windows.Visibility.Collapsed
+            LblMethode.Visibility = Windows.Visibility.Collapsed
+            CbMethode.Visibility = Windows.Visibility.Collapsed
+            TxtValue.Visibility = Windows.Visibility.Collapsed
+            CbActionValue.Visibility = Windows.Visibility.Collapsed
+            LblActionValue.Visibility = Windows.Visibility.Collapsed
 
-        Refresh_LstObjetAction()
+            Refresh_LstObjetAction()
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur CbAction_MouseLeftButtonDown: " & ex.Message, "Erreur", " CbAction_MouseLeftButtonDown")
+        End Try
     End Sub
 
     Private Sub Refresh_LstObjetAction()
-        Dim _list As New List(Of cWidget.Action)
+        Try
+            Dim _list As New List(Of cWidget.Action)
 
-        Select Case CbAction.SelectedIndex
-            Case 0
-                _list = Obj.Action_On_Click
-            Case 1
-                _list = Obj.Action_On_LongClick
-            Case 2
-                _list = Obj.Action_GestureGaucheDroite
-            Case 3
-                _list = Obj.Action_GestureDroiteGauche
-            Case 4
-                _list = Obj.Action_GestureHautBas
-            Case 5
-                _list = Obj.Action_GestureBasHaut
-        End Select
+            Select Case CbAction.SelectedIndex
+                Case 0
+                    _list = Obj.Action_On_Click
+                Case 1
+                    _list = Obj.Action_On_LongClick
+                Case 2
+                    _list = Obj.Action_GestureGaucheDroite
+                Case 3
+                    _list = Obj.Action_GestureDroiteGauche
+                Case 4
+                    _list = Obj.Action_GestureHautBas
+                Case 5
+                    _list = Obj.Action_GestureBasHaut
+            End Select
 
-        LstObjetActions.Items.Clear()
-        For Each Action As cWidget.Action In _list
-            Dim x As New ListBoxItem
-            x.Uid = Action.IdObject
+            LstObjetActions.Items.Clear()
+            For Each Action As cWidget.Action In _list
+                Dim x As New ListBoxItem
+                x.Uid = Action.IdObject
 
-            Dim _dev As TemplateDevice = myService.ReturnDeviceByID(IdSrv, Action.IdObject)
-            If _dev IsNot Nothing Then
-                x.Content = _dev.Name
-            Else
-                Dim _mac As Macro = myService.ReturnMacroById(IdSrv, Action.IdObject)
-                If _mac IsNot Nothing Then
-                    x.Content = _mac.Nom & "[Macro]"
+                Dim _dev As TemplateDevice = myService.ReturnDeviceByID(IdSrv, Action.IdObject)
+                If _dev IsNot Nothing Then
+                    x.Content = _dev.Name
                 Else
-                    Dim _zon As Zone = myService.ReturnZoneByID(IdSrv, Action.IdObject)
-                    If _zon IsNot Nothing Then
-                        x.Content = _zon.Name & "[Zone]"
+                    Dim _mac As Macro = myService.ReturnMacroById(IdSrv, Action.IdObject)
+                    If _mac IsNot Nothing Then
+                        x.Content = _mac.Nom & "[Macro]"
                     Else
-                        x.Content = "Commande"
+                        Dim _zon As Zone = myService.ReturnZoneByID(IdSrv, Action.IdObject)
+                        If _zon IsNot Nothing Then
+                            x.Content = _zon.Name & "[Zone]"
+                        Else
+                            x.Content = "Commande"
+                        End If
                     End If
                 End If
-            End If
-            LstObjetActions.Items.Add(x)
-        Next
-
+                LstObjetActions.Items.Add(x)
+            Next
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Refresh_LstObjetAction: " & ex.Message, "Erreur", " Refresh_LstObjetAction")
+        End Try
     End Sub
 
     Private Sub LstObjetActions_SelectionChanged(ByVal sender As Object, ByVal e As Object) Handles LstObjetActions.SelectionChanged, LstObjetActions.MouseLeftButtonUp
-        If LstObjetActions.SelectedIndex >= 0 Then
-            Dim _act As cWidget.Action = Nothing
+        Try
+            If LstObjetActions.SelectedIndex >= 0 Then
+                Dim _act As cWidget.Action = Nothing
 
-            LblActionValue.Visibility = Windows.Visibility.Collapsed
-            CbActionValue.Visibility = Windows.Visibility.Collapsed
-            TxtValue.Visibility = Windows.Visibility.Collapsed
-
-            Select Case CbAction.SelectedIndex
-                Case 0
-                    _act = Obj.Action_On_Click.Item(LstObjetActions.SelectedIndex)
-                Case 1
-                    _act = Obj.Action_On_LongClick.Item(LstObjetActions.SelectedIndex)
-                Case 2
-                    _act = Obj.Action_GestureGaucheDroite.Item(LstObjetActions.SelectedIndex)
-                Case 3
-                    _act = Obj.Action_GestureDroiteGauche.Item(LstObjetActions.SelectedIndex)
-                Case 4
-                    _act = Obj.Action_GestureHautBas.Item(LstObjetActions.SelectedIndex)
-                Case 5
-                    _act = Obj.Action_GestureBasHaut.Item(LstObjetActions.SelectedIndex)
-            End Select
-
-            Dim _idx As Integer = -1
-            For i As Integer = 0 To CbObjet.Items.Count - 1
-                If CbObjet.Items(i).uid = _act.IdObject Then
-                    _idx = i
-                    Exit For
-                End If
-            Next
-            CbObjet.SelectedIndex = _idx
-
-            _idx = -1
-            CbMethode.SelectedIndex = -1
-            For i As Integer = 0 To CbMethode.Items.Count - 1
-                If CbMethode.Items(i).Content = _act.Methode Then
-                    _idx = i
-                    Exit For
-                End If
-            Next
-            If _idx >= 0 Then
-                CbMethode.SelectedIndex = _idx
-            Else
-                CbMethode.Text = _act.Methode
-            End If
-
-
-            If _act.Value.ToString = Nothing Then
-                TxtValue.Visibility = Windows.Visibility.Collapsed
                 LblActionValue.Visibility = Windows.Visibility.Collapsed
-            Else
-                LblActionValue.Visibility = Windows.Visibility.Visible
-                TxtValue.Text = _act.Value.ToString
-                CbActionValue.Text = _act.Value.ToString
-                If CbMethode.Text <> "EnvoyerCommande" Then
-                    TxtValue.Visibility = Windows.Visibility.Visible
-                    CbActionValue.Visibility = Windows.Visibility.Collapsed
-                Else
-                    TxtValue.Visibility = Windows.Visibility.Collapsed
-                    CbActionValue.Visibility = Windows.Visibility.Visible
-                End If
-            End If
+                CbActionValue.Visibility = Windows.Visibility.Collapsed
+                TxtValue.Visibility = Windows.Visibility.Collapsed
 
-            BtnOkAction.Visibility = Windows.Visibility.Visible
-            LblMethode.Visibility = Windows.Visibility.Visible
-            CbMethode.Visibility = Windows.Visibility.Visible
-        End If
+                Select Case CbAction.SelectedIndex
+                    Case 0
+                        _act = Obj.Action_On_Click.Item(LstObjetActions.SelectedIndex)
+                    Case 1
+                        _act = Obj.Action_On_LongClick.Item(LstObjetActions.SelectedIndex)
+                    Case 2
+                        _act = Obj.Action_GestureGaucheDroite.Item(LstObjetActions.SelectedIndex)
+                    Case 3
+                        _act = Obj.Action_GestureDroiteGauche.Item(LstObjetActions.SelectedIndex)
+                    Case 4
+                        _act = Obj.Action_GestureHautBas.Item(LstObjetActions.SelectedIndex)
+                    Case 5
+                        _act = Obj.Action_GestureBasHaut.Item(LstObjetActions.SelectedIndex)
+                End Select
+
+                Dim _idx As Integer = -1
+                For i As Integer = 0 To CbObjet.Items.Count - 1
+                    If CbObjet.Items(i).uid = _act.IdObject Then
+                        _idx = i
+                        Exit For
+                    End If
+                Next
+                CbObjet.SelectedIndex = _idx
+
+                _idx = -1
+                CbMethode.SelectedIndex = -1
+                For i As Integer = 0 To CbMethode.Items.Count - 1
+                    If CbMethode.Items(i).Content = _act.Methode Then
+                        _idx = i
+                        Exit For
+                    End If
+                Next
+                If _idx >= 0 Then
+                    CbMethode.SelectedIndex = _idx
+                Else
+                    CbMethode.Text = _act.Methode
+                End If
+
+
+                If _act.Value.ToString = Nothing Then
+                    TxtValue.Visibility = Windows.Visibility.Collapsed
+                    LblActionValue.Visibility = Windows.Visibility.Collapsed
+                Else
+                    LblActionValue.Visibility = Windows.Visibility.Visible
+                    TxtValue.Text = _act.Value.ToString
+                    CbActionValue.Text = _act.Value.ToString
+                    If CbMethode.Text <> "EnvoyerCommande" Then
+                        TxtValue.Visibility = Windows.Visibility.Visible
+                        CbActionValue.Visibility = Windows.Visibility.Collapsed
+                    Else
+                        TxtValue.Visibility = Windows.Visibility.Collapsed
+                        CbActionValue.Visibility = Windows.Visibility.Visible
+                    End If
+                End If
+
+                BtnOkAction.Visibility = Windows.Visibility.Visible
+                LblMethode.Visibility = Windows.Visibility.Visible
+                CbMethode.Visibility = Windows.Visibility.Visible
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur LstObjetActions_SelectionChanged: " & ex.Message, "Erreur", " LstObjetActions_SelectionChanged")
+        End Try
     End Sub
 
     Private Sub BtnOkAction_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOkAction.Click
-        If String.IsNullOrEmpty(CbObjet.Text) Or CbObjet.SelectedIndex < 0 Then
-            MessageBox.Show("Veuillez sélectionner un Objet!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            Exit Sub
-        End If
-        If String.IsNullOrEmpty(CbMethode.Text) Or CbMethode.SelectedIndex < 0 Then
-            MessageBox.Show("Veuillez sélectionner une méthode!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            Exit Sub
-        End If
-        If TxtValue.Visibility = Windows.Visibility.Visible And String.IsNullOrEmpty(TxtValue.Text) Then
-            MessageBox.Show("Veuillez saisir une valeur!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            Exit Sub
-        End If
-
-        Dim _act As New cWidget.Action
-        With _act
-            .IdObject = CbObjet.SelectedItem.uid
-            .Methode = CbMethode.Text
-            If CbMethode.Text <> "EnvoyerCommande" Then
-                .Value = TxtValue.Text
-            Else
-                .Value = CbActionValue.Text
+        Try
+            If String.IsNullOrEmpty(CbObjet.Text) Or CbObjet.SelectedIndex < 0 Then
+                MessageBox.Show("Veuillez sélectionner un Objet!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
             End If
-        End With
+            If String.IsNullOrEmpty(CbMethode.Text) Or CbMethode.SelectedIndex < 0 Then
+                MessageBox.Show("Veuillez sélectionner une méthode!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            End If
+            If TxtValue.Visibility = Windows.Visibility.Visible And String.IsNullOrEmpty(TxtValue.Text) Then
+                MessageBox.Show("Veuillez saisir une valeur!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            End If
 
-        If _FlagNewAction = False Then
-            Select Case CbAction.SelectedIndex
-                Case 0
-                    Obj.Action_On_Click.Item(LstObjetActions.SelectedIndex) = _act
-                Case 1
-                    Obj.Action_On_LongClick.Item(LstObjetActions.SelectedIndex) = _act
-                Case (2)
-                    Obj.Action_GestureGaucheDroite.Item(LstObjetActions.SelectedIndex) = _act
-                Case 3
-                    Obj.Action_GestureDroiteGauche.Item(LstObjetActions.SelectedIndex) = _act
-                Case 4
-                    Obj.Action_GestureHautBas.Item(LstObjetActions.SelectedIndex) = _act
-                Case 5
-                    Obj.Action_GestureBasHaut.Item(LstObjetActions.SelectedIndex) = _act
-            End Select
-        Else
-            Select Case CbAction.SelectedIndex
-                Case 0
-                    Obj.Action_On_Click.Add(_act)
-                Case 1
-                    Obj.Action_On_LongClick.Add(_act)
-                Case (2)
-                    Obj.Action_GestureGaucheDroite.Add(_act)
-                Case 3
-                    Obj.Action_GestureDroiteGauche.Add(_act)
-                Case 4
-                    Obj.Action_GestureHautBas.Add(_act)
-                Case 5
-                    Obj.Action_GestureBasHaut.Add(_act)
-            End Select
-        End If
+            Dim _act As New cWidget.Action
+            With _act
+                .IdObject = CbObjet.SelectedItem.uid
+                .Methode = CbMethode.Text
+                If CbMethode.Text <> "EnvoyerCommande" Then
+                    .Value = TxtValue.Text
+                Else
+                    .Value = CbActionValue.Text
+                End If
+            End With
 
-        TxtValue.Text = Nothing
-        Refresh_LstObjetAction()
-        _FlagNewAction = False
-        LstObjetActions.SelectedIndex = -1
-        BtnOkAction.Visibility = Windows.Visibility.Collapsed
-        LblObjet.Visibility = Windows.Visibility.Collapsed
-        CbObjet.Visibility = Windows.Visibility.Collapsed
-        LblMethode.Visibility = Windows.Visibility.Collapsed
-        CbMethode.Visibility = Windows.Visibility.Collapsed
-        LblActionValue.Visibility = Windows.Visibility.Collapsed
-        TxtValue.Visibility = Windows.Visibility.Collapsed
-        CbActionValue.Visibility = Windows.Visibility.Collapsed
+            If _FlagNewAction = False Then
+                Select Case CbAction.SelectedIndex
+                    Case 0
+                        Obj.Action_On_Click.Item(LstObjetActions.SelectedIndex) = _act
+                    Case 1
+                        Obj.Action_On_LongClick.Item(LstObjetActions.SelectedIndex) = _act
+                    Case (2)
+                        Obj.Action_GestureGaucheDroite.Item(LstObjetActions.SelectedIndex) = _act
+                    Case 3
+                        Obj.Action_GestureDroiteGauche.Item(LstObjetActions.SelectedIndex) = _act
+                    Case 4
+                        Obj.Action_GestureHautBas.Item(LstObjetActions.SelectedIndex) = _act
+                    Case 5
+                        Obj.Action_GestureBasHaut.Item(LstObjetActions.SelectedIndex) = _act
+                End Select
+            Else
+                Select Case CbAction.SelectedIndex
+                    Case 0
+                        Obj.Action_On_Click.Add(_act)
+                    Case 1
+                        Obj.Action_On_LongClick.Add(_act)
+                    Case (2)
+                        Obj.Action_GestureGaucheDroite.Add(_act)
+                    Case 3
+                        Obj.Action_GestureDroiteGauche.Add(_act)
+                    Case 4
+                        Obj.Action_GestureHautBas.Add(_act)
+                    Case 5
+                        Obj.Action_GestureBasHaut.Add(_act)
+                End Select
+            End If
+
+            TxtValue.Text = Nothing
+            Refresh_LstObjetAction()
+            _FlagNewAction = False
+            LstObjetActions.SelectedIndex = -1
+            BtnOkAction.Visibility = Windows.Visibility.Collapsed
+            LblObjet.Visibility = Windows.Visibility.Collapsed
+            CbObjet.Visibility = Windows.Visibility.Collapsed
+            LblMethode.Visibility = Windows.Visibility.Collapsed
+            CbMethode.Visibility = Windows.Visibility.Collapsed
+            LblActionValue.Visibility = Windows.Visibility.Collapsed
+            TxtValue.Visibility = Windows.Visibility.Collapsed
+            CbActionValue.Visibility = Windows.Visibility.Collapsed
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur BtnOkAction_Click: " & ex.Message, "Erreur", " BtnOkAction_Click")
+        End Try
     End Sub
 
     Private Sub BtnNewAction_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewAction.Click
-        BtnOkAction.Visibility = Windows.Visibility.Visible
-        LblObjet.Visibility = Windows.Visibility.Visible
-        CbObjet.Visibility = Windows.Visibility.Visible
-        CbObjet.SelectedIndex = -1
-        TxtValue.Visibility = Windows.Visibility.Collapsed
-        LblActionValue.Visibility = Windows.Visibility.Collapsed
-        _FlagNewAction = True
+        Try
+            BtnOkAction.Visibility = Windows.Visibility.Visible
+            LblObjet.Visibility = Windows.Visibility.Visible
+            CbObjet.Visibility = Windows.Visibility.Visible
+            CbObjet.SelectedIndex = -1
+            TxtValue.Visibility = Windows.Visibility.Collapsed
+            LblActionValue.Visibility = Windows.Visibility.Collapsed
+            _FlagNewAction = True
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur BtnNewAction_Click: " & ex.Message, "Erreur", " BtnNewAction_Click")
+        End Try
     End Sub
 
     Private Sub BtnDelAction_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelAction.Click
-        If LstObjetActions.SelectedIndex < 0 Then
-            MessageBox.Show("Veuillez sélectionner une action à supprimer!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            Exit Sub
-        Else
-            Select Case CbAction.SelectedIndex
-                Case 0
-                    Obj.Action_On_Click.RemoveAt(LstObjetActions.SelectedIndex)
-                Case 1
-                    Obj.Action_On_LongClick.RemoveAt(LstObjetActions.SelectedIndex)
-                Case (2)
-                    Obj.Action_GestureGaucheDroite.RemoveAt(LstObjetActions.SelectedIndex)
-                Case 3
-                    Obj.Action_GestureDroiteGauche.RemoveAt(LstObjetActions.SelectedIndex)
-                Case 4
-                    Obj.Action_GestureHautBas.RemoveAt(LstObjetActions.SelectedIndex)
-                Case 5
-                    Obj.Action_GestureBasHaut.RemoveAt(LstObjetActions.SelectedIndex)
-            End Select
-            Refresh_LstObjetAction()
-        End If
+        Try
+            If LstObjetActions.SelectedIndex < 0 Then
+                MessageBox.Show("Veuillez sélectionner une action à supprimer!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            Else
+                Select Case CbAction.SelectedIndex
+                    Case 0
+                        Obj.Action_On_Click.RemoveAt(LstObjetActions.SelectedIndex)
+                    Case 1
+                        Obj.Action_On_LongClick.RemoveAt(LstObjetActions.SelectedIndex)
+                    Case (2)
+                        Obj.Action_GestureGaucheDroite.RemoveAt(LstObjetActions.SelectedIndex)
+                    Case 3
+                        Obj.Action_GestureDroiteGauche.RemoveAt(LstObjetActions.SelectedIndex)
+                    Case 4
+                        Obj.Action_GestureHautBas.RemoveAt(LstObjetActions.SelectedIndex)
+                    Case 5
+                        Obj.Action_GestureBasHaut.RemoveAt(LstObjetActions.SelectedIndex)
+                End Select
+                Refresh_LstObjetAction()
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur BtnDelAction_Click: " & ex.Message, "Erreur", " BtnDelAction_Click")
+        End Try
     End Sub
 
     Private Sub CbMethode_SelectionChanged(ByVal sender As Object, ByVal e As Object) Handles CbMethode.SelectionChanged, CbMethode.MouseLeftButtonUp, CbMethode.SourceUpdated
-        Dim _dev As TemplateDevice = myService.ReturnDeviceByID(IdSrv, CbObjet.SelectedItem.uid)
+        Try
+            Dim _dev As TemplateDevice = myService.ReturnDeviceByID(IdSrv, CbObjet.SelectedItem.uid)
 
-        If CbMethode.SelectedIndex < 0 Then Exit Sub
+            If CbMethode.SelectedIndex < 0 Then Exit Sub
 
-        TxtValue.Visibility = Windows.Visibility.Collapsed
-        LblActionValue.Visibility = Windows.Visibility.Collapsed
-        CbActionValue.Visibility = Windows.Visibility.Collapsed
+            TxtValue.Visibility = Windows.Visibility.Collapsed
+            LblActionValue.Visibility = Windows.Visibility.Collapsed
+            CbActionValue.Visibility = Windows.Visibility.Collapsed
 
-        If _dev IsNot Nothing Then
-            If _dev.DeviceAction.Item(CbMethode.SelectedIndex).Parametres.Count > 0 Then
-                LblActionValue.Visibility = Windows.Visibility.Visible
-                If _dev.Type <> Device.ListeDevices.MULTIMEDIA Then
-                    TxtValue.Visibility = Windows.Visibility.Visible
-                    CbActionValue.Visibility = Windows.Visibility.Collapsed
+            If _dev IsNot Nothing Then
+                If _dev.DeviceAction.Item(CbMethode.SelectedIndex).Parametres.Count > 0 Then
+                    LblActionValue.Visibility = Windows.Visibility.Visible
+                    If _dev.Type <> Device.ListeDevices.MULTIMEDIA Then
+                        TxtValue.Visibility = Windows.Visibility.Visible
+                        CbActionValue.Visibility = Windows.Visibility.Collapsed
+                    Else
+                        TxtValue.Visibility = Windows.Visibility.Collapsed
+                        CbActionValue.Visibility = Windows.Visibility.Visible
+                    End If
+                    'TxtValue.Visibility = Windows.Visibility.Visible
                 Else
-                    TxtValue.Visibility = Windows.Visibility.Collapsed
-                    CbActionValue.Visibility = Windows.Visibility.Visible
+                    TxtValue.Text = String.Empty
                 End If
-                'TxtValue.Visibility = Windows.Visibility.Visible
-            Else
-                TxtValue.Text = String.Empty
             End If
-        End If
 
-        If CType(CbMethode.SelectedItem, ComboBoxItem).Content = "Exécuter commande DOS" Or CType(CbMethode.SelectedItem, ComboBoxItem).Content = "Charger configuration" Then
-            LblActionValue.Visibility = Windows.Visibility.Visible
-            TxtValue.Visibility = Windows.Visibility.Visible
-        End If
-
+            If CType(CbMethode.SelectedItem, ComboBoxItem).Content = "Exécuter commande DOS" Or CType(CbMethode.SelectedItem, ComboBoxItem).Content = "Charger configuration" Then
+                LblActionValue.Visibility = Windows.Visibility.Visible
+                TxtValue.Visibility = Windows.Visibility.Visible
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur CbMethode_SelectionChanged: " & ex.Message, "Erreur", " CbMethode_SelectionChanged")
+        End Try
     End Sub
 
     Private Sub Refresh_LstObjetVisu()
@@ -969,31 +1039,39 @@ Public Class WWidgetProperty
     End Sub
 
     Private Sub BtnNewVisu_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnNewVisu.Click
-        BtnOkVisu.Visibility = Windows.Visibility.Visible
-        LblObjetVisu.Visibility = Windows.Visibility.Visible
-        CbObjetVisu.Visibility = Windows.Visibility.Visible
-        CbPropertyVisu.Visibility = Windows.Visibility.Visible
-        LblProperty.Visibility = Windows.Visibility.Visible
-        LblVisuValue.Visibility = Windows.Visibility.Visible
-        TxtValueVisu.Visibility = Windows.Visibility.Visible
-        LblPicture.Visibility = Windows.Visibility.Visible
-        ImgVisu.Visibility = Windows.Visibility.Visible
-        BtnImgVisu.Visibility = Windows.Visibility.Visible
-        LblOperateur.Visibility = Windows.Visibility.Visible
-        CbOperateurVisu.Visibility = Windows.Visibility.Visible
-        LblText.Visibility = Windows.Visibility.Visible
-        TxtText.Visibility = Windows.Visibility.Visible
-        _FlagNewVisu = True
+        Try
+            BtnOkVisu.Visibility = Windows.Visibility.Visible
+            LblObjetVisu.Visibility = Windows.Visibility.Visible
+            CbObjetVisu.Visibility = Windows.Visibility.Visible
+            CbPropertyVisu.Visibility = Windows.Visibility.Visible
+            LblProperty.Visibility = Windows.Visibility.Visible
+            LblVisuValue.Visibility = Windows.Visibility.Visible
+            TxtValueVisu.Visibility = Windows.Visibility.Visible
+            LblPicture.Visibility = Windows.Visibility.Visible
+            ImgVisu.Visibility = Windows.Visibility.Visible
+            BtnImgVisu.Visibility = Windows.Visibility.Visible
+            LblOperateur.Visibility = Windows.Visibility.Visible
+            CbOperateurVisu.Visibility = Windows.Visibility.Visible
+            LblText.Visibility = Windows.Visibility.Visible
+            TxtText.Visibility = Windows.Visibility.Visible
+            _FlagNewVisu = True
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur BtnNewVisu_Click: " & ex.Message, "Erreur", " BtnNewVisu_Click")
+        End Try
     End Sub
 
     Private Sub BtnDelVisu_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelVisu.Click
-        If LstObjetVisu.SelectedIndex < 0 Then
-            MessageBox.Show("Veuillez sélectionner un visuel à supprimer!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-            Exit Sub
-        Else
-            Obj.Visuel.RemoveAt(LstObjetVisu.SelectedIndex)
-            Refresh_LstObjetVisu()
-        End If
+        Try
+            If LstObjetVisu.SelectedIndex < 0 Then
+                MessageBox.Show("Veuillez sélectionner un visuel à supprimer!", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+                Exit Sub
+            Else
+                Obj.Visuel.RemoveAt(LstObjetVisu.SelectedIndex)
+                Refresh_LstObjetVisu()
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur BtnDelVisu_Click: " & ex.Message, "Erreur", " BtnDelVisu_Click")
+        End Try
     End Sub
 
     Private Sub BtnOkVisu_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOkVisu.Click
@@ -1092,20 +1170,24 @@ Public Class WWidgetProperty
     End Sub
 
     Private Sub BtnDelete_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnDelete.Click
-        For i As Integer = 0 To _ListElement.Count - 1
-            If _ListElement.Item(i).Uid = Obj.Uid And _ListElement.Item(i).ZoneId = Obj.ZoneId Then
-                _ListElement.RemoveAt(i)
-                For j As Integer = 0 To frmMere.Canvas1.Children.Count - 1
-                    If frmMere.Canvas1.Children.Item(j).Uid = Obj.Uid Then
-                        frmMere.Canvas1.Children.RemoveAt(j)
-                        Exit For
-                    End If
-                Next
-                Exit For
-            End If
-        Next
+        Try
+            For i As Integer = 0 To _ListElement.Count - 1
+                If _ListElement.Item(i).Uid = Obj.Uid And _ListElement.Item(i).ZoneId = Obj.ZoneId Then
+                    _ListElement.RemoveAt(i)
+                    For j As Integer = 0 To frmMere.Canvas1.Children.Count - 1
+                        If frmMere.Canvas1.Children.Item(j).Uid = Obj.Uid Then
+                            frmMere.Canvas1.Children.RemoveAt(j)
+                            Exit For
+                        End If
+                    Next
+                    Exit For
+                End If
+            Next
 
-        DialogResult = True
+            DialogResult = True
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur BtnDelete_Click: " & ex.Message, "Erreur", " BtnDelete_Click")
+        End Try
     End Sub
 
     Private Sub ImgPicture_MouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles ImgPicture.MouseDown
@@ -1129,8 +1211,12 @@ Public Class WWidgetProperty
     End Sub
 
     Private Sub BtnInitPict_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnInitPict.Click
-        ImgPicture.Source = Nothing
-        ImgPicture.Tag = "-defaut.png"
+        Try
+            ImgPicture.Source = Nothing
+            ImgPicture.Tag = "-defaut.png"
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur BtnInitPict_Click: " & ex.Message, "Erreur", " BtnInitPict_Click")
+        End Try
     End Sub
 
     Private Sub BtnInitPictLocal_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnInitPict_Local.Click
@@ -1184,12 +1270,16 @@ Public Class WWidgetProperty
     End Sub
 
     Private Sub HttpBtnNewBtn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles HttpBtnNewBtn.Click
-        HttpStkEditBtn.Visibility = Windows.Visibility.Visible
-        TxtHttpLabel.Text = ""
-        TxtHttpURL.Text = ""
-        TxtHttpWidth.Text = "20"
-        TxtHttpHeight.Text = "20"
-        _FlagNewBtnhttp = True
+        Try
+            HttpStkEditBtn.Visibility = Windows.Visibility.Visible
+            TxtHttpLabel.Text = ""
+            TxtHttpURL.Text = ""
+            TxtHttpWidth.Text = "20"
+            TxtHttpHeight.Text = "20"
+            _FlagNewBtnhttp = True
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur HttpBtnNewBtn_Click: " & ex.Message, "Erreur", " HttpBtnNewBtn_Click")
+        End Try
     End Sub
 
     Private Sub HttpDelBtn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles HttpDelBtn.Click
@@ -1298,25 +1388,37 @@ Public Class WWidgetProperty
     End Sub
 
     Private Sub TxtHttpWidth_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtHttpWidth.TextChanged
-        If IsNumeric(TxtHttpWidth.Text) = False Then
-            MessageBox.Show("La valeur doit être numérique", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End If
+        Try
+            If IsNumeric(TxtHttpWidth.Text) = False Then
+                MessageBox.Show("La valeur doit être numérique", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur TxtHttpWidth_TextChanged: " & ex.Message, "Erreur", " TxtHttpWidth_TextChanged")
+        End Try
     End Sub
 
     Private Sub TxtHttpHeight_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtHttpHeight.TextChanged
-        If IsNumeric(TxtHttpHeight.Text) = False Then
-            MessageBox.Show("La valeur doit être numérique", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End If
+        Try
+            If IsNumeric(TxtHttpHeight.Text) = False Then
+                MessageBox.Show("La valeur doit être numérique", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur TxtHttpHeight_TextChanged: " & ex.Message, "Erreur", " TxtHttpHeight_TextChanged")
+        End Try
     End Sub
 
     Private Sub TxtRefresh_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtRefresh.TextChanged
-        If String.IsNullOrEmpty(TxtRefresh.Text) Then
-            e.Handled = True
-            MessageBox.Show("La valeur doit être numérique", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        ElseIf 0 < CInt(TxtRefresh.Text) > 3600 Then
-            e.Handled = True
-            MessageBox.Show("La valeur doit être comprise entre 0 et 3600", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
-        End If
+        Try
+            If String.IsNullOrEmpty(TxtRefresh.Text) Then
+                e.Handled = True
+                MessageBox.Show("La valeur doit être numérique", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            ElseIf 0 < CInt(TxtRefresh.Text) > 3600 Then
+                e.Handled = True
+                MessageBox.Show("La valeur doit être comprise entre 0 et 3600", "Erreur", MessageBoxButtons.OK, MessageBoxIcon.Exclamation)
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur TxtRefresh_TextChanged: " & ex.Message, "Erreur", " TxtRefresh_TextChanged")
+        End Try
     End Sub
 
 #End Region
@@ -1448,64 +1550,101 @@ Public Class WWidgetProperty
     End Sub
 
     Private Sub ColorPicker3_SelectColorChange(ByVal sender As System.Windows.Media.Brush) Handles ColorPicker3.SelectColorChange
-        lblColorEtiquette.Background = ColorPicker3.SelectedColor
+        Try
+            lblColorEtiquette.Background = ColorPicker3.SelectedColor
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur ColorPicker3_SelectColorChange: " & ex.Message, "Erreur", " ColorPicker3_SelectColorChange")
+        End Try
+
     End Sub
 
     Private Sub ColorPicker1_SelectColorChange(ByVal sender As System.Windows.Media.Brush) Handles ColorPicker1.SelectColorChange
-        ' L'utilisation de couleurs nommées (p.ex. colors.antiqueblue) rend impossible l'attribution de la transparence
-        ' par affectation de la valeur alpha dans les valeurs ARGB.
-        ' Chaque fois que l'utilisateur choisit une couleur nommée dans la liste, on la convertir en valeur ARGB
-        Dim mycolor As System.Windows.Media.Color
-        Dim R, G, B As Byte
-        R = CByte("&H" & ColorPicker1.SelectedColor.ToString.Substring(3, 2))
-        G = CByte("&H" & ColorPicker1.SelectedColor.ToString.Substring(5, 2))
-        B = CByte("&H" & ColorPicker1.SelectedColor.ToString.Substring(7, 2))
-        mycolor = System.Windows.Media.Color.FromArgb(Slider1.Value, R, G, B)
-        Dim mybrush = New SolidColorBrush(mycolor)
-        lblColor.Background = mybrush
+        Try
+            ' L'utilisation de couleurs nommées (p.ex. colors.antiqueblue) rend impossible l'attribution de la transparence
+            ' par affectation de la valeur alpha dans les valeurs ARGB.
+            ' Chaque fois que l'utilisateur choisit une couleur nommée dans la liste, on la convertir en valeur ARGB
+            Dim mycolor As System.Windows.Media.Color
+            Dim R, G, B As Byte
+            R = CByte("&H" & ColorPicker1.SelectedColor.ToString.Substring(3, 2))
+            G = CByte("&H" & ColorPicker1.SelectedColor.ToString.Substring(5, 2))
+            B = CByte("&H" & ColorPicker1.SelectedColor.ToString.Substring(7, 2))
+            mycolor = System.Windows.Media.Color.FromArgb(Slider1.Value, R, G, B)
+            Dim mybrush = New SolidColorBrush(mycolor)
+            lblColor.Background = mybrush
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur ColorPicker1_SelectColorChange: " & ex.Message, "Erreur", " ColorPicker1_SelectColorChange")
+        End Try
     End Sub
 
     Private Sub ColorPicker2_SelectColorChange(ByVal sender As System.Windows.Media.Brush) Handles ColorPicker2.SelectColorChange
-        lblColorStatus.Background = ColorPicker2.SelectedColor
+        Try
+            lblColorStatus.Background = ColorPicker2.SelectedColor
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur ColorPicker2_SelectColorChange: " & ex.Message, "Erreur", " ColorPicker2_SelectColorChange")
+        End Try
     End Sub
 
     Private Sub ColorPicker4_SelectColorChange(ByVal sender As System.Windows.Media.Brush) Handles ColorPicker4.SelectColorChange
-        lblColorBorder.Background = ColorPicker4.SelectedColor
+        Try
+            lblColorBorder.Background = ColorPicker4.SelectedColor
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur ColorPicker4_SelectColorChange: " & ex.Message, "Erreur", " ColorPicker4_SelectColorChange")
+        End Try
     End Sub
 
 
     Private Sub Slider1_ValueChanged(sender As Object, e As RoutedPropertyChangedEventArgs(Of Double)) Handles Slider1.ValueChanged
-        Dim mycolor As System.Windows.Media.Color
-        Dim R, G, B As Byte
-        R = CByte("&H" & lblColor.Background.ToString.Substring(3, 2))
-        G = CByte("&H" & lblColor.Background.ToString.Substring(5, 2))
-        B = CByte("&H" & lblColor.Background.ToString.Substring(7, 2))
-        mycolor = System.Windows.Media.Color.FromArgb(Slider1.Value, R, G, B)
-        Dim mybrush = New SolidColorBrush(mycolor)
-        lblColor.Background = mybrush
+        Try
+            Dim mycolor As System.Windows.Media.Color
+            Dim R, G, B As Byte
+            R = CByte("&H" & lblColor.Background.ToString.Substring(3, 2))
+            G = CByte("&H" & lblColor.Background.ToString.Substring(5, 2))
+            B = CByte("&H" & lblColor.Background.ToString.Substring(7, 2))
+            mycolor = System.Windows.Media.Color.FromArgb(Slider1.Value, R, G, B)
+            Dim mybrush = New SolidColorBrush(mycolor)
+            lblColor.Background = mybrush
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Slider1_ValueChanged: " & ex.Message, "Erreur", " Slider1_ValueChanged")
+        End Try
     End Sub
 
 #Region "KeyPad"
     Private Sub BtnClosePropertyKeypad_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnClosePropertyKeypad.Click
-        GrpPropertyKeyPad.Visibility = Windows.Visibility.Collapsed
+        Try
+            GrpPropertyKeyPad.Visibility = Windows.Visibility.Collapsed
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur BtnClosePropertyKeypad_Click: " & ex.Message, "Erreur", " BtnClosePropertyKeypad_Click")
+        End Try
     End Sub
 #End Region
 
     Private Sub cbBalise_SelectionChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles cbBalise.SelectionChanged
-        TxtEtiq.Text = "<" & cbBalise.SelectedItem.Tag & ">"
+        Try
+            TxtEtiq.Text = "<" & cbBalise.SelectedItem.Tag & ">"
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur cbBalise_SelectionChanged: " & ex.Message, "Erreur", " cbBalise_SelectionChanged")
+        End Try
     End Sub
 
     Private Sub TxtBorderSize_TextChanged(sender As System.Object, e As System.Windows.Controls.TextChangedEventArgs) Handles TxtBorderSize.TextChanged
-        If IsNumeric(TxtBorderSize.Text) = False Then
-            MessageBox.Show("Veuillez saisir une valeur numérique!", "Erreur", MessageBoxButtons.OK)
-            TxtBorderSize.Text = 1
-        End If
+        Try
+            If IsNumeric(TxtBorderSize.Text) = False Then
+                MessageBox.Show("Veuillez saisir une valeur numérique!", "Erreur", MessageBoxButtons.OK)
+                TxtBorderSize.Text = 1
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur TxtBorderSize_TextChanged: " & ex.Message, "Erreur", " TxtBorderSize_TextChanged")
+        End Try
     End Sub
 
     Private Sub TxtBorderAngle_TextChanged(sender As System.Object, e As System.Windows.Controls.TextChangedEventArgs) Handles TxtBorderAngle.TextChanged
-        If IsNumeric(TxtBorderAngle.Text) = False Then
-            MessageBox.Show("Veuillez saisir une valeur numérique!", "Erreur", MessageBoxButtons.OK)
-            TxtBorderAngle.Text = 6
-        End If
+        Try
+            If IsNumeric(TxtBorderAngle.Text) = False Then
+                MessageBox.Show("Veuillez saisir une valeur numérique!", "Erreur", MessageBoxButtons.OK)
+                TxtBorderAngle.Text = 6
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur TxtBorderAngle_TextChanged: " & ex.Message, "Erreur", " TxtBorderAngle_TextChanged")
+        End Try
     End Sub
 End Class

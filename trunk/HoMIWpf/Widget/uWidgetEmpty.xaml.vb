@@ -198,163 +198,167 @@ Public Class uWidgetEmpty
             Return _Id
         End Get
         Set(ByVal value As String)
-            _Id = value
-            If _Show = False Then Exit Property
+            Try
+                _Id = value
+                If _Show = False Then Exit Property
 
-            If IsConnect = True And String.IsNullOrEmpty(value) = False Then
-                If frmMere.MaJWidgetFromServer Then
-                    _dev = myService.ReturnDeviceByID(IdSrv, _Id)
-                Else
-                    _dev = ReturnDeviceById(_Id)
-                End If
-                _macro = myService.ReturnMacroById(IdSrv, _Id)
-                _zone = myService.ReturnZoneByID(IdSrv, _Id)
-
-                IsEmpty = True
-                StkPopup.Children.Clear()
-
-                If _dev IsNot Nothing Then
-                    If MaJEtiquetteFromServeur Then Etiquette = _dev.Name
-                    Picture = _dev.Picture
-                    Dim _ShowValue As Boolean = True
-
-                    Select Case _dev.Type
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL
-                            Dim x As New uOnOff
-                            x.ContentOn = "ON"
-                            x.ContentOff = "OFF"
-                            AddHandler x.ClickOn, AddressOf ClickOn
-                            AddHandler x.ClickOff, AddressOf ClickOff
-                            StkPopup.Children.Add(x)
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.AUDIO
-                            Dim x As New uMedia
-                            x.IsLocal = False
-                            x.ShowVideo = False
-                            x.ShowTag = False
-                            x.ShowBtnAvance = False
-                            x.ShowBtnRecul = False
-                            x.ShowSliderTime = False
-                            x.ShowBtnVolume = False
-                            AddHandler x.Play, AddressOf AudioPlay
-                            AddHandler x.Pause, AddressOf AudioPause
-                            AddHandler x.Stop, AddressOf AudioStop
-                            AddHandler x.Avance, AddressOf AudioAvance
-                            AddHandler x.Recul, AddressOf AudioRecul
-                            AddHandler x.NextChap, AddressOf AudioNextChap
-                            AddHandler x.PreviousChap, AddressOf AudioPreviousChap
-                            AddHandler x.Mute, AddressOf AudioMute
-                            AddHandler x.VolumeUp, AddressOf AudioVolumeUp
-                            AddHandler x.VolumeDown, AddressOf AudioVolumeDown
-                            AddHandler x.SetFile, AddressOf AudioSetFile
-
-                            StkPopup.Children.Add(x)
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.BAROMETRE
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.BATTERIE
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.COMPTEUR
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.CONTACT
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.DETECTEUR
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.DIRECTIONVENT
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.ENERGIEINSTANTANEE
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.ENERGIETOTALE
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUESTRING
-                            Dim x As New uEditValue
-                            AddHandler x.ChangeValue, AddressOf ChangeValue
-                            StkPopup.Children.Add(x)
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEBOOLEEN
-                            Dim x As New uEditValue
-                            AddHandler x.ChangeValue, AddressOf ChangeValue
-                            StkPopup.Children.Add(x)
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE
-                            Dim x As New uEditValue
-                            AddHandler x.ChangeValue, AddressOf ChangeValue
-                            StkPopup.Children.Add(x)
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE
-
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.LAMPE
-                            Dim x As New uOnOff
-                            x.ContentOn = "ON"
-                            x.ContentOff = "OFF"
-                            AddHandler x.ClickOn, AddressOf ClickOn
-                            AddHandler x.ClickOff, AddressOf ClickOff
-                            StkPopup.Children.Add(x)
-                            Dim x2 As New uVariateur
-                            AddHandler x2.ValueChange, AddressOf ValueChange
-                            StkPopup.Children.Add(x2)
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.METEO
-                            StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
-                            StkTool.Visibility = Windows.Visibility.Visible
-
-                            _METEO = New uWMeteo
-                            IDMeteo = _Id
-                            StkTool.Children.Add(_METEO)
-
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA
-                            ShowStatus = False
-                            _ShowValue = False
-
-                            '    Dim x As New uTelecommande(_Id)
-                            '    AddHandler x.SendCommand, AddressOf SendCommand
-                            '    StkPopup.Children.Add(x)
-                            'Case HoMIDom.HoMIDom.Device.ListeDevices.PLUIECOURANT
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.PLUIETOTAL
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.SWITCH
-                            Dim x As New uOnOff
-                            x.ContentOn = "ON"
-                            x.ContentOff = "OFF"
-                            AddHandler x.ClickOn, AddressOf ClickOn
-                            AddHandler x.ClickOff, AddressOf ClickOff
-                            StkPopup.Children.Add(x)
-
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.TELECOMMANDE
-                            _ShowValue = False
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE
-                            Dim x As New uEditValue
-                            AddHandler x.ChangeValue, AddressOf ChangeValue
-                            StkPopup.Children.Add(x)
-
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.VITESSEVENT
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.VOLET
-                            Dim x As New uOnOff
-                            x.ContentOn = "OUVRIR"
-                            x.ContentOff = "FERMER"
-                            AddHandler x.ClickOn, AddressOf ClickOn
-                            AddHandler x.ClickOff, AddressOf ClickOff
-                            StkPopup.Children.Add(x)
-                            Dim x2 As New uVariateur
-                            AddHandler x2.ValueChange, AddressOf ValueChange
-                            StkPopup.Children.Add(x2)
-
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.UV
-                        Case HoMIDom.HoMIDom.Device.ListeDevices.FREEBOX
-                            _ShowValue = False
-                            ShowStatus = False
-                            Dim x As New uFreeBox
-                            AddHandler x.ButtonClick, AddressOf FreeTouch
-                            StkPopup.Children.Add(x)
-                        Case Else
-
-                    End Select
-
-                    If _ShowValue Then
-                        LblStatus.Content = _dev.Value & _dev.Unit
-                        _CurrentValue = _dev.Value
-                        LoadPicture()
+                If IsConnect = True And String.IsNullOrEmpty(value) = False Then
+                    If frmMere.MaJWidgetFromServer Then
+                        _dev = myService.ReturnDeviceByID(IdSrv, _Id)
+                    Else
+                        _dev = ReturnDeviceById(_Id)
                     End If
-                ElseIf _macro IsNot Nothing Then
-                    If MaJEtiquetteFromServeur Then Etiquette = _macro.Nom
-                    ShowStatus = False
-                    IsEmpty = False
-                ElseIf _zone IsNot Nothing Then
-                    If MaJEtiquetteFromServeur Then Etiquette = _zone.Name
-                    Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Icon))
-                    ShowStatus = False
-                    _Picture = _zone.Icon
-                    IsEmpty = False
-                End If
-            End If
+                    _macro = myService.ReturnMacroById(IdSrv, _Id)
+                    _zone = myService.ReturnZoneByID(IdSrv, _Id)
 
-            TraiteRefresh()
+                    IsEmpty = True
+                    StkPopup.Children.Clear()
+
+                    If _dev IsNot Nothing Then
+                        If MaJEtiquetteFromServeur Then Etiquette = _dev.Name
+                        Picture = _dev.Picture
+                        Dim _ShowValue As Boolean = True
+
+                        Select Case _dev.Type
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL
+                                Dim x As New uOnOff
+                                x.ContentOn = "ON"
+                                x.ContentOff = "OFF"
+                                AddHandler x.ClickOn, AddressOf ClickOn
+                                AddHandler x.ClickOff, AddressOf ClickOff
+                                StkPopup.Children.Add(x)
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.AUDIO
+                                Dim x As New uMedia
+                                x.IsLocal = False
+                                x.ShowVideo = False
+                                x.ShowTag = False
+                                x.ShowBtnAvance = False
+                                x.ShowBtnRecul = False
+                                x.ShowSliderTime = False
+                                x.ShowBtnVolume = False
+                                AddHandler x.Play, AddressOf AudioPlay
+                                AddHandler x.Pause, AddressOf AudioPause
+                                AddHandler x.Stop, AddressOf AudioStop
+                                AddHandler x.Avance, AddressOf AudioAvance
+                                AddHandler x.Recul, AddressOf AudioRecul
+                                AddHandler x.NextChap, AddressOf AudioNextChap
+                                AddHandler x.PreviousChap, AddressOf AudioPreviousChap
+                                AddHandler x.Mute, AddressOf AudioMute
+                                AddHandler x.VolumeUp, AddressOf AudioVolumeUp
+                                AddHandler x.VolumeDown, AddressOf AudioVolumeDown
+                                AddHandler x.SetFile, AddressOf AudioSetFile
+
+                                StkPopup.Children.Add(x)
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.BAROMETRE
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.BATTERIE
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.COMPTEUR
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.CONTACT
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.DETECTEUR
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.DIRECTIONVENT
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.ENERGIEINSTANTANEE
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.ENERGIETOTALE
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUESTRING
+                                Dim x As New uEditValue
+                                AddHandler x.ChangeValue, AddressOf ChangeValue
+                                StkPopup.Children.Add(x)
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEBOOLEEN
+                                Dim x As New uEditValue
+                                AddHandler x.ChangeValue, AddressOf ChangeValue
+                                StkPopup.Children.Add(x)
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE
+                                Dim x As New uEditValue
+                                AddHandler x.ChangeValue, AddressOf ChangeValue
+                                StkPopup.Children.Add(x)
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.HUMIDITE
+
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.LAMPE
+                                Dim x As New uOnOff
+                                x.ContentOn = "ON"
+                                x.ContentOff = "OFF"
+                                AddHandler x.ClickOn, AddressOf ClickOn
+                                AddHandler x.ClickOff, AddressOf ClickOff
+                                StkPopup.Children.Add(x)
+                                Dim x2 As New uVariateur
+                                AddHandler x2.ValueChange, AddressOf ValueChange
+                                StkPopup.Children.Add(x2)
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.METEO
+                                StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
+                                StkTool.Visibility = Windows.Visibility.Visible
+
+                                _METEO = New uWMeteo
+                                IDMeteo = _Id
+                                StkTool.Children.Add(_METEO)
+
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.MULTIMEDIA
+                                ShowStatus = False
+                                _ShowValue = False
+
+                                '    Dim x As New uTelecommande(_Id)
+                                '    AddHandler x.SendCommand, AddressOf SendCommand
+                                '    StkPopup.Children.Add(x)
+                                'Case HoMIDom.HoMIDom.Device.ListeDevices.PLUIECOURANT
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.PLUIETOTAL
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.SWITCH
+                                Dim x As New uOnOff
+                                x.ContentOn = "ON"
+                                x.ContentOff = "OFF"
+                                AddHandler x.ClickOn, AddressOf ClickOn
+                                AddHandler x.ClickOff, AddressOf ClickOff
+                                StkPopup.Children.Add(x)
+
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.TELECOMMANDE
+                                _ShowValue = False
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURE
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE
+                                Dim x As New uEditValue
+                                AddHandler x.ChangeValue, AddressOf ChangeValue
+                                StkPopup.Children.Add(x)
+
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.VITESSEVENT
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.VOLET
+                                Dim x As New uOnOff
+                                x.ContentOn = "OUVRIR"
+                                x.ContentOff = "FERMER"
+                                AddHandler x.ClickOn, AddressOf ClickOn
+                                AddHandler x.ClickOff, AddressOf ClickOff
+                                StkPopup.Children.Add(x)
+                                Dim x2 As New uVariateur
+                                AddHandler x2.ValueChange, AddressOf ValueChange
+                                StkPopup.Children.Add(x2)
+
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.UV
+                            Case HoMIDom.HoMIDom.Device.ListeDevices.FREEBOX
+                                _ShowValue = False
+                                ShowStatus = False
+                                Dim x As New uFreeBox
+                                AddHandler x.ButtonClick, AddressOf FreeTouch
+                                StkPopup.Children.Add(x)
+                            Case Else
+
+                        End Select
+
+                        If _ShowValue Then
+                            LblStatus.Content = _dev.Value & _dev.Unit
+                            _CurrentValue = _dev.Value
+                            LoadPicture()
+                        End If
+                    ElseIf _macro IsNot Nothing Then
+                        If MaJEtiquetteFromServeur Then Etiquette = _macro.Nom
+                        ShowStatus = False
+                        IsEmpty = False
+                    ElseIf _zone IsNot Nothing Then
+                        If MaJEtiquetteFromServeur Then Etiquette = _zone.Name
+                        Image.Source = ConvertArrayToImage(myService.GetByteFromImage(_zone.Icon))
+                        ShowStatus = False
+                        _Picture = _zone.Icon
+                        IsEmpty = False
+                    End If
+                End If
+
+                TraiteRefresh()
+            Catch ex As Exception
+                AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.id.set: " & ex.Message, "Erreur", " uWidgetEmpty.id.set")
+            End Try
         End Set
     End Property
 
@@ -1344,7 +1348,11 @@ Public Class uWidgetEmpty
     End Sub
 
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
-        If _FlagBlock = False Then TraiteRefresh()
+        Try
+            If _FlagBlock = False Then TraiteRefresh()
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur dispatcherTimer_Tick: " & ex.Message, "Erreur", " dispatcherTimer_Tick")
+        End Try
     End Sub
 
     Private Sub uWidgetEmpty_Loaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Loaded
@@ -1514,8 +1522,12 @@ Public Class uWidgetEmpty
     End Sub
 
     Private Sub Image_PreviewMouseDown(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles Me.PreviewMouseDown
-        _Down = Now
-        _oldposition = e.GetPosition(Me)
+        Try
+            _Down = Now
+            _oldposition = e.GetPosition(Me)
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Image_PreviewMouseDown: " & ex.Message, "Erreur", " Image_PreviewMouseDown")
+        End Try
     End Sub
 
 
@@ -2354,11 +2366,15 @@ Public Class uWidgetEmpty
     End Sub
 
     Private Sub KeyPadOK(ByVal Value As Integer)
-        If IsConnect Then
-            If String.IsNullOrEmpty(_IDKeyPad) = False Then
-                myService.ChangeValueOfDevice(IdSrv, _IDKeyPad, Value)
+        Try
+            If IsConnect Then
+                If String.IsNullOrEmpty(_IDKeyPad) = False Then
+                    myService.ChangeValueOfDevice(IdSrv, _IDKeyPad, Value)
+                End If
             End If
-        End If
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur KeyPadOK: " & ex.Message, "Erreur", " KeyPadOK")
+        End Try
     End Sub
 
     Private Sub uWidgetEmpty_Unloaded(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles Me.Unloaded
@@ -2567,26 +2583,32 @@ Public Class uWidgetEmpty
     End Sub
 
     Private Sub ProcessCommand(Command As String, Argument As String)
-
-        Select Case Command
-            Case "Exécuter commande DOS"
-                Process.Start(Argument)
-            Case "Quitter HoMIWpF"
-                'frmMere.SaveConfig(frmMere.ConfigFile)
-                Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermture de l'application")
-                End
-            Case "Charger configuration"
-                frmMere.ConfigFile = Argument
-                frmMere.LoadConfig(Argument)
-                frmMere.Canvas1.Children.Clear()
-                frmMere.LoadZones()
-                frmMere.ScrollViewer1.Content = frmMere.imgStackPnl
-        End Select
-
+        Try
+            Select Case Command
+                Case "Exécuter commande DOS"
+                    Process.Start(Argument)
+                Case "Quitter HoMIWpF"
+                    'frmMere.SaveConfig(frmMere.ConfigFile)
+                    Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermture de l'application")
+                    End
+                Case "Charger configuration"
+                    frmMere.ConfigFile = Argument
+                    frmMere.LoadConfig(Argument)
+                    frmMere.Canvas1.Children.Clear()
+                    frmMere.LoadZones()
+                    frmMere.ScrollViewer1.Content = frmMere.imgStackPnl
+            End Select
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur ProcessCommand: " & ex.Message, "Erreur", " ProcessCommand")
+        End Try
     End Sub
 
     Private Sub Popup1_MouseLeave(ByVal sender As System.Object, ByVal e As System.Windows.Input.MouseEventArgs) Handles Popup1.MouseLeave
-        Popup1.IsOpen = False
+        Try
+            Popup1.IsOpen = False
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Popup1_MouseLeave: " & ex.Message, "Erreur", " Popup1_MouseLeave")
+        End Try
     End Sub
 
 
