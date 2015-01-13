@@ -6,6 +6,7 @@ Imports System.Xml.XPath
 
 Public Class CurrentCostUpdate
     Public ValidUpdate As Boolean = False
+    Public Historique As Boolean = False
 
     Public Time As String
     Public Channel1Watts As Integer
@@ -33,43 +34,48 @@ Public Class CurrentCostUpdate
             doc = New XPathDocument(myStringReader)
             xmlNav = doc.CreateNavigator()
 
-            ' time
-            xmlNI = xmlNav.Select("/msg/time")
-            If xmlNI.Count = 1 Then
-                xmlNI.MoveNext()
-                Time = xmlNI.Current.Value
+            'Test si historique on ne prend pas en compte les valeurs
+            xmlNI = xmlNav.Select("/msg/hist")
+            If xmlNI.Count >= 1 Then
+                Historique = True
+            Else
+                ' time
+                xmlNI = xmlNav.Select("/msg/time")
+                If xmlNI.Count = 1 Then
+                    xmlNI.MoveNext()
+                    Time = xmlNI.Current.Value
+                End If
+
+                ' tmpr
+                xmlNI = xmlNav.Select("/msg/tmpr")
+                If xmlNI.Count = 1 Then
+                    xmlNI.MoveNext()
+                    Temperature = xmlNI.Current.Value
+                End If
+
+                ' ch1
+                xmlNI = xmlNav.Select("/msg/ch1/watts")
+                If xmlNI.Count = 1 Then
+                    xmlNI.MoveNext()
+                    Channel1Watts = xmlNI.Current.Value
+                End If
+
+                ' ch2
+                xmlNI = xmlNav.Select("/msg/ch2/watts")
+                If xmlNI.Count = 1 Then
+                    xmlNI.MoveNext()
+                    Channel2Watts = xmlNI.Current.Value
+                End If
+
+                ' ch3
+                xmlNI = xmlNav.Select("/msg/ch3/watts")
+                If xmlNI.Count = 1 Then
+                    xmlNI.MoveNext()
+                    Channel3Watts = xmlNI.Current.Value
+                End If
+                ValidUpdate = True
             End If
-
-            ' tmpr
-            xmlNI = xmlNav.Select("/msg/tmpr")
-            If xmlNI.Count = 1 Then
-                xmlNI.MoveNext()
-                Temperature = xmlNI.Current.Value
-            End If
-
-            ' ch1
-            xmlNI = xmlNav.Select("/msg/ch1/watts")
-            If xmlNI.Count = 1 Then
-                xmlNI.MoveNext()
-                Channel1Watts = xmlNI.Current.Value
-            End If
-
-            ' ch2
-            xmlNI = xmlNav.Select("/msg/ch2/watts")
-            If xmlNI.Count = 1 Then
-                xmlNI.MoveNext()
-                Channel2Watts = xmlNI.Current.Value
-            End If
-
-            ' ch3
-            xmlNI = xmlNav.Select("/msg/ch3/watts")
-            If xmlNI.Count = 1 Then
-                xmlNI.MoveNext()
-                Channel3Watts = xmlNI.Current.Value
-            End If
-
-
-            ValidUpdate = True
+            
         Catch exc As XmlException
             ValidUpdate = False
         End Try
