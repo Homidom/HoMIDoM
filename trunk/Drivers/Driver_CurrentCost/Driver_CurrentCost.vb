@@ -584,20 +584,25 @@ Public Class Driver_CurrentCost
 
                 Dim update As New CurrentCostUpdate(line)
 
-                If update.ValidUpdate Then
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "tmpr: " & update.Temperature)
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "time: " & update.Time)
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "ch1: " & update.Channel1Watts)
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "ch2: " & update.Channel2Watts)
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "ch3: " & update.Channel3Watts)
-                    traitement("TEMPERATURE", "tmpr", update.Temperature)
-                    traitement("ENERGIEINSTANTANEE", "ch1", update.Channel1Watts)
-                    traitement("ENERGIEINSTANTANEE", "ch2", update.Channel2Watts)
-                    traitement("ENERGIEINSTANTANEE", "ch3", update.Channel3Watts)
-                    traitement("GENERIQUESTRING", "time", update.Time)
+                If update.Historique Then
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "Historique reçu, pas de valeur utilisable")
                 Else
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "Update non réussi")
+                    If update.ValidUpdate Then
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "tmpr: " & update.Temperature)
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "time: " & update.Time)
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "ch1: " & update.Channel1Watts)
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "ch2: " & update.Channel2Watts)
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "ch3: " & update.Channel3Watts)
+                        traitement("TEMPERATURE", "tmpr", update.Temperature)
+                        traitement("ENERGIEINSTANTANEE", "ch1", update.Channel1Watts)
+                        traitement("ENERGIEINSTANTANEE", "ch2", update.Channel2Watts)
+                        traitement("ENERGIEINSTANTANEE", "ch3", update.Channel3Watts)
+                        traitement("GENERIQUESTRING", "time", update.Time)
+                    Else
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " DataReceived", "Valeurs reçues non valide")
+                    End If
                 End If
+                
             End If
         Catch Ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Datareceived", "Erreur:" & Ex.ToString)
