@@ -121,9 +121,9 @@ Namespace HoMIDom
         <NonSerialized()> Shared _TarifNuit As Double = 0
 
         'Gestion des threads
-        Private Shared lock_table_TimerSecTickthread As New Object
-        Public Shared table_TimerSecTickthread As New DataTable
-
+        'Private Shared lock_table_TimerSecTickthread As New Object
+        ' Public Shared table_TimerSecTickthread As New DataTable
+        <NonSerialized()> Private ListThread As New List(Of Thread)
 #End Region
 
 #Region "Event"
@@ -173,7 +173,9 @@ Namespace HoMIDom
                 valeurString = Parametres.ToString()
             End If
 
-            'Gestion Energies
+            '------------------------------------------------------------------------------------------------
+            '   ENERGIE
+            '------------------------------------------------------------------------------------------------
             If GererEnergie Then
 
                 Try
@@ -313,137 +315,351 @@ Namespace HoMIDom
             Dim ladate As DateTime = Now 'on récupére la date/heure
 
             Try
-
-                'verif si pas déjà trop de thread
-                If (table_TimerSecTickthread.Rows.Count < 5) Then
-                    'ajout a la table des thread
-                    Try
-                        Dim newRow As DataRow = Nothing
-                        newRow = table_TimerSecTickthread.NewRow()
-                        newRow.Item("name") = "TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss")
-                        newRow.Item("comment") = ""
-                        newRow.Item("datetime") = ladate.ToString("yyyy-MM-dd HH:mm:ss")
-                        newRow.Item("thread") = ""
-                        SyncLock lock_table_TimerSecTickthread
-                            table_TimerSecTickthread.Rows.Add(newRow)
-                        End SyncLock
-                    Catch ex As Exception
-                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "thread_ajout", "Exception : " & ex.Message)
-                    End Try
-
-                    '---- Action à effectuer toutes les secondes ----
-                    Dim thr As New Thread(AddressOf VerifTimeDevice)
-                    thr.IsBackground = True
-                    thr.Name = "VerifTimeDevice"
-                    thr.Start()
-                    '_SrvEvent.AddMessage("Test")
-
-                    '---- Actions à effectuer toutes les minutes ----
-                    If ladate.Second = 0 Then
-                        VerifIsJour()
-
-                        'on veirife si on doit enregistrer la config dans le xml
-                        If _CycleSave > 0 And _Finish = True Then
-                            If ladate >= _NextTimeSave Then
-                                _NextTimeSave = Now.AddMinutes(_CycleSave)
-                                SaveConfig(_MonRepertoire & "\config\homidom.xml")
-                            End If
+                Try
+                    'verif si pas déjà trop de thread
+                    If ListThread.Count > 10 Then
+                        If ListThread(0).IsAlive Then
+                            ListThread(0).Abort()
+                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "gestion thread", "Arrêt du thread " & ListThread(0).Name & " car il a pris trop de temps")
                         End If
+                        ListThread.RemoveAt(0)
                     End If
+                Catch ex As Exception
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "gestion thread", "Exception : " & ex.Message)
+                End Try
 
-                    '---- Actions à effectuer toutes les heures ----
-                    If ladate.Minute = 59 And ladate.Second = 59 Then
-                        SearchDeviceNoMaJ()
-                        'on verifie si on doit exporter la config vers un folder
-                        If _CycleSaveFolder > 0 And _Finish = True Then
-                            If ladate >= _NextTimeSaveFolder Then
-                                _NextTimeSaveFolder = Now.AddMinutes(_CycleSaveFolder)
-                                SaveConfigFolder()
-                            End If
-                        End If
-                    End If
 
-                    '---- Actions à effectuer à minuit ----
-                    If ladate.Hour = 0 And ladate.Minute = 0 And ladate.Second = 0 Then
-                        MAJ_HeuresSoleil()
-                        CleanLog(_MaxMonthLog)
-                        VerifIsWeekEnd()
-                        MaJSaint()
-                        'affichage des timersectick si il y en a plus d'un
-                        If table_TimerSecTickthread.Rows.Count > 1 Then
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "TimerSecTick", "Plusieurs Timers sont en cours (au lieu d'un seul) :")
-                            For Each thread As DataRow In table_TimerSecTickthread.Rows
-                                Log(TypeLog.INFO, TypeSource.SERVEUR, "TimerSecTick", " - " & thread("name") & " lancé à " & thread("datetime") & " - ")
-                            Next
-                        End If
-                    End If
+                'If (table_TimerSecTickthread.Rows.Count < 5) Then
+                '    'ajout a la table des thread
+                '    Try
+                '        Dim newRow As DataRow = Nothing
+                '        newRow = table_TimerSecTickthread.NewRow()
+                '        newRow.Item("name") = "TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss")
+                '        newRow.Item("comment") = ""
+                '        newRow.Item("datetime") = ladate.ToString("yyyy-MM-dd HH:mm:ss")
+                '        newRow.Item("thread") = ""
+                '        SyncLock lock_table_TimerSecTickthread
+                '            table_TimerSecTickthread.Rows.Add(newRow)
+                '        End SyncLock
+                '    Catch ex As Exception
+                '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "thread_ajout", "Exception : " & ex.Message)
+                '    End Try
 
-                    '---- Actions à effectuer à 3h du mat (au cas où qu'à minuit non maj) ----
-                    If ladate.Hour = 3 And ladate.Minute = 0 And ladate.Second = 0 Then
-                        MAJ_HeuresSoleil()
-                        VerifIsWeekEnd()
-                        MaJSaint()
-                    End If
+                '---- Action à effectuer toutes les secondes ----
+                Dim thr As New Thread(AddressOf VerifTimeDevice)
+                thr.IsBackground = True
+                thr.Name = "VerifTimeDevice"
+                thr.Start()
 
-                    '---- Actions à effectuer à midi ----
-                    If ladate.Hour = 12 And ladate.Minute = 0 And ladate.Second = 0 Then
-                        MAJ_HeuresSoleil()
-                    End If
+                '---- Actions à effectuer toutes les minutes ----
+                If ladate.Second = 0 Then
+                    Dim thr1 As New Thread(AddressOf ThreadSecond)
+                    thr1.Name = "ThreadSecond"
+                    thr1.IsBackground = True
+                    thr1.Priority = ThreadPriority.Highest
+                    thr1.Start()
+                    ListThread.Add(thr1)
+                    'OLD
+                    'VerifIsJour()
 
-                    'suppresion de la table des threads
-                    Try
-                        '--- suppresion du thread de la liste des threads lancés ---
-                        Dim tabletmp As DataRow()
-                        SyncLock lock_table_TimerSecTickthread
-                            tabletmp = table_TimerSecTickthread.Select("name = 'TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss") & "'")
-                        End SyncLock
-                        If tabletmp.GetLength(0) >= 1 Then
-                            SyncLock lock_table_TimerSecTickthread
-                                tabletmp(0).Delete()
-                            End SyncLock
-                        Else
-                            Dim listethreads As String = ""
-                            For Each thread As DataRow In table_TimerSecTickthread.Rows
-                                listethreads += thread("name") & "-"
-                            Next
-                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Thread non trouvé pour suppression : TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss") & " (liste: " & listethreads & ")")
-                        End If
-                    Catch ex As Exception
-                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception 1 : " & ex.ToString & " --> Erreur pendant la suppression du thread de la liste")
-                    End Try
-                Else
-                    Dim listethreads As String = ""
-                    For Each thread As DataRow In table_TimerSecTickthread.Rows
-                        listethreads += thread("name") & "-"
-                    Next
-                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Il y a déjà " & table_TimerSecTickthread.Rows.Count & " Threads en cours, TimerSick annulé (liste: " & listethreads & ")")
+                    'on veirife si on doit enregistrer la config dans le xml
+                    'If _CycleSave > 0 And _Finish = True Then
+                    '    If ladate >= _NextTimeSave Then
+                    '        _NextTimeSave = Now.AddMinutes(_CycleSave)
+                    '        SaveConfig(_MonRepertoire & "\config\homidom.xml")
+                    '    End If
+                    'End If
                 End If
-            Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception 2 : " & ex.ToString & " --> Exception donc suppression du thread de la liste")
+
+                '---- Actions à effectuer toutes les heures ----
+                If ladate.Minute = 59 And ladate.Second = 59 Then
+                    'OLD
+                    'SearchDeviceNoMaJ()
+                    ''on verifie si on doit exporter la config vers un folder
+                    'If _CycleSaveFolder > 0 And _Finish = True Then
+                    '    If ladate >= _NextTimeSaveFolder Then
+                    '        _NextTimeSaveFolder = Now.AddHours(_CycleSaveFolder)
+                    '        SaveConfigFolder()
+                    '    End If
+                    'End If
+
+                    Dim thr2 As New Thread(AddressOf ThreadMinute)
+                    thr2.Name = "ThreadMinute"
+                    thr2.IsBackground = True
+                    thr2.Priority = ThreadPriority.Normal
+                    thr2.Start()
+                    ListThread.Add(thr2)
+                End If
+
+                '---- Actions à effectuer à minuit ----
+                If ladate.Hour = 0 And ladate.Minute = 0 And ladate.Second = 0 Then
+                    Dim thr3 As New Thread(AddressOf ThreadMinuit)
+                    thr3.Name = "ThreadMinuit"
+                    thr3.IsBackground = True
+                    thr3.Priority = ThreadPriority.Normal
+                    thr3.Start()
+                    ListThread.Add(thr3)
+                    'OLD
+                    'MAJ_HeuresSoleil()
+                    ''CleanLog(_MaxMonthLog)
+                    'VerifIsWeekEnd()
+                    'MaJSaint()
+                    ''affichage des timersectick si il y en a plus d'un
+                    'If table_TimerSecTickthread.Rows.Count > 1 Then
+                    '    Log(TypeLog.INFO, TypeSource.SERVEUR, "TimerSecTick", "Plusieurs Timers sont en cours (au lieu d'un seul) :")
+                    '    For Each thread As DataRow In table_TimerSecTickthread.Rows
+                    '        Log(TypeLog.INFO, TypeSource.SERVEUR, "TimerSecTick", " - " & thread("name") & " lancé à " & thread("datetime") & " - ")
+                    '    Next
+                    'End If
+                End If
+
+                '---- Actions à effectuer à 3h du mat (au cas où qu'à minuit non maj) ----
+                If ladate.Hour = 3 And ladate.Minute = 0 And ladate.Second = 0 Then
+                    Dim thr4 As New Thread(AddressOf Thread3h)
+                    thr4.Name = "Thread3h"
+                    thr4.IsBackground = True
+                    thr4.Priority = ThreadPriority.AboveNormal
+                    thr4.Start()
+                    ListThread.Add(thr4)
+                    'OLD
+                    'MAJ_HeuresSoleil()
+                    'VerifIsWeekEnd()
+                    'MaJSaint()
+                End If
+
+                '---- Actions à effectuer à midi ----
+                If ladate.Hour = 12 And ladate.Minute = 0 And ladate.Second = 0 Then
+                    Dim thr5 As New Thread(AddressOf ThreadMidi)
+                    thr5.Name = "ThreadMidi"
+                    thr5.IsBackground = True
+                    thr5.Priority = ThreadPriority.AboveNormal
+                    thr5.Start()
+                    ListThread.Add(thr5)
+                    'OLD
+                    'MAJ_HeuresSoleil()
+                End If
 
                 'suppresion de la table des threads
-                Try
-                    '--- suppresion du thread de la liste des threads lancés ---
-                    Dim tabletmp As DataRow()
-                    SyncLock lock_table_TimerSecTickthread
-                        tabletmp = table_TimerSecTickthread.Select("name = 'TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss") & "'")
-                    End SyncLock
-                    If tabletmp.GetLength(0) >= 1 Then
-                        SyncLock lock_table_TimerSecTickthread
-                            tabletmp(0).Delete()
-                        End SyncLock
-                    Else
-                        Dim listethreads As String = ""
-                        For Each thread As DataRow In table_TimerSecTickthread.Rows
-                            listethreads += thread("name") & "-"
-                        Next
-                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Thread non trouvé pour suppression : TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss") & " (liste: " & listethreads & ")")
-                    End If
-                Catch ex2 As Exception
-                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception 3 : " & ex2.ToString & " --> Erreur pendant la suppression du thread de la liste en cas de'exception")
-                End Try
+                '    Try
+                '        '--- suppresion du thread de la liste des threads lancés ---
+                '        Dim tabletmp As DataRow()
+                '        SyncLock lock_table_TimerSecTickthread
+                '            tabletmp = table_TimerSecTickthread.Select("name = 'TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss") & "'")
+                '        End SyncLock
+                '        If tabletmp.GetLength(0) >= 1 Then
+                '            SyncLock lock_table_TimerSecTickthread
+                '                tabletmp(0).Delete()
+                '            End SyncLock
+                '        Else
+                '            Dim listethreads As String = ""
+                '            For Each thread As DataRow In table_TimerSecTickthread.Rows
+                '                listethreads += thread("name") & "-"
+                '            Next
+                '            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Thread non trouvé pour suppression : TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss") & " (liste: " & listethreads & ")")
+                '        End If
+                '    Catch ex As Exception
+                '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception 1 : " & ex.ToString & " --> Erreur pendant la suppression du thread de la liste")
+                '    End Try
+                '    Else
+                '    Dim listethreads As String = ""
+                '    For Each thread As DataRow In table_TimerSecTickthread.Rows
+                '        listethreads += thread("name") & "-"
+                '    Next
+                '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Il y a déjà " & table_TimerSecTickthread.Rows.Count & " Threads en cours, TimerSick annulé (liste: " & listethreads & ")")
+                '    End If
+                'Catch ex As Exception
+                '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception 2 : " & ex.ToString & " --> Exception donc suppression du thread de la liste")
+
+                '    'suppresion de la table des threads
+                '    Try
+                '        '--- suppresion du thread de la liste des threads lancés ---
+                '        Dim tabletmp As DataRow()
+                '        SyncLock lock_table_TimerSecTickthread
+                '            tabletmp = table_TimerSecTickthread.Select("name = 'TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss") & "'")
+                '        End SyncLock
+                '        If tabletmp.GetLength(0) >= 1 Then
+                '            SyncLock lock_table_TimerSecTickthread
+                '                tabletmp(0).Delete()
+                '            End SyncLock
+                '        Else
+                '            Dim listethreads As String = ""
+                '            For Each thread As DataRow In table_TimerSecTickthread.Rows
+                '                listethreads += thread("name") & "-"
+                '            Next
+                '            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Thread non trouvé pour suppression : TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss") & " (liste: " & listethreads & ")")
+                '        End If
+            Catch ex2 As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception 3 : " & ex2.ToString & " --> Erreur du thread TimerSecTick, suppression de tous les threads en cours")
+
+                For Each thr In ListThread
+                    If thr.IsAlive Then thr.Abort()
+                Next
+            End Try
+            'End Try
+        End Sub
+
+#Region "Thread"
+
+
+        ''' <summary>
+        ''' Thread à effectuer toutes les secondes
+        ''' </summary>
+        ''' <remarks></remarks>
+        Private Sub ThreadSecond()
+            Try
+                Dim thr1 As New Thread(AddressOf VerifIsJour)
+                thr1.IsBackground = True
+                thr1.Name = "VerifIsJour"
+                thr1.Start()
+
+                Dim thr As New Thread(AddressOf VerifTimeDevice)
+                thr.IsBackground = True
+                thr.Name = "VerifTimeDevice"
+                thr.Start()
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ThreadSecond", "Exception: " & ex.ToString)
             End Try
         End Sub
+
+        ''' <summary>
+        ''' Thread à effectuer toutes les minutes
+        ''' </summary>
+        ''' <remarks></remarks>
+        Private Sub ThreadMinute()
+            Try
+                Dim thr1 As New Thread(AddressOf VerifIsJour)
+                thr1.IsBackground = True
+                thr1.Name = "VerifIsJour"
+                thr1.Start()
+
+                Dim thr As New Thread(AddressOf ThreadSaveConfig)
+                thr.IsBackground = True
+                thr.Name = "ThreadSaveConfig"
+                thr.Start()
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ThreadMinute", "Exception: " & ex.ToString)
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' Thread à effectuer toutes les heures
+        ''' </summary>
+        ''' <remarks></remarks>
+        Private Sub ThreadHour()
+            Try
+
+                SearchDeviceNoMaJ()
+
+                Dim thr As New Thread(AddressOf ThreadSaveConfigFolder)
+                thr.IsBackground = True
+                thr.Priority = ThreadPriority.Lowest
+                thr.Name = "ThreadSaveConfigFolder"
+                thr.Start()
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ThreadHour", "Exception: " & ex.ToString)
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' Thread à effectuer à minuit
+        ''' </summary>
+        ''' <remarks></remarks>
+        Private Sub ThreadMinuit()
+            Try
+                MAJ_HeuresSoleil()
+
+                Dim thr As New Thread(AddressOf MaJSaint)
+                thr.IsBackground = True
+                thr.Priority = ThreadPriority.Lowest
+                thr.Name = "ThreadMAJSaint"
+                thr.Start()
+
+                CleanLog()
+                VerifIsWeekEnd()
+
+                'affichage des timersectick si il y en a plus d'un
+                'If table_TimerSecTickthread.Rows.Count > 1 Then
+                '    Log(TypeLog.INFO, TypeSource.SERVEUR, "TimerSecTick", "Plusieurs Timers sont en cours (au lieu d'un seul) :")
+                '    For Each thread As DataRow In table_TimerSecTickthread.Rows
+                '        Log(TypeLog.INFO, TypeSource.SERVEUR, "TimerSecTick", " - " & thread("name") & " lancé à " & thread("datetime") & " - ")
+                '    Next
+                'End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ThreadMinuit", "Exception: " & ex.ToString)
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' Thread à effectuer à 3h du matin
+        ''' </summary>
+        ''' <remarks></remarks>
+        Private Sub Thread3h()
+            Try
+                MAJ_HeuresSoleil()
+                VerifIsWeekEnd()
+
+                Dim thr As New Thread(AddressOf MaJSaint)
+                thr.IsBackground = True
+                thr.Priority = ThreadPriority.Lowest
+                thr.Name = "ThreadMAJSaint"
+                thr.Start()
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Thread3h", "Exception: " & ex.ToString)
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' Thread à effectuer à midi
+        ''' </summary>
+        ''' <remarks></remarks>
+        Private Sub ThreadMidi()
+            Try
+                MAJ_HeuresSoleil()
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ThreadMidi", "Exception: " & ex.ToString)
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' Thread permettant la sauvegarde de la config
+        ''' </summary>
+        ''' <remarks></remarks>
+        Private Sub ThreadSaveConfig()
+            Try
+                Dim ladate As DateTime = Now 'on récupére la date/heure
+
+                'on veirife si on doit enregistrer la config dans le xml
+                If _CycleSave > 0 And _Finish = True Then
+                    If ladate >= _NextTimeSave Then
+                        _NextTimeSave = Now.AddMinutes(_CycleSave)
+                        SaveConfig(_MonRepertoire & "\config\homidom.xml")
+                    End If
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ThreadSaveConfig", "Exception: " & ex.ToString)
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' Thread permettant de sauvegarder la config dans un autre dossier
+        ''' </summary>
+        ''' <remarks></remarks>
+        Private Sub ThreadSaveConfigFolder()
+            Try
+                Dim ladate As DateTime = Now 'on récupére la date/heure
+
+                'on verifie si on doit exporter la config vers un folder
+                If _CycleSaveFolder > 0 And _Finish = True Then
+                    If ladate >= _NextTimeSaveFolder Then
+                        _NextTimeSaveFolder = Now.AddHours(_CycleSaveFolder)
+                        SaveConfigFolder()
+                    End If
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ThreadSaveConfigFolder", "Exception: " & ex.ToString)
+            End Try
+        End Sub
+#End Region
 
         ''' <summary>on checke si il y a cron à faire</summary>
         ''' <remarks></remarks>
@@ -2434,25 +2650,35 @@ Namespace HoMIDom
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "SaveConfigFolder", "Sauvegarde de la configuration vers le dossier " & _FolderSaveFolder)
 
                 'test du chemin avec tempo au cas ou les NAS sont en veille
-                Try
+
+                Dim nbtentative = 10 'nombre de tentative pour vérifier si le répertoire de destination est ok
+                Dim flagok As Boolean = False 'true si repertoire ok
+
+                For i As Integer = 1 To nbtentative
                     If Not IO.Directory.Exists(_FolderSaveFolder) Then
                         Thread.Sleep(1000)
+                    Else
+                        flagok = True
+                        Exit For
                     End If
-                Catch ex As Exception
+                Next
 
-                End Try
-
-                If IO.Directory.Exists(_FolderSaveFolder) Then
-                    'homidom.xml
-                    If IO.File.Exists(_FolderSaveFolder & "\homidom.xml") = True Then IO.File.Delete(_FolderSaveFolder & "\homidom.xml")
-                    IO.File.Copy(_MonRepertoire & "\config\homidom.xml", _FolderSaveFolder & "\homidom.xml")
-
-                    'homidom.db
-                    If IO.File.Exists(_FolderSaveFolder & "\homidom.db") = True Then IO.File.Delete(_FolderSaveFolder & "\homidom.db")
-                    IO.File.Copy(_MonRepertoire & "\Bdd\homidom.db", _FolderSaveFolder & "\homidom.db")
-                Else
-                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfigFolder", " Erreur : le dossier de sauvegarde n'existe pas : " & _FolderSaveFolder)
+                If flagok = False Then
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfigFolder", " Erreur de sauvegarde de la configuration vers le dossier externe " & _FolderSaveFolder & " car il n'est pas disponible")
+                    Return False
                 End If
+
+                'If IO.Directory.Exists(_FolderSaveFolder) Then
+                'homidom.xml
+                If IO.File.Exists(_FolderSaveFolder & "\homidom.xml") = True Then IO.File.Delete(_FolderSaveFolder & "\homidom.xml")
+                IO.File.Copy(_MonRepertoire & "\config\homidom.xml", _FolderSaveFolder & "\homidom.xml")
+
+                'homidom.db
+                If IO.File.Exists(_FolderSaveFolder & "\homidom.db") = True Then IO.File.Delete(_FolderSaveFolder & "\homidom.db")
+                IO.File.Copy(_MonRepertoire & "\Bdd\homidom.db", _FolderSaveFolder & "\homidom.db")
+                'Else
+                'Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveConfigFolder", " Erreur : le dossier de sauvegarde n'existe pas : " & _FolderSaveFolder)
+                'End If
 
 
             Catch ex As Exception
@@ -3466,19 +3692,19 @@ Namespace HoMIDom
                 _IPSOAP = System.Net.Dns.GetHostByName(My.Computer.Name).AddressList(0).ToString()
 
                 '---------- Creation table des threads ----------
-                table_TimerSecTickthread.Dispose()
-                Dim x As New DataColumn
-                x.ColumnName = "name"
-                table_TimerSecTickthread.Columns.Add(x)
-                x = New DataColumn
-                x.ColumnName = "comment"
-                table_TimerSecTickthread.Columns.Add(x)
-                x = New DataColumn
-                x.ColumnName = "datetime"
-                table_TimerSecTickthread.Columns.Add(x)
-                x = New DataColumn
-                x.ColumnName = "thread"
-                table_TimerSecTickthread.Columns.Add(x)
+                'table_TimerSecTickthread.Dispose()
+                'Dim x As New DataColumn
+                'x.ColumnName = "name"
+                'table_TimerSecTickthread.Columns.Add(x)
+                'x = New DataColumn
+                'x.ColumnName = "comment"
+                'table_TimerSecTickthread.Columns.Add(x)
+                'x = New DataColumn
+                'x.ColumnName = "datetime"
+                'table_TimerSecTickthread.Columns.Add(x)
+                'x = New DataColumn
+                'x.ColumnName = "thread"
+                'table_TimerSecTickthread.Columns.Add(x)
 
                 'Si sauvegarde automatique
                 If _CycleSave > 0 Then _NextTimeSave = Now.AddMinutes(_CycleSave)
@@ -3539,6 +3765,7 @@ Namespace HoMIDom
 
                 '--- Scan les images
                 Dim _thr As New Thread(AddressOf mImages.ScanImage)
+                _thr.Priority = ThreadPriority.Lowest
                 _thr.Start()
 
                 'test biblio
@@ -3578,7 +3805,7 @@ Namespace HoMIDom
                 'End With
 
                 'test log
-                CleanLog(_MaxMonthLog)
+                CleanLog()
 
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "Start", "Serveur démarré")
 
@@ -9811,12 +10038,12 @@ Namespace HoMIDom
 #End Region
 
 #Region "Maintenance"
-        Public Sub CleanLog(ByVal Mois As Integer)
+        Public Sub CleanLog()
             Try
 
                 Dim dirInfo As New System.IO.DirectoryInfo(_MonRepertoire & "\logs\")
                 Dim files() As System.IO.FileInfo = dirInfo.GetFiles("*.txt", System.IO.SearchOption.AllDirectories)
-                Dim DateRef As DateTime = Now.AddMonths(-1 * Mois)
+                Dim DateRef As DateTime = Now.AddMonths(-1 * _MaxMonthLog)
                 Dim cnt As Integer = 0
 
                 If (files IsNot Nothing) Then
@@ -9838,7 +10065,7 @@ Namespace HoMIDom
                         End If
                     Next
                 End If
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "CleanLog", cnt & " Fichier(s) log supprimé(s) ( < " & Mois & " mois = " & DateRef.ToString("dd/MM/yyyy") & ")")
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "CleanLog", cnt & " Fichier(s) log supprimé(s) ( < " & _MaxMonthLog & " mois = " & DateRef.ToString("dd/MM/yyyy") & ")")
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "CleanLog", "Erreur: " & ex.Message)
             End Try
