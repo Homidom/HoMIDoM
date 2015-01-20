@@ -108,6 +108,8 @@
   <ItemGroup>
     <Compile Include="APi.vb" />
     <Compile Include="Audio.vb" />
+    <Compile Include="Client\ManagerData.vb" />
+    <Compile Include="Client\UDPClient.vb" />
     <Compile Include="Cron.vb" />
     <Compile Include="Decouverte.vb" />
     <Compile Include="DeviceAction.vb" />
@@ -148,7 +150,6 @@
     <Compile Include="TplDevice.vb" />
     <Compile Include="TplDriver.vb" />
     <Compile Include="UDP.vb" />
-    <Compile Include="UDPClient.vb" />
     <Compile Include="Update.vb" />
     <Compile Include="Users.vb" />
     <Compile Include="Variables.vb" />
@@ -199,6 +200,7 @@
   <ItemGroup>
     <None Include="Resources\Saint.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <PropertyGroup>
     <PreBuildEvent>
