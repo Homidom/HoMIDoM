@@ -4,13 +4,32 @@ Imports HoMIDom.HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 
-Imports Google.GData.Client
-Imports Google.GData.Extensions
-Imports Google.GData.Calendar
+Imports System.IO
+Imports System.Threading
+'Imports System.Threading.Tasks
+
+Imports Google.Apis.Calendar.v3
+Imports Google.Apis.Calendar.v3.Data
+Imports Google.Apis.Calendar.v3.EventsResource
+Imports Google.Apis.Util.Store
+Imports Google.Apis.Auth.OAuth2
+Imports Google.Apis.Auth.OAuth2.Flows
+Imports Google.Apis.Services
+Imports Google.Apis.Json
 
 
-' Auteur : Laurent
+Imports System
+Imports System.Collections.Generic
+Imports System.Linq
+Imports System.Text
+Imports System.Threading.Tasks
+Imports Newtonsoft.Json
+Imports Newtonsoft.Json.Linq
+
+
+' Auteur : Laurent/Mathieu
 ' Date : 19/04/2013  Creation du driver
+' Date : 30/11/2013  Maj pour API V3
 
 
 ''' <summary>Class Driver_GoogleCalendar, permet de communiquer avec le un Calendrier Google.</summary>
@@ -59,13 +78,17 @@ Imports Google.GData.Calendar
 #End Region
 
 #Region "Variables Internes"
-    Dim Service As CalendarService = New CalendarService("HoMIDoM")
-    Dim CalendarHomidom As New CalendarEntry
-    Dim Calendarferies As New CalendarEntry
+    Dim Service As CalendarService ' = New CalendarService("HoMIDoM")
+
+    '' Calendar scopes which is initialized on the main method.
+    Dim scopes As IList(Of String) = New List(Of String)()
+
+    Dim CalendarHomidom As New Data.CalendarListEntry
+    Dim Calendarferies As New Data.CalendarListEntry
 
     Dim str_to_week As New Dictionary(Of String, String)
     Dim firstScan As Boolean = True
-
+    'Dim gCal As Gcal_API_V3.OAuth2
 #End Region
 
 #Region "Propriétés génériques"
@@ -303,8 +326,8 @@ Imports Google.GData.Calendar
     ''' <summary>Démarrer le du driver</summary>
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
-        Dim queryCal As New CalendarQuery()
-        Dim CalendarFeed As CalendarFeed
+        'Dim queryCal As New CalendarQuery()
+        'Dim CalendarFeed As CalendarFeed
 
         Try
             ' Récuperation des parametres avancés
@@ -315,32 +338,127 @@ Imports Google.GData.Calendar
             _CalFeriesName = _Parametres.Item(4).Valeur
 
             ' Positionne le compte Gmail à utiliser
-            Service.setUserCredentials(_UserName, _PassWord)
-            queryCal.Uri = New Uri("https://www.google.com/calendar/feeds/default/allcalendars/full")
+            'Service.setUserCredentials(_UserName, _PassWord)
+            'queryCal.Uri = New Uri("https://www.google.com/calendar/feeds/default/allcalendars/full")
 
             ' Recupere la liste des calendriers du compte 
-            CalendarFeed = Service.Query(queryCal)
+            'CalendarFeed = Service.Query(queryCal)
+            ' Add the calendar specific scope to the scopes list.
+            'scopes.Add(CalendarService.Scope.Calendar)
 
-            'Recherche le calendrier Homidom 
-            For Each entry In CalendarFeed.Entries
-                If entry.Title.Text.ToUpper = _CalHomidomName.ToUpper Then
-                    CalendarHomidom = entry
+            ' Add the calendar specific scope to the scopes list.
+            scopes.Add(CalendarService.Scope.Calendar)
+            Dim stream As New FileStream(My.Application.Info.DirectoryPath & "\config\client_secrets.json", FileMode.Open, FileAccess.Read)
+            Dim X = GoogleClientSecrets.Load(stream).Secrets
+            'Dim Y As FileDataStore = New FileDataStore("Calendar.VB.Sample")
+
+            'Using stream As New FileStream("client_secrets.json", FileMode.Open, FileAccess.Read)
+
+            If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar ", "ClientId : " & X.ClientId & " // ClientSecret : " & X.ClientSecret)
+            If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar ", "Emplacement client_secrets.json : " & My.Application.Info.DirectoryPath & "\config\")
+
+            'Dim initializer1 = New GoogleAuthorizationCodeFlow.Initializer
+            'initializer1.Scopes = scopes
+            'initializer1.ClientSecrets = X
+            'initializer1.DataStore = New FileDownloadData(Y.FolderPath, Y.ToString)
+            'Dim flow = New GoogleAuthorizationCodeFlow(initializer1)
+
+            'If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar ", "Flow Ok : " & initializer1.ToString)
+
+            Dim fileName = My.Application.Info.DirectoryPath & "\config\Google.Apis.Auth.OAuth2.Responses.TokenResponse-user"
+
+            If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar ", "File Path TOKENRESPONSE = " & fileName)
+
+            Dim credential As UserCredential
+
+            If System.IO.File.Exists(fileName) Then
+                Dim Temp1 As String = System.IO.File.ReadAllText(fileName).Replace(",", "," & ControlChars.CrLf)
+                Dim position1 As Integer = InStr(Temp1, "refresh_token") + 15
+                Dim Temp2 As String = Right(Temp1, Temp1.Length - position1)
+                Dim position2 As Integer = InStr(Temp2, ",") - 2
+
+                If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar ", "File = " & Temp1)
+
+                Dim RefreshToken As String = Left(Temp2, position2)
+                If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar ", "Refresh token = " & RefreshToken)
+
+                Dim myStoredResponse As New GoogleOauthAPI.StoredResponse(RefreshToken)
+                'credential = New AuthorizationCodeInstalledApp(flow,  New LocalServerCodeReceiver()).AuthorizeAsync(
+                '    "user", CancellationToken.None).Result
+
+                GoogleWebAuthorizationBroker.Folder = "Tasks.Auth.Store"
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(X, scopes, "user", CancellationToken.None, New GoogleOauthAPI.SavedDataStore(myStoredResponse)).Result
+            Else
+                
+                System.Diagnostics.Process.Start(My.Application.Info.DirectoryPath & "\Drivers\GoogleOauthAPI.exe")
+
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar ", "File Path TOKENRESPONSE n'a pas été trouvé ")
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar", "Driver " & Me.Nom & " non démarré")
+                Exit Sub
+            End If
+
+            'Dim credential As UserCredential
+            'Using stream As New FileStream("client_secrets.json", FileMode.Open, FileAccess.Read)
+            'credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+            '       New ClientSecrets With {.ClientId = _UserName, .ClientSecret = _PassWord}, scopes, "user", CancellationToken.None
+            '       ).Result 'New FileDataStore("Calendar.VB.Sample")
+            'End Using
+            'New ClientSecrets With {.ClientId = _UserName, .ClientSecret = _PassWord}
+            'GoogleClientSecrets.Load(stream).Secrets
+            If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar ", "Credential Ok : ")
+
+            ' Create the calendar service using an initializer instance
+            Dim initializer As New BaseClientService.Initializer()
+            initializer.HttpClientInitializer = credential
+            initializer.ApplicationName = "HoMIDoM"
+            Service = New CalendarService(initializer)
+
+            ' Fetch the list of calendar list
+            Dim list As IList(Of CalendarListEntry) = Service.CalendarList.List().Execute().Items()
+
+            ' Display all calendars
+
+            Dim lstLog As String = "Lists of calendars: " & vbCrLf
+            For Each item As CalendarListEntry In list
+                lstLog &= item.Summary & ". Location: " & item.Location & ", TimeZone: " & item.TimeZone & vbCrLf
+            Next
+            If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar", lstLog)
+
+            For Each calendar As Data.CalendarListEntry In list
+                ' Display calendar's events
+                If calendar.Summary.ToUpper = _CalHomidomName.ToUpper Then
+                    CalendarHomidom = calendar
                     _IsConnect = True
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar", "Calendrier HoMIDoM trouvé dans le compte " & _UserName)
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar", "Calendrier " & calendar.Summary.ToUpper & " trouvé dans le compte " & _UserName)
                     _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar", "Driver " & Me.Nom & " démarré")
 
                     ' Recherche le calendrier des jours Fériés  
-                ElseIf entry.Title.Text.ToUpper = _CalFeriesName.ToUpper Then
-                    Calendarferies = entry
+                ElseIf calendar.Summary.ToUpper = _CalFeriesName.ToUpper Then
+                    Calendarferies = calendar
                     If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar", "Calendrier Jours fériés trouvé dans le compte " & _UserName)
                 End If
             Next
 
+            'Recherche le calendrier Homidom 
+            'For Each entry In CalendarFeed.Entries
+            'If entry.Title.Text.ToUpper = _CalHomidomName.ToUpper Then
+            'CalendarHomidom = entry
+            '_IsConnect = True
+            '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar", "Calendrier HoMIDoM trouvé dans le compte " & _UserName)
+            '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar", "Driver " & Me.Nom & " démarré")
+
+            ' Recherche le calendrier des jours Fériés  
+            'ElseIf entry.Title.Text.ToUpper = _CalFeriesName.ToUpper Then
+            'Calendarferies = entry
+            'If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar", "Calendrier Jours fériés trouvé dans le compte " & _UserName)
+            'End If
+            'Next
+
             ' Traitement en cas de calendrier non trouvé
-            If IsNothing(CalendarHomidom.SelfUri) Then
+            If CalendarHomidom Is Nothing And Calendarferies Is Nothing Then
                 ' pas de demarrage du drives
                 _IsConnect = False
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar", "Calendrier HoMIDoM non trouvé dans le compte " & _UserName)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar", "Calendrier " & _CalFeriesName.ToUpper & " non trouvé dans le compte " & _UserName)
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar", "Driver " & Me.Nom & " non démarré")
             End If
 
@@ -351,7 +469,7 @@ Imports Google.GData.Calendar
             End If
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar Start", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar Start", ex.Message & ex.Data.ToString)
         End Try
     End Sub
 
@@ -399,21 +517,21 @@ Imports Google.GData.Calendar
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
 
         ' Creation de l'evenement
-        Dim entryNew As New EventEntry()
+        '   Dim entryNew As New Data.Event
         ' Postionnement de l'heure de l'evenement à NOW avec un durée de 5 min 
-        Dim eventTime As New [When](DateTime.Now, DateTime.Now.AddMinutes(5))
+        '   Dim eventTime As New [When](DateTime.Now, DateTime.Now.AddMinutes(5))
 
         Try
-            If Not (IsNothing(Objet)) Then
-                entryNew.Title.Text = Objet.Name & ":" & Objet.value.ToString
+            '   If Not (IsNothing(Objet)) Then
+            '   entryNew.Title.Text = Objet.Name & ":" & Objet.value.ToString
 
-                ' Positionne l'heure de l'evenement 
-                entryNew.Times.Add(eventTime)
+            ' Positionne l'heure de l'evenement 
+            '   entryNew.Times.Add(eventTime)
 
-                ' Envoie la requete de creation de l'evenement         
-                Dim PostUri As New Uri(CalendarHomidom.Content.AbsoluteUri)
-                Dim insertedEntry As AtomEntry = Service.Insert(PostUri, entryNew)
-            End If
+            ' Envoie la requete de creation de l'evenement         
+            '   Dim PostUri As New Uri(CalendarHomidom.Content.AbsoluteUri)
+            '   Dim insertedEntry As AtomEntry = Service.Insert(PostUri, entryNew)
+            '   End If
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & "Write", ex.Message)
@@ -533,21 +651,21 @@ Imports Google.GData.Calendar
 
             Add_LibelleDevice("ADRESSE1", "Valeur à rechercher", "Titre de l'evenement à rechercher")
             Add_LibelleDevice("ADRESSE2", "Element à recuperer (Titre,Lieu,Description)", "Information de l'événement à retourner")
-            
+
             str_to_week.Add("MO", 1)
             str_to_week.Add("TU", 2)
             str_to_week.Add("WE", 3)
             str_to_week.Add("TH", 4)
             str_to_week.Add("FR", 5)
             str_to_week.Add("SA", 6)
-            str_to_week.Add("SU", 7)
+            str_to_week.Add("SU", 0)
             str_to_week.Add(1, "MO")
             str_to_week.Add(2, "TU")
             str_to_week.Add(3, "WE")
             str_to_week.Add(4, "TH")
             str_to_week.Add(5, "FR")
             str_to_week.Add(6, "SA")
-            str_to_week.Add(7, "SU")
+            str_to_week.Add(0, "SU")
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " New", ex.Message)
@@ -568,31 +686,31 @@ Imports Google.GData.Calendar
 
     Public Sub CreateEvent(ByVal Objet As Object, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing)
 
-        Dim entryNew As New EventEntry()
+        '   Dim entryNew As New EventEntry()
 
         Try
-            If _Enable = False Then Exit Sub
+            '   If _Enable = False Then Exit Sub
 
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write ", "Creation d'un événement " & Objet)
+            '   _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write ", "Creation d'un événement " & Objet)
 
             ' Positionne le titre et le commentaire de l'evenement 
-            If Not (IsNothing(Objet)) Then entryNew.Title.Text = Objet.name.ToString & ":" & Objet.value.ToString
-            If Not (IsNothing(Parametre1)) Then entryNew.Content.Content = Parametre1
+            '   If Not (IsNothing(Objet)) Then entryNew.Title.Text = Objet.name.ToString & ":" & Objet.value.ToString
+            '   If Not (IsNothing(Parametre1)) Then entryNew.Content.Content = Parametre1
 
             ' Positionne le lieu de l'evenement 
-            Dim eventLocation As New Where()
-            If Not (IsNothing(Parametre2)) Then
-                eventLocation.ValueString = Parametre2
-                entryNew.Locations.Add(eventLocation)
-            End If
+            '   Dim eventLocation As New Where()
+            '   If Not (IsNothing(Parametre2)) Then
+            '   eventLocation.ValueString = Parametre2
+            '   entryNew.Locations.Add(eventLocation)
+            '   End If
 
             ' Positionne l'heure de l'evenement 
-            Dim eventTime As New [When](DateTime.Now, DateTime.Now.AddMinutes(5))
-            entryNew.Times.Add(eventTime)
+            '   Dim eventTime As New [When](DateTime.Now, DateTime.Now.AddMinutes(5))
+            '   entryNew.Times.Add(eventTime)
 
             ' Envoie la requete de creation de l'evenement         
-            Dim PostUri As New Uri(CalendarHomidom.Content.AbsoluteUri)
-            Dim insertedEntry As AtomEntry = Service.Insert(PostUri, entryNew)
+            '   Dim PostUri As New Uri(CalendarHomidom.Content.AbsoluteUri)
+            '   Dim insertedEntry As AtomEntry = Service.Insert(PostUri, entryNew)
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & "Write", ex.Message)
@@ -602,70 +720,83 @@ Imports Google.GData.Calendar
     Public Sub ScanCalendar()
 
         Try
-            ' Creation de la requete sur le calendrier reservé 
-            Dim queryCal As New EventQuery(CalendarHomidom.Content.AbsoluteUri.ToString)
+            Dim request As ListRequest = Service.Events.List(CalendarHomidom.Id)
 
-            queryCal.ExtraParameters = "orderby=starttime&sortorder=ascending"
-            queryCal.NumberToRetrieve = 20
+            ' Creation de la requete sur le calendrier reservé 
+            'Dim queryCal As New EventQuery(CalendarHomidom.Content.AbsoluteUri.ToString)
+
+            'queryCal.ExtraParameters = "orderby=starttime&sortorder=ascending"
+            'queryCal.NumberToRetrieve = 20
+
+            'Recherche le calendrier Homidom 
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Il est : " & Now.ToShortTimeString)
 
             If Not firstScan Then
-                queryCal.StartDate = New System.DateTime(Now.Year, Now.Month, Now.Day)
-                queryCal.StartTime = New System.DateTime(Now.Year, Now.Month, Now.Day, Now.Hour, Now.Minute, 0)
-                queryCal.EndTime = New System.DateTime(Now.AddMinutes(Math.Ceiling(Refresh / 60)).Year, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Month, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Day, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Hour, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Minute, 0)
+                request.MaxResults = 20
+                request.TimeMin = New System.DateTime(Now.AddMinutes(Math.Ceiling(Refresh / 60) * (-1)).Year, Now.AddMinutes(Math.Ceiling(Refresh / 60) * (-1)).Month, Now.AddMinutes(Math.Ceiling(Refresh / 60) * (-1)).Day, Now.AddMinutes(Math.Ceiling(Refresh / 60) * (-1)).Hour, Now.AddMinutes(Math.Ceiling(Refresh / 60) * (-1)).Minute, 0)
+                request.TimeMax = New System.DateTime(Now.AddMinutes(Math.Ceiling(Refresh / 60)).Year, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Month, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Day, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Hour, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Minute, 0)
+
+                'queryCal.StartDate = New System.DateTime(Now.Year, Now.Month, Now.Day)
+                'queryCal.StartTime = New System.DateTime(Now.Year, Now.Month, Now.Day, Now.Hour, Now.Minute, 0)
+                'queryCal.EndTime = New System.DateTime(Now.AddMinutes(Math.Ceiling(Refresh / 60)).Year, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Month, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Day, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Hour, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Minute, 0)
             End If
             firstScan = False
 
             ' Lancement de la requete de recherches des événements
-            Dim calFeed As AtomFeed = Service.Query(queryCal)
-            Dim feedEntry As EventEntry
-            Dim EntryFind As New EventEntry
+            'Dim calFeed As AtomFeed = Service.Query(queryCal)
+            'Dim feedEntry As Data.Event
+            Dim calFeed As IList(Of Data.Event) = request.Execute().Items
+            Dim EntryFind As New Data.Event
             Dim elementFound As Boolean = False
             Dim commandFound As Boolean = False
 
-            If calFeed.Entries.Count > 0 Then
+            If calFeed.Count > 0 Then
 
-                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", " Nombres d'évenements trouvés: " & calFeed.Entries.Count)
+                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", " Nombres d'évenements trouvés: " & calFeed.Count)
 
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, "", "", Me._ID, True)
 
-                'Recherche le calendrier Homidom 
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Il est : " & Now.ToShortTimeString)
+                ' Fetch the list of events
+                For Each feedEntry As Data.Event In calFeed
 
-                'Parcours tous les evenements 
-                For Each feedEntry In calFeed.Entries
+                    'Parcours tous les evenements 
+                    'For Each feedEntry In calFeed.Entries
+                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.Summary & " Compte: " & feedEntry.Id)
 
                     Dim StartTime, EndTime As Date
                     Dim Fini As Boolean = False
 
-                    If feedEntry.Recurrence IsNot Nothing Then
+                    If feedEntry.Recurrence(0) IsNot Nothing Then
                         Dim position As Integer
-                        If InStr(feedEntry.Recurrence.Value, "DTSTART;TZID") Then
-                            position = InStr(InStr(feedEntry.Recurrence.Value, "DTSTART;TZID") + 12, feedEntry.Recurrence.Value, vbCrLf) - 15
-                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "StartTime Recurrence : " & Mid(feedEntry.Recurrence.Value, position, 15) & " et position= " & position)
-                            StartTime = New System.DateTime(Mid(feedEntry.Recurrence.Value, position, 4), _
-                                                           Mid(feedEntry.Recurrence.Value, position + 4, 2), _
-                                                           Mid(feedEntry.Recurrence.Value, position + 6, 2), _
-                                                           Mid(feedEntry.Recurrence.Value, position + 9, 2), _
-                                                           Mid(feedEntry.Recurrence.Value, position + 11, 2), _
-                                                           Mid(feedEntry.Recurrence.Value, position + 13, 2))
+                        If InStr(feedEntry.Recurrence(0).ToString, "DTSTART;TZID") Then
+                            position = InStr(InStr(feedEntry.Recurrence(0).ToString, "DTSTART;TZID") + 12, feedEntry.Recurrence(0).ToString, vbCrLf) - 15
+                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "StartTime Recurrence : " & Mid(feedEntry.Recurrence(0).ToString, position, 15) & " et position= " & position)
+                            StartTime = New System.DateTime(Mid(feedEntry.Recurrence(0).ToString, position, 4), _
+                                                           Mid(feedEntry.Recurrence(0).ToString, position + 4, 2), _
+                                                           Mid(feedEntry.Recurrence(0).ToString, position + 6, 2), _
+                                                           Mid(feedEntry.Recurrence(0).ToString, position + 9, 2), _
+                                                           Mid(feedEntry.Recurrence(0).ToString, position + 11, 2), _
+                                                           Mid(feedEntry.Recurrence(0).ToString, position + 13, 2))
                         End If
-                        If InStr(feedEntry.Recurrence.Value, "DTEND;TZID") Then
-                            position = InStr(InStr(feedEntry.Recurrence.Value, "DTEND;TZID") + 10, feedEntry.Recurrence.Value, vbCrLf) - 15
-                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "EndTime Recurrence : " & Mid(feedEntry.Recurrence.Value, position, 15) & " et position= " & position)
-                            EndTime = New System.DateTime(Mid(feedEntry.Recurrence.Value, position, 4), _
-                                                           Mid(feedEntry.Recurrence.Value, position + 4, 2), _
-                                                           Mid(feedEntry.Recurrence.Value, position + 6, 2), _
-                                                           Mid(feedEntry.Recurrence.Value, position + 9, 2), _
-                                                           Mid(feedEntry.Recurrence.Value, position + 11, 2), _
-                                                           Mid(feedEntry.Recurrence.Value, position + 13, 2))
+                        If InStr(feedEntry.Recurrence(0).ToString, "DTEND;TZID") Then
+                            position = InStr(InStr(feedEntry.Recurrence(0).ToString, "DTEND;TZID") + 10, feedEntry.Recurrence(0).ToString, vbCrLf) - 15
+                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "EndTime Recurrence : " & Mid(feedEntry.Recurrence(0).ToString, position, 15) & " et position= " & position)
+                            EndTime = New System.DateTime(Mid(feedEntry.Recurrence(0).ToString, position, 4), _
+                                                           Mid(feedEntry.Recurrence(0).ToString, position + 4, 2), _
+                                                           Mid(feedEntry.Recurrence(0).ToString, position + 6, 2), _
+                                                           Mid(feedEntry.Recurrence(0).ToString, position + 9, 2), _
+                                                           Mid(feedEntry.Recurrence(0).ToString, position + 11, 2), _
+                                                           Mid(feedEntry.Recurrence(0).ToString, position + 13, 2))
                         End If
+                        StartTime = feedEntry.Start.DateTime
+                        EndTime = feedEntry.End.DateTime
+                        If InStr(feedEntry.Recurrence(0).ToString, "RRULE:") Then
+                            position = InStr(InStr(feedEntry.Recurrence(0).ToString, "RRULE:") + 6, feedEntry.Recurrence(0).ToString, vbCrLf)
 
-                        If InStr(feedEntry.Recurrence.Value, "RRULE:") Then
-                            position = InStr(InStr(feedEntry.Recurrence.Value, "RRULE:") + 6, feedEntry.Recurrence.Value, vbCrLf)
-
-                            Dim Chaine = Mid(feedEntry.Recurrence.Value, InStr(feedEntry.Recurrence.Value, "RRULE:"), position - InStr(feedEntry.Recurrence.Value, "RRULE:")) & ";"
+                            'Dim Chaine = Mid(feedEntry.Recurrence(0).ToString, InStr(feedEntry.Recurrence(0).ToString, "RRULE:"), position - InStr(feedEntry.Recurrence(0).ToString, "RRULE:")) & ";"
+                            Dim Chaine = Right(feedEntry.Recurrence(0).ToString, feedEntry.Recurrence(0).Length - 6) & ";"
 
                             If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Chaine Recurrence : " & Chaine)
 
@@ -820,8 +951,6 @@ Imports Google.GData.Calendar
                             End If
                         End If
 
-                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.Title.Text & " Compte: " & feedEntry.Authors.FirstOrDefault.Name _
-                                 & " Start: " & StartTime & " End: " & EndTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
 
                         '---------------TESTé POUR:
 
@@ -850,23 +979,25 @@ Imports Google.GData.Calendar
                     If Not Fini And StartTime = System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString Then
                         commandFound = True
                         EntryFind = feedEntry
+
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", " Start: " & StartTime & " End: " & EndTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
+
                     End If
 
 
-                    For Each Times In feedEntry.Times
-                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.Title.Text & " Compte: " & feedEntry.Authors.FirstOrDefault.Name _
-                             & "Start: " & Times.StartTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
+                    If feedEntry.Start.DateTime = System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString Then
+                        commandFound = True
+                        EntryFind = feedEntry
 
-                        If Times.StartTime = System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString Then
-                            commandFound = True
-                            EntryFind = feedEntry
-                        End If
-                    Next
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", " Start: " & feedEntry.Start.DateTime & " End: " & feedEntry.End.DateTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
+
+                    End If
+
 
                     If commandFound Then
-                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", EntryFind.Title.Text & ":" & EntryFind.Summary.Text)
-                        If InStr(EntryFind.Title.Text, ":") Then
-                            Dim ParaAdr2 = Split(EntryFind.Title.Text, ":")
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", EntryFind.Summary & ":" & EntryFind.Id)
+                        If InStr(EntryFind.Description, ":") Then
+                            Dim ParaAdr2 = Split(EntryFind.Description, ":")
 
                             Select Case ParaAdr2(0).ToUpper
                                 Case "COMPOSANT"
@@ -912,10 +1043,10 @@ Imports Google.GData.Calendar
                                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Type non trouvée : " & ParaAdr2(0).ToUpper)
                             End Select
                         Else
-                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & "ScanCalendar - Le nombre de parametre n'est pas correct", feedEntry.Title.Text)
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & "ScanCalendar - Le nombre de parametre n'est pas correct", feedEntry.Summary)
                         End If
                     Else
-                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Evenement non retenu pour une commande : " & feedEntry.Title.Text)
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Evenement non retenu pour une commande : " & feedEntry.Summary)
                     End If
 
                     For Each objet As Object In listedevices
@@ -927,7 +1058,7 @@ Imports Google.GData.Calendar
                                 Minut = CInt(Adr2(1))
                             End If
                         End If
-                        If ((feedEntry.Title.Text.ToUpper = objet.Adresse1.ToString.ToUpper) Or (feedEntry.Title.Text.ToUpper = "Jours fériés en France")) Then
+                        If ((feedEntry.Summary.ToUpper = objet.Adresse1.ToString.ToUpper) Or (feedEntry.Summary.ToUpper = "Jours fériés en France")) Then
 
                             If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Le composant " & objet.name & " est valide pour cette évenement")
 
@@ -936,32 +1067,36 @@ Imports Google.GData.Calendar
                                 ' Un element etre trouvé 
                                 elementFound = True
                                 EntryFind = feedEntry
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.Summary & " Compte: " & feedEntry.Id _
+                                & "Start: " & StartTime & " End: " & EndTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
+
                             End If
 
-                            For Each Times In feedEntry.Times
-                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.Title.Text & " Compte: " & feedEntry.Authors.FirstOrDefault.Name _
-                                     & "Start: " & Times.StartTime & " End: " & Times.EndTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
+                            'For Each Times In feedEntry.Times
 
-                                If Times.StartTime < System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString And _
-                                   Times.EndTime > System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString Then
-                                    ' Un element etre trouvé 
-                                    elementFound = True
-                                    EntryFind = feedEntry
-                                End If
-                            Next
+                            If feedEntry.Start.DateTime < System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString And _
+                               feedEntry.End.DateTime > System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString Then
+                                ' Un element etre trouvé 
+                                elementFound = True
+                                EntryFind = feedEntry
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.Summary & " Compte: " & feedEntry.Id _
+                                & "Start: " & feedEntry.Start.DateTime & " End: " & feedEntry.End.DateTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
+
+                            End If
+                            'Next
 
                             Select Case objet.Type
                                 Case "GENERIQUESTRING"
                                     If elementFound Then
                                         Select Case objet.adresse2.ToString.ToUpper
                                             Case "TITRE"
-                                                objet.setValue(EntryFind.Title.Text)
+                                                objet.setValue(EntryFind.Summary)
 
                                             Case "DESCRIPTION"
-                                                objet.setValue(EntryFind.Content.Content.ToString)
+                                                objet.setValue(EntryFind.Description)
 
                                             Case "LIEU"
-                                                objet.setValue(EntryFind.Locations.Item(0).ValueString)
+                                                objet.setValue(EntryFind.Location)
 
                                         End Select
 
@@ -982,6 +1117,7 @@ Imports Google.GData.Calendar
                         End If
 
                     Next
+
                     elementFound = False
                     commandFound = False
                 Next
@@ -995,3 +1131,131 @@ Imports Google.GData.Calendar
 #End Region
 
 End Class
+
+Namespace GoogleOauthAPI
+    Public Class StoredResponse
+        Public Property access_token() As String
+        Public Property token_type() As String
+        Public Property expires_in() As Long?
+        Public Property refresh_token() As String
+        Public Property Issued() As String
+
+
+        Public Sub New(ByVal pRefreshToken As String)
+            'this.access_token = pAccessToken;
+            ' this.token_type = pTokenType;
+            'this.expires_in = pExpiresIn;
+            Me.refresh_token = pRefreshToken
+            'this.Issued = pIssued;
+            Me.Issued = Date.MinValue.ToString()
+        End Sub
+        Public Sub New()
+            Me.Issued = Date.MinValue.ToString()
+        End Sub
+
+
+    End Class
+
+    ''' <summary>
+    ''' Saved data store that implements <seealso cref="IDataStore"/>. 
+    ''' This Saved data store stores a StoredResponse object.
+    ''' </summary>
+    Friend Class SavedDataStore
+        Implements IDataStore
+
+        Public Property _storedResponse() As StoredResponse
+
+        ''' <summary>
+        ''' Constructs Load perviously saved StoredResponse.
+        ''' </summary>
+
+        Public Sub New(ByVal pResponse As StoredResponse)
+            Me._storedResponse = pResponse
+        End Sub
+        Public Sub New()
+            Me._storedResponse = New StoredResponse()
+        End Sub
+        ''' <summary>
+        ''' Stores the given value. into storedResponse
+        ''' </summary>
+        ''' <typeparam name="T">The type to store in the data store</typeparam>
+        ''' <param name="key">The key</param>
+        ''' <param name="value">The value to store in the data store</param>
+        Public Function StoreAsync(Of T)(ByVal key As String, ByVal value As T) As Task Implements IDataStore.StoreAsync
+
+            Dim serialized = NewtonsoftJsonSerializer.Instance.Serialize(value)
+
+            Dim jObject As jObject = Newtonsoft.Json.Linq.jObject.Parse(serialized)
+
+            ' storing access token
+            Dim test = jObject.SelectToken("access_token")
+            If test IsNot Nothing Then
+                Me._storedResponse.access_token = CStr(test)
+            End If
+            ' storing token type
+            test = jObject.SelectToken("token_type")
+            If test IsNot Nothing Then
+                Me._storedResponse.token_type = CStr(test)
+            End If
+            test = jObject.SelectToken("expires_in")
+            If test IsNot Nothing Then
+                Me._storedResponse.expires_in = CType(test, Long?)
+            End If
+            test = jObject.SelectToken("refresh_token")
+            If test IsNot Nothing Then
+                Me._storedResponse.refresh_token = CStr(test)
+            End If
+            test = jObject.SelectToken("Issued")
+            If test IsNot Nothing Then
+                Me._storedResponse.Issued = CStr(test)
+            End If
+
+            Return TaskEx.Delay(0)
+        End Function
+
+        ''' <summary>
+        ''' Deletes StoredResponse.
+        ''' </summary>
+        ''' <param name="key">The key to delete from the data store</param>
+        Public Function DeleteAsync(Of T)(ByVal key As String) As Task Implements IDataStore.DeleteAsync
+            Me._storedResponse = New StoredResponse()
+
+            Return TaskEx.Delay(0)
+        End Function
+
+
+        ''' Returns the stored value for_storedResponse      
+        ''' <typeparam name="T">The type to retrieve</typeparam>
+        ''' <param name="key">The key to retrieve from the data store</param>
+        ''' <returns>The stored object</returns>
+        Public Function GetAsync(Of T)(ByVal key As String) As Task(Of T) Implements IDataStore.GetAsync
+            Dim tcs As New TaskCompletionSource(Of T)()
+            Try
+
+                Dim JsonData As String = Newtonsoft.Json.JsonConvert.SerializeObject(Me._storedResponse)
+
+                tcs.SetResult(Google.Apis.Json.NewtonsoftJsonSerializer.Instance.Deserialize(Of T)(JsonData))
+            Catch ex As Exception
+                tcs.SetException(ex)
+            End Try
+
+            Return tcs.Task
+        End Function
+
+        ''' <summary>
+        ''' Clears all values in the data store. 
+        ''' </summary>
+        Public Function ClearAsync() As Task Implements IDataStore.ClearAsync
+            Me._storedResponse = New StoredResponse()
+            Return TaskEx.Delay(0)
+        End Function
+
+        '/// <summary>Creates a unique stored key based on the key and the class type.</summary>
+        '/// <param name="key">The object key</param>
+        '/// <param name="t">The type to store or retrieve</param>
+        'public static string GenerateStoredKey(string key, Type t)
+        '{
+        '    return string.Format("{0}-{1}", t.FullName, key);
+        '}
+    End Class
+End Namespace
