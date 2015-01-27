@@ -1,6 +1,9 @@
 ﻿Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
+Imports STRGS = Microsoft.VisualBasic.Strings
+Imports System.Net
+Imports System.IO
 
 '************************************************
 'INFOS 
@@ -25,7 +28,7 @@ Public Class Driver_Arduino_HTTP
     Dim _Port_TCP As String = "@"
     Dim _IP_UDP As String = "@"
     Dim _Port_UDP As String = "@"
-    Dim _Com As String = "COM2"
+    Dim _Com As String = "@"
     Dim _Refresh As Integer = 0
     Dim _Modele As String = "@"
     Dim _Version As String = My.Application.Info.Version.ToString
@@ -54,7 +57,7 @@ Public Class Driver_Arduino_HTTP
 #Region "Propriétés génériques"
     Public WriteOnly Property IdSrv As String Implements HoMIDom.HoMIDom.IDriver.IdSrv
         Set(ByVal value As String)
-            _IdSrv = value
+            _idsrv = value
         End Set
     End Property
 
@@ -288,8 +291,10 @@ Public Class Driver_Arduino_HTTP
 
         'ouverture du port
         Try
-
+            _IsConnect = True
+            WriteLog("Driver Démarré")
         Catch ex As Exception
+            _IsConnect = False
             WriteLog("ERR: Start Exception " & ex.Message)
         End Try
     End Sub
@@ -299,6 +304,7 @@ Public Class Driver_Arduino_HTTP
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Try
             WriteLog("Stop")
+            _IsConnect = False
         Catch ex As Exception
             WriteLog("ERR: Stop Exception " & ex.Message)
         End Try
@@ -315,11 +321,8 @@ Public Class Driver_Arduino_HTTP
     ''' <param name="Objet">Objet représetant le device à interroger</param>
     ''' <remarks>pas utilisé</remarks>
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
-        'pas utilisé
         If _Enable = False Then Exit Sub
-
-
-
+        WriteLog("La fonction Read n'est pas implementée pour ce driver")
     End Sub
 
     ''' <summary>Commander un device</summary>
@@ -332,28 +335,92 @@ Public Class Driver_Arduino_HTTP
         Try
             If _Enable = False Then Exit Sub
             If _IsConnect = False Then
-                WriteLog("Le driver n'est pas démarré, impossible d'écrire sur le port")
+                WriteLog("Le driver n'est pas démarré, impossible de communiquer avec l'arduino")
                 Exit Sub
             End If
             If _DEBUG Then WriteLog("DBG: WRITE Device " & Objet.Name & " <-- " & Command)
-            'suivant le protocole, on lance la bonne fonction
-            'AC / ACEU / ANSLUT / ARC / BLYSS / ELROAB400D / EMW100 / EMW200 / IMPULS / LIGHTWAVERF / PHILIPS / RISINGSUN / WAVEMAN / X10
-            Select Case UCase(Objet.Modele)
-                Case "ARC"
-                    'send_lighting1(Objet.Adresse1, Command, LIGHTING1.sTypeARC)
-                Case "EMW100"
-                    'If Not IsNothing(Parametre1) Then
-                    '    If IsNumeric(Parametre1) Then
-                    '        send_lighting5(Objet.Adresse1, Command, LIGHTING5.sTypeEMW100, CInt(Parametre1))
-                    '    Else
-                    '        WriteLog("ERR: WRITE Le parametre " & CStr(Parametre1) & " n'est pas un entier")
-                    '    End If
-                    'Else
-                    '    WriteLog("ERR: WRITE Il manque un parametre")
-                    'End If
-                Case "" : WriteLog("ERR: WRITE Pas de protocole d'emission pour " & Objet.Name)
-                Case Else : WriteLog("ERR: WRITE Protocole non géré : " & Objet.Modele.ToString.ToUpper)
-            End Select
+
+            'verification si adresse1 n'est pas vide (doit etre egale à l'IP de l'arduino)
+            If String.IsNullOrEmpty(Objet.Adresse1) Or Objet.Adresse1 = "" Then
+                WriteLog("ERR: WRITE l'adresse IP de l'arduino doit etre renseigné (ex: 192.168.1.13) : " & Objet.Name)
+                Exit Sub
+            End If
+
+
+            'suivant le type du PIN on lance la bonne commande : ENTREE|SORTIE|PWM|1WIRE
+
+            'liste des commmandes coté arduino
+            'http://ip/?homidom_ON_X
+            'http://ip/?homidom_OFF_X
+            'http://ip/?homidom_DIM_X_level (level = 0 to 255)
+            'http://ip/?homidom_ENR_X
+            'http://ip/?homidom_CFG_X_TYPE (Type = 0 pour Input, 1 pour Output, 2 pour pwm et 3 pour One wire)
+
+
+            Dim urlcommande As String = ""
+            If Command = "CONFIG_TYPE_PIN" Then
+                Select Case UCase(Objet.Modele)
+                    Case "ENTREE" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_CFG_" & Objet.Adresse2 & "_0"
+                    Case "SORTIE" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_CFG_" & Objet.Adresse2 & "_1"
+                    Case "PWM" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_CFG_" & Objet.Adresse2 & "_2"
+                    Case "1WIRE" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_CFG_" & Objet.Adresse2 & "_3"
+                    Case Else : WriteLog("ERR: WRITE CONFIG_TYPE_PIN : Type de PIN non géré : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
+                End Select
+            Else
+                Select Case UCase(Objet.Modele)
+                    Case "ENTREE" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_ENR_" & Objet.Adresse2
+                    Case "SORTIE"
+                        Select Case Command
+                            Case "OFF" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_ON_" & Objet.Adresse2
+                            Case "ON" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_OFF_" & Objet.Adresse2
+                            Case "DIM"
+                                If Not IsNothing(Parametre1) Then
+                                    If IsNumeric(Parametre1) Then
+                                        urlcommande = "http://" & Objet.Adresse1 & "/?homidom_DIM_" & Objet.Adresse2 & "_" & CInt(Parametre1)
+                                    Else
+                                        WriteLog("ERR: WRITE DIM Le parametre " & CStr(Parametre1) & " n'est pas un entier (" & Objet.Name & ")")
+                                    End If
+                                Else
+                                    WriteLog("ERR: WRITE DIM Il manque un parametre (" & Objet.Name & ")")
+                                End If
+                            Case Else
+                                WriteLog("ERR: Send AC : Commande invalide : " & Command)
+                                Exit Sub
+                        End Select
+                    Case "PWM"
+                        If Not IsNothing(Parametre1) Then
+                            If IsNumeric(Parametre1) Then
+                                urlcommande = "http://" & Objet.Adresse1 & "/?homidom_DIM_" & Objet.Adresse2 & "_" & CInt(Parametre1)
+                            Else
+                                WriteLog("ERR: WRITE DIM Le parametre " & CStr(Parametre1) & " n'est pas un entier (" & Objet.Name & ")")
+                            End If
+                        Else
+                            WriteLog("ERR: WRITE DIM Il manque un parametre (" & Objet.Name & ")")
+                        End If
+                    Case "1WIRE"
+                        WriteLog("le 1-wire n'est pas encore géré :" & Objet.Name)
+                    Case "" : WriteLog("ERR: WRITE Pas de protocole d'emission pour " & Objet.Name)
+                    Case Else : WriteLog("ERR: WRITE Protocole non géré : " & Objet.Modele.ToString.ToUpper)
+                End Select
+            End If
+
+            If urlcommande <> "" Then
+                If _DEBUG Then WriteLog("DBG: WRITE Composant " & Objet.Name & " : " & urlcommande)
+
+                Dim request As HttpWebRequest = WebRequest.Create(urlcommande)
+                CType(request, HttpWebRequest).UserAgent = "Other"
+                Dim response As WebResponse = request.GetResponse()
+                If CType(response, HttpWebResponse).StatusCode = HttpStatusCode.OK Then
+                    Dim dataStream As Stream = response.GetResponseStream()
+                    Dim reader As New StreamReader(dataStream)
+                    Dim responseFromServer As String = reader.ReadToEnd()
+                    WriteLog("DBG: Commande passée à l arduino : " & urlcommande & " --> " & responseFromServer & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
+                Else
+                    WriteLog("DBG: Commande passée à l arduino : " & urlcommande & " --> Réponse incorrecte reçu : " & CType(response, HttpWebResponse).StatusCode & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
+                End If
+                response.Close()
+            End If
+
         Catch ex As Exception
             WriteLog("ERR: WRITE" & ex.ToString)
         End Try
@@ -478,18 +545,17 @@ Public Class Driver_Arduino_HTTP
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
-            'add_devicecommande("GROUP_ON", "Protocole AC/ACEU/ARC/BLYSS : ON sur le groupe du composant", 1)
-            'add_devicecommande("BRIGHT", "Protocole X10 : Bright", 0)
+            add_devicecommande("CONFIG_TYPE_PIN", "configurer le type de PIN sur l arduino suivant les propriétés du composant", 0)
 
             'Libellé Driver
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            Add_LibelleDevice("ADRESSE1", "Adresse", "Adresse du composant. Le format dépend du protocole")
-            Add_LibelleDevice("ADRESSE2", "@", "")
+            Add_LibelleDevice("ADRESSE1", "Adresse IP Arduino", "Adresse IP de l arduino gérant ce composant (ex:192.168.1.13)")
+            Add_LibelleDevice("ADRESSE2", "Numéro du PIN", "Numéro du PIN sur l arduino (ex: 1)")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "Protocole", "Nom du protocole à utiliser : aucun/AC/ACEU/ANSLUT/ARC", "aucun|AC|ACEU|ANSLUT|ARC")
-            Add_LibelleDevice("REFRESH", "@", "")
+            Add_LibelleDevice("MODELE", "TYPE PIN", "Type du PIN : ENTREE(Analog)/SORTIE(ON/OFF)/PWM(0-255)/1WIRE", "ENTREE|SORTIE|PWM|1WIRE")
+            Add_LibelleDevice("REFRESH", "", "")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
         Catch ex As Exception
@@ -500,7 +566,8 @@ Public Class Driver_Arduino_HTTP
     ''' <summary>Si refresh >0 gestion du timer</summary>
     ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
     Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
-
+        If _Enable = False Then Exit Sub
+        WriteLog("La fonction Refresh n'est pas implementée pour ce driver")
     End Sub
 
 #End Region
