@@ -321,8 +321,21 @@ Public Class Driver_Arduino_HTTP
     ''' <param name="Objet">Objet représetant le device à interroger</param>
     ''' <remarks>pas utilisé</remarks>
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
-        If _Enable = False Then Exit Sub
-        WriteLog("La fonction Read n'est pas implementée pour ce driver")
+        Try
+            If _Enable = False Then Exit Sub
+
+            If Objet.Modele = "ENTREE" Then
+                Dim urlcommande As String = ""
+                urlcommande = "http://" & Objet.Adresse1 & "/?homidom_ENR_" & Objet.Adresse2
+
+
+            Else
+                WriteLog("La fonction Read n'est implementée que le type de PIN ENTREE (ANALOGIQUE)")
+            End If
+
+        Catch ex As Exception
+            WriteLog("ERR: READ " & ex.ToString)
+        End Try
     End Sub
 
     ''' <summary>Commander un device</summary>
@@ -405,24 +418,49 @@ Public Class Driver_Arduino_HTTP
             End If
 
             If urlcommande <> "" Then
-                If _DEBUG Then WriteLog("DBG: WRITE Composant " & Objet.Name & " : " & urlcommande)
+                If _DEBUG Then WriteLog("DBG: WRITE Composant " & Objet.Name & " URL : " & urlcommande)
 
                 Dim request As HttpWebRequest = WebRequest.Create(urlcommande)
+                request.Timeout = 3000
                 CType(request, HttpWebRequest).UserAgent = "Other"
-                Dim response As WebResponse = request.GetResponse()
-                If CType(response, HttpWebResponse).StatusCode = HttpStatusCode.OK Then
-                    Dim dataStream As Stream = response.GetResponseStream()
-                    Dim reader As New StreamReader(dataStream)
-                    Dim responseFromServer As String = reader.ReadToEnd()
-                    WriteLog("DBG: Commande passée à l arduino : " & urlcommande & " --> " & responseFromServer & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
-                Else
-                    WriteLog("DBG: Commande passée à l arduino : " & urlcommande & " --> Réponse incorrecte reçu : " & CType(response, HttpWebResponse).StatusCode & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
-                End If
-                response.Close()
+
+
+                'Dim response As WebResponse = request.GetResponse()
+                'If CType(response, HttpWebResponse).StatusCode = HttpStatusCode.OK Then
+                '    Dim dataStream As Stream = response.GetResponseStream()
+                '    Dim reader As New StreamReader(dataStream)
+                '    Dim responseFromServer As String = reader.ReadToEnd()
+                '    WriteLog("DBG: Commande passée à l arduino : " & urlcommande & " --> " & responseFromServer & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
+                'Else
+                '    WriteLog("DBG: Commande passée à l arduino : " & urlcommande & " --> Réponse incorrecte reçu : " & CType(response, HttpWebResponse).StatusCode & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
+                'End If
+
+
+                'Get a web response  
+                Dim response As WebResponse
+                Try
+                    response = request.GetResponse()
+                    If CType(response, HttpWebResponse).StatusCode = HttpStatusCode.OK Then
+                        Dim dataStream As Stream = response.GetResponseStream()
+                        Dim reader As New StreamReader(dataStream)
+                        Dim responseFromServer As String = reader.ReadToEnd()
+                        WriteLog("DBG: Commande passée à l arduino : " & urlcommande & " --> " & responseFromServer & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
+                    Else
+                        WriteLog("DBG: Commande passée à l arduino : " & urlcommande & " --> Réponse incorrecte reçu : " & CType(response, HttpWebResponse).StatusCode & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
+                    End If
+                    response.Close()
+                Catch ex As System.Net.WebException
+                    WriteLog("ERR: Commande passée à l arduino : " & urlcommande & " --> Erreur de communication : " & ex.Message.ToString)
+
+                    If ex.Status = WebExceptionStatus.ProtocolError Then
+
+                    End If
+                End Try
+
             End If
 
         Catch ex As Exception
-            WriteLog("ERR: WRITE" & ex.ToString)
+            WriteLog("ERR: WRITE " & ex.ToString)
         End Try
     End Sub
 
@@ -554,8 +592,8 @@ Public Class Driver_Arduino_HTTP
             Add_LibelleDevice("ADRESSE1", "Adresse IP Arduino", "Adresse IP de l arduino gérant ce composant (ex:192.168.1.13)")
             Add_LibelleDevice("ADRESSE2", "Numéro du PIN", "Numéro du PIN sur l arduino (ex: 1)")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "TYPE PIN", "Type du PIN : ENTREE(Analog)/SORTIE(ON/OFF)/PWM(0-255)/1WIRE", "ENTREE|SORTIE|PWM|1WIRE")
-            Add_LibelleDevice("REFRESH", "", "")
+            Add_LibelleDevice("MODELE", "TYPE PIN", "Type du PIN : ENTREE(Analogique)/SORTIE(ON/OFF)/PWM(0-255)/1WIRE", "ENTREE|SORTIE|PWM|1WIRE")
+            Add_LibelleDevice("REFRESH", "@", "")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
         Catch ex As Exception
