@@ -1036,7 +1036,7 @@ Class Window1
                         Dim OK As Boolean = False
                         Dim t As DateTime = DateTime.Now
                         Do While DateTime.Now < t.AddSeconds(10) And OK = False
-                            OK = myService.ReturnDriverByID(IdSrv, sender.tag).IsConnect
+                            OK = myService.ReturnDriverByID(IdSrv, sender.uid).IsConnect
                             Thread.Sleep(1000)
                         Loop
 
