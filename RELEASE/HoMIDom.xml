@@ -246,6 +246,12 @@ HoMIDom
  Class pour gérer les télécommandes
  </summary>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.ManagerData.OnMessageReceiveUDP(System.String)">
+	<summary>
+ Message UDP reçu
+ </summary>
+	<param name="Message"></param>
+	<remarks></remarks>
 </member><member name="T:HoMIDom.HoMIDom.Mail">
 	<summary>
  Envoi un mail
@@ -701,6 +707,46 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.TimerSecTick">
 	<summary>Traitement à effectuer toutes les secondes/minutes/heures/minuit/midi</summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ThreadSecond">
+	<summary>
+ Thread à effectuer toutes les secondes
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ThreadMinute">
+	<summary>
+ Thread à effectuer toutes les minutes
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ThreadHour">
+	<summary>
+ Thread à effectuer toutes les heures
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ThreadMinuit">
+	<summary>
+ Thread à effectuer à minuit
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.Thread3h">
+	<summary>
+ Thread à effectuer à 3h du matin
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ThreadMidi">
+	<summary>
+ Thread à effectuer à midi
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ThreadSaveConfig">
+	<summary>
+ Thread permettant la sauvegarde de la config
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ThreadSaveConfigFolder">
+	<summary>
+ Thread permettant de sauvegarder la config dans un autre dossier
+ </summary>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.VerifTimeDevice">
 	<summary>on checke si il y a cron à faire</summary>
