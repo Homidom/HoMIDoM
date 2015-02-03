@@ -1031,7 +1031,7 @@ Class Window1
                         'AffDriver()
 
                         Me.Cursor = Cursors.Wait
-                        myService.StartDriver(IdSrv, sender.tag)
+                        myService.StartDriver(IdSrv, sender.uid)
 
                         Dim OK As Boolean = False
                         Dim t As DateTime = DateTime.Now
