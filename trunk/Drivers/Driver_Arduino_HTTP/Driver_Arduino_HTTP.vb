@@ -323,17 +323,112 @@ Public Class Driver_Arduino_HTTP
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Try
             If _Enable = False Then Exit Sub
+            If _IsConnect = False Then
+                WriteLog("Le driver n'est pas démarré, impossible de communiquer avec l'arduino")
+                Exit Sub
+            End If
+            If _DEBUG Then WriteLog("DBG: READ Device " & Objet.Name)
 
-            Select UCase(Objet.Modele)
+            'verification si adresse1 n'est pas vide (doit etre egale à l'IP de l'arduino)
+            If String.IsNullOrEmpty(Objet.Adresse1) Or Objet.Adresse1 = "" Then
+                WriteLog("ERR: READ l'adresse IP de l'arduino doit etre renseigné (ex: 192.168.1.13) : " & Objet.Name)
+                Exit Sub
+            End If
+
+            Dim urlcommande As String = ""
+            Select Case UCase(Objet.Modele)
                 Case "ENTREE"
-                    Dim urlcommande As String = ""
                     urlcommande = "http://" & Objet.Adresse1 & "/?homidom_ENR_" & Objet.Adresse2
                 Case Else
                     WriteLog("La fonction Read n'est implementée que le type de PIN ENTREE (ANALOGIQUE)")
                     Exit Sub
             End Select
 
+            If urlcommande <> "" Then
+                If _DEBUG Then WriteLog("DBG: READ Composant " & Objet.Name & " URL : " & urlcommande)
 
+                Dim request As HttpWebRequest = WebRequest.Create(urlcommande)
+                request.Timeout = 3000
+                CType(request, HttpWebRequest).UserAgent = "Other"
+
+                'Get a web response  
+                Dim response As WebResponse
+                Dim responseFromServer As String = ""
+                Try
+                    response = request.GetResponse()
+                    If CType(response, HttpWebResponse).StatusCode = HttpStatusCode.OK Then
+                        Dim dataStream As Stream = response.GetResponseStream()
+                        Dim reader As New StreamReader(dataStream)
+                        responseFromServer = reader.ReadToEnd()
+                        WriteLog("DBG: Commande passée à l arduino " & Objet.Name & " : " & urlcommande & " --> " & responseFromServer & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
+                    Else
+                        WriteLog("ERR: Commande passée à l arduino " & Objet.Name & " : " & urlcommande & " --> Réponse incorrecte reçu : " & CType(response, HttpWebResponse).StatusCode & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
+                    End If
+                    response.Close()
+                Catch ex As System.Net.WebException
+                    WriteLog("ERR: Commande passée à l arduino : " & urlcommande & " --> Erreur de communication : " & ex.Message.ToString)
+                End Try
+
+                'Traitement de la réponse
+                If responseFromServer = "" Then
+                    WriteLog("ERR: Pas de réponse de l'arduino " & Objet.Name & " : " & urlcommande)
+                Else
+                    'Analyse de la réponse: "NumPin"="command" "parametre" : "2=DIM 20" "4=ON"
+                    Dim responsetab As String() = responseFromServer.Split("=")
+                    If responsetab.Count = 2 Then
+                        Dim responsetab2 As String() = responsetab(1).Split(" ")
+                        If responsetab2.Count = 1 Then
+                            WriteLog("DBG: " & Objet.Name & ": Reponse reçu de larduino : " & responsetab2(0))
+                            'update de la value suivant la commande et le type de composant
+                            Select Case responsetab2(0)
+                                Case "ON"
+                                    If TypeOf Objet.Value Is Boolean Then
+                                        Objet.Value = True
+                                    ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
+                                        Objet.Value = 100
+                                    Else
+                                        Objet.Value = "ON"
+                                    End If
+                                Case "OFF"
+                                    If TypeOf Objet.Value Is Boolean Then
+                                        Objet.Value = False
+                                    ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
+                                        Objet.Value = 0
+                                    Else
+                                        Objet.Value = "OFF"
+                                    End If
+                            End Select
+                        Else
+                            WriteLog("DBG: " & Objet.Name & ": Reponse reçu de larduino : " & responsetab2(0) & "-" & responsetab2(1))
+                            'update de la value suivant la commande et le type de composant
+                            Select Case responsetab2(0)
+                                Case "DIM"
+                                    If TypeOf Objet.Value Is Boolean Then
+                                        If CInt(responsetab2(1)) > 0 Then Objet.Value = True Else Objet.Value = False
+                                    ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
+                                        Objet.Value = CInt(responsetab2(1))
+                                    Else
+                                        Objet.Value = responsetab2(1)
+                                    End If
+                                Case "ENR"
+                                    If TypeOf Objet.Value Is Boolean Then
+                                        If CInt(responsetab2(1)) > 0 Then Objet.Value = True Else Objet.Value = False
+                                    ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
+                                        Objet.Value = CInt(responsetab2(1))
+                                    Else
+                                        Objet.Value = responsetab2(1)
+                                    End If
+                                Case "CFG"
+                                    WriteLog(Objet.Name & ": Type de PIN configuré à " & Objet.Modele.ToString.ToUpper)
+                            End Select
+                        End If
+                    Else
+                        WriteLog("ERR: la réponse reçu n est pas correct (NumPin=Command Value ou NumPin=Command) " & Objet.Name & " : " & responseFromServer)
+                    End If
+
+
+                End If
+            End If
 
 
 
