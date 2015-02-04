@@ -68,16 +68,16 @@ Imports Newtonsoft.Json.Linq
     Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
     Dim _AutoDiscover As Boolean = False
 
-    'Ajoutés dans les ppt avancés dans New()
-    Dim _DEBUG As Boolean = False
-    Dim _UserName As String
-    Dim _PassWord As String
-    Dim _CalHomidomName As String
-    Dim _CalFeriesName As String
-
+   
 #End Region
 
 #Region "Variables Internes"
+
+    'Ajoutés dans les ppt avancés dans New()
+    Dim _DEBUG As Boolean = False
+    Dim _CalHomidomName As String
+    Dim _CalFeriesName As String
+
     Dim Service As CalendarService ' = New CalendarService("HoMIDoM")
 
     '' Calendar scopes which is initialized on the main method.
@@ -328,14 +328,11 @@ Imports Newtonsoft.Json.Linq
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         'Dim queryCal As New CalendarQuery()
         'Dim CalendarFeed As CalendarFeed
-
         Try
             ' Récuperation des parametres avancés
             _DEBUG = _Parametres.Item(0).Valeur
-            _UserName = _Parametres.Item(1).Valeur
-            _PassWord = _Parametres.Item(2).Valeur
-            _CalHomidomName = _Parametres.Item(3).Valeur
-            _CalFeriesName = _Parametres.Item(4).Valeur
+            _CalHomidomName = _Parametres.Item(1).Valeur
+            _CalFeriesName = _Parametres.Item(2).Valeur
 
             ' Positionne le compte Gmail à utiliser
             'Service.setUserCredentials(_UserName, _PassWord)
@@ -370,7 +367,6 @@ Imports Newtonsoft.Json.Linq
             If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar ", "File Path TOKENRESPONSE = " & fileName)
 
             Dim credential As UserCredential
-
             If System.IO.File.Exists(fileName) Then
                 Dim Temp1 As String = System.IO.File.ReadAllText(fileName).Replace(",", "," & ControlChars.CrLf)
                 Dim position1 As Integer = InStr(Temp1, "refresh_token") + 15
@@ -389,7 +385,7 @@ Imports Newtonsoft.Json.Linq
                 GoogleWebAuthorizationBroker.Folder = "Tasks.Auth.Store"
                 credential = GoogleWebAuthorizationBroker.AuthorizeAsync(X, scopes, "user", CancellationToken.None, New GoogleOauthAPI.SavedDataStore(myStoredResponse)).Result
             Else
-                
+
                 System.Diagnostics.Process.Start(My.Application.Info.DirectoryPath & "\Drivers\GoogleOauthAPI.exe")
 
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar ", "File Path TOKENRESPONSE n'a pas été trouvé ")
@@ -429,13 +425,13 @@ Imports Newtonsoft.Json.Linq
                 If calendar.Summary.ToUpper = _CalHomidomName.ToUpper Then
                     CalendarHomidom = calendar
                     _IsConnect = True
-                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar", "Calendrier " & calendar.Summary.ToUpper & " trouvé dans le compte " & _UserName)
+                    _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar", "Calendrier " & calendar.Summary.ToUpper & " trouvé dans le compte ")
                     _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar", "Driver " & Me.Nom & " démarré")
 
                     ' Recherche le calendrier des jours Fériés  
                 ElseIf calendar.Summary.ToUpper = _CalFeriesName.ToUpper Then
                     Calendarferies = calendar
-                    If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar", "Calendrier Jours fériés trouvé dans le compte " & _UserName)
+                    If _DEBUG Then _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "GoogleCalendar", "Calendrier Jours fériés trouvé dans le compte ")
                 End If
             Next
 
@@ -458,7 +454,7 @@ Imports Newtonsoft.Json.Linq
             If CalendarHomidom Is Nothing And Calendarferies Is Nothing Then
                 ' pas de demarrage du drives
                 _IsConnect = False
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar", "Calendrier " & _CalFeriesName.ToUpper & " non trouvé dans le compte " & _UserName)
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar", "Calendrier " & _CalFeriesName.ToUpper & " non trouvé dans le compte ")
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar", "Driver " & Me.Nom & " non démarré")
             End If
 
@@ -644,8 +640,6 @@ Imports Newtonsoft.Json.Linq
 
             ' Défintion des Paramètres avancés
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
-            Add_ParamAvance("Compte Google", "Adresse de messagerie Google", "")
-            Add_ParamAvance("Mot de passe", "Mot de passe du compte Google", "")
             Add_ParamAvance("Calendrier Homidom", "Nom du calendrier réservé à HoMIDoM", "homidom")
             Add_ParamAvance("Calendrier Jours Fériés", "Nom du calendrier réservé aux jours fériés du pays", "")
 
@@ -767,213 +761,215 @@ Imports Newtonsoft.Json.Linq
 
                     Dim StartTime, EndTime As Date
                     Dim Fini As Boolean = False
-
-                    If feedEntry.Recurrence(0) IsNot Nothing Then
-                        Dim position As Integer
-                        If InStr(feedEntry.Recurrence(0).ToString, "DTSTART;TZID") Then
-                            position = InStr(InStr(feedEntry.Recurrence(0).ToString, "DTSTART;TZID") + 12, feedEntry.Recurrence(0).ToString, vbCrLf) - 15
-                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "StartTime Recurrence : " & Mid(feedEntry.Recurrence(0).ToString, position, 15) & " et position= " & position)
-                            StartTime = New System.DateTime(Mid(feedEntry.Recurrence(0).ToString, position, 4), _
-                                                           Mid(feedEntry.Recurrence(0).ToString, position + 4, 2), _
-                                                           Mid(feedEntry.Recurrence(0).ToString, position + 6, 2), _
-                                                           Mid(feedEntry.Recurrence(0).ToString, position + 9, 2), _
-                                                           Mid(feedEntry.Recurrence(0).ToString, position + 11, 2), _
-                                                           Mid(feedEntry.Recurrence(0).ToString, position + 13, 2))
-                        End If
-                        If InStr(feedEntry.Recurrence(0).ToString, "DTEND;TZID") Then
-                            position = InStr(InStr(feedEntry.Recurrence(0).ToString, "DTEND;TZID") + 10, feedEntry.Recurrence(0).ToString, vbCrLf) - 15
-                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "EndTime Recurrence : " & Mid(feedEntry.Recurrence(0).ToString, position, 15) & " et position= " & position)
-                            EndTime = New System.DateTime(Mid(feedEntry.Recurrence(0).ToString, position, 4), _
-                                                           Mid(feedEntry.Recurrence(0).ToString, position + 4, 2), _
-                                                           Mid(feedEntry.Recurrence(0).ToString, position + 6, 2), _
-                                                           Mid(feedEntry.Recurrence(0).ToString, position + 9, 2), _
-                                                           Mid(feedEntry.Recurrence(0).ToString, position + 11, 2), _
-                                                           Mid(feedEntry.Recurrence(0).ToString, position + 13, 2))
-                        End If
-                        StartTime = feedEntry.Start.DateTime
-                        EndTime = feedEntry.End.DateTime
-                        If InStr(feedEntry.Recurrence(0).ToString, "RRULE:") Then
-                            position = InStr(InStr(feedEntry.Recurrence(0).ToString, "RRULE:") + 6, feedEntry.Recurrence(0).ToString, vbCrLf)
-
-                            'Dim Chaine = Mid(feedEntry.Recurrence(0).ToString, InStr(feedEntry.Recurrence(0).ToString, "RRULE:"), position - InStr(feedEntry.Recurrence(0).ToString, "RRULE:")) & ";"
-                            Dim Chaine = Right(feedEntry.Recurrence(0).ToString, feedEntry.Recurrence(0).Length - 6) & ";"
-
-                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Chaine Recurrence : " & Chaine)
-
-                            Dim Frequence As String = ""
-                            Dim Interval As String = ""
-                            Dim Compteur As String = ""
-                            Dim Jusque As String = ""
-                            Dim EndDate As String = ""
-                            Dim ByDay As String = ""
-                            Dim ByMonth As String = ""
-                            Dim ByMonthDay As String = ""
-
-                            If InStr(Chaine, "INTERVAL=") > 0 Then
-                                position = InStr(InStr(Chaine, "INTERVAL=") + 9, Chaine, ";")
-                                Interval = Mid(Chaine, InStr(Chaine, "INTERVAL=") + 9, position - InStr(Chaine, "INTERVAL=") - 9)
-                            Else
-                                Interval = "1"
+                    
+                    If feedEntry.Recurrence IsNot Nothing Then
+                        If feedEntry.Recurrence(0) IsNot Nothing Then
+                            Dim position As Integer
+                            If InStr(feedEntry.Recurrence(0).ToString, "DTSTART;TZID") Then
+                                position = InStr(InStr(feedEntry.Recurrence(0).ToString, "DTSTART;TZID") + 12, feedEntry.Recurrence(0).ToString, vbCrLf) - 15
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "StartTime Recurrence : " & Mid(feedEntry.Recurrence(0).ToString, position, 15) & " et position= " & position)
+                                StartTime = New System.DateTime(Mid(feedEntry.Recurrence(0).ToString, position, 4), _
+                                                               Mid(feedEntry.Recurrence(0).ToString, position + 4, 2), _
+                                                               Mid(feedEntry.Recurrence(0).ToString, position + 6, 2), _
+                                                               Mid(feedEntry.Recurrence(0).ToString, position + 9, 2), _
+                                                               Mid(feedEntry.Recurrence(0).ToString, position + 11, 2), _
+                                                               Mid(feedEntry.Recurrence(0).ToString, position + 13, 2))
                             End If
-
-                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Interval Recurrence : " & Interval & " Position= " & position)
-
-                            If InStr(Chaine, "BYDAY=") > 0 Then
-                                position = InStr(InStr(Chaine, "BYDAY=") + 6, Chaine, ";")
-                                ByDay = Mid(Chaine, InStr(Chaine, "BYDAY=") + 6, position - InStr(Chaine, "BYDAY=") - 6)
-                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "ByDay Recurrence : " & ByDay & " Position= " & position)
+                            If InStr(feedEntry.Recurrence(0).ToString, "DTEND;TZID") Then
+                                position = InStr(InStr(feedEntry.Recurrence(0).ToString, "DTEND;TZID") + 10, feedEntry.Recurrence(0).ToString, vbCrLf) - 15
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "EndTime Recurrence : " & Mid(feedEntry.Recurrence(0).ToString, position, 15) & " et position= " & position)
+                                EndTime = New System.DateTime(Mid(feedEntry.Recurrence(0).ToString, position, 4), _
+                                                               Mid(feedEntry.Recurrence(0).ToString, position + 4, 2), _
+                                                               Mid(feedEntry.Recurrence(0).ToString, position + 6, 2), _
+                                                               Mid(feedEntry.Recurrence(0).ToString, position + 9, 2), _
+                                                               Mid(feedEntry.Recurrence(0).ToString, position + 11, 2), _
+                                                               Mid(feedEntry.Recurrence(0).ToString, position + 13, 2))
                             End If
+                            StartTime = feedEntry.Start.DateTime
+                            EndTime = feedEntry.End.DateTime
+                            If InStr(feedEntry.Recurrence(0).ToString, "RRULE:") Then
+                                position = InStr(InStr(feedEntry.Recurrence(0).ToString, "RRULE:") + 6, feedEntry.Recurrence(0).ToString, vbCrLf)
 
-                            If InStr(Chaine, "BYMONTHDAY=") > 0 Then
-                                position = InStr(InStr(Chaine, "BYMONTHDAY=") + 11, Chaine, ";")
-                                ByMonthDay = Mid(Chaine, InStr(Chaine, "BYMONTHDAY=") + 11, position - InStr(Chaine, "BYMONTHDAY=") - 11)
-                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "ByMonthDay Recurrence : " & ByMonthDay & " Position= " & position)
-                            End If
+                                'Dim Chaine = Mid(feedEntry.Recurrence(0).ToString, InStr(feedEntry.Recurrence(0).ToString, "RRULE:"), position - InStr(feedEntry.Recurrence(0).ToString, "RRULE:")) & ";"
+                                Dim Chaine = Right(feedEntry.Recurrence(0).ToString, feedEntry.Recurrence(0).Length - 6) & ";"
 
-                            If InStr(Chaine, "BYMONTH=") > 0 Then
-                                position = InStr(InStr(Chaine, "BYMONTH=") + 8, Chaine, ";")
-                                ByMonth = Mid(Chaine, InStr(Chaine, "BYMONTH=") + 8, position - InStr(Chaine, "BYMONTH=") - 8)
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Chaine Recurrence : " & Chaine)
 
-                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "ByMonth Recurrence : " & ByMonth & " Position= " & position)
+                                Dim Frequence As String = ""
+                                Dim Interval As String = ""
+                                Dim Compteur As String = ""
+                                Dim Jusque As String = ""
+                                Dim EndDate As String = ""
+                                Dim ByDay As String = ""
+                                Dim ByMonth As String = ""
+                                Dim ByMonthDay As String = ""
 
-                            End If
-
-                            If InStr(Chaine, "FREQ=") > 0 Then
-                                position = InStr(InStr(Chaine, "FREQ=") + 5, Chaine, ";")
-                                Frequence = Mid(Chaine, InStr(Chaine, "FREQ=") + 5, position - InStr(Chaine, "FREQ=") - 5)
-
-                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Frequence Recurrence : " & Frequence & " Position= " & position)
-                                Dim Sdatesearch As Date
-                                Dim Edatesearch As Date
-
-                                If Frequence = "DAILY" Then
-                                    Sdatesearch = StartTime
-                                    Edatesearch = EndTime
-                                    While Sdatesearch.Date <= Now.Date
-                                        StartTime = Sdatesearch
-                                        EndTime = Edatesearch
-                                        Sdatesearch = Sdatesearch.AddDays(CInt(Interval))
-                                        Edatesearch = Edatesearch.AddDays(CInt(Interval))
-                                    End While
+                                If InStr(Chaine, "INTERVAL=") > 0 Then
+                                    position = InStr(InStr(Chaine, "INTERVAL=") + 9, Chaine, ";")
+                                    Interval = Mid(Chaine, InStr(Chaine, "INTERVAL=") + 9, position - InStr(Chaine, "INTERVAL=") - 9)
+                                Else
+                                    Interval = "1"
                                 End If
 
-                                If Frequence = "WEEKLY" Then
-                                    If ByDay <> "" Then
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Interval Recurrence : " & Interval & " Position= " & position)
+
+                                If InStr(Chaine, "BYDAY=") > 0 Then
+                                    position = InStr(InStr(Chaine, "BYDAY=") + 6, Chaine, ";")
+                                    ByDay = Mid(Chaine, InStr(Chaine, "BYDAY=") + 6, position - InStr(Chaine, "BYDAY=") - 6)
+                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "ByDay Recurrence : " & ByDay & " Position= " & position)
+                                End If
+
+                                If InStr(Chaine, "BYMONTHDAY=") > 0 Then
+                                    position = InStr(InStr(Chaine, "BYMONTHDAY=") + 11, Chaine, ";")
+                                    ByMonthDay = Mid(Chaine, InStr(Chaine, "BYMONTHDAY=") + 11, position - InStr(Chaine, "BYMONTHDAY=") - 11)
+                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "ByMonthDay Recurrence : " & ByMonthDay & " Position= " & position)
+                                End If
+
+                                If InStr(Chaine, "BYMONTH=") > 0 Then
+                                    position = InStr(InStr(Chaine, "BYMONTH=") + 8, Chaine, ";")
+                                    ByMonth = Mid(Chaine, InStr(Chaine, "BYMONTH=") + 8, position - InStr(Chaine, "BYMONTH=") - 8)
+
+                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "ByMonth Recurrence : " & ByMonth & " Position= " & position)
+
+                                End If
+
+                                If InStr(Chaine, "FREQ=") > 0 Then
+                                    position = InStr(InStr(Chaine, "FREQ=") + 5, Chaine, ";")
+                                    Frequence = Mid(Chaine, InStr(Chaine, "FREQ=") + 5, position - InStr(Chaine, "FREQ=") - 5)
+
+                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Frequence Recurrence : " & Frequence & " Position= " & position)
+                                    Dim Sdatesearch As Date
+                                    Dim Edatesearch As Date
+
+                                    If Frequence = "DAILY" Then
                                         Sdatesearch = StartTime
                                         Edatesearch = EndTime
-                                        While Sdatesearch.DayOfWeek <> Now.DayOfWeek
-                                            Sdatesearch = Sdatesearch.AddDays(1)
-                                            Edatesearch = Edatesearch.AddDays(1)
+                                        While Sdatesearch.Date <= Now.Date
+                                            StartTime = Sdatesearch
+                                            EndTime = Edatesearch
+                                            Sdatesearch = Sdatesearch.AddDays(CInt(Interval))
+                                            Edatesearch = Edatesearch.AddDays(CInt(Interval))
                                         End While
-                                        If Now.DayOfWeek = Sdatesearch.DayOfWeek Then
-                                            If InStr(ByDay, str_to_week(Now.DayOfWeek)) Then
-                                                While Sdatesearch.Date <= Now.Date
-                                                    StartTime = Sdatesearch
-                                                    EndTime = Edatesearch
-                                                    Sdatesearch = Sdatesearch.AddDays(CInt(Interval) * 7)
-                                                    Edatesearch = Edatesearch.AddDays(CInt(Interval) * 7)
-                                                End While
+                                    End If
+
+                                    If Frequence = "WEEKLY" Then
+                                        If ByDay <> "" Then
+                                            Sdatesearch = StartTime
+                                            Edatesearch = EndTime
+                                            While Sdatesearch.DayOfWeek <> Now.DayOfWeek
+                                                Sdatesearch = Sdatesearch.AddDays(1)
+                                                Edatesearch = Edatesearch.AddDays(1)
+                                            End While
+                                            If Now.DayOfWeek = Sdatesearch.DayOfWeek Then
+                                                If InStr(ByDay, str_to_week(Now.DayOfWeek)) Then
+                                                    While Sdatesearch.Date <= Now.Date
+                                                        StartTime = Sdatesearch
+                                                        EndTime = Edatesearch
+                                                        Sdatesearch = Sdatesearch.AddDays(CInt(Interval) * 7)
+                                                        Edatesearch = Edatesearch.AddDays(CInt(Interval) * 7)
+                                                    End While
+                                                End If
                                             End If
                                         End If
                                     End If
-                                End If
 
-                                If Frequence = "MONTHLY" Then
-                                    Dim nb, dow, dday As Integer
-                                    If ByDay <> "" Then
-                                        nb = CInt(Left(ByDay, 1))
-                                        dow = str_to_week(Right(ByDay, 2))
-                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Monthly Recurrence : Tout les " & nb & " et " & dow)
+                                    If Frequence = "MONTHLY" Then
+                                        Dim nb, dow, dday As Integer
+                                        If ByDay <> "" Then
+                                            nb = CInt(Left(ByDay, 1))
+                                            dow = str_to_week(Right(ByDay, 2))
+                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Monthly Recurrence : Tout les " & nb & " et " & dow)
 
-                                        Dim firstday As Date = New System.DateTime(Now.Year, Now.Month, 1)
-                                        While firstday.DayOfWeek <> dow
-                                            firstday = firstday.AddDays(1)
+                                            Dim firstday As Date = New System.DateTime(Now.Year, Now.Month, 1)
+                                            While firstday.DayOfWeek <> dow
+                                                firstday = firstday.AddDays(1)
+                                            End While
+                                            dday = firstday.Day + ((nb - 1) * 7)
+                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Monthly Recurrence : DDay= " & dday)
+                                        End If
+                                        If ByMonthDay <> "" Then
+                                            dday = CInt(ByMonthDay)
+                                        End If
+
+                                        Sdatesearch = StartTime
+                                        Edatesearch = EndTime
+                                        While Sdatesearch.Day <> dday
+                                            Sdatesearch = Sdatesearch.AddDays(1)
+                                            Edatesearch = Edatesearch.AddDays(1)
                                         End While
-                                        dday = firstday.Day + ((nb - 1) * 7)
-                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Monthly Recurrence : DDay= " & dday)
+
+                                        While Sdatesearch.Date <= Now.Date
+                                            StartTime = Sdatesearch
+                                            EndTime = Edatesearch
+                                            Sdatesearch = Sdatesearch.AddMonths(CInt(Interval))
+                                            Edatesearch = Edatesearch.AddMonths(CInt(Interval))
+                                        End While
                                     End If
-                                    If ByMonthDay <> "" Then
-                                        dday = CInt(ByMonthDay)
+
+                                    If Frequence = "YEARLY" Then
+                                        Sdatesearch = StartTime
+                                        Edatesearch = EndTime
+                                        While Sdatesearch.Date <= Now.Date
+                                            StartTime = Sdatesearch
+                                            EndTime = Edatesearch
+                                            Sdatesearch = Sdatesearch.AddYears(CInt(Interval))
+                                            Edatesearch = Edatesearch.AddYears(CInt(Interval))
+                                        End While
                                     End If
 
-                                    Sdatesearch = StartTime
-                                    Edatesearch = EndTime
-                                    While Sdatesearch.Day <> dday
-                                        Sdatesearch = Sdatesearch.AddDays(1)
-                                        Edatesearch = Edatesearch.AddDays(1)
-                                    End While
-
-                                    While Sdatesearch.Date <= Now.Date
-                                        StartTime = Sdatesearch
-                                        EndTime = Edatesearch
-                                        Sdatesearch = Sdatesearch.AddMonths(CInt(Interval))
-                                        Edatesearch = Edatesearch.AddMonths(CInt(Interval))
-                                    End While
                                 End If
 
-                                If Frequence = "YEARLY" Then
-                                    Sdatesearch = StartTime
-                                    Edatesearch = EndTime
-                                    While Sdatesearch.Date <= Now.Date
-                                        StartTime = Sdatesearch
-                                        EndTime = Edatesearch
-                                        Sdatesearch = Sdatesearch.AddYears(CInt(Interval))
-                                        Edatesearch = Edatesearch.AddYears(CInt(Interval))
-                                    End While
+                                If InStr(Chaine, "COUNT=") > 0 Then
+                                    position = InStr(InStr(Chaine, "COUNT=") + 6, Chaine, ";")
+                                    Compteur = Mid(Chaine, InStr(Chaine, "COUNT=") + 6, position - InStr(Chaine, "COUNT=") - 6)
+                                    If (Frequence = "DAILY" And StartTime.AddDays(CInt(Compteur) * CInt(Interval)) > Now) Or _
+                                         (Frequence = "WEEKLY" And StartTime.AddDays(CInt(Compteur) * CInt(Interval) * 7) > Now) Or _
+                                         (Frequence = "MONTHLY" And StartTime.AddMonths(CInt(Compteur) * CInt(Interval)) > Now) Or _
+                                         (Frequence = "YEARLY" And StartTime.AddYears(CInt(Compteur) * CInt(Interval)) > Now) Then
+                                        Fini = True
+                                    End If
+                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Compteur Recurrence : " & Compteur)
                                 End If
-
+                                If InStr(Chaine, "UNTIL=") > 0 Then
+                                    position = InStr(InStr(Chaine, "UNTIL=") + 6, Chaine, ";")
+                                    Jusque = Mid(Chaine, InStr(Chaine, "UNTIL=") + 6, position - InStr(Chaine, "UNTIL=") - 7)
+                                    EndDate = New System.DateTime(Mid(Jusque, 1, 4), _
+                                                                                          Mid(Jusque, 5, 2), _
+                                                                                          Mid(Jusque, 7, 2), _
+                                                                                          Mid(Jusque, 10, 2), _
+                                                                                          Mid(Jusque, 12, 2), _
+                                                                                          Mid(Jusque, 14, 2))
+                                    If EndDate > Now Then
+                                        Fini = True
+                                    End If
+                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Jusqu'au Recurrence : " & Jusque)
+                                End If
                             End If
 
-                            If InStr(Chaine, "COUNT=") > 0 Then
-                                position = InStr(InStr(Chaine, "COUNT=") + 6, Chaine, ";")
-                                Compteur = Mid(Chaine, InStr(Chaine, "COUNT=") + 6, position - InStr(Chaine, "COUNT=") - 6)
-                                If (Frequence = "DAILY" And StartTime.AddDays(CInt(Compteur) * CInt(Interval)) > Now) Or _
-                                     (Frequence = "WEEKLY" And StartTime.AddDays(CInt(Compteur) * CInt(Interval) * 7) > Now) Or _
-                                     (Frequence = "MONTHLY" And StartTime.AddMonths(CInt(Compteur) * CInt(Interval)) > Now) Or _
-                                     (Frequence = "YEARLY" And StartTime.AddYears(CInt(Compteur) * CInt(Interval)) > Now) Then
-                                    Fini = True
-                                End If
-                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Compteur Recurrence : " & Compteur)
-                            End If
-                            If InStr(Chaine, "UNTIL=") > 0 Then
-                                position = InStr(InStr(Chaine, "UNTIL=") + 6, Chaine, ";")
-                                Jusque = Mid(Chaine, InStr(Chaine, "UNTIL=") + 6, position - InStr(Chaine, "UNTIL=") - 7)
-                                EndDate = New System.DateTime(Mid(Jusque, 1, 4), _
-                                                                                      Mid(Jusque, 5, 2), _
-                                                                                      Mid(Jusque, 7, 2), _
-                                                                                      Mid(Jusque, 10, 2), _
-                                                                                      Mid(Jusque, 12, 2), _
-                                                                                      Mid(Jusque, 14, 2))
-                                If EndDate > Now Then
-                                    Fini = True
-                                End If
-                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Jusqu'au Recurrence : " & Jusque)
-                            End If
+
+                            '---------------TESTé POUR:
+
+                            'DTSTART;TZID=Europe/Paris:20140526T080000
+                            'DTEND;TZID=Europe/Paris:20140526T180000
+                            'RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR
+
+                            'DTSTART;TZID=Europe/Paris:20140607T080000
+                            'DTEND;TZID=Europe/Paris:20140607T090000
+                            'RRULE:FREQ=MONTHLY;INTERVAL=2;BYMONTHDAY=7
+
+                            'DTSTART;TZID=Europe/Paris:20140608T080000
+                            'DTEND;TZID=Europe/Paris:20140608T090000
+                            'RRULE:FREQ=YEARLY
+
+                            'DTSTART;TZID=Europe/Paris:20140608T080000
+                            'DTEND;TZID=Europe/Paris:20140608T090000
+                            'RRULE:FREQ=DAILY;UNTIL=20140612T060000Z;INTERVAL=2
+
+                            'DTSTART;TZID=Europe/Paris:20140607T080000
+                            'DTEND;TZID=Europe/Paris:20140607T090000
+                            'RRULE:FREQ=MONTHLY;COUNT=35;BYDAY=1SA
+                            
                         End If
-
-
-                        '---------------TESTé POUR:
-
-                        'DTSTART;TZID=Europe/Paris:20140526T080000
-                        'DTEND;TZID=Europe/Paris:20140526T180000
-                        'RRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR
-
-                        'DTSTART;TZID=Europe/Paris:20140607T080000
-                        'DTEND;TZID=Europe/Paris:20140607T090000
-                        'RRULE:FREQ=MONTHLY;INTERVAL=2;BYMONTHDAY=7
-
-                        'DTSTART;TZID=Europe/Paris:20140608T080000
-                        'DTEND;TZID=Europe/Paris:20140608T090000
-                        'RRULE:FREQ=YEARLY
-
-                        'DTSTART;TZID=Europe/Paris:20140608T080000
-                        'DTEND;TZID=Europe/Paris:20140608T090000
-                        'RRULE:FREQ=DAILY;UNTIL=20140612T060000Z;INTERVAL=2
-
-                        'DTSTART;TZID=Europe/Paris:20140607T080000
-                        'DTEND;TZID=Europe/Paris:20140607T090000
-                        'RRULE:FREQ=MONTHLY;COUNT=35;BYDAY=1SA
-
                     End If
 
                     If Not Fini And StartTime = System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString Then
@@ -1058,60 +1054,64 @@ Imports Newtonsoft.Json.Linq
                                 Minut = CInt(Adr2(1))
                             End If
                         End If
-                        If ((feedEntry.Summary.ToUpper = objet.Adresse1.ToString.ToUpper) Or (feedEntry.Summary.ToUpper = "Jours fériés en France")) Then
+                        If feedEntry.Summary IsNot Nothing Then
+                            If ((feedEntry.Summary.ToUpper = objet.Adresse1.ToString.ToUpper) Or (feedEntry.Summary.ToUpper = "Jours fériés en France")) Then
 
-                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Le composant " & objet.name & " est valide pour cette évenement")
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Le composant " & objet.name & " est valide pour cette évenement")
 
-                            If Not Fini And StartTime < System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString And _
-                                   EndTime > System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString Then
-                                ' Un element etre trouvé 
-                                elementFound = True
-                                EntryFind = feedEntry
-                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.Summary & " Compte: " & feedEntry.Id _
-                                & "Start: " & StartTime & " End: " & EndTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
+                                If Not Fini And StartTime < System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString And _
+                                       EndTime > System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString Then
+                                    ' Un element etre trouvé 
+                                    elementFound = True
+                                    EntryFind = feedEntry
+                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.Summary & " Compte: " & feedEntry.Id _
+                                    & " Start: " & StartTime & " End: " & EndTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
 
+                                End If
+
+                                'For Each Times In feedEntry.Times
+
+                                If feedEntry.Start.DateTime < System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString And _
+                                   feedEntry.End.DateTime > System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString Then
+                                    ' Un element etre trouvé 
+                                    elementFound = True
+                                    EntryFind = feedEntry
+                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.Summary & " Compte: " & feedEntry.Id _
+                                    & "Start: " & feedEntry.Start.DateTime & " End: " & feedEntry.End.DateTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
+
+                                End If
+                                'Next
+
+                                Select Case objet.Type
+                                    Case "GENERIQUESTRING"
+                                        If elementFound Then
+                                            Select Case objet.adresse2.ToString.ToUpper
+                                                Case "TITRE"
+                                                    objet.setValue(EntryFind.Summary)
+
+                                                Case "DESCRIPTION"
+                                                    objet.setValue(EntryFind.Description)
+
+                                                Case "LIEU"
+                                                    objet.setValue(EntryFind.Location)
+
+                                            End Select
+
+                                        Else
+                                            objet.setValue("Evénement non trouvé")
+                                        End If
+
+
+                                    Case "GENERIQUEBOOLEEN"
+                                        objet.setValue(elementFound)
+
+                                    Case Else
+                                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur du type du composant de " & objet.Adresse1)
+                                End Select
+
+                            Else
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Le composant " & objet.name & " n'est pas valide pour cette évenement")
                             End If
-
-                            'For Each Times In feedEntry.Times
-
-                            If feedEntry.Start.DateTime < System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString And _
-                               feedEntry.End.DateTime > System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString Then
-                                ' Un element etre trouvé 
-                                elementFound = True
-                                EntryFind = feedEntry
-                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.Summary & " Compte: " & feedEntry.Id _
-                                & "Start: " & feedEntry.Start.DateTime & " End: " & feedEntry.End.DateTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
-
-                            End If
-                            'Next
-
-                            Select Case objet.Type
-                                Case "GENERIQUESTRING"
-                                    If elementFound Then
-                                        Select Case objet.adresse2.ToString.ToUpper
-                                            Case "TITRE"
-                                                objet.setValue(EntryFind.Summary)
-
-                                            Case "DESCRIPTION"
-                                                objet.setValue(EntryFind.Description)
-
-                                            Case "LIEU"
-                                                objet.setValue(EntryFind.Location)
-
-                                        End Select
-
-                                    Else
-                                        objet.setValue("Evénement non trouvé")
-                                    End If
-
-
-                                Case "GENERIQUEBOOLEEN"
-                                    objet.setValue(elementFound)
-
-                                Case Else
-                                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur du type du composant de " & objet.Adresse1)
-                            End Select
-
                         Else
                             If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Le composant " & objet.name & " n'est pas valide pour cette évenement")
                         End If
