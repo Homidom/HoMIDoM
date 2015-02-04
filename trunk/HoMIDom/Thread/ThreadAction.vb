@@ -515,7 +515,7 @@ Namespace HoMIDom
                 ' Pass parameters into the compiler.
                 Dim objCompilerParameters As New CompilerParameters
                 objCompilerParameters.ReferencedAssemblies.Add("System.dll")
-                objCompilerParameters.ReferencedAssemblies.Add("System.data")
+                objCompilerParameters.ReferencedAssemblies.Add("System.data.dll")
                 objCompilerParameters.ReferencedAssemblies.Add("System.xml.dll")
                 objCompilerParameters.ReferencedAssemblies.Add("System.xml.linq.dll")
                 objCompilerParameters.ReferencedAssemblies.Add("System.net.dll")
