@@ -844,11 +844,11 @@ Imports Newtonsoft.Json.Linq
                                     If Frequence = "DAILY" Then
                                         Sdatesearch = StartTime
                                         Edatesearch = EndTime
-                                        While Sdatesearch.Date <= Now.Date
-                                            StartTime = Sdatesearch
-                                            EndTime = Edatesearch
+                                        While Sdatesearch <= Now And Edatesearch <= Now
                                             Sdatesearch = Sdatesearch.AddDays(CInt(Interval))
                                             Edatesearch = Edatesearch.AddDays(CInt(Interval))
+                                            StartTime = Sdatesearch
+                                            EndTime = Edatesearch
                                         End While
                                     End If
 
@@ -856,17 +856,19 @@ Imports Newtonsoft.Json.Linq
                                         If ByDay <> "" Then
                                             Sdatesearch = StartTime
                                             Edatesearch = EndTime
-                                            While Sdatesearch.DayOfWeek <> Now.DayOfWeek
+                                            While (Sdatesearch.DayOfWeek <> Now.DayOfWeek Or Sdatesearch.TimeOfDay > Now.TimeOfDay) And (Edatesearch.DayOfWeek <> Now.DayOfWeek Or Edatesearch.TimeOfDay < Now.TimeOfDay)
                                                 Sdatesearch = Sdatesearch.AddDays(1)
                                                 Edatesearch = Edatesearch.AddDays(1)
+                                                StartTime = Sdatesearch
+                                                EndTime = Edatesearch
                                             End While
-                                            If Now.DayOfWeek = Sdatesearch.DayOfWeek Then
+                                            If Now.DayOfWeek = Sdatesearch.DayOfWeek Or Now.DayOfWeek = Edatesearch.DayOfWeek Then
                                                 If InStr(ByDay, str_to_week(Now.DayOfWeek)) Then
-                                                    While Sdatesearch.Date <= Now.Date
-                                                        StartTime = Sdatesearch
-                                                        EndTime = Edatesearch
+                                                    While Sdatesearch <= Now And Edatesearch <= Now
                                                         Sdatesearch = Sdatesearch.AddDays(CInt(Interval) * 7)
                                                         Edatesearch = Edatesearch.AddDays(CInt(Interval) * 7)
+                                                        StartTime = Sdatesearch
+                                                        EndTime = Edatesearch
                                                     End While
                                                 End If
                                             End If
@@ -893,27 +895,29 @@ Imports Newtonsoft.Json.Linq
 
                                         Sdatesearch = StartTime
                                         Edatesearch = EndTime
-                                        While Sdatesearch.Day <> dday
+                                        While (Sdatesearch.Day <> dday Or Sdatesearch.TimeOfDay > Now.TimeOfDay) And (Edatesearch.Day <> dday Or Edatesearch.TimeOfDay < Now.TimeOfDay)
                                             Sdatesearch = Sdatesearch.AddDays(1)
                                             Edatesearch = Edatesearch.AddDays(1)
-                                        End While
-
-                                        While Sdatesearch.Date <= Now.Date
                                             StartTime = Sdatesearch
                                             EndTime = Edatesearch
+                                        End While
+
+                                        While Sdatesearch <= Now And Edatesearch <= Now
                                             Sdatesearch = Sdatesearch.AddMonths(CInt(Interval))
                                             Edatesearch = Edatesearch.AddMonths(CInt(Interval))
+                                            StartTime = Sdatesearch
+                                            EndTime = Edatesearch
                                         End While
                                     End If
 
                                     If Frequence = "YEARLY" Then
                                         Sdatesearch = StartTime
                                         Edatesearch = EndTime
-                                        While Sdatesearch.Date <= Now.Date
-                                            StartTime = Sdatesearch
-                                            EndTime = Edatesearch
+                                        While Sdatesearch <= Now And Edatesearch <= Now
                                             Sdatesearch = Sdatesearch.AddYears(CInt(Interval))
                                             Edatesearch = Edatesearch.AddYears(CInt(Interval))
+                                            StartTime = Sdatesearch
+                                            EndTime = Edatesearch
                                         End While
                                     End If
 
@@ -939,7 +943,7 @@ Imports Newtonsoft.Json.Linq
                                                                                           Mid(Jusque, 10, 2), _
                                                                                           Mid(Jusque, 12, 2), _
                                                                                           Mid(Jusque, 14, 2))
-                                    If EndDate > Now Then
+                                    If EndDate <= Now Then
                                         Fini = True
                                     End If
                                     If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Jusqu'au Recurrence : " & Jusque)
@@ -1045,46 +1049,46 @@ Imports Newtonsoft.Json.Linq
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Evenement non retenu pour une commande : " & feedEntry.Summary)
                     End If
 
-                    For Each objet As Object In listedevices
 
-                        Dim Minut As Integer = 0
-                        If InStr(objet.Adresse2, ":") Then
-                            Dim Adr2 = Split(objet.Adresse2, ":")
-                            If Adr2(1) <> "" Then
-                                Minut = CInt(Adr2(1))
-                            End If
-                        End If
+
+                    For Each objet As Object In listedevices
                         If feedEntry.Summary IsNot Nothing Then
                             If ((feedEntry.Summary.ToUpper = objet.Adresse1.ToString.ToUpper) Or (feedEntry.Summary.ToUpper = "Jours fériés en France")) Then
 
                                 If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Le composant " & objet.name & " est valide pour cette évenement")
 
+                                Dim Minut As Integer = 0
+                                If InStr(objet.Adresse2, ":") Then
+                                    Dim Adr2 = Split(objet.Adresse2, ":")
+                                    If Adr2(1) <> "" Then
+                                        Minut = CInt(Adr2(1))
+                                    End If
+                                End If
+
                                 If Not Fini And StartTime < System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString And _
-                                       EndTime > System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString Then
+                                               EndTime > System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString Then
                                     ' Un element etre trouvé 
                                     elementFound = True
                                     EntryFind = feedEntry
                                     If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.Summary & " Compte: " & feedEntry.Id _
-                                    & " Start: " & StartTime & " End: " & EndTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
+                                    & " Recurrence Start: " & StartTime & " End: " & EndTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
+                                Else
 
+                                    If feedEntry.Start.DateTime < System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString And _
+                                       feedEntry.End.DateTime > System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString Then
+                                        ' Un element etre trouvé 
+                                        elementFound = True
+                                        EntryFind = feedEntry
+                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.Summary & " Compte: " & feedEntry.Id _
+                                        & " Start: " & feedEntry.Start.DateTime & " End: " & feedEntry.End.DateTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
+
+                                    End If
                                 End If
+                                If elementFound Then
+                                   
+                                    Select Case objet.Type
+                                        Case "GENERIQUESTRING"
 
-                                'For Each Times In feedEntry.Times
-
-                                If feedEntry.Start.DateTime < System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString And _
-                                   feedEntry.End.DateTime > System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString Then
-                                    ' Un element etre trouvé 
-                                    elementFound = True
-                                    EntryFind = feedEntry
-                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.Summary & " Compte: " & feedEntry.Id _
-                                    & "Start: " & feedEntry.Start.DateTime & " End: " & feedEntry.End.DateTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
-
-                                End If
-                                'Next
-
-                                Select Case objet.Type
-                                    Case "GENERIQUESTRING"
-                                        If elementFound Then
                                             Select Case objet.adresse2.ToString.ToUpper
                                                 Case "TITRE"
                                                     objet.setValue(EntryFind.Summary)
@@ -1097,25 +1101,21 @@ Imports Newtonsoft.Json.Linq
 
                                             End Select
 
-                                        Else
-                                            objet.setValue("Evénement non trouvé")
-                                        End If
+                                        Case "GENERIQUEBOOLEEN"
+                                            objet.setValue(elementFound)
 
-
-                                    Case "GENERIQUEBOOLEEN"
-                                        objet.setValue(elementFound)
-
-                                    Case Else
-                                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur du type du composant de " & objet.Adresse1)
-                                End Select
-
+                                        Case Else
+                                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur du type du composant de " & objet.Adresse1)
+                                    End Select
+                                Else
+                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "La plage horaire du composant " & objet.name & " n'est pas en cours")
+                                End If
                             Else
                                 If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Le composant " & objet.name & " n'est pas valide pour cette évenement")
                             End If
                         Else
                             If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Le composant " & objet.name & " n'est pas valide pour cette évenement")
                         End If
-
                     Next
 
                     elementFound = False
