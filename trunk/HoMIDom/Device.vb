@@ -5,6 +5,7 @@ Imports System.Reflection
 Imports System.CodeDom.Compiler
 Imports Microsoft.VisualBasic
 Imports System.Globalization
+Imports NCalc
 
 Namespace HoMIDom
     '***********************************************
@@ -626,9 +627,13 @@ Namespace HoMIDom
                 'On fait le calcul
                 Try
                     If Text.RegularExpressions.Regex.IsMatch(resultatSTR, "^[0-9+\-*/\^().,]*$") Then
-                        Dim dt = New DataTable()
-                        Dim resultat As Double = CDbl(dt.Compute(resultatSTR, ""))
-                        dt = Nothing
+
+                        'Dim dt = New DataTable()
+                        'Dim resultat As Double = CDbl(dt.Compute(resultatSTR, ""))
+                        'dt = Nothing
+                        Dim ncalcexpress As Expression = New Expression(resultatSTR, EvaluateOptions.IgnoreCase)
+                        Expression.CacheEnabled = False
+                        Dim resultat As Double = ncalcexpress.Evaluate()
                         Return resultat
                     Else
                         Return resultatSTR
