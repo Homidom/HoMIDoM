@@ -10,6 +10,7 @@ Imports System.CodeDom
 Imports System.CodeDom.Compiler
 Imports HoMIDom.HoMIDom.Server
 Imports STRGS = Microsoft.VisualBasic.Strings
+Imports NCalc
 
 Namespace HoMIDom
 
@@ -717,9 +718,17 @@ Namespace HoMIDom
 
                             Try
                                 If Text.RegularExpressions.Regex.IsMatch(_calculstring, "^[0-9+\-*/\^().,]*$") Then
-                                    Dim dt = New DataTable()
-                                    Dim resultat As Double = CDbl(dt.Compute(_calculstring, ""))
-                                    dt = Nothing
+                                    'methode datatable.compute
+                                    'Dim dt = New DataTable()
+                                    'Dim resultat As Double = CDbl(dt.Compute(_calculstring, ""))
+                                    'dt = Nothing
+                                    'methode ncalc
+                                    Dim ncalcexpress As Expression = New Expression(_calculstring, EvaluateOptions.IgnoreCase)
+                                    Expression.CacheEnabled = False
+                                    Dim resultat As Double = ncalcexpress.Evaluate()
+
+
+
                                     _calculstring = resultat
                                 End If
                             Catch ex As Exception
