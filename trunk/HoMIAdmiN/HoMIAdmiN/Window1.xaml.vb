@@ -416,6 +416,8 @@ Class Window1
                     End Select
                 End If
             End If
+        Catch ex As CommunicationException
+            'nothing to do, server is disconnected
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur OnMessageReceiveUDP: " & ex.ToString, "Erreur", " OnMessageReceiveUDP")
         End Try
@@ -430,6 +432,8 @@ Class Window1
                     AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.DEBUG, "Le device " & _dev.Name & " a été mis à jour", "Debug Admin", "")
                 End If
             Next
+        Catch ex As EndpointNotFoundException
+            'nothing to do, server is disconnected
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Event DeviceChanged: " & ex.ToString, "Erreur", " Event DeviceChanged")
         End Try

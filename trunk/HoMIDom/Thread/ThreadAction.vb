@@ -723,13 +723,10 @@ Namespace HoMIDom
                                     'Dim resultat As Double = CDbl(dt.Compute(_calculstring, ""))
                                     'dt = Nothing
                                     'methode ncalc
-                                    Dim ncalcexpress As Expression = New Expression(_calculstring, EvaluateOptions.IgnoreCase)
+                                    Dim ncalcexpress As Expression = New Expression(Text.RegularExpressions.Regex.Replace(_calculstring, "[.,]", System.Globalization.NumberFormatInfo.InvariantInfo.NumberDecimalSeparator), EvaluateOptions.IgnoreCase)
                                     Expression.CacheEnabled = False
-                                    Dim resultat As Double = ncalcexpress.Evaluate()
-
-
-
-                                    _calculstring = resultat
+                                    Dim resultat = ncalcexpress.Evaluate()
+                                    _calculstring = Text.RegularExpressions.Regex.Replace(resultat, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                                 End If
                             Catch ex As Exception
                                 _calculstring = Mid(newcmd, startcmd + 1, endcmd - startcmd - 1)
