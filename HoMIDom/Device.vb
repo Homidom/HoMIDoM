@@ -631,10 +631,12 @@ Namespace HoMIDom
                         'Dim dt = New DataTable()
                         'Dim resultat As Double = CDbl(dt.Compute(resultatSTR, ""))
                         'dt = Nothing
-                        Dim ncalcexpress As Expression = New Expression(resultatSTR, EvaluateOptions.IgnoreCase)
+
+                        Dim ncalcexpress As Expression = New Expression(Text.RegularExpressions.Regex.Replace(resultatSTR, "[.,]", System.Globalization.NumberFormatInfo.InvariantInfo.NumberDecimalSeparator), EvaluateOptions.IgnoreCase)
                         Expression.CacheEnabled = False
-                        Dim resultat As Double = ncalcexpress.Evaluate()
-                        Return resultat
+                        Dim resultat = ncalcexpress.Evaluate()
+                        Return Text.RegularExpressions.Regex.Replace(resultat, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+
                     Else
                         Return resultatSTR
                     End If
