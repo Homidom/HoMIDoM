@@ -678,7 +678,7 @@ Namespace HoMIDom
                 If String.IsNullOrEmpty(Message) = False Then
                     Dim a() As String
                     a = Message.Split("|")
-                    If a.Length > 0 Then
+                    If a.Count > 0 Then
                         Select Case a(0).ToUpper
 
                         End Select
