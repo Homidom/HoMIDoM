@@ -741,7 +741,19 @@ Imports Driver_Zibase.ZibaseDllvb
 
             'Action suivant le type
             Select Case LCase(type)
-                Case "bat" : If STRGS.UCase(valeur) = "LOW" Then WriteBattery(adresse) 'Niveau de batterie (Ok / Low)
+                Case "bat"
+                    'on cherche si un composant Batterie existe sinon on logue juste le LOW
+                    Dim listedevicesbatterie As New ArrayList
+                    listedevicesbatterie = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, ListeDevices.BATTERIE.ToString, Me._ID, True)
+                    If IsNothing(listedevicesbatterie) Then
+                        WriteLog("ERR: Communication impossible avec le serveur, l'IDsrv est peut être erroné : " & _IdSrv)
+                    Else
+                        If (listedevicesbatterie.Count = 1) Then
+                            WriteRetour(adresse, ListeDevices.BATTERIE.ToString, STRGS.UCase(valeur)) 'Température (°C)
+                        Else
+                            If STRGS.UCase(valeur) = "LOW" Then WriteBattery(adresse) 'Niveau de batterie (Ok / Low)
+                        End If
+                    End If
                 Case "lev" : If _DEBUG Then WriteLog("DBG: Signal Level : " & valeur & " (Adresse:" & adresse & ")") 'on log le level si debug : Niveau de réception RF (1 à 5)
                 Case "lnk" : WriteLog("DBG: Etat de la connexion avec la Zibase " & adresse & " : " & valeur) 'Etat de la connexion Zibase
                 Case "" : WriteRetour(adresse, "", valeur) ' si pas de type particulier
