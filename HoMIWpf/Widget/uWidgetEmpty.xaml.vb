@@ -4,6 +4,7 @@ Imports System.Threading
 Imports WpfAnimatedGif
 Imports System.Windows.Media.Animation
 Imports System.IO
+Imports STRGS = Microsoft.VisualBasic.Strings
 
 Public Class uWidgetEmpty
     Public Enum TypeOfWidget
@@ -2418,17 +2419,24 @@ Public Class uWidgetEmpty
                     Case HoMIDom.HoMIDom.Device.ListeDevices.BAROMETRE
                         GetStatusPicture = _MonRepertoire & "\Images\Devices\barometre-defaut.png"
                     Case HoMIDom.HoMIDom.Device.ListeDevices.BATTERIE
-                        If CSng(Value) > 80 Then
-                            GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-100.png"
-                        ElseIf CSng(Value) > 60 Then
-                            GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-75.png"
-                        ElseIf CSng(Value) > 40 Then
-                            GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-50.png"
-                        ElseIf CSng(Value) > 20 Then
-                            GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-25.png"
+                        If TypeOf Value Is Boolean Then
+                            If Value = True Then GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-100.png" Else GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-0.png"
+                        ElseIf TypeOf Value Is Integer Or TypeOf Value Is Long Or TypeOf Value Is Single Or TypeOf Value Is Double Then
+                            If CSng(Value) > 80 Then
+                                GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-100.png"
+                            ElseIf CSng(Value) > 60 Then
+                                GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-75.png"
+                            ElseIf CSng(Value) > 40 Then
+                                GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-50.png"
+                            ElseIf CSng(Value) > 20 Then
+                                GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-25.png"
+                            Else
+                                GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-0.png"
+                            End If
                         Else
-                            GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-0.png"
+                            If STRGS.UCase(Value) = "LOW" Or STRGS.UCase(Value) = "0%" Then GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-0.png" Else GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-100.png"
                         End If
+                        
                     Case HoMIDom.HoMIDom.Device.ListeDevices.COMPTEUR
                         GetStatusPicture = _MonRepertoire & "\Images\Devices\compteur-defaut.png"
                     Case HoMIDom.HoMIDom.Device.ListeDevices.CONTACT
