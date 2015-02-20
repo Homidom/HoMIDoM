@@ -353,28 +353,72 @@ Public Class Driver_Arduino_HTTP
             End Select
 
             If urlcommande <> "" Then
+
+
+                'urlcommande = "http://192.168.1.3/x.txt"
+
+
+                Dim assembly As Reflection.Assembly
+                assembly = Reflection.Assembly.GetAssembly(GetType(System.Net.Configuration.SettingsSection))
+                If (assembly Is Nothing) Then
+                    WriteLog("DBG: READ TESTXXX  Could not access Assembly")
+                End If
+                Dim type As Type
+                type = [assembly].GetType("System.Net.Configuration.SettingsSectionInternal")
+                If (type Is Nothing) Then
+                    WriteLog("DBG: READ TESTXXX  Could not access internal settings")
+                End If
+                Dim obj As Object
+                obj = [type].InvokeMember("Section", Reflection.BindingFlags.Static Or Reflection.BindingFlags.GetProperty Or Reflection.BindingFlags.NonPublic, Nothing, Nothing, New [Object]() {})
+                If (obj Is Nothing) Then
+                    WriteLog("DBG: READ TESTXXX  Could not invoke Section member")
+                End If
+                ' If it's not already set, set it.
+                Dim fi As Reflection.FieldInfo
+                fi = [type].GetField("useUnsafeHeaderParsing", Reflection.BindingFlags.NonPublic Or Reflection.BindingFlags.Instance)
+                If (fi Is Nothing) Then
+                    WriteLog("DBG: READ TESTXXX  Could not access useUnsafeHeaderParsing field")
+                End If
+                If (Not Convert.ToBoolean(fi.GetValue(obj))) Then
+                    fi.SetValue(obj, True)
+                End If
+
+
+
+
                 If _DEBUG Then WriteLog("DBG: READ Composant " & Objet.Name & " URL : " & urlcommande)
 
                 Dim request As HttpWebRequest = WebRequest.Create(urlcommande)
+                request.ProtocolVersion = HttpVersion.Version10
                 request.Timeout = 3000
+                request.ServicePoint.Expect100Continue = False
+                request.KeepAlive = False
+                request.Accept = "text/plain"
                 CType(request, HttpWebRequest).UserAgent = "Other"
 
                 'Get a web response  
                 Dim response As WebResponse
                 Dim responseFromServer As String = ""
                 Try
+                    WriteLog("DBG: RESPONSE1")
                     response = request.GetResponse()
+                    WriteLog("DBG: RESPONSE2")
+                    'response.ContentType = "text/plain"
                     If CType(response, HttpWebResponse).StatusCode = HttpStatusCode.OK Then
+                        WriteLog("DBG: RESPONSE3")
                         Dim dataStream As Stream = response.GetResponseStream()
+                        WriteLog("DBG: RESPONSE4")
                         Dim reader As New StreamReader(dataStream)
                         responseFromServer = reader.ReadToEnd()
                         WriteLog("DBG: Commande passée à l arduino " & Objet.Name & " : " & urlcommande & " --> " & responseFromServer & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
                     Else
                         WriteLog("ERR: Commande passée à l arduino " & Objet.Name & " : " & urlcommande & " --> Réponse incorrecte reçu : " & CType(response, HttpWebResponse).StatusCode & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
+                        Exit Sub
                     End If
                     response.Close()
                 Catch ex As System.Net.WebException
                     WriteLog("ERR: Commande passée à l arduino : " & urlcommande & " --> Erreur de communication : " & ex.Message.ToString)
+                    Exit Sub
                 End Try
 
                 'Traitement de la réponse
