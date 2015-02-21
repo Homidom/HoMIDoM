@@ -358,30 +358,15 @@ Public Class Driver_Arduino_HTTP
                 'urlcommande = "http://192.168.1.3/x.txt"
 
 
-                Dim assembly As Reflection.Assembly
-                assembly = Reflection.Assembly.GetAssembly(GetType(System.Net.Configuration.SettingsSection))
-                If (assembly Is Nothing) Then
-                    WriteLog("DBG: READ TESTXXX  Could not access Assembly")
-                End If
-                Dim type As Type
-                type = [assembly].GetType("System.Net.Configuration.SettingsSectionInternal")
-                If (type Is Nothing) Then
-                    WriteLog("DBG: READ TESTXXX  Could not access internal settings")
-                End If
-                Dim obj As Object
-                obj = [type].InvokeMember("Section", Reflection.BindingFlags.Static Or Reflection.BindingFlags.GetProperty Or Reflection.BindingFlags.NonPublic, Nothing, Nothing, New [Object]() {})
-                If (obj Is Nothing) Then
-                    WriteLog("DBG: READ TESTXXX  Could not invoke Section member")
-                End If
-                ' If it's not already set, set it.
-                Dim fi As Reflection.FieldInfo
-                fi = [type].GetField("useUnsafeHeaderParsing", Reflection.BindingFlags.NonPublic Or Reflection.BindingFlags.Instance)
-                If (fi Is Nothing) Then
-                    WriteLog("DBG: READ TESTXXX  Could not access useUnsafeHeaderParsing field")
-                End If
-                If (Not Convert.ToBoolean(fi.GetValue(obj))) Then
-                    fi.SetValue(obj, True)
-                End If
+                Dim assembly As Reflection.Assembly = Reflection.Assembly.GetAssembly(GetType(System.Net.Configuration.SettingsSection))
+                If (assembly Is Nothing) Then WriteLog("DBG: READ TESTXXX  Could not access Assembly")
+                Dim type As Type = [assembly].GetType("System.Net.Configuration.SettingsSectionInternal")
+                If (type Is Nothing) Then WriteLog("DBG: READ TESTXXX  Could not access internal settings")
+                Dim obj As Object = [type].InvokeMember("Section", Reflection.BindingFlags.Static Or Reflection.BindingFlags.GetProperty Or Reflection.BindingFlags.NonPublic, Nothing, Nothing, New [Object]() {})
+                If (obj Is Nothing) Then WriteLog("DBG: READ TESTXXX  Could not invoke Section member")
+                Dim fi As Reflection.FieldInfo = [type].GetField("useUnsafeHeaderParsing", Reflection.BindingFlags.NonPublic Or Reflection.BindingFlags.Instance)
+                If (fi Is Nothing) Then WriteLog("DBG: READ TESTXXX  Could not access useUnsafeHeaderParsing field")
+                If (Not Convert.ToBoolean(fi.GetValue(obj))) Then fi.SetValue(obj, True)
 
 
 
@@ -389,12 +374,15 @@ Public Class Driver_Arduino_HTTP
                 If _DEBUG Then WriteLog("DBG: READ Composant " & Objet.Name & " URL : " & urlcommande)
 
                 Dim request As HttpWebRequest = WebRequest.Create(urlcommande)
-                request.ProtocolVersion = HttpVersion.Version10
-                request.Timeout = 3000
-                request.ServicePoint.Expect100Continue = False
-                request.KeepAlive = False
-                request.Accept = "text/plain"
-                CType(request, HttpWebRequest).UserAgent = "Other"
+                'request.ProtocolVersion = HttpVersion.Version10
+                request.Timeout = 5000
+                'request.ServicePoint.Expect100Continue = False
+                request.KeepAlive = True
+                'request.Accept = "text/plain"
+                'request.Method = WebRequestMethods.Http.Get
+                request.ReadWriteTimeout = 5000
+
+                'CType(request, HttpWebRequest).UserAgent = "Other"
 
                 'Get a web response  
                 Dim response As WebResponse
