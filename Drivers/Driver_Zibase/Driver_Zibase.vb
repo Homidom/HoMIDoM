@@ -841,45 +841,84 @@ Imports Driver_Zibase.ZibaseDllvb
             valeur = valeur.ToUpper
 
             'Recherche si un device affecté
-            Dim listedevices As New ArrayList
-            listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
-            If IsNothing(listedevices) Then
+            Dim listedevicessearch As New ArrayList
+            listedevicessearch = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, adresse, type, Me._ID, True)
+            If IsNothing(listedevicessearch) Then
                 WriteLog("ERR: Communication impossible avec le serveur, l'IDsrv est peut être erroné : " & _IdSrv)
                 Exit Sub
             End If
-            If (listedevices.Count = 1) Then
+            If (listedevicessearch.Count = 1) Then
                 'un device trouvé 
                 If STRGS.InStr(valeur, "CFG:") > 0 Then
                     'c'est un message de config, on log juste
-                    WriteLog(listedevices.Item(0).name & " : " & valeur)
+                    WriteLog(listedevicessearch.Item(0).name & " : " & valeur)
                 Else
                     'on maj la value si la durée entre les deux receptions est > à 1.5s
-                    If (DateTime.Now - Date.Parse(listedevices.Item(0).LastChange)).TotalMilliseconds > 1500 Then
+                    If (DateTime.Now - Date.Parse(listedevicessearch.Item(0).LastChange)).TotalMilliseconds > 1500 Then
                         If valeur = "ON" Then
-                            If TypeOf listedevices.Item(0).Value Is Boolean Then
-                                listedevices.Item(0).Value = True
-                            ElseIf TypeOf listedevices.Item(0).Value Is Long Then
-                                listedevices.Item(0).Value = 100
+                            If TypeOf listedevicessearch.Item(0).Value Is Boolean Then
+                                listedevicessearch.Item(0).Value = True
+                            ElseIf TypeOf listedevicessearch.Item(0).Value Is Long Then
+                                listedevicessearch.Item(0).Value = 100
                             Else
-                                listedevices.Item(0).Value = "ON"
+                                listedevicessearch.Item(0).Value = "ON"
                             End If
                         ElseIf valeur = "OFF" Then
-                            If TypeOf listedevices.Item(0).Value Is Boolean Then
-                                listedevices.Item(0).Value = False
-                            ElseIf TypeOf listedevices.Item(0).Value Is Long Then
-                                listedevices.Item(0).Value = 0
+                            If TypeOf listedevicessearch.Item(0).Value Is Boolean Then
+                                listedevicessearch.Item(0).Value = False
+                            ElseIf TypeOf listedevicessearch.Item(0).Value Is Long Then
+                                listedevicessearch.Item(0).Value = 0
                             Else
-                                listedevices.Item(0).Value = "OFF"
+                                listedevicessearch.Item(0).Value = "OFF"
                             End If
                         Else
-                            listedevices.Item(0).Value = valeur
+                            listedevicessearch.Item(0).Value = valeur
                         End If
                     Else
-                        WriteLog("DBG: Reception < 1.5s de deux valeurs pour le meme composant : " & listedevices.Item(0).name & ":" & valeur)
+                        WriteLog("DBG: Reception < 1.5s de deux valeurs pour le meme composant : " & listedevicessearch.Item(0).name & ":" & valeur)
                     End If
                 End If
-            ElseIf (listedevices.Count > 1) Then
-                WriteLog("ERR: Plusieurs composants correspondent à : " & type & " " & adresse & ":" & valeur)
+            ElseIf (listedevicessearch.Count > 1) Then
+                If (listedevicessearch.Count = 2) Then
+                    If listedevicessearch.Item(0).Type = ListeDevices.BATTERIE.ToString Or listedevicessearch.Item(1).Type = ListeDevices.BATTERIE.ToString Then
+                        'un des composants est la batterie du comspoant physique, on maj l'autre
+                        Dim numerodevice As Integer = 0
+                        If listedevicessearch.Item(0).Type = ListeDevices.BATTERIE.ToString Then numerodevice = 1
+                        If STRGS.InStr(valeur, "CFG:") > 0 Then
+                            'c'est un message de config, on log juste
+                            WriteLog(listedevicessearch.Item(numerodevice).name & " : " & valeur)
+                        Else
+                            'on maj la value si la durée entre les deux receptions est > à 1.5s
+                            If (DateTime.Now - Date.Parse(listedevicessearch.Item(numerodevice).LastChange)).TotalMilliseconds > 1500 Then
+                                If valeur = "ON" Then
+                                    If TypeOf listedevicessearch.Item(numerodevice).Value Is Boolean Then
+                                        listedevicessearch.Item(numerodevice).Value = True
+                                    ElseIf TypeOf listedevicessearch.Item(numerodevice).Value Is Long Then
+                                        listedevicessearch.Item(numerodevice).Value = 100
+                                    Else
+                                        listedevicessearch.Item(numerodevice).Value = "ON"
+                                    End If
+                                ElseIf valeur = "OFF" Then
+                                    If TypeOf listedevicessearch.Item(numerodevice).Value Is Boolean Then
+                                        listedevicessearch.Item(numerodevice).Value = False
+                                    ElseIf TypeOf listedevicessearch.Item(numerodevice).Value Is Long Then
+                                        listedevicessearch.Item(numerodevice).Value = 0
+                                    Else
+                                        listedevicessearch.Item(numerodevice).Value = "OFF"
+                                    End If
+                                Else
+                                    listedevicessearch.Item(numerodevice).Value = valeur
+                                End If
+                            Else
+                                WriteLog("DBG: Reception < 1.5s de deux valeurs pour le meme composant : " & listedevicessearch.Item(numerodevice).name & ":" & valeur)
+                            End If
+                        End If
+                    Else
+                        WriteLog("ERR: Plusieurs composants correspondent à : " & type & " " & adresse & ":" & valeur)
+                    End If
+                Else
+                    WriteLog("ERR: Plusieurs composants correspondent à : " & type & " " & adresse & ":" & valeur)
+                End If
             Else
 
                 'si autodiscover = true ou modedecouverte du serveur actif alors on crée le composant sinon on logue
