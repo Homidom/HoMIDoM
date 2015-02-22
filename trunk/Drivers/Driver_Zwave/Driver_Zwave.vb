@@ -98,8 +98,20 @@ Public Class Driver_ZWave
             COMMAND_CLASS_BASIC = 32                ' 0X20
             COMMAND_CLASS_SWITCH_BINARY = 37        ' 0x25 
             COMMAND_CLASS_SWITCH_MULTILEVEL = 38    ' 0x26
+            COMMAND_CLASS_SWITCH_ALL = 39
+            COMMAND_CLASS_SENSOR_MULTILEVEL = 49
+            COMMAND_CLASS_SENSOR_MULTILEVEL_V2 = 49
+            COMMAND_CLASS_SENSOR_MULTILEVEL_V3 = 49
+            COMMAND_CLASS_METER = 50
+            COMMAND_CLASS_METER_V3 = 50
+            COMMAND_CLASS_ALARM = 113
+            COMMAND_CLASS_POWERLEVEL = 115
+            COMMAND_CLASS_BATTERY = 128
             COMMAND_CLASS_CONFIGURATION = 132
+            COMMAND_CLASS_CONFIGURATION_V2 = 132
             COMMAND_CLASS_VERSION = 134
+            COMMAND_CLASS_SENSOR_ALARM = 156
+            COMMAND_CLASS_SILENCE_ALARM = 157
         End Enum
 
 
@@ -1422,6 +1434,10 @@ Public Class Driver_ZWave
                                 m_device.Type = ListeDevices.CONTACT.ToString()
                             Case "Relative Humidity".ToString()
                                 m_device.Type = ListeDevices.HUMIDITE.ToString()
+                            Case "Energy".ToLower()
+                                m_device.Type = ListeDevices.ENERGIETOTALE.ToString()
+                            Case "Power".ToLower()
+                                m_device.Type = ListeDevices.ENERGIEINSTANTANEE.ToString()
                         End Select
 
                         'Vérification que le driver supporte bien ce type de composant
