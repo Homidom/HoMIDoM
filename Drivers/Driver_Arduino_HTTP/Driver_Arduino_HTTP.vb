@@ -374,14 +374,16 @@ Public Class Driver_Arduino_HTTP
                 If _DEBUG Then WriteLog("DBG: READ Composant " & Objet.Name & " URL : " & urlcommande)
 
                 Dim request As HttpWebRequest = WebRequest.Create(urlcommande)
-                'request.ProtocolVersion = HttpVersion.Version10
+                request.ProtocolVersion = HttpVersion.Version10
                 request.Timeout = 5000
-                'request.ServicePoint.Expect100Continue = False
-                request.KeepAlive = True
-                'request.Accept = "text/plain"
-                'request.Method = WebRequestMethods.Http.Get
                 request.ReadWriteTimeout = 5000
-
+                request.ServicePoint.Expect100Continue = True
+                request.ServicePoint.ConnectionLimit = 10
+                request.ServicePoint.MaxIdleTime = 5000
+                request.KeepAlive = False
+                request.Accept = "text/plain"
+                request.Method = WebRequestMethods.Http.Get
+                
                 'CType(request, HttpWebRequest).UserAgent = "Other"
 
                 'Get a web response  
