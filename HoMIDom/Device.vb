@@ -864,7 +864,7 @@ Namespace HoMIDom
             End Property
 
             'Demande de Lecture au driver
-            Public Sub Read()
+            Public Overridable Sub Read()
                 Try
                     If _Enable = False Then Exit Sub
                     If Driver.IsConnect() Then Driver.Read(Me)
@@ -1147,8 +1147,12 @@ Namespace HoMIDom
             End Property
 
             Public Overridable Sub Read()
-                If _Enable = False Then Exit Sub
-                If Driver.IsConnect() Then Driver.Read(Me)
+                Try
+                    If _Enable = False Then Exit Sub
+                    If Driver.IsConnect() Then Driver.Read(Me)
+                Catch ex As Exception
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DEVICE, "DeviceSTR Read", "Exception : " & ex.Message)
+                End Try
             End Sub
 
             'Force la valeur
