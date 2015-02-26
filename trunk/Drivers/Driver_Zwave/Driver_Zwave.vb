@@ -1386,7 +1386,7 @@ Public Class Driver_ZWave
                     Dim m_productName As String = m_manager.GetNodeProductName(m_notification.GetHomeId(), m_nodeId)
 
                     If (String.IsNullOrEmpty(m_manufacturerName) And String.IsNullOrEmpty(m_productName)) Then
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom, "Impossible de déterminé le nom et le fabriquant de l'équipement !")
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom, "Impossible de déterminer le nom et le fabriquant de l'équipement !")
                     End If
                     If (String.IsNullOrEmpty(m_manufacturerName)) Then m_manufacturerName = "Unknown"
                     If (String.IsNullOrEmpty(m_productName)) Then m_productName = "Unknown"

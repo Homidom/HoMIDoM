@@ -124,6 +124,11 @@ Namespace HoMIDom
         'Private Shared lock_table_TimerSecTickthread As New Object
         ' Public Shared table_TimerSecTickthread As New DataTable
         <NonSerialized()> Private ListThread As New List(Of Thread)
+
+        'used to verify Local System separator in server.start function
+        Private Declare Function GetLocaleInfoEx Lib "kernel32" Alias "GetLocaleInfoA" (ByVal Locale As Long, ByVal LCType As Long, ByVal lpLCData As String, ByVal cchData As Long) As Long
+        Private Declare Function GetThreadLocale Lib "kernel32" () As Long
+
 #End Region
 
 #Region "Event"
@@ -2959,9 +2964,6 @@ Namespace HoMIDom
                             o = _dev
                             RemoveHandler o.DeviceChanged, AddressOf DeviceChange
                             o = Nothing
-                            o = _dev
-                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
-                            o = Nothing
                         Case "GENERIQUEVALUE"
                             Dim o As Device.GENERIQUEVALUE
                             o = _dev
@@ -3688,8 +3690,26 @@ Namespace HoMIDom
                 End If
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Version du Framework: " & System.Runtime.InteropServices.RuntimeEnvironment.GetSystemVersion())
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Répertoire utilisé: " & My.Application.Info.DirectoryPath.ToString)
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Adresse IP du serveur: " & System.Net.Dns.GetHostByName(My.Computer.Name).AddressList(0).ToString())
-                _IPSOAP = System.Net.Dns.GetHostByName(My.Computer.Name).AddressList(0).ToString()
+                'Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Adresse IP du serveur: " & System.Net.Dns.GetHostByName(My.Computer.Name).AddressList(0).ToString())
+                '_IPSOAP = System.Net.Dns.GetHostByName(My.Computer.Name).AddressList(0).ToString()
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Adresse IP du serveur: " & System.Net.Dns.GetHostEntry(My.Computer.Name).AddressList(0).ToString())
+                _IPSOAP = System.Net.Dns.GetHostEntry(My.Computer.Name).AddressList(0).ToString()
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Séparateur décimal CurrentCulture: '" & Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator & "'")
+
+                'verify Local System separator
+                
+                Const LOCALE_SDECIMAL = &HE ' Symbole décimal
+                'Const LOCALE_STHOUSAND = &HF ' Séparateur des milliers
+                Dim sBuffer As String
+                Dim nBufferLen As Long
+                nBufferLen = 255
+                sBuffer = New String(vbNullChar, nBufferLen)
+                nBufferLen = GetLocaleInfoEx(GetThreadLocale(), LOCALE_SDECIMAL, sBuffer, nBufferLen)
+                If nBufferLen > 0 Then
+                    If Left$(sBuffer, nBufferLen - 1) <> Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator.ToString() Then
+                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "INFO", "Séparateur décimal Default User: '" & Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator & "' différent du séparateur courant, change la valeur de la clé HKU/default/International/sdecimal par le séparateur CurrentCulture")
+                    End If
+                End If
 
                 '---------- Creation table des threads ----------
                 'table_TimerSecTickthread.Dispose()

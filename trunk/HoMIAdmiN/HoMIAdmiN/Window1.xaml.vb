@@ -339,7 +339,7 @@ Class Window1
                 LOG.Content = "Connexion au serveur UDP...."
                 ClientUDP = New HoMIDom.HoMIDom.UDPClient(myService)
 
-                ClientUDP.Connect("Application Admin", System.Net.Dns.GetHostByName(IP).AddressList(0).ToString(), CInt(Port) - 1)
+                ClientUDP.Connect("Application Admin", System.Net.Dns.GetHostEntry(IP).AddressList(0).ToString(), CInt(Port) - 1)
                 AddHandler ClientUDP.OnMessageReceive, AddressOf OnMessageReceiveUDP
 
                 Tabcontrol1.SelectedIndex = 0
