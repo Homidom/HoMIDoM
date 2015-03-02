@@ -1,0 +1,15 @@
+C:\download\Homidom\Drivers\Driver_Netatmo\bin\x86\Release\Driver_Netatmo.dll
+C:\download\Homidom\Drivers\Driver_Netatmo\bin\x86\Release\Driver_Netatmo.pdb
+C:\download\Homidom\Drivers\Driver_Netatmo\bin\x86\Release\Driver_Netatmo.xml
+C:\download\Homidom\Drivers\Driver_Netatmo\bin\x86\Release\HoMIDom.dll
+C:\download\Homidom\Drivers\Driver_Netatmo\bin\x86\Release\Newtonsoft.Json.dll
+C:\download\Homidom\Drivers\Driver_Netatmo\bin\x86\Release\System.Data.SQLite.dll
+C:\download\Homidom\Drivers\Driver_Netatmo\bin\x86\Release\NCalc.dll
+C:\download\Homidom\Drivers\Driver_Netatmo\bin\x86\Release\HoMIDom.pdb
+C:\download\Homidom\Drivers\Driver_Netatmo\bin\x86\Release\HoMIDom.xml
+C:\download\Homidom\Drivers\Driver_Netatmo\bin\x86\Release\Newtonsoft.Json.xml
+C:\download\Homidom\Drivers\Driver_Netatmo\obj\x86\Release\Driver_Netatmo.Resources.resources
+C:\download\Homidom\Drivers\Driver_Netatmo\obj\x86\Release\Driver_Netatmo.vbproj.GenerateResource.Cache
+C:\download\Homidom\Drivers\Driver_Netatmo\obj\x86\Release\Driver_Netatmo.dll
+C:\download\Homidom\Drivers\Driver_Netatmo\obj\x86\Release\Driver_Netatmo.xml
+C:\download\Homidom\Drivers\Driver_Netatmo\obj\x86\Release\Driver_Netatmo.pdb

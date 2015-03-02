@@ -1,0 +1,102 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Driver_Netatmo
+</name>
+</assembly>
+<members>
+<member name="M:Driver_Netatmo.Driver_NetAtmo.GetCommandPlus">
+	<summary>
+ Retourne la liste des Commandes avancées
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_Netatmo.Driver_NetAtmo.ExecuteCommand(System.Object,System.String,System.Object[])">
+	<summary>Execute une commande avancée</summary>
+	<param name="MyDevice">Objet représentant le Device </param>
+	<param name="Command">Nom de la commande avancée à éxécuter</param>
+	<param name="Param">tableau de paramétres</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_Netatmo.Driver_NetAtmo.VerifChamp(System.String,System.Object)">
+	<summary>
+ Permet de vérifier si un champ est valide
+ </summary>
+	<param name="Champ"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_Netatmo.Driver_NetAtmo.Start">
+	<summary>Démarrer le driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Netatmo.Driver_NetAtmo.Stop">
+	<summary>Arrêter le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Netatmo.Driver_NetAtmo.Restart">
+	<summary>Re-Démarrer le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_Netatmo.Driver_NetAtmo.Read(System.Object)">
+	<summary>Intérroger un device</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<remarks>pas utilisé</remarks>
+</member><member name="M:Driver_Netatmo.Driver_NetAtmo.Write(System.Object,System.String,System.Object,System.Object)">
+	<summary>Commander un device</summary>
+	<param name="Objet">Objet représentant le device à interroger</param>
+	<param name="Command">La commande à passer</param>
+	<param name="Parametre1"></param>
+	<param name="Parametre2"></param>
+	<remarks></remarks>
+</member><member name="M:Driver_Netatmo.Driver_NetAtmo.DeleteDevice(System.String)">
+	<summary>Fonction lancée lors de la suppression d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Netatmo.Driver_NetAtmo.NewDevice(System.String)">
+	<summary>Fonction lancée lors de l'ajout d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Netatmo.Driver_NetAtmo.Add_DeviceCommande(System.String,System.String,System.Int32)">
+	<summary>ajout des commandes avancées pour les devices</summary>
+	<param name="nom">Nom de la commande avancée</param>
+	<param name="description">Description qui sera affichée dans l'admin</param>
+	<param name="nbparam">Nombre de parametres attendus</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Netatmo.Driver_NetAtmo.Add_LibelleDriver(System.String,System.String,System.String,System.String)">
+	<summary>ajout Libellé pour le Driver</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Netatmo.Driver_NetAtmo.Add_LibelleDevice(System.String,System.String,System.String,System.String)">
+	<summary>Ajout Libellé pour les Devices</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Netatmo.Driver_NetAtmo.Add_ParamAvance(System.String,System.String,System.Object)">
+	<summary>ajout de parametre avancés</summary>
+	<param name="nom">Nom du parametre (sans espace)</param>
+	<param name="description">Description du parametre</param>
+	<param name="valeur">Sa valeur</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Netatmo.Driver_NetAtmo.#ctor">
+	<summary>Creation d'un objet de type</summary>
+	<remarks></remarks>
+</member><member name="T:Driver_Netatmo.Driver_NetAtmo">
+	<summary>Driver Netatmo Meteo Reception de datas base plus module température/pluviometre</summary>
+	<remarks></remarks>
+</member><member name="P:Driver_Netatmo.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_Netatmo.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_Netatmo.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+</members>
+</doc>

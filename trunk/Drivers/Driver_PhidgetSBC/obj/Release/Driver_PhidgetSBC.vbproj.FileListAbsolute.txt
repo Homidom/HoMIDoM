@@ -1,0 +1,10 @@
+C:\download\Homidom\Drivers\Driver_PhidgetSBC\obj\Release\Driver_PhidgetSBC.Resources.resources
+C:\download\Homidom\Drivers\Driver_PhidgetSBC\obj\Release\Driver_PhidgetSBC.vbproj.GenerateResource.Cache
+C:\download\Homidom\Drivers\Driver_PhidgetSBC\obj\Release\Driver_PhidgetSBC.pdb
+C:\download\Homidom\RELEASE\Drivers\Driver_PhidgetSBC.dll
+C:\download\Homidom\RELEASE\Drivers\Driver_PhidgetSBC.pdb
+C:\download\Homidom\RELEASE\Drivers\Driver_PhidgetSBC.xml
+C:\download\Homidom\Drivers\Driver_PhidgetSBC\obj\Release\Driver_PhidgetSBC.dll
+C:\download\Homidom\Drivers\Driver_PhidgetSBC\obj\Release\Driver_PhidgetSBC.xml
+C:\download\Homidom\RELEASE\Drivers\Driver_PhidgetSBC.dll.config
+C:\download\Homidom\Drivers\Driver_PhidgetSBC\obj\Release\Driver_PhidgetSBC.vbprojResolveAssemblyReference.cache
