@@ -5,8 +5,10 @@
     ${If} ${RunningX64}
       File  "..\Dll_externes\Homidom-64bits\Drivers\NLog.dll"
       File  "..\Dll_externes\Homidom-64bits\Drivers\S22.Imap.dll"
+      File  "..\Dll_externes\Homidom-64bits\Drivers\S22.Pop3.dll"
     ${Else}
       File  "..\Dll_externes\Homidom-32bits\Drivers\NLog.dll"
       File  "..\Dll_externes\Homidom-32bits\Drivers\S22.Imap.dll"
+      File  "..\Dll_externes\Homidom-32bits\Drivers\S22.Pop3.dll"
     ${EndIf}
   SectionEnd

@@ -3,10 +3,11 @@ Imports HoMIDom.HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 Imports System.Net.Mail
-Imports S22.Imap
+Imports S22.Imap ' http://smiley22.github.io/S22.Imap/Documentation/
+Imports S22.Pop3 ' http://smiley22.github.io/S22.Pop3/Documentation/ 
 
-' Auteur : Mathieu
-' Date : 21/11/2013
+' Auteur : Mathieu complété jphomi POP3 1/3/2015
+' Date : 02/03/2015
 
 ''' <summary>Class Driver_Mail</summary>
 ''' <remarks></remarks>
@@ -55,6 +56,7 @@ Imports S22.Imap
     Dim _UserName As String
     Dim _Password As String
     Dim _PortNm As String
+    Dim _Protocole As String
     Dim DmdStart As Boolean
     Dim boxmail As MailBoxHandler
 	
@@ -396,7 +398,6 @@ Imports S22.Imap
     ''' <param name="Param">tableau de paramétres</param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-
     Public Function ExecuteCommand(ByVal MyDevice As Object, ByVal Command As String, Optional ByVal Param() As Object = Nothing) As Boolean
         Dim retour As Boolean = False
         Try
@@ -422,7 +423,6 @@ Imports S22.Imap
     ''' <param name="Value">Valeur à vérifier</param>
     ''' <returns>Retourne 0 si OK, sinon un message d'erreur</returns>
     ''' <remarks></remarks>
-
     Public Function VerifChamp(ByVal Champ As String, ByVal Value As Object) As String Implements HoMIDom.HoMIDom.IDriver.VerifChamp
         Try
             Dim retour As String = "0"
@@ -441,7 +441,6 @@ Imports S22.Imap
     ''' <summary>Démarrer le driver</summary>
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
-
         Try
             _DEBUG = _Parametres.Item(0).Valeur
         Catch ex As Exception
@@ -454,29 +453,25 @@ Imports S22.Imap
             _UserName = _Parametres.Item(2).Valeur
             _Password = _Parametres.Item(3).Valeur
             _PortNm = _Parametres.Item(4).Valeur
+            _Protocole = _Parametres.Item(5).Valeur
+
+            'Verification POP3 ou IMAP
+            If _Protocole.ToUpper <> "POP3" Then _Protocole = "IMAP" Else _Protocole = "POP3"
 
             'Vérifie si Mail est démarrer si non tentative de de connexion  
-
-            boxmail = New MailBoxHandler(_PopHost, _PortNm, _UserName, _Password)
-
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " POP/IMAP", "Demande login : " & _PopHost & ":" & _PortNm)
+            boxmail = New MailBoxHandler(_PopHost, _PortNm, _UserName, _Password, _Protocole)
             _IsConnect = boxmail.IsConnected
-
             boxmail.Dispose()
-
             If _IsConnect Then
-
                 If _Refresh > 0 Then
                     Me.MyTimer.Interval = _Refresh * 1000
                     Me.MyTimer.Enabled = True
                     AddHandler Me.MyTimer.Elapsed, AddressOf Me.TimerTick
                 End If
-
                 DmdStart = True
-
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Mail Start", "Demarré")
-
             End If
-
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", ex.Message)
         End Try
@@ -646,6 +641,7 @@ Imports S22.Imap
             Add_ParamAvance("Utilisateur", "Utilisateur du compte mail", "")
             Add_ParamAvance("Mot de passe", "Mot de passe du compte mail", "")
             Add_ParamAvance("Numéro du port", "Numéro du port du compte mail", "993")
+            Add_ParamAvance("Protocole", "Protocole IMAP ou POP3", "IMAP")
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
@@ -669,27 +665,17 @@ Imports S22.Imap
     ''' <summary>Si refresh >0 gestion du timer</summary>
     ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
     Private Sub TimerTick(ByVal sender As Object, ByVal e As System.Timers.ElapsedEventArgs)
-
         Try
-
             If DmdStart = True Then
-
-                boxmail = New MailBoxHandler(_PopHost, _PortNm, _UserName, _Password)
-
+                boxmail = New MailBoxHandler(_PopHost, _PortNm, _UserName, _Password, _Protocole)
                 AddHandler boxmail.HandleMessage, AddressOf receiveMsg
-
                 Dim checkmail = boxmail.CheckExistingEmails()
-
                 If checkmail <> "ok" Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Replication", checkmail)
                 End If
-
                 RemoveHandler boxmail.HandleMessage, AddressOf receiveMsg
-
                 boxmail.Dispose()
-
             End If
-
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Replication", ex.Message)
         End Try
@@ -702,11 +688,9 @@ Imports S22.Imap
 
     Public Sub receiveMsg(ByVal sender As Object, ByVal e As HandleMessageEventArgs)
         Try
-
             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Reception Message Mail : ", "Recu de : " & e.Message.From.Address & " avec l'objet: " & e.Message.Subject & " et le texte: " & e.Message.Body)
-
             'Parcourt tous les evenements 
-            If e.Message.Subject.ToUpper = "Commande HoMIDoM" Then
+            If e.Message.Subject.ToUpper = UCase("Commande HoMIDoM") Then
                 CommandeString(e.Message.Body)
             Else
                 'Recherche si un device affecté
@@ -748,7 +732,7 @@ Imports S22.Imap
                                         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Reception Message Mail : ", "Le texte cherché n'a pas été trouvé dans le message : " & txt)
                                     End If
                                 Else
-                                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Reception Message Mail : ", "L'expediteur n'est pas celui recgerché : " & e.Message.From.Address)
+                                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Reception Message Mail : ", "L'expediteur n'est pas celui recherché : " & e.Message.From.Address)
                                 End If
                             Else
                                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Reception Message Mail : ", "'Element à recuperer' doit etre au format <texte avant><texte après> et non comme ceci : " & txt)
@@ -761,24 +745,31 @@ Imports S22.Imap
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Reception Message Mail", "Composant non trouvé : " & e.Message.Subject)
                 End If
             End If
-
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Mail Message Reçu", ex.Message)
-
         End Try
     End Sub
 
     Private Sub CommandeString(ByVal msg As String)
-
         Try
-
             Dim ParaAdr2 = Split(msg, ":")
+            Dim IDCmd As String
+
+            ParaAdr2(0) = Replace(ParaAdr2(0), vbCrLf, "")
+            ParaAdr2(1) = Replace(ParaAdr2(1), vbCrLf, "")
+            ParaAdr2(2) = Replace(ParaAdr2(2), vbCrLf, "")
+
+            '           _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Traitement Commande", "ID/nom macro : " & ParaAdr2(1))
 
             Select Case ParaAdr2(0).ToUpper
                 Case "COMPOSANT" 'If _DEBUG Then
-                    Dim ID = ReturnDeviceIDByName(ParaAdr2(1))
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Reception Message Commande", "Passage par la partie composant d'ID : " & ID & " L'action     est : " & ParaAdr2(2))
-                    Dim TempDevice As TemplateDevice = _Server.ReturnDeviceById(_IdSrv, ID)
+                    If InStr(ParaAdr2(1), "-") = 0 Then  'teste si cest id device qui est passé ou son nom
+                        IDCmd = ReturnDeviceIDByName(ParaAdr2(1))
+                    Else
+                        IDCmd = ParaAdr2(1)
+                    End If
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Reception Message Commande", "Passage par la partie composant d'ID : " & IDCmd & " L'action     est : " & ParaAdr2(2))
+                    Dim TempDevice As TemplateDevice = _Server.ReturnDeviceById(_IdSrv, IDCmd)
                     If TempDevice IsNot Nothing Then
                         If TempDevice.Type = ListeDevices.LAMPE Or TempDevice.Type = ListeDevices.APPAREIL Then
 
@@ -787,13 +778,13 @@ Imports S22.Imap
                                 Case "ON", "OFF"
                                     Dim x As DeviceAction = New DeviceAction
                                     x.Nom = ParaAdr2(2)
-                                    _Server.ExecuteDeviceCommand(_IdSrv, ID, x)
+                                    _Server.ExecuteDeviceCommand(_IdSrv, IDCmd, x)
 
                                 Case "DIM"
                                     Dim x As DeviceActionSimple = New DeviceActionSimple
                                     x.Nom = ParaAdr2(2)
                                     x.Param1 = ParaAdr2(3)
-                                    _Server.ExecuteDeviceCommandSimple(_IdSrv, ID, x)
+                                    _Server.ExecuteDeviceCommandSimple(_IdSrv, IDCmd, x)
 
                                 Case "READ"
 
@@ -803,17 +794,26 @@ Imports S22.Imap
                     End If
 
                 Case "MACRO"
-                    Dim ID = ReturnMacroIDByName(ParaAdr2(1))
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Reception Message Commande", "Passage par la partie Macro d'ID : " & ID)
+                    If InStr(ParaAdr2(1), "-") = 0 Then  'teste si cest 'id  macro qui est passé ou son nom
+                        IDCmd = ReturnMacroIDByName(ParaAdr2(1))
+                    Else
+                        IDCmd = ParaAdr2(1)
+                    End If
+                    If ID = "" Then
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Reception Message Commande", "ID macro inconnu : " & ParaAdr2(1))
+                        Exit Sub
+                    End If
 
-                    Dim TempMacro As Macro = _Server.ReturnMacroById(_IdSrv, ID)
+                    Dim TempMacro As Macro = _Server.ReturnMacroById(_IdSrv, IDCmd)
                     If TempMacro IsNot Nothing And TempMacro.Enable = True Then
                         ' Analyse de la commande 
+                        '                       _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Reception Message Commande", "Execution macro d'ID : " & IDCmd)
                         Select Case ParaAdr2(2).ToUpper
                             Case "START"
-                                _Server.RunMacro(_IdSrv, ID)
+                                '                               _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Reception Message Commande", "Execution START macro d'ID : " & IDCmd)
+                                _Server.RunMacro(_IdSrv, IDCmd)
                             Case "STOP"
-
+                                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Reception Message Commande", "Execution STOP macro d'ID : " & IDCmd)
                         End Select
                     End If
 
@@ -876,58 +876,96 @@ Public Class MailBoxHandler
     Implements IDisposable
 
     Private _imapClient As ImapClient
+    Private _pop3client As Pop3Client
     Private memUids As UInteger()
     
     Public Event HandleMessage As EventHandler(Of HandleMessageEventArgs)
 
-    Public Sub New(ByVal hostName As String, ByVal port As Integer, ByVal userName As String, ByVal password As String)
+    Public Sub New(ByVal hostName As String, ByVal port As Integer, ByVal userName As String, ByVal password As String, ByVal protocole As String)
+        Try
+            If protocole = "IMAP" Then
+                _imapClient = New ImapClient(hostName, port, True)
+                _imapClient.Login(userName, password, S22.Imap.AuthMethod.Login)
+            Else
+                _pop3client = New Pop3Client(hostName, port, False)
+                _pop3client.Login(userName, password, S22.Pop3.AuthMethod.Login)
+            End If
+        Catch ex As Exception
 
-        _imapClient = New ImapClient(hostName, port, True)
-        _imapClient.Login(userName, password, AuthMethod.Login)
-
+        End Try
     End Sub
 
     Public Function CheckExistingEmails() As String
-
-        Try
-
-            Dim uids As UInteger() = Me._imapClient.Search(SearchCondition.Unseen)
-
-            For Each uid As UInteger In uids
-
-                If memUids IsNot Nothing Then
-                    If memUids.Contains(uid) = False Then
+        If _imapClient IsNot Nothing Then
+            Try
+                Dim uids As UInteger() = Me._imapClient.Search(SearchCondition.Unseen)
+                For Each uid As UInteger In uids
+                    If memUids IsNot Nothing Then
+                        If memUids.Contains(uid) = False Then
+                            Dim message = Me._imapClient.GetMessage(uid)
+                            Me.ProcessMessage(uid, message)
+                            'Me._imapClient.AddMessageFlags(uid, S22.Imap.MessageFlag.Seen)
+                        End If
+                    Else
                         Dim message = Me._imapClient.GetMessage(uid)
                         Me.ProcessMessage(uid, message)
-                        'Me._imapClient.AddMessageFlags(uid, S22.Imap.MessageFlag.Seen)
                     End If
-                Else
-                    Dim message = Me._imapClient.GetMessage(uid)
-                    Me.ProcessMessage(uid, message)
-                End If
-
-            Next
-
-            memUids = uids
-            Return "ok"
-
-        Catch ex As Exception
-
-            Return "erreur dans CheckExistingEmails"
-
-        End Try
+                Next
+                memUids = uids
+                Return "ok"
+            Catch ex As Exception
+                Return "Erreur dans CheckExistingImapEmails"
+            End Try
+        Else
+            Try
+                Dim uids As UInteger() = Me._pop3client.GetMessageNumbers
+                For Each uid As UInteger In uids
+                    If memUids IsNot Nothing Then
+                        If memUids.Contains(uid) = False Then
+                            Dim message = Me._pop3client.GetMessage(uid, S22.Pop3.FetchOptions.Normal, True)
+                            message.Body = Replace(message.Body, vbLf, "") ' supprime les saut de ligne éventuels
+                            message.Body = Replace(message.Body, vbCr, "") ' supprime les retours chariot éventuels
+                            message.Body = Replace(message.Body, vbCrLf, "") ' supprime les deux éventuels
+                            Me.ProcessMessage(uid, message)
+                        End If
+                    Else
+                        Dim message = Me._pop3client.GetMessage(uid, S22.Pop3.FetchOptions.Normal, True)
+                        message.Body = Replace(message.Body, vbLf, "") ' supprime les saut de ligne éventuels
+                        message.Body = Replace(message.Body, vbCr, "") ' supprime les retours chariot éventuels
+                        message.Body = Replace(message.Body, vbCrLf, "") ' supprime les deux éventuels
+                        Me.ProcessMessage(uid, message)
+                    End If
+                Next
+                memUids = uids
+                Return "ok"
+            Catch ex As Exception
+                Return "Erreur dans CheckExistingPop3Emails"
+            End Try
+        End If
     End Function
 
     Public Function IsConnected() As Boolean
-        Try
-            If _imapClient.Authed Then
-                Return True
-            Else
+        If _imapClient IsNot Nothing Then
+            Try
+                If _imapClient.Authed Then
+                    Return True
+                Else
+                    Return False
+                End If
+            Catch ex As Exception
                 Return False
-            End If
-        Catch ex As Exception
-            Return False
-        End Try
+            End Try
+        Else
+            Try
+                If _pop3client.Authed Then
+                    Return True
+                Else
+                    Return False
+                End If
+            Catch ex As Exception
+                Return False
+            End Try
+        End If
     End Function
 
     Protected Sub ProcessMessage(ByVal uid As UInteger, ByVal message As MailMessage)
@@ -950,7 +988,15 @@ Public Class MailBoxHandler
                 _imapClient.Dispose()
                 _imapClient = Nothing
             Catch ex As Exception
-                
+
+            End Try
+        Else
+            Try
+                _pop3client.Logout()
+                _pop3client.Dispose()
+                _pop3client = Nothing
+            Catch ex As Exception
+
             End Try
         End If
     End Sub
