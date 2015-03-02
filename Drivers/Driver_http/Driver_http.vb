@@ -578,7 +578,8 @@ Imports System.Xml
                         Dim result As String = ""
                         For Each itemNode As XmlNode In itemNodes
                             Dim titleNode As XmlNode = itemNode.SelectSingleNode(Objet.Adresse2)
-                            result &= titleNode.InnerText & vbCrLf
+                            'Modif JPhomi, suppression de vbCrLf
+                            result &= titleNode.InnerText ' & vbCrLf
                         Next
                         Objet.Value = result
                     ElseIf Trim(UCase(Objet.Modele)) = "ECODEVICE" Then
