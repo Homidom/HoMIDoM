@@ -54,7 +54,7 @@ Imports UsbUirt
     <NonSerialized()> Private learn_code_modifier As LearnCodeModifier = LearnCodeModifier.ForceStruct
     <NonSerialized()> Private code_format As CodeFormat = CodeFormat.Uuirt
     <NonSerialized()> Dim args As LearnCompletedEventArgs = Nothing     'arguments récup lors de l'apprentissage
-
+    <NonSerialized()> Dim Count As Integer = 1
     Private last_received_code As String        'dernier code recu
 
     Public Structure ircodeinfo
@@ -298,9 +298,11 @@ Imports UsbUirt
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
+            Count = _Parametres.Item(0).Valeur
             Me.mc = New Controller
             'capte les events
             AddHandler mc.Received, AddressOf handler_mc_received
+
             _IsConnect = True
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "USBUIRT", "Driver démarré")
         Catch ex As Exception
@@ -348,6 +350,8 @@ Imports UsbUirt
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
             If _Enable = False Then Exit Sub
+            If _IsConnect = False Then Exit Sub
+
             If Objet.type = "MULTIMEDIA" Then
                 If Commande = "SendCodeIR" Then
                     SendCodeIR(Parametre1, Parametre2)
@@ -355,6 +359,24 @@ Imports UsbUirt
                     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "La commande " & Commande & " est inconnue pour ce driver")
                 End If
             Else
+                If Commande = "ON" And String.IsNullOrEmpty(Objet.Adresse1) = False Then
+                    If String.IsNullOrEmpty(Objet.Adresse1) Then
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "La trame correspondant à ON est vide pour le composant " & Objet.Name)
+                    Else
+                        SendCodeIR(Objet.Adresse1, Count)
+                        Objet.Value = 100
+                        Exit Sub
+                    End If
+                End If
+                If Commande = "OFF" Then
+                    If String.IsNullOrEmpty(Objet.Adresse2) Then
+                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "La trame correspondant à OFF est vide pour le composant " & Objet.Name)
+                    Else
+                        SendCodeIR(Objet.Adresse2, Count)
+                        Objet.Value = 0
+                        Exit Sub
+                    End If
+                End If
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUIRT", "Impossible d'envoyer un code IR pour un type de device autre que MULTIMEDIA")
             End If
         Catch ex As Exception
@@ -462,9 +484,18 @@ Imports UsbUirt
 
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.MULTIMEDIA)
+            _DeviceSupport.Add(ListeDevices.SWITCH)
+            _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)
+            _DeviceSupport.Add(ListeDevices.CONTACT)
+            _DeviceSupport.Add(ListeDevices.APPAREIL)
+            _DeviceSupport.Add(ListeDevices.LAMPE)
+            _DeviceSupport.Add(ListeDevices.VOLET)
 
-            Add_LibelleDevice("ADRESSE1", "Adresse", "")
-            Add_LibelleDevice("ADRESSE2", "@", "")
+            'Parametres avancés
+            Add_ParamAvance("Nombre d'envoi de la trame", "Nombre de fois à envoyer la trame", 1)
+
+            Add_LibelleDevice("ADRESSE1", "Trame ON", "Trame reçue ou envoyée si ON ou simulation appuie sur bouton télécommande")
+            Add_LibelleDevice("ADRESSE2", "Trame OFF", "Trame reçue ou envoyée si OFF")
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "@", "")
             'Add_LibelleDevice("REFRESH", "Refresh (sec)", "Valeur de rafraîchissement de la mesure en secondes")
@@ -579,7 +610,47 @@ Imports UsbUirt
     'handler code recu
     Private Sub handler_mc_received(ByVal sender As Object, ByVal e As ReceivedEventArgs)
         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "Code IR reçu: " & e.IRCode)
-        Debug.WriteLine("Code recu: " & e.IRCode)
+
+        If String.IsNullOrEmpty(e.IRCode) = False Then
+            Try
+                'Recherche si un device affecté pour Adresse 1
+                Dim listedevices As New ArrayList
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, e.IRCode, "", Me._ID, True)
+                'un device trouvé on maj la value
+                If listedevices IsNot Nothing Then
+                    If (listedevices.Count = 1) Then
+                        'correction valeur pour correspondre au type de value
+                        If TypeOf listedevices.Item(0).Value Is Integer Then
+
+                            listedevices.Item(0).Value = 100
+                        End If
+                        If TypeOf listedevices.Item(0).Value Is Boolean Then
+                            listedevices.Item(0).Value = True
+                        End If
+                    End If
+                End If
+
+                listedevices = New ArrayList
+                listedevices = _Server.ReturnDeviceByAdresse2TypeDriver(_IdSrv, e.IRCode, "", Me._ID, True)
+                'un device trouvé on maj la value
+                If listedevices IsNot Nothing Then
+                    If (listedevices.Count = 1) Then
+                        'correction valeur pour correspondre au type de value
+                        If TypeOf listedevices.Item(0).Value Is Integer Then
+                            listedevices.Item(0).Value = 0
+                        End If
+                        If TypeOf listedevices.Item(0).Value Is Boolean Then
+                            listedevices.Item(0).Value = False
+                        End If
+                    End If
+                End If
+
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " handler_mc_received", "Erreur : " & ex.ToString)
+        End Try
+        End If
+
+
         last_received_code = e.IRCode
         RaiseEvent DriverEvent(_Nom, "CODE_RECU", e.IRCode)
     End Sub
