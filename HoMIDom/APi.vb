@@ -210,7 +210,8 @@ Namespace HoMIDom
 
                 For Each Info In Objet.GetType.GetMethods()
                     X = (Info.ReturnType.ToString) 'retourne le type string, boolean
-                    If Info.Attributes = 6 And X = "System.Void" Then 'on prend que les méthodes public
+
+                    If (Info.Attributes = 6 Or Info.Attributes = 838) And X = "System.Void" Then 'on prend que les méthodes public
                         X = Info.Name 'Nom de la méthode
                         paraminfos = Info.GetParameters()
 
