@@ -1,9 +1,0 @@
-C:\download\Homidom\DEBUG\Drivers\Driver_Phidget.dll
-C:\download\Homidom\DEBUG\Drivers\Driver_Phidget.pdb
-C:\download\Homidom\DEBUG\Drivers\Driver_Phidget.xml
-C:\download\Homidom\Drivers\Driver_Phidget\obj\Debug\Driver_Phidget.vbprojResolveAssemblyReference.cache
-C:\download\Homidom\Drivers\Driver_Phidget\obj\Debug\Driver_Phidget.Resources.resources
-C:\download\Homidom\Drivers\Driver_Phidget\obj\Debug\Driver_Phidget.vbproj.GenerateResource.Cache
-C:\download\Homidom\Drivers\Driver_Phidget\obj\Debug\Driver_Phidget.dll
-C:\download\Homidom\Drivers\Driver_Phidget\obj\Debug\Driver_Phidget.xml
-C:\download\Homidom\Drivers\Driver_Phidget\obj\Debug\Driver_Phidget.pdb
