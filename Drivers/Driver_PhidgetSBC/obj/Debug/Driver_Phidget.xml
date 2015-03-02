@@ -1,0 +1,71 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Driver_Phidget
+</name>
+</assembly>
+<members>
+<member name="M:Driver_Phidget.Driver_Phidget.GetCommandPlus">
+	<summary>
+ Retourne la liste des Commandes avancées
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_Phidget.Driver_Phidget.ExecuteCommand(System.Object,System.String,System.Object[])">
+	<summary>Execute une commande avancée</summary>
+	<param name="MyDevice">Objet représentant le Device </param>
+	<param name="Command">Nom de la commande avancée à éxécuter</param>
+	<param name="Param">tableau de paramétres</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_Phidget.Driver_Phidget.VerifChamp(System.String,System.Object)">
+	<summary>
+ Permet de vérifier si un champ est valide
+ </summary>
+	<param name="Champ"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_Phidget.Driver_Phidget.Add_DeviceCommande(System.String,System.String,System.Int32)">
+	<summary>ajout des commandes avancées pour les devices</summary>
+	<param name="nom">Nom de la commande avancée</param>
+	<param name="description">Description qui sera affichée dans l'admin</param>
+	<param name="nbparam">Nombre de parametres attendus</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Phidget.Driver_Phidget.Add_LibelleDriver(System.String,System.String,System.String,System.String)">
+	<summary>ajout Libellé pour le Driver</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Phidget.Driver_Phidget.Add_LibelleDevice(System.String,System.String,System.String,System.String)">
+	<summary>Ajout Libellé pour les Devices</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Phidget.Driver_Phidget.Add_ParamAvance(System.String,System.String,System.Object)">
+	<summary>ajout de parametre avancés</summary>
+	<param name="nom">Nom du parametre (sans espace)</param>
+	<param name="description">Description du parametre</param>
+	<param name="valeur">Sa valeur</param>
+	<remarks></remarks>
+</member><member name="M:Driver_Phidget.Driver_Phidget.traitement(System.Boolean,System.String)">
+	<summary>Traite les paquets reçus</summary>
+	<remarks></remarks>
+</member><member name="P:Driver_Phidget.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_Phidget.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_Phidget.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member>
+</members>
+</doc>
