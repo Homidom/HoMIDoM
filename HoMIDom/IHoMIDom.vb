@@ -716,6 +716,18 @@ Namespace HoMIDom
         <OperationContract()> Function ReturnDeviceByAdresse1TypeDriver(ByVal IdSrv As String, ByVal DeviceAdresse As String, ByVal DeviceType As String, ByVal DeviceDriver As String, ByVal Enable As Boolean) As ArrayList
 
         ''' <summary>
+        ''' Retourne une liste de device suivant l'addresse2 et/ou son type et/ou le driver
+        ''' </summary>
+        ''' <param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+        ''' <param name="DeviceAdresse">Adresse1 du device</param>
+        ''' <param name="DeviceType">Type de device</param>
+        ''' <param name="DeviceDriver">ID driver du device</param>
+        ''' <returns>List de device, Nothing si non trouvé ou ID du serveur erroné</returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function ReturnDeviceByAdresse2TypeDriver(ByVal IdSrv As String, ByVal DeviceAdresse As String, ByVal DeviceType As String, ByVal DeviceDriver As String, ByVal Enable As Boolean) As ArrayList
+
+
+        ''' <summary>
         ''' Retourne une liste de device suivant l'addresse1 et/ou son type 
         ''' </summary>
         ''' <param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>

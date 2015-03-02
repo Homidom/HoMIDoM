@@ -7979,6 +7979,33 @@ Namespace HoMIDom
             End Try
         End Function
 
+        ''' <summary>Retourne une liste de device par son Adresse2 et/ou type et/ou son driver, ex: "A1" "TEMPERATURE" "RFXCOM_RECEIVER"</summary>
+        ''' <param name="DeviceAdresse"></param>
+        ''' <param name="DeviceType"></param>
+        ''' <param name="DriverID"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnDeviceByAdresse2TypeDriver(ByVal IdSrv As String, ByVal DeviceAdresse As String, ByVal DeviceType As String, ByVal DriverID As String, ByVal Enable As Boolean) As ArrayList Implements IHoMIDom.ReturnDeviceByAdresse2TypeDriver
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                End If
+
+                Dim listresultat As New ArrayList
+
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    If (String.IsNullOrEmpty(DeviceAdresse) = True Or _ListDevices.Item(i).Adresse2.ToUpper() = DeviceAdresse.ToUpper()) And (DeviceType = "" Or _ListDevices.Item(i).type = DeviceType.ToUpper()) And (DriverID = "" Or _ListDevices.Item(i).DriverID = DriverID.ToUpper()) And _ListDevices.Item(i).Enable = Enable Then
+                        listresultat.Add(_ListDevices.Item(i))
+                    End If
+                Next
+
+                Return listresultat
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDeviceByAdresse2TypeDriver", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
         ''' <summary>Retourne une liste de device par sa Zone et/ou type et/ou son driver, ex: "Salle" "Volet" </summary>
         ''' <param name="ZoneID"></param>
         ''' <param name="DeviceType"></param>
