@@ -3690,26 +3690,32 @@ Namespace HoMIDom
                 End If
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Version du Framework: " & System.Runtime.InteropServices.RuntimeEnvironment.GetSystemVersion())
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Répertoire utilisé: " & My.Application.Info.DirectoryPath.ToString)
+
                 'Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Adresse IP du serveur: " & System.Net.Dns.GetHostByName(My.Computer.Name).AddressList(0).ToString())
                 '_IPSOAP = System.Net.Dns.GetHostByName(My.Computer.Name).AddressList(0).ToString()
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Adresse IP du serveur: " & System.Net.Dns.GetHostEntry(My.Computer.Name).AddressList(0).ToString())
-                _IPSOAP = System.Net.Dns.GetHostEntry(My.Computer.Name).AddressList(0).ToString()
+                '_IPSOAP = System.Net.Dns.GetHostEntry(My.Computer.Name).AddressList(0).ToString()
+                _IPSOAP = Dns.GetHostEntry(Dns.GetHostName()).AddressList.Where(Function(a As IPAddress) Not a.IsIPv6LinkLocal AndAlso Not a.IsIPv6Multicast AndAlso Not a.IsIPv6SiteLocal).First().ToString()
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Adresse IP du serveur: " & _IPSOAP)
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Séparateur décimal CurrentCulture: '" & Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator & "'")
 
                 'verify Local System separator
-                
-                Const LOCALE_SDECIMAL = &HE ' Symbole décimal
-                'Const LOCALE_STHOUSAND = &HF ' Séparateur des milliers
-                Dim sBuffer As String
-                Dim nBufferLen As Long
-                nBufferLen = 255
-                sBuffer = New String(vbNullChar, nBufferLen)
-                nBufferLen = GetLocaleInfoEx(GetThreadLocale(), LOCALE_SDECIMAL, sBuffer, nBufferLen)
-                If nBufferLen > 0 Then
-                    If Left$(sBuffer, nBufferLen - 1) <> Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator.ToString() Then
-                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "INFO", "Séparateur décimal Default User: '" & Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator & "' différent du séparateur courant, change la valeur de la clé HKU/default/International/sdecimal par le séparateur CurrentCulture")
+                Try
+                    Const LOCALE_SDECIMAL = &HE ' Symbole décimal
+                    'Const LOCALE_STHOUSAND = &HF ' Séparateur des milliers
+                    Dim sBuffer As String
+                    Dim nBufferLen As Long
+                    nBufferLen = 255
+                    sBuffer = New String(vbNullChar, nBufferLen)
+                    nBufferLen = GetLocaleInfoEx(GetThreadLocale(), LOCALE_SDECIMAL, sBuffer, nBufferLen)
+                    If nBufferLen > 0 Then
+                        If Left$(sBuffer, nBufferLen - 1) <> Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator.ToString() Then
+                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "INFO", "Séparateur décimal Default User: '" & Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator & "' différent du séparateur courant, change la valeur de la clé HKU/default/International/sdecimal par le séparateur CurrentCulture")
+                        End If
                     End If
-                End If
+                Catch ex As Exception
+
+                End Try
+
 
                 '---------- Creation table des threads ----------
                 'table_TimerSecTickthread.Dispose()

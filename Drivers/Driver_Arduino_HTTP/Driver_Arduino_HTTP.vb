@@ -460,7 +460,12 @@ Public Class Driver_Arduino_HTTP
 
             'verification si adresse1 n'est pas vide (doit etre egale à l'IP de l'arduino)
             If String.IsNullOrEmpty(Objet.Adresse1) Or Objet.Adresse1 = "" Then
-                WriteLog("ERR: WRITE l'adresse IP de l'arduino doit etre renseigné (ex: 192.168.1.13) : " & Objet.Name)
+                WriteLog("ERR: READ l'adresse IP de l'arduino doit etre renseigné (ex: 192.168.1.13) : " & Objet.Name)
+                Exit Sub
+            End If
+            'verification si adresse2 n'est pas vide (doit etre egale au numero du PIN)
+            If String.IsNullOrEmpty(Objet.Adresse2) Or Objet.Adresse2 = "" Then
+                WriteLog("ERR: READ le numéro du PIN doit etre renseigné (1 / 2 / 3...) : " & Objet.Name)
                 Exit Sub
             End If
 
