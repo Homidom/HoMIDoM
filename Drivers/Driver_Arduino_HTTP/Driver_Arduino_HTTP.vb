@@ -390,14 +390,10 @@ Public Class Driver_Arduino_HTTP
                 Dim response As WebResponse
                 Dim responseFromServer As String = ""
                 Try
-                    WriteLog("DBG: RESPONSE1")
                     response = request.GetResponse()
-                    WriteLog("DBG: RESPONSE2")
                     'response.ContentType = "text/plain"
                     If CType(response, HttpWebResponse).StatusCode = HttpStatusCode.OK Then
-                        WriteLog("DBG: RESPONSE3")
                         Dim dataStream As Stream = response.GetResponseStream()
-                        WriteLog("DBG: RESPONSE4")
                         Dim reader As New StreamReader(dataStream)
                         responseFromServer = reader.ReadToEnd()
                         WriteLog("DBG: Commande passée à l arduino " & Objet.Name & " : " & urlcommande & " --> " & responseFromServer & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
@@ -479,6 +475,7 @@ Public Class Driver_Arduino_HTTP
             'http://ip/?homidom_READA_X
             'http://ip/?homidom_READD_X
             'http://ip/?homidom_READV_X
+            'http://ip/?homidom_WRITV_X
             'http://ip/?homidom_CFG_X_TYPE (Type = 0 pour Input, 1 pour Output, 2 pour pwm et 3 pour One wire)
 
 
@@ -495,7 +492,40 @@ Public Class Driver_Arduino_HTTP
                 End Select
             Else
                 Select Case UCase(Objet.Modele)
-                    Case "VARIABLE" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_READV_" & Objet.Adresse2
+                    Case "VARIABLE"
+                        Select Case Command
+                            Case "ON" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_WRITV_" & Objet.Adresse2 & "_1"
+                            Case "OFF" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_WRITV_" & Objet.Adresse2 & "_0"
+                            Case "DIM", "OUVERTURE"
+                                If Not IsNothing(Parametre1) Then
+                                    If IsNumeric(Parametre1) Then
+                                        urlcommande = "http://" & Objet.Adresse1 & "/?homidom_WRITV_" & Objet.Adresse2 & "_" & CInt(Parametre1)
+                                    Else
+                                        WriteLog("ERR: WRITE VAR DIM Le parametre " & CStr(Parametre1) & " n'est pas un entier (" & Objet.Name & ")")
+                                        Exit Sub
+                                    End If
+                                Else
+                                    WriteLog("ERR: WRITE VAR DIM Il manque un parametre pour DIM (" & Objet.Name & ")")
+                                    Exit Sub
+                                End If
+                            Case "PWM"
+                                If Not IsNothing(Parametre1) Then
+                                    If IsNumeric(Parametre1) Then
+                                        urlcommande = "http://" & Objet.Adresse1 & "/?homidom_WRITV_" & Objet.Adresse2 & "_" & CInt(Parametre1)
+                                    Else
+                                        WriteLog("ERR: WRITE VAR PWM Le parametre " & CStr(Parametre1) & " n'est pas un entier (" & Objet.Name & ")")
+                                        Exit Sub
+                                    End If
+                                Else
+                                    WriteLog("ERR: WRITE VAR PWM Il manque un parametre (" & Objet.Name & ")")
+                                    Exit Sub
+                                End If
+                            Case Else
+                                'on lit la valeur par défault
+                                urlcommande = "http://" & Objet.Adresse1 & "/?homidom_READV_" & Objet.Adresse2
+                                Exit Sub
+                        End Select
+
                     Case "ANALOG_IN" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_READA_" & Objet.Adresse2
                     Case "DIGITAL_IN" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_READD_" & Objet.Adresse2
                     Case "DIGITAL_OUT"
@@ -515,9 +545,14 @@ Public Class Driver_Arduino_HTTP
                             Case "DIM", "OUVERTURE"
                                 If Not IsNothing(Parametre1) Then
                                     If IsNumeric(Parametre1) Then
-                                        'Conversion du parametre de % (0 à 100) en 0 à 255
-                                        Parametre1 = CInt(Parametre1 * 255 / 100)
-                                        urlcommande = "http://" & Objet.Adresse1 & "/?homidom_DIM_" & Objet.Adresse2 & "_" & CInt(Parametre1)
+                                        If (Parametre1 >= 0 And Parametre1 <= 100) Then
+                                            'Conversion du parametre de % (0 à 100) en 0 à 255
+                                            Parametre1 = CInt(Parametre1 * 255 / 100)
+                                            urlcommande = "http://" & Objet.Adresse1 & "/?homidom_DIM_" & Objet.Adresse2 & "_" & CInt(Parametre1)
+                                        Else
+                                            WriteLog("ERR: WRITE DIM Le parametre " & CStr(Parametre1) & " n'est pas un entier de 0 à 100 (" & Objet.Name & ")")
+                                            Exit Sub
+                                        End If
                                     Else
                                         WriteLog("ERR: WRITE DIM Le parametre " & CStr(Parametre1) & " n'est pas un entier (" & Objet.Name & ")")
                                         Exit Sub
