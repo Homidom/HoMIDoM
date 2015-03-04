@@ -496,7 +496,7 @@ Public Class Driver_Arduino_HTTP
                         Select Case Command
                             Case "ON" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_WRITV_" & Objet.Adresse2 & "_1"
                             Case "OFF" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_WRITV_" & Objet.Adresse2 & "_0"
-                            Case "DIM", "OUVERTURE"
+                            Case "DIM", "OUVERTURE", "PWM"
                                 If Not IsNothing(Parametre1) Then
                                     If IsNumeric(Parametre1) Then
                                         urlcommande = "http://" & Objet.Adresse1 & "/?homidom_WRITV_" & Objet.Adresse2 & "_" & CInt(Parametre1)
@@ -506,18 +506,6 @@ Public Class Driver_Arduino_HTTP
                                     End If
                                 Else
                                     WriteLog("ERR: WRITE VAR DIM Il manque un parametre pour DIM (" & Objet.Name & ")")
-                                    Exit Sub
-                                End If
-                            Case "PWM"
-                                If Not IsNothing(Parametre1) Then
-                                    If IsNumeric(Parametre1) Then
-                                        urlcommande = "http://" & Objet.Adresse1 & "/?homidom_WRITV_" & Objet.Adresse2 & "_" & CInt(Parametre1)
-                                    Else
-                                        WriteLog("ERR: WRITE VAR PWM Le parametre " & CStr(Parametre1) & " n'est pas un entier (" & Objet.Name & ")")
-                                        Exit Sub
-                                    End If
-                                Else
-                                    WriteLog("ERR: WRITE VAR PWM Il manque un parametre (" & Objet.Name & ")")
                                     Exit Sub
                                 End If
                             Case Else
