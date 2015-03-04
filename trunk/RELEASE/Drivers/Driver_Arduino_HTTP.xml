@@ -6,20 +6,7 @@ Driver_Arduino_HTTP
 </name>
 </assembly>
 <members>
-<member name="P:Driver_Arduino_HTTP.My.Resources.Resources.ResourceManager">
-	<summary>
-  Returns the cached ResourceManager instance used by this class.
-</summary>
-</member><member name="P:Driver_Arduino_HTTP.My.Resources.Resources.Culture">
-	<summary>
-  Overrides the current thread's CurrentUICulture property for all
-  resource lookups using this strongly typed resource class.
-</summary>
-</member><member name="T:Driver_Arduino_HTTP.My.Resources.Resources">
-	<summary>
-  A strongly-typed resource class, for looking up localized strings, etc.
-</summary>
-</member><member name="M:Driver_Arduino_HTTP.Driver_Arduino_HTTP.GetCommandPlus">
+<member name="M:Driver_Arduino_HTTP.Driver_Arduino_HTTP.GetCommandPlus">
 	<summary>
  Retourne la liste des Commandes avancées
  </summary>
@@ -56,44 +43,19 @@ Driver_Arduino_HTTP
 	<param name="Parametre1"></param>
 	<param name="Parametre2"></param>
 	<remarks></remarks>
-</member><member name="M:Driver_Arduino_HTTP.Driver_Arduino_HTTP.DeleteDevice(System.String)">
-	<summary>Fonction lancée lors de la suppression d'un device</summary>
-	<param name="DeviceId">Objet représetant le device à interroger</param>
-	<remarks></remarks>
-</member><member name="M:Driver_Arduino_HTTP.Driver_Arduino_HTTP.NewDevice(System.String)">
-	<summary>Fonction lancée lors de l'ajout d'un device</summary>
-	<param name="DeviceId">Objet représetant le device à interroger</param>
-	<remarks></remarks>
-</member><member name="M:Driver_Arduino_HTTP.Driver_Arduino_HTTP.add_devicecommande(System.String,System.String,System.Int32)">
-	<summary>ajout des commandes avancées pour les devices</summary>
-	<remarks></remarks>
-</member><member name="M:Driver_Arduino_HTTP.Driver_Arduino_HTTP.Add_LibelleDriver(System.String,System.String,System.String,System.String)">
-	<summary>ajout Libellé pour le Driver</summary>
-	<param name="nom">Nom du champ : HELP</param>
-	<param name="labelchamp">Nom à afficher : Aide</param>
-	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
-	<remarks></remarks>
-</member><member name="M:Driver_Arduino_HTTP.Driver_Arduino_HTTP.Add_LibelleDevice(System.String,System.String,System.String,System.String)">
-	<summary>Ajout Libellé pour les Devices</summary>
-	<param name="nom">Nom du champ : HELP</param>
-	<param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
-	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
-	<remarks></remarks>
-</member><member name="M:Driver_Arduino_HTTP.Driver_Arduino_HTTP.add_paramavance(System.String,System.String,System.Object)">
-	<summary>ajout de parametre avancés</summary>
-	<param name="nom">Nom du parametre (sans espace)</param>
-	<param name="description">Description du parametre</param>
-	<param name="valeur">Sa valeur</param>
-	<remarks></remarks>
-</member><member name="M:Driver_Arduino_HTTP.Driver_Arduino_HTTP.#ctor">
-	<summary>Creation d'un objet de type</summary>
-	<remarks></remarks>
-</member><member name="M:Driver_Arduino_HTTP.Driver_Arduino_HTTP.TimerTick(System.Object,System.Timers.ElapsedEventArgs)">
-	<summary>Si refresh &gt;0 gestion du timer</summary>
-	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
-</member><member name="M:Driver_Arduino_HTTP.Driver_Arduino_HTTP.traitement(System.Int32,System.String,System.Int32)">
-	<summary>Va écrire les valeurs dans Homidom</summary>
-	<remarks></remarks>
+</member><member name="P:Driver_Arduino_HTTP.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:Driver_Arduino_HTTP.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:Driver_Arduino_HTTP.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
 </member>
 </members>
 </doc>
