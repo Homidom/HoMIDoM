@@ -1209,22 +1209,22 @@ Namespace HoMIDom
         <Serializable()> Class APPAREIL
             Inherits DeviceGenerique_ValueBool
 
-            ''' <summary>Permet de tester une commande write</summary>
-            ''' <param name="Commande"></param>
-            ''' <param name="Parametre1"></param>
-            ''' <param name="Parametre2"></param>
-            ''' <remarks></remarks>
-            Public Sub TestWrite(ByVal Commande As String, Optional ByVal Parametre1 As String = "", Optional ByVal Parametre2 As String = "")
-                If _Enable = False Then Exit Sub
-                Driver.Write(Me, UCase(Commande), Parametre1, Parametre2)
-            End Sub
+            ' ''' <summary>Permet de tester une commande write</summary>
+            ' ''' <param name="Commande"></param>
+            ' ''' <param name="Parametre1"></param>
+            ' ''' <param name="Parametre2"></param>
+            ' ''' <remarks></remarks>
+            'Public Sub TestWrite(ByVal Commande As String, Optional ByVal Parametre1 As String = "", Optional ByVal Parametre2 As String = "")
+            '    If _Enable = False Then Exit Sub
+            '    Driver.Write(Me, UCase(Commande), Parametre1, Parametre2)
+            'End Sub
 
-            ''' <summary>Permet de tester une commande read</summary>
-            ''' <remarks></remarks>
-            Public Sub TestRead()
-                If _Enable = False Then Exit Sub
-                Driver.read(Me)
-            End Sub
+            ' ''' <summary>Permet de tester une commande read</summary>
+            ' ''' <remarks></remarks>
+            'Public Sub TestRead()
+            '    If _Enable = False Then Exit Sub
+            '    Driver.read(Me)
+            'End Sub
 
             'Creation du device
             Public Sub New(ByVal Server As Server)
@@ -1259,22 +1259,22 @@ Namespace HoMIDom
             Inherits DeviceGenerique_ValueString
             Dim _Fichier As String
 
-            ''' <summary>Permet de tester une commande write</summary>
-            ''' <param name="Commande"></param>
-            ''' <param name="Parametre1"></param>
-            ''' <param name="Parametre2"></param>
-            ''' <remarks></remarks>
-            Public Sub TestWrite(ByVal Commande As String, Optional ByVal Parametre1 As String = "", Optional ByVal Parametre2 As String = "")
-                If _Enable = False Then Exit Sub
-                Driver.Write(Me, UCase(Commande), Parametre1, Parametre2)
-            End Sub
+            ' ''' <summary>Permet de tester une commande write</summary>
+            ' ''' <param name="Commande"></param>
+            ' ''' <param name="Parametre1"></param>
+            ' ''' <param name="Parametre2"></param>
+            ' ''' <remarks></remarks>
+            'Public Sub TestWrite(ByVal Commande As String, Optional ByVal Parametre1 As String = "", Optional ByVal Parametre2 As String = "")
+            '    If _Enable = False Then Exit Sub
+            '    Driver.Write(Me, UCase(Commande), Parametre1, Parametre2)
+            'End Sub
 
-            ''' <summary>Permet de tester une commande read</summary>
-            ''' <remarks></remarks>
-            Public Sub TestRead()
-                If _Enable = False Then Exit Sub
-                Driver.read(Me)
-            End Sub
+            ' ''' <summary>Permet de tester une commande read</summary>
+            ' ''' <remarks></remarks>
+            'Public Sub TestRead()
+            '    If _Enable = False Then Exit Sub
+            '    Driver.read(Me)
+            'End Sub
 
             'Creation du device
             Public Sub New(ByVal Server As Server)

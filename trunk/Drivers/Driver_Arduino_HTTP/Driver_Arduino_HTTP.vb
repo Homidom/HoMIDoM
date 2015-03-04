@@ -490,6 +490,18 @@ Public Class Driver_Arduino_HTTP
                         WriteLog("ERR: WRITE CONFIG_TYPE_PIN : Ce type de PIN ne peut pas être configuré : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
                         Exit Sub
                 End Select
+            ElseIf Command = "SETVAR" Then
+                If Not IsNothing(Parametre1) Then
+                    Select Case UCase(Objet.Modele)
+                        Case "VARIABLE" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_WRITV_" & Objet.Adresse2 & "_" & Parametre1
+                        Case Else
+                            WriteLog("ERR: WRITE SETVAR : Seulement une variable peut utilisé la fonction SETVAR : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
+                            Exit Sub
+                    End Select
+                Else
+                    WriteLog("ERR: WRITE SETVAR : Il manque la valeur à passer à la variable en parametre : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
+                    Exit Sub
+                End If
             Else
                 Select Case UCase(Objet.Modele)
                     Case "VARIABLE"
@@ -816,6 +828,7 @@ Public Class Driver_Arduino_HTTP
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
             add_devicecommande("CONFIG_TYPE_PIN", "configurer le type de PIN sur l arduino suivant les propriétés du composant", 0)
             add_devicecommande("PWM", "Envoyer une commande PWM avec une valeur de 0 à 255", 1)
+            add_devicecommande("SETVAR", "Envoyer une valeur de type string à une variable sur l arduino", 1)
 
             'Libellé Driver
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
