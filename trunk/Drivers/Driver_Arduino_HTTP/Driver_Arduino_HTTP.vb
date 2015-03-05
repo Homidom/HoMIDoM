@@ -641,52 +641,52 @@ Public Class Driver_Arduino_HTTP
 
                         If (UCase(Objet.Modele) = "VARIABLE" Or UCase(Objet.Modele) = "ANALOG_IN" Or UCase(Objet.Modele) = "DIGITAL_IN") Then
                             'Analyse de la réponse (valeur lue): "20" "ON"
-                            WriteLog("DBG: " & Objet.Name & ": Reponse reçu de larduino : " & responseFromServer)
+                            WriteLog("DBG: " & Objet.Name & ": Reponse reçu de larduino : " & responsetab2(0))
                             'update de la value suivant la commande et le type de composant
                             If TypeOf Objet.Value Is Boolean Then
                                 'composant est un booleen
-                                If UCase(responseFromServer) = "LOW" Or UCase(responseFromServer) = "OFF" Or responseFromServer = "0" Or UCase(responseFromServer) = "FALSE" Or responseFromServer = False Then Objet.Value = False Else Objet.Value = True
+                                If UCase(responsetab2(0)) = "LOW" Or UCase(responsetab2(0)) = "OFF" Or responsetab2(0) = "0" Or UCase(responsetab2(0)) = "FALSE" Or responsetab2(0) = False Then Objet.Value = False Else Objet.Value = True
                             ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Or TypeOf Objet.Value Is Single Then
                                 'composant est un nombre
-                                If IsNumeric(responseFromServer) Then
-                                    Objet.Value = responseFromServer
-                                ElseIf UCase(responseFromServer) = "LOW" Or UCase(responseFromServer) = "OFF" Or responseFromServer = "0" Or UCase(responseFromServer) = "FALSE" Or responseFromServer = False Then
+                                If IsNumeric(responsetab2(0)) Then
+                                    Objet.Value = responsetab2(0)
+                                ElseIf UCase(responsetab2(0)) = "LOW" Or UCase(responsetab2(0)) = "OFF" Or responsetab2(0) = "0" Or UCase(responsetab2(0)) = "FALSE" Or responsetab2(0) = False Then
                                     Objet.Value = 0
-                                ElseIf UCase(responseFromServer) = "HIGH" Or UCase(responseFromServer) = "ON" Or responseFromServer = "1" Or UCase(responseFromServer) = "True" Or responseFromServer = True Then
+                                ElseIf UCase(responsetab2(0)) = "HIGH" Or UCase(responsetab2(0)) = "ON" Or responsetab2(0) = "1" Or UCase(responsetab2(0)) = "True" Or responsetab2(0) = True Then
                                     Objet.Value = 100
                                 Else
-                                    WriteLog("ERR: La valeur reçu pour " & Objet.Name & " n'est pas un nombre: " & responseFromServer)
+                                    WriteLog("ERR: La valeur reçu pour " & Objet.Name & " n'est pas un nombre: " & responsetab2(0))
                                 End If
                             Else
                                 'composant est un string
-                                Objet.Value = responseFromServer
+                                Objet.Value = responsetab2(0)
                             End If
                         Else
-                            WriteLog("DBG: " & Objet.Name & ": Reponse reçu de larduino : " & responsetab2(0))
+                            responsetab2(0) = responsetab2(0).ToUpper
+                            WriteLog("DBG: " & Objet.Name & ": Reponse reçu de l arduino : " & responsetab2(0))
                             'update de la value suivant la commande et le type de composant
-                            Select Case responsetab2(0).ToUpper
-                                Case "ON", "HIGH", "TRUE"
-                                    If TypeOf Objet.Value Is Boolean Then
-                                        Objet.Value = True
-                                    ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
-                                        Objet.Value = 100
-                                    Else
-                                        Objet.Value = "ON"
-                                    End If
-                                Case "OFF", "LOW", "FALSE"
-                                    If TypeOf Objet.Value Is Boolean Then
-                                        Objet.Value = False
-                                    ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
-                                        Objet.Value = 0
-                                    Else
-                                        Objet.Value = "OFF"
-                                    End If
-                                Case Else
-                                    WriteLog(Objet.Name & ": La valeur reçu de l'aruino n'est pas utilisable : " & responsetab2(0).ToUpper)
-                            End Select
+                            If responsetab2(0) = "ON" Or responsetab2(0) = "HIGH" Or responsetab2(0) = "TRUE" Then
+                                If TypeOf Objet.Value Is Boolean Then
+                                    Objet.Value = True
+                                ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
+                                    Objet.Value = 100
+                                Else
+                                    Objet.Value = "ON"
+                                End If
+                            ElseIf responsetab2(0) = "OFF" Or responsetab2(0) = "LOW" Or responsetab2(0) = "FALSE" Then
+                                If TypeOf Objet.Value Is Boolean Then
+                                    Objet.Value = False
+                                ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
+                                    Objet.Value = 0
+                                Else
+                                    Objet.Value = "OFF"
+                                End If
+                            Else
+                                WriteLog(Objet.Name & ": La valeur reçu de l arduino n'est pas utilisable : " & responsetab2(0))
+                            End If
                         End If
                     Else
-                        WriteLog("DBG: " & Objet.Name & ": Reponse reçu de larduino : " & responsetab2(0) & "-" & responsetab2(1))
+                        WriteLog("DBG: " & Objet.Name & ": Reponse reçu de l arduino : " & responsetab2(0) & "-" & responsetab2(1))
                         'update de la value suivant la commande et le type de composant
                         Select Case responsetab2(0)
                             Case "DIM"
