@@ -664,7 +664,7 @@ Public Class Driver_Arduino_HTTP
                         Else
                             WriteLog("DBG: " & Objet.Name & ": Reponse reçu de larduino : " & responsetab2(0))
                             'update de la value suivant la commande et le type de composant
-                            Select Case responsetab2(0)
+                            Select Case responsetab2(0).ToUpper
                                 Case "ON", "HIGH", "TRUE"
                                     If TypeOf Objet.Value Is Boolean Then
                                         Objet.Value = True
@@ -681,6 +681,8 @@ Public Class Driver_Arduino_HTTP
                                     Else
                                         Objet.Value = "OFF"
                                     End If
+                                Case Else
+                                    WriteLog(Objet.Name & ": La valeur reçu de l'aruino n'est pas utilisable : " & responsetab2(0).ToUpper)
                             End Select
                         End If
                     Else
@@ -697,6 +699,8 @@ Public Class Driver_Arduino_HTTP
                                 End If
                             Case "CFG"
                                 WriteLog(Objet.Name & ": Type de PIN configuré à " & Objet.Modele.ToString.ToUpper)
+                            Case Else
+                                WriteLog(Objet.Name & ": La commande reçu de l'aruino n'est pas utilisable : " & responsetab2(0).ToUpper & " - " & responsetab2(1).ToUpper)
                         End Select
                     End If
                 End If
@@ -838,7 +842,7 @@ Public Class Driver_Arduino_HTTP
             Add_LibelleDevice("ADRESSE2", "Numéro du PIN", "Numéro du PIN sur l arduino (ex: 1)")
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("MODELE", "TYPE PIN", "Type du PIN : ANALOG_IN(Entrée Analogique: 0-1023), DIGITAL_IN(Entrée digital: ON/OFF), DIGITAL_OUT(Sortie digital: ON/OFF), DIGITAL_PWM(Sortie digital: 0-255), 1WIRE, VARIABLE", "ANALOG_IN|DIGITAL_IN|DIGITAL_OUT|DIGITAL_PWM|1WIRE|VARIABLE")
-            Add_LibelleDevice("REFRESH", "@", "")
+            Add_LibelleDevice("REFRESH", "REFRESH", "Aller intérroger le composant Arduino toutes les x secondes.")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
 
         Catch ex As Exception
