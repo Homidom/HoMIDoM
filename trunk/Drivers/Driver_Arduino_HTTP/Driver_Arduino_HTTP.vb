@@ -638,7 +638,10 @@ Public Class Driver_Arduino_HTTP
                     'Analyse de la réponse: "command" "parametre" : "DIM 20" "ON" "120"
                     Dim responsetab2 As String() = responseFromServer.Split(" ")
                     If responsetab2.Count = 1 Then
-
+                        responsetab2(0) = responsetab2(0).ToUpper
+                        responsetab2(0) = responsetab2(0).Replace(vbCrLf, "")
+                        responsetab2(0) = responsetab2(0).Replace(vbCr, "")
+                        responsetab2(0) = responsetab2(0).Replace(vbLf, "")
                         If (UCase(Objet.Modele) = "VARIABLE" Or UCase(Objet.Modele) = "ANALOG_IN" Or UCase(Objet.Modele) = "DIGITAL_IN") Then
                             'Analyse de la réponse (valeur lue): "20" "ON"
                             WriteLog("DBG: " & Objet.Name & ": Reponse reçu de larduino : " & responsetab2(0))
@@ -662,7 +665,6 @@ Public Class Driver_Arduino_HTTP
                                 Objet.Value = responsetab2(0)
                             End If
                         Else
-                            responsetab2(0) = responsetab2(0).ToUpper
                             WriteLog("DBG: " & Objet.Name & ": Reponse reçu de l arduino : " & responsetab2(0))
                             'update de la value suivant la commande et le type de composant
                             If responsetab2(0) = "ON" Or responsetab2(0) = "HIGH" Or responsetab2(0) = "TRUE" Then
