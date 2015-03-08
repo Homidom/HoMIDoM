@@ -302,33 +302,32 @@ Imports System.Text.RegularExpressions
     ''' <summary>Démarrer le du driver</summary>
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
-        '_IsConnect = True
+        'récupération des paramétres avancés 
 
-        'récupération des paramétres avancés
         Try
             _DEBUG = _Parametres.Item(0).Valeur
             _NumeroUnit = _Parametres.Item(1).Valeur
         Catch ex As Exception
+            _DEBUG = False
+            _Parametres.Item(0).Valeur = False
             WriteLog("ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut : " & ex.Message)
         End Try
 
         'ouverture du port suivant le Port Com ou IP
         Try
             'cree l'objet
-            If _DEBUG Then WriteLog("DBG: ServeurID demande : " & IP_TCP & ":" & Port_TCP & " / " & _NumeroUnit)
+            WriteLog("DBG: ServeurID demande : " & IP_TCP & ":" & Port_TCP & " / " & _NumeroUnit)
             phidgetIFK = New Phidgets.InterfaceKit()
             phidgetIFK.open(_NumeroUnit, IP_TCP, CInt(Port_TCP))
-            phidgetIFK.waitForAttachment(3000)
+            phidgetIFK.waitForAttachment(5000)
             If phidgetIFK.Attached Then
                 WriteLog("SBC connecte : " & IP_TCP & ":" & Port_TCP & " -> " & _NumeroUnit)
                 _IsConnect = True
             End If
-            If _DEBUG Then
-                WriteLog("DBG: Nom: " & phidgetIFK.Name)
-                WriteLog("DBG: Nombre d'entrees: " & phidgetIFK.inputs.Count.ToString())
-                WriteLog("DBG: Nombre de sorties digitales: " & phidgetIFK.outputs.Count.ToString())
-                WriteLog("DBG: Nombre de capteurs analogiques: " & phidgetIFK.sensors.Count.ToString())
-            End If
+            WriteLog("DBG: Nom: " & phidgetIFK.Name)
+            WriteLog("DBG: Nombre d'entrees: " & phidgetIFK.inputs.Count.ToString())
+            WriteLog("DBG: Nombre de sorties digitales: " & phidgetIFK.outputs.Count.ToString())
+            WriteLog("DBG: Nombre de capteurs analogiques: " & phidgetIFK.sensors.Count.ToString())
         Catch ex As Exception
             WriteLog("ERR: Start Exception " & ex.Message)
             _IsConnect = False
@@ -345,10 +344,10 @@ Imports System.Text.RegularExpressions
             RemoveHandler phidgetIFK.SensorChange, AddressOf phidgetIFK_ANAOutputChange
 
             phidgetIFK.close()
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Phidget SBC", "Driver arrete")
+            WriteLog("Driver arrêté")
             _IsConnect = False
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget SBC", "Erreur lors de l'arret du driver: " & ex.ToString)
+            WriteLog("ERR: Erreur lors de l'arret du driver: " & ex.ToString)
             _IsConnect = False
         End Try
     End Sub
@@ -368,16 +367,24 @@ Imports System.Text.RegularExpressions
             If _Enable = False Then Exit Sub
 
             If _IsConnect = False Then
-                WriteLog("Le driver n'est pas démarré, impossible d'écrire sur le port")
+                WriteLog("ERR: READ, Le driver n'est pas démarré, impossible d'écrire sur le port")
                 Exit Sub
             End If
+
+            Try ' lecture de la variable debug, permet de rafraichir la variable debug sans redemarrer le service
+                _DEBUG = _Parametres.Item(0).Valeur
+            Catch ex As Exception
+                _DEBUG = False
+                _Parametres.Item(0).Valeur = False
+                WriteLog("ERR: Erreur de lecture de debug : " & ex.Message)
+            End Try
 
             Dim typadr As String
             Dim adr1 As Integer
 
             typadr = Mid(Objet.Adresse1, 1, 1)
             adr1 = Mid(Objet.Adresse1, InStr(Objet.Adresse1, ":") + 1, 1)
-           If _DEBUG Then WriteLog("DBG: Read Composant " & Objet.Name & " --> " & Objet.Adresse1 & " / " & Objet.type)
+            WriteLog("DBG: Read Composant " & Objet.Name & " --> " & Objet.Adresse1 & " / " & Objet.type)
 
             If typadr = "A" Then
                 Select Case Objet.Type
@@ -405,7 +412,7 @@ Imports System.Text.RegularExpressions
                 End Select
             End If
         Catch ex As Exception
-            WriteLog("ERR: READ " & ex.ToString)
+            WriteLog("ERR: READ, " & ex.ToString)
         End Try
     End Sub
 
@@ -419,11 +426,11 @@ Imports System.Text.RegularExpressions
         Try
             If _Enable = False Then Exit Sub
             If _IsConnect = False Then
-                WriteLog("Le driver n'est pas démarré, impossible d'écrire sur le port")
+                WriteLog("ERR: WRITE, Le driver n'est pas démarré, impossible d'écrire sur le port")
                 Exit Sub
             End If
 
-            If _DEBUG Then WriteLog("DBG: WRITE Device " & Objet.Name & " <-- " & Command)
+            WriteLog("DBG: WRITE Device " & Objet.Name & " <-- " & Command)
 
             Dim adr2 As Integer
             adr2 = Mid(Objet.Adresse2, InStr(Objet.Adresse2, ":") + 1, 1)
@@ -597,7 +604,7 @@ Imports System.Text.RegularExpressions
     'digital input change event handler... here we check or uncheck the corresponding input checkbox based on the index of
     'the digital input that generated the event
     Private Sub phidgetIFK_InputChange(ByVal sender As Object, ByVal e As Phidgets.Events.InputChangeEventArgs) Handles phidgetIFK.InputChange
-        _Server.Log(TypeLog.VALEUR_CHANGE, TypeSource.DRIVER, "Phidget SBC DigitalInputChange", "Entree Num: " & e.Index & " Value: " & e.Value)
+        WriteLog("Valeur change, Entree Num: " & e.Index & " Value: " & e.Value)
         traitement(e.Value, e.Index)
     End Sub
 
@@ -647,7 +654,7 @@ Imports System.Text.RegularExpressions
                 WriteLog("ERR: traitement Process: Composant non trouvé : " & adresse & ":" & valeur)
                 'si autodiscover = true ou modedecouverte du serveur actif alors on crée le composant sinon on logue
                 If _AutoDiscover Or _Server.GetModeDecouverte Then
-                    If _DEBUG Then WriteLog("DBG: traitement Process: Composant non trouvé, AutoCreation du composant : " & adresse & ":" & valeur)
+                    WriteLog("DBG: traitement Process: Composant non trouvé, AutoCreation du composant : " & adresse & ":" & valeur)
                     _Server.AddDetectNewDevice(adresse, _ID, "", "", valeur)
                 Else
                     WriteLog("ERR: traitement Process: Composant non trouvé : " & adresse & ":" & valeur)
@@ -663,7 +670,9 @@ Imports System.Text.RegularExpressions
         Try
             'utilise la fonction de base pour loguer un event
             If STRGS.InStr(message, "DBG:") > 0 Then
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Phidget SBC", STRGS.Right(message, message.Length - 5))
+                If _DEBUG Then
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Phidget SBC", STRGS.Right(message, message.Length - 5))
+                End If
             ElseIf STRGS.InStr(message, "ERR:") > 0 Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Phidget SBC", STRGS.Right(message, message.Length - 5))
             Else
