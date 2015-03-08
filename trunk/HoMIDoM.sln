@@ -100,6 +100,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Arduino_HTTP", "Driv
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_PhidgetSBC", "Drivers\Driver_PhidgetSBC\Driver_PhidgetSBC.vbproj", "{FEC08548-CD77-4F42-875C-E8341F7B8E30}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Netatmo", "Drivers\Driver_Netatmo\Driver_Netatmo.vbproj", "{2C5598AF-67D1-45C9-B01E-FB536E11826D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -537,15 +539,27 @@ Global
 		{FEC08548-CD77-4F42-875C-E8341F7B8E30}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{FEC08548-CD77-4F42-875C-E8341F7B8E30}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{FEC08548-CD77-4F42-875C-E8341F7B8E30}.Release|x86.ActiveCfg = Release|Any CPU
+		{2C5598AF-67D1-45C9-B01E-FB536E11826D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C5598AF-67D1-45C9-B01E-FB536E11826D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C5598AF-67D1-45C9-B01E-FB536E11826D}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{2C5598AF-67D1-45C9-B01E-FB536E11826D}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{2C5598AF-67D1-45C9-B01E-FB536E11826D}.Debug|x86.ActiveCfg = Debug|x86
+		{2C5598AF-67D1-45C9-B01E-FB536E11826D}.Debug|x86.Build.0 = Debug|x86
+		{2C5598AF-67D1-45C9-B01E-FB536E11826D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C5598AF-67D1-45C9-B01E-FB536E11826D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C5598AF-67D1-45C9-B01E-FB536E11826D}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{2C5598AF-67D1-45C9-B01E-FB536E11826D}.Release|Mixed Platforms.Build.0 = Release|x86
+		{2C5598AF-67D1-45C9-B01E-FB536E11826D}.Release|x86.ActiveCfg = Release|x86
+		{2C5598AF-67D1-45C9-B01E-FB536E11826D}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_IncrementBeforeBuild = True
-		BuildVersion_UseGlobalSettings = True
-		BuildVersion_BuildVersioningStyle = None.None.Increment.None
-		BuildVersion_UpdateFileVersion = True
 		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_BuildVersioningStyle = None.None.Increment.None
+		BuildVersion_UseGlobalSettings = True
+		BuildVersion_IncrementBeforeBuild = True
 	EndGlobalSection
 EndGlobal

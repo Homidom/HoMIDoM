@@ -41,7 +41,7 @@ Driver_Netatmo
 	<remarks>pas utilisé</remarks>
 </member><member name="M:Driver_Netatmo.Driver_NetAtmo.Write(System.Object,System.String,System.Object,System.Object)">
 	<summary>Commander un device</summary>
-	<param name="Objet">Objet représetant le device à interroger</param>
+	<param name="Objet">Objet représentant le device à interroger</param>
 	<param name="Command">La commande à passer</param>
 	<param name="Parametre1"></param>
 	<param name="Parametre2"></param>
@@ -81,11 +81,8 @@ Driver_Netatmo
 </member><member name="M:Driver_Netatmo.Driver_NetAtmo.#ctor">
 	<summary>Creation d'un objet de type</summary>
 	<remarks></remarks>
-</member><member name="M:Driver_Netatmo.Driver_NetAtmo.TimerTick(System.Object,System.Timers.ElapsedEventArgs)">
-	<summary>Si refresh &gt;0 gestion du timer</summary>
-	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
 </member><member name="T:Driver_Netatmo.Driver_NetAtmo">
-	<summary>Driver Netatmo Meteo</summary>
+	<summary>Driver Netatmo Meteo Reception de datas base plus module température/pluviometre</summary>
 	<remarks></remarks>
 </member><member name="P:Driver_Netatmo.My.Resources.Resources.ResourceManager">
 	<summary>
