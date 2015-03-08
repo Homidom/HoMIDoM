@@ -1,0 +1,9 @@
+C:\download\Homidom\RELEASE\Drivers\Driver_Netatmo.dll
+C:\download\Homidom\RELEASE\Drivers\Driver_Netatmo.pdb
+C:\download\Homidom\RELEASE\Drivers\Driver_Netatmo.xml
+C:\download\Homidom\Drivers\Driver_Netatmo\obj\Release\Driver_Netatmo.Resources.resources
+C:\download\Homidom\Drivers\Driver_Netatmo\obj\Release\Driver_Netatmo.vbproj.GenerateResource.Cache
+C:\download\Homidom\Drivers\Driver_Netatmo\obj\Release\Driver_Netatmo.dll
+C:\download\Homidom\Drivers\Driver_Netatmo\obj\Release\Driver_Netatmo.xml
+C:\download\Homidom\Drivers\Driver_Netatmo\obj\Release\Driver_Netatmo.pdb
+C:\download\Homidom\Drivers\Driver_Netatmo\obj\Release\Driver_Netatmo.vbprojResolveAssemblyReference.cache
