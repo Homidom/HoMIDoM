@@ -8,12 +8,12 @@ Imports System.Runtime.InteropServices
 
 ' Passez en revue les valeurs des attributs de l'assembly
 
-<Assembly: AssemblyTitle("Driver_Netatmo")> 
+<Assembly: AssemblyTitle("Driver Netatmo")> 
 <Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("Homidom")> 
-<Assembly: AssemblyProduct("Driver_Netatmo")> 
-<Assembly: AssemblyCopyright("")> 
-<Assembly: AssemblyTrademark("")> 
+<Assembly: AssemblyCompany("HoMIDoM")> 
+<Assembly: AssemblyProduct("Driver Netatmo")> 
+<Assembly: AssemblyCopyright("HoMIDoM")> 
+<Assembly: AssemblyTrademark("HoMIDoM")> 
 
 <Assembly: ComVisible(False)>
 
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' en utilisant '*', comme indiqué ci-dessous :
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("1.0.0.0")> 
-<Assembly: AssemblyFileVersion("1.0.0.0")> 
+<Assembly: AssemblyVersion("1.2.2.0")> 
+<Assembly: AssemblyFileVersion("1.2.2.0")> 

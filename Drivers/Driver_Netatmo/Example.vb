@@ -1,4 +1,0 @@
-﻿
-Class Example
-
-End Class

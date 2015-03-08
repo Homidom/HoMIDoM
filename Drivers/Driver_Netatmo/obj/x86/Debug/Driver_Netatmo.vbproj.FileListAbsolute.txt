@@ -1,0 +1,9 @@
+D:\Domotique\HoMIDoM\DEBUG\Drivers\Driver_Netatmo.dll
+D:\Domotique\HoMIDoM\DEBUG\Drivers\Driver_Netatmo.pdb
+D:\Domotique\HoMIDoM\DEBUG\Drivers\Driver_Netatmo.xml
+D:\Domotique\HoMIDoM\Drivers\Driver_Netatmo\obj\x86\Debug\Driver_Netatmo.vbprojResolveAssemblyReference.cache
+D:\Domotique\HoMIDoM\Drivers\Driver_Netatmo\obj\x86\Debug\Driver_Netatmo.Resources.resources
+D:\Domotique\HoMIDoM\Drivers\Driver_Netatmo\obj\x86\Debug\Driver_Netatmo.vbproj.GenerateResource.Cache
+D:\Domotique\HoMIDoM\Drivers\Driver_Netatmo\obj\x86\Debug\Driver_Netatmo.dll
+D:\Domotique\HoMIDoM\Drivers\Driver_Netatmo\obj\x86\Debug\Driver_Netatmo.xml
+D:\Domotique\HoMIDoM\Drivers\Driver_Netatmo\obj\x86\Debug\Driver_Netatmo.pdb

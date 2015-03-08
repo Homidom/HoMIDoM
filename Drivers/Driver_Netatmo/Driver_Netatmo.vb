@@ -1,10 +1,9 @@
-﻿
-'Option Strict On
-Imports HoMIDom
+﻿Imports HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 
 Imports System.Text.RegularExpressions
+Imports STRGS = Microsoft.VisualBasic.Strings
 
 ' Auteur : jphomi sur une base HoMIDoM meteoweather
 ' Date : 01/03/2015
@@ -52,6 +51,11 @@ Imports System.Text.RegularExpressions
 
     'param avancé
     Dim _DEBUG As Boolean = False
+    Dim _ClientID As String = "abcdefghi0123456789"
+    Dim _ClientSecret As String = "abcdefghi0123456789"
+    Dim _Username As String = "homidom@homidom.com"
+    Dim _Password As String = "homi123456"
+
 #End Region
 
 #Region "Variables internes"
@@ -268,7 +272,7 @@ Imports System.Text.RegularExpressions
                 Return False
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "exception : " & ex.Message)
+            WriteLog("ERR: ExecuteCommand exception : " & ex.Message)
             Return False
         End Try
     End Function
@@ -297,7 +301,6 @@ Imports System.Text.RegularExpressions
         End Try
     End Function
 
-
     ''' <summary>Démarrer le driver</summary>
     ''' <remarks></remarks>
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
@@ -305,16 +308,21 @@ Imports System.Text.RegularExpressions
             'récupération des paramétres avancés
             Try
                 _DEBUG = _Parametres.Item(0).Valeur
+                _ClientID = _Parametres.Item(1).Valeur
+                _ClientSecret = _Parametres.Item(2).Valeur
+                _Username = _Parametres.Item(3).Valeur
+                _Password = _Parametres.Item(4).Valeur
             Catch ex As Exception
                 _DEBUG = False
                 _Parametres.Item(0).Valeur = False
+                WriteLog("ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut : " & ex.Message)
             End Try
 
             _IsConnect = True
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " démarré")
+            WriteLog("Driver " & Me.Nom & " démarré")
         Catch ex As Exception
             _IsConnect = False
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", ex.Message)
+            WriteLog("ERR: Driver " & Me.Nom & " Erreur démarrage " & ex.Message)
         End Try
     End Sub
 
@@ -323,9 +331,9 @@ Imports System.Text.RegularExpressions
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Try
             _IsConnect = False
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " arrêté")
+            WriteLog("Driver " & Me.Nom & " arrêté")
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Stop", ex.Message)
+            WriteLog("ERR: Driver " & Me.Nom & " Erreur arrêt " & ex.Message)
         End Try
     End Sub
 
@@ -342,6 +350,15 @@ Imports System.Text.RegularExpressions
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
 
         Try
+
+            If _Enable = False Then Exit Sub
+
+            If _IsConnect = False Then
+                WriteLog("ERR: READ, Le driver n'est pas démarré, impossible d'écrire sur le port")
+                Exit Sub
+            End If
+
+
             'Si internet n'est pas disponible on ne mets pas à jour les informations
             If My.Computer.Network.IsAvailable = False Then
                 Exit Sub
@@ -368,7 +385,7 @@ Imports System.Text.RegularExpressions
 
             ' nom de device non trouve
             If (deviceIDalire = "") And (moduleIDalire = "") Then
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "NetAtmo", "Pas de nom de device/module pour adresse1= " & Objet.adresse1)
+                WriteLog("ERR: Pas de nom de device/module pour adresse1= " & Objet.adresse1)
                 Exit Sub
             End If
 
@@ -463,14 +480,14 @@ Imports System.Text.RegularExpressions
                         End Select
                     End If
                 Case Else
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "NetAtmo", "Pas de valeur enregistrée")
+                    WriteLog("ERR: Pas de valeur enregistrée")
                     Exit Sub
             End Select
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "NetAtmo", "Valeur enregistrée : " & Objet.Type & " ==> " & Objet.value)
-
+            WriteLog("Valeur enregistrée : " & Objet.Type & " -> " & Objet.value)
             Exit Sub
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", ex.Message)
+            WriteLog("ERR: Read, Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -483,8 +500,14 @@ Imports System.Text.RegularExpressions
     Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
             If _Enable = False Then Exit Sub
+
+            If _IsConnect = False Then
+                WriteLog("ERR: READ, Le driver n'est pas démarré, impossible d'écrire sur le port")
+                Exit Sub
+            End If
+
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", ex.Message)
+            WriteLog("ERR: Write, Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -495,7 +518,7 @@ Imports System.Text.RegularExpressions
         Try
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " DeleteDevice", ex.Message)
+            WriteLog("ERR: DeleteDevice, Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -506,7 +529,7 @@ Imports System.Text.RegularExpressions
         Try
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " NewDevice", ex.Message)
+            WriteLog("ERR: NewDevice, Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -523,7 +546,7 @@ Imports System.Text.RegularExpressions
             x.CountParam = NbParam
             _DeviceCommandPlus.Add(x)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+            WriteLog("ERR: add_devicecommande, Exception :" & ex.Message)
         End Try
     End Sub
 
@@ -541,7 +564,7 @@ Imports System.Text.RegularExpressions
             y0.Parametre = Parametre
             _LabelsDriver.Add(y0)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+            WriteLog("ERR: add_devicecommande, Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -559,7 +582,7 @@ Imports System.Text.RegularExpressions
             ld0.Parametre = Parametre
             _LabelsDevice.Add(ld0)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+            WriteLog("ERR: add_devicecommande, Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -576,7 +599,7 @@ Imports System.Text.RegularExpressions
             x.Valeur = valeur
             _Parametres.Add(x)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+            WriteLog("ERR: add_devicecommande, Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -619,7 +642,7 @@ Imports System.Text.RegularExpressions
             Add_LibelleDevice("MODELE", "@", "")
             Add_LibelleDevice("LASTCHANGEDUREE", "@", "")
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " New", ex.Message)
+            WriteLog("ERR: New, Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -733,45 +756,63 @@ Imports System.Text.RegularExpressions
     End Class
 
     Private Sub GetListeDevice()
-        Dim client As New Net.WebClient
-        Dim reqparm As New Specialized.NameValueCollection
 
-        reqparm.Add("grant_type", "password")
-        reqparm.Add("client_id", _Parametres.Item(1).valeur)
-        reqparm.Add("client_secret", _Parametres.Item(2).valeur)
-        reqparm.Add("username", _Parametres.Item(3).valeur)
-        reqparm.Add("password", _Parametres.Item(4).valeur)
-        Dim responsebytes = client.UploadValues("https://api.netatmo.net/oauth2/token?", "POST", reqparm)
+        Try
 
-        Dim responsebody = (New System.Text.UTF8Encoding).GetString(responsebytes)
-        Auth = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(Authentication))
+            Try ' lecture de la variable debug, permet de rafraichir la variable debug sans redemarrer le service
+                _DEBUG = _Parametres.Item(0).Valeur
+            Catch ex As Exception
+                _DEBUG = False
+                _Parametres.Item(0).Valeur = False
+                WriteLog("ERR: Erreur de lecture de debug : " & ex.Message)
+            End Try
 
-        'va chercher les module que si connecté
-        If Auth.expire_in > 0 Then
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "NetAtmo", "Netatmo Connect, " & responsebody.ToString)
-            ' recuperation des modules
-            GetModules()
-        Else
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "NetAtmo", " Netatmo non connecté")
-        End If
+            Dim client As New Net.WebClient
+            Dim reqparm As New Specialized.NameValueCollection
+
+            reqparm.Add("grant_type", "password")
+            reqparm.Add("client_id", _Parametres.Item(1).valeur)
+            reqparm.Add("client_secret", _Parametres.Item(2).valeur)
+            reqparm.Add("username", _Parametres.Item(3).valeur)
+            reqparm.Add("password", _Parametres.Item(4).valeur)
+            Dim responsebytes = client.UploadValues("https://api.netatmo.net/oauth2/token?", "POST", reqparm)
+
+            Dim responsebody = (New System.Text.UTF8Encoding).GetString(responsebytes)
+            Auth = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(Authentication))
+
+            'va chercher les module que si connecté
+            If Auth.expire_in > 0 Then
+                WriteLog("Requête https://api.netatmo.net/oauth2/token?  OK")
+                WriteLog("DBG: Connect : " & responsebody.ToString)
+                ' recuperation des modules
+                GetModules()
+            Else
+                WriteLog("ERR: Connect, non connecté")
+            End If
+        Catch ex As Exception
+            WriteLog("ERR: GetListDevice, Exception : " & ex.Message)
+        End Try
     End Sub
-
     Private Sub GetModules()
-        Dim client As New Net.WebClient
-        Dim responsebody = client.DownloadString("http://api.netatmo.net/api/devicelist?access_token=" & Auth.access_token)
-        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "NetAtmo", "Netatmo Token, " & Auth.access_token)
-        obj = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody)
-        devlist = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(DeviceList))
 
-        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "NetAtmo", "Netatmo GetModule, " & responsebody.ToString)
+        Try
+            Dim client As New Net.WebClient
+            Dim responsebody = client.DownloadString("http://api.netatmo.net/api/devicelist?access_token=" & Auth.access_token)
+            WriteLog("DBG: Token : " & Auth.access_token)
+            obj = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody)
+            devlist = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(DeviceList))
 
-        Dim i As Integer
-        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "NetAtmo", "Device :   " & devlist.body.devices.Item(0).module_name & " | type ==> " & devlist.body.devices.Item(0).type & ", ID = " & devlist.body.devices.Item(0)._id)
-        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "NetAtmo", "Netatmo Nbre module " & devlist.body.modules.Count)
-        For i = 0 To devlist.body.modules.Count - 1
-            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "NetAtmo", "Module " & " : " & devlist.body.modules.Item(i).module_name & " | type ==> " & devlist.body.modules.Item(i).type & ", ID = " & devlist.body.modules.Item(i)._id)
-        Next
+            WriteLog("DBG: GetModule : " & responsebody.ToString)
 
+            Dim i As Integer
+            WriteLog("DBG: Device : " & devlist.body.devices.Item(0).module_name & " | type -> " & devlist.body.devices.Item(0).type & ", ID = " & devlist.body.devices.Item(0)._id)
+            WriteLog("DBG: Nbre module : " & devlist.body.modules.Count)
+            For i = 0 To devlist.body.modules.Count - 1
+                WriteLog("DBG: Module : " & devlist.body.modules.Item(i).module_name & " | type -> " & devlist.body.modules.Item(i).type & ", ID = " & devlist.body.modules.Item(i)._id)
+            Next
+        Catch ex As Exception
+            WriteLog("ERR: GetModules, Exception : " & ex.Message)
+        End Try
     End Sub
 
     'Private Sub GetDataDevice(deviceid As String, moduleid As String)
@@ -789,6 +830,24 @@ Imports System.Text.RegularExpressions
     '    obj = Newtonsoft.Json.JsonConvert.DeserializeObject(responsedatas)
 
     'End Sub
+
+    Private Sub WriteLog(ByVal message As String)
+        Try
+            'utilise la fonction de base pour loguer un event
+            If STRGS.InStr(message, "DBG:") > 0 Then
+                If _DEBUG Then
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "NetAtmo", STRGS.Right(message, message.Length - 5))
+                End If
+            ElseIf STRGS.InStr(message, "ERR:") > 0 Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "NetAtmo", STRGS.Right(message, message.Length - 5))
+            Else
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "NetAtmo", message)
+            End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "NetAtmo WriteLog", ex.Message)
+        End Try
+    End Sub
+
 #End Region
 
 End Class
