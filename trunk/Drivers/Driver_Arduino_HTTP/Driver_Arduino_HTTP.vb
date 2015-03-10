@@ -383,7 +383,7 @@ Public Class Driver_Arduino_HTTP
                 request.KeepAlive = False
                 request.Accept = "text/plain"
                 request.Method = WebRequestMethods.Http.Get
-                
+
                 'CType(request, HttpWebRequest).UserAgent = "Other"
 
                 'Get a web response  
@@ -395,7 +395,7 @@ Public Class Driver_Arduino_HTTP
                     If CType(response, HttpWebResponse).StatusCode = HttpStatusCode.OK Then
                         Dim dataStream As Stream = response.GetResponseStream()
                         Dim reader As New StreamReader(dataStream)
-                        responseFromServer = reader.ReadToEnd()
+                        responseFromServer = reader.ReadToEnd().ToUpper
                         WriteLog("DBG: Commande passée à l arduino " & Objet.Name & " : " & urlcommande & " --> " & responseFromServer & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
                     Else
                         WriteLog("ERR: Commande passée à l arduino " & Objet.Name & " : " & urlcommande & " --> Réponse incorrecte reçu : " & CType(response, HttpWebResponse).StatusCode & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
@@ -416,14 +416,14 @@ Public Class Driver_Arduino_HTTP
                     'update de la value suivant la commande et le type de composant
                     If TypeOf Objet.Value Is Boolean Then
                         'composant est un booleen
-                        If UCase(responseFromServer) = "LOW" Or UCase(responseFromServer) = "OFF" Or responseFromServer = "0" Or UCase(responseFromServer) = "FALSE" Or responseFromServer = False Then Objet.Value = False Else Objet.Value = True
+                        If responseFromServer = "LOW" Or responseFromServer = "OFF" Or responseFromServer = "0" Or responseFromServer = "FALSE" Or responseFromServer = False Then Objet.Value = False Else Objet.Value = True
                     ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Or TypeOf Objet.Value Is Single Then
                         'composant est un nombre
                         If IsNumeric(responseFromServer) Then
                             Objet.Value = responseFromServer
-                        ElseIf UCase(responseFromServer) = "LOW" Or UCase(responseFromServer) = "OFF" Or responseFromServer = "0" Or UCase(responseFromServer) = "FALSE" Or responseFromServer = False Then
+                        ElseIf responseFromServer = "LOW" Or responseFromServer = "OFF" Or responseFromServer = "0" Or responseFromServer = "FALSE" Or responseFromServer = False Then
                             Objet.Value = 0
-                        ElseIf UCase(responseFromServer) = "HIGH" Or UCase(responseFromServer) = "ON" Or responseFromServer = "1" Or UCase(responseFromServer) = "True" Or responseFromServer = True Then
+                        ElseIf responseFromServer = "HIGH" Or responseFromServer = "ON" Or responseFromServer = "1" Or responseFromServer = "True" Or responseFromServer = True Then
                             Objet.Value = 100
                         Else
                             WriteLog("ERR: La valeur reçu pour " & Objet.Name & " n'est pas un nombre: " & responseFromServer)
@@ -621,7 +621,7 @@ Public Class Driver_Arduino_HTTP
                     If CType(response, HttpWebResponse).StatusCode = HttpStatusCode.OK Then
                         Dim dataStream As Stream = response.GetResponseStream()
                         Dim reader As New StreamReader(dataStream)
-                        responseFromServer = reader.ReadToEnd()
+                        responseFromServer = reader.ReadToEnd().ToUpper
                         WriteLog("DBG: Commande passée à l arduino " & Objet.Name & " : " & urlcommande & " --> " & responseFromServer & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
                     Else
                         WriteLog("ERR: Commande passée à l arduino " & Objet.Name & " : " & urlcommande & " --> Réponse incorrecte reçu : " & CType(response, HttpWebResponse).StatusCode & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
@@ -664,7 +664,6 @@ Public Class Driver_Arduino_HTTP
                     Else
                         Dim responsetab2 As String() = responseFromServer.Split(" ")
                         If responsetab2.Count = 1 Then
-                            responsetab2(0) = responsetab2(0).ToUpper
                             responsetab2(0) = responsetab2(0).Replace(vbCrLf, "")
                             responsetab2(0) = responsetab2(0).Replace(vbCr, "")
                             responsetab2(0) = responsetab2(0).Replace(vbLf, "")
@@ -674,14 +673,14 @@ Public Class Driver_Arduino_HTTP
                                 'update de la value suivant la commande et le type de composant
                                 If TypeOf Objet.Value Is Boolean Then
                                     'composant est un booleen
-                                    If UCase(responsetab2(0)) = "LOW" Or UCase(responsetab2(0)) = "OFF" Or responsetab2(0) = "0" Or UCase(responsetab2(0)) = "FALSE" Or responsetab2(0) = False Then Objet.Value = False Else Objet.Value = True
+                                    If responsetab2(0) = "LOW" Or responsetab2(0) = "OFF" Or responsetab2(0) = "0" Or responsetab2(0) = "FALSE" Or responsetab2(0) = False Then Objet.Value = False Else Objet.Value = True
                                 ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Or TypeOf Objet.Value Is Single Then
                                     'composant est un nombre
                                     If IsNumeric(responsetab2(0)) Then
                                         Objet.Value = responsetab2(0)
-                                    ElseIf UCase(responsetab2(0)) = "LOW" Or UCase(responsetab2(0)) = "OFF" Or responsetab2(0) = "0" Or UCase(responsetab2(0)) = "FALSE" Or responsetab2(0) = False Then
+                                    ElseIf responsetab2(0) = "LOW" Or responsetab2(0) = "OFF" Or responsetab2(0) = "0" Or responsetab2(0) = "FALSE" Or responsetab2(0) = False Then
                                         Objet.Value = 0
-                                    ElseIf UCase(responsetab2(0)) = "HIGH" Or UCase(responsetab2(0)) = "ON" Or responsetab2(0) = "1" Or UCase(responsetab2(0)) = "True" Or responsetab2(0) = True Then
+                                    ElseIf responsetab2(0) = "HIGH" Or responsetab2(0) = "ON" Or responsetab2(0) = "1" Or responsetab2(0) = "True" Or responsetab2(0) = True Then
                                         Objet.Value = 100
                                     Else
                                         WriteLog("ERR: La valeur reçu pour " & Objet.Name & " n'est pas un nombre: " & responsetab2(0))
@@ -693,25 +692,26 @@ Public Class Driver_Arduino_HTTP
                             Else
                                 WriteLog("DBG: " & Objet.Name & ": Reponse reçu de l arduino : " & responsetab2(0))
                                 'update de la value suivant la commande et le type de composant
-                                If responsetab2(0) = "ON" Or responsetab2(0) = "HIGH" Or responsetab2(0) = "TRUE" Then
-                                    If TypeOf Objet.Value Is Boolean Then
-                                        Objet.Value = True
-                                    ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
-                                        Objet.Value = 100
-                                    Else
-                                        Objet.Value = "ON"
-                                    End If
-                                ElseIf responsetab2(0) = "OFF" Or responsetab2(0) = "LOW" Or responsetab2(0) = "FALSE" Then
-                                    If TypeOf Objet.Value Is Boolean Then
-                                        Objet.Value = False
-                                    ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
-                                        Objet.Value = 0
-                                    Else
-                                        Objet.Value = "OFF"
-                                    End If
-                                Else
-                                    WriteLog(Objet.Name & ": La valeur reçu de l arduino n'est pas utilisable : " & responsetab2(0))
-                                End If
+                                Select Case responsetab2(0)
+                                    Case "ON", "HIGH", "TRUE"
+                                        If TypeOf Objet.Value Is Boolean Then
+                                            Objet.Value = True
+                                        ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
+                                            Objet.Value = 100
+                                        Else
+                                            Objet.Value = "ON"
+                                        End If
+                                    Case "OFF", "LOW", "FALSE"
+                                        If TypeOf Objet.Value Is Boolean Then
+                                            Objet.Value = False
+                                        ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
+                                            Objet.Value = 0
+                                        Else
+                                            Objet.Value = "OFF"
+                                        End If
+                                    Case Else
+                                        WriteLog(Objet.Name & ": La valeur reçu de l arduino n'est pas utilisable : " & responsetab2(0))
+                                End Select
                             End If
                         Else
                             WriteLog("DBG: " & Objet.Name & ": Reponse reçu de l arduino : " & responsetab2(0) & "-" & responsetab2(1))
