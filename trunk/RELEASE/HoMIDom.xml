@@ -2797,24 +2797,6 @@ St Arnau [le reste de la chaîne a été tronqué]";.
 </member><member name="T:HoMIDom.HoMIDom.Device.DeviceGenerique_ValueString">
 	<summary>Classe valeur String </summary>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.APPAREIL.TestWrite(System.String,System.String,System.String)">
-	<summary>Permet de tester une commande write</summary>
-	<param name="Commande"></param>
-	<param name="Parametre1"></param>
-	<param name="Parametre2"></param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.APPAREIL.TestRead">
-	<summary>Permet de tester une commande read</summary>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.AUDIO.TestWrite(System.String,System.String,System.String)">
-	<summary>Permet de tester une commande write</summary>
-	<param name="Commande"></param>
-	<param name="Parametre1"></param>
-	<param name="Parametre2"></param>
-	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Device.AUDIO.TestRead">
-	<summary>Permet de tester une commande read</summary>
-	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Device.MULTIMEDIA.EnvoyerCommande(System.String)">
 	<summary>
  Envoyer une commande au driver

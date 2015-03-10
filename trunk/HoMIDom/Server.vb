@@ -3477,7 +3477,19 @@ Namespace HoMIDom
                 If sourcestring = "" Then sourcestring = "Divers"
 
                 'on affiche dans la console
+                If TypLog = TypeLog.ERREUR Or TypLog = TypeLog.ERREUR_CRITIQUE Then
+                    Console.ForegroundColor = ConsoleColor.Red
+                ElseIf TypLog = TypeLog.VALEUR_INCHANGE Or TypLog = TypeLog.VALEUR_INCHANGE_LASTETAT Or TypLog = TypeLog.VALEUR_INCHANGE_PRECISION Then
+                    Console.ForegroundColor = ConsoleColor.Gray
+                ElseIf TypLog = TypeLog.DEBUG Then
+                    Console.ForegroundColor = ConsoleColor.DarkGray
+                Else
+                    Console.ForegroundColor = ConsoleColor.Black
+                End If
+
                 Console.WriteLine(Now & " " & TypLog.ToString & " " & Source.ToString & " " & Fonction & " " & _Message)
+
+
                 WriteLastLogs(TypLog, Source, Fonction, _Message)
 
                 RaiseEvent NewLog(TypLog, Source, Fonction, _Message)
