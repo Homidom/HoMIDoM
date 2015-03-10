@@ -31,7 +31,7 @@ Public Class HoMIServicE
                 Catch ex As Exception
                     Console.SetWindowSize(largeur, hauteur)
                 End Try
-                Console.SetBufferSize(200, 1000)
+                Console.SetBufferSize(200, 2000)
                 Console.BackgroundColor = ConsoleColor.White 'Couleur du fond
                 Console.Clear()  'Applique la couleur du fond
                 Console.ForegroundColor = ConsoleColor.Black 'Couleur du texte
