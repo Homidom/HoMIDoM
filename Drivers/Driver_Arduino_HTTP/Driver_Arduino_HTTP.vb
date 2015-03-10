@@ -354,10 +354,6 @@ Public Class Driver_Arduino_HTTP
 
             If urlcommande <> "" Then
 
-
-                'urlcommande = "http://192.168.1.3/x.txt"
-
-
                 Dim assembly As Reflection.Assembly = Reflection.Assembly.GetAssembly(GetType(System.Net.Configuration.SettingsSection))
                 If (assembly Is Nothing) Then WriteLog("DBG: READ TESTXXX  Could not access Assembly")
                 Dim type As Type = [assembly].GetType("System.Net.Configuration.SettingsSectionInternal")
@@ -367,9 +363,6 @@ Public Class Driver_Arduino_HTTP
                 Dim fi As Reflection.FieldInfo = [type].GetField("useUnsafeHeaderParsing", Reflection.BindingFlags.NonPublic Or Reflection.BindingFlags.Instance)
                 If (fi Is Nothing) Then WriteLog("DBG: READ TESTXXX  Could not access useUnsafeHeaderParsing field")
                 If (Not Convert.ToBoolean(fi.GetValue(obj))) Then fi.SetValue(obj, True)
-
-
-
 
                 If _DEBUG Then WriteLog("DBG: READ Composant " & Objet.Name & " URL : " & urlcommande)
 
@@ -476,7 +469,7 @@ Public Class Driver_Arduino_HTTP
             'http://ip/?homidom_READD_X
             'http://ip/?homidom_READV_X
             'http://ip/?homidom_READX
-            'http://ip/?homidom_WRITV_X
+            'http://ip/?homidom_WRITV_X_xxx
             'http://ip/?homidom_CFG_X_TYPE (Type = 0 pour Input, 1 pour Output, 2 pour pwm et 3 pour One wire)
 
 
