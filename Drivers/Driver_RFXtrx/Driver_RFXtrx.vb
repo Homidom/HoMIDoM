@@ -1298,7 +1298,7 @@ Imports System.Media
     Private trxType As Integer = 0
     Private Shared rfxtrxlock As New Object
 
-    Private recbuf(40), recbytes As Byte
+    Private recbuf(60), recbytes As Byte
     Private bytecnt As Integer = 0
     Private message As String
     Private bytSeqNbr As Byte = 0
@@ -2498,13 +2498,13 @@ Imports System.Media
                 Case SECURITY1.pTypeSecurity1 : decode_Security1()
                 Case CAMERA1.pTypeCamera : decode_Camera1()
                 Case BLINDS1.pTypeBlinds : decode_BLINDS1()
-                Case RFY.pTypeRFY:decode_RFY()
+                Case RFY.pTypeRFY : decode_RFY()
                 Case REMOTE.pTypeRemote : decode_Remote()
                 Case THERMOSTAT1.pTypeThermostat1 : decode_Thermostat1()
                 Case THERMOSTAT2.pTypeThermostat2 : decode_Thermostat2()
                 Case THERMOSTAT3.pTypeThermostat3 : decode_Thermostat3()
                 Case BBQ.pTypeBBQ : decode_BBQ()
-                Case TEMP_RAIN.pTypeTEMP_RAIN:decode_TempRain()
+                Case TEMP_RAIN.pTypeTEMP_RAIN : decode_TempRain()
                 Case TEMP.pTypeTEMP : decode_Temp()
                 Case HUM.pTypeHUM : decode_Hum()
                 Case TEMP_HUM.pTypeTEMP_HUM : decode_TempHum()
@@ -2517,14 +2517,14 @@ Imports System.Media
                 Case CURRENT.pTypeCURRENT : decode_Current()
                 Case ENERGY.pTypeENERGY : decode_Energy()
                 Case CURRENT_ENERGY.pTypeCURRENTENERGY : decode_Current_Energy()
-                Case POWER.pTypePOWER:decode_Power()
+                Case POWER.pTypePOWER : decode_Power()
                 Case GAS.pTypeGAS : decode_Gas()
                 Case WATER.pTypeWATER : decode_Water()
                 Case WEIGHT.pTypeWEIGHT : decode_Weight()
                 Case RFXSENSOR.pTypeRFXSensor : decode_RFXSensor()
                 Case RFXMETER.pTypeRFXMeter : decode_RFXMeter()
                 Case FS20.pTypeFS20 : decode_FS20()
-                Case RAW.pTypeRAW:decode_RAW()
+                Case RAW.pTypeRAW : decode_RAW()
                 Case Else : _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "RFXtrx decode_messages", "ERROR: Unknown Packet type:" & Hex(recbuf(1)))
             End Select
         Catch ex As Exception
@@ -2719,7 +2719,7 @@ Imports System.Media
 
     Private Sub decode_RecXmitMessage()
         Try
-            Select recbuf(RXRESPONSE.subtype)
+            Select Case recbuf(RXRESPONSE.subtype)
                 Case RXRESPONSE.sTypeReceiverLockError
                     If _DEBUG Then WriteLog("ERR: Receiver lock error")
                 Case RXRESPONSE.sTypeTransmitterResponse
@@ -2966,7 +2966,7 @@ Imports System.Media
         Try
             Dim adresse As String = ""
             Dim valeur As String = ""
-            Select recbuf(LIGHTING4.subtype)
+            Select Case recbuf(LIGHTING4.subtype)
                 Case LIGHTING4.sTypePT2262
                     'WriteMessage("subtype       = PT2262")
                     'WriteMessage("Sequence nbr  = " & recbuf(LIGHTING4.seqnbr).ToString)
@@ -2998,7 +2998,7 @@ Imports System.Media
                     If (recbuf(LIGHTING4.cmd3) And &H1) = 0 Then valeur &= "0" Else valeur &= "1"
 
                     'valeur &= " Pulse=" & ((recbuf(LIGHTING4.pulsehigh) * 256) + recbuf(LIGHTING4.pulselow)).ToString & " usec"
-                    
+
                     WriteLog("decode_Lighting4: Commande non gérée PT2262 : " & adresse & "=" & valeur)
                     'WriteRetour(adresse, "", valeur)
                 Case Else : WriteLog("ERR: decode_Lighting4 : Unknown Sub type for Packet type=" & Hex(recbuf(LIGHTING4.packettype)) & ": " & Hex(recbuf(LIGHTING4.subtype)))
@@ -3222,7 +3222,7 @@ Imports System.Media
                         Case CURTAIN1.sProgram : valeur = "PROGRAM"
                         Case Else : valeur = "UNKNOWN"
                     End Select
-                     WriteRetour(adresse, "", valeur)
+                    WriteRetour(adresse, "", valeur)
                 Case Else : WriteLog("ERR: decode_Curtain1 : Unknown Sub type for Packet type=" & Hex(recbuf(CURTAIN1.packettype)) & ": " & Hex(recbuf(CURTAIN1.subtype)))
             End Select
             If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(CURTAIN1.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
@@ -5566,7 +5566,7 @@ Imports System.Media
                 Case "ALARM_DELAYED" : kar(SECURITY1.status) = 3
                 Case "MOTION" : kar(SECURITY1.status) = 4
                 Case "NO_MOTION" : kar(SECURITY1.status) = 5
-                Case "PANIC":kar(SECURITY1.status) = 6
+                Case "PANIC" : kar(SECURITY1.status) = 6
                 Case "END_PANIC" : kar(SECURITY1.status) = 7
                 Case "ARM_AWAY" : kar(SECURITY1.status) = 9
                 Case "ARM_AWAY_DELAYED" : kar(SECURITY1.status) = &HA
