@@ -363,6 +363,7 @@ Imports UsbUirt
                     If String.IsNullOrEmpty(Objet.Adresse1) Then
                         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "La trame correspondant à ON est vide pour le composant " & Objet.Name)
                     Else
+			Count = _Parametres.Item(0).Valeur
                         SendCodeIR(Objet.Adresse1, Count)
                         Objet.Value = 100
                         Exit Sub
@@ -372,7 +373,8 @@ Imports UsbUirt
                     If String.IsNullOrEmpty(Objet.Adresse2) Then
                         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "La trame correspondant à OFF est vide pour le composant " & Objet.Name)
                     Else
-                        SendCodeIR(Objet.Adresse2, Count)
+                        Count = _Parametres.Item(0).Valeur
+			SendCodeIR(Objet.Adresse2, Count)
                         Objet.Value = 0
                         Exit Sub
                     End If
