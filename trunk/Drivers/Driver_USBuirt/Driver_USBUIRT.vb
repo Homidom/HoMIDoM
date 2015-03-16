@@ -373,11 +373,11 @@ Imports UsbUirt
                         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "La trame correspondant à ON est vide pour le composant " & Objet.Name)
                     Else
                         Count = _Parametres.Item(0).Valeur
-                        If IsNumeric(_Parametres.Item(0).Valeur) Then
-                            If CInt(_Parametres.Item(0).Valeur) = 0 Then
+                        If IsNumeric(_Parametres.Item(1).Valeur) Then
+                            If CInt(_Parametres.Item(1).Valeur) = 0 Then
                                 _CodeFormat = UsbUirt.CodeFormat.Uuirt
                             End If
-                            If CInt(_Parametres.Item(0).Valeur) = 1 Then
+                            If CInt(_Parametres.Item(1).Valeur) = 1 Then
                                 _CodeFormat = UsbUirt.CodeFormat.Pronto
                             End If
                         End If
@@ -391,11 +391,11 @@ Imports UsbUirt
                         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "La trame correspondant à OFF est vide pour le composant " & Objet.Name)
                     Else
                         Count = _Parametres.Item(0).Valeur
-                        If IsNumeric(_Parametres.Item(0).Valeur) Then
-                            If CInt(_Parametres.Item(0).Valeur) = 0 Then
+                        If IsNumeric(_Parametres.Item(1).Valeur) Then
+                            If CInt(_Parametres.Item(1).Valeur) = 0 Then
                                 _CodeFormat = UsbUirt.CodeFormat.Uuirt
                             End If
-                            If CInt(_Parametres.Item(0).Valeur) = 1 Then
+                            If CInt(_Parametres.Item(1).Valeur) = 1 Then
                                 _CodeFormat = UsbUirt.CodeFormat.Pronto
                             End If
                         End If
@@ -567,7 +567,7 @@ Imports UsbUirt
         'lance l'apprentissage
         Try
             Try
-                Me.mc.LearnAsync(Me.code_format, Me.learn_code_modifier, Me.args)
+                Me.mc.LearnAsync(Me._CodeFormat, Me.learn_code_modifier, Me.args)
                 'Me.mc.Learn(Me.code_format, Me.learn_code_modifier, TimeSpan.Zero)
             Catch ex As Exception
                 'MsgBox(ex.Message)
@@ -655,7 +655,7 @@ Imports UsbUirt
     ''' <param name="Code"></param>
     ''' <param name="Repeat"></param>
     ''' <remarks></remarks>
-    Public Sub EnvoyerCode(ByVal Code As String, ByVal Repeat As Integer)
+    Public Sub EnvoyerCode(ByVal Code As String, ByVal Repeat As Integer, Optional Format As Integer = 99)
         Try
             If _Enable = False Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " EnvoyerCommande", "Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
@@ -667,10 +667,19 @@ Imports UsbUirt
                 Exit Sub
             End If
 
+            Dim _myformat As CodeFormat = _CodeFormat
+
+            If Format = 0 Then
+                _myformat = CodeFormat.Uuirt
+            End If
+            If Format = 1 Then
+                _myformat = CodeFormat.Pronto
+            End If
+
             If Repeat <= 0 Then Repeat = 1
-            Code = Mid(Code, 2, Len(Code) - 1)
-            mc.Transmit(Code, _CodeFormat, Repeat, TimeSpan.Zero)
-            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " EnvoyerCommande", "Code IR envoyé: " & Code & " repeat: " & Repeat & " Format:" & _CodeFormat.ToString)
+
+            mc.Transmit(Code, _myformat, Repeat, TimeSpan.Zero)
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " EnvoyerCommande", "Code IR envoyé: " & Code & " repeat: " & Repeat & " Format:" & _myformat.ToString)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " EnvoyerCommande", "Erreur: " & ex.ToString & vbCrLf & "Code=" & Code & "  Repeat=" & Repeat)
         End Try
