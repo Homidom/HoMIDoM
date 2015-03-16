@@ -601,7 +601,7 @@ Imports UsbUirt
     Public Sub SendCodeIR(ByVal ir_code As String, ByVal RepeatCount As Integer)
         Try
             mc.Transmit(ir_code, _CodeFormat, RepeatCount, TimeSpan.Zero)
-            _Server.Log(TypeLog.MESSAGE, TypeSource.DRIVER, "USBUIRT", "Code IR envoyé: " & ir_code & " repeat: " & RepeatCount)
+            _Server.Log(TypeLog.MESSAGE, TypeSource.DRIVER, "USBUIRT", "Code IR envoyé: " & ir_code & " repeat: " & RepeatCount & " format:" & _CodeFormat.ToString)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUIRT", "Problème de transmission: " & ex.Message)
         End Try
@@ -629,7 +629,7 @@ Imports UsbUirt
             If Repeat <= 0 Then Repeat = 1
             Code = Mid(Code, 2, Len(Code) - 1)
             mc.Transmit(Code, _CodeFormat, Repeat, TimeSpan.Zero)
-            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " EnvoyerCommande", "Code IR envoyé: " & Code & " repeat: " & Repeat)
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " EnvoyerCommande", "Code IR envoyé: " & Code & " repeat: " & Repeat & " Format:" & _CodeFormat.ToString)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " EnvoyerCommande", "Erreur: " & ex.ToString & vbCrLf & "Code=" & Code & "  Repeat=" & Repeat)
         End Try
