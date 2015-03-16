@@ -658,7 +658,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
         Public access_token As String
         Public refresh_token As String
         Public expire_in As Integer
-        Public scope As String
+        Public scope As List(Of Object)
     End Class
 
     Public Class DeviceList
@@ -775,14 +775,14 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             reqparm.Add("client_secret", _Parametres.Item(2).valeur)
             reqparm.Add("username", _Parametres.Item(3).valeur)
             reqparm.Add("password", _Parametres.Item(4).valeur)
-            Dim responsebytes = client.UploadValues("https://api.netatmo.net/oauth2/token?", "POST", reqparm)
-
+            Dim responsebytes = client.UploadValues("http://api.netatmo.net/oauth2/token", "POST", reqparm)
             Dim responsebody = (New System.Text.UTF8Encoding).GetString(responsebytes)
+            WriteLog("DBG: responsebody : " & responsebody.ToString)
             Auth = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(Authentication))
 
             'va chercher les module que si connecté
             If Auth.expire_in > 0 Then
-                WriteLog("Requête https://api.netatmo.net/oauth2/token?  OK")
+                WriteLog("Requête https://api.netatmo.net/oauth2/token  OK")
                 WriteLog("DBG: Connect : " & responsebody.ToString)
                 ' recuperation des modules
                 GetModules()
@@ -797,7 +797,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
         Try
             Dim client As New Net.WebClient
-            Dim responsebody = client.DownloadString("http://api.netatmo.net/api/devicelist?access_token=" & Auth.access_token)
+            Dim responsebody = client.DownloadString("https://api.netatmo.net/api/devicelist?access_token=" & Auth.access_token)
             WriteLog("DBG: Token : " & Auth.access_token)
             obj = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody)
             devlist = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(DeviceList))
@@ -819,7 +819,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
     '        Exit Sub
     '    Dim urldata As String
-    '   urldata = "http://api.netatmo.net/api/getmeasure?access_token=" & Auth.access_token & "&device_id=" & deviceid
+    '   urldata = "https://api.netatmo.net/api/getmeasure?access_token=" & Auth.access_token & "&device_id=" & deviceid
     '   If moduleid <> "" Then urldata = urldata + "&module_id=" & moduleid
     '   urldata = urldata + "&type=Temperature,Humidity,Co2,Pressure,Noise,Rain&limit=1&date_end=last&scale=30min"
     '        ReDim DatasModule.value(1, 6)

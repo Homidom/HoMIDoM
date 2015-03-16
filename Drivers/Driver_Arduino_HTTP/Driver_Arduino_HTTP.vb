@@ -843,7 +843,6 @@ Public Class Driver_Arduino_HTTP
             _DeviceSupport.Add(ListeDevices.PLUIECOURANT.ToString)
             _DeviceSupport.Add(ListeDevices.PLUIETOTAL.ToString)
             _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
-            _DeviceSupport.Add(ListeDevices.TELECOMMANDE.ToString)
             _DeviceSupport.Add(ListeDevices.TEMPERATURE.ToString)
             _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE.ToString)
             _DeviceSupport.Add(ListeDevices.UV.ToString)
