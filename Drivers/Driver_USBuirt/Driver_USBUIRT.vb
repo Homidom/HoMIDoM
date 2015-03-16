@@ -520,7 +520,7 @@ Imports UsbUirt
 
             'Parametres avancés
             Add_ParamAvance("Nombre d'envoi de la trame", "Nombre de fois à envoyer la trame", 1)
-            Add_ParamAvance("Format", "Format trame (Usbuirt=0/Pronto=1)", 0)
+            Add_ParamAvance("Format (Uuirt/Pronto)", "Format trame (Usbuirt=0/Pronto=1)", 0)
 
             Add_LibelleDevice("ADRESSE1", "Trame ON", "Trame reçue ou envoyée si ON ou simulation appuie sur bouton télécommande")
             Add_LibelleDevice("ADRESSE2", "Trame OFF", "Trame reçue ou envoyée si OFF")
@@ -600,8 +600,49 @@ Imports UsbUirt
     ''' <remarks></remarks>
     Public Sub SendCodeIR(ByVal ir_code As String, ByVal RepeatCount As Integer)
         Try
-            mc.Transmit(ir_code, _CodeFormat, RepeatCount, TimeSpan.Zero)
-            _Server.Log(TypeLog.MESSAGE, TypeSource.DRIVER, "USBUIRT", "Code IR envoyé: " & ir_code & " repeat: " & RepeatCount & " format:" & _CodeFormat.ToString)
+            Dim _format As String = ""
+            Dim _tabl() As String = ir_code.Split(";") 'c=<Code>;r=4;f=0
+            Dim _ir_code As String = ir_code
+
+            If _tabl IsNot Nothing Then
+                If _tabl.Length > 0 Then
+                    For i = 0 To _tabl.Length - 1
+                        'variable code
+                        If _tabl(i).ToLower.StartsWith("c=") Then
+                            Dim _var As String = Mid(_tabl(i), 3, Len(_tabl(i)) - 2)
+                            If String.IsNullOrEmpty(_var) = False Then
+                                _ir_code = _var
+                            End If
+                        End If
+                        'variable repeat
+                        If _tabl(i).ToLower.StartsWith("r=") Then
+                            Dim _var As String = Mid(_tabl(i), 3, Len(_tabl(i)) - 2)
+                            If IsNumeric(_var) Then
+                                RepeatCount = CInt(_var)
+                                If RepeatCount < 0 Then RepeatCount = 0
+                            End If
+                        End If
+                        'variable format
+                        If _tabl(i).ToLower.StartsWith("f=") Then
+                            Dim _var As String = Mid(_tabl(i), 3, Len(_tabl(i)) - 2)
+                            If IsNumeric(_var) Then
+                                If CInt(_var) = 0 Then
+                                    _CodeFormat = UsbUirt.CodeFormat.Uuirt
+                                End If
+                                If CInt(_var) = 1 Then
+                                    _CodeFormat = UsbUirt.CodeFormat.Pronto
+                                End If
+                            End If
+                        End If
+                    Next
+                End If
+            End If
+
+            If _CodeFormat = CodeFormat.Uuirt Then _format = "Uuirt"
+            If _CodeFormat = CodeFormat.Pronto Then _format = "Pronto"
+
+            mc.Transmit(_ir_code, _CodeFormat, RepeatCount, TimeSpan.Zero)
+            _Server.Log(TypeLog.MESSAGE, TypeSource.DRIVER, "USBUIRT", "Code IR envoyé: " & _ir_code & " Repeat: " & RepeatCount & " Format:" & _format & " FromTrame:" & ir_code)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUIRT", "Problème de transmission: " & ex.Message)
         End Try
