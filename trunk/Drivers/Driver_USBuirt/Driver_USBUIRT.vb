@@ -55,6 +55,7 @@ Imports UsbUirt
     <NonSerialized()> Private code_format As CodeFormat = CodeFormat.Uuirt
     <NonSerialized()> Dim args As LearnCompletedEventArgs = Nothing     'arguments récup lors de l'apprentissage
     <NonSerialized()> Dim Count As Integer = 1
+    <NonSerialized()> Dim _CodeFormat As CodeFormat = CodeFormat.Uuirt
     Private last_received_code As String        'dernier code recu
 
     Public Structure ircodeinfo
@@ -299,6 +300,14 @@ Imports UsbUirt
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Try
             Count = _Parametres.Item(0).Valeur
+            If IsNumeric(_Parametres.Item(0).Valeur) Then
+                If CInt(_Parametres.Item(0).Valeur) = 0 Then
+                    _CodeFormat = UsbUirt.CodeFormat.Uuirt
+                End If
+                If CInt(_Parametres.Item(0).Valeur) = 1 Then
+                    _CodeFormat = UsbUirt.CodeFormat.Pronto
+                End If
+            End If
             Me.mc = New Controller
             'capte les events
             AddHandler mc.Received, AddressOf handler_mc_received
@@ -363,7 +372,15 @@ Imports UsbUirt
                     If String.IsNullOrEmpty(Objet.Adresse1) Then
                         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "La trame correspondant à ON est vide pour le composant " & Objet.Name)
                     Else
-			Count = _Parametres.Item(0).Valeur
+                        Count = _Parametres.Item(0).Valeur
+                        If IsNumeric(_Parametres.Item(0).Valeur) Then
+                            If CInt(_Parametres.Item(0).Valeur) = 0 Then
+                                _CodeFormat = UsbUirt.CodeFormat.Uuirt
+                            End If
+                            If CInt(_Parametres.Item(0).Valeur) = 1 Then
+                                _CodeFormat = UsbUirt.CodeFormat.Pronto
+                            End If
+                        End If
                         SendCodeIR(Objet.Adresse1, Count)
                         Objet.Value = 100
                         Exit Sub
@@ -374,7 +391,15 @@ Imports UsbUirt
                         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "La trame correspondant à OFF est vide pour le composant " & Objet.Name)
                     Else
                         Count = _Parametres.Item(0).Valeur
-			SendCodeIR(Objet.Adresse2, Count)
+                        If IsNumeric(_Parametres.Item(0).Valeur) Then
+                            If CInt(_Parametres.Item(0).Valeur) = 0 Then
+                                _CodeFormat = UsbUirt.CodeFormat.Uuirt
+                            End If
+                            If CInt(_Parametres.Item(0).Valeur) = 1 Then
+                                _CodeFormat = UsbUirt.CodeFormat.Pronto
+                            End If
+                        End If
+                        SendCodeIR(Objet.Adresse2, Count)
                         Objet.Value = 0
                         Exit Sub
                     End If
@@ -495,6 +520,7 @@ Imports UsbUirt
 
             'Parametres avancés
             Add_ParamAvance("Nombre d'envoi de la trame", "Nombre de fois à envoyer la trame", 1)
+            Add_ParamAvance("Nombre d'envoi de la trame", "Format trame (Usbuirt=0/Pronto=1)", 0)
 
             Add_LibelleDevice("ADRESSE1", "Trame ON", "Trame reçue ou envoyée si ON ou simulation appuie sur bouton télécommande")
             Add_LibelleDevice("ADRESSE2", "Trame OFF", "Trame reçue ou envoyée si OFF")
@@ -574,7 +600,7 @@ Imports UsbUirt
     ''' <remarks></remarks>
     Public Sub SendCodeIR(ByVal ir_code As String, ByVal RepeatCount As Integer)
         Try
-            mc.Transmit(ir_code, CodeFormat.Uuirt, RepeatCount, TimeSpan.Zero)
+            mc.Transmit(ir_code, _CodeFormat, RepeatCount, TimeSpan.Zero)
             _Server.Log(TypeLog.MESSAGE, TypeSource.DRIVER, "USBUIRT", "Code IR envoyé: " & ir_code & " repeat: " & RepeatCount)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUIRT", "Problème de transmission: " & ex.Message)
@@ -602,7 +628,7 @@ Imports UsbUirt
 
             If Repeat <= 0 Then Repeat = 1
             Code = Mid(Code, 2, Len(Code) - 1)
-            mc.Transmit(Code, CodeFormat.Uuirt, Repeat, TimeSpan.Zero)
+            mc.Transmit(Code, _CodeFormat, Repeat, TimeSpan.Zero)
             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " EnvoyerCommande", "Code IR envoyé: " & Code & " repeat: " & Repeat)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " EnvoyerCommande", "Erreur: " & ex.ToString & vbCrLf & "Code=" & Code & "  Repeat=" & Repeat)
