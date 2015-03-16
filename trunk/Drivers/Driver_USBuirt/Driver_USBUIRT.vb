@@ -358,8 +358,16 @@ Imports UsbUirt
     ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
         Try
-            If _Enable = False Then Exit Sub
-            If _IsConnect = False Then Exit Sub
+            If _Enable = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUIRT", "Le Driver n'est pas activé, impossible de traiter cette action")
+                Exit Sub
+            End If
+
+            If _IsConnect = False Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUIRT", "Le Driver n'est pas connecté, impossible de traiter cette action")
+                Exit Sub
+            End If
+
 
             If Objet.type = "MULTIMEDIA" Then
                 If Commande = "SendCodeIR" Then
@@ -520,7 +528,7 @@ Imports UsbUirt
 
             'Parametres avancés
             Add_ParamAvance("Nombre d'envoi de la trame", "Nombre de fois à envoyer la trame", 1)
-            Add_ParamAvance("Format (Uuirt/Pronto)", "Format trame (Usbuirt=0/Pronto=1)", 0)
+            Add_ParamAvance("Format (Uuirt/Pronto)", "Format trame (Uuirt=0/Pronto=1)", 0)
 
             Add_LibelleDevice("ADRESSE1", "Trame ON", "Trame reçue ou envoyée si ON ou simulation appuie sur bouton télécommande")
             Add_LibelleDevice("ADRESSE2", "Trame OFF", "Trame reçue ou envoyée si OFF")
@@ -601,7 +609,7 @@ Imports UsbUirt
     Public Sub SendCodeIR(ByVal ir_code As String, ByVal RepeatCount As Integer)
         Try
             Dim _format As String = ""
-            Dim _tabl() As String = ir_code.Split(";") 'c=<Code>;r=4;f=0
+            Dim _tabl() As String = ir_code.Split(";") 'c=<Code>;r=<REPEAT>;f=<Format>
             Dim _ir_code As String = ir_code
 
             If _tabl IsNot Nothing Then
