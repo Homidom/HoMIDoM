@@ -552,7 +552,35 @@
         </Manufacturer>
         <Manufacturer id="0007" name="Vimar CRS">
         </Manufacturer>
-        <Manufacturer id="010a" name="Vitrum">
+        <Manufacturer id="0109" name="Vision">
+                <Product type="1001" id="0101" name="ZU1401 Z-Wave USB Stick"/>
+                <Product type="2001" id="0101" name="ZD2102 Door/Window Sensor"/>
+                <Product type="2001" id="0102" name="ZD2102 Door/Window Sensor"/>
+                <Product type="2001" id="0104" name="ZD2102 Door/Window Sensor"/>
+                <Product type="2001" id="0105" name="ZD2102 Door/Window Sensor"/>
+                <Product type="2002" id="0201" name="ZP3102 US PIR Motion Sensor" config="vision/zp3102.xml"/>
+                <Product type="2002" id="0202" name="ZP3102 AU PIR Motion Sensor" config="vision/zp3102.xml"/>
+                <Product type="2002" id="0203" name="ZP3102 EU PIR Motion Sensor" config="vision/zp3102.xml"/>
+                <Product type="2002" id="0204" name="ZP3102 JP PIR Motion Sensor" config="vision/zp3102.xml"/>
+                <Product type="2002" id="0205" name="ZP3102 EU PIR Motion Sensor" config="vision/zp3102.xml"/>          
+                <Product type="2003" id="0302" name="ZS5101 Shock and Vibration Sensor"  config="vision/zm5101eu.xml"/>
+                <Product type="2004" id="0403" name="ZS6101 Smoke Detector"  config="vision/zm6101eu.xml"/>
+                <Product type="2005" id="0503" name="ZM1601 Battery Operated Siren" config="vision/zm1601eu.xml"/>
+                <Product type="2005" id="0505" name="ZM1601 Battery Operated Siren"/>
+                <Product type="2006" id="0610" name="ZM1701 Electronic Deadbolt Door Lock without Handle"/>
+                <Product type="2006" id="0620" name="ZM1702 Electronic Deadbolt Door Lock with Handle"/>
+                <Product type="2006" id="0621" name="ZM1701 Electronic Deadbolt Door Lock without Handle"/>
+                <Product type="2007" id="0703" name="Plug-in Switch"/>
+                <Product type="2008" id="0803" name="ZL7101 Plug-in Dimmer Module"/>
+                <Product type="200a" id="0a02" name="ZG8101 Garage Door Detector"/>
+                <Product type="200f" id="0f02" name="ZS6301 CO Detector"/>
+                <Product type="200f" id="0f03" name="ZS6301 CO Detector"/>
+                <Product type="2012" id="1203" name="ZR1202 Repeater"/>
+                <Product type="2014" id="1401" name="ZL7101 Plug-in Dimmer Module"/>
+                <Product type="2017" id="1717" name="ZL7432 In-Wall Switch, Dual Relay"/>
+                <Product type="3001" id="0104" name="ZM1602 Main Operated Siren"/>
+       </Manufacturer>
+       <Manufacturer id="010a" name="Vitrum">
                 <Product type="1100" id="4900" name="Vitrum I EU Wireless Dimmer" config="vitrum/vitrumBS.xml"/>
                 <Product type="1100" id="4a00" name="Vitrum II EU Wireless Dimmer" config="vitrum/vitrumBS.xml"/>
                 <Product type="1200" id="5100" name="Vitrum I EU Wireless On-off" config="vitrum/vitrumBS.xml"/>
