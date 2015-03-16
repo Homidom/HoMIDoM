@@ -520,7 +520,7 @@ Imports UsbUirt
 
             'Parametres avancés
             Add_ParamAvance("Nombre d'envoi de la trame", "Nombre de fois à envoyer la trame", 1)
-            Add_ParamAvance("Nombre d'envoi de la trame", "Format trame (Usbuirt=0/Pronto=1)", 0)
+            Add_ParamAvance("Format", "Format trame (Usbuirt=0/Pronto=1)", 0)
 
             Add_LibelleDevice("ADRESSE1", "Trame ON", "Trame reçue ou envoyée si ON ou simulation appuie sur bouton télécommande")
             Add_LibelleDevice("ADRESSE2", "Trame OFF", "Trame reçue ou envoyée si OFF")
