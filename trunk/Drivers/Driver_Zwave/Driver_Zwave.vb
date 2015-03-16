@@ -94,24 +94,27 @@ Public Class Driver_ZWave
         End Enum
 
         Enum CommandClass As Byte
-            COMMAND_CLASS_NO_OPERATION = 0
-            COMMAND_CLASS_BASIC = 32                ' 0X20
-            COMMAND_CLASS_SWITCH_BINARY = 37        ' 0x25 
-            COMMAND_CLASS_SWITCH_MULTILEVEL = 38    ' 0x26
-            COMMAND_CLASS_SWITCH_ALL = 39
-            COMMAND_CLASS_SENSOR_MULTILEVEL = 49
-            COMMAND_CLASS_SENSOR_MULTILEVEL_V2 = 49
-            COMMAND_CLASS_SENSOR_MULTILEVEL_V3 = 49
-            COMMAND_CLASS_METER = 50
-            COMMAND_CLASS_METER_V3 = 50
-            COMMAND_CLASS_ALARM = 113
-            COMMAND_CLASS_POWERLEVEL = 115
-            COMMAND_CLASS_BATTERY = 128
-            COMMAND_CLASS_CONFIGURATION = 132
-            COMMAND_CLASS_CONFIGURATION_V2 = 132
-            COMMAND_CLASS_VERSION = 134
-            COMMAND_CLASS_SENSOR_ALARM = 156
-            COMMAND_CLASS_SILENCE_ALARM = 157
+            COMMAND_CLASS_NO_OPERATION = 0            ' 0x00
+            COMMAND_CLASS_BASIC = 32                  ' 0X20
+            COMMAND_CLASS_SWITCH_BINARY = 37          ' 0x25 
+            COMMAND_CLASS_SWITCH_MULTILEVEL = 38      ' 0x26
+            COMMAND_CLASS_SWITCH_ALL = 39             ' 0x27
+            COMMAND_CLASS_SENSOR_MULTILEVEL = 49      ' 0x31
+            COMMAND_CLASS_SENSOR_MULTILEVEL_V2 = 49   ' 0x31
+            COMMAND_CLASS_SENSOR_MULTILEVEL_V3 = 49   ' 0x31
+            COMMAND_CLASS_METER = 50                  ' 0x32
+            COMMAND_CLASS_METER_V3 = 50               ' 0x32
+            COMMAND_CLASS_ALARM = 113                 ' 0x71
+            COMMAND_CLASS_MANUFACTURER_SPECIFIC = 114 ' 0x72
+            COMMAND_CLASS_POWERLEVEL = 115            ' 0x73
+            COMMAND_CLASS_BATTERY = 128               ' 0x80
+            COMMAND_CLASS_CONFIGURATION = 132         ' 0x84
+            COMMAND_CLASS_CONFIGURATION_V2 = 132      ' 0x84
+			COMMAND_CLASS_ASSOCIATION = 133           ' 0x85 
+			COMMAND_CLASS_ASSOCIATION_V2 = 133        ' 0x85 
+            COMMAND_CLASS_VERSION = 134               ' 0x86 
+            COMMAND_CLASS_SENSOR_ALARM = 156          ' 0x9c
+            COMMAND_CLASS_SILENCE_ALARM = 157         ' 0x9d
         End Enum
 
 
