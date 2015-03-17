@@ -715,7 +715,7 @@
                         </StackPanel>
                     </StackPanel>
                     </Expander>--> 
-                <Expander Name="ExpdCmd" Header="Commandes" Foreground=" White">
+                <Expander Name="ExpdCmd" Header="Commandes" Foreground=" White" >
                 <StackPanel Name="StkCmd" Visibility="Collapsed" >
                     <ListBox HorizontalAlignment="Left" Margin="1" Height="100" Name="ListCmd" Width="145" Background="DarkGray" BorderBrush="Black" Foreground=" White"/>
                     <StackPanel Orientation="Horizontal" >
@@ -725,7 +725,12 @@
                     <StackPanel Orientation="Horizontal" >
                         <Label Width="50" Foreground="White" HorizontalAlignment="Right" Name="Label17"  Content="Repeat :"/>
                         <TextBox Name="TxtCmdRepeat" Height="21" HorizontalAlignment="Right" VerticalAlignment="Top" Width="33.244" ToolTip="Nombre de fois à envoyer le code" Background="DarkGray" BorderBrush="Black" Foreground=" White" Text="0"/>
-                    </StackPanel>
+                            <Label Width="50" Foreground="White" HorizontalAlignment="Right" Name="Label27"  Content="Format :" Visibility="Collapsed" />
+                            <ComboBox Name="CbFormat" Height="21" HorizontalAlignment="Right" VerticalAlignment="Top" Width="63.244" ToolTip="Format (Uuirt/Pronto)" Background="DarkGray" BorderBrush="Black" Foreground=" White" Text="0" SelectedIndex="0" Visibility="Collapsed" >
+                                <ComboBoxItem Content="Uuirt" />
+                                <ComboBoxItem Content="Pronto" />
+                            </ComboBox>
+                        </StackPanel>
                         <StackPanel >
                             <StackPanel Orientation="Horizontal" >
                                 <RadioButton Margin="2,0,0,0" Name="RdBIsScriptFalse" Content="Trame" Foreground=" White" IsChecked=" True"/>

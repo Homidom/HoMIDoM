@@ -6,6 +6,7 @@ Public Class WTelecommandeNew
 
 #Region "Variables"
     Dim FlagNewCmd As Boolean
+    Dim _DevId As String = ""
     'Dim x As HoMIDom.HoMIDom.TemplateDevice = Nothing
     'Dim _SelectDriverIndex As Integer 'Index du driver sélectionné
     'Dim ListButton As New List(Of ImageButton)
@@ -26,6 +27,7 @@ Public Class WTelecommandeNew
         TxtCmdName.Text = ""
         TxtCmdRepeat.Text = "0"
         TxtCmdData.Text = ""
+        CbFormat.SelectedIndex = 0
         'ImgCommande2.Source = Nothing
         ' ImgCommande2.Tag = ""
 
@@ -59,6 +61,7 @@ Public Class WTelecommandeNew
                         .Name = TxtCmdName.Text
                         .Code = TxtCmdData.Text
                         .Repeat = TxtCmdRepeat.Text
+                        .Format = CbFormat.SelectedIndex
                         '.Picture = ImgCommande2.Tag
                     End With
                     _CurrentTemplate.Commandes.Add(_cmd)
@@ -70,12 +73,14 @@ Public Class WTelecommandeNew
                         .Name = TxtCmdName.Text
                         .Code = TxtCmdData.Text
                         .Repeat = TxtCmdRepeat.Text
+                        .Format = CbFormat.SelectedIndex
                         '.Picture = ImgCommande2.Tag
                     End With
                 End If
                 TxtCmdName.Text = ""
                 TxtCmdData.Text = ""
                 TxtCmdRepeat.Text = ""
+                CbFormat.SelectedIndex = 0
 
                 ListCmd.Items.Clear()
                 For i2 As Integer = 0 To _CurrentTemplate.Commandes.Count - 1
@@ -111,10 +116,12 @@ Public Class WTelecommandeNew
                     Next
 
                 End If
+
                 BtnDelCmd.Visibility = Windows.Visibility.Hidden
                 TxtCmdData.Text = ""
                 TxtCmdName.Text = ""
                 TxtCmdRepeat.Text = ""
+                CbFormat.SelectedIndex = 0
                 'ImgCommande2.Source = Nothing
                 'ImgCommande2.Tag = Nothing
             End If
@@ -132,7 +139,16 @@ Public Class WTelecommandeNew
     Private Sub BtnTstCmd_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnTstCmd.Click
         Try
             If String.IsNullOrEmpty(TxtCmdName.Text) = False And _CurrentTemplate IsNot Nothing Then
-                _CurrentTemplate.ExecuteCommand(IdSrv, TxtCmdName.Text, myService)
+                If String.IsNullOrEmpty(_DevId) = False Then
+                    Dim x As New HoMIDom.HoMIDom.DeviceAction
+                    x.Nom = "EnvoyerCommande"
+                    Dim param As New HoMIDom.HoMIDom.DeviceAction.Parametre
+                    param.Value = TxtCmdName.Text
+                    x.Parametres.Add(param)
+                    myService.ExecuteDeviceCommand(IdSrv, _DevId, x)
+                End If
+
+                '_CurrentTemplate.ExecuteCommand(IdSrv, TxtCmdName.Text, myService)
             End If
             'Dim retour As String = myService.TelecommandeSendCommand(IdSrv, _DeviceId, TxtCmdName.Text)
             'If retour <> 0 Then
@@ -151,15 +167,20 @@ Public Class WTelecommandeNew
     ''' <remarks></remarks>
     Private Sub BtnLearn_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnLearn.Click
         Try
-            'If _Driver IsNot Nothing Then
-            '    If _Driver.Enable = True And _Driver.IsConnect Then
-            '        TxtCmdData.Text = myService.StartLearning(IdSrv, _Driver.ID)
-            '    Else
-            '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Impossible d'apprendre un code car le driver n'est pas activé ou n'est pas connecté", "Erreur", "")
-            '    End If
-            'Else
-            '    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Impossible d'apprendre un code car le driver n'a pas été trouvé", "Erreur", "")
-            'End If
+            Dim _idDrv As String = "0"
+
+            'On envoi la commande
+            Select Case _CurrentTemplate.Type
+                Case 0 'Template de type http
+                    _IdDrv = "D04010DA-5E22-11E1-A742-4E4A4824019B"
+                Case 1 'Template de type IR
+                    _idDrv = "74FD4E7C-34ED-11E0-8AC4-70CEDED72085"
+                Case 2 'Template de type rs232
+                    _idDrv = "7631FA52-31C2-11E3-8BE1-6DD36088709B"
+            End Select
+
+
+            TxtCmdData.Text = myService.StartLearning(IdSrv, _idDrv)
         Catch Ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnLearnCmd: " & Ex.Message, "Erreur", "")
         End Try
@@ -201,11 +222,11 @@ Public Class WTelecommandeNew
 
                 BtnSaveCmd.Visibility = Windows.Visibility.Collapsed
                 BtnDelCmd.Visibility = Windows.Visibility.Visible
-                BtnTstCmd.Visibility = Windows.Visibility.Visible
+                If String.IsNullOrEmpty(_DevId) = False Then BtnTstCmd.Visibility = Windows.Visibility.Visible
                 TxtCmdName.Text = _CurrentTemplate.Commandes.Item(i).Name
                 TxtCmdData.Text = _CurrentTemplate.Commandes.Item(i).Code
                 TxtCmdRepeat.Text = _CurrentTemplate.Commandes.Item(i).Repeat
-
+                CbFormat.SelectedIndex = _CurrentTemplate.Commandes.Item(i).Format
                 'If String.IsNullOrEmpty(_CurrentTemplate.Commandes.Item(i).Picture) = False Then
                 '    ImgCommande2.Source = ConvertArrayToImage(myService.GetByteFromImage(_CurrentTemplate.Commandes.Item(i).Picture))
                 '    ImgCommande2.Tag = _CurrentTemplate.Commandes.Item(i).Picture
@@ -229,7 +250,23 @@ Public Class WTelecommandeNew
     ''' <param name="e"></param>
     ''' <remarks></remarks>
     Private Sub TxtCmdData_TextInput(ByVal sender As Object, ByVal e As System.Windows.Input.TextCompositionEventArgs) Handles TxtCmdData.TextInput
-        BtnTstCmd.Visibility = Windows.Visibility.Visible
+        If String.IsNullOrEmpty(_DevId) = False Then BtnTstCmd.Visibility = Windows.Visibility.Visible
+    End Sub
+
+    Private Sub TxtCmdName_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TxtCmdName.MouseDown
+        BtnSaveCmd.Visibility = Windows.Visibility.Visible
+    End Sub
+
+    Private Sub TxtCmdRepeat_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TxtCmdRepeat.MouseDown
+        BtnSaveCmd.Visibility = Windows.Visibility.Visible
+    End Sub
+
+    Private Sub CbFormat_MouseUp(sender As Object, e As System.Windows.Input.MouseButtonEventArgs) Handles CbFormat.MouseUp
+        BtnSaveCmd.Visibility = Windows.Visibility.Visible
+    End Sub
+
+    Private Sub CbFormat_SelectionChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbFormat.SelectionChanged
+        If CbFormat.Visibility = Windows.Visibility.Visible Then BtnSaveCmd.Visibility = Windows.Visibility.Visible
     End Sub
 
     '''' <summary>
@@ -398,13 +435,13 @@ Public Class WTelecommandeNew
     ''' </summary>
     ''' <param name="TemplateName">Nom du template à afficher</param>
     ''' <remarks></remarks>
-    Public Sub New(Optional TemplateName As String = "")
+    Public Sub New(Optional TemplateName As String = "", Optional DeviceId As String = "")
 
         ' Cet appel est requis par le concepteur.
         InitializeComponent()
 
         Try
-
+            _DevId = DeviceId
             Call Refresh(TemplateName)
 
         Catch ex As Exception
@@ -513,12 +550,18 @@ Public Class WTelecommandeNew
                     Case 0 'http
                         RdHttp.IsChecked = True
                         BtnLearn.Visibility = Windows.Visibility.Collapsed
+                        Label27.Visibility = Windows.Visibility.Collapsed
+                        CbFormat.Visibility = Windows.Visibility.Collapsed
                     Case 1 'IR
                         RdIR.IsChecked = True
                         BtnLearn.Visibility = Windows.Visibility.Visible
+                        Label27.Visibility = Windows.Visibility.Visible
+                        CbFormat.Visibility = Windows.Visibility.Visible
                     Case 2 'RS232
                         RdRS232.IsChecked = True
                         BtnLearn.Visibility = Windows.Visibility.Visible
+                        Label27.Visibility = Windows.Visibility.Collapsed
+                        CbFormat.Visibility = Windows.Visibility.Collapsed
                 End Select
 
                 RdHttp.IsEnabled = False
@@ -563,13 +606,6 @@ Public Class WTelecommandeNew
         End Try
     End Sub
 
-    Private Sub TxtCmdName_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TxtCmdName.MouseDown
-        BtnSaveCmd.Visibility = Windows.Visibility.Visible
-    End Sub
-
-    Private Sub TxtCmdRepeat_TextChanged(ByVal sender As Object, ByVal e As System.Windows.Input.MouseButtonEventArgs) Handles TxtCmdRepeat.MouseDown
-        BtnSaveCmd.Visibility = Windows.Visibility.Visible
-    End Sub
 
 #Region "Variable"
     Dim FlagNewVar As Boolean
@@ -820,4 +856,17 @@ Public Class WTelecommandeNew
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnExportTemplate_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
+
+
+    Private Sub RdIR_Checked(sender As Object, e As System.Windows.RoutedEventArgs) Handles RdIR.Checked, RdIR.Click
+        If RdIR.IsChecked Then
+            Label27.Visibility = Windows.Visibility.Visible
+            CbFormat.Visibility = Windows.Visibility.Visible
+        Else
+            Label27.Visibility = Windows.Visibility.Collapsed
+            CbFormat.Visibility = Windows.Visibility.Collapsed
+        End If
+    End Sub
+
+
 End Class

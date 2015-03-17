@@ -9734,6 +9734,27 @@ Namespace HoMIDom
             End Try
         End Function
 
+        Public Function DriverTelecommandeSendCommand(IdSrv As String, IdDriver As String, Type As Integer, Parametres As List(Of String)) As String Implements IHoMIDom.DriverTelecommandeSendCommand
+            Try
+                Dim _driver As Object = Nothing
+                _driver = ReturnDrvById(IdSrv, IdDriver)
+
+                Select Case Type
+                    Case 0 'http
+                        _driver.EnvoyerCode(Parametres(0), Parametres(1)) 'EnvoyerCode(code, cmd.Repeat)
+                    Case 1 'ir
+                        _driver.EnvoyerCode(Parametres(0), Parametres(1), Parametres(2)) 'EnvoyerCode(code, cmd.Repeat, cmd.Format)
+                    Case 2 'rs232
+                        _driver.EnvoyerCode(Parametres(0), Parametres(1), Parametres(2), Parametres(3), Parametres(4), Parametres(5), Parametres(6)) 'EnvoyerCode(code, Me.Port, 9600, 8, 0, 1, cmd.Repeat)
+                End Select
+
+                Return "0"
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DriverTelecommandeSendCommand", "Erreur : " & ex.Message)
+                Return "Erreur lors du traitement de la fonction DriverTelecommandeSendCommand: " & ex.Message
+            End Try
+        End Function
+
         ''' <summary>
         ''' Exporte le template vers une destination
         ''' </summary>
