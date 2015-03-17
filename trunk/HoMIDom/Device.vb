@@ -164,6 +164,7 @@ Namespace HoMIDom
             Dim _NameCommand As String
             Dim _DescriptionCommand As String
             Dim _CountParam As Integer = 0
+
             Public Property NameCommand As String
                 Get
                     Return _NameCommand
@@ -2487,6 +2488,7 @@ Namespace HoMIDom
                     If UCase(Commande) = UCase(_Template.Commandes.Item(i).Name) Then
                         Dim code As String = ""
                         Dim repeat As String = _Template.Commandes.Item(i).Repeat
+                        Dim format As Integer = _Template.Commandes.Item(i).Format
 
                         If _Template.Type = 0 And String.IsNullOrEmpty(Me.Adresse1) = False Then
                             code = "http://"
@@ -2503,7 +2505,7 @@ Namespace HoMIDom
                             Case 0 'http
                                 _Template.SetVariable(_IdSrv, "trame", Driver.EnvoyerCode(code, repeat))
                             Case 1 'IR
-                                _Template.SetVariable(_IdSrv, "trame", Driver.EnvoyerCode(code, repeat))
+                                _Template.SetVariable(_IdSrv, "trame", Driver.EnvoyerCode(code, repeat, format))
                             Case 2 'RS232
                                 _Template.SetVariable(_IdSrv, "trame", Driver.EnvoyerCode(code, Me.Adresse1, 9600, 8, 0, 1, repeat))
                         End Select

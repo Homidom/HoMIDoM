@@ -1291,6 +1291,17 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         <OperationContract()> Function StartLearning(ByVal IdSrv As String, ByVal DriverId As String) As String
 
+        ''' <summary>
+        ''' Execute une commande à un driver
+        ''' </summary>
+        ''' <param name="IdSrv"></param>
+        ''' <param name="IdDriver"></param>
+        ''' <param name="Type"></param>
+        ''' <param name="Parametres"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function DriverTelecommandeSendCommand(IdSrv As String, IdDriver As String, Type As Integer, Parametres As List(Of String)) As String
+
         '''' <param name="Commandes">Liste des commandes</param>
         ''' <summary>
         ''' Sauvegarde les commandes dans un template donné

@@ -340,13 +340,15 @@
             ''' <param name="Name"></param>
             ''' <returns></returns>
             ''' <remarks></remarks>
-            Public Function ExecuteCommand(ByVal idsrv As String, ByVal Name As String, Server As Server) As String
+            Public Function ExecuteCommand(ByVal Idsrv As String, ByVal Name As String, Server As IHoMIDom) As String
                 Try
                     'on verifie l'id du serveur pour la sécurité
                     If idsrv <> _IdSrv Then
                         Return "99"
                         Exit Function
                     End If
+
+                    Dim _IdDrv As String = "0"
 
                     For Each cmd In _Cmd
                         If cmd.Name.ToLower = Name.ToLower Then 'on a trouvé la commande
@@ -370,11 +372,29 @@
                             'On envoi la commande
                             Select Case _Type
                                 Case 0 'Template de type http
-
+                                    _IdDrv = "D04010DA-5E22-11E1-A742-4E4A4824019B"
+                                    Dim x As New List(Of String)
+                                    x.Add(code)
+                                    x.Add(cmd.Repeat)
+                                    Server.DriverTelecommandeSendCommand(idsrv, _IdDrv, 0, x)
                                 Case 1 'Template de type IR
-
+                                    _IdDrv = "74FD4E7C-34ED-11E0-8AC4-70CEDED72085"
+                                    Dim x As New List(Of String)
+                                    x.Add(code)
+                                    x.Add(cmd.Repeat)
+                                    x.Add(cmd.Format)
+                                    Server.DriverTelecommandeSendCommand(idsrv, _IdDrv, 1, x)
                                 Case 2 'Template de type rs232
-
+                                    _IdDrv = "7631FA52-31C2-11E3-8BE1-6DD36088709B"
+                                    Dim x As New List(Of String)
+                                    x.Add(code)
+                                    x.Add(Me.Port)
+                                    x.Add(9600)
+                                    x.Add(8)
+                                    x.Add(0)
+                                    x.Add(1)
+                                    x.Add(cmd.Repeat)
+                                    Server.DriverTelecommandeSendCommand(idsrv, _IdDrv, 2, x)
                             End Select
                         End If
                     Next
@@ -469,6 +489,7 @@
             Dim _IsScript As Boolean = False 'si false c'est une commande à envoyer si false c'est un script à exécuter
             Dim _Repeat As Integer = 0
             Dim _Picture As String
+            Dim _Format As Integer = 0 'si usbuirt 0=uuirt 1=Pronto
 
             'Variables graphiques
             Dim _Width As Double = 45
@@ -511,6 +532,15 @@
                 End Get
                 Set(ByVal value As Integer)
                     _Repeat = value
+                End Set
+            End Property
+
+            Property Format As Integer
+                Get
+                    Return _Format
+                End Get
+                Set(ByVal value As Integer)
+                    _Format = value
                 End Set
             End Property
 

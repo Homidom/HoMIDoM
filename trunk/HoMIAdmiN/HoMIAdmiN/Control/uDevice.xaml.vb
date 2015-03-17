@@ -1022,7 +1022,7 @@ Partial Public Class uDevice
 
     Private Sub ImgEditTemplate_MouseDown(sender As System.Object, e As System.Windows.Input.MouseButtonEventArgs) Handles ImgEditTemplate.MouseDown
         Try
-            Dim frm As New WTelecommandeNew(CBModele.Text)
+            Dim frm As New WTelecommandeNew(CBModele.Text, TxtID.Text)
             frm.ShowDialog()
             If frm.DialogResult.HasValue And frm.DialogResult.Value Then
                 frm.Close()
