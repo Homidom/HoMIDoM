@@ -289,6 +289,7 @@ Partial Public Class uDevice
     Private Sub CbDriver_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbDriver.SelectionChanged
         MaJDriver()
     End Sub
+
     Private Sub MaJDriver()
         Try
             Dim _Driver As Object = Nothing
@@ -445,11 +446,24 @@ Partial Public Class uDevice
                     Next
                 End If
 
+                IsIR()
             End If
             Me.Cursor = Nothing
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur: " & ex.ToString, "Erreur", "")
         End Try
+    End Sub
+
+    Private Sub IsIR()
+        If IsNothing(_Driver) Then Exit Sub
+
+        If CbType.Text <> "MULTIMEDIA" And _Driver.ID = "74FD4E7C-34ED-11E0-8AC4-70CEDED72085" Then
+            BtnLearn1.Visibility = Windows.Visibility.Visible
+            BtnLearn2.Visibility = Windows.Visibility.Visible
+        Else
+            BtnLearn1.Visibility = Windows.Visibility.Collapsed
+            BtnLearn2.Visibility = Windows.Visibility.Collapsed
+        End If
     End Sub
 
     'Verification du driver suivant son ID
@@ -554,6 +568,8 @@ Partial Public Class uDevice
                     StkType.Margin = New Thickness(0)
                 End If
             End If
+
+            IsIR()
         Catch Ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors du changement de type: " & Ex.Message, "Erreur", "")
         End Try
@@ -1241,4 +1257,13 @@ Partial Public Class uDevice
 #End Region
 
 
+    Private Sub BtnLearn1_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles BtnLearn1.Click
+        MessageBox.Show("Merci de rester appuyer sur le bouton de votre télécommande jusqu'à inscription d'un message dans le champs", "Info", MessageBoxButton.OK, MessageBoxImage.Information)
+        TxtAdresse1.Text = myService.StartLearning(IdSrv, _Driver.ID)
+    End Sub
+
+    Private Sub BtnLearn2_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles BtnLearn2.Click
+        MessageBox.Show("Merci de rester appuyer sur le bouton de votre télécommande jusqu'à inscription d'un message dans le champs", "Info", MessageBoxButton.OK, MessageBoxImage.Information)
+        TxtAdresse2.Text = myService.StartLearning(IdSrv, _Driver.ID)
+    End Sub
 End Class
