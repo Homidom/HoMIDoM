@@ -7970,6 +7970,32 @@ Namespace HoMIDom
             End Try
         End Function
 
+        ''' <summary>Retourne une liste de device par son driver</summary>
+        ''' <param name="DriverID"></param>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function ReturnDeviceByDriver(ByVal IdSrv As String, ByVal DriverID As String, ByVal Enable As Boolean) As ArrayList Implements IHoMIDom.ReturnDeviceByDriver
+            Try
+                If VerifIdSrv(IdSrv) = False Then
+                    Return Nothing
+                End If
+
+                Dim listresultat As New ArrayList
+
+                For i As Integer = 0 To _ListDevices.Count - 1
+                    If (_ListDevices.Item(i).DriverID = DriverID.ToUpper()) And _ListDevices.Item(i).Enable = Enable Then
+                        listresultat.Add(_ListDevices.Item(i))
+                    End If
+                Next
+
+                Return listresultat
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDeviceByDriver", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+
         ''' <summary>Retourne une liste de device par son Adresse1 et/ou type et/ou son driver, ex: "A1" "TEMPERATURE" "RFXCOM_RECEIVER"</summary>
         ''' <param name="DeviceAdresse"></param>
         ''' <param name="DeviceType"></param>
