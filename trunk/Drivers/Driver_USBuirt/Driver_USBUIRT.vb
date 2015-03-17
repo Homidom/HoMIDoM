@@ -53,7 +53,7 @@ Imports UsbUirt
     <NonSerialized()> Dim mc As Controller 'var pour l'usb uirt
     <NonSerialized()> Private learn_code_modifier As LearnCodeModifier = LearnCodeModifier.ForceStruct
     <NonSerialized()> Private code_format As CodeFormat = CodeFormat.Uuirt
-    <NonSerialized()> Dim args As LearnCompletedEventArgs = Nothing     'arguments récup lors de l'apprentissage
+    <NonSerialized()> Dim args As LearnCompletedEventArgs = Nothing 'arguments récup lors de l'apprentissage
     <NonSerialized()> Dim Count As Integer = 1
     <NonSerialized()> Dim _CodeFormat As CodeFormat = CodeFormat.Uuirt
     Private last_received_code As String        'dernier code recu
@@ -707,11 +707,12 @@ Imports UsbUirt
                     If (listedevices.Count = 1) Then
                         'correction valeur pour correspondre au type de value
                         If TypeOf listedevices.Item(0).Value Is Integer Then
-
                             listedevices.Item(0).Value = 100
+                            Exit Sub
                         End If
                         If TypeOf listedevices.Item(0).Value Is Boolean Then
                             listedevices.Item(0).Value = True
+                            Exit Sub
                         End If
                     End If
                 End If
@@ -724,11 +725,39 @@ Imports UsbUirt
                         'correction valeur pour correspondre au type de value
                         If TypeOf listedevices.Item(0).Value Is Integer Then
                             listedevices.Item(0).Value = 0
+                            Exit Sub
                         End If
                         If TypeOf listedevices.Item(0).Value Is Boolean Then
                             listedevices.Item(0).Value = False
+                            Exit Sub
                         End If
                     End If
+                End If
+
+                listedevices = New ArrayList
+                listedevices = _Server.ReturnDeviceByDriver(_IdSrv, Me._ID, True)
+
+                If listedevices IsNot Nothing Then
+                    For Each _dev In listedevices
+                        If _dev.Adresse1.ToString.Contains(e.IRCode) Then 'un device trouvé via adresse1 on maj la value
+                            'correction valeur pour correspondre au type de value
+                            If TypeOf _dev.Value Is Integer Then
+                                _dev.Value = 100
+                            End If
+                            If TypeOf _dev.Value Is Boolean Then
+                                _dev.Value = True
+                            End If
+                        End If
+                        If _dev.Adresse2.ToString.Contains(e.IRCode) Then 'un device trouvé via adresse 2 on maj la value
+                            'correction valeur pour correspondre au type de value
+                            If TypeOf _dev.Value Is Integer Then
+                                _dev.Value = 0
+                            End If
+                            If TypeOf _dev.Value Is Boolean Then
+                                _dev.Value = False
+                            End If
+                        End If
+                    Next
                 End If
 
             Catch ex As Exception
