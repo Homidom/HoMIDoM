@@ -42,11 +42,13 @@
                             <StackPanel Name="StkAdr1">
                                 <Label Foreground="White" Name="LabelAdresse1" Width="215" >Adresse1:</Label>
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtAdresse1" Width="215" Height="21.978" />
+                                <Button Name="BtnLearn1" Content="Apprendre" Foreground=" White" Template="{DynamicResource GlassButton}" Width="65" HorizontalAlignment=" Left" Height="25" Visibility="Visible" />
                                 <ComboBox Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" HorizontalAlignment=" Left" Name="CbAdresse1" Width="215" Height="25" Visibility="Collapsed" IsEditable="True" />
                             </StackPanel>
                             <StackPanel Name="StkAdr2" Margin="10,0,0,0">
                                 <Label Foreground="White" Name="LabelAdresse2" >Adresse2:</Label>
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtAdresse2" Height="21.978" Width="215" />
+                                <Button Name="BtnLearn2" Content="Apprendre" Foreground=" White" Template="{DynamicResource GlassButton}" Width="65" HorizontalAlignment=" Left" Height="25" Visibility="Visible" />
                             </StackPanel>
                         </StackPanel>
                     <StackPanel Orientation="Horizontal" >
