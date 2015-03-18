@@ -9477,11 +9477,15 @@ Namespace HoMIDom
                         Dim x As Object = _ListDrivers.Item(i)
                         retour = x.LearnCode()
                         Log(TypeLog.INFO, TypeSource.SERVEUR, "SERVEUR", "StartLearning: " & retour)
-                        Exit For
+                        If String.IsNullOrEmpty(retour) Then
+                            Return "Erreur lors de l'apprentissage du code (retour vide), veuillez consulter les logs du serveur pour en savoir plus"
+                        Else
+                            Return retour
+                        End If
                     End If
                 Next
 
-                Return retour
+
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "StartLearning", "Erreur : " & ex.Message)
                 Return ("ERREUR: " & ex.Message)
