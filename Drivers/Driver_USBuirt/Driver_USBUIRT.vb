@@ -557,11 +557,21 @@ Imports UsbUirt
         If _IsConnect = False Then
             Return "ERREUR: Impossible d'apprendre le code IR le driver n'est pas connecté"
         Else
-            Dim x As ircodeinfo
+            _FlagFinish = False
+            Dim x As ircodeinfo = Nothing
             x = wait_for_code()
-            Return x.code_to_send
+            If String.IsNullOrEmpty(x.code_to_send) Then
+                Return String.Empty
+            Else
+                Dim f As Integer = 0
+                If _CodeFormat = CodeFormat.Pronto Then f = 1
+                If _CodeFormat = CodeFormat.Uuirt Then f = 0
+                Return "c=" & x.code_to_send & ";r=" & Count & ";f=" & f
+            End If
         End If
     End Function
+
+    Dim _FlagFinish As Boolean = False
 
     'boucle qui attend kon recoive
     <System.STAThread()> _
@@ -578,28 +588,39 @@ Imports UsbUirt
                 Me.mc.LearnAsync(Me._CodeFormat, Me.learn_code_modifier, Me.args)
                 'Me.mc.Learn(Me.code_format, Me.learn_code_modifier, TimeSpan.Zero)
             Catch ex As Exception
-                'MsgBox(ex.Message)
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "Erreur lors de l'apprentissage:" & ex.Message)
                 Return Nothing
             End Try
 
             'attend que ce soit appris
-            Do While IsNothing(Me.args)
-                'Application.DoEvents()          !!!!!!!!MODIFIE A CAUSE DOEVENTS
+            Dim timeout As Date = Now.AddSeconds(15)
+
+            Do While IsNothing(Me.args) And timeout > Now And _FlagFinish = False
+                Threading.Thread.Sleep(500)
             Loop
 
-            'c appris !!!
+            'retourne le code
+            wait_for_code.code_to_send = Me.args.Code
+            wait_for_code.code_to_receive = last_received_code
+
+            'c appris ou non !!!
             RemoveHandler mc.Learning, AddressOf handler_mc_learning
             RemoveHandler mc.LearnCompleted, AddressOf handler_mc_learning_completed
 
+            Return wait_for_code
         Catch ex As Exception
+            'c appris ou non !!!
+            RemoveHandler mc.Learning, AddressOf handler_mc_learning
+            RemoveHandler mc.LearnCompleted, AddressOf handler_mc_learning_completed
+
             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "Erreur lors de l'apprentissage:" & ex.Message)
             Return Nothing
         End Try
 
-        'retourne le code
-        wait_for_code.code_to_send = Me.args.Code
-        wait_for_code.code_to_receive = last_received_code
-        Return wait_for_code
+        ''retourne le code 17/03/2015
+        'wait_for_code.code_to_send = Me.args.Code
+        'wait_for_code.code_to_receive = last_received_code
+        'Return wait_for_code
     End Function
 
     ''' <summary>Emet un code infrarouge</summary>
@@ -655,7 +676,6 @@ Imports UsbUirt
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUIRT", "Problème de transmission: " & ex.Message)
         End Try
     End Sub
-
 
     ''' <summary>
     ''' Envoyer une commande IR
@@ -773,17 +793,26 @@ Imports UsbUirt
     'handler en apprentissage
     Private Sub handler_mc_learning(ByVal sender As Object, ByVal e As LearningEventArgs)
         Try
-            'Debug.WriteLine("Learning: " & e.Progress & " freq=" & e.CarrierFrequency & " quality=" & e.SignalQuality)
+            If e.Progress >= 100 Then
+                _FlagFinish = True
+            End If
+            '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "Learning: " & e.Progress & " freq=" & e.CarrierFrequency & " quality=" & e.SignalQuality)
         Catch ex As Exception
-
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " handler_mc_learning", "Erreur : " & ex.ToString)
         End Try
     End Sub
 
     'handler a appris
     Private Sub handler_mc_learning_completed(ByVal sender As Object, ByVal e As LearnCompletedEventArgs)
-        args = e
-        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "Learning completed: " & e.Code)
-        RaiseEvent DriverEvent(_Nom, "LEARN_TERMINE", e.Code)
+        Try
+            args = e
+            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "Learning completed: " & e.Code)
+            _FlagFinish = True
+            'RaiseEvent DriverEvent(_Nom, "LEARN_TERMINE", e.Code)
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " handler_mc_learning_completed", "Erreur : " & ex.ToString)
+        End Try
+
     End Sub
 #End Region
 

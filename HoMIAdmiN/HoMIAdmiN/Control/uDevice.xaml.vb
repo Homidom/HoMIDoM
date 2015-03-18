@@ -1258,12 +1258,30 @@ Partial Public Class uDevice
 
 
     Private Sub BtnLearn1_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles BtnLearn1.Click
-        MessageBox.Show("Merci de rester appuyer sur le bouton de votre télécommande jusqu'à inscription d'un message dans le champs", "Info", MessageBoxButton.OK, MessageBoxImage.Information)
-        TxtAdresse1.Text = myService.StartLearning(IdSrv, _Driver.ID)
+        Try
+            If MessageBox.Show("Merci de rester appuyer sur le bouton de votre télécommande jusqu'à inscription d'un message dans le champs", "Info", MessageBoxButton.OKCancel, MessageBoxImage.Information) = MessageBoxResult.OK Then
+                Me.Cursor = Cursors.Wait
+                TxtAdresse1.Text = myService.StartLearning(IdSrv, _Driver.ID)
+                Me.Cursor = Nothing
+            Else
+                Exit Sub
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnLearn1_Click: " & ex.ToString, "Erreur Admin", "BtnLearn1_Click")
+        End Try
     End Sub
 
     Private Sub BtnLearn2_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles BtnLearn2.Click
-        MessageBox.Show("Merci de rester appuyer sur le bouton de votre télécommande jusqu'à inscription d'un message dans le champs", "Info", MessageBoxButton.OK, MessageBoxImage.Information)
-        TxtAdresse2.Text = myService.StartLearning(IdSrv, _Driver.ID)
+        Try
+            If MessageBox.Show("Merci de rester appuyer sur le bouton de votre télécommande jusqu'à inscription d'un message dans le champs", "Info", MessageBoxButton.OKCancel, MessageBoxImage.Information) = MessageBoxResult.OK Then
+                Me.Cursor = Cursors.Wait
+                TxtAdresse2.Text = myService.StartLearning(IdSrv, _Driver.ID)
+                Me.Cursor = Nothing
+            Else
+                Exit Sub
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnLearn1_Click: " & ex.ToString, "Erreur Admin", "BtnLearn1_Click")
+        End Try
     End Sub
 End Class
