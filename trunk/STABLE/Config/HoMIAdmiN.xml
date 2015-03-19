@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfClServer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ClServer>
+    <Id>123456789</Id>
+    <Nom>serveur Local</Nom>
+    <Adresse>localhost</Adresse>
+    <Defaut>true</Defaut>
+    <Port>7999</Port>
+    <Icon />
+  </ClServer>
+</ArrayOfClServer>
