@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<template fabricant="Violet" modele="Nabaztag" driver="http">
+  <commandes>
+    <cmd name="Parler" code="tts=Bonjour%20a%20tous" repeat="0" />
+	<cmd name="PoubelleJaune" code="tts=As tu sorti la poubelle jaune ?" repeat="0" />
+    <cmd name="Poubelle" code="tts=As tu sorti la poubelle standard ?" repeat="1" />
+  </commandes>
+</template>

@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<homidom>
+  <server ipsoap="localhost" portsoap="7999" idsrv="123456789" longitude="6.052793" latitude="49.364016" heurecorrectionlever="0" heurecorrectioncoucher="0" smtpserver="" smtpmail="" smtplogin="" smtppassword="" smtpport="25" smtpssl="false" log0="false" log1="false" log2="false" log3="false" log4="false" log5="false" log6="false" log7="false" log8="false" log9="false" cyclesave="0" voice="Microsoft Sam" saverealtime="true" devise="€" puissancemini="0" gererenergie="false" tarifjour="0" tarifnuit="0" portweb="7980" enablesrvweb="false" modedecouverte="false" codepays="12" />
+  <drivers>
+    <driver id="DE96B466-2540-11E0-A321-65D7DFD72085" nom="Virtuel" enable="true" description="Driver Virtuel" startauto="true" protocol="Virtuel" iptcp="@" porttcp="@" ipudp="@" portudp="@" com="@" refresh="0" modele="" />
+  </drivers>
+  <zones />
+  <users>
+    <user id="f1da9939-3419-47a9-a0b3-f69a1c62e3cf" username="Admin" nom="Administrateur" prenom="Admin" profil="2" password="PAvsrAy++QJoiwy5JaPK9bqiqALOdu18pAdW5z/lljk=" numberidentification="" image="E:\Homidom_Test\images\icones\user_128.png" email="Admin@mail.com" emailautre="" telfixe="" telmobile="" telautre="" adresse="" ville="" codepostal="" />
+    <user id="9410175d-814e-415a-82ec-a50f6afc2f61" username="test" nom="test" prenom="test" profil="0" password="UE+LNYJ0vEk=" numberidentification="" image="E:\Homidom_Test\images\icones\user_128.png" email="mail@mail.com" emailautre="" telfixe="" telmobile="" telautre="" adresse="" ville="" codepostal="" />
+  </users>
+  <devices>
+    <device id="soleil01" name="HOMI_Jour" enable="true" driverid="DE96B466-2540-11E0-A321-65D7DFD72085" description="Levé/Couché du soleil : True si il fait jour" type="GENERIQUEBOOLEEN" adresse1="N/A" adresse2="" datecreated="2012-02-28T18:31:24.0966797+01:00" lastchange="2012-02-28T18:31:24.0966797+01:00" lastchangeduree="0" refresh="0" modele="" picture="E:\Homidom_Test\images\icones\composant_128.png" solo="true" value="true" lastetat="true" />
+  </devices>
+  <triggers />
+  <macros />
+</homidom>

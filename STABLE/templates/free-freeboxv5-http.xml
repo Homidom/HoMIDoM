@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<template fabricant="free" modele="freeboxv5" driver="http">
+  <commandes>
+    <cmd name="0" code="0" repeat="0" />
+    <cmd name="1" code="1" repeat="0" />
+    <cmd name="2" code="2" repeat="0" />
+    <cmd name="3" code="3" repeat="0" />
+    <cmd name="4" code="4" repeat="0" />
+    <cmd name="5" code="5" repeat="0" />
+    <cmd name="6" code="6" repeat="0" />
+    <cmd name="7" code="7" repeat="0" />
+    <cmd name="8" code="8" repeat="0" />
+    <cmd name="9" code="9" repeat="0" />
+    <cmd name="Power" code="power" repeat="0" />
+    <cmd name="List" code="list" repeat="0" />
+    <cmd name="TV" code="tv" repeat="0" />
+    <cmd name="Back" code="back" repeat="0" />
+    <cmd name="Swap" code="swap" repeat="0" />
+    <cmd name="Info" code="info" repeat="0" />
+    <cmd name="Mail" code="mail" repeat="0" />
+    <cmd name="Help" code="help" repeat="0" />
+    <cmd name="Pip" code="pip" repeat="0" />
+    <cmd name="Epg" code="epg" repeat="0" />
+    <cmd name="Media" code="media" repeat="0" />
+    <cmd name="Option" code="options" repeat="0" />
+    <cmd name="Volume+" code="vol_inc" repeat="0" />
+    <cmd name="Volume-" code="vol_dec" repeat="0" />
+    <cmd name="Program+" code="prgm_inc" repeat="0" />
+    <cmd name="Program-" code="prgm_dec" repeat="0" />
+    <cmd name="Haut" code="up" repeat="0" />
+    <cmd name="Bas" code="down" repeat="0" />
+    <cmd name="Gauche" code="left" repeat="0" />
+    <cmd name="Droite" code="right" repeat="0" />
+    <cmd name="Mute" code="mute" repeat="0" />
+    <cmd name="Home" code="home" repeat="0" />
+    <cmd name="Enregistrer" code="rec" repeat="0" />
+    <cmd name="Retour rapide" code="bwd" repeat="0" />
+    <cmd name="Retour chapitre" code="prev" repeat="0" />
+    <cmd name="Play/Pause" code="play" repeat="0" />
+    <cmd name="Avance rapide" code="fwd" repeat="0" />
+    <cmd name="Avance chapitre" code="next" repeat="0" />
+    <cmd name="Rouge (B)" code="red" repeat="0" />
+    <cmd name="Vert (A)" code="green" repeat="0" />
+    <cmd name="Jaune (Y)" code="yellow" repeat="0" />
+    <cmd name="Bleu (X)" code="blue" repeat="0" />
+  </commandes>
+</template>
