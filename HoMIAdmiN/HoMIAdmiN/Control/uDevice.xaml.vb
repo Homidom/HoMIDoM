@@ -1260,9 +1260,17 @@ Partial Public Class uDevice
     Private Sub BtnLearn1_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles BtnLearn1.Click
         Try
             If MessageBox.Show("Merci de rester appuyer sur le bouton de votre télécommande jusqu'à inscription d'un message dans le champs", "Info", MessageBoxButton.OKCancel, MessageBoxImage.Information) = MessageBoxResult.OK Then
-                Me.Cursor = Cursors.Wait
-                TxtAdresse1.Text = myService.StartLearning(IdSrv, _Driver.ID)
-                Me.Cursor = Nothing
+                If _Driver IsNot Nothing Then
+                    If String.IsNullOrEmpty(_Driver.ID) = False Then
+                        Me.Cursor = Cursors.Wait
+                        TxtAdresse1.Text = myService.StartLearning(IdSrv, _Driver.ID)
+                        Me.Cursor = Nothing
+                    Else
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Apprendre1: Driver non affecté, vérifier qu'un driver à bien été associé au composant et que celui-ci a été créé", "Erreur Admin", "BtnLearn1_Click")
+                    End If
+                Else
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Apprendre1: Driver non affecté, vérifier qu'un driver à bien été associé au composant et que celui-ci a été créé", "Erreur Admin", "BtnLearn1_Click")
+                End If
             Else
                 Exit Sub
             End If
@@ -1274,14 +1282,22 @@ Partial Public Class uDevice
     Private Sub BtnLearn2_Click(sender As System.Object, e As System.Windows.RoutedEventArgs) Handles BtnLearn2.Click
         Try
             If MessageBox.Show("Merci de rester appuyer sur le bouton de votre télécommande jusqu'à inscription d'un message dans le champs", "Info", MessageBoxButton.OKCancel, MessageBoxImage.Information) = MessageBoxResult.OK Then
-                Me.Cursor = Cursors.Wait
-                TxtAdresse2.Text = myService.StartLearning(IdSrv, _Driver.ID)
-                Me.Cursor = Nothing
+                If _Driver IsNot Nothing Then
+                    If String.IsNullOrEmpty(_Driver.ID) = False Then
+                        Me.Cursor = Cursors.Wait
+                        TxtAdresse2.Text = myService.StartLearning(IdSrv, _Driver.ID)
+                        Me.Cursor = Nothing
+                    Else
+                        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Apprendre1: Driver non affecté, vérifier qu'un driver à bien été associé au composant et que celui-ci a été créé", "Erreur Admin", "BtnLearn2_Click")
+                    End If
+                Else
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Apprendre1: Driver non affecté, vérifier qu'un driver à bien été associé au composant et que celui-ci a été créé", "Erreur Admin", "BtnLearn2_Click")
+                End If
             Else
                 Exit Sub
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnLearn1_Click: " & ex.ToString, "Erreur Admin", "BtnLearn1_Click")
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnLearn1_Click: " & ex.ToString, "Erreur Admin", "BtnLearn2_Click")
         End Try
     End Sub
 End Class
