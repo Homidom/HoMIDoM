@@ -333,61 +333,16 @@ Namespace HoMIDom
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "gestion thread", "Exception : " & ex.Message)
                 End Try
 
-
-                'If (table_TimerSecTickthread.Rows.Count < 5) Then
-                '    'ajout a la table des thread
-                '    Try
-                '        Dim newRow As DataRow = Nothing
-                '        newRow = table_TimerSecTickthread.NewRow()
-                '        newRow.Item("name") = "TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss")
-                '        newRow.Item("comment") = ""
-                '        newRow.Item("datetime") = ladate.ToString("yyyy-MM-dd HH:mm:ss")
-                '        newRow.Item("thread") = ""
-                '        SyncLock lock_table_TimerSecTickthread
-                '            table_TimerSecTickthread.Rows.Add(newRow)
-                '        End SyncLock
-                '    Catch ex As Exception
-                '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "thread_ajout", "Exception : " & ex.Message)
-                '    End Try
-
                 '---- Action à effectuer toutes les secondes ----
-                Dim thr As New Thread(AddressOf VerifTimeDevice)
-                thr.IsBackground = True
-                thr.Name = "VerifTimeDevice"
-                thr.Start()
+                Dim thr1 As New Thread(AddressOf ThreadSecond)
+                thr1.Name = "ThreadSecond"
+                thr1.IsBackground = True
+                thr1.Priority = ThreadPriority.Highest
+                thr1.Start()
+                ListThread.Add(thr1)
 
                 '---- Actions à effectuer toutes les minutes ----
                 If ladate.Second = 0 Then
-                    Dim thr1 As New Thread(AddressOf ThreadSecond)
-                    thr1.Name = "ThreadSecond"
-                    thr1.IsBackground = True
-                    thr1.Priority = ThreadPriority.Highest
-                    thr1.Start()
-                    ListThread.Add(thr1)
-                    'OLD
-                    'VerifIsJour()
-
-                    'on veirife si on doit enregistrer la config dans le xml
-                    'If _CycleSave > 0 And _Finish = True Then
-                    '    If ladate >= _NextTimeSave Then
-                    '        _NextTimeSave = Now.AddMinutes(_CycleSave)
-                    '        SaveConfig(_MonRepertoire & "\config\homidom.xml")
-                    '    End If
-                    'End If
-                End If
-
-                '---- Actions à effectuer toutes les heures ----
-                If ladate.Minute = 59 And ladate.Second = 59 Then
-                    'OLD
-                    'SearchDeviceNoMaJ()
-                    ''on verifie si on doit exporter la config vers un folder
-                    'If _CycleSaveFolder > 0 And _Finish = True Then
-                    '    If ladate >= _NextTimeSaveFolder Then
-                    '        _NextTimeSaveFolder = Now.AddHours(_CycleSaveFolder)
-                    '        SaveConfigFolder()
-                    '    End If
-                    'End If
-
                     Dim thr2 As New Thread(AddressOf ThreadMinute)
                     thr2.Name = "ThreadMinute"
                     thr2.IsBackground = True
@@ -396,103 +351,46 @@ Namespace HoMIDom
                     ListThread.Add(thr2)
                 End If
 
-                '---- Actions à effectuer à minuit ----
-                If ladate.Hour = 0 And ladate.Minute = 0 And ladate.Second = 0 Then
-                    Dim thr3 As New Thread(AddressOf ThreadMinuit)
-                    thr3.Name = "ThreadMinuit"
+                '---- Actions à effectuer toutes les heures ----
+                If ladate.Minute = 59 And ladate.Second = 59 Then
+                    Dim thr3 As New Thread(AddressOf ThreadHour)
+                    thr3.Name = "ThreadHour"
                     thr3.IsBackground = True
                     thr3.Priority = ThreadPriority.Normal
                     thr3.Start()
                     ListThread.Add(thr3)
-                    'OLD
-                    'MAJ_HeuresSoleil()
-                    ''CleanLog(_MaxMonthLog)
-                    'VerifIsWeekEnd()
-                    'MaJSaint()
-                    ''affichage des timersectick si il y en a plus d'un
-                    'If table_TimerSecTickthread.Rows.Count > 1 Then
-                    '    Log(TypeLog.INFO, TypeSource.SERVEUR, "TimerSecTick", "Plusieurs Timers sont en cours (au lieu d'un seul) :")
-                    '    For Each thread As DataRow In table_TimerSecTickthread.Rows
-                    '        Log(TypeLog.INFO, TypeSource.SERVEUR, "TimerSecTick", " - " & thread("name") & " lancé à " & thread("datetime") & " - ")
-                    '    Next
-                    'End If
+                End If
+
+                '---- Actions à effectuer à minuit ----
+                If ladate.Hour = 0 And ladate.Minute = 0 And ladate.Second = 0 Then
+                    Dim thr4 As New Thread(AddressOf ThreadMinuit)
+                    thr4.Name = "ThreadMinuit"
+                    thr4.IsBackground = True
+                    thr4.Priority = ThreadPriority.Normal
+                    thr4.Start()
+                    ListThread.Add(thr4)
                 End If
 
                 '---- Actions à effectuer à 3h du mat (au cas où qu'à minuit non maj) ----
                 If ladate.Hour = 3 And ladate.Minute = 0 And ladate.Second = 0 Then
-                    Dim thr4 As New Thread(AddressOf Thread3h)
-                    thr4.Name = "Thread3h"
-                    thr4.IsBackground = True
-                    thr4.Priority = ThreadPriority.AboveNormal
-                    thr4.Start()
-                    ListThread.Add(thr4)
-                    'OLD
-                    'MAJ_HeuresSoleil()
-                    'VerifIsWeekEnd()
-                    'MaJSaint()
-                End If
-
-                '---- Actions à effectuer à midi ----
-                If ladate.Hour = 12 And ladate.Minute = 0 And ladate.Second = 0 Then
-                    Dim thr5 As New Thread(AddressOf ThreadMidi)
-                    thr5.Name = "ThreadMidi"
+                    Dim thr5 As New Thread(AddressOf Thread3h)
+                    thr5.Name = "Thread3h"
                     thr5.IsBackground = True
                     thr5.Priority = ThreadPriority.AboveNormal
                     thr5.Start()
                     ListThread.Add(thr5)
-                    'OLD
-                    'MAJ_HeuresSoleil()
                 End If
 
-                'suppresion de la table des threads
-                '    Try
-                '        '--- suppresion du thread de la liste des threads lancés ---
-                '        Dim tabletmp As DataRow()
-                '        SyncLock lock_table_TimerSecTickthread
-                '            tabletmp = table_TimerSecTickthread.Select("name = 'TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss") & "'")
-                '        End SyncLock
-                '        If tabletmp.GetLength(0) >= 1 Then
-                '            SyncLock lock_table_TimerSecTickthread
-                '                tabletmp(0).Delete()
-                '            End SyncLock
-                '        Else
-                '            Dim listethreads As String = ""
-                '            For Each thread As DataRow In table_TimerSecTickthread.Rows
-                '                listethreads += thread("name") & "-"
-                '            Next
-                '            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Thread non trouvé pour suppression : TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss") & " (liste: " & listethreads & ")")
-                '        End If
-                '    Catch ex As Exception
-                '        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception 1 : " & ex.ToString & " --> Erreur pendant la suppression du thread de la liste")
-                '    End Try
-                '    Else
-                '    Dim listethreads As String = ""
-                '    For Each thread As DataRow In table_TimerSecTickthread.Rows
-                '        listethreads += thread("name") & "-"
-                '    Next
-                '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Il y a déjà " & table_TimerSecTickthread.Rows.Count & " Threads en cours, TimerSick annulé (liste: " & listethreads & ")")
-                '    End If
-                'Catch ex As Exception
-                '    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception 2 : " & ex.ToString & " --> Exception donc suppression du thread de la liste")
+                '---- Actions à effectuer à midi ----
+                If ladate.Hour = 12 And ladate.Minute = 0 And ladate.Second = 0 Then
+                    Dim thr6 As New Thread(AddressOf ThreadMidi)
+                    thr6.Name = "ThreadMidi"
+                    thr6.IsBackground = True
+                    thr6.Priority = ThreadPriority.AboveNormal
+                    thr6.Start()
+                    ListThread.Add(thr6)
+                End If
 
-                '    'suppresion de la table des threads
-                '    Try
-                '        '--- suppresion du thread de la liste des threads lancés ---
-                '        Dim tabletmp As DataRow()
-                '        SyncLock lock_table_TimerSecTickthread
-                '            tabletmp = table_TimerSecTickthread.Select("name = 'TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss") & "'")
-                '        End SyncLock
-                '        If tabletmp.GetLength(0) >= 1 Then
-                '            SyncLock lock_table_TimerSecTickthread
-                '                tabletmp(0).Delete()
-                '            End SyncLock
-                '        Else
-                '            Dim listethreads As String = ""
-                '            For Each thread As DataRow In table_TimerSecTickthread.Rows
-                '                listethreads += thread("name") & "-"
-                '            Next
-                '            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Thread non trouvé pour suppression : TimerSecTick_" & ladate.ToString("yyyyMMddHHmmss") & " (liste: " & listethreads & ")")
-                '        End If
             Catch ex2 As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception 3 : " & ex2.ToString & " --> Erreur du thread TimerSecTick, suppression de tous les threads en cours")
 
@@ -512,11 +410,6 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Private Sub ThreadSecond()
             Try
-                Dim thr1 As New Thread(AddressOf VerifIsJour)
-                thr1.IsBackground = True
-                thr1.Name = "VerifIsJour"
-                thr1.Start()
-
                 Dim thr As New Thread(AddressOf VerifTimeDevice)
                 thr.IsBackground = True
                 thr.Name = "VerifTimeDevice"
@@ -541,6 +434,8 @@ Namespace HoMIDom
                 thr.IsBackground = True
                 thr.Name = "ThreadSaveConfig"
                 thr.Start()
+
+                SearchDeviceNoMaJ()
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ThreadMinute", "Exception: " & ex.ToString)
             End Try
@@ -552,9 +447,6 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Private Sub ThreadHour()
             Try
-
-                SearchDeviceNoMaJ()
-
                 Dim thr As New Thread(AddressOf ThreadSaveConfigFolder)
                 thr.IsBackground = True
                 thr.Priority = ThreadPriority.Lowest
@@ -571,24 +463,15 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Private Sub ThreadMinuit()
             Try
-                MAJ_HeuresSoleil()
-
                 Dim thr As New Thread(AddressOf MaJSaint)
                 thr.IsBackground = True
                 thr.Priority = ThreadPriority.Lowest
                 thr.Name = "ThreadMAJSaint"
                 thr.Start()
 
+                MAJ_HeuresSoleil()
                 CleanLog()
                 VerifIsWeekEnd()
-
-                'affichage des timersectick si il y en a plus d'un
-                'If table_TimerSecTickthread.Rows.Count > 1 Then
-                '    Log(TypeLog.INFO, TypeSource.SERVEUR, "TimerSecTick", "Plusieurs Timers sont en cours (au lieu d'un seul) :")
-                '    For Each thread As DataRow In table_TimerSecTickthread.Rows
-                '        Log(TypeLog.INFO, TypeSource.SERVEUR, "TimerSecTick", " - " & thread("name") & " lancé à " & thread("datetime") & " - ")
-                '    Next
-                'End If
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ThreadMinuit", "Exception: " & ex.ToString)
             End Try
@@ -600,14 +483,14 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         Private Sub Thread3h()
             Try
-                MAJ_HeuresSoleil()
-                VerifIsWeekEnd()
-
                 Dim thr As New Thread(AddressOf MaJSaint)
                 thr.IsBackground = True
                 thr.Priority = ThreadPriority.Lowest
                 thr.Name = "ThreadMAJSaint"
                 thr.Start()
+
+                MAJ_HeuresSoleil()
+                VerifIsWeekEnd()
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Thread3h", "Exception: " & ex.ToString)
             End Try
@@ -1573,12 +1456,9 @@ Namespace HoMIDom
 
                                         'Verifie si prob de MaJ
                                         If .LastChangeDuree > 0 Then
-                                            Dim X As Date = .LastChange
-                                            X.AddHours(CInt(.LastChangeDuree))
-                                            If X < Now Then
+                                            If DateTime.Compare(.LastChange.AddMinutes(CInt(.LastChangeDuree)), Now) < 0 Then
                                                 _DevicesNoMAJ.Add(.Name)
                                             End If
-                                            X = Nothing
                                         End If
 
                                         If String.IsNullOrEmpty(.ID) = False And String.IsNullOrEmpty(.Name) = False And String.IsNullOrEmpty(.Adresse1) = False And String.IsNullOrEmpty(.DriverId) = False Then
@@ -3706,7 +3586,8 @@ Namespace HoMIDom
                 'Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Adresse IP du serveur: " & System.Net.Dns.GetHostByName(My.Computer.Name).AddressList(0).ToString())
                 '_IPSOAP = System.Net.Dns.GetHostByName(My.Computer.Name).AddressList(0).ToString()
                 '_IPSOAP = System.Net.Dns.GetHostEntry(My.Computer.Name).AddressList(0).ToString()
-                _IPSOAP = Dns.GetHostEntry(Dns.GetHostName()).AddressList.Where(Function(a As IPAddress) Not a.IsIPv6LinkLocal AndAlso Not a.IsIPv6Multicast AndAlso Not a.IsIPv6SiteLocal).First().ToString()
+                '_IPSOAP = Dns.GetHostEntry(Dns.GetHostName()).AddressList.Where(Function(a As IPAddress) Not a.IsIPv6LinkLocal AndAlso Not a.IsIPv6Multicast AndAlso Not a.IsIPv6SiteLocal).First().ToString()
+                _IPSOAP = Dns.GetHostEntry(Dns.GetHostName()).AddressList.Where(Function(a As IPAddress) a.AddressFamily = Sockets.AddressFamily.InterNetwork).First().ToString()
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Adresse IP du serveur: " & _IPSOAP)
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Séparateur décimal CurrentCulture: '" & Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator & "'")
 
@@ -7029,12 +6910,9 @@ Namespace HoMIDom
 
                 For i As Integer = 0 To _ListDevices.Count - 1
                     If _ListDevices.Item(i).LastChangeDuree > 0 Then
-                        Dim X As Date = _ListDevices.Item(i).LastChange
-                        X.AddHours(CInt(_ListDevices.Item(i).LastChangeDuree))
-                        If X < Now Then
-                            _DevicesNoMAJ.Add(_ListDevices.Item(i).name)
+                        If DateTime.Compare(_ListDevices.Item(i).LastChange.AddMinutes(CInt(_ListDevices.Item(i).LastChangeDuree)), Now) < 0 Then
+                            _DevicesNoMAJ.Add(_ListDevices.Item(i).Name)
                         End If
-                        X = Nothing
                     End If
                 Next
             Catch ex As Exception
@@ -9484,7 +9362,7 @@ Namespace HoMIDom
                         End If
                     End If
                 Next
-
+                Return ""
 
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "StartLearning", "Erreur : " & ex.Message)

@@ -340,7 +340,8 @@ Class Window1
                 ClientUDP = New HoMIDom.HoMIDom.UDPClient(myService)
 
                 'ClientUDP.Connect("Application Admin", System.Net.Dns.GetHostEntry(IP).AddressList(0).ToString(), CInt(Port) - 1)
-                ClientUDP.Connect("Application Admin", System.Net.Dns.GetHostEntry(Dns.GetHostName()).AddressList.Where(Function(a As IPAddress) Not a.IsIPv6LinkLocal AndAlso Not a.IsIPv6Multicast AndAlso Not a.IsIPv6SiteLocal).First().ToString(), CInt(Port) - 1)
+                'ClientUDP.Connect("Application Admin", System.Net.Dns.GetHostEntry(Dns.GetHostName()).AddressList.Where(Function(a As IPAddress) Not a.IsIPv6LinkLocal AndAlso Not a.IsIPv6Multicast AndAlso Not a.IsIPv6SiteLocal).First().ToString(), CInt(Port) - 1)
+                ClientUDP.Connect("Application Admin", System.Net.Dns.GetHostEntry(Dns.GetHostName()).AddressList.Where(Function(a As IPAddress) a.AddressFamily = Sockets.AddressFamily.InterNetwork).First().ToString(), CInt(Port) - 1)
 
                 AddHandler ClientUDP.OnMessageReceive, AddressOf OnMessageReceiveUDP
 

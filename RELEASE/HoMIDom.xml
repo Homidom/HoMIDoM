@@ -595,6 +595,15 @@ HoMIDom
 	<param name="Id">ID du device</param>
 	<returns>Objet de type TemplateDevice, Nothing si non trouvé ou ID du serveur erroné</returns>
 	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnDeviceByDriver(System.String,System.String,System.Boolean)">
+	<summary>
+ Retourne une liste de device suivant le driver
+ </summary>
+	<param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+	<param name="DriverID">ID du driver</param>
+	<param name="Enable"></param>
+	<returns>List de device, Nothing si non trouvé ou ID du serveur erroné</returns>
+	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.ReturnDeviceByAdresse1TypeDriver(System.String,System.String,System.String,System.String,System.Boolean)">
 	<summary>
  Retourne une liste de device suivant l'addresse1 et/ou son type et/ou le driver
@@ -1091,6 +1100,16 @@ HoMIDom
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.StartLearning(System.String,System.String)">
 	<summary>Demander un apprentissage à un driver</summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.IHoMIDom.DriverTelecommandeSendCommand(System.String,System.String,System.Int32,System.Collections.Generic.List{System.String})">
+	<summary>
+ Execute une commande à un driver
+ </summary>
+	<param name="IdSrv"></param>
+	<param name="IdDriver"></param>
+	<param name="Type"></param>
+	<param name="Parametres"></param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.IHoMIDom.SaveTemplate(System.String,HoMIDom.HoMIDom.Telecommande.Template)">
@@ -1976,6 +1995,11 @@ HoMIDom
 </member><member name="M:HoMIDom.HoMIDom.Server.ListMethod(System.String)">
 	<summary>liste les méthodes d'un device depuis son ID</summary>
 	<param name="DeviceId"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:HoMIDom.HoMIDom.Server.ReturnDeviceByDriver(System.String,System.String,System.Boolean)">
+	<summary>Retourne une liste de device par son driver</summary>
+	<param name="DriverID"></param>
 	<returns></returns>
 	<remarks></remarks>
 </member><member name="M:HoMIDom.HoMIDom.Server.ReturnDeviceByAdresse1TypeDriver(System.String,System.String,System.String,System.String,System.Boolean)">
@@ -3097,7 +3121,7 @@ St Arnau [le reste de la chaîne a été tronqué]";.
 	<param name="idsrv"></param>
 	<returns></returns>
 	<remarks></remarks>
-</member><member name="M:HoMIDom.HoMIDom.Telecommande.Template.ExecuteCommand(System.String,System.String,HoMIDom.HoMIDom.Server)">
+</member><member name="M:HoMIDom.HoMIDom.Telecommande.Template.ExecuteCommand(System.String,System.String,HoMIDom.HoMIDom.IHoMIDom)">
 	<summary>
  Execute une commande suivant son nom
  </summary>
