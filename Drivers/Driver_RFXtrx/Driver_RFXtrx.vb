@@ -92,7 +92,7 @@ Imports System.Media
     Dim _PARAMMODE_16_arc As Integer = 1 '16 : ARC
     Dim _PARAMMODE_17_x10 As Integer = 1 '17 : X10 11111111
     Dim _PARAMMODE_18_blindst0 As Integer = 0 '18 : BlindsT0
-    Dim _PARAMMODE_19_rfu As Integer = 1 '19 : RFU
+    Dim _PARAMMODE_19_Imagintronix As Integer = 1 '19 : Imagintronix
     Dim _PARAMMODE_20_sx As Integer = 1 '20 : SX
     Dim _PARAMMODE_21_rsl As Integer = 1 '21 : RSL
     Dim _PARAMMODE_22_lighting4 As Integer = 1 '22 : LIGHTING4
@@ -104,6 +104,7 @@ Imports System.Media
 #End Region
 
 #Region "Variables Internes"
+
 
     Enum ICMD As Byte
         packetlength = 0
@@ -130,11 +131,13 @@ Imports System.Media
         cmdRESET = &H0 ' reset the receiver/transceiver
         cmdSTATUS = &H2 ' request firmware versions and configuration of the interface
         cmdSETMODE = &H3 ' set the configuration of the interface
-
         cmdSAVE = &H6 ' save receiving modes of the receiver/transceiver in non-volatile memory
+        cmdStartRec = &H7   'start RFXtrx receiver device
 
         cmd310 = &H50 ' select 310MHz in the 310/315 transceiver
         cmd315 = &H51 ' select 315MHz in the 310/315 transceiver
+        cmd433r = &H52 ' select 433.92MHz in the 433.92 receiver
+        cmd433 = &H53 ' select 433.92MHz in the 433.92 transceiver
         cmd800 = &H55 ' select 868.00MHz ASK in the 868 transceiver
         cmd800F = &H56 ' select 868.00MHz FSK in the 868 transceiver
         cmd830 = &H57 ' select 868.30MHz ASK in the 868 transceiver
@@ -159,13 +162,21 @@ Imports System.Media
         msg7 = 11
         msg8 = 12
         msg9 = 13
-        size = 13
+        msg10 = 14
+        msg11 = 15
+        msg12 = 16
+        msg13 = 17
+        msg14 = 18
+        msg15 = 19
+        msg16 = 20
+        size = 20
 
         pTypeInterfaceMessage = &H1
         sTypeInterfaceResponse = &H0
         sTypeUnknownRFYremote = &H1
         sTypeExtError = &H2
         sTypeRFYremoteList = &H3
+        sTypeRecStarted = &H7
         sTypeInterfaceWrongCommand = &HFF
 
         recType310 = &H50
@@ -182,7 +193,7 @@ Imports System.Media
         recType86895 = &H5B
 
         msg3_undec = &H80
-        msg3_RFU = &H40
+        msg3_IMAGINTRONIX = &H40
         msg3_SX = &H20
         msg3_RSL = &H10
         msg3_LIGHTING4 = &H8
@@ -207,6 +218,15 @@ Imports System.Media
         msg5_AC = &H4
         msg5_ARC = &H2
         msg5_X10 = &H1
+
+        msg6_RFU7 = &H80
+        msg6_RFU6 = &H40
+        msg6_RFU5 = &H20
+        msg6_RFU4 = &H10
+        msg6_RFU3 = &H8
+        msg6_RFU2 = &H4
+        msg6_RFU1 = &H2
+        msg6_KEELOQ = &H1
     End Enum
 
     Enum RXRESPONSE As Byte
@@ -253,6 +273,7 @@ Imports System.Media
         sTypeUfineoffset = &H12
         sTypeUrgb = &H13
         sTypeUrfy = &H14
+        sTypeUselectplus = &H15
     End Enum
 
     Enum LIGHTING1 As Byte
@@ -395,6 +416,7 @@ Imports System.Media
         sTypeAoke = &H7
         sTypeTRC02_2 = &H8
         sTypeEurodomest = &H9
+        sTypeLivoloAppliance = &HA
 
         sOff = 0
         sOn = 1
@@ -433,6 +455,13 @@ Imports System.Media
         sLivoloGang1Toggle = 1
         sLivoloGang2Toggle = 2   'dim+ for dimmer
         sLivoloGang3Toggle = 3   'dim- for dimmer
+        sLivoloGang4Toggle = 4
+        sLivoloGang5Toggle = 5
+        sLivoloGang6Toggle = 6
+        sLivoloGang7Toggle = 7
+        sLivoloGang8Toggle = 8
+        sLivoloGang9Toggle = 9
+        sLivoloGang10Toggle = 10
 
         sRGBoff = 0
         sRGBon = 1
@@ -474,7 +503,7 @@ Imports System.Media
         seqnbr = 3
         id1 = 4
         id2 = 5
-        sound = 6
+        sound = 6   'sound or id3
         filler = 7 'bits 3-0
         rssi = 7   'bits 7-4
         size = 7
@@ -483,6 +512,9 @@ Imports System.Media
         pTypeChime = &H16
         sTypeByronSX = &H0
         sTypeByronMP001 = &H1
+        sTypeSelectPlus = &H2 'SelectPlus200689101
+        sTypeRFU = &H3 'not used
+        sTypeEnvivo = &H4 'Envivo ENV-1348
 
         sSound0 = 1
         sSound1 = 3
@@ -566,6 +598,9 @@ Imports System.Media
         BlindsT5 = &H5    'Media Mount
         BlindsT6 = &H6    'DC106
         BlindsT7 = &H7    'Forest
+        BlindsT8 = &H8    'Chamberlain CS4330CN
+        BlindsT9 = &H9    'Sunpery
+        BlindsT10 = &HA   'Dolat
 
         sOpen = 0
         sClose = 1
@@ -577,6 +612,15 @@ Imports System.Media
         sChangeDirection = 7
         sLeft = 8
         sRight = 9
+        s9ChangeDirection = 6
+        s9ImA = 7
+        s9ImCenter = 8
+        s9ImB = 9
+        s9EraseCurrentCh = 10
+        s9EraseAllCh = 11
+        s10LearnMaster = 4
+        s10EraseCurrentCh = 5
+        s10ChangeDirection = 6
     End Enum
 
     Enum RFY As Byte
@@ -621,6 +665,8 @@ Imports System.Media
         s05SecDown = 16
         s2SecUP = 17
         s2SecDown = 18
+        sEnableSunWind = 19
+        sDisableSun = 20
     End Enum
 
     Enum SECURITY1 As Byte
@@ -632,12 +678,12 @@ Imports System.Media
         id2 = 5
         id3 = 6
         status = 7
-        battery_level = 8   'bits 3-0
         rssi = 8            'bits 7-4
+        battery_level = 8   'bits 3-0
         filler = 8
         size = 8
 
-        'Security
+        'Security1
         pTypeSecurity1 = &H20
         sTypeSecX10 = &H0
         sTypeSecX10M = &H1
@@ -679,6 +725,44 @@ Imports System.Media
         sStatusAlarmDelayedTamper = &H83
         sStatusMotionTamper = &H84
         sStatusNoMotionTamper = &H85
+    End Enum
+
+    Enum SECURITY2 As Byte
+        packetlength = 0
+        packettype = 1
+        subtype = 2
+        seqnbr = 3
+        id1 = 4
+        id2 = 5
+        id3 = 6
+        id4 = 7
+        id5 = 8
+        id6 = 9
+        id7 = 10
+        id8 = 11
+        id9 = 12
+        id10 = 13
+        id11 = 14
+        id12 = 15
+        id13 = 16
+        id14 = 17
+        id15 = 18
+        id16 = 19
+        id17 = 20
+        id18 = 21
+        id19 = 22
+        id20 = 23
+        id21 = 24
+        id22 = 25
+        id23 = 26
+        id24 = 27
+        rssi = 28           'bits 7-4
+        battery_level = 28  'bits 3-0
+        size = 28
+
+        'Security2 KeeLoq
+        pTypeSecurity2 = &H21
+        sTypeSec2Classic = &H0  'KeeLoq packet
     End Enum
 
     Enum CAMERA1 As Byte
@@ -799,6 +883,7 @@ Imports System.Media
         pTypeThermostat3 = &H42
         sTypeMertikG6RH4T1 = &H0  'Mertik G6R-H4T1
         sTypeMertikG6RH4TB = &H1  'Mertik G6R-H4TB
+        sTypeMertikG6RH4TD = &H2  'Mertik G6R-H4TD
 
         sOff = 0
         sOn = 1
@@ -809,6 +894,31 @@ Imports System.Media
         sRunDown = 5
         On2nd = 5
         sStop = 6
+    End Enum
+
+    Enum RADIATOR1 As Byte
+        packetlength = 0
+        packettype = 1
+        subtype = 2
+        seqnbr = 3
+        id1 = 4
+        id2 = 5
+        id3 = 6
+        id4 = 7
+        unitcode = 8
+        cmnd = 9
+        temperature = 10
+        tempPoint5 = 11
+        filler = 12 'bits 3-0
+        rssi = 12   'bits 7-4
+        size = 12
+
+        pTypeRadiator1 = &H48
+        sTypeSmartwares = &H0
+
+        sNight = 0
+        sDay = 1
+        sSetTemp = 2
     End Enum
 
     Enum BBQ As Byte
@@ -874,7 +984,7 @@ Imports System.Media
         sTypeTEMP4 = &H4  'RTHN318
         sTypeTEMP5 = &H5  'LaCrosse TX3
         sTypeTEMP6 = &H6  'TS15C
-        sTypeTEMP7 = &H7  'Viking 02811
+        sTypeTEMP7 = &H7  'Viking 02811/Proove TSS330,311346
         sTypeTEMP8 = &H8  'WS2300
         sTypeTEMP9 = &H9  'RUBiCSON
         sTypeTEMP10 = &HA   'TFA 30.3133
@@ -931,10 +1041,12 @@ Imports System.Media
         sTypeTH6 = &H6    'THGR918,THGRN228,THGN500
         sTypeTH7 = &H7    'TFA TS34C, Cresta
         sTypeTH8 = &H8    'Esic
-        sTypeTH9 = &H9    'viking 02038
+        sTypeTH9 = &H9    'viking 02038/Proove TSS320,311501
         sTypeTH10 = &HA    'Rubicson
         sTypeTH11 = &HB    'EW109
         sTypeTH12 = &HC    'Imagintronix soil sensor
+        sTypeTH13 = &HD    'Alecto WS1700
+        sTypeTH14 = &HE    'Alecto
     End Enum
 
     Enum BARO As Byte
@@ -991,6 +1103,7 @@ Imports System.Media
         sTypeRAIN4 = &H4   'UPM
         sTypeRAIN5 = &H5   'WS2300
         sTypeRAIN6 = &H6   'TX5
+        sTypeRAIN7 = &H7   'Alecto
     End Enum
 
     Enum WIND As Byte
@@ -1024,6 +1137,7 @@ Imports System.Media
         sTypeWIND4 = &H4   'TFA
         sTypeWIND5 = &H5   'UPM
         sTypeWIND6 = &H6   'WS2300
+        sTypeWIND7 = &H7   'Alecto WS4500
     End Enum
 
     Enum UV As Byte
@@ -1600,7 +1714,7 @@ Imports System.Media
                 _PARAMMODE_16_arc = _Parametres.Item(1).Valeur.Substring(15, 1)
                 _PARAMMODE_17_x10 = _Parametres.Item(1).Valeur.Substring(16, 1)
                 _PARAMMODE_18_blindst0 = _Parametres.Item(1).Valeur.Substring(17, 1)
-                _PARAMMODE_19_rfu = _Parametres.Item(1).Valeur.Substring(18, 1)
+                _PARAMMODE_19_Imagintronix = _Parametres.Item(1).Valeur.Substring(18, 1)
                 _PARAMMODE_20_sx = _Parametres.Item(1).Valeur.Substring(19, 1)
                 _PARAMMODE_21_rsl = _Parametres.Item(1).Valeur.Substring(20, 1)
                 _PARAMMODE_22_lighting4 = _Parametres.Item(1).Valeur.Substring(21, 1)
@@ -1627,7 +1741,7 @@ Imports System.Media
                 _Parametres.Item(16).Valeur = _PARAMMODE_16_arc
                 _Parametres.Item(17).Valeur = _PARAMMODE_17_x10
                 _Parametres.Item(18).Valeur = _PARAMMODE_18_blindst0
-                _Parametres.Item(19).Valeur = _PARAMMODE_19_rfu
+                _Parametres.Item(19).Valeur = _PARAMMODE_19_Imagintronix
                 _Parametres.Item(20).Valeur = _PARAMMODE_20_sx
                 _Parametres.Item(21).Valeur = _PARAMMODE_21_rsl
                 _Parametres.Item(22).Valeur = _PARAMMODE_22_lighting4
@@ -1656,7 +1770,7 @@ Imports System.Media
                 _Parametres.Item(16).Valeur = _PARAMMODE_16_arc
                 _Parametres.Item(17).Valeur = _PARAMMODE_17_x10
                 _Parametres.Item(18).Valeur = _PARAMMODE_18_blindst0
-                _Parametres.Item(19).Valeur = _PARAMMODE_19_rfu
+                _Parametres.Item(19).Valeur = _PARAMMODE_19_Imagintronix
                 _Parametres.Item(20).Valeur = _PARAMMODE_20_sx
                 _Parametres.Item(21).Valeur = _PARAMMODE_21_rsl
                 _Parametres.Item(22).Valeur = _PARAMMODE_22_lighting4
@@ -1685,7 +1799,7 @@ Imports System.Media
                 _PARAMMODE_16_arc = _Parametres.Item(16).Valeur
                 _PARAMMODE_17_x10 = _Parametres.Item(17).Valeur
                 _PARAMMODE_18_blindst0 = _Parametres.Item(18).Valeur
-                _PARAMMODE_19_rfu = _Parametres.Item(19).Valeur
+                _PARAMMODE_19_Imagintronix = _Parametres.Item(19).Valeur
                 _PARAMMODE_20_sx = _Parametres.Item(20).Valeur
                 _PARAMMODE_21_rsl = _Parametres.Item(21).Valeur
                 _PARAMMODE_22_lighting4 = _Parametres.Item(22).Valeur
@@ -1970,7 +2084,7 @@ Imports System.Media
             add_paramavance("Protocole ARC", "0=disable 1=enable", 1)
             add_paramavance("Protocole X10", "0=disable 1=enable", 1)
             add_paramavance("Protocole Blinds t0", "0=disable 1=enable", 0)
-            add_paramavance("Protocole RFU", "0=disable 1=enable", 0)
+            add_paramavance("Protocole Imagintronix", "0=disable 1=enable", 0)
             add_paramavance("Protocole SX", "0=disable 1=enable", 1)
             add_paramavance("Protocole RSL", "0=disable 1=enable", 1)
             add_paramavance("Protocole Lighting4", "0=disable 1=enable", 0)
@@ -2561,7 +2675,7 @@ Imports System.Media
                                 Case &H5B : messagelog &= "868.95MHz"
                             End Select
                             If (recbuf(ICMD.msg3) And IRESPONSE.msg3_undec) = 0 Then messagelog &= "Undec=off" Else messagelog &= "Undec=on"
-                            If (recbuf(ICMD.msg3) And IRESPONSE.msg3_RFU) = 0 Then messagelog &= ", RFU=off" Else messagelog &= ", RFU=on"
+                            If (recbuf(ICMD.msg3) And IRESPONSE.msg3_IMAGINTRONIX) = 0 Then messagelog &= ", Imagintronix=off" Else messagelog &= ", Imagintronix=on"
                             If (recbuf(ICMD.msg3) And IRESPONSE.msg3_SX) = 0 Then messagelog &= ", ByronSX=off" Else messagelog &= ", ByronSX=on"
                             If (recbuf(ICMD.msg3) And IRESPONSE.msg3_RSL) = 0 Then messagelog &= ", RSL=off" Else messagelog &= ", RSL=on"
                             If (recbuf(ICMD.msg3) And IRESPONSE.msg3_LIGHTING4) = 0 Then messagelog &= ", LIGHTING4=off" Else messagelog &= ", LIGHTING4=on"
@@ -2679,7 +2793,7 @@ Imports System.Media
                             If (recbuf(IRESPONSE.msg3) And IRESPONSE.msg3_LIGHTING4) <> 0 Then messagelog &= ", Lighting4=on" Else messagelog &= ", Lighting4=off"
                             If (recbuf(IRESPONSE.msg3) And IRESPONSE.msg3_RSL) <> 0 Then messagelog &= ", RSL=on" Else messagelog &= ", RSL=off"
                             If (recbuf(IRESPONSE.msg3) And IRESPONSE.msg3_SX) <> 0 Then messagelog &= ", Byron SX=on" Else messagelog &= ", Byron SX=off"
-                            If (recbuf(IRESPONSE.msg3) And IRESPONSE.msg3_RFU) <> 0 Then messagelog &= ", RFU=on" Else messagelog &= ", RFU=off"
+                            If (recbuf(IRESPONSE.msg3) And IRESPONSE.msg3_IMAGINTRONIX) <> 0 Then messagelog &= ", Imagintronix=on" Else messagelog &= ", Imagintronix=off"
 
                             WriteLog(messagelog)
                             'Case ICMD.ENABLEALL : WriteLog("Réponse à : Enable All RF")
@@ -3196,6 +3310,16 @@ Imports System.Media
                     If recbuf(CHIME.id2) And &H40 = &H40 Then valeur = "Switch 5=Off" Else valeur = "Switch 5=On"
                     If recbuf(CHIME.id2) And &H10 = &H10 Then valeur = "Switch 6=Off" Else valeur = "Switch 6=On"
                     WriteRetour(adresse, "", valeur)
+                Case CHIME.sTypeSelectPlus
+                    'WriteMessage("subtype       = SelectPlus")
+                    'WriteMessage("ID            = " & VB.Right("0" & Hex(recbuf(CHIME.id1)), 2) & VB.Right("0" & Hex(recbuf(CHIME.id2)), 2) & VB.Right("0" & Hex(recbuf(CHIME.sound)), 2))
+                    adresse = VB.Right("0" & Hex(recbuf(CHIME.id1)), 2) & VB.Right("0" & Hex(recbuf(CHIME.id2)), 2) & VB.Right("0" & Hex(recbuf(CHIME.sound)), 2)
+                    valeur = "CHIME"
+                Case CHIME.sTypeEnvivo
+                    'WriteMessage("subtype       = Envivo ENV-1348")
+                    'WriteMessage("ID            = " & VB.Right("0" & Hex(recbuf(CHIME.id1)), 2) & VB.Right("0" & Hex(recbuf(CHIME.id2)), 2))
+                    adresse = VB.Right("0" & Hex(recbuf(CHIME.id1)), 2) & VB.Right("0" & Hex(recbuf(CHIME.id2)), 2)
+                    valeur = "CHIME"
                 Case Else : WriteLog("ERR: decode_Chime : Unknown Sub type for Packet type=" & Hex(recbuf(CHIME.packettype)) & ": " & Hex(recbuf(CHIME.subtype)))
             End Select
             If _DEBUG Then WriteLog("DBG: Signal Level : " & (recbuf(CHIME.rssi) >> 4).ToString & " (Adresse:" & adresse & ")")
@@ -4865,7 +4989,7 @@ Imports System.Media
                 kar(ICMD.msg4) = IRESPONSE.msg4_BlindsT0
                 kar(ICMD.msg5) = 0
             Else
-                If _PARAMMODE_19_rfu = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RFU
+                If _PARAMMODE_19_Imagintronix = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_IMAGINTRONIX
                 If _PARAMMODE_20_sx = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_SX
                 If _PARAMMODE_21_rsl = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_RSL
                 If _PARAMMODE_22_lighting4 = 1 Then kar(ICMD.msg3) = kar(ICMD.msg3) Or IRESPONSE.msg3_LIGHTING4
@@ -5327,6 +5451,7 @@ Imports System.Media
             WriteLog("ERR: Send Lighting2 Exception : " & ex.ToString)
         End Try
     End Sub
+
 
     ''' <summary>Gestion du protocole EMW100 / LIGHTWAVERF</summary>
     ''' <param name="adresse">Adresse du type FFFFFF-1</param>
