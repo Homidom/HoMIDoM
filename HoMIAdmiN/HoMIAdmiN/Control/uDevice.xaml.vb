@@ -54,6 +54,7 @@ Partial Public Class uDevice
                 StkValueMINMAX.Visibility = Windows.Visibility.Collapsed
                 StkValueDefaultPrecision.Visibility = Windows.Visibility.Collapsed
                 StkValueCorrectionFormatage.Visibility = Windows.Visibility.Collapsed
+                ChKSolo.Visibility = Windows.Visibility.Collapsed
 
                 'si c'est un nouveau device créé depuis un autocreateddevice alors on pré-rempli certains champs
                 If NewDevice IsNot Nothing Then
@@ -1263,8 +1264,13 @@ Partial Public Class uDevice
                 If _Driver IsNot Nothing Then
                     If String.IsNullOrEmpty(_Driver.ID) = False Then
                         Me.Cursor = Cursors.Wait
-                        TxtAdresse1.Text = myService.StartLearning(IdSrv, _Driver.ID)
+                        Dim retourlearn As String = myService.StartLearning(IdSrv, _Driver.ID)
                         Me.Cursor = Nothing
+                        If retourlearn = "" Or retourlearn.Substring(0, 4) = "ERR:" Then
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur durant l'apprentissage: " & retourlearn, "Erreur Admin", "BtnLearn1_Click")
+                        Else
+                            TxtAdresse1.Text = retourlearn
+                        End If
                     Else
                         AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Apprendre1: Driver non affecté, vérifier qu'un driver à bien été associé au composant et que celui-ci a été créé", "Erreur Admin", "BtnLearn1_Click")
                     End If
@@ -1285,8 +1291,13 @@ Partial Public Class uDevice
                 If _Driver IsNot Nothing Then
                     If String.IsNullOrEmpty(_Driver.ID) = False Then
                         Me.Cursor = Cursors.Wait
-                        TxtAdresse2.Text = myService.StartLearning(IdSrv, _Driver.ID)
+                        Dim retourlearn As String = myService.StartLearning(IdSrv, _Driver.ID)
                         Me.Cursor = Nothing
+                        If retourlearn = "" Or retourlearn.Substring(0, 4) = "ERR:" Then
+                            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur durant l'apprentissage: " & retourlearn, "Erreur Admin", "BtnLearn2_Click")
+                        Else
+                            TxtAdresse2.Text = retourlearn
+                        End If
                     Else
                         AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Apprendre1: Driver non affecté, vérifier qu'un driver à bien été associé au composant et que celui-ci a été créé", "Erreur Admin", "BtnLearn2_Click")
                     End If

@@ -9355,12 +9355,16 @@ Namespace HoMIDom
                 For i As Integer = 0 To _ListDrivers.Count - 1
                     If _ListDrivers.Item(i).ID = DriverId Then
                         Dim x As Object = _ListDrivers.Item(i)
-                        retour = x.LearnCode()
-                        Log(TypeLog.INFO, TypeSource.SERVEUR, "SERVEUR", "StartLearning: " & retour)
-                        If String.IsNullOrEmpty(retour) Then
-                            Return "Erreur lors de l'apprentissage du code (retour vide), veuillez consulter les logs du serveur pour en savoir plus"
+                        If x.GetType().GetMethod("LearnCode") = Nothing Then
+                            Return "ERR: Ce driver ne possede de fonction LearnCode"
                         Else
-                            Return retour
+                            retour = x.LearnCode()
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "SERVEUR", "StartLearning: " & retour)
+                            If String.IsNullOrEmpty(retour) Then
+                                Return "ERR: Erreur lors de l'apprentissage du code (retour vide), veuillez consulter les logs du serveur pour en savoir plus"
+                            Else
+                                Return retour
+                            End If
                         End If
                     End If
                 Next
