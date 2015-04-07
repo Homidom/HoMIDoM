@@ -240,7 +240,7 @@
         </StackPanel>
         
         <DockPanel Name="DKpanel">
-            <TabControl Name="Tabcontrol1" MaxWidth="230" DockPanel.Dock="Left" Width="230" Background="black" SelectedIndex="-1">
+            <TabControl Name="Tabcontrol1" MaxWidth="250" DockPanel.Dock="Left" Width="250" Background="black" SelectedIndex="-1">
                 <TabControl.Resources>
                     <Style TargetType="{x:Type TabItem}">
                         <Setter Property="BorderThickness" Value="0"/>
@@ -265,7 +265,7 @@
                                         <Border Name="Border" Margin="1,1,1,0" Background="black" BorderBrush="gray" BorderThickness="2,2,2,0" CornerRadius="5,5,0,0" >
                                             <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center" ContentSource="Header" Margin="0" RecognizesAccessKey="True">
                                                 <ContentPresenter.LayoutTransform>
-                                                    <RotateTransform Angle="287" />
+                                                    <RotateTransform Angle="292" />
                                                 </ContentPresenter.LayoutTransform>
                                             </ContentPresenter>
                                         </Border>
