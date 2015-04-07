@@ -6994,6 +6994,11 @@ Namespace HoMIDom
             End Try
         End Sub
 
+        ''' <summary>
+        ''' Retoune la position du device dans une des zones sinon "-1"
+        ''' </summary>
+        ''' <param name="IdDevice"></param>
+        ''' <remarks></remarks>
         Private Function DeviceInZone(ByVal IdDevice As Integer) As Integer
             Try
                 Dim retour As Integer = -1
@@ -7575,7 +7580,6 @@ Namespace HoMIDom
             End Try
         End Function
 
-
         ''' <summary>Retourne un device par son ID</summary>
         ''' <param name="DeviceId"></param>
         ''' <returns></returns>
@@ -7873,7 +7877,6 @@ Namespace HoMIDom
             End Try
         End Function
 
-
         ''' <summary>Retourne une liste de device par son Adresse1 et/ou type et/ou son driver, ex: "A1" "TEMPERATURE" "RFXCOM_RECEIVER"</summary>
         ''' <param name="DeviceAdresse"></param>
         ''' <param name="DeviceType"></param>
@@ -7991,7 +7994,6 @@ Namespace HoMIDom
                 Return Nothing
             End Try
         End Function
-
 
         ''' <summary>Permet d'exécuter une commande Sub d'un Device</summary>
         ''' <param name="DeviceId"></param>
