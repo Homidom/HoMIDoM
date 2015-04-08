@@ -8358,9 +8358,10 @@ Namespace HoMIDom
                 If x IsNot Nothing Then
                     If x.ListElement.Count > 0 Then
                         For i As Integer = 0 To x.ListElement.Count - 1
-                            'Dim z As TemplateDevice = ReturnDeviceById(IdSrv, x.ListElement.Item(i).ElementID)
-                            'If z IsNot Nothing Then
-                            y.Add(x.ListElement.Item(i).ElementID)
+                            'on verifie si c'est un device (ou une zone ou une macro)
+                            For j As Integer = 0 To _ListDevices.Count - 1
+                                If _ListDevices.Item(j).ID = x.ListElement.Item(i).ElementID Then y.Add(x.ListElement.Item(i).ElementID)
+                            Next
                         Next
                     End If
                 End If
