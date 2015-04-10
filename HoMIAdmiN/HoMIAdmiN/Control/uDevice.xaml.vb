@@ -788,14 +788,35 @@ Partial Public Class uDevice
 
             'on cré le dictionnaire parametre à passer à savedevice
             Dim Proprietes As New Dictionary(Of String, String)
+            'recuperation, verification et correction des valeurs pour LAMPERGBW
             If CbType.Text = "LAMPERGBW" Then
+                If IsNumeric(TxtRGBWred.Text) = False Or (TxtRGBWred.Text < 0 Or TxtRGBWred.Text > 255) Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le champ RGBW Rouge doit être un Nombre compris entre 0 et 255", "Erreur", "")
+                    Exit Sub
+                End If
+                If IsNumeric(TxtRGBWgreen.Text) = False Or (TxtRGBWgreen.Text < 0 Or TxtRGBWgreen.Text > 255) Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le champ RGBW green doit être un Nombre compris entre 0 et 255", "Erreur", "")
+                    Exit Sub
+                End If
+                If IsNumeric(TxtRGBWblue.Text) = False Or (TxtRGBWblue.Text < 0 Or TxtRGBWblue.Text > 255) Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le champ RGBW blue doit être un Nombre compris entre 0 et 255", "Erreur", "")
+                    Exit Sub
+                End If
+                If IsNumeric(TxtRGBWwhite.Text) = False Or (TxtRGBWwhite.Text < 0 Or TxtRGBWwhite.Text > 255) Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le champ RGBW white doit être un Nombre compris entre 0 et 255", "Erreur", "")
+                    Exit Sub
+                End If
+                If IsNumeric(TxtRGBWspeed.Text) = False Or (TxtRGBWspeed.Text < 0 Or TxtRGBWspeed.Text > 100) Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le champ RGBW Speed doit être un Nombre compris entre 0 et 100", "Erreur", "")
+                    Exit Sub
+                End If
                 Proprietes.Add("red", TxtRGBWred.Text)
-                Proprietes.Add("red", TxtRGBWgreen.Text)
-                Proprietes.Add("red", TxtRGBWblue.Text)
-                Proprietes.Add("red", TxtRGBWwhite.Text)
-                Proprietes.Add("red", TxtRGBWtemperature.Text)
-                Proprietes.Add("red", TxtRGBWspeed.Text)
-                Proprietes.Add("red", TxtRGBWoptionnal.Text)
+                Proprietes.Add("green", TxtRGBWgreen.Text)
+                Proprietes.Add("blue", TxtRGBWblue.Text)
+                Proprietes.Add("white", TxtRGBWwhite.Text)
+                Proprietes.Add("temperature", TxtRGBWtemperature.Text)
+                Proprietes.Add("speed", TxtRGBWspeed.Text)
+                Proprietes.Add("optionnal", TxtRGBWoptionnal.Text)
             End If
 
 
@@ -815,12 +836,12 @@ Partial Public Class uDevice
                 '    _modele = x.Modele
                 'End If
                 If _Action = EAction.Modifier Then
-                    If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar)
+                    If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
                 Else
-                    retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar)
+                    retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
                 End If
             Else
-                retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar)
+                retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
             End If
 
             If retour = "98" Then
@@ -962,6 +983,39 @@ Partial Public Class uDevice
                 End If
             End If
 
+            'on cré le dictionnaire parametre à passer à savedevice
+            Dim Proprietes As New Dictionary(Of String, String)
+            'recuperation, verification et correction des valeurs pour LAMPERGBW
+            If CbType.Text = "LAMPERGBW" Then
+                If IsNumeric(TxtRGBWred.Text) = False Or (TxtRGBWred.Text < 0 Or TxtRGBWred.Text > 255) Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le champ RGBW Rouge doit être un Nombre compris entre 0 et 255", "Erreur", "")
+                    Exit Sub
+                End If
+                If IsNumeric(TxtRGBWgreen.Text) = False Or (TxtRGBWgreen.Text < 0 Or TxtRGBWgreen.Text > 255) Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le champ RGBW green doit être un Nombre compris entre 0 et 255", "Erreur", "")
+                    Exit Sub
+                End If
+                If IsNumeric(TxtRGBWblue.Text) = False Or (TxtRGBWblue.Text < 0 Or TxtRGBWblue.Text > 255) Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le champ RGBW blue doit être un Nombre compris entre 0 et 255", "Erreur", "")
+                    Exit Sub
+                End If
+                If IsNumeric(TxtRGBWwhite.Text) = False Or (TxtRGBWwhite.Text < 0 Or TxtRGBWwhite.Text > 255) Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le champ RGBW white doit être un Nombre compris entre 0 et 255", "Erreur", "")
+                    Exit Sub
+                End If
+                If IsNumeric(TxtRGBWspeed.Text) = False Or (TxtRGBWspeed.Text < 0 Or TxtRGBWspeed.Text > 100) Then
+                    AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le champ RGBW Speed doit être un Nombre compris entre 0 et 100", "Erreur", "")
+                    Exit Sub
+                End If
+                Proprietes.Add("red", TxtRGBWred.Text)
+                Proprietes.Add("green", TxtRGBWgreen.Text)
+                Proprietes.Add("blue", TxtRGBWblue.Text)
+                Proprietes.Add("white", TxtRGBWwhite.Text)
+                Proprietes.Add("temperature", TxtRGBWtemperature.Text)
+                Proprietes.Add("speed", TxtRGBWspeed.Text)
+                Proprietes.Add("optionnal", TxtRGBWoptionnal.Text)
+            End If
+
             'on sauvegarde le composant
             If CbType.Text = "MULTIMEDIA" Then
                 If CBModele.SelectedItem IsNot Nothing Then
@@ -971,12 +1025,12 @@ Partial Public Class uDevice
                     Exit Sub
                 End If
                 If _Action = EAction.Modifier Then
-                    If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar)
+                    If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
                 Else
-                    retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar)
+                    retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
                 End If
             Else
-                retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar)
+                retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
             End If
             If retour = "98" Then
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du device: " & TxtNom.Text & " existe déjà impossible de l'enregister", "ERREUR", "")
