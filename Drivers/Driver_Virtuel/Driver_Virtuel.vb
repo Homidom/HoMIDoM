@@ -618,6 +618,7 @@ Imports HoMIDom.HoMIDom
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.FREEBOX)
             _DeviceSupport.Add(ListeDevices.LAMPE)
+            _DeviceSupport.Add(ListeDevices.LAMPERGBW)
             _DeviceSupport.Add(ListeDevices.SWITCH)
             _DeviceSupport.Add(ListeDevices.APPAREIL)
             _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN)

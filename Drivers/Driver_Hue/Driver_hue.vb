@@ -751,6 +751,7 @@ Imports Q42.HueApi
 
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.LAMPE)
+            _DeviceSupport.Add(ListeDevices.LAMPERGBW)
 
             'Parametres avancés
             'add_paramavance("nom", "Description", valeupardefaut)
