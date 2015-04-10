@@ -71,7 +71,7 @@ Namespace HoMIDom
         Dim _blue As Integer = 0 '0-255 (LAMPE RGBW)
         Dim _white As Integer = 0 '0-255 (LAMPE RGBW)
         Dim _temperature As Integer = 0 ' (LAMPE RGBW) use for HUE 0=Warm, 1=cold 
-        Dim _speed As Integer = "" ' (LAMPE RGBW) 0-100 setting of speed change of colours/ON/OFF... 
+        Dim _speed As Integer = 0 ' (LAMPE RGBW) 0-100 setting of speed change of colours/ON/OFF... 
         Dim _optionnal As String = "" ' (LAMPE RGBW) optionnal depending on driver
 
         ''' <summary>
