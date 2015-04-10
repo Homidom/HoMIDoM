@@ -448,7 +448,7 @@ Partial Public Class uConfigServer
                 ' <item>le salon<tag>out.action.device="device";out.action.id_device="fc8a97ae-feaa-4f04-85e8-66721c163dd2";out.action.ttsDevice="le salon";</tag></item>
                 Dim listedevices = myService.GetAllDevices(IdSrv)
                 For Each Device In listedevices
-                    If Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.LAMPE Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.VOLET Then
+                    If Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.LAMPE Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.LAMPERGBW Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.APPAREIL Or Device.Type = HoMIDom.HoMIDom.Device.ListeDevices.VOLET Then
                         Print(FreeF, "<item>" & Device.Name & "<tag>out.action.device=""device"";out.action.id_device=""" & Device.ID & """;out.action.ttsDevice=""" & Device.Name & """;</tag></item>" & vbCrLf)
                     End If
                 Next

@@ -66,6 +66,13 @@ Namespace HoMIDom
         Dim _AllValue As Boolean
         Dim _ListCommandPlus As New List(Of Device.DeviceCommande)
         Dim _CountHisto As Double = 0
+        Dim _red As Integer = 0 '0-255 (LAMPE RGBW)
+        Dim _green As Integer = 0 '0-255 (LAMPE RGBW)
+        Dim _blue As Integer = 0 '0-255 (LAMPE RGBW)
+        Dim _white As Integer = 0 '0-255 (LAMPE RGBW)
+        Dim _temperature As Integer = 0 ' (LAMPE RGBW) use for HUE 0=Warm, 1=cold 
+        Dim _speed As Integer = "" ' (LAMPE RGBW) 0-100 setting of speed change of colours/ON/OFF... 
+        Dim _optionnal As String = "" ' (LAMPE RGBW) optionnal depending on driver
 
         ''' <summary>
         ''' Nom du device
@@ -874,6 +881,122 @@ Namespace HoMIDom
         End Property
 
         ''' <summary>
+        ''' LAMPERGBW RED Value of color 0-255
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property red() As Integer
+            Get
+                Return _red
+            End Get
+            Set(ByVal value As Integer)
+                If value > 255 Then value = 255
+                If value < 0 Then value = 0
+                _red = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' LAMPERGBW GREEN Value of color 0-255
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property green() As Integer
+            Get
+                Return _green
+            End Get
+            Set(ByVal value As Integer)
+                If value > 255 Then value = 255
+                If value < 0 Then value = 0
+                _green = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' LAMPERGBW BLUE Value of color 0-255
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property blue() As Integer
+            Get
+                Return _blue
+            End Get
+            Set(ByVal value As Integer)
+                If value > 255 Then value = 255
+                If value < 0 Then value = 0
+                _blue = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' LAMPERGBW WHITE Value of color 0-255
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property white() As Integer
+            Get
+                Return _white
+            End Get
+            Set(ByVal value As Integer)
+                If value > 255 Then value = 255
+                If value < 0 Then value = 0
+                _white = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' LAMPERGBW TEMPERATURE for HUE
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property temperature() As Integer
+            Get
+                Return _temperature
+            End Get
+            Set(ByVal value As Integer)
+                _temperature = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' LAMPERGBW speed change of colours/ON/OFF 0-100
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property speed() As Integer
+            Get
+                Return _speed
+            End Get
+            Set(ByVal value As Integer)
+                If value > 100 Then value = 100
+                If value < 0 Then value = 0
+                _speed = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' optionnal value, use depending on driver
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property optionnal() As String
+            Get
+                Return _optionnal
+            End Get
+            Set(ByVal value As String)
+                _optionnal = value
+            End Set
+        End Property
+
+
+        ''' <summary>
         ''' Retourne la liste des commandes avancées
         ''' </summary>
         ''' <value></value>
@@ -887,6 +1010,7 @@ Namespace HoMIDom
                 _ListCommandPlus = value
             End Set
         End Property
+
 
         ''' <summary>
         ''' Liste des noms des commandes IR (device IR)
@@ -905,5 +1029,7 @@ Namespace HoMIDom
         ''' </summary>
         ''' <remarks></remarks>
         Public VariablesOfDevice As New Dictionary(Of String, String)
+
+
     End Class
 End Namespace

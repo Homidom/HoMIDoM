@@ -758,7 +758,7 @@ Public Class Driver_ZWave
                     Else
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", " Composant Classique ")
                     End If
-                    If Objet.Type = "LAMPE" Or Objet.Type = "APPAREIL" Or Objet.Type = "SWITCH" Then
+                    If Objet.Type = "LAMPE" Or Objet.Type = "LAMPERGBW" Or Objet.Type = "APPAREIL" Or Objet.Type = "SWITCH" Then
                         texteCommande = UCase(Commande)
 
                         Select Case UCase(Commande)
@@ -924,6 +924,7 @@ Public Class Driver_ZWave
                 _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE.ToString)
                 _DeviceSupport.Add(ListeDevices.HUMIDITE.ToString)
                 _DeviceSupport.Add(ListeDevices.LAMPE.ToString)
+                _DeviceSupport.Add(ListeDevices.LAMPERGBW.ToString)
                 _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
                 _DeviceSupport.Add(ListeDevices.TELECOMMANDE.ToString)
                 _DeviceSupport.Add(ListeDevices.TEMPERATURE.ToString)

@@ -211,6 +211,8 @@ Namespace HoMIDom
                             Case "HUMIDITE"
                             Case "LAMPE"
                                 _CalculVariation = True
+                            Case "LAMPERGBW"
+                                _CalculVariation = True
                             Case "METEO"
                             Case "MULTIMEDIA"
                             Case "PLUIECOURANT"
@@ -1322,6 +1324,11 @@ Namespace HoMIDom
                                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                                             _Dev = o
                                             o = Nothing
+                                        Case "LAMPERGBW"
+                                            Dim o As New Device.LAMPERGBW(Me)
+                                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                                            _Dev = o
+                                            o = Nothing
                                         Case "METEO"
                                             Dim o As New Device.METEO(Me)
                                             AddHandler o.DeviceChanged, AddressOf DeviceChange
@@ -1436,6 +1443,7 @@ Namespace HoMIDom
                                         Or _Dev.Type = "GENERIQUEVALUE" _
                                         Or _Dev.Type = "HUMIDITE" _
                                         Or _Dev.Type = "LAMPE" _
+                                        Or _Dev.Type = "LAMPERGBW" _
                                         Or _Dev.Type = "PLUIECOURANT" _
                                         Or _Dev.Type = "PLUIETOTAL" _
                                         Or _Dev.Type = "TEMPERATURE" _
@@ -1453,6 +1461,16 @@ Namespace HoMIDom
                                         End If
                                         If (Not list.Item(j).Attributes.GetNamedItem("value") Is Nothing) Then .Value = Regex.Replace(list.Item(j).Attributes.GetNamedItem("value").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                                         If (Not list.Item(j).Attributes.GetNamedItem("valuelast") Is Nothing) Then .ValueLast = Regex.Replace(list.Item(j).Attributes.GetNamedItem("valuelast").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+
+                                        If _Dev.Type = "LAMPERGBW" Then
+                                            If (Not list.Item(j).Attributes.GetNamedItem("red") Is Nothing) Then .red = list.Item(j).Attributes.GetNamedItem("red").Value
+                                            If (Not list.Item(j).Attributes.GetNamedItem("green") Is Nothing) Then .green = list.Item(j).Attributes.GetNamedItem("green").Value
+                                            If (Not list.Item(j).Attributes.GetNamedItem("blue") Is Nothing) Then .blue = list.Item(j).Attributes.GetNamedItem("blue").Value
+                                            If (Not list.Item(j).Attributes.GetNamedItem("white") Is Nothing) Then .white = list.Item(j).Attributes.GetNamedItem("white").Value
+                                            If (Not list.Item(j).Attributes.GetNamedItem("temperature") Is Nothing) Then .temperature = list.Item(j).Attributes.GetNamedItem("temperature").Value
+                                            If (Not list.Item(j).Attributes.GetNamedItem("speed") Is Nothing) Then .speed = list.Item(j).Attributes.GetNamedItem("speed").Value
+                                            If (Not list.Item(j).Attributes.GetNamedItem("optionnal") Is Nothing) Then .Formatage = list.Item(j).Attributes.GetNamedItem("optionnal").Value
+                                        End If
 
                                         'Verifie si prob de MaJ
                                         If .LastChangeDuree > 0 Then
@@ -2331,6 +2349,7 @@ Namespace HoMIDom
                         Or _ListDevices.Item(i).Type = "GENERIQUEVALUE" _
                         Or _ListDevices.Item(i).Type = "HUMIDITE" _
                         Or _ListDevices.Item(i).Type = "LAMPE" _
+                        Or _ListDevices.Item(i).Type = "LAMPERGBW" _
                         Or _ListDevices.Item(i).Type = "PLUIECOURANT" _
                         Or _ListDevices.Item(i).Type = "PLUIETOTAL" _
                         Or _ListDevices.Item(i).Type = "TEMPERATURE" _
@@ -2359,6 +2378,29 @@ Namespace HoMIDom
                             writer.WriteEndAttribute()
                             writer.WriteStartAttribute("valuelast")
                             writer.WriteValue(_ListDevices.Item(i).valuelast)
+                            writer.WriteEndAttribute()
+                        End If
+                        If _ListDevices.Item(i).Type = "LAMPERGBW" Then
+                            writer.WriteStartAttribute("red")
+                            writer.WriteValue(_ListDevices.Item(i).red)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("green")
+                            writer.WriteValue(_ListDevices.Item(i).green)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("blue")
+                            writer.WriteValue(_ListDevices.Item(i).blue)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("white")
+                            writer.WriteValue(_ListDevices.Item(i).white)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("temperature")
+                            writer.WriteValue(_ListDevices.Item(i).temperature)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("speed")
+                            writer.WriteValue(_ListDevices.Item(i).speed)
+                            writer.WriteEndAttribute()
+                            writer.WriteStartAttribute("optionnal")
+                            writer.WriteValue(_ListDevices.Item(i).optionnal)
                             writer.WriteEndAttribute()
                         End If
 
@@ -2856,6 +2898,11 @@ Namespace HoMIDom
                             o = Nothing
                         Case "LAMPE"
                             Dim o As Device.LAMPE
+                            o = _dev
+                            RemoveHandler o.DeviceChanged, AddressOf DeviceChange
+                            o = Nothing
+                        Case "LAMPERGBW"
+                            Dim o As Device.LAMPERGBW
                             o = _dev
                             RemoveHandler o.DeviceChanged, AddressOf DeviceChange
                             o = Nothing
@@ -7054,6 +7101,7 @@ Namespace HoMIDom
                             Case "GENERIQUEVALUE" : .Type = Device.ListeDevices.GENERIQUEVALUE
                             Case "HUMIDITE" : .Type = Device.ListeDevices.HUMIDITE
                             Case "LAMPE" : .Type = Device.ListeDevices.LAMPE
+                            Case "LAMPERGBW" : .Type = Device.ListeDevices.LAMPERGBW
                             Case "METEO" : .Type = Device.ListeDevices.METEO
                             Case "MULTIMEDIA" : .Type = Device.ListeDevices.MULTIMEDIA
                             Case "PLUIECOURANT" : .Type = Device.ListeDevices.PLUIECOURANT
@@ -7120,6 +7168,14 @@ Namespace HoMIDom
                             Case Device.ListeDevices.ENERGIETOTALE
                             Case Device.ListeDevices.GENERIQUEVALUE
                             Case Device.ListeDevices.HUMIDITE
+                            Case Device.ListeDevices.LAMPERGBW
+                                .red = _ListDevices.Item(i).red
+                                .green = _ListDevices.Item(i).green
+                                .blue = _ListDevices.Item(i).blue
+                                .white = _ListDevices.Item(i).white
+                                .temperature = _ListDevices.Item(i).temperature
+                                .speed = _ListDevices.Item(i).speed
+                                .optionnal = _ListDevices.Item(i).optionnal
                             Case Device.ListeDevices.PLUIECOURANT
                             Case Device.ListeDevices.PLUIETOTAL
                             Case Device.ListeDevices.TEMPERATURE
@@ -7218,7 +7274,7 @@ Namespace HoMIDom
         ''' <param name="valuedef"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0, Optional ByVal lastEtat As Boolean = True, Optional ByVal correction As String = "0", Optional ByVal formatage As String = "", Optional ByVal precision As Double = 0, Optional ByVal valuemax As Double = 9999, Optional ByVal valuemin As Double = -9999, Optional ByVal valuedef As Double = 0, Optional ByVal Commandes As List(Of Telecommande.Commandes) = Nothing, Optional ByVal Unit As String = "", Optional ByVal Puissance As Integer = 0, Optional ByVal AllValue As Boolean = False, Optional Variables As Dictionary(Of String, String) = Nothing) As String Implements IHoMIDom.SaveDevice
+        Public Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0, Optional ByVal lastEtat As Boolean = True, Optional ByVal correction As String = "0", Optional ByVal formatage As String = "", Optional ByVal precision As Double = 0, Optional ByVal valuemax As Double = 9999, Optional ByVal valuemin As Double = -9999, Optional ByVal valuedef As Double = 0, Optional ByVal Commandes As List(Of Telecommande.Commandes) = Nothing, Optional ByVal Unit As String = "", Optional ByVal Puissance As Integer = 0, Optional ByVal AllValue As Boolean = False, Optional ByVal Variables As Dictionary(Of String, String) = Nothing, Optional ByVal Proprietes As Dictionary(Of String, String) = Nothing) As String Implements IHoMIDom.SaveDevice
             Try
                 'Vérification de l'Id du serveur pour accepter le traitement
                 If VerifIdSrv(IdSrv) = False Then
@@ -7294,6 +7350,10 @@ Namespace HoMIDom
                             MyNewObj = o
                         Case "LAMPE"
                             Dim o As New Device.LAMPE(Me)
+                            AddHandler o.DeviceChanged, AddressOf DeviceChange
+                            MyNewObj = o
+                        Case "LAMPERGBW"
+                            Dim o As New Device.LAMPERGBW(Me)
                             AddHandler o.DeviceChanged, AddressOf DeviceChange
                             MyNewObj = o
                         Case "CONTACT"
@@ -7388,6 +7448,22 @@ Namespace HoMIDom
                                 .ValueMin = valuemin
                                 .ValueDef = valuedef
                             End With
+                        Case "LAMPERGBW"
+                            With MyNewObj
+                                .Correction = correction
+                                .Formatage = formatage
+                                .Precision = precision
+                                .ValueMax = valuemax
+                                .ValueMin = valuemin
+                                .ValueDef = valuedef
+                                If Proprietes.ContainsKey("red") Then .red = Proprietes("red") Else .red = 0
+                                If Proprietes.ContainsKey("green") Then .green = Proprietes("green") Else .green = 0
+                                If Proprietes.ContainsKey("blue") Then .blue = Proprietes("blue") Else .blue = 0
+                                If Proprietes.ContainsKey("white") Then .white = Proprietes("white") Else .white = 0
+                                If Proprietes.ContainsKey("temperature") Then .temperature = Proprietes("temperature") Else .temperature = 0
+                                If Proprietes.ContainsKey("speed") Then .speed = Proprietes("speed") Else .speed = 0
+                                If Proprietes.ContainsKey("optionnal") Then .optionnal = Proprietes("optionnal") Else .optionnal = 0
+                            End With
                     End Select
 
                     _ListDevices.Add(MyNewObj)
@@ -7448,6 +7524,20 @@ Namespace HoMIDom
                                 _ListDevices.Item(i).ValueMax = valuemax
                                 _ListDevices.Item(i).ValueMin = valuemin
                                 _ListDevices.Item(i).ValueDef = valuedef
+                            ElseIf _ListDevices.Item(i).Type = "LAMPERGBW" Then
+                                _ListDevices.Item(i).Correction = correction
+                                _ListDevices.Item(i).Formatage = formatage
+                                _ListDevices.Item(i).Precision = precision
+                                _ListDevices.Item(i).ValueMax = valuemax
+                                _ListDevices.Item(i).ValueMin = valuemin
+                                _ListDevices.Item(i).ValueDef = valuedef
+                                If Proprietes.ContainsKey("red") Then _ListDevices.Item(i).red = Proprietes("red") Else _ListDevices.Item(i).red = 0
+                                If Proprietes.ContainsKey("green") Then _ListDevices.Item(i).green = Proprietes("green") Else _ListDevices.Item(i).green = 0
+                                If Proprietes.ContainsKey("blue") Then _ListDevices.Item(i).blue = Proprietes("blue") Else _ListDevices.Item(i).blue = 0
+                                If Proprietes.ContainsKey("white") Then _ListDevices.Item(i).white = Proprietes("white") Else _ListDevices.Item(i).white = 0
+                                If Proprietes.ContainsKey("temperature") Then _ListDevices.Item(i).temperature = Proprietes("temperature") Else _ListDevices.Item(i).temperature = 0
+                                If Proprietes.ContainsKey("speed") Then _ListDevices.Item(i).speed = Proprietes("speed") Else _ListDevices.Item(i).speed = 0
+                                If Proprietes.ContainsKey("optionnal") Then _ListDevices.Item(i).optionnal = Proprietes("optionnal") Else _ListDevices.Item(i).optionnal = 0
                             End If
                             SaveRealTime()
                             Exit For 'on a trouvé le device, on arrete donc de le chercher.
@@ -7619,6 +7709,7 @@ Namespace HoMIDom
                             Case "GENERIQUEVALUE" : retour.Type = Device.ListeDevices.GENERIQUEVALUE
                             Case "HUMIDITE" : retour.Type = Device.ListeDevices.HUMIDITE
                             Case "LAMPE" : retour.Type = Device.ListeDevices.LAMPE
+                            Case "LAMPERGBW" : retour.Type = Device.ListeDevices.LAMPERGBW
                             Case "METEO" : retour.Type = Device.ListeDevices.METEO
                             Case "MULTIMEDIA" : retour.Type = Device.ListeDevices.MULTIMEDIA
                             Case "PLUIECOURANT" : retour.Type = Device.ListeDevices.PLUIECOURANT
@@ -7720,6 +7811,14 @@ Namespace HoMIDom
                             Case Device.ListeDevices.GENERIQUEVALUE
                             Case Device.ListeDevices.HUMIDITE
                             Case Device.ListeDevices.LAMPE
+                            Case Device.ListeDevices.LAMPERGBW
+                                retour.red = _ListDevices.Item(i).red
+                                retour.green = _ListDevices.Item(i).green
+                                retour.blue = _ListDevices.Item(i).blue
+                                retour.white = _ListDevices.Item(i).white
+                                retour.temperature = _ListDevices.Item(i).temperature
+                                retour.speed = _ListDevices.Item(i).speed
+                                retour.optionnal = _ListDevices.Item(i).optionnal
                             Case Device.ListeDevices.PLUIECOURANT
                             Case Device.ListeDevices.PLUIETOTAL
                             Case Device.ListeDevices.TEMPERATURE
@@ -7966,6 +8065,7 @@ Namespace HoMIDom
                                     Case "GENERIQUEVALUE" : TypeDevice = Device.ListeDevices.GENERIQUEVALUE
                                     Case "HUMIDITE" : TypeDevice = Device.ListeDevices.HUMIDITE
                                     Case "LAMPE" : TypeDevice = Device.ListeDevices.LAMPE
+                                    Case "LAMPERGBW" : TypeDevice = Device.ListeDevices.LAMPERGBW
                                     Case "METEO" : TypeDevice = Device.ListeDevices.METEO
                                     Case "MULTIMEDIA" : TypeDevice = Device.ListeDevices.MULTIMEDIA
                                     Case "PLUIECOURANT" : TypeDevice = Device.ListeDevices.PLUIECOURANT
@@ -9243,7 +9343,7 @@ Namespace HoMIDom
         ''' </summary>
         ''' <returns>0 si ok, sinon message d'erreur</returns>
         ''' <remarks></remarks>
-        Public Function CreateNewTemplate(Template As Telecommande.Template) As String Implements IHoMIDom.CreateNewTemplate
+        Public Function CreateNewTemplate(ByVal Template As Telecommande.Template) As String Implements IHoMIDom.CreateNewTemplate
             Try
                 Dim MyPath As String = _MonRepertoire & "\templates\"
                 Dim _Fichier As String = MyPath & Template.Name & ".xml"
@@ -9313,7 +9413,7 @@ Namespace HoMIDom
         ''' </summary>
         ''' <returns>Liste de commandes</returns>
         ''' <remarks></remarks>
-        Public Function ReadTemplate(Name As String) As List(Of Telecommande.Commandes)
+        Public Function ReadTemplate(ByVal Name As String) As List(Of Telecommande.Commandes)
             Try
                 Dim _list As New List(Of Telecommande.Commandes)
 
@@ -9384,7 +9484,7 @@ Namespace HoMIDom
         ''' <param name="Template">Nom du template</param>
         ''' <returns>O si ok sinon message d'erreur</returns>
         ''' <remarks></remarks>
-        Public Function SaveTemplate(ByVal IdSrv As String, Template As Telecommande.Template) As String Implements IHoMIDom.SaveTemplate
+        Public Function SaveTemplate(ByVal IdSrv As String, ByVal Template As Telecommande.Template) As String Implements IHoMIDom.SaveTemplate
             Try
                 If VerifIdSrv(IdSrv) = False Then
                     Return 99
@@ -9428,7 +9528,7 @@ Namespace HoMIDom
         ''' <param name="Template">Nom du template</param>
         ''' <returns>O si ok sinon message d'erreur</returns>
         ''' <remarks></remarks>
-        Public Function DeleteTemplate(ByVal IdSrv As String, Template As Telecommande.Template) As String Implements IHoMIDom.DeleteTemplate
+        Public Function DeleteTemplate(ByVal IdSrv As String, ByVal Template As Telecommande.Template) As String Implements IHoMIDom.DeleteTemplate
             Try
                 If VerifIdSrv(IdSrv) = False Then
                     Return 99
@@ -9457,7 +9557,7 @@ Namespace HoMIDom
         ''' <param name="Template"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function EffaceTemplateGraphic(Template As Telecommande.Template) As String
+        Public Function EffaceTemplateGraphic(ByVal Template As Telecommande.Template) As String
             Try
                 Template.GraphicTemplate = Nothing
 
@@ -9474,7 +9574,7 @@ Namespace HoMIDom
         ''' <param name="Template"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function CreateDefautTemplateGrafic(Template As Telecommande.Template) As Telecommande.Template
+        Public Function CreateDefautTemplateGrafic(ByVal Template As Telecommande.Template) As Telecommande.Template
             Try
                 Dim _NewTemplate As Telecommande.Template = Template
 
@@ -9649,7 +9749,7 @@ Namespace HoMIDom
             End Try
         End Function
 
-        Public Function DriverTelecommandeSendCommand(IdSrv As String, IdDriver As String, Type As Integer, Parametres As List(Of String)) As String Implements IHoMIDom.DriverTelecommandeSendCommand
+        Public Function DriverTelecommandeSendCommand(ByVal IdSrv As String, ByVal IdDriver As String, ByVal Type As Integer, ByVal Parametres As List(Of String)) As String Implements IHoMIDom.DriverTelecommandeSendCommand
             Try
                 Dim _driver As Object = Nothing
                 _driver = ReturnDrvById(IdSrv, IdDriver)
@@ -9676,7 +9776,7 @@ Namespace HoMIDom
         ''' <param name="IdSrv">Id du serveur</param>
         ''' <returns>le fichier sous format text si ok sinon message d'erreur commençant par ERREUR</returns>
         ''' <remarks></remarks>
-        Public Function ExportTemplateMultimedia(ByVal IdSrv As String, Template As Telecommande.Template) As String Implements IHoMIDom.ExportTemplateMultimedia
+        Public Function ExportTemplateMultimedia(ByVal IdSrv As String, ByVal Template As Telecommande.Template) As String Implements IHoMIDom.ExportTemplateMultimedia
             Try
                 If VerifIdSrv(IdSrv) = False Then
                     Return 99
@@ -9697,7 +9797,7 @@ Namespace HoMIDom
         ''' </summary>
         ''' <returns>"0" si ok sinon message d'erreur</returns>
         ''' <remarks></remarks>
-        Public Function ImportTemplateMultimedia(ByVal IdSrv As String, Template As Telecommande.Template) As String Implements IHoMIDom.ImportTemplateMultimedia
+        Public Function ImportTemplateMultimedia(ByVal IdSrv As String, ByVal Template As Telecommande.Template) As String Implements IHoMIDom.ImportTemplateMultimedia
             Try
                 If VerifIdSrv(IdSrv) = False Then
                     Return "L'Id du serveur est incorrect!"

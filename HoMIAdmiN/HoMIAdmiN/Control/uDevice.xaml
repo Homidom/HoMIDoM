@@ -99,7 +99,37 @@
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtFormatage" HorizontalAlignment="Left" Width="214.5" />
                             </StackPanel>
                     </StackPanel>
-                    
+                        <StackPanel Orientation="Horizontal" Name="StkRGBW">
+                            <StackPanel Name="StkRGBW_red">
+                                <Label Foreground="White" Name="LabelRouge" Width="50">Rouge:</Label>
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtRGBWred" Width="50" ToolTip="Composante RGBW Rouge de 0 à 255">0</TextBox>
+                            </StackPanel>
+                            <StackPanel Name="StkRGBW_green" Margin="10,0,0,0">
+                                <Label Foreground="White" Name="LabelVert" Width="50">Vert:</Label>
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtRGBWgreen" Width="50" ToolTip="Composante RGBW Vert de 0 à 255">0</TextBox>
+                            </StackPanel>
+                            <StackPanel Name="StkRGBW_blue" Margin="10,0,0,0">
+                                <Label Foreground="White" Name="Labelblue" Width="50">Bleu:</Label>
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtRGBWblue" Width="50" ToolTip="Composante RGBW Bleu de 0 à 255">0</TextBox>
+                            </StackPanel>
+                            <StackPanel Name="StkRGBW_white" Margin="10,0,0,0">
+                                <Label Foreground="White" Name="LabelWhite" Width="50">Blanc:</Label>
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtRGBWwhite" Width="50" ToolTip="Composante RGBW Blanche de 0 à 255">0</TextBox>
+                            </StackPanel>
+                            <StackPanel Name="StkRGBW_temperature" Margin="10,0,0,0">
+                                <Label Foreground="White" Name="LabelTemperature" Width="50">Temp:</Label>
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtRGBWtemperature" Width="50" ToolTip="temperature de la couleur de type entier">0</TextBox>
+                            </StackPanel>
+                            <StackPanel Name="StkRGBW_speed" Margin="10,0,0,0">
+                                <Label Foreground="White" Name="LabelSpeed" Width="50">Vitesse:</Label>
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtRGBWspeed" Width="50" ToolTip="Vitesse de changement d'etat de la lampe 0-100">0</TextBox>
+                            </StackPanel>
+                            <StackPanel Name="StkRGBW_optionnal" Margin="10,0,0,0">
+                                <Label Foreground="White" Name="LabelOptionnal" Width="50">Option:</Label>
+                                <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtRGBWoptionnal" Width="50" ToolTip="Optionnel de type string"></TextBox>
+                            </StackPanel>
+                        </StackPanel>
+
                         <StackPanel Orientation="Horizontal" >
                              <StackPanel HorizontalAlignment="Left" Margin="0,7,0,0">
                                 <Label Content="Zones:" Foreground="White" />

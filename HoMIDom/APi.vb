@@ -84,6 +84,8 @@ Namespace HoMIDom
                         _Myobjet = New Device.HUMIDITE(Nothing)
                     Case HoMIDom.Device.ListeDevices.LAMPE.ToString
                         _Myobjet = New Device.LAMPE(Nothing)
+                    Case HoMIDom.Device.ListeDevices.LAMPERGBW.ToString
+                        _Myobjet = New Device.LAMPERGBW(Nothing)
                     Case HoMIDom.Device.ListeDevices.METEO.ToString
                         _Myobjet = New Device.METEO(Nothing)
                     Case HoMIDom.Device.ListeDevices.MULTIMEDIA.ToString
@@ -160,6 +162,8 @@ Namespace HoMIDom
                         _Myobjet = New Device.HUMIDITE(Nothing)
                     Case HoMIDom.Device.ListeDevices.LAMPE.ToString
                         _Myobjet = New Device.LAMPE(Nothing)
+                    Case HoMIDom.Device.ListeDevices.LAMPERGBW.ToString
+                        _Myobjet = New Device.LAMPERGBW(Nothing)
                     Case HoMIDom.Device.ListeDevices.METEO.ToString
                         _Myobjet = New Device.METEO(Nothing)
                     Case HoMIDom.Device.ListeDevices.MULTIMEDIA.ToString

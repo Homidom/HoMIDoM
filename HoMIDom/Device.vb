@@ -158,6 +158,12 @@ Namespace HoMIDom
             ''' </summary>
             ''' <remarks></remarks>
             VOLET = 27
+            ''' <summary>
+            ''' Module de type lampe RGBW avec variation
+            ''' </summary>
+            ''' <remarks></remarks>
+            LAMPERGBW = 28
+
         End Enum
 
         <Serializable()> Public Class DeviceCommande
@@ -1931,6 +1937,139 @@ Namespace HoMIDom
                 _Unit = "%"
                 AddHandler MyTimer.Elapsed, AddressOf Read
             End Sub
+
+            'ON
+            Public Sub [ON]()
+                If _Enable = False Then Exit Sub
+                _Driver.Write(Me, "ON")
+            End Sub
+
+            'OFF
+            Public Sub OFF()
+                If _Enable = False Then Exit Sub
+                Driver.Write(Me, "OFF")
+            End Sub
+
+            'Toggle
+            Public Sub Toggle()
+                If _Enable = False Then Exit Sub
+                If _Value > 0 Then
+                    Driver.Write(Me, "OFF")
+                    _Value = 0
+                Else
+                    Driver.Write(Me, "ON")
+                    _Value = 100
+                End If
+            End Sub
+
+            'DIM
+            Public Sub [DIM](ByVal Variation As Integer)
+                If _Enable = False Then Exit Sub
+
+                If Variation < 0 Then
+                    Variation = 0
+                ElseIf Variation > 100 Then
+                    Variation = 100
+                End If
+
+                Driver.Write(Me, "DIM", Variation)
+            End Sub
+
+        End Class
+
+        <Serializable()> Class LAMPERGBW
+            Inherits DeviceGenerique_ValueInt
+            'Value : brightness As Integer '0-100 %
+
+            Dim _red As Integer = 0 '0-255
+            Dim _green As Integer = 0 '0-255
+            Dim _blue As Integer = 0 '0-255
+            Dim _white As Integer = 0 '0-255
+            Dim _temperature As Integer = 0 'use for HUE 0=Warm, 1=cold 
+            Dim _speed As Integer = "" '0-100 setting of speed change of colours/ON/OFF... 
+            Dim _optionnal As String = "" 'optionnal depending on driver
+
+            'Creation du device
+            Public Sub New(ByVal Server As Server)
+                _Server = Server
+                _Type = "LAMPERGBW"
+                _Unit = "%"
+                AddHandler MyTimer.Elapsed, AddressOf Read
+            End Sub
+
+            'RED Value of color 0-255
+            Public Property red() As Integer
+                Get
+                    Return _red
+                End Get
+                Set(ByVal value As Integer)
+                    If value > 255 Then value = 255
+                    If value < 0 Then value = 0
+                    _red = value
+                End Set
+            End Property
+            'GREEN Value of color 0-255
+            Public Property green() As Integer
+                Get
+                    Return _green
+                End Get
+                Set(ByVal value As Integer)
+                    If value > 255 Then value = 255
+                    If value < 0 Then value = 0
+                    _green = value
+                End Set
+            End Property
+            'BLUE Value of color 0-255
+            Public Property blue() As Integer
+                Get
+                    Return _blue
+                End Get
+                Set(ByVal value As Integer)
+                    If value > 255 Then value = 255
+                    If value < 0 Then value = 0
+                    _blue = value
+                End Set
+            End Property
+            'WHITE Value of color 0-255
+            Public Property white() As Integer
+                Get
+                    Return _white
+                End Get
+                Set(ByVal value As Integer)
+                    If value > 255 Then value = 255
+                    If value < 0 Then value = 0
+                    _white = value
+                End Set
+            End Property
+            'Temperature value (use for Hue)
+            Public Property temperature() As Integer
+                Get
+                    Return _temperature
+                End Get
+                Set(ByVal value As Integer)
+                    _temperature = value
+                End Set
+            End Property
+            'speed change of colours/ON/OFF 0-100
+            Public Property speed() As Integer
+                Get
+                    Return _speed
+                End Get
+                Set(ByVal value As Integer)
+                    If value > 100 Then value = 100
+                    If value < 0 Then value = 0
+                    _speed = value
+                End Set
+            End Property
+            'optionnal value, use depending on driver
+            Public Property optionnal() As String
+                Get
+                    Return _optionnal
+                End Get
+                Set(ByVal value As String)
+                    _optionnal = value
+                End Set
+            End Property
 
             'ON
             Public Sub [ON]()

@@ -54,6 +54,7 @@ Partial Public Class uDevice
                 StkValueMINMAX.Visibility = Windows.Visibility.Collapsed
                 StkValueDefaultPrecision.Visibility = Windows.Visibility.Collapsed
                 StkValueCorrectionFormatage.Visibility = Windows.Visibility.Collapsed
+                StkRGBW.Visibility = Windows.Visibility.Collapsed
                 ChKSolo.Visibility = Windows.Visibility.Collapsed
 
                 'si c'est un nouveau device créé depuis un autocreateddevice alors on pré-rempli certains champs
@@ -142,6 +143,20 @@ Partial Public Class uDevice
                     Else : StkValueCorrectionFormatage.Visibility = Windows.Visibility.Collapsed
                     End If
 
+                    'gestion des champs des composants LAMPERGBW
+                    If x.Type = ListeDevices.LAMPERGBW Then
+                        StkRGBW.Visibility = Windows.Visibility.Visible
+                        TxtRGBWred.Text = x.red
+                        TxtRGBWgreen.Text = x.green
+                        TxtRGBWblue.Text = x.blue
+                        TxtRGBWwhite.Text = x.white
+                        TxtRGBWtemperature.Text = x.temperature
+                        TxtRGBWspeed.Text = x.speed
+                        TxtRGBWoptionnal.Text = x.optionnal
+                    Else : StkRGBW.Visibility = Windows.Visibility.Collapsed
+                    End If
+
+
                     BtnTest.Visibility = Windows.Visibility.Visible
                     StkModel.Visibility = Visibility.Visible
                     If x.Type = ListeDevices.MULTIMEDIA Then
@@ -212,7 +227,7 @@ Partial Public Class uDevice
                     stkpopup = Nothing
                     BtnHisto.ToolTip = tl
                 End If
-            End If
+                End If
 
             'Liste toutes les zones dans la liste
             Dim _listezone = myService.GetAllZones(IdSrv)
@@ -498,6 +513,7 @@ Partial Public Class uDevice
                     Or CbType.Text = "GENERIQUEVALUE" _
                     Or CbType.Text = "HUMIDITE" _
                     Or CbType.Text = "LAMPE" _
+                    Or CbType.Text = "LAMPERGBW" _
                     Or CbType.Text = "PLUIECOURANT" _
                     Or CbType.Text = "PLUIETOTAL" _
                     Or CbType.Text = "TEMPERATURE" _
@@ -510,8 +526,9 @@ Partial Public Class uDevice
                     StkValueDefaultPrecision.Visibility = Windows.Visibility.Visible
                     StkValueCorrectionFormatage.Visibility = Windows.Visibility.Visible
 
+
                     'gestion des champs valuemin/max/defaut suivant le type
-                    If CbType.Text = "HUMIDITE" Or CbType.Text = "LAMPE" Or CbType.Text = "VOLET" Then
+                    If CbType.Text = "HUMIDITE" Or CbType.Text = "LAMPE" Or CbType.Text = "LAMPERGBW" Or CbType.Text = "VOLET" Then
                         TxtValueMin.Text = "0"
                         TxtValueMax.Text = "100"
                         TxtValDef.Text = "0"
@@ -540,10 +557,22 @@ Partial Public Class uDevice
                         TxtCorrection.Text = "0"
                         TxtPrecision.Text = "0"
                     End If
+
+                    If CbType.Text = "LAMPERGBW" Then
+                        StkRGBW.Visibility = Windows.Visibility.Visible
+                        TxtRGBWred.Text = 0
+                        TxtRGBWgreen.Text = 0
+                        TxtRGBWblue.Text = 0
+                        TxtRGBWwhite.Text = 0
+                        TxtRGBWtemperature.Text = 0
+                        TxtRGBWspeed.Text = 0
+                        TxtRGBWoptionnal.Text = ""
+                    End If
                 Else
                     StkValueMINMAX.Visibility = Windows.Visibility.Collapsed
                     StkValueDefaultPrecision.Visibility = Windows.Visibility.Collapsed
                     StkValueCorrectionFormatage.Visibility = Windows.Visibility.Collapsed
+                    StkRGBW.Visibility = Windows.Visibility.Collapsed
                 End If
 
                 'Gestion AllValue et LastEtat par défaut
@@ -757,6 +786,19 @@ Partial Public Class uDevice
                 End If
             End If
 
+            'on cré le dictionnaire parametre à passer à savedevice
+            Dim Proprietes As New Dictionary(Of String, String)
+            If CbType.Text = "LAMPERGBW" Then
+                Proprietes.Add("red", TxtRGBWred.Text)
+                Proprietes.Add("red", TxtRGBWgreen.Text)
+                Proprietes.Add("red", TxtRGBWblue.Text)
+                Proprietes.Add("red", TxtRGBWwhite.Text)
+                Proprietes.Add("red", TxtRGBWtemperature.Text)
+                Proprietes.Add("red", TxtRGBWspeed.Text)
+                Proprietes.Add("red", TxtRGBWoptionnal.Text)
+            End If
+
+
             'on sauvegarde le composant
             If CbType.Text = "MULTIMEDIA" Then
                 If CBModele.SelectedItem IsNot Nothing Then
@@ -858,6 +900,7 @@ Partial Public Class uDevice
                 Or CbType.Text = "GENERIQUEVALUE" _
                 Or CbType.Text = "HUMIDITE" _
                 Or CbType.Text = "LAMPE" _
+                Or CbType.Text = "LAMPERGBW" _
                 Or CbType.Text = "PLUIECOURANT" _
                 Or CbType.Text = "PLUIETOTAL" _
                 Or CbType.Text = "TEMPERATURE" _
