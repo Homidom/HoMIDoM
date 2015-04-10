@@ -1155,6 +1155,13 @@ Imports System.Threading
                     Return ("Port " & port_name & "  non ouvert")
             End Select
         Catch ex As Exception
+            'on ferme la connexion en cas de plantage
+            Try
+                ATport.DiscardInBuffer()
+                ATport.DiscardOutBuffer()
+                ATport.Close()
+            Catch ex3 As Exception
+            End Try
             Return ("ERR: Port COM non ouvert" & ex.Message)
         End Try
 

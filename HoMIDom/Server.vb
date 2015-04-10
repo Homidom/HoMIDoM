@@ -1646,7 +1646,8 @@ Namespace HoMIDom
                                             Case "id" : x.ID = list.Item(i).Attributes.Item(j1).Value
                                             Case "nom" : x.Nom = list.Item(i).Attributes.Item(j1).Value
                                             Case "enable" : x.Enable = list.Item(i).Attributes.Item(j1).Value
-                                            Case "description" : If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Description = list.Item(0).Attributes.Item(j1).Value
+                                                'Case "description" : If list.Item(i).Attributes.Item(j1).Value <> Nothing Then x.Description = list.Item(0).Attributes.Item(j1).Value
+                                            Case "description" : x.Description = list.Item(0).Attributes.Item(j1).Value
                                             Case Else : Log(TypeLog.INFO, TypeSource.SERVEUR, "LoadConfig", " -> Un attribut correspondant à la macro est inconnu: nom:" & list.Item(i).Attributes.Item(j1).Name & " Valeur: " & list.Item(0).Attributes.Item(j1).Value)
                                         End Select
                                     Next
