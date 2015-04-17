@@ -869,7 +869,25 @@ Imports Q42.HueApi
                 Exit Sub
             End If
             If (listedevices.Count = 0) Then
-                gen.SaveDevice(_IdSrv, "", "Hue" + device.Name, device.ID.ToString(), True, False, _ID, "GENERIQUESTRING", 0, device.State.Hue.ToString(), "", device.State.ColorTemperature.ToString(), "Devices et Valeurs recuperées du Bridge Hue", 0, False, "0", "", 0, 9999, -9999, 0.0, Nothing, "", 0, True)
+                Dim Propriete_hue As New Dictionary(Of String, String)
+                'get value
+                'Propriete_hue("red")
+                'Propriete_hue("green")
+                'Propriete_hue("blue")
+                'Propriete_hue("white")
+                'Propriete_hue("temperature")
+                'Propriete_hue("speed") 
+                'Propriete_hue("optionnal")
+                'SetValue
+                Propriete_hue.Add("red", 0)
+                Propriete_hue.Add("green", 0)
+                Propriete_hue.Add("blue", 0)
+                Propriete_hue.Add("white", 0)
+                Propriete_hue.Add("temperature", 153)
+                Propriete_hue.Add("speed", 0)
+                Propriete_hue.Add("optionnal", "")
+
+                gen.SaveDevice(_IdSrv, "", "Hue" + device.Name, device.ID.ToString(), True, False, _ID, "GENERIQUESTRING", 0, device.State.Hue.ToString(), "", device.State.ColorTemperature.ToString(), "Devices et Valeurs recuperées du Bridge Hue", 0, False, "0", "", 0, 9999, -9999, 0.0, Nothing, "", 0, True, Nothing, Propriete_hue)
 
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Driver " & Me.Nom & " démarré")
 
