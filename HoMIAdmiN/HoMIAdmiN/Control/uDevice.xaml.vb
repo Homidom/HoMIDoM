@@ -6,7 +6,6 @@ Imports System.Threading
 Imports System.Text.RegularExpressions
 Imports System.ComponentModel
 
-
 Partial Public Class uDevice
 
     '--- Variables ------------------
@@ -106,7 +105,7 @@ Partial Public Class uDevice
                     End If
                     CbType.SelectedValue = x.Type.ToString
                     CbType.IsEnabled = False
-                    CbType.Foreground = Brushes.Black
+                    CbType.Foreground = System.Windows.Media.Brushes.Black
                     TxtAdresse1.Text = x.Adresse1
                     'CbAdresse1.Text = x.Adresse1
                     TxtAdresse2.Text = x.Adresse2
@@ -190,7 +189,7 @@ Partial Public Class uDevice
                         CbDriver.IsEditable = False
                         CbDriver.IsReadOnly = True
                         CbDriver.IsEnabled = False
-                        CbDriver.Foreground = Brushes.Black
+                        CbDriver.Foreground = System.Windows.Media.Brushes.Black
                         ChkEnable.Visibility = Windows.Visibility.Collapsed
                         ChKSolo.Visibility = Windows.Visibility.Collapsed
                         StkAdr1.Visibility = Windows.Visibility.Collapsed
@@ -1409,3 +1408,4 @@ Partial Public Class uDevice
         End Try
     End Sub
 End Class
+
