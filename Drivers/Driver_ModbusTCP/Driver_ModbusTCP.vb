@@ -64,7 +64,13 @@ Imports System.Net.Sockets
     Private rcvIX As Boolean = False
 
     Private rID As UShort
-    Private MemID As UShort
+    Private wID As UShort
+    Private MemrID As UShort
+    Private MemwID As UShort
+
+    Private MemAdrWrite As Integer
+
+    Private FirstStart As Boolean = True
 
     Private adressReadMW As Integer
     Private longReadMW As Integer
@@ -80,10 +86,13 @@ Imports System.Net.Sockets
     Private nbsendIW As Integer
     Private nbsendMX As Integer
 
-    Private dataMdbMW() As UInt16
-    Private dataMdbIW() As UInt16
-    Private dataMdbMX() As Boolean
-    Private dataMdbIX() As Boolean
+    Private dataMdbRMW() As UInt16
+    Private dataMdbRIW() As UInt16
+    Private dataMdbRMX() As Boolean
+    Private dataMdbRIX() As Boolean
+
+    Private dataMdbWMW() As UInt16
+    Private dataMdbWMX() As Boolean
 
     Dim str_to_bool As New Dictionary(Of String, Integer)
 
@@ -336,7 +345,7 @@ Imports System.Net.Sockets
                     If Value < adressReadIW Then
 
                     End If
-                    
+
 
                 Case "ADRESSE2" 'Adresse Ecriture 
                     If adressWriteMX + Value > 20479 Then
@@ -369,7 +378,7 @@ Imports System.Net.Sockets
     Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
         Dim retour As String = ""
         'récupération des paramétres avancés
-       
+
         'ouverture du port suivant le Port Com ou IP
         Try
             If _IP_TCP <> "" And _Port_TCP <> "" Then
@@ -432,19 +441,22 @@ Imports System.Net.Sockets
                 Next
                 If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ModbusTCP Start", ConfigTxt)
 
-                MyTimer.Interval = _Parametres.Item(0).Valeur '2000
-                MyTimer.Enabled = True
-                breading = False
-                cptsend = 0
-
                 If longReadMW <> 0 Then nbsendMW = Math.Floor((longReadMW - 1) / 75) + 1 Else nbsendMW = 0
                 If longReadIW <> 0 Then nbsendIW = Math.Floor((longReadIW - 1) / 75) + 1 Else nbsendIW = 0
                 If longReadMX <> 0 Then nbsendMX = Math.Floor((longReadMX - 1) / 512) + 1 Else nbsendMX = 0
 
-                ReDim dataMdbMW(nbsendMW * 75)
-                ReDim dataMdbIW(nbsendIW * 75)
-                ReDim dataMdbMX(nbsendMX * 512)
-                ReDim dataMdbIX(512)
+                ReDim dataMdbRMW(nbsendMW * 75)
+                ReDim dataMdbRIW(nbsendIW * 75)
+                ReDim dataMdbRMX(nbsendMX * 512)
+                ReDim dataMdbRIX(512)
+
+                ReDim dataMdbWMW(nbsendMW * 75)
+                ReDim dataMdbWMX(nbsendMX * 512)
+
+                MyTimer.Interval = _Parametres.Item(0).Valeur '2000
+                MyTimer.Enabled = True
+                breading = False
+                cptsend = 0
 
                 AddHandler _Server.DeviceChanged, AddressOf DeviceChange
 
@@ -503,9 +515,9 @@ Imports System.Net.Sockets
             End If
             If CInt(Objet.Adresse1) > "-1" And Objet.Adresse1 <> "" Then
                 If (Objet.Model = "MX" And CInt(Objet.Adresse1) < adressReadMX + longReadMX And CInt(Objet.Adresse1) >= adressReadMX) Then
-               
-                    If TypeOf Objet.Value Is Boolean And dataMdbMX(Objet.adresse1) > -1 And dataMdbMX(Objet.adresse1) < 2 Then
-                        Objet.Value = CBool(dataMdbMX(Objet.adresse1 - 1))
+
+                    If TypeOf Objet.Value Is Boolean And dataMdbRMX(Objet.adresse1) > -1 And dataMdbRMX(Objet.adresse1) < 2 Then
+                        Objet.Value = CBool(dataMdbRMX(Objet.adresse1 - 1))
                     End If
                 Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "L'adresse du composant n'est pas dans la plage de lecture du driver")
@@ -514,8 +526,8 @@ Imports System.Net.Sockets
 
                 If (Objet.Model = "IX" And CInt(Objet.Adresse1) < 512 And CInt(Objet.Adresse1) >= 0) Then
 
-                    If TypeOf Objet.Value Is Boolean And dataMdbIX(Objet.adresse1) > -1 And dataMdbIX(Objet.adresse1) < 2 Then
-                        Objet.Value = CBool(dataMdbIX(Objet.adresse1 - 1))
+                    If TypeOf Objet.Value Is Boolean And dataMdbRIX(Objet.adresse1) > -1 And dataMdbRIX(Objet.adresse1) < 2 Then
+                        Objet.Value = CBool(dataMdbRIX(Objet.adresse1 - 1))
                     End If
                 Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "L'adresse du composant n'est pas dans la plage de lecture du driver")
@@ -525,10 +537,10 @@ Imports System.Net.Sockets
                 If (Objet.Model = "MW" And CInt(Objet.Adresse1) < adressReadMW + longReadMW And CInt(Objet.Adresse1) >= adressReadMW) Then
 
                     If TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
-                        Objet.Value = dataMdbMW(Objet.adresse1 - 1)
+                        Objet.Value = dataMdbRMW(Objet.adresse1 - 1)
                     End If
-                    If TypeOf Objet.Value Is Boolean And dataMdbMW(Objet.adresse1) > -1 And dataMdbMW(Objet.adresse1) < 2 Then
-                        Objet.Value = CBool(dataMdbMW(Objet.adresse1 - 1))
+                    If TypeOf Objet.Value Is Boolean And dataMdbRMW(Objet.adresse1) > -1 And dataMdbRMW(Objet.adresse1) < 2 Then
+                        Objet.Value = CBool(dataMdbRMW(Objet.adresse1 - 1))
                     End If
                 Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "L'adresse du composant n'est pas dans la plage de lecture du driver")
@@ -538,10 +550,10 @@ Imports System.Net.Sockets
                 If (Objet.Model = "IW" And CInt(Objet.Adresse1) < adressReadIW + longReadIW And CInt(Objet.Adresse1) >= adressReadIW) Then
 
                     If TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
-                        Objet.Value = dataMdbIW(Objet.adresse1 - 1)
+                        Objet.Value = dataMdbRIW(Objet.adresse1 - 1)
                     End If
-                    If TypeOf Objet.Value Is Boolean And dataMdbIW(Objet.adresse1) > -1 And dataMdbIW(Objet.adresse1) < 2 Then
-                        Objet.Value = CBool(dataMdbIW(Objet.adresse1 - 1))
+                    If TypeOf Objet.Value Is Boolean And dataMdbRIW(Objet.adresse1) > -1 And dataMdbRIW(Objet.adresse1) < 2 Then
+                        Objet.Value = CBool(dataMdbRIW(Objet.adresse1 - 1))
                     End If
                 Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "L'adresse du composant n'est pas dans la plage de lecture du driver")
@@ -561,8 +573,7 @@ Imports System.Net.Sockets
     ''' <param name="Parametre2"></param>
     ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
-        'Parametre1 = data1
-        'Parametre2 = data2
+       
         Dim sendtwice As Boolean = False
         Try
             If _Enable = False Then Exit Sub
@@ -570,21 +581,26 @@ Imports System.Net.Sockets
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "ModbusTCP Write", "Le driver n'est pas démarré, impossible d'écrire sur le port")
                 Exit Sub
             End If
+
             If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Write", "Ecriture de " & Objet.Name)
             If Parametre1 Is Nothing Then Parametre1 = 0
 
-            Select Case Objet.modele
-                Case "MX"
-                    Parametre2 = 1
-                Case "QX"
-                    Parametre2 = 2
-                Case "MW"
-                    Parametre2 = 3
-                Case "QW"
-                    Parametre2 = 4
-            End Select
-
             If Objet.Adresse2 <> "-1" And Objet.Adresse2 <> "" Then
+
+                Select Case Objet.modele
+                    Case "MX"
+                        Parametre2 = 1
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Write", "Debut d'ecriture MX ")
+
+                    Case "QX"
+                        Parametre2 = 2
+                    Case "MW"
+                        Parametre2 = 3
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Write", "Debut d'ecriture MW ")
+                    Case "QW"
+                        Parametre2 = 4
+                End Select
+
                 If TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
 
                     Select Case Commande
@@ -599,22 +615,25 @@ Imports System.Net.Sockets
 
                     End Select
 
-                    ecrire(Objet.adresse2, Commande, Parametre1, Parametre2, sendtwice)
+                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Write", "Valeur a ecrire : " & Parametre1 & " et memoire d'écriture = " & Objet.value & " et memoire de lecture = " & dataMdbRMW(Objet.Adresse2))
+
                 End If
 
-                If TypeOf Objet.Value Is Boolean Or Parametre2 = 1 Or Parametre2 = 2 Then
-                    Parametre1 = str_to_bool(Commande)
-                    ecrire(Objet.adresse2, Commande, Parametre1, Parametre2, sendtwice)
-                End If
             End If
             Select Case Commande
                 Case "ON", "OFF"
                     If Parametre1 = 0 Then traitement("OFF", Objet.adresse2, Commande, True) Else traitement("ON", Objet.adresse2, Commande, True)
+                Case "OPEN", "CLOSE"
+                    If Parametre1 = 0 Then traitement("CLOSE", Objet.adresse2, Commande, True) Else traitement("OPEN", Objet.adresse2, Commande, True)
                 Case "DIM", "OUVERTURE"
                     traitement(CStr(Parametre1), Objet.adresse2, Commande, True)
                 Case Else
                     traitement(Commande, Objet.adresse2, Commande, True)
             End Select
+            If Not flagWrite Then
+                flagWrite = True
+                If Not breading Then TestWrite()
+            End If
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP Write", ex.Message)
         End Try
@@ -623,6 +642,7 @@ Imports System.Net.Sockets
     ''' <summary>Fonction lancée lors de la suppression d'un device</summary>
     ''' <param name="DeviceId">Objet représetant le device à interroger</param>
     ''' <remarks></remarks>
+
     Public Sub DeleteDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.DeleteDevice
         Try
 
@@ -738,7 +758,7 @@ Imports System.Net.Sockets
             _DeviceSupport.Add(ListeDevices.UV.ToString)
             _DeviceSupport.Add(ListeDevices.VITESSEVENT.ToString)
             _DeviceSupport.Add(ListeDevices.VOLET.ToString)
-			
+
             'Parametres avancés
             add_paramavance("Rafraichissement de lecture", "le temps en millisecondes entre les demandes de lecture", 500)
             add_paramavance("Premier bit interne de lecture", "Adresse du premier bit interne MX à lire dans l'automate", 0)
@@ -791,11 +811,12 @@ Imports System.Net.Sockets
 
         Try
             If Not breading Then
-				If Not flagwrite Then
+
+                If Not flagWrite Then
+
                     cptsend += 1
 
                     Select Case typeRead
-                       
 
                         Case "MW"
                             If nbsendMW > 0 And cptsend <= nbsendMW Then
@@ -804,7 +825,7 @@ Imports System.Net.Sockets
                                 StartAddress = ReadStartAdr(offsetModele + adressReadMW + ((cptsend - 1) * 75)) '%MW0 = 12288 
                                 Length = ReadStartAdr(75)
                                 rID = (Rnd() * 256)
-                                MBmaster.ReadHoldingRegister(unit, rID, StartAddress, Length)
+                                MBmaster.ReadHoldingRegister(rID, unit, StartAddress, Length)
                                 If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Read", "Demande de lecture MW" & StartAddress & " , Envoi n°" & cptsend & "/" & nbsendMW)
 
                             Else
@@ -812,7 +833,7 @@ Imports System.Net.Sockets
                                 cptsend = 0
                                 breading = False
                             End If
-                       
+
                         Case "IW"
                             If nbsendIW > 0 And cptsend <= nbsendIW Then
 
@@ -820,7 +841,7 @@ Imports System.Net.Sockets
                                 StartAddress = ReadStartAdr(adressReadIW + ((cptsend - 1) * 75))
                                 Length = ReadStartAdr(75)
                                 rID = (Rnd() * 256)
-                                MBmaster.ReadHoldingRegister(unit, rID, StartAddress, Length)
+                                MBmaster.ReadHoldingRegister(rID, unit, StartAddress, Length)
                                 If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Read", "Demande de lecture IW" & StartAddress & " , Envoi n°" & cptsend & "/" & nbsendIW)
 
                             Else
@@ -836,7 +857,7 @@ Imports System.Net.Sockets
                                 StartAddress = ReadStartAdr(offsetModele + adressReadMX + ((cptsend - 1) * 512)) '%MX0.0 = 12288
                                 Length = ReadStartAdr(512)
                                 rID = (Rnd() * 256)
-                                MBmaster.ReadDiscreteInputs(unit, rID, StartAddress, Length)
+                                MBmaster.ReadDiscreteInputs(rID, unit, StartAddress, Length)
                                 If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Read", "Demande de lecture MX" & StartAddress & " , Envoi n°" & cptsend & "/" & nbsendMX)
 
                             Else
@@ -848,7 +869,7 @@ Imports System.Net.Sockets
                         Case "IX"
 
                             breading = True
-                           
+
                             If rcvIX Then
                                 rcvIX = False
                                 typeRead = "MW"
@@ -858,18 +879,21 @@ Imports System.Net.Sockets
                                 StartAddress = ReadStartAdr(0)
                                 Length = ReadStartAdr(512) '64 octet
                                 rID = (Rnd() * 256)
-                                MBmaster.ReadDiscreteInputs(unit, rID, StartAddress, Length)
+                                MBmaster.ReadDiscreteInputs(rID, unit, StartAddress, Length)
                                 If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Read", "Demande de lecture IX" & StartAddress)
                             End If
 
                     End Select
+
+
+                    cptWaitReponse = 0
                 Else
-                    flagWrite = False
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "ModbusTCP Read", "Tentative de lecture échoué car ecriture en cours")
+                    If Not breading Then TestWrite()
                 End If
-                cptWaitReponse = 0
             Else
-                If cptWaitReponse = 3 Then
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP Read", "Time Out Reponse")
+                If cptWaitReponse = 10 Then
+                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP Read", "Time Out lecture deja en cours")
 
                     cptWaitReponse = 0
                     breading = False
@@ -884,11 +908,15 @@ Imports System.Net.Sockets
     End Sub
 
     Sub DeviceChange(ByVal DeviceID, ByVal valeurString)
-		Try
-        Dim genericDevice As templateDevice = _Server.ReturnDeviceById(_IdSrv, DeviceID)
+        Try
+            Dim genericDevice As templateDevice = _Server.ReturnDeviceById(_IdSrv, DeviceID)
             If genericDevice.DriverID = _ID Then
                 If TypeOf genericDevice.Value Is Double Or TypeOf genericDevice.Value Is Integer Then
-                    Write(genericDevice, "", CInt(valeurString))
+                    If genericDevice.Value <> dataMdbWMW(genericDevice.Adresse2) And Not flagWrite Then '  
+                        flagWrite = True
+                        'ecrire(genericDevice.Adresse2, "", CInt(valeurString), 3)
+                        If Not breading Then TestWrite()
+                    End If
                 End If
             End If
         Catch ex As Exception
@@ -954,7 +982,7 @@ Imports System.Net.Sockets
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP Wait", "Exception : " & ex.Message)
         End Try
     End Sub
-	
+
     ''' <summary>Traite les paquets reçus</summary>
     ''' <remarks></remarks>
     Private Sub traitement(ByVal valeur As String, ByVal adresse As String, ByVal commande As String, ByVal erreursidevicepastrouve As Boolean)
@@ -972,17 +1000,17 @@ Imports System.Net.Sockets
                 If (listedevices.Count = 1) Then
                     'correction valeur pour correspondre au type de value
                     If TypeOf listedevices.Item(0).Value Is Integer Then
-                        If valeur = "ON" Then
+                        If valeur = "ON" Or valeur = "OPEN" Then
                             listedevices.Item(0).Value = listedevices.Item(0).ValueMax
-                        ElseIf valeur = "OFF" Then
+                        ElseIf valeur = "OFF" Or valeur = "CLOSE" Then
                             listedevices.Item(0).Value = listedevices.Item(0).ValueMin
                         Else
                             listedevices.Item(0).Value = valeur
                         End If
                     ElseIf TypeOf listedevices.Item(0).Value Is Boolean Then
-                        If valeur = "ON" Then
+                        If valeur = "ON" Or valeur = "OPEN" Then
                             listedevices.Item(0).Value = True
-                        ElseIf valeur = "OFF" Then
+                        ElseIf valeur = "OFF" Or valeur = "CLOSE" Then
                             listedevices.Item(0).Value = False
                         Else
                             listedevices.Item(0).Value = True
@@ -992,7 +1020,7 @@ Imports System.Net.Sockets
                     End If
                 ElseIf (listedevices.Count > 1) Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Process", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
-                Else                    
+                Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Process", "Device non trouvé : " & adresse & ":" & valeur)
 
                     'Ajouter la gestion des composants bannis (si dans la liste des composant bannis alors on log en debug sinon onlog device non trouve empty)
@@ -1003,7 +1031,57 @@ Imports System.Net.Sockets
             End Try
         End If
     End Sub
-	
+
+    ''' <summary>Tester la possiblité d'écrire sur le port ModbusTCP</summary>
+    ''' <remarks></remarks>
+
+    Private Sub TestWrite()
+
+
+        'Recherche si un device affecté
+        Dim listedevices As New ArrayList
+        listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, "", "", Me._ID, True)
+
+        For Each j As Object In listedevices
+            If j.Adresse2 <> "-1" And j.Adresse2 <> "" Then
+                Select Case j.modele
+                    Case "MW"
+                        If j.Value <> dataMdbWMW(j.adresse2) Then
+                            If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
+                                dataMdbWMW(j.adresse2) = j.Value
+                                flagWrite = True
+                                ecrire(j.adresse2, "DIM", j.value, 3)
+                                Exit Sub
+                            End If
+                            If TypeOf j.Value Is Boolean Then
+                                dataMdbWMW(j.adresse2) = j.Value
+                                flagWrite = True
+                                If j.value = False Then ecrire(j.adresse2, "OFF", 0, 3)
+                                If j.value = True Then ecrire(j.adresse2, "ON", 1, 3)
+                                Exit Sub
+                            End If
+                        End If
+                    Case "MX"
+                        If j.Value <> dataMdbWMX(j.adresse2) Then
+                            If TypeOf j.Value Is Boolean Then
+                                dataMdbWMX(j.adresse2) = j.Value
+                                flagWrite = True
+                                If j.value = 0 Then ecrire(j.adresse2, "OFF", 0, 1)
+                                If j.value = 1 Then ecrire(j.adresse2, "ON", 1, 1)
+                                Exit Sub
+                            End If
+                        End If
+                End Select
+            End If
+        Next
+
+        Threading.Thread.Sleep(100)
+        flagWrite = False
+        breading = False
+        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Modbus slave send", "Fin du traitement d'ecriture")
+
+    End Sub
+
     ''' <summary>Ecrire sur le port ModbusTCP</summary>
     ''' <param name="adresse">Adresse du device : A1...</param>
     ''' <param name="commande">commande à envoyer : ON, OFF...</param>
@@ -1017,39 +1095,46 @@ Imports System.Net.Sockets
         Try
             If _IsConnect Then
 
+
+
                 Dim StartAddress As UShort
                 Dim DataM(1) As UInteger
                 Dim DataB As Boolean
                 Dim Data() As Byte
-
+                wID = (Rnd() * 256)
                 Try
                     If data2 = 3 Then
-                        StartAddress = ReadStartAdr(CInt(adresse) + adressWriteMW + offsetModele - 1)
+                        StartAddress = ReadStartAdr(CInt(adresse) + adressWriteMW + offsetModele)
                     End If
                     If data2 = 1 Then
-                        StartAddress = ReadStartAdr(CInt(adresse) + adressWriteMX + offsetModele - 1)
+                        StartAddress = ReadStartAdr(CInt(adresse) + adressWriteMX + offsetModele)
                     End If
+
                     If data2 = 2 Or data2 = 4 Then
-                        StartAddress = ReadStartAdr(CInt(adresse) - 1)
+                        StartAddress = ReadStartAdr(CInt(adresse))
                     End If
 
                     If data2 = 3 Or data2 = 4 Then 'MW ou QW
+
                         DataM(0) = data1
                         Data = GetData(DataM)
-                        MBmaster.WriteSingleRegister(unit, 16, StartAddress, Data)
-                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Modbus slave receive", "MBmaster_WriteSingleRegister : " & "Debut MW ou QW" & StartAddress & " a la valeur " & data1)
+                        MBmaster.WriteSingleRegister(wID, unit, StartAddress, Data)
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Modbus slave receive", "MBmaster_WriteSingleRegister : à l'adresse MW ou QW" & StartAddress - offsetModele & " a la valeur " & data1)
 
                     End If
                     If data2 = 1 Or data2 = 2 Then 'MX ou QX
+
                         DataB = CBool(data1)
-                        MBmaster.WriteSingleCoils(unit, 16, StartAddress, DataB)
-                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Modbus slave receive", "MBmaster_WriteSingleCoils : " & "Debut MX ou QX" & StartAddress & " a la valeur " & CBool(data1))
+                        MBmaster.WriteSingleCoils(wID, unit, StartAddress, DataB)
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Modbus slave receive", "MBmaster_WriteSingleCoils : à l'adresse MX ou QX" & StartAddress - offsetModele & " a la valeur " & CBool(data1))
 
                     End If
-                    flagWrite = True
-                    
+
+                    Threading.Thread.Sleep(100)
+                    If Not breading Then TestWrite()
+
                 Catch ex As Exception
-                    Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP", "ModbusTCP Ecrire startadress=" & StartAddress)
+                    Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "ModbusTCP Ecrire Exception", "Ecriture startadress=" & StartAddress)
                 End Try
 
                 'renvoie la valeur ecrite
@@ -1072,7 +1157,7 @@ Imports System.Net.Sockets
     ' ------------------------------------------------------------------------
     ' Event for response data
     ' ------------------------------------------------------------------------
-    Private Sub MBmaster_OnResponseData(ByVal ID As UShort, ByVal [function] As Byte, ByVal values As Byte()) Handles MBmaster.OnResponseData
+    Private Sub MBmaster_OnResponseData(ByVal ID As UShort, ByVal unit As Byte, ByVal [function] As Byte, ByVal values As Byte()) Handles MBmaster.OnResponseData
 
         Dim msg As String = ""
         Dim adresse As Integer = 0
@@ -1089,33 +1174,49 @@ Imports System.Net.Sockets
 
             msg = "ID = " & ID & " et Fonction = " & [function]
 
-            If ID = rid Then
+            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Modbus slave receive", "MBmaster_OnResponseData : " & msg)
+            If Not flagWrite Then
+                If Not breading Then TestWrite()
+            Else
+                Exit Sub
+            End If
 
+            If Not [function] = 6 Then
 
                 'Recherche si un device affecté
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, "", "", Me._ID, True)
 
                 If typeRead = "MW" Then
-                    dataMdbMW = ShowAsW(values)
+
+                    dataMdbRMW = ShowAsW(values, dataMdbRMW, 75 * (cptsend - 1))
+
                     msg += " Debut MW" & adressReadMW + (75 * (cptsend - 1)) & " et data = "
+
+                    If cptsend = nbsendMW Then FirstStart = False
+
                 End If
 
                 If typeRead = "IW" Then
-                    dataMdbIW = ShowAsW(values)
+                    dataMdbRIW = ShowAsW(values, dataMdbRIW, 75 * (cptsend - 1))
                     msg += " Debut IW" & adressReadIW + (75 * (cptsend - 1)) & " et data = "
                 End If
 
                 If typeRead = "MX" Then
-                    dataMdbMX = ShowAsB(values)
+                    dataMdbRMX = ShowAsB(values, dataMdbRMX, 512 * (cptsend - 1))
                     msg += " Debut MX" & adressReadMX + (512 * (cptsend - 1)) & ".0 et data = "
                     For i = 0 To values.Length - 1
                         msg += CStr(values(i)) & "; "
                     Next
+                   
+                    If FirstStart Then
+                        dataMdbWMX = dataMdbRMX
+                    End If
+
                 End If
 
                 If typeRead = "IX" Then
-                    dataMdbIX = ShowAsB(values)
+                    dataMdbRIX = ShowAsB(values, dataMdbRIX, 0)
                     msg += " Debut IX0.0 et data = "
                     For i = 0 To values.Length - 1
                         msg += CStr(values(i)) & "; "
@@ -1129,58 +1230,66 @@ Imports System.Net.Sockets
                         If j.modele = typeRead And j.Refresh = 0 Then
 
                             If j.modele = "MW" Then
-                                adresse = j.adresse1 - ((cptsend - 1) * 75) - 1
+                                adresse = j.adresse1 '- 1 '- ((cptsend - 1) * 75)
                                 If j.adresse1 > 75 * (cptsend - 1) And j.adresse1 <= 75 * cptsend Then
-                                    msg += j.adresse1 & "=" & dataMdbMW(adresse) & " / " & j.Value & " ;"
-                                    If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
-                                        j.Value = dataMdbMW(adresse)
+                                    If j.Value <> dataMdbRMW(adresse) And Not flagWrite Then
+                                        If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
+                                            j.Value = dataMdbRMW(adresse)
+                                        End If
+                                        If TypeOf j.Value Is Boolean And j.Value > -1 And j.Value < 2 Then
+                                            j.Value = CBool(dataMdbRMW(adresse))
+                                        End If
+                                        msg += "( " & j.adresse1 & "=" & dataMdbRMW(adresse) & " / " & j.Value & ") ; "
                                     End If
-                                    If TypeOf j.Value Is Boolean And dataMdbMW(adresse) > -1 And dataMdbMW(adresse) < 2 Then
-                                        j.Value = CBool(dataMdbMW(adresse))
-                                    End If
+                                    dataMdbWMW(adresse) = dataMdbRMW(adresse)
                                 End If
                             End If
 
                             If j.modele = "IW" Then
                                 If j.adresse1 > 75 * (cptsend - 1) And j.adresse1 <= 75 * cptsend Then
-                                    msg += j.adresse1 & "=" & dataMdbIW(j.adresse1) & " / " & j.Value & " ;"
-                                    If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
-                                        j.Value = dataMdbIW(j.adresse1)
-                                    End If
-                                    If TypeOf j.Value Is Boolean And dataMdbIW(j.adresse1) > -1 And dataMdbIW(j.adresse1) < 2 Then
-                                        j.Value = CBool(dataMdbIW(j.adresse1))
+                                    If j.Value <> dataMdbRIW(j.adresse1) Then
+                                        msg += j.adresse1 & "=" & dataMdbRIW(j.adresse1) & " / " & j.Value & " ;"
+                                        If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
+                                            j.Value = dataMdbRIW(j.adresse1)
+                                        End If
+                                        If TypeOf j.Value Is Boolean And dataMdbRIW(j.adresse1) > -1 And dataMdbRIW(j.adresse1) < 2 Then
+                                            j.Value = CBool(dataMdbRIW(j.adresse1))
+                                        End If
                                     End If
                                 End If
                             End If
 
                             If TypeOf j.Value Is Boolean Then
+
                                 If j.modele = "MX" Then
-                                    adresse = j.adresse1 - ((cptsend - 1) * 512) - 1
+                                    adresse = j.adresse1  '- ((cptsend - 1) * 512)
                                     If j.adresse1 > 512 * (cptsend - 1) And j.adresse1 <= 512 * cptsend Then
-                                        msg += j.adresse1 & "=" & dataMdbMX(adresse) & " / " & j.Value & " ; "
-                                        j.Value = dataMdbMX(adresse)
+                                        If j.Value <> dataMdbRMX(adresse) And Not flagWrite Then
+                                            msg += j.adresse1 & "=" & dataMdbRMX(adresse) & " / " & j.Value & " ; "
+                                            j.Value = dataMdbRMX(adresse)
+                                        End If
+                                        dataMdbWMX(adresse) = dataMdbRMX(adresse)
                                     End If
                                 End If
+
                                 If j.modele = "IX" Then
                                     If j.adresse1 > 0 And j.adresse1 <= 512 Then
-                                        msg += j.adresse1 & "=" & dataMdbIX(j.adresse1) & " / " & j.Value & " ; "
-                                        j.Value = dataMdbIX(j.adresse1)
+                                        If j.Value <> dataMdbRIX(j.adresse1) Then
+                                            msg += j.adresse1 & "=" & dataMdbRIX(j.adresse1) & " / " & j.Value & " ; "
+                                            j.Value = dataMdbRIX(j.adresse1)
+                                        End If
                                     End If
                                 End If
                             End If
-
                         End If
-
                     End If
                 Next
-                MemID = ID
-            ElseIf ID = MemID Then
-                [Stop]()
-                Threading.Thread.Sleep(2000)
-                Start()
+
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Modbus slave receive", "MBmaster_OnResponseData : " & msg)
+                Threading.Thread.Sleep(100)
+                breading = False
+
             End If
-            breading = False
-            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Modbus slave receive", "MBmaster_OnResponseData : " & msg)
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Modbus slave exception", "MBmaster_OnResponseData : " & msg)
@@ -1191,7 +1300,7 @@ Imports System.Net.Sockets
     ' ------------------------------------------------------------------------
     ' Modbus TCP slave exception
     ' ------------------------------------------------------------------------
-    Private Sub MBmaster_OnException(ByVal id As UShort, ByVal [function] As Byte, ByVal exception As Byte) Handles MBmaster.OnException
+    Private Sub MBmaster_OnException(ByVal id As UShort, ByVal unit As Byte, ByVal [function] As Byte, ByVal exception As Byte) Handles MBmaster.OnException
         ' ------------------------------------------------------------------
 
         Dim exc As String = "Modbus says error: "
@@ -1228,7 +1337,7 @@ Imports System.Net.Sockets
                 Exit Select
         End Select
 
-        _Server.Log(TypeLog.MESSAGE, TypeSource.DRIVER, "Modbus slave exception", exc)
+        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Modbus slave exception", exc)
         Restart()
     End Sub
 
@@ -1248,6 +1357,24 @@ Imports System.Net.Sockets
         Catch ex As Exception
             Return Convert.ToUInt16(CStr(0))
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Modbus slave exception", "ReadStartAdr")
+        End Try
+    End Function
+
+    ' ------------------------------------------------------------------------
+    ' Read start address
+    ' ------------------------------------------------------------------------
+    Private Function Compare(ByVal comp1 As UShort(), ByVal comp2 As UShort()) As Boolean
+        Try
+            For Index = 0 To comp1.Length - 1
+                If comp1(Index) <> comp2(Index) Then
+                    Return False
+                    Exit Function
+                End If
+            Next
+            Return True
+        Catch ex As Exception
+            Return False
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Modbus slave exception", "Compare")
         End Try
     End Function
 
@@ -1287,7 +1414,7 @@ Imports System.Net.Sockets
     ' ------------------------------------------------------------------------
     ' Show values in selected way
     ' ------------------------------------------------------------------------
-    Private Function ShowAsW(ByVal dataR() As Byte) As UInt16()
+    Private Function ShowAsW(ByVal dataR() As Byte, ByVal orig As UInt16(), ByVal StartAdr As Integer) As UInt16()
 
         Dim word As UInt16() = New UInt16(0) {}
         Try
@@ -1296,10 +1423,10 @@ Imports System.Net.Sockets
                 Return Nothing
                 Exit Function
             End If
-            word = New UInt16(CInt(dataR.Length / 2 - 1)) {}
+            word = orig '= New UInt16(CInt(dataR.Length / 2 - 1)) {}
             Dim x As Integer = 0
             While x < dataR.Length
-                word(CInt(x / 2)) = CType(dataR(x) * 256 + dataR(x + 1), UInt16)
+                word(CInt(x / 2) + StartAdr) = CType(dataR(x) * 256 + dataR(x + 1), UInt16)
                 x = x + 2
             End While
 
@@ -1310,7 +1437,7 @@ Imports System.Net.Sockets
         End Try
     End Function
 
-    Private Function ShowAsB(ByVal dataR() As Byte) As Boolean()
+    Private Function ShowAsB(ByVal dataR() As Byte, ByVal orig As Boolean(), ByVal StartAdr As Integer) As Boolean()
 
         Dim bool As Boolean() = New Boolean(0) {}
         Try
@@ -1319,18 +1446,18 @@ Imports System.Net.Sockets
                 Return Nothing
                 Exit Function
             End If
-            bool = New Boolean(CInt(dataR.Length * 8 - 1)) {}
+            bool = orig '= New Boolean(CInt(dataR.Length * 8 - 1)) {}
             Dim x As Integer = 0
 
             While x < dataR.Length
-                bool(CInt(x * 8)) = CType(dataR(x) And Hex(("&h" & 1)), Boolean)
-                bool(CInt(x * 8) + 1) = CType(dataR(x) And Hex(("&h" & 2)), Boolean)
-                bool(CInt(x * 8) + 2) = CType(dataR(x) And Hex(("&h" & 4)), Boolean)
-                bool(CInt(x * 8) + 3) = CType(dataR(x) And Hex(("&h" & 8)), Boolean)
-                bool(CInt(x * 8) + 4) = CType(dataR(x) And Hex(("&h" & 16)), Boolean)
-                bool(CInt(x * 8) + 5) = CType(dataR(x) And Hex(("&h" & 32)), Boolean)
-                bool(CInt(x * 8) + 6) = CType(dataR(x) And Hex(("&h" & 64)), Boolean)
-                bool(CInt(x * 8) + 7) = CType(dataR(x) And Hex(("&h" & 128)), Boolean)
+                bool(CInt(x * 8) + StartAdr) = CType(dataR(x) And Hex(("&h" & 1)), Boolean)
+                bool(CInt(x * 8) + StartAdr + 1) = CType(dataR(x) And Hex(("&h" & 2)), Boolean)
+                bool(CInt(x * 8) + StartAdr + 2) = CType(dataR(x) And Hex(("&h" & 4)), Boolean)
+                bool(CInt(x * 8) + StartAdr + 3) = CType(dataR(x) And Hex(("&h" & 8)), Boolean)
+                bool(CInt(x * 8) + StartAdr + 4) = CType(dataR(x) And Hex(("&h" & 16)), Boolean)
+                bool(CInt(x * 8) + StartAdr + 5) = CType(dataR(x) And Hex(("&h" & 32)), Boolean)
+                bool(CInt(x * 8) + StartAdr + 6) = CType(dataR(x) And Hex(("&h" & 64)), Boolean)
+                bool(CInt(x * 8) + StartAdr + 7) = CType(dataR(x) And Hex(("&h" & 128)), Boolean)
                 x = x + 1
             End While
 
@@ -1344,6 +1471,7 @@ Imports System.Net.Sockets
 #End Region
 
 End Class
+
 
 
 Namespace ModbusTCP
@@ -1408,26 +1536,26 @@ Namespace ModbusTCP
 
         ' ------------------------------------------------------------------------
         ' Private declarations
-        Private Shared _timeout As UShort = 5000
+        Private Shared _timeout As UShort = 500
+        Private Shared _refresh As UShort = 10
         Private Shared _connected As Boolean = False
 
-        Private tcpAsyCl As Sockets.Socket
-        Private tcpAsyClBuffer As Byte() = New Byte(2047) {}
+        Private tcpAsyCl As Socket
+        Private tcpAsyClBuffer(2047) As Byte
 
-        Private tcpSynCl As Sockets.Socket
-        Private tcpSynClBuffer As Byte() = New Byte(2047) {}
+        Private tcpSynCl As Socket
+        Private tcpSynClBuffer(2047) As Byte
 
         ' ------------------------------------------------------------------------
         ''' <summary>Response data event. This event is called when new data arrives</summary>
-        Public Delegate Sub ResponseData(ByVal id As UShort, ByVal [function] As Byte, ByVal data As Byte())
+        Public Delegate Sub ResponseData(ByVal id As UShort, ByVal unit As Byte, ByVal [function] As Byte, ByVal data() As Byte)
         ''' <summary>Response data event. This event is called when new data arrives</summary>
         Public Event OnResponseData As ResponseData
         ''' <summary>Exception data event. This event is called when the data is incorrect</summary>
-        Public Delegate Sub ExceptionData(ByVal id As UShort, ByVal [function] As Byte, ByVal exception As Byte)
+        Public Delegate Sub ExceptionData(ByVal id As UShort, ByVal unit As Byte, ByVal [function] As Byte, ByVal exception As Byte)
         ''' <summary>Exception data event. This event is called when the data is incorrect</summary>
         Public Event OnException As ExceptionData
 
-        Public Event statConnect(ByVal Connect As Boolean)
         ' ------------------------------------------------------------------------
         ''' <summary>Response timeout. If the slave didn't answers within in this time an exception is called.</summary>
         ''' <value>The default value is 500ms.</value>
@@ -1437,6 +1565,18 @@ Namespace ModbusTCP
             End Get
             Set(ByVal value As UShort)
                 _timeout = value
+            End Set
+        End Property
+
+        ' ------------------------------------------------------------------------
+        ''' <summary>Refresh timer for slave answer. The class is polling for answer every X ms.</summary>
+        ''' <value>The default value is 10ms.</value>
+        Public Property refresh() As UShort
+            Get
+                Return _refresh
+            End Get
+            Set(ByVal value As UShort)
+                _refresh = value
             End Set
         End Property
 
@@ -1474,23 +1614,19 @@ Namespace ModbusTCP
                 End If
                 ' ----------------------------------------------------------------
                 ' Connect asynchronous client
-                tcpAsyCl = New Sockets.Socket(IPAddress.Parse(ip).AddressFamily, Sockets.SocketType.Stream, Sockets.ProtocolType.Tcp)
-
+                tcpAsyCl = New Socket(IPAddress.Parse(ip).AddressFamily, SocketType.Stream, ProtocolType.Tcp)
                 tcpAsyCl.Connect(New IPEndPoint(IPAddress.Parse(ip), port))
-                tcpAsyCl.SetSocketOption(Sockets.SocketOptionLevel.Socket, Sockets.SocketOptionName.SendTimeout, _timeout)
-                tcpAsyCl.SetSocketOption(Sockets.SocketOptionLevel.Socket, Sockets.SocketOptionName.ReceiveTimeout, _timeout)
-                tcpAsyCl.SetSocketOption(Sockets.SocketOptionLevel.Socket, Sockets.SocketOptionName.NoDelay, 1)
-
-
+                tcpAsyCl.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, _timeout)
+                tcpAsyCl.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, _timeout)
+                tcpAsyCl.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.NoDelay, 1)
                 ' ----------------------------------------------------------------
                 ' Connect synchronous client
-                tcpSynCl = New Sockets.Socket(IPAddress.Parse(ip).AddressFamily, Sockets.SocketType.Stream, Sockets.ProtocolType.Tcp)
+                tcpSynCl = New Socket(IPAddress.Parse(ip).AddressFamily, SocketType.Stream, ProtocolType.Tcp)
                 tcpSynCl.Connect(New IPEndPoint(IPAddress.Parse(ip), port))
-                tcpSynCl.SetSocketOption(Sockets.SocketOptionLevel.Socket, Sockets.SocketOptionName.SendTimeout, _timeout)
-                tcpSynCl.SetSocketOption(Sockets.SocketOptionLevel.Socket, Sockets.SocketOptionName.ReceiveTimeout, _timeout)
-                tcpSynCl.SetSocketOption(Sockets.SocketOptionLevel.Socket, Sockets.SocketOptionName.NoDelay, 1)
+                tcpSynCl.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, _timeout)
+                tcpSynCl.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, _timeout)
+                tcpSynCl.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.NoDelay, 1)
                 _connected = True
-                RaiseEvent statConnect(True)
             Catch [error] As System.IO.IOException
                 _connected = False
                 Throw ([error])
@@ -1506,11 +1642,7 @@ Namespace ModbusTCP
         ' ------------------------------------------------------------------------
         ''' <summary>Destroy master instance.</summary>
         Protected Overrides Sub Finalize()
-            Try
-                Dispose()
-            Finally
-                MyBase.Finalize()
-            End Try
+            Dispose()
         End Sub
 
         ' ------------------------------------------------------------------------
@@ -1519,7 +1651,7 @@ Namespace ModbusTCP
             If tcpAsyCl IsNot Nothing Then
                 If tcpAsyCl.Connected Then
                     Try
-                        tcpAsyCl.Shutdown(Sockets.SocketShutdown.Both)
+                        tcpAsyCl.Shutdown(SocketShutdown.Both)
                     Catch
                     End Try
                     tcpAsyCl.Close()
@@ -1529,17 +1661,16 @@ Namespace ModbusTCP
             If tcpSynCl IsNot Nothing Then
                 If tcpSynCl.Connected Then
                     Try
-                        tcpSynCl.Shutdown(Sockets.SocketShutdown.Both)
+                        tcpSynCl.Shutdown(SocketShutdown.Both)
                     Catch
                     End Try
                     tcpSynCl.Close()
                 End If
                 tcpSynCl = Nothing
             End If
-            RaiseEvent statConnect(False)
         End Sub
 
-        Friend Sub CallException(ByVal id As UShort, ByVal [function] As Byte, ByVal exception As Byte)
+        Friend Sub CallException(ByVal id As UShort, ByVal unit As Byte, ByVal [function] As Byte, ByVal exception As Byte)
             If (tcpAsyCl Is Nothing) OrElse (tcpSynCl Is Nothing) Then
                 Return
             End If
@@ -1547,98 +1678,106 @@ Namespace ModbusTCP
                 tcpSynCl = Nothing
                 tcpAsyCl = Nothing
             End If
-            RaiseEvent statConnect(_connected)
-            RaiseEvent OnException(id, [function], exception)
+            RaiseEvent OnException(id, unit, [function], exception)
         End Sub
+
+        Friend Shared Function SwapUInt16(ByVal inValue As UInt16) As UInt16
+            Return CUShort(((inValue And &HFF00) >> 8) Or ((inValue And &HFF) << 8))
+        End Function
 
         ' ------------------------------------------------------------------------
         ''' <summary>Read coils from slave asynchronous. The result is given in the response function.</summary>
         ''' <param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
+        ''' <param name="unit">Unit identifier (previously slave address). In asynchonous mode this unit is given to the callback function.</param>
         ''' <param name="startAddress">Address from where the data read begins.</param>
         ''' <param name="numInputs">Length of data.</param>
-        Public Sub ReadCoils(ByVal unit As Byte, ByVal id As UShort, ByVal startAddress As UShort, ByVal numInputs As UShort)
-            WriteAsyncData(CreateReadHeader(unit, id, startAddress, numInputs, fctReadCoil), id)
+        Public Sub ReadCoils(ByVal id As UShort, ByVal unit As Byte, ByVal startAddress As UShort, ByVal numInputs As UShort)
+            WriteAsyncData(CreateReadHeader(id, unit, startAddress, numInputs, fctReadCoil), id)
         End Sub
 
         ' ------------------------------------------------------------------------
         ''' <summary>Read coils from slave synchronous.</summary>
         ''' <param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
+        ''' <param name="unit">Unit identifier (previously slave address). In asynchonous mode this unit is given to the callback function.</param>
         ''' <param name="startAddress">Address from where the data read begins.</param>
         ''' <param name="numInputs">Length of data.</param>
         ''' <param name="values">Contains the result of function.</param>
-        Public Sub ReadCoils(ByVal unit As Byte, ByVal id As UShort, ByVal startAddress As UShort, ByVal numInputs As UShort, ByRef values As Byte())
-            values = WriteSyncData(CreateReadHeader(unit, id, startAddress, numInputs, fctReadCoil), id)
+        Public Sub ReadCoils(ByVal id As UShort, ByVal unit As Byte, ByVal startAddress As UShort, ByVal numInputs As UShort, ByRef values() As Byte)
+            values = WriteSyncData(CreateReadHeader(id, unit, startAddress, numInputs, fctReadCoil), id)
         End Sub
 
         ' ------------------------------------------------------------------------
         ''' <summary>Read discrete inputs from slave asynchronous. The result is given in the response function.</summary>
         ''' <param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
+        ''' <param name="unit">Unit identifier (previously slave address). In asynchonous mode this unit is given to the callback function.</param>
         ''' <param name="startAddress">Address from where the data read begins.</param>
         ''' <param name="numInputs">Length of data.</param>
-        Public Sub ReadDiscreteInputs(ByVal unit As Byte, ByVal id As UShort, ByVal startAddress As UShort, ByVal numInputs As UShort)
-            WriteAsyncData(CreateReadHeader(unit, id, startAddress, numInputs, fctReadDiscreteInputs), id)
+        Public Sub ReadDiscreteInputs(ByVal id As UShort, ByVal unit As Byte, ByVal startAddress As UShort, ByVal numInputs As UShort)
+            WriteAsyncData(CreateReadHeader(id, unit, startAddress, numInputs, fctReadDiscreteInputs), id)
         End Sub
 
         ' ------------------------------------------------------------------------
         ''' <summary>Read discrete inputs from slave synchronous.</summary>
         ''' <param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
+        ''' <param name="unit">Unit identifier (previously slave address). In asynchonous mode this unit is given to the callback function.</param>
         ''' <param name="startAddress">Address from where the data read begins.</param>
         ''' <param name="numInputs">Length of data.</param>
         ''' <param name="values">Contains the result of function.</param>
-        Public Sub ReadDiscreteInputs(ByVal unit As Byte, ByVal id As UShort, ByVal startAddress As UShort, ByVal numInputs As UShort, ByRef values As Byte())
-            values = WriteSyncData(CreateReadHeader(unit, id, startAddress, numInputs, fctReadDiscreteInputs), id)
+        Public Sub ReadDiscreteInputs(ByVal id As UShort, ByVal unit As Byte, ByVal startAddress As UShort, ByVal numInputs As UShort, ByRef values() As Byte)
+            values = WriteSyncData(CreateReadHeader(id, unit, startAddress, numInputs, fctReadDiscreteInputs), id)
         End Sub
 
         ' ------------------------------------------------------------------------
         ''' <summary>Read holding registers from slave asynchronous. The result is given in the response function.</summary>
         ''' <param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
+        ''' <param name="unit">Unit identifier (previously slave address). In asynchonous mode this unit is given to the callback function.</param>
         ''' <param name="startAddress">Address from where the data read begins.</param>
         ''' <param name="numInputs">Length of data.</param>
-        Public Sub ReadHoldingRegister(ByVal unit As Byte, ByVal id As UShort, ByVal startAddress As UShort, ByVal numInputs As UShort)
-            Try
-                WriteAsyncData(CreateReadHeader(unit, id, startAddress, numInputs, fctReadHoldingRegister), id)
-            Catch ex As Exception
-                Debug.WriteLine("erreur read class mdb startadress=" & startAddress & " et length=" & numInputs)
-            End Try
+        Public Sub ReadHoldingRegister(ByVal id As UShort, ByVal unit As Byte, ByVal startAddress As UShort, ByVal numInputs As UShort)
+            WriteAsyncData(CreateReadHeader(id, unit, startAddress, numInputs, fctReadHoldingRegister), id)
         End Sub
 
         ' ------------------------------------------------------------------------
         ''' <summary>Read holding registers from slave synchronous.</summary>
         ''' <param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
+        ''' <param name="unit">Unit identifier (previously slave address). In asynchonous mode this unit is given to the callback function.</param>
         ''' <param name="startAddress">Address from where the data read begins.</param>
         ''' <param name="numInputs">Length of data.</param>
         ''' <param name="values">Contains the result of function.</param>
-        Public Sub ReadHoldingRegister(ByVal unit As Byte, ByVal id As UShort, ByVal startAddress As UShort, ByVal numInputs As UShort, ByRef values As Byte())
-            values = WriteSyncData(CreateReadHeader(unit, id, startAddress, numInputs, fctReadHoldingRegister), id)
+        Public Sub ReadHoldingRegister(ByVal id As UShort, ByVal unit As Byte, ByVal startAddress As UShort, ByVal numInputs As UShort, ByRef values() As Byte)
+            values = WriteSyncData(CreateReadHeader(id, unit, startAddress, numInputs, fctReadHoldingRegister), id)
         End Sub
 
         ' ------------------------------------------------------------------------
         ''' <summary>Read input registers from slave asynchronous. The result is given in the response function.</summary>
         ''' <param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
+        ''' <param name="unit">Unit identifier (previously slave address). In asynchonous mode this unit is given to the callback function.</param>
         ''' <param name="startAddress">Address from where the data read begins.</param>
         ''' <param name="numInputs">Length of data.</param>
-        Public Sub ReadInputRegister(ByVal unit As Byte, ByVal id As UShort, ByVal startAddress As UShort, ByVal numInputs As UShort)
-            WriteAsyncData(CreateReadHeader(unit, id, startAddress, numInputs, fctReadInputRegister), id)
+        Public Sub ReadInputRegister(ByVal id As UShort, ByVal unit As Byte, ByVal startAddress As UShort, ByVal numInputs As UShort)
+            WriteAsyncData(CreateReadHeader(id, unit, startAddress, numInputs, fctReadInputRegister), id)
         End Sub
 
         ' ------------------------------------------------------------------------
         ''' <summary>Read input registers from slave synchronous.</summary>
         ''' <param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
+        ''' <param name="unit">Unit identifier (previously slave address). In asynchonous mode this unit is given to the callback function.</param>
         ''' <param name="startAddress">Address from where the data read begins.</param>
         ''' <param name="numInputs">Length of data.</param>
         ''' <param name="values">Contains the result of function.</param>
-        Public Sub ReadInputRegister(ByVal unit As Byte, ByVal id As UShort, ByVal startAddress As UShort, ByVal numInputs As UShort, ByRef values As Byte())
-            values = WriteSyncData(CreateReadHeader(unit, id, startAddress, numInputs, fctReadInputRegister), id)
+        Public Sub ReadInputRegister(ByVal id As UShort, ByVal unit As Byte, ByVal startAddress As UShort, ByVal numInputs As UShort, ByRef values() As Byte)
+            values = WriteSyncData(CreateReadHeader(id, unit, startAddress, numInputs, fctReadInputRegister), id)
         End Sub
 
         ' ------------------------------------------------------------------------
         ''' <summary>Write single coil in slave asynchronous. The result is given in the response function.</summary>
         ''' <param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
+        ''' <param name="unit">Unit identifier (previously slave address). In asynchonous mode this unit is given to the callback function.</param>
         ''' <param name="startAddress">Address from where the data read begins.</param>
         ''' <param name="OnOff">Specifys if the coil should be switched on or off.</param>
-        Public Sub WriteSingleCoils(ByVal unit As Byte, ByVal id As UShort, ByVal startAddress As UShort, ByVal OnOff As Boolean)
-            Dim data As Byte()
-            data = CreateWriteHeader(unit, id, startAddress, 1, 1, fctWriteSingleCoil)
+        Public Sub WriteSingleCoils(ByVal id As UShort, ByVal unit As Byte, ByVal startAddress As UShort, ByVal OnOff As Boolean)
+            Dim data() As Byte
+            data = CreateWriteHeader(id, unit, startAddress, 1, 1, fctWriteSingleCoil)
             If OnOff = True Then
                 data(10) = 255
             Else
@@ -1650,12 +1789,13 @@ Namespace ModbusTCP
         ' ------------------------------------------------------------------------
         ''' <summary>Write single coil in slave synchronous.</summary>
         ''' <param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
+        ''' <param name="unit">Unit identifier (previously slave address). In asynchonous mode this unit is given to the callback function.</param>
         ''' <param name="startAddress">Address from where the data read begins.</param>
         ''' <param name="OnOff">Specifys if the coil should be switched on or off.</param>
         ''' <param name="result">Contains the result of the synchronous write.</param>
-        Public Sub WriteSingleCoils(ByVal unit As Byte, ByVal id As UShort, ByVal startAddress As UShort, ByVal OnOff As Boolean, ByRef result As Byte())
-            Dim data As Byte()
-            data = CreateWriteHeader(unit, id, startAddress, 1, 1, fctWriteSingleCoil)
+        Public Sub WriteSingleCoils(ByVal id As UShort, ByVal unit As Byte, ByVal startAddress As UShort, ByVal OnOff As Boolean, ByRef result() As Byte)
+            Dim data() As Byte
+            data = CreateWriteHeader(id, unit, startAddress, 1, 1, fctWriteSingleCoil)
             If OnOff = True Then
                 data(10) = 255
             Else
@@ -1667,13 +1807,14 @@ Namespace ModbusTCP
         ' ------------------------------------------------------------------------
         ''' <summary>Write multiple coils in slave asynchronous. The result is given in the response function.</summary>
         ''' <param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
+        ''' <param name="unit">Unit identifier (previously slave address). In asynchonous mode this unit is given to the callback function.</param>
         ''' <param name="startAddress">Address from where the data read begins.</param>
         ''' <param name="numBits">Specifys number of bits.</param>
         ''' <param name="values">Contains the bit information in byte format.</param>
-        Public Sub WriteMultipleCoils(ByVal unit As Byte, ByVal id As UShort, ByVal startAddress As UShort, ByVal numBits As UShort, ByVal values As Byte())
+        Public Sub WriteMultipleCoils(ByVal id As UShort, ByVal unit As Byte, ByVal startAddress As UShort, ByVal numBits As UShort, ByVal values() As Byte)
             Dim numBytes As Byte = Convert.ToByte(values.Length)
-            Dim data As Byte()
-            data = CreateWriteHeader(unit, id, startAddress, numBits, CByte(numBytes + 2), fctWriteMultipleCoils)
+            Dim data() As Byte
+            data = CreateWriteHeader(id, unit, startAddress, numBits, CByte(numBytes + 2), fctWriteMultipleCoils)
             Array.Copy(values, 0, data, 13, numBytes)
             WriteAsyncData(data, id)
         End Sub
@@ -1681,14 +1822,15 @@ Namespace ModbusTCP
         ' ------------------------------------------------------------------------
         ''' <summary>Write multiple coils in slave synchronous.</summary>
         ''' <param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
+        ''' <param name="unit">Unit identifier (previously slave address). In asynchonous mode this unit is given to the callback function.</param>
         ''' <param name="startAddress">Address from where the data read begins.</param>
         ''' <param name="numBits">Specifys number of bits.</param>
         ''' <param name="values">Contains the bit information in byte format.</param>
         ''' <param name="result">Contains the result of the synchronous write.</param>
-        Public Sub WriteMultipleCoils(ByVal unit As Byte, ByVal id As UShort, ByVal startAddress As UShort, ByVal numBits As UShort, ByVal values As Byte(), ByRef result As Byte())
+        Public Sub WriteMultipleCoils(ByVal id As UShort, ByVal unit As Byte, ByVal startAddress As UShort, ByVal numBits As UShort, ByVal values() As Byte, ByRef result() As Byte)
             Dim numBytes As Byte = Convert.ToByte(values.Length)
-            Dim data As Byte()
-            data = CreateWriteHeader(unit, id, startAddress, numBits, CByte(numBytes + 2), fctWriteMultipleCoils)
+            Dim data() As Byte
+            data = CreateWriteHeader(id, unit, startAddress, numBits, CByte(numBytes + 2), fctWriteMultipleCoils)
             Array.Copy(values, 0, data, 13, numBytes)
             result = WriteSyncData(data, id)
         End Sub
@@ -1696,11 +1838,12 @@ Namespace ModbusTCP
         ' ------------------------------------------------------------------------
         ''' <summary>Write single register in slave asynchronous. The result is given in the response function.</summary>
         ''' <param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
+        ''' <param name="unit">Unit identifier (previously slave address). In asynchonous mode this unit is given to the callback function.</param>
         ''' <param name="startAddress">Address to where the data is written.</param>
         ''' <param name="values">Contains the register information.</param>
-        Public Sub WriteSingleRegister(ByVal unit As Byte, ByVal id As UShort, ByVal startAddress As UShort, ByVal values As Byte())
-            Dim data As Byte()
-            data = CreateWriteHeader(unit, id, startAddress, 1, 1, fctWriteSingleRegister)
+        Public Sub WriteSingleRegister(ByVal id As UShort, ByVal unit As Byte, ByVal startAddress As UShort, ByVal values() As Byte)
+            Dim data() As Byte
+            data = CreateWriteHeader(id, unit, startAddress, 1, 1, fctWriteSingleRegister)
             data(10) = values(0)
             data(11) = values(1)
             WriteAsyncData(data, id)
@@ -1709,12 +1852,13 @@ Namespace ModbusTCP
         ' ------------------------------------------------------------------------
         ''' <summary>Write single register in slave synchronous.</summary>
         ''' <param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
+        ''' <param name="unit">Unit identifier (previously slave address). In asynchonous mode this unit is given to the callback function.</param>
         ''' <param name="startAddress">Address to where the data is written.</param>
         ''' <param name="values">Contains the register information.</param>
         ''' <param name="result">Contains the result of the synchronous write.</param>
-        Public Sub WriteSingleRegister(ByVal unit As Byte, ByVal id As UShort, ByVal startAddress As UShort, ByVal values As Byte(), ByRef result As Byte())
-            Dim data As Byte()
-            data = CreateWriteHeader(unit, id, startAddress, 1, 1, fctWriteSingleRegister)
+        Public Sub WriteSingleRegister(ByVal id As UShort, ByVal unit As Byte, ByVal startAddress As UShort, ByVal values() As Byte, ByRef result() As Byte)
+            Dim data() As Byte
+            data = CreateWriteHeader(id, unit, startAddress, 1, 1, fctWriteSingleRegister)
             data(10) = values(0)
             data(11) = values(1)
             result = WriteSyncData(data, id)
@@ -1723,16 +1867,17 @@ Namespace ModbusTCP
         ' ------------------------------------------------------------------------
         ''' <summary>Write multiple registers in slave asynchronous. The result is given in the response function.</summary>
         ''' <param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
+        ''' <param name="unit">Unit identifier (previously slave address). In asynchonous mode this unit is given to the callback function.</param>
         ''' <param name="startAddress">Address to where the data is written.</param>
         ''' <param name="values">Contains the register information.</param>
-        Public Sub WriteMultipleRegister(ByVal unit As Byte, ByVal id As UShort, ByVal startAddress As UShort, ByVal values As Byte())
+        Public Sub WriteMultipleRegister(ByVal id As UShort, ByVal unit As Byte, ByVal startAddress As UShort, ByVal values() As Byte)
             Dim numBytes As UShort = Convert.ToUInt16(values.Length)
             If numBytes Mod 2 > 0 Then
                 numBytes += CUShort(1)
             End If
-            Dim data As Byte()
+            Dim data() As Byte
 
-            data = CreateWriteHeader(unit, id, startAddress, Convert.ToUInt16(numBytes / 2), Convert.ToUInt16(numBytes + 2), fctWriteMultipleRegister)
+            data = CreateWriteHeader(id, unit, startAddress, Convert.ToUInt16(numBytes \ 2), Convert.ToUInt16(numBytes + 2), fctWriteMultipleRegister)
             Array.Copy(values, 0, data, 13, values.Length)
             WriteAsyncData(data, id)
         End Sub
@@ -1740,17 +1885,18 @@ Namespace ModbusTCP
         ' ------------------------------------------------------------------------
         ''' <summary>Write multiple registers in slave synchronous.</summary>
         ''' <param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
+        ''' <param name="unit">Unit identifier (previously slave address). In asynchonous mode this unit is given to the callback function.</param>
         ''' <param name="startAddress">Address to where the data is written.</param>
         ''' <param name="values">Contains the register information.</param>
         ''' <param name="result">Contains the result of the synchronous write.</param>
-        Public Sub WriteMultipleRegister(ByVal unit As Byte, ByVal id As UShort, ByVal startAddress As UShort, ByVal values As Byte(), ByRef result As Byte())
+        Public Sub WriteMultipleRegister(ByVal id As UShort, ByVal unit As Byte, ByVal startAddress As UShort, ByVal values() As Byte, ByRef result() As Byte)
             Dim numBytes As UShort = Convert.ToUInt16(values.Length)
             If numBytes Mod 2 > 0 Then
                 numBytes += CUShort(1)
             End If
-            Dim data As Byte()
+            Dim data() As Byte
 
-            data = CreateWriteHeader(unit, id, startAddress, Convert.ToUInt16(numBytes / 2), Convert.ToUInt16(numBytes + 2), fctWriteMultipleRegister)
+            data = CreateWriteHeader(id, unit, startAddress, Convert.ToUInt16(numBytes \ 2), Convert.ToUInt16(numBytes + 2), fctWriteMultipleRegister)
             Array.Copy(values, 0, data, 13, values.Length)
             result = WriteSyncData(data, id)
         End Sub
@@ -1758,18 +1904,19 @@ Namespace ModbusTCP
         ' ------------------------------------------------------------------------
         ''' <summary>Read/Write multiple registers in slave asynchronous. The result is given in the response function.</summary>
         ''' <param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
+        ''' <param name="unit">Unit identifier (previously slave address). In asynchonous mode this unit is given to the callback function.</param>
         ''' <param name="startReadAddress">Address from where the data read begins.</param>
         ''' <param name="numInputs">Length of data.</param>
         ''' <param name="startWriteAddress">Address to where the data is written.</param>
         ''' <param name="values">Contains the register information.</param>
-        Public Sub ReadWriteMultipleRegister(ByVal unit As Byte, ByVal id As UShort, ByVal startReadAddress As UShort, ByVal numInputs As UShort, ByVal startWriteAddress As UShort, ByVal values As Byte())
+        Public Sub ReadWriteMultipleRegister(ByVal id As UShort, ByVal unit As Byte, ByVal startReadAddress As UShort, ByVal numInputs As UShort, ByVal startWriteAddress As UShort, ByVal values() As Byte)
             Dim numBytes As UShort = Convert.ToUInt16(values.Length)
             If numBytes Mod 2 > 0 Then
                 numBytes += CUShort(1)
             End If
-            Dim data As Byte()
+            Dim data() As Byte
 
-            data = CreateReadWriteHeader(unit, id, startReadAddress, numInputs, startWriteAddress, Convert.ToUInt16(numBytes / 2))
+            data = CreateReadWriteHeader(id, unit, startReadAddress, numInputs, startWriteAddress, Convert.ToUInt16(numBytes \ 2))
             Array.Copy(values, 0, data, 17, values.Length)
             WriteAsyncData(data, id)
         End Sub
@@ -1777,126 +1924,94 @@ Namespace ModbusTCP
         ' ------------------------------------------------------------------------
         ''' <summary>Read/Write multiple registers in slave synchronous. The result is given in the response function.</summary>
         ''' <param name="id">Unique id that marks the transaction. In asynchonous mode this id is given to the callback function.</param>
+        ''' <param name="unit">Unit identifier (previously slave address). In asynchonous mode this unit is given to the callback function.</param>
         ''' <param name="startReadAddress">Address from where the data read begins.</param>
         ''' <param name="numInputs">Length of data.</param>
         ''' <param name="startWriteAddress">Address to where the data is written.</param>
         ''' <param name="values">Contains the register information.</param>
         ''' <param name="result">Contains the result of the synchronous command.</param>
-        Public Sub ReadWriteMultipleRegister(ByVal unit As Byte, ByVal id As UShort, ByVal startReadAddress As UShort, ByVal numInputs As UShort, ByVal startWriteAddress As UShort, ByVal values As Byte(), ByRef result As Byte())
+        Public Sub ReadWriteMultipleRegister(ByVal id As UShort, ByVal unit As Byte, ByVal startReadAddress As UShort, ByVal numInputs As UShort, ByVal startWriteAddress As UShort, ByVal values() As Byte, ByRef result() As Byte)
             Dim numBytes As UShort = Convert.ToUInt16(values.Length)
             If numBytes Mod 2 > 0 Then
                 numBytes += CUShort(1)
             End If
-            Dim data As Byte()
+            Dim data() As Byte
 
-            data = CreateReadWriteHeader(unit, id, startReadAddress, numInputs, startWriteAddress, Convert.ToUInt16(numBytes / 2))
+            data = CreateReadWriteHeader(id, unit, startReadAddress, numInputs, startWriteAddress, Convert.ToUInt16(numBytes \ 2))
             Array.Copy(values, 0, data, 17, values.Length)
             result = WriteSyncData(data, id)
         End Sub
 
         ' ------------------------------------------------------------------------
         ' Create modbus header for read action
-        Private Function CreateReadHeader(ByVal unit As Byte, ByVal id As UShort, ByVal startAddress As UShort, ByVal length As UShort, ByVal [function] As Byte) As Byte()
-            Dim data As Byte() = New Byte(11) {}
+        Private Function CreateReadHeader(ByVal id As UShort, ByVal unit As Byte, ByVal startAddress As UShort, ByVal length As UShort, ByVal [function] As Byte) As Byte()
+            Dim data(11) As Byte
 
-            Dim _id As Byte() = BitConverter.GetBytes(CShort(id))
-            data(0) = _id(0)
-            ' Slave id high byte
-            data(1) = _id(1)
-            ' Slave id low byte
-            data(5) = 6
-            ' Message size
-            data(6) = unit
-            ' Slave address
-            data(7) = [function]
-            ' Function code
-            Dim _adr As Byte() = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(startAddress))))
-            data(8) = _adr(0)
-            ' Start address
-            data(9) = _adr(1)
-            ' Start address
-            Dim _length As Byte() = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(length))))
-            data(10) = _length(0)
-            ' Number of data to read
-            data(11) = _length(1)
-            ' Number of data to read
+            Dim _id() As Byte = BitConverter.GetBytes(CShort(id))
+            data(0) = _id(1) ' Slave id high byte
+            data(1) = _id(0) ' Slave id low byte
+            data(5) = 6 ' Message size
+            data(6) = unit ' Slave address
+            data(7) = [function] ' Function code
+            Dim _adr() As Byte = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(startAddress))))
+            data(8) = _adr(0) ' Start address
+            data(9) = _adr(1) ' Start address
+            Dim _length() As Byte = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(length))))
+            data(10) = _length(0) ' Number of data to read
+            data(11) = _length(1) ' Number of data to read
             Return data
         End Function
 
         ' ------------------------------------------------------------------------
         ' Create modbus header for write action
-        Private Function CreateWriteHeader(ByVal Unit As Byte, ByVal id As UShort, ByVal startAddress As UShort, ByVal numData As UShort, ByVal numBytes As UShort, ByVal [function] As Byte) As Byte()
-            Dim data As Byte() = New Byte(numBytes + 10) {}
+        Private Function CreateWriteHeader(ByVal id As UShort, ByVal unit As Byte, ByVal startAddress As UShort, ByVal numData As UShort, ByVal numBytes As UShort, ByVal [function] As Byte) As Byte()
+            Dim data((numBytes + 11) - 1) As Byte
 
-            Dim _id As Byte() = BitConverter.GetBytes(CShort(id))
-            data(0) = _id(0)
-            ' Slave id high byte
-            data(1) = _id(1)
-            ' Slave id low byte+
-            Dim _size As Byte() = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(5 + numBytes))))
-            data(4) = _size(0)
-            ' Complete message size in bytes
-            data(5) = _size(1)
-            ' Complete message size in bytes
-            data(6) = Unit
-            ' Slave address
-            data(7) = [function]
-            ' Function code
-            Dim _adr As Byte() = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(startAddress))))
-            data(8) = _adr(0)
-            ' Start address
-            data(9) = _adr(1)
-            ' Start address
+            Dim _id() As Byte = BitConverter.GetBytes(CShort(id))
+            data(0) = _id(1) ' Slave id high byte
+            data(1) = _id(0) ' Slave id low byte
+            Dim _size() As Byte = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(5 + numBytes))))
+            data(4) = _size(0) ' Complete message size in bytes
+            data(5) = _size(1) ' Complete message size in bytes
+            data(6) = unit ' Slave address
+            data(7) = [function] ' Function code
+            Dim _adr() As Byte = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(startAddress))))
+            data(8) = _adr(0) ' Start address
+            data(9) = _adr(1) ' Start address
             If [function] >= fctWriteMultipleCoils Then
-                Dim _cnt As Byte() = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(numData))))
-                data(10) = _cnt(0)
-                ' Number of bytes
-                data(11) = _cnt(1)
-                ' Number of bytes
+                Dim _cnt() As Byte = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(numData))))
+                data(10) = _cnt(0) ' Number of bytes
+                data(11) = _cnt(1) ' Number of bytes
                 data(12) = CByte(numBytes - 2)
             End If
             Return data
         End Function
 
         ' ------------------------------------------------------------------------
-        ' Create modbus header for write action
-        Private Function CreateReadWriteHeader(ByVal Unit As Byte, ByVal id As UShort, ByVal startReadAddress As UShort, ByVal numRead As UShort, ByVal startWriteAddress As UShort, ByVal numWrite As UShort) As Byte()
-            Dim data As Byte() = New Byte(numWrite * 2 + 16) {}
+        ' Create modbus header for read/write action
+        Private Function CreateReadWriteHeader(ByVal id As UShort, ByVal unit As Byte, ByVal startReadAddress As UShort, ByVal numRead As UShort, ByVal startWriteAddress As UShort, ByVal numWrite As UShort) As Byte()
+            Dim data((numWrite * 2 + 17) - 1) As Byte
 
-            Dim _id As Byte() = BitConverter.GetBytes(CShort(id))
-            data(0) = _id(0)
-            ' Slave id high byte
-            data(1) = _id(1)
-            ' Slave id low byte+
-            Dim _size As Byte() = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(11 + numWrite * 2))))
-            data(4) = _size(0)
-            ' Complete message size in bytes
-            data(5) = _size(1)
-            ' Complete message size in bytes
-            data(6) = Unit
-            ' Slave address
-            data(7) = fctReadWriteMultipleRegister
-            ' Function code
-            Dim _adr_read As Byte() = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(startReadAddress))))
-            data(8) = _adr_read(0)
-            ' Start read address
-            data(9) = _adr_read(1)
-            ' Start read address
-            Dim _cnt_read As Byte() = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(numRead))))
-            data(10) = _cnt_read(0)
-            ' Number of bytes to read
-            data(11) = _cnt_read(1)
-            ' Number of bytes to read
-            Dim _adr_write As Byte() = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(startWriteAddress))))
-            data(12) = _adr_write(0)
-            ' Start write address
-            data(13) = _adr_write(1)
-            ' Start write address
-            Dim _cnt_write As Byte() = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(numWrite))))
-            data(14) = _cnt_write(0)
-            ' Number of bytes to write
-            data(15) = _cnt_write(1)
-            ' Number of bytes to write
+            Dim _id() As Byte = BitConverter.GetBytes(CShort(id))
+            data(0) = _id(1) ' Slave id high byte
+            data(1) = _id(0) ' Slave id low byte
+            Dim _size() As Byte = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(11 + numWrite * 2))))
+            data(4) = _size(0) ' Complete message size in bytes
+            data(5) = _size(1) ' Complete message size in bytes
+            data(6) = unit ' Slave address
+            data(7) = fctReadWriteMultipleRegister ' Function code
+            Dim _adr_read() As Byte = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(startReadAddress))))
+            data(8) = _adr_read(0) ' Start read address
+            data(9) = _adr_read(1) ' Start read address
+            Dim _cnt_read() As Byte = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(numRead))))
+            data(10) = _cnt_read(0) ' Number of bytes to read
+            data(11) = _cnt_read(1) ' Number of bytes to read
+            Dim _adr_write() As Byte = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(startWriteAddress))))
+            data(12) = _adr_write(0) ' Start write address
+            data(13) = _adr_write(1) ' Start write address
+            Dim _cnt_write() As Byte = BitConverter.GetBytes(CShort(IPAddress.HostToNetworkOrder(CShort(numWrite))))
+            data(14) = _cnt_write(0) ' Number of bytes to write
+            data(15) = _cnt_write(1) ' Number of bytes to write
             data(16) = CByte(numWrite * 2)
 
             Return data
@@ -1904,17 +2019,16 @@ Namespace ModbusTCP
 
         ' ------------------------------------------------------------------------
         ' Write asynchronous data
-        Private Sub WriteAsyncData(ByVal write_data As Byte(), ByVal id As UShort)
+        Private Sub WriteAsyncData(ByVal write_data() As Byte, ByVal id As UShort)
             If (tcpAsyCl IsNot Nothing) AndAlso (tcpAsyCl.Connected) Then
                 Try
-                    tcpAsyCl.BeginSend(write_data, 0, write_data.Length, Sockets.SocketFlags.None, New AsyncCallback(AddressOf OnSend), Nothing)
-                    tcpAsyCl.BeginReceive(tcpAsyClBuffer, 0, tcpAsyClBuffer.Length, Sockets.SocketFlags.None, New AsyncCallback(AddressOf OnReceive), tcpAsyCl)
-
-                Catch generatedExceptionName As SystemException
-                    CallException(id, write_data(7), excExceptionConnectionLost)
+                    tcpAsyCl.BeginSend(write_data, 0, write_data.Length, SocketFlags.None, New AsyncCallback(AddressOf OnSend), Nothing)
+                    tcpAsyCl.BeginReceive(tcpAsyClBuffer, 0, tcpAsyClBuffer.Length, SocketFlags.None, New AsyncCallback(AddressOf OnReceive), tcpAsyCl)
+                Catch e1 As SystemException
+                    CallException(id, write_data(6), write_data(7), excExceptionConnectionLost)
                 End Try
             Else
-                CallException(id, write_data(7), excExceptionConnectionLost)
+                CallException(id, write_data(6), write_data(7), excExceptionConnectionLost)
             End If
         End Sub
 
@@ -1922,96 +2036,88 @@ Namespace ModbusTCP
         ' Write asynchronous data acknowledge
         Private Sub OnSend(ByVal result As System.IAsyncResult)
             If result.IsCompleted = False Then
-                CallException(&HFFFF, &HFF, excSendFailt)
+                CallException(&HFFFF, &HFF, &HFF, excSendFailt)
             End If
         End Sub
 
         ' ------------------------------------------------------------------------
         ' Write asynchronous data response
         Private Sub OnReceive(ByVal result As System.IAsyncResult)
-            Try
+            If result.IsCompleted = False Then
+                CallException(&HFF, &HFF, &HFF, excExceptionConnectionLost)
+            End If
 
-                RaiseEvent statConnect(_connected)
-                If result.IsCompleted = False Then
-                    CallException(&HFF, &HFF, excExceptionConnectionLost)
-                End If
+            Dim id As UShort = SwapUInt16(BitConverter.ToUInt16(tcpAsyClBuffer, 0))
+            Dim unit As Byte = tcpAsyClBuffer(6)
+            Dim [function] As Byte = tcpAsyClBuffer(7)
+            Dim data() As Byte
 
-                Dim id As UShort = BitConverter.ToUInt16(tcpAsyClBuffer, 0)
-
-                Dim [function] As Byte = tcpAsyClBuffer(7)
-                Dim data As Byte()
-
+            ' ------------------------------------------------------------
+            ' Write response data
+            If ([function] >= fctWriteSingleCoil) AndAlso ([function] <> fctReadWriteMultipleRegister) Then
+                data = New Byte(1) {}
+                Array.Copy(tcpAsyClBuffer, 10, data, 0, 2)
                 ' ------------------------------------------------------------
-                ' Write response data
-                If ([function] >= fctWriteSingleCoil) AndAlso ([function] <> fctReadWriteMultipleRegister) Then
-                    data = New Byte(1) {}
-                    Array.Copy(tcpAsyClBuffer, 10, data, 0, 2)
-                Else
-                    ' ------------------------------------------------------------
-                    ' Read response data
-                    data = New Byte(tcpAsyClBuffer(8) - 1) {}
-                    Array.Copy(tcpAsyClBuffer, 9, data, 0, tcpAsyClBuffer(8))
-                End If
+                ' Read response data
+            Else
+                data = New Byte(tcpAsyClBuffer(8) - 1) {}
+                Array.Copy(tcpAsyClBuffer, 9, data, 0, tcpAsyClBuffer(8))
+            End If
+            ' ------------------------------------------------------------
+            ' Response data is slave exception
+            If [function] > excExceptionOffset Then
+                [function] -= excExceptionOffset
+                CallException(id, unit, [function], tcpAsyClBuffer(8))
                 ' ------------------------------------------------------------
-                ' Response data is slave exception
-                If [function] > excExceptionOffset Then
-                    [function] -= excExceptionOffset
-                    CallException(id, [function], tcpAsyClBuffer(8))
-                    ' ------------------------------------------------------------
-                    ' Response data is regular data
-                Else
-
-                    RaiseEvent OnResponseData(id, [function], data)
-
-                End If
-
-            Catch ex As Exception
-                Debug.WriteLine("erreur on receive mdb")
-            End Try
+                ' Response data is regular data
+            ElseIf OnResponseDataEvent IsNot Nothing Then
+                RaiseEvent OnResponseData(id, unit, [function], data)
+            End If
         End Sub
 
         ' ------------------------------------------------------------------------
         ' Write data and and wait for response
-        Private Function WriteSyncData(ByVal write_data As Byte(), ByVal id As UShort) As Byte()
+        Private Function WriteSyncData(ByVal write_data() As Byte, ByVal id As UShort) As Byte()
 
             If tcpSynCl.Connected Then
                 Try
-                    tcpSynCl.Send(write_data, 0, write_data.Length, Sockets.SocketFlags.None)
-                    Dim result As Integer = tcpSynCl.Receive(tcpSynClBuffer, 0, tcpSynClBuffer.Length, Sockets.SocketFlags.None)
+                    tcpSynCl.Send(write_data, 0, write_data.Length, SocketFlags.None)
+                    Dim result As Integer = tcpSynCl.Receive(tcpSynClBuffer, 0, tcpSynClBuffer.Length, SocketFlags.None)
 
+                    Dim unit As Byte = tcpSynClBuffer(6)
                     Dim [function] As Byte = tcpSynClBuffer(7)
-                    Dim data As Byte()
+                    Dim data() As Byte
 
                     If result = 0 Then
-                        CallException(id, write_data(7), excExceptionConnectionLost)
+                        CallException(id, unit, write_data(7), excExceptionConnectionLost)
                     End If
 
                     ' ------------------------------------------------------------
                     ' Response data is slave exception
                     If [function] > excExceptionOffset Then
                         [function] -= excExceptionOffset
-                        CallException(id, [function], tcpSynClBuffer(8))
+                        CallException(id, unit, [function], tcpSynClBuffer(8))
                         Return Nothing
                         ' ------------------------------------------------------------
                         ' Write response data
                     ElseIf ([function] >= fctWriteSingleCoil) AndAlso ([function] <> fctReadWriteMultipleRegister) Then
                         data = New Byte(1) {}
                         Array.Copy(tcpSynClBuffer, 10, data, 0, 2)
-                    Else
                         ' ------------------------------------------------------------
                         ' Read response data
+                    Else
                         data = New Byte(tcpSynClBuffer(8) - 1) {}
                         Array.Copy(tcpSynClBuffer, 9, data, 0, tcpSynClBuffer(8))
                     End If
                     Return data
-                Catch generatedExceptionName As SystemException
-                    CallException(id, write_data(7), excExceptionConnectionLost)
+                Catch e1 As SystemException
+                    CallException(id, write_data(6), write_data(7), excExceptionConnectionLost)
                 End Try
             Else
-                CallException(id, write_data(7), excExceptionConnectionLost)
+                CallException(id, write_data(6), write_data(7), excExceptionConnectionLost)
             End If
             Return Nothing
         End Function
-       
     End Class
 End Namespace
+

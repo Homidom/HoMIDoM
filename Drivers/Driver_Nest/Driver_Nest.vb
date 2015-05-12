@@ -51,14 +51,98 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
     'param avancé
     Dim _DEBUG As Boolean = False
-    Dim _ClientID As String = "abcdefghi0123456789"
-    Dim _ClientSecret As String = "abcdefghi0123456789"
-    Dim _Pincode As String = "A1B2C3D4E5F6"
 
 #End Region
 
 #Region "Variables internes"
-    Dim _Obj As Object = Nothing
+
+    Dim obj As Object
+    Public Auth As Authentication
+    Dim devlist As All
+    Dim _ClientID As String = ""
+    Dim _ClientSecret As String = ""
+    Dim _Pincode As String = ""
+    Dim _AccessToken As String = ""
+
+    Public Class Authentication
+        Public access_token As String
+        Public expires_in As Integer
+    End Class
+
+    Public Class All
+        Public Property devices() As Devices
+        Public Property structures() As Dictionary(Of String, [Structure])
+    End Class
+
+    Public Class Devices
+        Public Property thermostats() As Dictionary(Of String, Thermostat)
+        Public Property smoke_co_alarms() As Dictionary(Of String, smoke_co_alarm)
+    End Class
+
+    Public Class [Structure]
+        Public Property name As String
+        Public Property country_code As String
+        Public Property time_zone As String
+        Public Property away As String
+        Public Property thermostats As IList(Of String)
+        Public Property structure_id As String
+    End Class
+
+    Public Class Thermostat
+        Public Property humidity As Integer
+        Public Property locale As String
+        Public Property temperature_scale As String
+        Public Property is_using_emergency_heat As Boolean
+        Public Property has_fan As Boolean
+        Public Property software_version As String
+        Public Property has_leaf As Boolean
+        Public Property device_id As String
+        Public Property name As String
+        Public Property can_heat As Boolean
+        Public Property can_cool As Boolean
+        Public Property hvac_mode As String
+        Public Property target_temperature_c As Double
+        Public Property target_temperature_f As Integer
+        Public Property target_temperature_high_c As Double
+        Public Property target_temperature_high_f As Integer
+        Public Property target_temperature_low_c As Double
+        Public Property target_temperature_low_f As Integer
+        Public Property ambient_temperature_c As Double
+        Public Property ambient_temperature_f As Integer
+        Public Property away_temperature_high_c As Double
+        Public Property away_temperature_high_f As Integer
+        Public Property away_temperature_low_c As Double
+        Public Property away_temperature_low_f As Integer
+        Public Property structure_id As String
+        Public Property fan_timer_active As Boolean
+        Public Property name_long As String
+        Public Property is_online As Boolean
+        Public Property last_connection As String
+    End Class
+
+    Public Class metadata
+        Public Property access_token As String
+        Public Property client_version As Integer
+    End Class
+
+    Public Class smoke_co_alarm
+
+        Public Property device_id As String
+        Public Property locale As String
+        Public Property software_version As String
+        Public Property structure_id As String
+        Public Property name As String
+        Public Property name_long As String
+        Public Property last_connection As String
+        Public Property is_online As Boolean
+        Public Property battery_health As String
+        Public Property co_alarm_state As String
+        Public Property smoke_alarm_state As String
+        Public Property is_manual_test_active As Boolean
+        Public Property last_manual_test_time As String
+        Public Property ui_color_state As String
+    End Class
+
 #End Region
 
 #Region "Propriétés génériques"
@@ -289,7 +373,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             Select Case UCase(Champ)
                 Case "ADRESSE1"
                     If Value IsNot Nothing Then
-                        If String.IsNullOrEmpty(Value) Or IsNumeric(Value) Then
+                        If String.IsNullOrEmpty(Value) Then
                             retour = "Veuillez saisir le nom du module en respectant la casse ( maj/minuscule )"
                         End If
                     End If
@@ -306,14 +390,20 @@ Imports STRGS = Microsoft.VisualBasic.Strings
         Try
             'récupération des paramétres avancés
             Try
+
                 _DEBUG = _Parametres.Item(0).Valeur
                 _ClientID = _Parametres.Item(1).Valeur
                 _ClientSecret = _Parametres.Item(2).Valeur
+                _Pincode = _Parametres.Item(3).Valeur
+                _AccessToken = _Parametres.Item(4).Valeur
+
             Catch ex As Exception
                 _DEBUG = False
                 _Parametres.Item(0).Valeur = False
                 WriteLog("ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut : " & ex.Message)
             End Try
+
+            GetAccessToken()
 
             _IsConnect = True
             WriteLog("Driver " & Me.Nom & " démarré")
@@ -351,7 +441,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             If _Enable = False Then Exit Sub
 
             If _IsConnect = False Then
-                WriteLog("ERR: READ, Le driver n'est pas démarré, impossible d'écrire sur le port")
+                WriteLog("ERR: READ, Le driver n'est pas démarré, impossible de lire le port")
                 Exit Sub
             End If
 
@@ -362,125 +452,163 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             End If
 
             ' recherche du device/module a interroger
-            GetListeDevice()
+            GetData()
 
-            Dim deviceIDalire, moduleIDalire As String
-            Dim nummodulealire As Integer
-            deviceIDalire = ""
-            moduleIDalire = ""
-            nummodulealire = 99
-            If (Objet.adresse1 = devlist.body.devices.Item(0).module_name) Then
-                deviceIDalire = devlist.body.devices.Item(0)._id
-            End If
-            For i = 0 To devlist.body.modules.Count - 1
-                If Objet.adresse1 = devlist.body.modules.Item(i).module_name Then
-                    moduleIDalire = devlist.body.modules.Item(i)._id
-                    nummodulealire = i
-                    Exit For
-                End If
-            Next
+            If devlist.devices.smoke_co_alarms IsNot Nothing Then
+                For i = 0 To devlist.devices.smoke_co_alarms.Count - 1
+                    If Objet.adresse1 = "Detecteur " & devlist.devices.smoke_co_alarms.Values(i).name Then
 
-            ' nom de device non trouve
-            If (deviceIDalire = "") And (moduleIDalire = "") Then
-                WriteLog("ERR: Pas de nom de device/module pour adresse1= " & Objet.adresse1)
-                Exit Sub
+                        If TypeOf (Objet.value) Is String Then
+                            Select Case Objet.adresse2
+
+                                Case "locale"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).locale
+                                Case "name"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).name
+                                Case "name_long"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).name_long
+                                Case "last_connection"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).last_connection
+                                Case "battery_health"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).battery_health
+                                Case "co_alarm_state"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).co_alarm_state
+                                Case "smoke_alarm_state"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).smoke_alarm_state
+                                Case "last_manual_test_time"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).last_manual_test_time
+                                Case "ui_color_state"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).ui_color_state
+                                Case "all"
+                                    Objet.value = "locale = " & devlist.devices.smoke_co_alarms.Values(i).locale & vbCrLf & _
+                                    "name = " & devlist.devices.smoke_co_alarms.Values(i).name & vbCrLf & _
+                                    "name_long = " & devlist.devices.smoke_co_alarms.Values(i).name_long & vbCrLf & _
+                                    "last_connection = " & devlist.devices.smoke_co_alarms.Values(i).last_connection & vbCrLf & _
+                                    "battery_health = " & devlist.devices.smoke_co_alarms.Values(i).battery_health & vbCrLf & _
+                                    "co_alarm_state = " & devlist.devices.smoke_co_alarms.Values(i).co_alarm_state & vbCrLf & _
+                                    "smoke_alarm_state = " & devlist.devices.smoke_co_alarms.Values(i).smoke_alarm_state & vbCrLf & _
+                                    "last_manual_test_time = " & devlist.devices.smoke_co_alarms.Values(i).last_manual_test_time & vbCrLf & _
+                                    "is_online = " & CStr(devlist.devices.smoke_co_alarms.Values(i).is_online) & vbCrLf & _
+                                    "is_manual_test_active = " & CStr(devlist.devices.smoke_co_alarms.Values(i).is_manual_test_active) & vbCrLf & _
+                                    "ui_color_state = " & devlist.devices.smoke_co_alarms.Values(i).ui_color_state
+
+                            End Select
+                        End If
+
+                        If TypeOf (Objet.value) Is Boolean Then
+                            Select Case Objet.adresse2
+
+                                Case "is_online"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).is_online
+                                Case "is_manual_test_active"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).is_manual_test_active
+                                Case "battery_health"
+                                    If devlist.devices.smoke_co_alarms.Values(i).battery_health = "Ok" Then
+                                        Objet.value = True
+                                    Else
+                                        Objet.value = False
+                                    End If
+                                Case "co_alarm_state"
+                                    If devlist.devices.smoke_co_alarms.Values(i).co_alarm_state = "Ok" Then
+                                        Objet.value = True
+                                    Else
+                                        Objet.value = False
+                                    End If
+                                Case "smoke_alarm_state"
+                                    If devlist.devices.smoke_co_alarms.Values(i).smoke_alarm_state = "Ok" Then
+                                        Objet.value = True
+                                    Else
+                                        Objet.value = False
+                                    End If
+                            End Select
+                        End If
+
+                    End If
+                Next
             End If
 
-            'releve de la batterie device/module
-            If (Objet.Type = "BATTERIE") And (moduleIDalire = "") Then
-                Objet.Value = devlist.body.devices.Item(0).battery_vp
-                Exit Sub
-            End If
-            If (Objet.Type = "BATTERIE") And (moduleIDalire <> "") Then
-                ' ne fais pas la différence entre module int et ext
-                Objet.value = Format(((devlist.body.modules.Item(nummodulealire).battery_vp - 3600) * 100) / 2400, "#0")
-                Exit Sub
+            If devlist.devices.thermostats IsNot Nothing Then
+                For i = 0 To devlist.devices.thermostats.Count - 1
+                    If Objet.adresse1 = "Thermostat " & devlist.devices.thermostats.Values(i).name Then
+
+                        If TypeOf (Objet.value) Is Boolean Then
+                            Select Case Objet.adresse2
+
+                                Case "locale"
+                                    Objet.value = devlist.devices.thermostats.Values(i).locale
+                                Case "temperature_scale"
+                                    Objet.value = devlist.devices.thermostats.Values(i).temperature_scale
+                                Case "name"
+                                    Objet.value = devlist.devices.thermostats.Values(i).name
+                                Case "hvac_mode"
+                                    Objet.value = devlist.devices.thermostats.Values(i).hvac_mode
+                                Case "name_long"
+                                    Objet.value = devlist.devices.thermostats.Values(i).name_long
+                                Case "last_connection"
+                                    Objet.value = devlist.devices.thermostats.Values(i).last_connection
+                                Case "all"
+
+                            End Select
+                        End If
+
+                        If TypeOf (Objet.value) Is Boolean Then
+                            Select Case Objet.adresse2
+
+                                Case "is_using_emergency_heat"
+                                    Objet.value = devlist.devices.thermostats.Values(i).is_using_emergency_heat
+                                Case "has_fan"
+                                    Objet.value = devlist.devices.thermostats.Values(i).has_fan
+                                Case "has_leaf"
+                                    Objet.value = devlist.devices.thermostats.Values(i).has_leaf
+                                Case "can_heat"
+                                    Objet.value = devlist.devices.thermostats.Values(i).can_heat
+                                Case "can_cool"
+                                    Objet.value = devlist.devices.thermostats.Values(i).can_cool
+                                Case "fan_timer_active"
+                                    Objet.value = devlist.devices.thermostats.Values(i).fan_timer_active
+                                Case "is_online"
+                                    Objet.value = devlist.devices.thermostats.Values(i).is_online
+
+                            End Select
+                        End If
+
+                        If TypeOf (Objet.value) Is Double Or TypeOf (Objet.value) Is Integer Then
+                            Select Case Objet.adresse2
+
+                                Case "humidity"
+                                    Objet.value = devlist.devices.thermostats.Values(i).humidity
+                                Case "target_temperature_c"
+                                    Objet.value = devlist.devices.thermostats.Values(i).target_temperature_c
+                                Case "target_temperature_f"
+                                    Objet.value = devlist.devices.thermostats.Values(i).target_temperature_f
+                                Case "target_temperature_high_c"
+                                    Objet.value = devlist.devices.thermostats.Values(i).target_temperature_high_c
+                                Case "target_temperature_high_f"
+                                    Objet.value = devlist.devices.thermostats.Values(i).target_temperature_high_f
+                                Case "target_temperature_low_c"
+                                    Objet.value = devlist.devices.thermostats.Values(i).target_temperature_low_c
+                                Case "target_temperature_low_f"
+                                    Objet.value = devlist.devices.thermostats.Values(i).target_temperature_low_f
+                                Case "ambient_temperature_c"
+                                    Objet.value = devlist.devices.thermostats.Values(i).ambient_temperature_c
+                                Case "ambient_temperature_f"
+                                    Objet.value = devlist.devices.thermostats.Values(i).ambient_temperature_f
+                                Case "away_temperature_high_c"
+                                    Objet.value = devlist.devices.thermostats.Values(i).away_temperature_high_c
+                                Case "away_temperature_high_f"
+                                    Objet.value = devlist.devices.thermostats.Values(i).away_temperature_high_f
+                                Case "away_temperature_low_c"
+                                    Objet.value = devlist.devices.thermostats.Values(i).away_temperature_low_c
+                                Case "away_temperature_low_f"
+                                    Objet.value = devlist.devices.thermostats.Values(i).away_temperature_low_f
+                            End Select
+                        End If
+
+                    End If
+                Next
             End If
 
-            Select Case Objet.Type
-                Case "METEO"
-                    If nummodulealire = 99 Then
-                        Objet.TemperatureActuel = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                        Objet.HumiditeActuel = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                        Objet.MinToday = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.min_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                        Objet.MaxToday = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.max_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                        Exit Sub
-                    Else
-                        Objet.TemperatureActuel = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                        Objet.HumiditeActuel = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                        Objet.MinToday = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.min_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                        Objet.MaxToday = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.max_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                        Exit Sub
-                    End If
-                Case "TEMPERATURE"
-                    If nummodulealire = 99 Then
-                        Objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                    Else
-                        Objet.Value = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                    End If
-                Case "HUMIDITE"
-                    If nummodulealire = 99 Then
-                        Objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                    Else
-                        Objet.Value = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                    End If
-                Case "BRUIT"
-                    If nummodulealire = 99 Then
-                        Objet.Value = devlist.body.devices.Item(0).dashboard_data.Noise
-                    Else
-                        Objet.Value = devlist.body.modules.Item(nummodulealire).dashboard_data.Noise
-                    End If
-                Case "CO2"
-                    If nummodulealire = 99 Then
-                        Objet.Value = devlist.body.devices.Item(0).dashboard_data.CO2
-                    Else
-                        Objet.Value = devlist.body.modules.Item(nummodulealire).dashboard_data.CO2
-                    End If
-                Case "PLUIETOTAL"
-                    If nummodulealire = 99 Then
-                        Objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.sum_rain_24), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                    Else
-                        Objet.Value = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.sum_rain_24), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                    End If
-                Case "PLUIECOURANT"
-                    If nummodulealire = 99 Then
-                        Objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.sum_rain_1), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                    Else
-                        Objet.Value = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.sum_rain_1), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                    End If
-                Case "BAROMETRE"
-                    If nummodulealire = 99 Then
-                        Objet.Value = devlist.body.devices.Item(0).dashboard_data.Pressure
-                    Else
-                        Objet.Value = devlist.body.modules.Item(nummodulealire).dashboard_data.Pressure
-                    End If
-                Case "VITESSEVENT"
-                    If nummodulealire = 99 Then
-                        Objet.Value = devlist.body.devices.Item(0).dashboard_data.Pressure
-                    Else
-                        Objet.Value = devlist.body.modules.Item(nummodulealire).dashboard_data.Pressure
-                    End If
-                Case "GENERIQUESTRING"
-                    If nummodulealire = 99 Then
-                        Select Case Objet.adresse2.toUpper
-                            Case "CO2"
-                                Objet.Value = devlist.body.devices.Item(0).dashboard_data.CO2
-                            Case "NOISE"
-                                Objet.Value = devlist.body.devices.Item(0).dashboard_data.Noise
-                        End Select
-                    Else
-                        Select Case Objet.adresse2.toUpper
-                            Case "CO2"
-                                Objet.Value = devlist.body.modules.Item(nummodulealire).dashboard_data.CO2
-                            Case "NOISE"
-                                Objet.Value = devlist.body.modules.Item(nummodulealire).dashboard_data.Noise
-                        End Select
-                    End If
-                Case Else
-                    WriteLog("ERR: Pas de valeur enregistrée")
-                    Exit Sub
-            End Select
-            WriteLog("Valeur enregistrée : " & Objet.Type & " -> " & Objet.value)
+            WriteLog("Valeur enregistrée : " & Objet.Name & " -> " & Objet.value)
             Exit Sub
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", ex.Message)
@@ -607,32 +735,44 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             _Version = Reflection.Assembly.GetExecutingAssembly.GetName.Version.ToString
 
             'liste des devices compatibles
-            _DeviceSupport.Add(ListeDevices.METEO)
-            _DeviceSupport.Add(ListeDevices.BAROMETRE)
-            _DeviceSupport.Add(ListeDevices.DIRECTIONVENT)
-            _DeviceSupport.Add(ListeDevices.HUMIDITE)
-            _DeviceSupport.Add(ListeDevices.UV)
-            _DeviceSupport.Add(ListeDevices.VITESSEVENT)
-            _DeviceSupport.Add(ListeDevices.TEMPERATURE)
-            _DeviceSupport.Add(ListeDevices.BATTERIE)
-            _DeviceSupport.Add(ListeDevices.PLUIECOURANT)
-            _DeviceSupport.Add(ListeDevices.HUMIDITE)
-            _DeviceSupport.Add(ListeDevices.PLUIETOTAL)
-            _DeviceSupport.Add(ListeDevices.GENERIQUESTRING)
+            _DeviceSupport.Add(ListeDevices.METEO.ToString)
+            _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
+            _DeviceSupport.Add(ListeDevices.BAROMETRE.ToString)
+            _DeviceSupport.Add(ListeDevices.BATTERIE.ToString)
+            _DeviceSupport.Add(ListeDevices.COMPTEUR.ToString)
+            _DeviceSupport.Add(ListeDevices.CONTACT.ToString)
+            _DeviceSupport.Add(ListeDevices.DETECTEUR.ToString)
+            _DeviceSupport.Add(ListeDevices.DIRECTIONVENT.ToString)
+            _DeviceSupport.Add(ListeDevices.ENERGIEINSTANTANEE.ToString)
+            _DeviceSupport.Add(ListeDevices.ENERGIETOTALE.ToString)
+            _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
+            _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE.ToString)
+            _DeviceSupport.Add(ListeDevices.GENERIQUESTRING.ToString)
+            _DeviceSupport.Add(ListeDevices.HUMIDITE.ToString)
+            _DeviceSupport.Add(ListeDevices.LAMPE.ToString)
+            _DeviceSupport.Add(ListeDevices.PLUIECOURANT.ToString)
+            _DeviceSupport.Add(ListeDevices.PLUIETOTAL.ToString)
+            _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
+            _DeviceSupport.Add(ListeDevices.TELECOMMANDE.ToString)
+            _DeviceSupport.Add(ListeDevices.TEMPERATURE.ToString)
+            _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE.ToString)
+            _DeviceSupport.Add(ListeDevices.UV.ToString)
+            _DeviceSupport.Add(ListeDevices.VITESSEVENT.ToString)
+            _DeviceSupport.Add(ListeDevices.VOLET.ToString)
 
             'Parametres avancés
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
-            Add_ParamAvance("ClientID", "ID client", "abcdefghi0123456789")
-            Add_ParamAvance("ClientSecret", "Secret du client", "abcdefghi0123456789")
-            Add_ParamAvance("Username", "Nom utilisateur", "homidom@homidom.com")
-            Add_ParamAvance("Password", "Mot de passe", "homi123456")
+            Add_ParamAvance("ClientID", "ID client", "")
+            Add_ParamAvance("ClientSecret", "Secret du client", "")
+            Add_ParamAvance("Pincode", "Code d'autorisation", "")
+            Add_ParamAvance("AccessToken", "Jeton d'accès", "")
 
             'Libellé Driver
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            Add_LibelleDevice("ADRESSE1", "Nom module", "Nom du module en respectant maj./minuscule", "")
-            Add_LibelleDevice("ADRESSE2", "Nom valeur", "Obligatoire pour Noise, CO2, ", "")
+            Add_LibelleDevice("ADRESSE1", "Nom du module", "Nom du module ", "")
+            Add_LibelleDevice("ADRESSE2", "Donnée à lire", "Donnée à lire dans le module ", " | ")
             Add_LibelleDevice("REFRESH", "Refresh en sec", "Minimum 600, valeur rafraicissement station", "600")
             ' Libellés Device inutiles
             Add_LibelleDevice("SOLO", "@", "")
@@ -647,190 +787,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
 #Region "Fonctions internes"
 
-    Dim obj As Object
-    Public Auth As Authentication
-    Dim devlist As DeviceList
-
-    Public Class Authentication
-        Public access_token As String
-        Public refresh_token As String
-        Public expire_in As Integer
-        Public scope As List(Of Object)
-    End Class
-
-    'new
-
-
-    Public Class All
-        Public Property devices() As devices
-        Public Property structures() As Dictionary(Of String, [Structure])
-    End Class
-
-    Public Class Devices
-        Public Property thermostats() As Dictionary(Of String, Thermostat)
-        Public Property smoke_co_alarms() As Dictionary(Of String, smoke_co_alarm)
-    End Class
-
-    Public Class [Structure]
-        Public Property name() As String
-        Public Property country_code() As String
-        Public Property time_zone() As String
-        Public Property away() As String
-        Public Property thermostats() As IList(Of String)
-        Public Property structure_id() As String
-    End Class
-
-    Public Class Thermostat
-        Public Property humidity() As Integer
-        Public Property locale() As String
-        Public Property temperature_scale() As String
-        Public Property is_using_emergency_heat() As Boolean
-        Public Property has_fan() As Boolean
-        Public Property software_version() As String
-        Public Property has_leaf() As Boolean
-        Public Property device_id() As String
-        Public Property name() As String
-        Public Property can_heat() As Boolean
-        Public Property can_cool() As Boolean
-        Public Property hvac_mode() As String
-        Public Property target_temperature_c() As Double
-        Public Property target_temperature_f() As Integer
-        Public Property target_temperature_high_c() As Double
-        Public Property target_temperature_high_f() As Integer
-        Public Property target_temperature_low_c() As Double
-        Public Property target_temperature_low_f() As Integer
-        Public Property ambient_temperature_c() As Double
-        Public Property ambient_temperature_f() As Integer
-        Public Property away_temperature_high_c() As Double
-        Public Property away_temperature_high_f() As Integer
-        Public Property away_temperature_low_c() As Double
-        Public Property away_temperature_low_f() As Integer
-        Public Property structure_id() As String
-        Public Property fan_timer_active() As Boolean
-        Public Property name_long() As String
-        Public Property is_online() As Boolean
-        Public Property last_connection() As Date
-    End Class
-
-    Public Class metadata
-        Public access_token As String
-        Public client_version As Integer
-    End Class
-
-    Public Class smoke_co_alarm
-
-        Public device_id As String
-        Public locale As String
-        Public software_version As String
-        Public structure_id As String
-        Public name As String
-        Public name_long As String
-        Public last_connection As String
-        Public is_online As Boolean
-        Public battery_health As String
-        Public co_alarm_state As String
-        Public smoke_alarm_state As String
-        Public is_manual_test_active As Boolean
-        Public last_manual_test_time As String
-        Public ui_color_state As String
-    End Class
-    'end new
-
-    Public Class DeviceList
-        Public status As String
-        Public body As body
-        Public time_exec As Double
-    End Class
-
-    Public Class datasmodule
-        Public body As body
-        Public time_exec As String
-        Public time_server As String
-    End Class
-
-    Public Class body
-        Public devices As List(Of devices2)
-        Public modules As List(Of modules)
-    End Class
-
-    Public Class modules
-        Public _id As String
-        Public battery_rint As Integer
-        Public battery_vp As Integer
-        Public date_setup As Nestdate
-        Public firmware As Integer
-        Public last_alarm_stored As Integer
-        Public last_event_stored As Integer
-        Public last_message As Integer
-        Public last_seen As Integer
-        Public main_device As String
-        Public module_name As String
-        Public rf_status As Integer
-        Public type As String
-        Public dashboard_data As dashboarddata
-    End Class
-
-    Public Class devices2
-        Public _id As String
-        Public access_code As String
-        Public battery_rint As Integer
-        Public battery_vp As Integer
-        Public date_creation As Nestdate
-        Public firmware As Integer
-        Public invitation_disable As Boolean
-        Public ip As String
-        Public last_alarm_stored As Integer
-        Public last_data_store As Object
-        Public last_event_stored As Integer
-        Public last_status_store As Integer
-        Public module_name As String
-        Public modules As List(Of Object)
-        Public netcom_transport As String
-        Public place As place
-        Public public_ext_data As Boolean
-        Public rf_amb_status As Integer
-        Public station_name As String
-        Public type As String
-        Public update_device As Boolean
-        Public user_owner As String
-        Public wifi_status As Integer
-        Public streaming_key As String
-        Public dashboard_data As dashboarddata
-    End Class
-
-    Public Class dashboarddata
-        Public Temperature As Double
-        Public Humidity As Double
-        Public min_temp As Double
-        Public max_temp As Double
-        Public CO2 As Integer
-        Public Rain As Double
-        Public sum_rain_24 As Double
-        Public sum_rain_1 As Double
-        Public AbsolutePressure As Double
-        Public Noise As Integer
-        Public Pressure As Double
-        Public time_utc As Integer
-        Public date_max_temp As Integer
-        Public date_min_temp As Integer
-    End Class
-
-    Class Nestdate
-        Public sec As Integer
-        Public usec As Integer
-    End Class
-
-    Class place
-        Public altitude As Integer
-        Public bssid As String
-        Public city As String
-        Public country As String
-        Public location As List(Of Double)
-        Public timezone As String
-        Public trust_location As Boolean
-    End Class
-
-    Private Sub GetListeDevice()
+    Private Sub GetAccessToken()
 
         Try
 
@@ -842,131 +799,81 @@ Imports STRGS = Microsoft.VisualBasic.Strings
                 WriteLog("ERR: Erreur de lecture de debug : " & ex.Message)
             End Try
 
+            If _Pincode = "" Then
+                WriteLog("ERR: Le parametre Pincode n'est pas renseigné")
+                Exit Sub
+            End If
+
+            If _AccessToken <> "" Then
+                Exit Sub
+            End If
+
             Dim client As New Net.WebClient
             Dim reqparm As New Specialized.NameValueCollection
 
-            reqparm.Add("grant_type", "password")
-            reqparm.Add("client_id", _Parametres.Item(1).valeur)
-            reqparm.Add("client_secret", _Parametres.Item(2).valeur)
-            reqparm.Add("username", _Parametres.Item(3).valeur)
-            reqparm.Add("password", _Parametres.Item(4).valeur)
-            Dim responsebytes = client.UploadValues("http://api.Nest.net/oauth2/token", "POST", reqparm)
+            reqparm.Add("code", _Pincode)
+            reqparm.Add("client_id", _ClientID)
+            reqparm.Add("client_secret", _ClientSecret)
+            reqparm.Add("grant_type", "authorization_code")
+
+            Dim responsebytes = client.UploadValues("https://api.home.nest.com/oauth2/access_token?", "POST", reqparm)
             Dim responsebody = (New System.Text.UTF8Encoding).GetString(responsebytes)
+
+            WriteLog("DBG: responsebody : " & responsebody.ToString)
+            obj = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody)
+            WriteLog("DBG: Objet Json : " & obj.ToString)
+            Auth = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(Authentication))
+
             WriteLog("DBG: responsebody : " & responsebody.ToString)
             Auth = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(Authentication))
 
             'va chercher les module que si connecté
-            If Auth.expire_in > 0 Then
-                WriteLog("Requête https://api.Nest.net/oauth2/token  OK")
-                WriteLog("DBG: Connect : " & responsebody.ToString)
-                ' recuperation des modules
-                GetModules()
-            Else
-                WriteLog("ERR: Connect, non connecté")
-            End If
-        Catch ex As Exception
-            WriteLog("ERR: GetListDevice, Exception : " & ex.Message)
-        End Try
-    End Sub
-
-    Private Sub GetListeDevice2()
-
-        Try
-
-            Try ' lecture de la variable debug, permet de rafraichir la variable debug sans redemarrer le service
-                _DEBUG = _Parametres.Item(0).Valeur
-            Catch ex As Exception
-                _DEBUG = False
-                _Parametres.Item(0).Valeur = False
-                WriteLog("ERR: Erreur de lecture de debug : " & ex.Message)
-            End Try
-
-            Dim client As New Net.WebClient
-            Dim reqparm As New Specialized.NameValueCollection
-            '"https://api.home.nest.com/oauth2/access_token?code=AUTORIZATION_CODE&client_id={1}&client_secret={2}&grant_type=authorization_code"
-            'reqparm.Add("grant_type", "password")
-            'reqparm.Add("client_id", _Parametres.Item(1).valeur)
-            'reqparm.Add("client_secret", _Parametres.Item(2).valeur)
-            'reqparm.Add("pincode", _Parametres.Item(3).valeur)
-            'reqparm.Add("password", _Parametres.Item(4).valeur)
-            'Dim responsebytes = client.UploadValues("https://api.home.nest.com/oauth2/access_token?", "POST", reqparm)
-            Dim responsebody = "https://api.home.nest.com/oauth2/access_token?code=" & _Parametres.Item(3).valeur & "&client_id=" & _Parametres.Item(1).valeur & "&client_secret=" & _Parametres.Item(2).valeur & "&grant_type=authorization_code" '(New System.Text.UTF8Encoding).GetString(responsebytes)
-            WriteLog("DBG: responsebody : " & responsebody.ToString)
-            Auth = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(Authentication))
-
-            'va chercher les module que si connecté
-            If Auth.expire_in > 0 Then
+            If Auth.expires_in > 0 Then
                 WriteLog("Requête https://api.home.nest.com/oauth2/access_token?  OK")
+                WriteLog("DBG: Token : " & Auth.access_token)
                 WriteLog("DBG: Connect : " & responsebody.ToString)
-                ' recuperation des modules
-                GetModules2()
+                _Parametres.Item(4).Valeur = Auth.access_token
+                _AccessToken = Auth.access_token
             Else
                 WriteLog("ERR: Connect, non connecté")
             End If
         Catch ex As Exception
-            WriteLog("ERR: GetListDevice, Exception : " & ex.Message)
+            WriteLog("ERR: GetAccessToken, Exception : " & ex.Message)
         End Try
     End Sub
 
-    Private Sub GetModules()
+    Private Sub GetData()
 
         Try
+            Dim IdLib As String = ""
             Dim client As New Net.WebClient
-            Dim responsebody = client.DownloadString("https://api.Nest.net/api/devicelist?access_token=" & Auth.access_token)
-            WriteLog("DBG: Token : " & Auth.access_token)
+            Dim responsebody = client.DownloadString("https://developer-api.nest.com/?auth=" & _AccessToken)
             obj = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody)
-            devlist = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(DeviceList))
+            devlist = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(All))
 
-            WriteLog("DBG: GetModule : " & responsebody.ToString)
+            WriteLog("DBG: GetData : " & responsebody.ToString)
 
-            Dim i As Integer
-            WriteLog("DBG: Device : " & devlist.body.devices.Item(0).module_name & " | type -> " & devlist.body.devices.Item(0).type & ", ID = " & devlist.body.devices.Item(0)._id)
-            WriteLog("DBG: Nbre module : " & devlist.body.modules.Count)
-            For i = 0 To devlist.body.modules.Count - 1
-                WriteLog("DBG: Module : " & devlist.body.modules.Item(i).module_name & " | type -> " & devlist.body.modules.Item(i).type & ", ID = " & devlist.body.modules.Item(i)._id)
-            Next
+            If devlist.devices.smoke_co_alarms IsNot Nothing Then
+                WriteLog("DBG: Nombre de detecteur Fumée/Co2 : " & devlist.devices.smoke_co_alarms.Count)
+                For i = 0 To devlist.devices.smoke_co_alarms.Count - 1
+                    IdLib += "Detecteur " & devlist.devices.smoke_co_alarms.Values(i).name & "|"
+                    WriteLog("DBG: Detecteur Fumée/Co2 : " & devlist.devices.smoke_co_alarms.Values(i).name & ", ID = " & devlist.devices.smoke_co_alarms.Values(i).device_id)
+                Next
+            End If
+            If devlist.devices.thermostats IsNot Nothing Then
+                WriteLog("DBG: Nombre de Thermostat : " & devlist.devices.thermostats.Count)
+                For i = 0 To devlist.devices.thermostats.Count - 1
+                    IdLib += "Thermostat " & devlist.devices.thermostats.Values(i).name & "|"
+                    WriteLog("DBG: Thermostat : " & devlist.devices.thermostats.Values(i).name & ", ID = " & devlist.devices.thermostats.Values(i).device_id)
+                Next
+            End If
+
+            Add_LibelleDevice("ADRESSE1", "Id du module", "Identifiant du module ", IdLib)
+
         Catch ex As Exception
-            WriteLog("ERR: GetModules, Exception : " & ex.Message)
+            WriteLog("ERR: GetData, Exception : " & ex.Message)
         End Try
     End Sub
-
-    Private Sub GetModules2()
-
-        Try
-            Dim client As New Net.WebClient
-            Dim responsebody = client.DownloadString("https://developer-api.nest.com/?auth=" & Auth.access_token)
-            WriteLog("DBG: Token : " & Auth.access_token)
-            obj = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody)
-            devlist = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(DeviceList))
-
-            WriteLog("DBG: GetModule : " & responsebody.ToString)
-
-            Dim i As Integer
-            WriteLog("DBG: Device : " & devlist.body.devices.Item(0).module_name & " | type -> " & devlist.body.devices.Item(0).type & ", ID = " & devlist.body.devices.Item(0)._id)
-            WriteLog("DBG: Nbre module : " & devlist.body.modules.Count)
-            For i = 0 To devlist.body.modules.Count - 1
-                WriteLog("DBG: Module : " & devlist.body.modules.Item(i).module_name & " | type -> " & devlist.body.modules.Item(i).type & ", ID = " & devlist.body.modules.Item(i)._id)
-            Next
-        Catch ex As Exception
-            WriteLog("ERR: GetModules, Exception : " & ex.Message)
-        End Try
-    End Sub
-
-    'Private Sub GetDataDevice(deviceid As String, moduleid As String)
-
-    '        Exit Sub
-    '    Dim urldata As String
-    '   urldata = "https://api.Nest.net/api/getmeasure?access_token=" & Auth.access_token & "&device_id=" & deviceid
-    '   If moduleid <> "" Then urldata = urldata + "&module_id=" & moduleid
-    '   urldata = urldata + "&type=Temperature,Humidity,Co2,Pressure,Noise,Rain&limit=1&date_end=last&scale=30min"
-    '        ReDim DatasModule.value(1, 6)
-
-    '    Dim client As New Net.WebClient
-    '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "Nest", "url " & urldata)
-    '    Dim responsedatas = client.DownloadString(urldata)
-    '    obj = Newtonsoft.Json.JsonConvert.DeserializeObject(responsedatas)
-
-    'End Sub
 
     Private Sub WriteLog(ByVal message As String)
         Try
