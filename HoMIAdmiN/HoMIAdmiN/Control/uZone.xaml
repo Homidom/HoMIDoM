@@ -56,7 +56,11 @@
 
                     </StackPanel>
                 </StackPanel>
+                <StackPanel Orientation="Horizontal" Name="StkID">
+                    <Label Content="ID:" Foreground="LightGray" FontSize="10" />
+                    <TextBox Name="TxtID" MinWidth="300" FontSize="10" IsReadOnly="True" Foreground="White" Background="Transparent" BorderThickness="0" />
                 </StackPanel>
+            </StackPanel>
         </Border>
         <Image Height="60" HorizontalAlignment="Left" Margin="17,10,0,0" Name="ImgIcon" Stretch="Fill" VerticalAlignment="Top" Width="60" Source="/HoMIAdmiN;component/Images/Defaut_128.png" ToolTip="Click sur image pour la modifier">
             <Image.LayoutTransform >

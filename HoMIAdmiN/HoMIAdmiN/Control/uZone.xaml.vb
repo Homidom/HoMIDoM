@@ -115,6 +115,7 @@ Partial Public Class uZone
                         ImgIcon.Source = ConvertArrayToImage(myService.GetByteFromImage(x.Icon))
                         ImgIcon.Tag = x.Icon
                     End If
+                    TxtID.Text = x.ID
                 End If
             End If
 
