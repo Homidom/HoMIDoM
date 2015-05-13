@@ -925,13 +925,13 @@ Namespace HoMIDom
         ''' <param name="ZoneId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetZoneInZone(ByVal IdSrv As String, ByVal zoneId As String) As List(Of Zone)
+        <OperationContract()> Function GetZoneInZone(ByVal IdSrv As String, ByVal zoneId As String) As List(Of String) 'Zone)
 
         ''' <summary>Retourne la liste des macros d'une zone depuis son ID</summary>
         ''' <param name="ZoneId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function GetMacroInZone(ByVal IdSrv As String, ByVal zoneId As String) As List(Of Macro)
+        <OperationContract()> Function GetMacroInZone(ByVal IdSrv As String, ByVal zoneId As String) As List(Of String) 'Macro)
 
         ''' <summary>
         ''' Retourne l'objet d'une zone par son ID

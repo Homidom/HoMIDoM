@@ -8484,19 +8484,28 @@ Namespace HoMIDom
         ''' <param name="ZoneId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function GetZoneInZone(ByVal IdSrv As String, ByVal zoneId As String) As List(Of Zone) Implements IHoMIDom.GetZoneInZone
+        Function GetZoneInZone(ByVal IdSrv As String, ByVal zoneId As String) As List(Of String) Implements IHoMIDom.GetZoneInZone
             Try
                 If VerifIdSrv(IdSrv) = False Then
                     Return Nothing
                 End If
 
                 Dim x As Zone = ReturnZoneById(_IdSrv, zoneId)
-                Dim y As New List(Of Zone)
+                Dim y As New List(Of String) 'New List(Of Zone)
                 If x IsNot Nothing Then
                     If x.ListElement.Count > 0 Then
                         For i As Integer = 0 To x.ListElement.Count - 1
-                            Dim z As Zone = ReturnZoneById(IdSrv, x.ListElement.Item(i).ElementID)
-                            If z IsNot Nothing Then y.Add(z)
+                            'Dim z As Zone = ReturnZoneById(IdSrv, x.ListElement.Item(i).ElementID)
+                            'If z IsNot Nothing Then y.Add(z)
+
+
+                            'renvoie uniquement l'ID
+                            'on verifie si c'est une zone
+                            For j As Integer = 0 To _ListZones.Count - 1
+                                If _ListZones.Item(j).ID = x.ListElement.Item(i).ElementID Then y.Add(x.ListElement.Item(i).ElementID)
+                            Next
+
+
                         Next
                     End If
                 End If
@@ -8513,20 +8522,27 @@ Namespace HoMIDom
         ''' <param name="ZoneId"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Function GetMacroInZone(ByVal IdSrv As String, ByVal zoneId As String) As List(Of Macro) Implements IHoMIDom.GetMacroInZone
+        Function GetMacroInZone(ByVal IdSrv As String, ByVal zoneId As String) As List(Of String) Implements IHoMIDom.GetMacroInZone
             Try
                 If VerifIdSrv(IdSrv) = False Then
                     Return Nothing
                 End If
 
                 Dim x As Zone = ReturnZoneById(_IdSrv, zoneId)
-                Dim y As New List(Of Macro)
+                Dim y As New List(Of String) 'New List(Of Macro)
 
                 If x IsNot Nothing Then
                     If x.ListElement.Count > 0 Then
                         For i As Integer = 0 To x.ListElement.Count - 1
-                            Dim z As Macro = ReturnMacroById(IdSrv, x.ListElement.Item(i).ElementID)
-                            If z IsNot Nothing Then y.Add(z)
+                            'Dim z As Macro = ReturnMacroById(IdSrv, x.ListElement.Item(i).ElementID)
+                            'If z IsNot Nothing Then y.Add(z)
+
+                            'renvoie uniquement l'ID
+                            'on verifie si c'est une zone
+                            For j As Integer = 0 To _ListMacros.Count - 1
+                                If _ListMacros.Item(j).ID = x.ListElement.Item(i).ElementID Then y.Add(x.ListElement.Item(i).ElementID)
+                            Next
+
                         Next
                     End If
                 End If
