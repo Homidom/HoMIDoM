@@ -1,7 +1,7 @@
 ﻿Imports System.IO
 Imports System.Net
 Imports System.Net.Sockets
-Imports System.Runtime.Serialization.Formatters.Soap
+'Imports System.Runtime.Serialization.Formatters.Soap
 Imports System.ServiceModel
 Imports HoMIDom
 

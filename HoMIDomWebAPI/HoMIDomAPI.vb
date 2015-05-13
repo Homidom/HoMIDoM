@@ -67,7 +67,7 @@ Public Class HoMIDomAPI
             })
 
             ' Add jsonp formatter for cross domain call
-            config.Formatters(0) = New WebApiContrib.Formatting.Jsonp.JsonpMediaTypeFormatter() ' Replace default JSON by JSONP formatter
+            config.Formatters(0) = New WebApiContrib.Formatting.Jsonp.JsonpMediaTypeFormatter(config.Formatters.XmlFormatter) ' Replace default JSON by JSONP formatter
 
             If (Environment.UserInteractive) Then Console.WriteLine(Now & " INFO    API Web démarrée sur l'adresse :  " & webApiUrl)
             server = New HttpSelfHostServer(config)

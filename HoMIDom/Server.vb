@@ -3,7 +3,7 @@ Imports System
 Imports System.IO
 Imports System.IO.Ports
 Imports System.Data
-Imports System.Data.Linq
+'Imports System.Data.Linq
 Imports System.Management
 Imports System.Xml
 Imports System.Xml.XPath
