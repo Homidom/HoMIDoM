@@ -269,6 +269,9 @@ Partial Public Class uConfigServer
                 Next
                 CbVoice.SelectedIndex = idx
 
+                ComboBoxAPI.Items.Add("GoogleCalendar")
+                ComboBoxAPI.Items.Add("Nest")
+
             End If
 
         Catch ex As Exception
@@ -591,4 +594,48 @@ Partial Public Class uConfigServer
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnStartSrvWeb_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
+
+    Private Sub ButtonAutor_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ButtonAutor.Click
+        'redirect_uri a renseigner sur le compte = http://localhost:7999/api/123456789/command/Device/" APIClient  "/ON
+        Try
+            Dim authorizationUrl As String = ""
+            If Not System.IO.File.Exists(My.Application.Info.DirectoryPath & "\config\client_secrets_" & ComboBoxAPI.Text & ".json") Then
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le fichier client secret n'existe pas, veuillez le créer")
+                Exit Sub
+            End If
+            Select Case ComboBoxAPI.Text
+                Case "Nest"
+                    authorizationUrl = String.Format("https://home.nest.com/login/oauth2?client_id=" _
+                                                     & myService.GetClientFile(ComboBoxAPI.Text).web.client_id & "&state=" & Rnd())
+                Case "GoogleCalendar"
+                    authorizationUrl = String.Format("https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/calendar&state=" _
+                                                     & Rnd() & "&access_type=offline&redirect_uri=" _
+                                                     & myService.GetClientFile(ComboBoxAPI.Text).web.redirect_uris(0) & "&response_type=code&client_id=" _
+                                                     & myService.GetClientFile(ComboBoxAPI.Text).web.client_id _
+                                                     & "&approval_prompt=force")
+                Case Else
+                    Exit Sub
+            End Select
+            Dim process__1 = Process.Start(authorizationUrl)
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnAuthorNest_Click: " & ex.Message, "ERREUR", "")
+        End Try
+    End Sub
+
+    Private Sub ButtonClient_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Button2.Click
+        Try
+            Dim ClientSecret As HoMIDom.HoMIDom.ClientOAuth2 = New HoMIDom.HoMIDom.ClientOAuth2
+            ClientSecret.Nom = ComboBoxAPI.Text
+            ClientSecret.web = New HoMIDom.HoMIDom.web
+            ClientSecret.web.client_id = TextBox1.Text
+            ClientSecret.web.client_secret = TextBox2.Text
+            ClientSecret.web.redirect_uris = New List(Of String)
+            ClientSecret.web.redirect_uris.Add("http://" & "localhost" & ":" & myService.GetPortSOAP & "/api/" & IdSrv & "/command/Device/" & ComboBoxAPI.Text & "/ON")
+            Dim stream = Newtonsoft.Json.JsonConvert.SerializeObject(ClientSecret)
+            System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\config\client_secrets_" & ComboBoxAPI.Text & ".json", stream)
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnCreateClient_Click: " & ex.Message, "ERREUR", "")
+        End Try
+    End Sub
+
 End Class

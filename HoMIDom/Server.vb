@@ -21,6 +21,7 @@ Imports System.Net.Sockets
 Imports System.Net.Mail
 Imports TagLib
 Imports System.Text.RegularExpressions
+Imports Newtonsoft
 
 #End Region
 
@@ -10732,6 +10733,55 @@ Namespace HoMIDom
                 Return Nothing
             End Try
         End Function
+#End Region
+
+#Region "Autorisations"
+
+        Public Function GetClientFile(ByVal type As String) As ClientOAuth2 Implements IHoMIDom.GetClientFile
+            Try
+                Dim stream = System.IO.File.ReadAllText(My.Application.Info.DirectoryPath & "\config\client_secrets_" & type & ".json")
+                Return Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(ClientOAuth2))
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetClient", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+
+        Public Function GetToken(ByVal clientOauth As String, ByVal httpsOauth As String, ByVal code As String) As Boolean Implements IHoMIDom.GetToken
+            Try
+                Dim client As New Net.WebClient
+                Dim reqparm As New Specialized.NameValueCollection
+                reqparm.Add("code", code)
+                reqparm.Add("client_id", GetClientFile(clientOauth).web.client_id)
+                reqparm.Add("client_secret", GetClientFile(clientOauth).web.client_secret)
+                reqparm.Add("redirect_uri", GetClientFile(clientOauth).web.redirect_uris(0))
+                reqparm.Add("grant_type", "authorization_code")
+                Dim responsebytes = client.UploadValues(httpsOauth, "POST", reqparm)
+                Dim responsebody = (New System.Text.UTF8Encoding).GetString(responsebytes)
+                Dim Oauth As Authentication = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(Authentication))
+                Dim stream = Newtonsoft.Json.JsonConvert.SerializeObject(Oauth)
+                System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\config\reponse_accesstoken_" & clientOauth & ".json", stream)
+                If Oauth.expires_in > 0 Then
+                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "GetToken : ", "Requête " & httpsOauth & " OK")
+                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "GetToken", "Connect : " & responsebody.ToString)
+                Else
+                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetToken", "Non connecté")
+                End If
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetToken", "Exception : " & ex.Message)
+            End Try
+        End Function
+
+        Public Function GetTokenFile(ByVal clientOauth As String) As Authentication Implements IHoMIDom.GetTokenFile
+            Try
+                Dim stream = System.IO.File.ReadAllText(My.Application.Info.DirectoryPath & "\config\reponse_accesstoken_" & clientOauth & ".json")
+                Return Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(Authentication))
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetOauth", "Exception : " & ex.Message)
+                Return Nothing
+            End Try
+        End Function
+		
 #End Region
 
 #End Region

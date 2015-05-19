@@ -1511,6 +1511,14 @@ Namespace HoMIDom
         <OperationContract()> Function ReturnSequenceFromNumero(Numero As String) As Sequence
         <OperationContract()> Function ReturnSequences() As List(Of Sequence)
 #End Region
+
+#Region "Autorisations"
+
+        <OperationContract()> Function GetClientFile(ByVal type As String) As ClientOAuth2
+        <OperationContract()> Function GetToken(ByVal client As String, ByVal https As String, ByVal code As String) As Boolean
+        <OperationContract()> Function GetTokenFile(ByVal client As String) As Authentication
+
+#End Region
     End Interface
 
     

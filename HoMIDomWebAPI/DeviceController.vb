@@ -91,9 +91,27 @@ Public Class DeviceController
 
     Private Function ExecuteCommandWithParams(id As String, command As String, parameters As System.Collections.Specialized.NameValueCollection) As Boolean
         Try
+		
             Dim action As DeviceAction = New DeviceAction() With {.Nom = command}
 
             If Not parameters Is Nothing And parameters.Count > 0 Then
+
+                If id = "Nest" Or id = "GoogleCalendar" Then
+                    Dim code As String = ""
+                    Dim https As String = ""
+                    If id = "Nest" Then
+                        https = "https://api.home.nest.com/oauth2/access_token?"
+                    End If
+                    If id = "GoogleCalendar" Then
+                        https = "https://www.googleapis.com/oauth2/v3/token"
+                    End If
+                    For Each pKey In parameters.AllKeys
+                        If pKey = "code" Then code = parameters(pKey)
+                    Next
+                    HoMIDomAPI.CurrentServer.GetToken(id, https, code)
+                    Return True
+                    Exit Function
+                End If
 
                 ' récupération du composant
                 Dim tplDevice As TemplateDevice = HoMIDomAPI.CurrentServer.ReturnDeviceByID(Me.ServerKey, id)
