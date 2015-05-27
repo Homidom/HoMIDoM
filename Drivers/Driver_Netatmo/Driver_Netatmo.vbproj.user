@@ -11,6 +11,6 @@
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
   </PropertyGroup>
   <PropertyGroup>
-    <ReferencePath>C:\download\Homidom\RELEASE\</ReferencePath>
+    <ReferencePath>C:\Users\JP\Documents\GitHub\RELEASE\</ReferencePath>
   </PropertyGroup>
 </Project>

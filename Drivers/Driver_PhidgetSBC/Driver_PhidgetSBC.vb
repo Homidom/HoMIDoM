@@ -283,7 +283,7 @@ Imports System.Text.RegularExpressions
                 Case "ADRESSE1"
                     If Value IsNot Nothing Then
                         If String.IsNullOrEmpty(Value) Or IsNumeric(Value) Or InStr(Value, ":") = 0 Then
-                            retour = "Veuillez saisir l'adresse de lecture sous la forme A:1 pour Analog entree1, D3 pour Digital entree3 "
+                            retour = "Veuillez saisir l'adresse de lecture sous la forme A:1 pour Analog entree1, D:3 pour Digital entree3 "
                         End If
                     End If
                 Case "ADRESSE2"
