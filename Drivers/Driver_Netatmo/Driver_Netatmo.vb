@@ -775,7 +775,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             reqparm.Add("client_secret", _Parametres.Item(2).valeur)
             reqparm.Add("username", _Parametres.Item(3).valeur)
             reqparm.Add("password", _Parametres.Item(4).valeur)
-            Dim responsebytes = client.UploadValues("https://api.netatmo.net/oauth2/token", "POST", reqparm)
+            Dim responsebytes = client.UploadValues("http://api.netatmo.net/oauth2/token", "POST", reqparm)
             Dim responsebody = (New System.Text.UTF8Encoding).GetString(responsebytes)
             WriteLog("DBG: responsebody : " & responsebody.ToString)
             Auth = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(Authentication))

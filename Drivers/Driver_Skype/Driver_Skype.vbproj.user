@@ -10,7 +10,4 @@
     <FallbackCulture>fr-FR</FallbackCulture>
     <VerifyUploadedFiles>false</VerifyUploadedFiles>
   </PropertyGroup>
-  <PropertyGroup>
-    <ReferencePath>C:\Users\JP\Documents\GitHub\homidom\STABLE\;C:\Users\JP\Documents\GitHub\homidom\STABLE\Drivers\</ReferencePath>
-  </PropertyGroup>
 </Project>

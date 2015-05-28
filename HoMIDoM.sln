@@ -1,8 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
-MinimumVisualStudioVersion = 10.0.40219.1
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Foobar", "Drivers\Driver_Foobar\Driver_Foobar.vbproj", "{62C5EA60-2FE8-4F56-BC66-BE2D7B14CA5B}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_k8055", "Drivers\Driver_k8055\Driver_k8055.vbproj", "{B1154B53-619A-4878-8915-9A98904EEEF5}"
@@ -107,8 +105,6 @@ EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Arduino_USB", "Drivers\Driver_ArduinoPlusPlus\Driver_Arduino_USB.vbproj", "{45E0DD7E-6590-4657-8C2A-F2CFB63AF398}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Nest", "Drivers\Driver_Nest\Driver_Nest.vbproj", "{66EFE707-510B-4D78-9FB1-228C0AE19640}"
-EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_IPX800", "Drivers\Driver_IPX800\Driver_IPX800.vbproj", "{8E93F086-2AD4-4DE1-8A1A-43C70EA33902}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -581,27 +577,15 @@ Global
 		{66EFE707-510B-4D78-9FB1-228C0AE19640}.Release|Mixed Platforms.Build.0 = Release|x86
 		{66EFE707-510B-4D78-9FB1-228C0AE19640}.Release|x86.ActiveCfg = Release|x86
 		{66EFE707-510B-4D78-9FB1-228C0AE19640}.Release|x86.Build.0 = Release|x86
-		{8E93F086-2AD4-4DE1-8A1A-43C70EA33902}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8E93F086-2AD4-4DE1-8A1A-43C70EA33902}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8E93F086-2AD4-4DE1-8A1A-43C70EA33902}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{8E93F086-2AD4-4DE1-8A1A-43C70EA33902}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{8E93F086-2AD4-4DE1-8A1A-43C70EA33902}.Debug|x86.ActiveCfg = Debug|x86
-		{8E93F086-2AD4-4DE1-8A1A-43C70EA33902}.Debug|x86.Build.0 = Debug|x86
-		{8E93F086-2AD4-4DE1-8A1A-43C70EA33902}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8E93F086-2AD4-4DE1-8A1A-43C70EA33902}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8E93F086-2AD4-4DE1-8A1A-43C70EA33902}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{8E93F086-2AD4-4DE1-8A1A-43C70EA33902}.Release|Mixed Platforms.Build.0 = Release|x86
-		{8E93F086-2AD4-4DE1-8A1A-43C70EA33902}.Release|x86.ActiveCfg = Release|x86
-		{8E93F086-2AD4-4DE1-8A1A-43C70EA33902}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_IncrementBeforeBuild = True
-		BuildVersion_UseGlobalSettings = True
-		BuildVersion_BuildVersioningStyle = None.None.Increment.None
-		BuildVersion_UpdateFileVersion = True
 		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_BuildVersioningStyle = None.None.Increment.None
+		BuildVersion_UseGlobalSettings = True
+		BuildVersion_IncrementBeforeBuild = True
 	EndGlobalSection
 EndGlobal

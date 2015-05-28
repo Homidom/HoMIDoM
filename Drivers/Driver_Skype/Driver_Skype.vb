@@ -50,7 +50,7 @@ Imports SKYPE4COMLib
 #Region "Variables Internes"
     'Insérer ici les variables internes propres au driver et non communes
 
-    Private oSkype As New SKYPE4COMlib.Skype
+    Private oSkype As New SKYPE4COMLib.Skype
     Private oCall As New SKYPE4COMLib.Call
     Private mmCall As Boolean
 
