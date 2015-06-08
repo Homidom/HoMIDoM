@@ -335,7 +335,7 @@ Partial Public Class uDevice
                     CbType.Text = mem
                 End If
 
-                If _Driver.ID = "8B8EFC7E-F66D-11E1-AD40-71AF6188709B" And CbAdresse1.Tag <> "WEATHERMETEO" Then
+                If _Driver.ID = "8B8EFC7E-F66D-11E1-AD40-71AF6188709B" Then 'And CbAdresse1.Tag <> "WEATHERMETEO" 
                     CbAdresse1.Tag = "WEATHERMETEO"
                     CbAdresse1.Items.Clear()
 
@@ -363,14 +363,45 @@ Partial Public Class uDevice
                         Select Case UCase(_Driver.LabelsDevice.Item(k).NomChamp)
                             Case "ADRESSE1"
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
-                                    StkAdr1.Visibility = Windows.Visibility.Collapsed
+                                    CbAdresse1.Visibility = Windows.Visibility.Collapsed
+                                    CbAdresse1.Tag = 0
+                                    TxtAdresse1.Visibility = Windows.Visibility.Collapsed
+                                    TxtAdresse1.Tag = 0
+                                    LabelAdresse1.Visibility = Windows.Visibility.Collapsed
+                                    StkModel.Visibility = Windows.Visibility.Collapsed
                                 Else
-                                    LabelAdresse1.Content = _Driver.LabelsDevice.Item(k).LabelChamp
+                                    LabelAdresse1.Visibility = Windows.Visibility.Visible
+                                    StkModel.Visibility = Windows.Visibility.Visible
+                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).LabelChamp) = False Then LabelAdresse1.Content = _Driver.LabelsDevice.Item(k).LabelChamp
                                     If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Tooltip) = False Then
                                         LabelAdresse1.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
-                                        TxtAdresse1.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
+                                        CbAdresse1.ToolTip = _Driver.LabelsDevice.Item(k).Tooltip
                                     End If
-                                    StkAdr1.Visibility = Windows.Visibility.Visible
+                                    If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Parametre) = False Then
+                                        CbAdresse1.Items.Clear()
+                                        Dim a() As String = _Driver.LabelsDevice.Item(k).Parametre.Split("|")
+                                        If a.Length > 0 Then
+                                            For g As Integer = 0 To a.Length - 1
+                                                CbAdresse1.Items.Add(a(g))
+                                            Next
+                                            CbAdresse1.IsEditable = False
+                                            CbAdresse1.Visibility = Windows.Visibility.Visible
+                                            CbAdresse1.Tag = 1
+                                            TxtAdresse1.Visibility = Windows.Visibility.Collapsed
+                                            TxtAdresse1.Tag = 0
+                                        Else
+                                            CbAdresse1.Visibility = Windows.Visibility.Collapsed
+                                            CbAdresse1.Tag = 0
+                                            TxtAdresse1.Visibility = Windows.Visibility.Visible
+                                            TxtAdresse1.Tag = 1
+                                            TxtAdresse1.Text = a(0)
+                                        End If
+                                    Else
+                                        CbAdresse1.Visibility = Windows.Visibility.Collapsed
+                                        CbAdresse1.Tag = 0
+                                        TxtAdresse1.Visibility = Windows.Visibility.Visible
+                                        TxtAdresse1.Tag = 1
+                                    End If
                                 End If
                             Case "ADRESSE2"
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
@@ -1204,9 +1235,9 @@ Partial Public Class uDevice
     End Sub
 
     Private Sub CbAdresse1_SelectionChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbAdresse1.SelectionChanged
-        If CbAdresse1.Tag = "WEATHERMETEO" Then
-            If CbAdresse1.Text <> "" And Left(CbAdresse1.SelectedValue, 4) <> "XXXX" Then TxtAdresse1.Text = CbAdresse1.SelectedValue
-        End If
+        'If CbAdresse1.Tag = "WEATHERMETEO" Then
+        If CbAdresse1.Text <> "" And Left(CbAdresse1.SelectedValue, 4) <> "XXXX" Then TxtAdresse1.Text = CbAdresse1.SelectedValue
+        'End If
     End Sub
 
     Private Sub TxtAdresse1_TextChanged(sender As System.Object, e As System.Windows.Controls.TextChangedEventArgs) Handles TxtAdresse1.TextChanged

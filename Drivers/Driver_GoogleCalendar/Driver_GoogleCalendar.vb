@@ -68,6 +68,37 @@ Imports STRGS = Microsoft.VisualBasic.Strings
     Dim firstScan As Boolean = True
     Dim cpt_restart As Integer = 0
 
+    Public Class calendarList
+        Public kind As String
+        Public items As List(Of calendar)
+    End Class
+
+    Public Class calendar
+        Public id As String
+        Public summary As String
+    End Class
+
+    Public Class eventsList
+        Public items As List(Of [event])
+    End Class
+
+    Public Class [event]
+        Public id As String
+        Public summary As String
+        Public status As String
+        Public description As String
+        Public location As String
+        Public [start] As [Date]
+        Public [end] As [Date]
+        Public recurrence As List(Of String)
+    End Class
+
+    Public Class [Date]
+        Public [date] As Date
+        Public [dateTime] As DateTime
+        Public timeZone As String
+    End Class
+
 #End Region
 
 #Region "Propriétés génériques"
@@ -314,10 +345,18 @@ Imports STRGS = Microsoft.VisualBasic.Strings
                 _CalHomidomName = _Parametres.Item(1).Valeur
                 _CalFeriesName = _Parametres.Item(2).Valeur
 
+                If String.IsNullOrEmpty(_CalFeriesName) And String.IsNullOrEmpty(_CalHomidomName) Then
+                    WriteLog("ERR: Veuillez renseigner un nom de calendrier dans les paramétres avancés.")
+                    WriteLog("Driver " & Me.Nom & "non démarré")
+                    Exit Sub
+                End If
+
             Catch ex As Exception
                 _DEBUG = False
                 _Parametres.Item(0).Valeur = False
                 WriteLog("ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut : " & ex.Message)
+                WriteLog("Driver " & Me.Nom & "non démarré")
+                Exit Sub
             End Try
 
             Dim fileName = My.Application.Info.DirectoryPath & "\config\reponse_accesstoken_GoogleCalendar.json"
@@ -358,8 +397,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
                     If CalendarHomidom Is Nothing And Calendarferies Is Nothing Then
                         ' pas de demarrage du drives
                         _IsConnect = False
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom, "Calendrier " & _CalFeriesName.ToUpper & " non trouvé dans le compte ")
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " non démarré")
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom, "Calendrier " & _CalFeriesName.ToUpper & " et " & _CalHomidomName.ToUpper & " non trouvé dans le compte ")
+                        WriteLog("Driver " & Me.Nom & "non démarré")
+                        Exit Sub
                     Else
                         _IsConnect = True
                         If _Refresh > 0 Then
@@ -380,9 +420,17 @@ Imports STRGS = Microsoft.VisualBasic.Strings
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " non démarré")
                 Exit Sub
             End If
+            cpt_restart = 0
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar Start", ex.Message & ex.Data.ToString)
+            cpt_restart += 1
+            If cpt_restart < 4 Then
+                RefreshToken("GoogleCalendar", "https://www.googleapis.com/oauth2/v3/token")
+                Start()
+            Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar Start", ex.Message & ex.Data.ToString)
+                WriteLog("ERR:Verifié que votre authentification est valide avec HoMIAdmiN dans HoMIDoM/Config")
+            End If
         End Try
     End Sub
 
@@ -595,6 +643,33 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
 #Region "Fonctions internes"
 
+
+    Private Sub RefreshToken(ByVal clientOauth As String, ByVal httpsOauth As String)
+        Try
+            Dim client As New Net.WebClient
+            Dim reqparm As New Specialized.NameValueCollection
+            reqparm.Add("client_id", _Server.GetClientFile(clientOauth).web.client_id)
+            reqparm.Add("client_secret", _Server.GetClientFile(clientOauth).web.client_secret)
+            reqparm.Add("refresh_token", Auth.refresh_token)
+            reqparm.Add("grant_type", "refresh_token")
+            Dim responsebytes = client.UploadValues(httpsOauth, "POST", reqparm)
+            Dim responsebody = (New System.Text.UTF8Encoding).GetString(responsebytes)
+            Dim Oauth As Authentication = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(Authentication))
+            Auth.access_token = Oauth.access_token
+            Dim stream = Newtonsoft.Json.JsonConvert.SerializeObject(Auth)
+            System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\config\reponse_accesstoken_" & clientOauth & ".json", stream)
+            If Oauth.expires_in > 0 Then
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " RefreshToken : ", "Requête " & httpsOauth & " OK")
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " RefreshToken", "Connect : " & responsebody.ToString)
+            Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " RefreshToken", "Non connecté")
+            End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " RefreshToken", "Exception : " & ex.Message)
+        End Try
+    End Sub
+
+
     Public Sub CreateEvent(ByVal Objet As Object, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing)
 
         '   Dim entryNew As New EventEntry()
@@ -633,229 +708,239 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
         'GET  https://www.googleapis.com/calendar/v3/calendars/calendarId/events?maxResults=10&singleEvents=true&pageToken=CiAKGjBpNDd2Nmp2Zml2cXRwYjBpOXA
 
+        Dim calFeed(2) As eventsList
+        Dim responsebody0 As Object = New Object
+        Dim responsebody1 As Object = New Object
+
         Try
+            If String.IsNullOrEmpty(CalendarHomidom.id) And String.IsNullOrEmpty(Calendarferies.id) Then
+                WriteLog("ERR:Verifié que votre authentification est valide avec HoMIAdmiN dans HoMIDoM/Config et redemarrer le driver")
+                [Stop]()
+                Exit Sub
+            End If
 
             Dim client As New Net.WebClient
 
             Dim xTimeMin = New System.DateTime(Now.AddMinutes(Math.Ceiling(Refresh / 60) * (-1)).Year, Now.AddMinutes(Math.Ceiling(Refresh / 60) * (-1)).Month, Now.AddMinutes(Math.Ceiling(Refresh / 60) * (-1)).Day, Now.AddMinutes(Math.Ceiling(Refresh / 60) * (-1)).Hour, Now.AddMinutes(Math.Ceiling(Refresh / 60) * (-1)).Minute, 0)
             Dim xTimeMax = New System.DateTime(Now.AddMinutes(Math.Ceiling(Refresh / 60)).Year, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Month, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Day, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Hour, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Minute, 0)
 
-            Dim responsebody = client.DownloadString("https://www.googleapis.com/calendar/v3/calendars/" & CalendarHomidom.id & "/events?" & "maxResults=20&singleEvents=true&TimeMin=" & xTimeMin & "&TimeMax=" & xTimeMax & "&access_token=" & Auth.access_token)
+            If Not String.IsNullOrEmpty(CalendarHomidom.id) Then
+                responsebody0 = client.DownloadString("https://www.googleapis.com/calendar/v3/calendars/" & CalendarHomidom.id & "/events?" & "maxResults=20&singleEvents=true&TimeMin=" & xTimeMin & "&TimeMax=" & xTimeMax & "&access_token=" & Auth.access_token)
+                WriteLog("DBG: GetData : " & responsebody0.ToString)
+            End If
 
-            WriteLog("DBG: GetData : " & responsebody.ToString)
+            If Not String.IsNullOrEmpty(Calendarferies.id) Then
+                responsebody1 = client.DownloadString("https://www.googleapis.com/calendar/v3/calendars/" & Calendarferies.id & "/events?" & "maxResults=20&singleEvents=true&TimeMin=" & xTimeMin & "&TimeMax=" & xTimeMax & "&access_token=" & Auth.access_token)
+                WriteLog("DBG: GetData : " & responsebody1.ToString)
+            End If
 
-            Dim calFeed As eventsList = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(eventsList))
+            cpt_restart = 0
+        Catch ex As Exception
 
+            cpt_restart += 1
+            If cpt_restart < 4 Then
+                RefreshToken("GoogleCalendar", "https://www.googleapis.com/oauth2/v3/token")
+            Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ScanCalendar", ex.Message)
+                WriteLog("ERR:Verifié que votre authentification est valide avec HoMIAdmiN dans HoMIDoM/Config")
+                Restart()
+            End If
+        End Try
+
+        Try
             ' Lancement de la requete de recherches des événements
-
 
             Dim EntryFind As New [event]
             Dim elementFound As Boolean = False
             Dim commandFound As Boolean = False
+            Dim compFound As Boolean = False
 
-            If calFeed.items.Count > 0 Then
+            If Not String.IsNullOrEmpty(CalendarHomidom.id) Then
+                calFeed(0) = (Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody0, GetType(eventsList)))
+            End If
 
-                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", " Nombres d'évenements trouvés: " & calFeed.items.Count)
+            If Not String.IsNullOrEmpty(Calendarferies.id) Then
+                calFeed(1) = (Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody1, GetType(eventsList)))
+            End If
 
-                'Recherche si un device affecté
-                Dim listedevices As New ArrayList
-                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, "", "", Me._ID, True)
+            For i = 0 To 1
+                If calFeed(i) IsNot Nothing Then
+                    If calFeed(i).items.Count > 0 Then
 
-                ' Fetch the list of events
-                For Each feedEntry As [event] In calFeed.items
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", " Nombres d'évenements trouvés: " & calFeed(i).items.Count)
 
-                    'Parcours tous les evenements 
+                        'Recherche si un device affecté
+                        Dim listedevices As New ArrayList
+                        listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_IdSrv, "", "", Me._ID, True)
 
-                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.summary & " Compte: " & feedEntry.id)
+                        ' Fetch the list of events
+                        For Each feedEntry As [event] In calFeed(i).items
 
-                    If feedEntry.start.dateTime = System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString Then
-                        commandFound = True
-                        EntryFind = feedEntry
+                            'Parcours tous les evenements 
 
-                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", " Start: " & feedEntry.start.dateTime & " End: " & feedEntry.end.dateTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
+                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.summary & " Compte: " & feedEntry.id)
 
-                    End If
+                            If feedEntry.start.dateTime = System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString Then
+                                commandFound = True
+                                compFound = True
+                                EntryFind = feedEntry
 
-                    If commandFound Then
-                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", EntryFind.summary & ":" & EntryFind.id)
-                        If InStr(EntryFind.summary, ":") Then
-                            Dim ParaAdr2 = Split(EntryFind.summary, ":")
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", " Start: " & feedEntry.start.dateTime & " End: " & feedEntry.end.dateTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
 
-                            Select Case ParaAdr2(0).ToUpper
-                                Case "COMPOSANT"
-                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Composant d'ID : " & ParaAdr2(1) & " L'action est : " & ParaAdr2(2))
-                                    Dim TempDevice As TemplateDevice = _Server.ReturnDeviceById(_IdSrv, ParaAdr2(1))
-                                    If TempDevice IsNot Nothing Then
-                                        Select Case ParaAdr2(2).ToUpper
-                                            Case "ON", "OFF"
-                                                Dim x As DeviceAction = New DeviceAction
-                                                x.Nom = ParaAdr2(2)
-                                                _Server.ExecuteDeviceCommand(_IdSrv, ParaAdr2(1), x)
+                            End If
 
-                                            Case "DIM", "OUVERTURE"
-                                                Dim x As DeviceActionSimple = New DeviceActionSimple
-                                                x.Nom = ParaAdr2(2)
-                                                x.Param1 = ParaAdr2(3)
-                                                _Server.ExecuteDeviceCommandSimple(_IdSrv, ParaAdr2(1), x)
-                                            Case Else
-                                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Commande non trouvée : " & ParaAdr2(2).ToUpper)
-                                        End Select
-                                    Else
-                                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Composant non trouvée : " & ParaAdr2(1).ToUpper)
-                                    End If
+                            If commandFound Then
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", EntryFind.summary & ":" & EntryFind.id)
+                                If InStr(EntryFind.summary, ":") Then
+                                    Dim ParaAdr2 = Split(EntryFind.summary, ":")
 
-                                Case "MACRO"
-                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Passage par la partie Macro d'ID : " & ParaAdr2(1))
-                                    Dim TempMacro As Macro = _Server.ReturnMacroById(_IdSrv, ParaAdr2(1))
-                                    If TempMacro IsNot Nothing And TempMacro.Enable = True Then
-                                        ' Analyse de la commande 
-                                        Select Case ParaAdr2(2).ToUpper
-                                            Case "START"
-                                                _Server.RunMacro(_IdSrv, ParaAdr2(1))
-                                            Case "STOP"
+                                    Select Case ParaAdr2(0).ToUpper
+                                        Case "COMPOSANT"
+                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Composant d'ID : " & ParaAdr2(1) & " L'action est : " & ParaAdr2(2))
+                                            Dim TempDevice As TemplateDevice = _Server.ReturnDeviceById(_IdSrv, ParaAdr2(1))
+                                            If TempDevice IsNot Nothing Then
+                                                Select Case ParaAdr2(2).ToUpper
+                                                    Case "ON", "OFF"
+                                                        Dim x As DeviceAction = New DeviceAction
+                                                        x.Nom = ParaAdr2(2)
+                                                        _Server.ExecuteDeviceCommand(_IdSrv, ParaAdr2(1), x)
 
-                                            Case Else
-                                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Macro non trouvée : " & ParaAdr2(2).ToUpper)
-                                        End Select
-                                    Else
-                                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Composant non trouvée : " & ParaAdr2(1).ToUpper)
-                                    End If
-
-                                Case Else
-                                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Type non trouvée : " & ParaAdr2(0).ToUpper)
-                            End Select
-                        Else
-                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & "ScanCalendar - Le nombre de parametre n'est pas correct", feedEntry.summary)
-                        End If
-                    Else
-                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Evenement non retenu pour une commande : " & feedEntry.summary)
-                    End If
-                    If listedevices IsNot Nothing Then
-
-                        For Each objet As Object In listedevices
-                            If feedEntry.summary IsNot Nothing Then
-                                If ((feedEntry.summary.ToUpper = objet.Adresse1.ToString.ToUpper) Or (feedEntry.summary.ToUpper = "Jours fériés en France")) Then
-
-                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Le composant " & objet.name & " est valide pour cette évenement")
-
-                                    Dim Minut As Integer = 0
-                                    Dim Search As String = ""
-                                    If InStr(objet.Adresse2, ":") Then
-                                        Dim Adr2 = Split(objet.Adresse2, ":")
-                                        If Adr2(1) <> "" Then
-                                            Minut = CInt(Adr2(1))
-                                        End If
-                                        Search = Adr2(0)
-                                    Else
-                                        Search = objet.Adresse2
-                                    End If
-
-                                    If feedEntry.start.dateTime < System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString And _
-                                           feedEntry.end.dateTime > System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString Then
-                                        ' Un element etre trouvé 
-                                        elementFound = True
-                                        EntryFind = feedEntry
-                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.summary & " Compte: " & feedEntry.id _
-                                        & " Start: " & feedEntry.start.dateTime & " End: " & feedEntry.end.dateTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
-
-                                    End If
-
-                                    If elementFound Then
-
-                                        Select Case objet.Type
-                                            Case "GENERIQUESTRING"
-
-                                                Select Case Search.ToString.ToUpper
-                                                    Case "TITRE"
-                                                        objet.setValue(EntryFind.summary)
-
-                                                    Case "DESCRIPTION"
-                                                        objet.setValue(EntryFind.description)
-
-                                                    Case "LIEU"
-                                                        objet.setValue(EntryFind.location)
-
+                                                    Case "DIM", "OUVERTURE"
+                                                        Dim x As DeviceActionSimple = New DeviceActionSimple
+                                                        x.Nom = ParaAdr2(2)
+                                                        x.Param1 = ParaAdr2(3)
+                                                        _Server.ExecuteDeviceCommandSimple(_IdSrv, ParaAdr2(1), x)
+                                                    Case Else
+                                                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Commande non trouvée : " & ParaAdr2(2).ToUpper)
                                                 End Select
+                                            Else
+                                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Composant non trouvée : " & ParaAdr2(1).ToUpper)
+                                            End If
 
-                                            Case "GENERIQUEBOOLEEN"
-                                                objet.setValue(True)
+                                        Case "MACRO"
+                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Passage par la partie Macro d'ID : " & ParaAdr2(1))
+                                            Dim TempMacro As Macro = _Server.ReturnMacroById(_IdSrv, ParaAdr2(1))
+                                            If TempMacro IsNot Nothing And TempMacro.Enable = True Then
+                                                ' Analyse de la commande 
+                                                Select Case ParaAdr2(2).ToUpper
+                                                    Case "START"
+                                                        _Server.RunMacro(_IdSrv, ParaAdr2(1))
+                                                    Case "STOP"
 
-                                            Case Else
-                                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur du type du composant de " & objet.Adresse1)
-                                        End Select
-                                    Else
-                                        Select Case objet.Type
-                                            Case "GENERIQUESTRING"
-                                                objet.setValue("")
+                                                    Case Else
+                                                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Macro non trouvée : " & ParaAdr2(2).ToUpper)
+                                                End Select
+                                            Else
+                                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Composant non trouvée : " & ParaAdr2(1).ToUpper)
+                                            End If
 
-                                            Case "GENERIQUEBOOLEEN"
-                                                objet.setValue(False)
-
-                                            Case Else
-                                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur du type du composant de " & objet.Adresse1)
-                                        End Select
-                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "La plage horaire du composant " & objet.name & " n'est pas en cours")
-
-                                    End If
+                                        Case Else
+                                            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Type non trouvée : " & ParaAdr2(0).ToUpper)
+                                    End Select
                                 Else
-                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Le composant " & objet.name & " n'est pas valide pour cette évenement")
+                                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & "ScanCalendar - Le nombre de parametre n'est pas correct", feedEntry.summary)
                                 End If
                             Else
-                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Le composant " & objet.name & " n'est pas valide pour cette évenement")
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Evenement non retenu pour une commande : " & feedEntry.summary)
                             End If
+                            If listedevices IsNot Nothing Then
+
+                                For Each objet As Object In listedevices
+                                    If feedEntry.summary IsNot Nothing Then
+                                        If ((feedEntry.summary.ToUpper = objet.Adresse1.ToString.ToUpper) Or (feedEntry.summary.ToUpper = "Jours fériés en France")) Then
+                                            compFound = True
+                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Le composant " & objet.name & " est valide pour cette évenement")
+
+                                            Dim Minut As Integer = 0
+                                            Dim Search As String = ""
+                                            If InStr(objet.Adresse2, ":") Then
+                                                Dim Adr2 = Split(objet.Adresse2, ":")
+                                                If Adr2(1) <> "" Then
+                                                    Minut = CInt(Adr2(1))
+                                                End If
+                                                Search = Adr2(0)
+                                            Else
+                                                Search = objet.Adresse2
+                                            End If
+
+                                            If feedEntry.start.dateTime < System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString And _
+                                                   feedEntry.end.dateTime > System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString Then
+                                                ' Un element etre trouvé 
+                                                elementFound = True
+                                                EntryFind = feedEntry
+                                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.summary & " Compte: " & feedEntry.id _
+                                                & " Start: " & feedEntry.start.dateTime & " End: " & feedEntry.end.dateTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
+
+                                            End If
+
+                                            If elementFound Then
+
+                                                Select Case objet.Type
+                                                    Case "GENERIQUESTRING"
+
+                                                        Select Case Search.ToString.ToUpper
+                                                            Case "TITRE"
+                                                                objet.setValue(EntryFind.summary)
+
+                                                            Case "DESCRIPTION"
+                                                                objet.setValue(EntryFind.description)
+
+                                                            Case "LIEU"
+                                                                objet.setValue(EntryFind.location)
+
+                                                        End Select
+
+                                                    Case "GENERIQUEBOOLEEN"
+                                                        objet.setValue(True)
+
+                                                    Case Else
+                                                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur du type du composant de " & objet.Adresse1)
+                                                End Select
+                                            Else
+                                                Select Case objet.Type
+                                                    Case "GENERIQUESTRING"
+                                                        objet.setValue("")
+
+                                                    Case "GENERIQUEBOOLEEN"
+                                                        objet.setValue(False)
+
+                                                    Case Else
+                                                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur du type du composant de " & objet.Adresse1)
+                                                End Select
+                                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "La plage horaire du composant " & objet.name & " n'est pas en cours")
+
+                                            End If
+                                        Else
+                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Le composant " & objet.name & " n'est pas valide pour cette évenement")
+                                        End If
+                                    Else
+                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Le composant " & objet.name & " n'est pas valide pour cette évenement")
+                                    End If
+                                Next
+
+                               
+                            End If
+                            If (_AutoDiscover Or _Server.GetModeDecouverte) And Not compFound Then
+
+                                WriteLog("DBG:AutoCreation du composant : Titre" & " à l'adresse " & feedEntry.summary)
+                                _Server.AddDetectNewDevice(feedEntry.summary, _ID, "GENERIQUEBOOLEEN", "Titre")
+
+                            End If
+                            compFound = False
+                            elementFound = False
+                            commandFound = False
                         Next
-
-                        If _AutoDiscover Or _Server.GetModeDecouverte Then
-
-                            WriteLog("DBG:AutoCreation du composant : Titre" & " à l'adresse " & feedEntry.summary)
-                            _Server.AddDetectNewDevice(feedEntry.summary, _ID, "GENERIQUEBOOLEEN", "Titre")
-
-                        End If
                     End If
-                    elementFound = False
-                    commandFound = False
-                Next
+                End If
+            Next
 
-            End If
-            cpt_restart = 0
         Catch ex As Exception
+
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ScanCalendar", ex.Message)
-            cpt_restart += 1
-            If cpt_restart < 4 Then Restart()
+
         End Try
 
     End Sub
-
-    Public Class calendarList
-        Public kind As String
-        Public items As List(Of calendar)
-    End Class
-
-    Public Class calendar
-        Public id As String
-        Public summary As String
-    End Class
-
-    Public Class eventsList
-        Public items As List(Of [event])
-    End Class
-
-    Public Class [event]
-        Public id As String
-        Public summary As String
-        Public status As String
-        Public description As String
-        Public location As String
-        Public [start] As [Date]
-        Public [end] As [Date]
-        Public recurrence As List(Of String)
-    End Class
-
-    Public Class [Date]
-        Public [date] As Date
-        Public [dateTime] As DateTime
-        Public timeZone As String
-    End Class
 
     Private Sub WriteLog(ByVal message As String)
         Try
@@ -870,7 +955,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, message)
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Nest WriteLog", ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Google Calendar WriteLog", ex.Message)
         End Try
     End Sub
 
