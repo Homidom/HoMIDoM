@@ -61,6 +61,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
     Dim devlist As All
     Dim First As Boolean = True
 
+    Dim detect As New Dictionary(Of String, Object)
+    Dim thermo As New Dictionary(Of String, Object)
+
     Public Class All
         Public Property devices() As Devices
         Public Property structures() As Dictionary(Of String, [Structure])
@@ -538,7 +541,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
                     For i = 0 To devlist.devices.thermostats.Count - 1
                         If Objet.adresse1 = "Thermostat " & devlist.devices.thermostats.Values(i).name Then
 
-                            If TypeOf (Objet.value) Is Boolean Then
+                            If TypeOf (Objet.value) Is String Then
                                 Select Case Objet.modele
 
                                     Case "locale"
@@ -791,6 +794,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             Add_LibelleDevice("SOLO", "@", "")
             Add_LibelleDevice("ADRESSE2", "@", "")
             Add_LibelleDevice("LASTCHANGEDUREE", "@", "")
+
+            
+
         Catch ex As Exception
             WriteLog("ERR: New, Exception : " & ex.Message)
         End Try
@@ -851,19 +857,70 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
                 If devlist.devices.smoke_co_alarms IsNot Nothing Then
                     WriteLog("DBG: Nombre de detecteur Fumée/Co2 : " & devlist.devices.smoke_co_alarms.Count)
+                    detect.Clear()
+                    detect.Add("last_connection", "GENERIQUESTRING")
+                    detect.Add("is_online", "GENERIQUEBOOLEAN")
+                    detect.Add("battery_health", "GENERIQUESTRING")
+                    detect.Add("co_alarm_state", "GENERIQUESTRING")
+                    detect.Add("smoke_alarm_state", "GENERIQUESTRING")
+                    detect.Add("is_manual_test_active", "GENERIQUEBOOLEAN")
+                    detect.Add("last_manual_test_time", "GENERIQUESTRING")
                     For i = 0 To devlist.devices.smoke_co_alarms.Count - 1
                         IdLib += "Detecteur " & devlist.devices.smoke_co_alarms.Values(i).name & "|"
                         If i = devlist.devices.smoke_co_alarms.Count - 1 Then IdLib += "Autre"
                         WriteLog("DBG: Detecteur Fumée/Co2 : " & devlist.devices.smoke_co_alarms.Values(i).name & ", ID = " & devlist.devices.smoke_co_alarms.Values(i).device_id)
+                        If _AutoDiscover Or _Server.GetModeDecouverte Then
+                            For Each det In detect
+                                Dim listedevicessearch As New ArrayList
+                                listedevicessearch = _Server.ReturnDeviceByAdresse2TypeDriver(_IdSrv, det.Key, "", Me._ID, True)
+                                If listedevicessearch.Count = i Then
+                                    _Server.AddDetectNewDevice("Detecteur " & devlist.devices.smoke_co_alarms.Values(i).name, _ID, det.Value, det.Key, "")
+                                End If
+                            Next
+                        End If
+
                     Next
                 End If
 
                 If devlist.devices.thermostats IsNot Nothing Then
                     WriteLog("DBG: Nombre de Thermostat : " & devlist.devices.thermostats.Count)
+                    thermo.Clear()
+                    thermo.Add("humidity", "GENERIQUEVALUE")
+                    thermo.Add("temperature_scale", "GENERIQUESTRING")
+                    thermo.Add("is_using_emergency_heat", "GENERIQUEBOOLEAN")
+                    thermo.Add("has_fan", "GENERIQUEBOOLEAN")
+                    thermo.Add("has_leaf", "GENERIQUEBOOLEAN")
+                    thermo.Add("can_heat", "GENERIQUEBOOLEAN")
+                    thermo.Add("can_cool", "GENERIQUEBOOLEAN")
+                    thermo.Add("hvac_mode", "GENERIQUESTRING")
+                    thermo.Add("target_temperature_c", "GENERIQUEVALUE")
+                    thermo.Add("target_temperature_f", "GENERIQUEVALUE")
+                    thermo.Add("target_temperature_high_c", "GENERIQUEVALUE")
+                    thermo.Add("target_temperature_high_f", "GENERIQUEVALUE")
+                    thermo.Add("target_temperature_low_c", "GENERIQUEVALUE")
+                    thermo.Add("target_temperature_low_f", "GENERIQUEVALUE")
+                    thermo.Add("ambient_temperature_c", "GENERIQUEVALUE")
+                    thermo.Add("ambient_temperature_f", "GENERIQUEVALUE")
+                    thermo.Add("away_temperature_high_c", "GENERIQUEVALUE")
+                    thermo.Add("away_temperature_high_f", "GENERIQUEVALUE")
+                    thermo.Add("away_temperature_low_c", "GENERIQUEVALUE")
+                    thermo.Add("away_temperature_low_f", "GENERIQUEVALUE")
+                    thermo.Add("fan_timer_active", "GENERIQUEBOOLEAN")
+                    thermo.Add("is_online", "GENERIQUEBOOLEAN")
+                    thermo.Add("last_connection", "GENERIQUESTRING")
                     For i = 0 To devlist.devices.thermostats.Count - 1
                         IdLib += "Thermostat " & devlist.devices.thermostats.Values(i).name & "|"
-                        If i = devlist.devices.smoke_co_alarms.Count - 1 Then IdLib += "Autre"
+                        If i = devlist.devices.thermostats.Count - 1 Then IdLib += "Autre"
                         WriteLog("DBG: Thermostat : " & devlist.devices.thermostats.Values(i).name & ", ID = " & devlist.devices.thermostats.Values(i).device_id)
+                        If _AutoDiscover Or _Server.GetModeDecouverte Then
+                            For Each det In thermo
+                                Dim listedevicessearch As New ArrayList
+                                listedevicessearch = _Server.ReturnDeviceByAdresse2TypeDriver(_IdSrv, det.Key, "", Me._ID, True)
+                                If listedevicessearch.Count = i Then
+                                    _Server.AddDetectNewDevice("Thermostat " & devlist.devices.thermostats.Values(i).name, _ID, det.Value, det.Key, "")
+                                End If
+                            Next
+                        End If
                     Next
                 End If
 
