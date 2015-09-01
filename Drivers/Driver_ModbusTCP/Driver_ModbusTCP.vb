@@ -1452,9 +1452,12 @@ Imports System.Net.Sockets
                                         If TypeOf j.Value Is Boolean And j.Value > -1 And j.Value < 2 Then
                                             j.Value = CBool(dataMdbRMW(j.adresse1))
                                         End If
-                                        msg += "( adress= " & j.adresse1 & " ; mRead= " & dataMdbRMW(j.adresse1) & " ; mWrite= " & dataMdbWMW(j.adresse2) & " ; value= " & j.Value & ") ; "
-                                        If j.adresse1 > -1 And j.adresse2 > -1 Then
+                                        msg += "( adress= " & j.adresse1 & " ; value= " & j.Value & " ; mRead= " & dataMdbRMW(j.adresse1)
+                                        If j.adresse2 > -1 Then
                                             dataMdbWMW(j.adresse2) = dataMdbRMW(j.adresse1)
+                                            msg += " ; mWrite= " & dataMdbWMW(j.adresse2) & ") ; "
+                                        Else
+                                            msg += ") ; "
                                         End If
                                     End If
                                 End If
@@ -1479,10 +1482,13 @@ Imports System.Net.Sockets
                                 If j.modele = "MX" Then
                                     If j.adresse1 > 255 * (cptsend - 1) And j.adresse1 <= 255 * cptsend And testDatatableB(j) Then
                                         If j.Value <> dataMdbRMX(j.adresse1) And Not flagWrite Then
-                                            msg += "( adress= " & j.adresse1 & " ; mRead= " & dataMdbRMX(j.adresse1) & " ; mWrite= " & dataMdbWMX(j.adresse2) & " ; value= " & j.Value & ") ; "
                                             j.Value = dataMdbRMX(j.adresse1)
-                                            If j.adresse1 > -1 And j.adresse2 > -1 Then
+                                            msg += "( adress= " & j.adresse1 & " ; value= " & j.Value & " ; mRead= " & dataMdbRMX(j.adresse1)
+                                            If j.adresse2 > -1 Then
                                                 dataMdbWMX(j.adresse2) = dataMdbRMX(j.adresse1)
+                                                msg += " ; mWrite= " & dataMdbWMX(j.adresse2) & ") ; "
+                                            Else
+                                                msg += ") ; "
                                             End If
                                         End If
                                     End If
