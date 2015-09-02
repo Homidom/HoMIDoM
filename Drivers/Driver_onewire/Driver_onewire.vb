@@ -470,12 +470,22 @@ Public Class Driver_onewire
             Select Case UCase(Command)
                 Case "ON"
                     If Objet.Type = "SWITCH" Then
-                        Dim retour As Integer = switch_setstate(Objet.Adresse1, True)
+                        Dim retour As Integer
+                        If Objet.Adresse2 = "" Then
+                            retour = switchs_setstate(Objet.Adresse1, Objet.Adresse2, True)
+                        Else
+                            retour = switch_setstate(Objet.Adresse1, True)
+                        End If
                         If retour = 1 Then Objet.value = True
                     End If
                 Case "OFF"
                     If Objet.Type = "SWITCH" Then
-                        Dim retour As Integer = switch_setstate(Objet.Adresse1, False)
+                        Dim retour As Integer
+                        If Objet.Adresse2 = "" Then
+                            retour = switchs_setstate(Objet.Adresse1, Objet.Adresse2, False)
+                        Else
+                            retour = switch_setstate(Objet.Adresse1, False)
+                        End If
                         If retour = 0 Then Objet.value = False
                     End If
                 Case "DIM"
