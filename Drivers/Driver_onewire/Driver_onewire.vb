@@ -471,7 +471,7 @@ Public Class Driver_onewire
                 Case "ON"
                     If Objet.Type = "SWITCH" Or Objet.Type = "APPAREIL" Then
                         Dim retour As Integer
-                        If Objet.Adresse2 = "" Then
+                        If Objet.Adresse2 <> "" Then
                             retour = switchs_setstate(Objet.Adresse1, Objet.Adresse2, True)
                         Else
                             retour = switch_setstate(Objet.Adresse1, True)
@@ -481,7 +481,7 @@ Public Class Driver_onewire
                 Case "OFF"
                     If Objet.Type = "SWITCH" Or Objet.Type = "APPAREIL" Then
                         Dim retour As Integer
-                        If Objet.Adresse2 = "" Then
+                        If Objet.Adresse2 <> "" Then
                             retour = switchs_setstate(Objet.Adresse1, Objet.Adresse2, False)
                         Else
                             retour = switch_setstate(Objet.Adresse1, False)
