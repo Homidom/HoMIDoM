@@ -283,6 +283,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
                 Case "ADRESSE1"
                     If String.IsNullOrEmpty(Value) Then
                         result = "Veuillez saisir la valeur StatutAC (mode secteur/batterie) ou StatutEC (economiseur energie) ou TpsRestant (Temps restant en min.) ou TpsCharge (Temps de charge en min.)"
+                        Value = "StatutAC"
                     End If
             End Select
             Return result
@@ -339,7 +340,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
                 Exit Sub
             End If
 
-            Try ' lecture de la variable debug, permet de rafraichir la variable debug sans redemarrer le service
+            Try ' lecture de la variable debug, permet de rafraichir la variable debug sans redèmarrer le service
                 _DEBUG = _Parametres.Item(0).Valeur
             Catch ex As Exception
                 _DEBUG = False
@@ -519,7 +520,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            Add_LibelleDevice("ADRESSE1", "Info attendue", "Valeur à retourner ( StatutAC, StatutEC, TpsRestant, TpsCharge )", "")
+            Add_LibelleDevice("ADRESSE1", "Info attendue", "Valeur à retourner ( StatutAC, StatutEC, TpsRestant, TpsCharge )", "StatutAC")
             Add_LibelleDevice("REFRESH", "Refresh en sec", "Minimum 600, valeur rafraicissement station", "600")
             ' Libellés Device inutiles
             Add_LibelleDevice("ADRESSE2", "@", "", "")
@@ -535,9 +536,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
 #Region "Fonctions internes"
 
-
     Private Shared pstatus As SYSTEM_POWER_STATUS
-
     Private Declare Auto Function GetSystemPowerStatus Lib "kernel32" (ByRef lpSystemPowerStatus As SYSTEM_POWER_STATUS) As Int32
 
     Public Structure SYSTEM_POWER_STATUS
