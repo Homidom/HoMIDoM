@@ -2972,18 +2972,20 @@ Class Window1
 
     Private Sub AffControlPageSuite()
         Try
-            CanvasRight.Children.Clear()
-            CanvasRight.UpdateLayout()
+            If Objet3 IsNot Nothing Then
+                CanvasRight.Children.Clear()
+                CanvasRight.UpdateLayout()
 
-            GC.Collect()
-            GC.WaitForPendingFinalizers()
-            GC.Collect()
+                GC.Collect()
+                GC.WaitForPendingFinalizers()
+                GC.Collect()
 
-            Me.UpdateLayout()
+                Me.UpdateLayout()
 
-            CanvasRight.Children.Add(Objet3)
-            AnimationApparition(Objet3)
-            Objet3 = Nothing
+                CanvasRight.Children.Add(Objet3)
+                AnimationApparition(Objet3)
+                Objet3 = Nothing
+            End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub AffControlPageSuite: " & ex.Message, "ERREUR", "")
         End Try
