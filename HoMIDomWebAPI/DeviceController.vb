@@ -86,9 +86,6 @@ Public Class DeviceController
     '    Return True
     'End Function
 
-
-
-
     Private Function ExecuteCommandWithParams(id As String, command As String, parameters As System.Collections.Specialized.NameValueCollection) As Boolean
         Try
 		
@@ -96,11 +93,14 @@ Public Class DeviceController
 
             If Not parameters Is Nothing And parameters.Count > 0 Then
 
-                If id = "Nest" Or id = "GoogleCalendar" Then
+                If id = "Nest" Or id = "GoogleCalendar" Or id = "Netatmo" Then
                     Dim code As String = ""
                     Dim https As String = ""
                     If id = "Nest" Then
                         https = "https://api.home.nest.com/oauth2/access_token?"
+                    End If
+                    If id = "Netatmo" Then
+                        https = "https://api.netatmo.net/oauth2/token"
                     End If
                     If id = "GoogleCalendar" Then
                         https = "https://www.googleapis.com/oauth2/v3/token"

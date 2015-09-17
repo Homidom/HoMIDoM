@@ -271,6 +271,7 @@ Partial Public Class uConfigServer
 
                 ComboBoxAPI.Items.Add("GoogleCalendar")
                 ComboBoxAPI.Items.Add("Nest")
+                ComboBoxAPI.Items.Add("Netatmo")
 
             End If
 
@@ -607,6 +608,13 @@ Partial Public Class uConfigServer
                 Case "Nest"
                     authorizationUrl = String.Format("https://home.nest.com/login/oauth2?client_id=" _
                                                      & myService.GetClientFile(ComboBoxAPI.Text).web.client_id & "&state=" & Rnd())
+
+                Case "Netatmo"
+                    authorizationUrl = String.Format("https://api.netatmo.net/oauth2/authorize?client_id=" _
+                                                     & myService.GetClientFile(ComboBoxAPI.Text).web.client_id _
+                                                     & "&redirect_uri=http://" & "localhost" & ":" & myService.GetPortSOAP & "/api/" & IdSrv & "/command/Device/" & ComboBoxAPI.Text & "/ON" _
+                                                     & "&scope=read_station" _
+                                                     & "&state=" & Rnd())
                 Case "GoogleCalendar"
                     authorizationUrl = String.Format("https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/calendar&state=" _
                                                      & Rnd() & "&access_type=offline&redirect_uri=" _
@@ -618,7 +626,7 @@ Partial Public Class uConfigServer
             End Select
             Dim process__1 = Process.Start(authorizationUrl)
         Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnAuthorNest_Click: " & ex.Message, "ERREUR", "")
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnAuthor_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
@@ -635,6 +643,33 @@ Partial Public Class uConfigServer
             System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\config\client_secrets_" & ComboBoxAPI.Text & ".json", stream)
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnCreateClient_Click: " & ex.Message, "ERREUR", "")
+        End Try
+    End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles Button1.Click
+        Try
+
+            Dim x As New uSelectExp()
+             x.Uid = System.Guid.NewGuid.ToString()
+            AddHandler x.CloseMe, AddressOf UnloadControl
+            Window1.CanvasUser.Children.Add(x)
+
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub Export Imperi: " & ex.Message, "ERREUR", "")
+        End Try
+
+    End Sub
+
+    Private Sub UnloadControl(ByVal MyControl As Object)
+        Try
+            For i As Integer = 0 To Window1.CanvasUser.Children.Count - 1
+                If Window1.CanvasUser.Children.Item(i).Uid = MyControl.uid Then
+                    Window1.CanvasUser.Children.RemoveAt(i)
+                    Exit Sub
+                End If
+            Next
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uConfigServer UnloadControl: " & ex.ToString, "ERREUR", "")
         End Try
     End Sub
 

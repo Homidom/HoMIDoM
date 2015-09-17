@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="uSelectExp"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+            MinWidth="300" MaxHeight="500" Margin="100" d:DesignWidth="657" d:DesignHeight="500">
+
+    <Grid Background="#636060" Opacity="1" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0*" />
+            <ColumnDefinition Width="657*" />
+        </Grid.ColumnDefinitions>
+        <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Grid.ColumnSpan="2" />
+        <StackPanel Margin="1,53,0,0" Orientation="Horizontal" HorizontalAlignment="center" Width="656" Grid.Column="1">
+            <ListBox Name="ListBox1" Margin="3 " Background="DarkGray" BorderThickness="0" Foreground="White" HorizontalContentAlignment="Center"  MaxHeight="500" MinHeight="150" Width="280" Height="410" />
+            <ListBox Name="ListBox2" Margin="3 " Background="DarkGray" BorderThickness="0" Foreground="White" HorizontalContentAlignment="Center"  MaxHeight="500" MinHeight="150" Width="280" Height="410" />
+            <StackPanel Margin="3 " Orientation="Vertical" VerticalAlignment="Bottom" >
+                <Button Width="70" Height="22" Margin="2" Name="BtnOK" Content="OK" Template="{DynamicResource GlassButton}" Foreground="White" />
+                <Button  Width="70" Height="22" Margin="2" Name="BtnCancel" Content="Annuler" Template="{DynamicResource GlassButton}" Foreground="White" />
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Height="48" Name="StackPanel1" Margin="1,0,0,0" VerticalAlignment="Top" Grid.Column="1">
+            <Label Name="LblTitle" Content="Sélectionner les éléments à exporter:" FontSize="14" Foreground="White" Height="35" Width="241" />
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -474,12 +474,65 @@ Imports System.Net.Sockets
 
                 If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Start", ConfigTxt)
 
-                If longReadMW <> 0 Then nbsendMW = Math.Ceiling((longReadMW - 1) / 75) + 1 Else nbsendMW = 0
-                If longReadIW <> 0 Then nbsendIW = Math.Ceiling((longReadIW - 1) / 75) + 1 Else nbsendIW = 0
-                If longReadQW <> 0 Then nbsendQW = Math.Ceiling((longReadQW - 1) / 75) + 1 Else nbsendQW = 0
-                If longReadMX <> 0 Then nbsendMX = Math.Ceiling((longReadMX - 1) / 255) + 1 Else nbsendMX = 0
-                If longReadIX <> 0 Then nbsendIX = Math.Ceiling((longReadIX - 1) / 255) + 1 Else nbsendIX = 0
-                If longReadQX <> 0 Then nbsendQX = Math.Ceiling((longReadQX - 1) / 255) + 1 Else nbsendQX = 0
+                If longReadMW > 0 Then
+                    If longReadMW < 76 Then
+                        nbsendMW = 1
+                    Else
+                        nbsendMW = Math.Ceiling((longReadMW - 1) / 75)
+                    End If
+                Else
+                    nbsendMW = 0
+                End If
+
+                If longReadIW > 0 Then
+                    If longReadIW < 76 Then
+                        nbsendIW = 1
+                    Else
+                        nbsendIW = Math.Ceiling((longReadIW - 1) / 75)
+                    End If
+                Else
+                    nbsendIW = 0
+                End If
+
+                If longReadQW > 0 Then
+                    If longReadQW < 76 Then
+                        nbsendQW = 1
+                    Else
+                        nbsendQW = Math.Ceiling((longReadQW - 1) / 75)
+                    End If
+                Else
+                    nbsendQW = 0
+                End If
+
+                If longReadMX > 0 Then
+                    If longReadMX < 256 Then
+                        nbsendMX = 1
+                    Else
+                        nbsendMX = Math.Ceiling((longReadMX - 1) / 255)
+                    End If
+                Else
+                    nbsendMX = 0
+                End If
+
+                If longReadIX > 0 Then
+                    If longReadIX < 256 Then
+                        nbsendIX = 1
+                    Else
+                        nbsendIX = Math.Ceiling((longReadIX - 1) / 255)
+                    End If
+                Else
+                    nbsendIX = 0
+                End If
+
+                If longReadQX > 0 Then
+                    If longReadQX < 256 Then
+                        nbsendQX = 1
+                    Else
+                        nbsendQX = Math.Ceiling((longReadQX - 1) / 255)
+                    End If
+                Else
+                    nbsendQX = 0
+                End If
 
                 ReDim dataMdbRMW(nbsendMW * 75)
                 ReDim dataMdbRIW(nbsendIW * 75)
@@ -1142,96 +1195,114 @@ Imports System.Net.Sockets
                                     If TypeOf j.Value Is Boolean Then
                                         If j.Value <> CBool(dataMdbWMW(j.adresse2)) Then
                                             If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite MW ", "adress= " & j.adresse2 & " ; mWrite= " & CBool(dataMdbWMW(j.adresse2)) & " ; value= " & j.Value & ") ; ")
-                                            dataMdbWMW(j.adresse2) = CUShort(j.Value)
+                                            If j.Value = False Then
+                                                dataMdbWMW(j.adresse2) = 0
+                                            Else
+                                                dataMdbWMW(j.adresse2) = 1
+                                            End If
                                             flagWrite = True
                                             If j.value = False Then ecrire(j.adresse2, "OFF", 0, 3)
                                             If j.value = True Then ecrire(j.adresse2, "ON", 1, 3)
                                             Exit Sub
                                         End If
+                                        End If
                                     End If
                                 End If
-                            End If
                         Case "MX"
-                            If testDatatableB(j) Then
-                                If nbsendMX > 0 Then
-                                    If TypeOf j.Value Is Boolean Then
-                                        If j.Value <> dataMdbWMX(j.adresse2) Then
-                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite MX ", "adress= " & j.adresse2 & " ; mWrite= " & dataMdbWMX(j.adresse2) & " ; value= " & j.Value & ") ; ")
-                                            dataMdbWMX(j.adresse2) = j.Value
-                                            flagWrite = True
-                                            If j.value = False Then ecrire(j.adresse2, "OFF", 0, 1)
-                                            If j.value = True Then ecrire(j.adresse2, "ON", 1, 1)
-                                            Exit Sub
-                                        End If
-                                    End If
-                                    If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
-                                        If j.Value <> CInt(dataMdbWMX(j.adresse2)) Then
-                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite MX ", "adress= " & j.adresse2 & " ; mWrite= " & CUShort(dataMdbWMX(j.adresse2)) & " ; value= " & j.Value & ") ; ")
-                                            dataMdbWMX(j.adresse2) = CBool(j.Value)
-                                            flagWrite = True
-                                            If j.value = 0 Then
-                                                ecrire(j.adresse2, "OFF", 0, 1)
-                                            Else
-                                                ecrire(j.adresse2, "ON", 1, 1)
+                                If testDatatableB(j) Then
+                                    If nbsendMX > 0 Then
+                                        If TypeOf j.Value Is Boolean Then
+                                            If j.Value <> dataMdbWMX(j.adresse2) Then
+                                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite MX ", "adress= " & j.adresse2 & " ; mWrite= " & dataMdbWMX(j.adresse2) & " ; value= " & j.Value & ") ; ")
+                                                dataMdbWMX(j.adresse2) = j.Value
+                                                flagWrite = True
+                                                If j.value = False Then ecrire(j.adresse2, "OFF", 0, 1)
+                                                If j.value = True Then ecrire(j.adresse2, "ON", 1, 1)
+                                                Exit Sub
                                             End If
-                                            Exit Sub
+                                        End If
+                                        If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
+                                            If j.Value <> CInt(dataMdbWMX(j.adresse2)) Then
+                                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite MX ", "adress= " & j.adresse2 & " ; mWrite= " & CUShort(dataMdbWMX(j.adresse2)) & " ; value= " & j.Value & ") ; ")
+                                            If j.Value = 0 Then
+                                                dataMdbWMX(j.adresse2) = False
+                                            Else
+                                                dataMdbWMX(j.adresse2) = True
+                                            End If
+                                                flagWrite = True
+                                                If j.value = 0 Then
+                                                    ecrire(j.adresse2, "OFF", 0, 1)
+                                                Else
+                                                    ecrire(j.adresse2, "ON", 1, 1)
+                                                End If
+                                                Exit Sub
+                                            End If
                                         End If
                                     End If
                                 End If
-                            End If
                         Case "QW"
                                 If testDatatableW(j) Then
-                                If nbsendQW > 0 Then
-                                    If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
-                                        If j.Value <> dataMdbWQW(j.adresse2) Then
-                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite QW ", "adress= " & j.adresse2 & " ; mWrite= " & dataMdbWQW(j.adresse2) & " ; value= " & j.Value & ") ; ")
-                                            dataMdbWQW(j.adresse2) = j.Value
-                                            flagWrite = True
-                                            ecrire(j.adresse2, "DIM", j.value, 4)
-                                            Exit Sub
+                                    If nbsendQW > 0 Then
+                                        If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
+                                            If j.Value <> dataMdbWQW(j.adresse2) Then
+                                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite QW ", "adress= " & j.adresse2 & " ; mWrite= " & dataMdbWQW(j.adresse2) & " ; value= " & j.Value & ") ; ")
+                                                dataMdbWQW(j.adresse2) = j.Value
+                                                flagWrite = True
+                                                ecrire(j.adresse2, "DIM", j.value, 4)
+                                                Exit Sub
+                                            End If
                                         End If
-                                    End If
-                                    If TypeOf j.Value Is Boolean Then
-                                        If j.Value <> CBool(dataMdbWQW(j.adresse2)) Then
-                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite QW ", "adress= " & j.adresse2 & " ; mWrite= " & CBool(dataMdbWQW(j.adresse2)) & " ; value= " & j.Value & ") ; ")
-                                            dataMdbWQW(j.adresse2) = CUShort(j.Value)
-                                            flagWrite = True
-                                            If j.value = False Then ecrire(j.adresse2, "OFF", 0, 4)
-                                            If j.value = True Then ecrire(j.adresse2, "ON", 1, 4)
-                                            Exit Sub
+                                        If TypeOf j.Value Is Boolean Then
+                                            If j.Value <> CBool(dataMdbWQW(j.adresse2)) Then
+                                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite QW ", "adress= " & j.adresse2 & " ; mWrite= " & CBool(dataMdbWQW(j.adresse2)) & " ; value= " & j.Value & ") ; ")
+                                            If j.Value = False Then
+                                                dataMdbWQW(j.adresse2) = 0
+                                            Else
+                                                dataMdbWQW(j.adresse2) = 1
+                                            End If
+                                                flagWrite = True
+                                                If j.value = False Then ecrire(j.adresse2, "OFF", 0, 4)
+                                                If j.value = True Then ecrire(j.adresse2, "ON", 1, 4)
+                                                Exit Sub
+                                            End If
                                         End If
                                     End If
                                 End If
-                            End If
                         Case "QX"
                                 If testDatatableB(j) Then
                                     If nbsendQX > 0 Then
-                                    If TypeOf j.Value Is Boolean Then
-                                        If j.Value <> dataMdbWQX(j.adresse2) Then
-                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite QX ", "adress= " & j.adresse2 & " ; mWrite= " & dataMdbWQX(j.adresse2) & " ; value= " & j.Value & ") ; ")
-                                            dataMdbWQX(j.adresse2) = j.Value
-                                            flagWrite = True
-                                            If j.value = False Then ecrire(j.adresse2, "OFF", 0, 2)
-                                            If j.value = True Then ecrire(j.adresse2, "ON", 1, 2)
-                                            Exit Sub
+                                        If TypeOf j.Value Is Boolean Then
+                                            If j.Value <> dataMdbWQX(j.adresse2) Then
+                                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite QX ", "adress= " & j.adresse2 & " ; mWrite= " & dataMdbWQX(j.adresse2) & " ; value= " & j.Value & ") ; ")
+                                                dataMdbWQX(j.adresse2) = j.Value
+                                                flagWrite = True
+                                                If j.value = False Then ecrire(j.adresse2, "OFF", 0, 2)
+                                                If j.value = True Then ecrire(j.adresse2, "ON", 1, 2)
+                                                Exit Sub
+                                            End If
                                         End If
-                                    End If
-                                    If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
-                                        If j.Value <> CInt(dataMdbWQX(j.adresse2)) Then
-                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite QX ", "adress= " & j.adresse2 & " ; mWrite= " & CUShort(dataMdbWQX(j.adresse2)) & " ; value= " & j.Value & ") ; ")
-                                            dataMdbWQX(j.adresse2) = CBool(j.Value)
+                                        If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
+                                            If j.Value <> CInt(dataMdbWQX(j.adresse2)) Then
+                                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite QX ", "adress= " & j.adresse2 & " ; mWrite= " & CUShort(dataMdbWQX(j.adresse2)) & " ; value= " & j.Value & ") ; ")
+                                            If j.Value = 0 Then
+                                                dataMdbWQX(j.adresse2) = False
+                                            Else
+                                                dataMdbWQX(j.adresse2) = True
+                                            End If
                                             flagWrite = True
+
                                             If j.value = 0 Then
                                                 ecrire(j.adresse2, "OFF", 0, 2)
                                             Else
-
                                                 ecrire(j.adresse2, "ON", 1, 2)
                                             End If
+
                                             Exit Sub
                                         End If
                                     End If
                                 End If
                             End If
+
                     End Select
                 End If
             Next
@@ -1449,8 +1520,12 @@ Imports System.Net.Sockets
                                         If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
                                             j.Value = dataMdbRMW(j.adresse1)
                                         End If
-                                        If TypeOf j.Value Is Boolean And j.Value > -1 And j.Value < 2 Then
-                                            j.Value = CBool(dataMdbRMW(j.adresse1))
+                                        If TypeOf j.Value Is Boolean Then
+                                            If dataMdbRMW(j.adresse1) > 0 Then
+                                                j.Value = True
+                                            Else
+                                                j.Value = False
+                                            End If
                                         End If
                                         msg += "( adress= " & j.adresse1 & " ; value= " & j.Value & " ; mRead= " & dataMdbRMW(j.adresse1)
                                         If j.adresse2 > -1 Then
@@ -1470,41 +1545,64 @@ Imports System.Net.Sockets
                                         If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
                                             j.Value = dataMdbRIW(j.adresse1)
                                         End If
-                                        If TypeOf j.Value Is Boolean And dataMdbRIW(j.adresse1) > -1 And dataMdbRIW(j.adresse1) < 2 Then
-                                            j.Value = CBool(dataMdbRIW(j.adresse1))
+                                        If TypeOf j.Value Is Boolean Then
+                                            If dataMdbRIW(j.adresse1) > 0 Then
+                                                j.Value = True
+                                            Else
+                                                j.Value = False
+                                            End If
                                         End If
                                     End If
                                 End If
                             End If
 
-                            If TypeOf j.Value Is Boolean Then
 
-                                If j.modele = "MX" Then
-                                    If j.adresse1 > 255 * (cptsend - 1) And j.adresse1 <= 255 * cptsend And testDatatableB(j) Then
-                                        If j.Value <> dataMdbRMX(j.adresse1) And Not flagWrite Then
-                                            j.Value = dataMdbRMX(j.adresse1)
-                                            msg += "( adress= " & j.adresse1 & " ; value= " & j.Value & " ; mRead= " & dataMdbRMX(j.adresse1)
-                                            If j.adresse2 > -1 Then
-                                                dataMdbWMX(j.adresse2) = dataMdbRMX(j.adresse1)
-                                                msg += " ; mWrite= " & dataMdbWMX(j.adresse2) & ") ; "
+                            If j.modele = "MX" Then
+                                If j.adresse1 > 255 * (cptsend - 1) And j.adresse1 <= 255 * cptsend And testDatatableB(j) Then
+                                    If j.Value <> dataMdbRMX(j.adresse1) And Not flagWrite Then
+                                        If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
+                                            If dataMdbRMX(j.adresse1) = False Then
+                                                j.Value = 0
                                             Else
-                                                msg += ") ; "
+                                                j.Value = 1
                                             End If
+                                        End If
+                                        If TypeOf j.Value Is Boolean Then
+                                            j.Value = dataMdbRMX(j.adresse1)
+                                        End If
+                                        msg += "( adress= " & j.adresse1 & " ; value= " & j.Value & " ; mRead= " & dataMdbRMX(j.adresse1)
+                                        If j.adresse2 > -1 Then
+                                            dataMdbWMX(j.adresse2) = dataMdbRMX(j.adresse1)
+                                            msg += " ; mWrite= " & dataMdbWMX(j.adresse2) & ") ; "
+                                        Else
+                                            msg += ") ; "
                                         End If
                                     End If
                                 End If
+                            End If
 
-                                If j.modele = "IX" Then
-                                    If j.adresse1 > 255 * (cptsend - 1) And j.adresse1 <= 255 * cptsend And testDatatableB(j) Then
-                                        If j.Value <> dataMdbRIX(j.adresse1) Then
-                                            msg += j.adresse1 & "=" & dataMdbRIX(j.adresse1) & " / " & j.Value & " ; "
+                            If j.modele = "IX" Then
+                                If j.adresse1 > 255 * (cptsend - 1) And j.adresse1 <= 255 * cptsend And testDatatableB(j) Then
+                                    If j.Value <> dataMdbRIX(j.adresse1) Then
+                                        msg += j.adresse1 & "=" & dataMdbRIX(j.adresse1) & " / " & j.Value & " ; "
+                                        If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
+                                            If dataMdbRIX(j.adresse1) = False Then
+                                                j.Value = 0
+                                            Else
+                                                j.Value = 1
+                                            End If
+                                        End If
+                                        If TypeOf j.Value Is Boolean Then
                                             j.Value = dataMdbRIX(j.adresse1)
                                         End If
                                     End If
                                 End If
                             End If
+
                         End If
+
                     End If
+
                 Next
 
                 If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " slave receive", "MBmaster_OnResponseData : " & msg)
@@ -1630,7 +1728,7 @@ Imports System.Net.Sockets
         Dim word As Integer() = New Integer(num - 1) {}
 
         Try
-            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GetData", num.ToString)
+            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GetData", num.ToString)
 
             ' ------------------------------------------------------------------------
             ' Convert data from text boxes

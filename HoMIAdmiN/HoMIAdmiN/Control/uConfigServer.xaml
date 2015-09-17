@@ -290,7 +290,7 @@
                                         </StackPanel>
                                     </StackPanel>
                                 </GroupBox>
-                                <GroupBox Name="GroupBox11" Margin="2" HorizontalAlignment="left" Width="700">
+                                <GroupBox Name="GroupBox11" Margin="2" HorizontalAlignment="left" Width="700" Height="201">
                                     <GroupBox.Header>
                                         <Label Foreground="White" FontWeight="Bold">Importer et exporter la configuration</Label>
                                     </GroupBox.Header>
@@ -322,6 +322,15 @@
                                                 </StackPanel>
                                             </Button>
                                             <Label Content="Exporter la configuration au format XML pour le plugin SARAH" Foreground="Gray" Height="28" FontSize="10" />
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button HorizontalAlignment="left" Margin="2" Name="Button1" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="110">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="/HoMIAdmiN;component/Images/Import_32.png" Width="16" />
+                                                    <Label Content="Export Imperi" Foreground="White" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" />
+                                                </StackPanel>
+                                            </Button>
+                                            <Label Content="Exporter la configuration au format JSON pour ImperiHome" FontSize="10" Foreground="Gray" Height="28" />
                                         </StackPanel>
                                     </StackPanel>
                                 </GroupBox>

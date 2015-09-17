@@ -1,4 +1,5 @@
 ﻿Imports HoMIDom
+Imports HoMIDom.HoMIDom
 Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 
@@ -11,7 +12,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 ''' <summary>Driver Nest Reception de données de Thermostat intelligent et de detecteur de Fumée/Co2</summary>
 ''' <remarks></remarks>
 <Serializable()> Public Class Driver_Nest
-    Implements HoMIDom.HoMIDom.IDriver
+    Implements IDriver
 
 #Region "Variables génériques"
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
@@ -33,15 +34,15 @@ Imports STRGS = Microsoft.VisualBasic.Strings
     Dim _Version As String = My.Application.Info.Version.ToString
     Dim _OsPlatform As String = "3264"
     Dim _Picture As String = ""
-    Dim _Server As HoMIDom.HoMIDom.Server
-    Dim _Device As HoMIDom.HoMIDom.Device
+    Dim _Server As Server
+    Dim _Device As Device
     Dim _DeviceSupport As New ArrayList
     Dim _Parametres As New ArrayList
     Dim _LabelsDriver As New ArrayList
     Dim _LabelsDevice As New ArrayList
     Dim MyTimer As New Timers.Timer
     Dim _IdSrv As String
-    Dim _DeviceCommandPlus As New List(Of HoMIDom.HoMIDom.Device.DeviceCommande)
+    Dim _DeviceCommandPlus As New List(Of Device.DeviceCommande)
     Dim _AutoDiscover As Boolean = False
 
     'A ajouter dans les ppt du driver
@@ -56,10 +57,14 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
 #Region "Variables internes"
 
-    Dim obj As Object
-    Dim Auth As HoMIDom.HoMIDom.Authentication
+
+    Dim Auth As Authentication
     Dim devlist As All
     Dim First As Boolean = True
+    Dim cpt_restart As Integer = 0
+
+    Dim cptBeforeToken As Integer = 0
+    Dim cpt As Integer = 0
 
     Dim detect As New Dictionary(Of String, Object)
     Dim thermo As New Dictionary(Of String, Object)
@@ -141,13 +146,13 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 #End Region
 
 #Region "Propriétés génériques"
-    Public WriteOnly Property IdSrv As String Implements HoMIDom.HoMIDom.IDriver.IdSrv
+    Public WriteOnly Property IdSrv As String Implements IDriver.IdSrv
         Set(ByVal value As String)
             _IdSrv = value
         End Set
     End Property
 
-    Public Property COM() As String Implements HoMIDom.HoMIDom.IDriver.COM
+    Public Property COM() As String Implements IDriver.COM
         Get
             Return _Com
         End Get
@@ -155,17 +160,17 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             _Com = value
         End Set
     End Property
-    Public ReadOnly Property Description() As String Implements HoMIDom.HoMIDom.IDriver.Description
+    Public ReadOnly Property Description() As String Implements IDriver.Description
         Get
             Return _Description
         End Get
     End Property
-    Public ReadOnly Property DeviceSupport() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.DeviceSupport
+    Public ReadOnly Property DeviceSupport() As System.Collections.ArrayList Implements IDriver.DeviceSupport
         Get
             Return _DeviceSupport
         End Get
     End Property
-    Public Property Parametres() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.Parametres
+    Public Property Parametres() As System.Collections.ArrayList Implements IDriver.Parametres
         Get
             Return _Parametres
         End Get
@@ -174,7 +179,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
         End Set
     End Property
 
-    Public Property LabelsDriver() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.LabelsDriver
+    Public Property LabelsDriver() As System.Collections.ArrayList Implements IDriver.LabelsDriver
         Get
             Return _LabelsDriver
         End Get
@@ -182,7 +187,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             _LabelsDriver = value
         End Set
     End Property
-    Public Property LabelsDevice() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.LabelsDevice
+    Public Property LabelsDevice() As System.Collections.ArrayList Implements IDriver.LabelsDevice
         Get
             Return _LabelsDevice
         End Get
@@ -193,9 +198,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
 
 
-    Public Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object) Implements HoMIDom.HoMIDom.IDriver.DriverEvent
+    Public Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object) Implements IDriver.DriverEvent
 
-    Public Property Enable() As Boolean Implements HoMIDom.HoMIDom.IDriver.Enable
+    Public Property Enable() As Boolean Implements IDriver.Enable
         Get
             Return _Enable
         End Get
@@ -203,12 +208,12 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             _Enable = value
         End Set
     End Property
-    Public ReadOnly Property ID() As String Implements HoMIDom.HoMIDom.IDriver.ID
+    Public ReadOnly Property ID() As String Implements IDriver.ID
         Get
             Return _ID
         End Get
     End Property
-    Public Property IP_TCP() As String Implements HoMIDom.HoMIDom.IDriver.IP_TCP
+    Public Property IP_TCP() As String Implements IDriver.IP_TCP
         Get
             Return _IP_TCP
         End Get
@@ -216,7 +221,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             _IP_TCP = value
         End Set
     End Property
-    Public Property IP_UDP() As String Implements HoMIDom.HoMIDom.IDriver.IP_UDP
+    Public Property IP_UDP() As String Implements IDriver.IP_UDP
         Get
             Return _IP_UDP
         End Get
@@ -224,12 +229,12 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             _IP_UDP = value
         End Set
     End Property
-    Public ReadOnly Property IsConnect() As Boolean Implements HoMIDom.HoMIDom.IDriver.IsConnect
+    Public ReadOnly Property IsConnect() As Boolean Implements IDriver.IsConnect
         Get
             Return _IsConnect
         End Get
     End Property
-    Public Property Modele() As String Implements HoMIDom.HoMIDom.IDriver.Modele
+    Public Property Modele() As String Implements IDriver.Modele
         Get
             Return _Modele
         End Get
@@ -237,12 +242,12 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             _Modele = value
         End Set
     End Property
-    Public ReadOnly Property Nom() As String Implements HoMIDom.HoMIDom.IDriver.Nom
+    Public ReadOnly Property Nom() As String Implements IDriver.Nom
         Get
             Return _Nom
         End Get
     End Property
-    Public Property Picture() As String Implements HoMIDom.HoMIDom.IDriver.Picture
+    Public Property Picture() As String Implements IDriver.Picture
         Get
             Return _Picture
         End Get
@@ -250,7 +255,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             _Picture = value
         End Set
     End Property
-    Public Property Port_TCP() As String Implements HoMIDom.HoMIDom.IDriver.Port_TCP
+    Public Property Port_TCP() As String Implements IDriver.Port_TCP
         Get
             Return _Port_TCP
         End Get
@@ -258,7 +263,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             _Port_TCP = value
         End Set
     End Property
-    Public Property Port_UDP() As String Implements HoMIDom.HoMIDom.IDriver.Port_UDP
+    Public Property Port_UDP() As String Implements IDriver.Port_UDP
         Get
             Return _Port_UDP
         End Get
@@ -266,12 +271,12 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             _Port_UDP = value
         End Set
     End Property
-    Public ReadOnly Property Protocol() As String Implements HoMIDom.HoMIDom.IDriver.Protocol
+    Public ReadOnly Property Protocol() As String Implements IDriver.Protocol
         Get
             Return _Protocol
         End Get
     End Property
-    Public Property Refresh() As Integer Implements HoMIDom.HoMIDom.IDriver.Refresh
+    Public Property Refresh() As Integer Implements IDriver.Refresh
         Get
             Return _Refresh
         End Get
@@ -279,15 +284,15 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             _Refresh = value
         End Set
     End Property
-    Public Property Server() As HoMIDom.HoMIDom.Server Implements HoMIDom.HoMIDom.IDriver.Server
+    Public Property Server() As Server Implements IDriver.Server
         Get
             Return _Server
         End Get
-        Set(ByVal value As HoMIDom.HoMIDom.Server)
+        Set(ByVal value As Server)
             _Server = value
         End Set
     End Property
-    Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
+    Public ReadOnly Property Version() As String Implements IDriver.Version
         Get
             Return _Version
         End Get
@@ -394,27 +399,40 @@ Imports STRGS = Microsoft.VisualBasic.Strings
                 WriteLog("ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut : " & ex.Message)
             End Try
 
-            GetAccessToken()
+            If GetAccessToken("Nest") Then
 
-            First = True
-            _IsConnect = True
+                cptBeforeToken = (Auth.expires_in / _Refresh) - 2
+                First = True
+                _IsConnect = True
 
-            If _Refresh > 0 Then
-                If _Refresh < 600 Then
-                    _Refresh = 600
+                If _Refresh > 0 Then
+                    If _Refresh < 60 Then
+                        _Refresh = 60
+                    End If
+                    MyTimer.Interval = _Refresh * 1000
+                    MyTimer.Enabled = True
+                    AddHandler MyTimer.Elapsed, AddressOf TimerTick
                 End If
-                MyTimer.Interval = _Refresh * 1000
-                MyTimer.Enabled = True
-                AddHandler MyTimer.Elapsed, AddressOf TimerTick
+                
+                cpt_restart = 0
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " démarré")
+
+            Else
+                cpt_restart += 1
+                If cpt_restart < 4 Then
+                    'GetRefreshToken("Nest", "https://home.nest.com/login/oauth2")
+                    Start()
+                Else
+                    _IsConnect = False
+                    WriteLog("Driver " & Me.Nom & " non démarré")
+                    WriteLog("ERR: Verifié que votre authentification est valide avec HoMIAdmiN dans HoMIDoM/Config")
+                End If
             End If
 
-            GetData()
-
-            WriteLog("Driver " & Me.Nom & " démarré")
         Catch ex As Exception
-            _IsConnect = False
-            WriteLog("ERR: Driver " & Me.Nom & " Erreur démarrage " & ex.Message)
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar Start", ex.Message & ex.Data.ToString)
         End Try
+
     End Sub
 
     ''' <summary>Arrêter le du driver</summary>
@@ -460,166 +478,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             End If
 
             ' recherche du device/module a interroger
-            'GetData()
 
             If Not First Then
-
-                If devlist.devices.smoke_co_alarms IsNot Nothing Then
-                    For i = 0 To devlist.devices.smoke_co_alarms.Count - 1
-                        If Objet.adresse1 = "Detecteur " & devlist.devices.smoke_co_alarms.Values(i).name Then
-
-                            If TypeOf (Objet.value) Is String Then
-                                Select Case Objet.modele
-
-                                    Case "locale"
-                                        Objet.value = devlist.devices.smoke_co_alarms.Values(i).locale
-                                    Case "name"
-                                        Objet.value = devlist.devices.smoke_co_alarms.Values(i).name
-                                    Case "name_long"
-                                        Objet.value = devlist.devices.smoke_co_alarms.Values(i).name_long
-                                    Case "last_connection"
-                                        Objet.value = devlist.devices.smoke_co_alarms.Values(i).last_connection
-                                    Case "battery_health"
-                                        Objet.value = devlist.devices.smoke_co_alarms.Values(i).battery_health
-                                    Case "co_alarm_state"
-                                        Objet.value = devlist.devices.smoke_co_alarms.Values(i).co_alarm_state
-                                    Case "smoke_alarm_state"
-                                        Objet.value = devlist.devices.smoke_co_alarms.Values(i).smoke_alarm_state
-                                    Case "last_manual_test_time"
-                                        Objet.value = devlist.devices.smoke_co_alarms.Values(i).last_manual_test_time
-                                    Case "ui_color_state"
-                                        Objet.value = devlist.devices.smoke_co_alarms.Values(i).ui_color_state
-                                    Case "all"
-                                        Objet.value = "locale = " & devlist.devices.smoke_co_alarms.Values(i).locale & vbCrLf & _
-                                        "name = " & devlist.devices.smoke_co_alarms.Values(i).name & vbCrLf & _
-                                        "name_long = " & devlist.devices.smoke_co_alarms.Values(i).name_long & vbCrLf & _
-                                        "last_connection = " & devlist.devices.smoke_co_alarms.Values(i).last_connection & vbCrLf & _
-                                        "battery_health = " & devlist.devices.smoke_co_alarms.Values(i).battery_health & vbCrLf & _
-                                        "co_alarm_state = " & devlist.devices.smoke_co_alarms.Values(i).co_alarm_state & vbCrLf & _
-                                        "smoke_alarm_state = " & devlist.devices.smoke_co_alarms.Values(i).smoke_alarm_state & vbCrLf & _
-                                        "last_manual_test_time = " & devlist.devices.smoke_co_alarms.Values(i).last_manual_test_time & vbCrLf & _
-                                        "is_online = " & CStr(devlist.devices.smoke_co_alarms.Values(i).is_online) & vbCrLf & _
-                                        "is_manual_test_active = " & CStr(devlist.devices.smoke_co_alarms.Values(i).is_manual_test_active) & vbCrLf & _
-                                        "ui_color_state = " & devlist.devices.smoke_co_alarms.Values(i).ui_color_state
-
-                                End Select
-                            End If
-
-                            If TypeOf (Objet.value) Is Boolean Then
-                                Select Case Objet.modele
-
-                                    Case "is_online"
-                                        Objet.value = devlist.devices.smoke_co_alarms.Values(i).is_online
-                                    Case "is_manual_test_active"
-                                        Objet.value = devlist.devices.smoke_co_alarms.Values(i).is_manual_test_active
-                                    Case "battery_health"
-                                        If devlist.devices.smoke_co_alarms.Values(i).battery_health = "Ok" Then
-                                            Objet.value = True
-                                        Else
-                                            Objet.value = False
-                                        End If
-                                    Case "co_alarm_state"
-                                        If devlist.devices.smoke_co_alarms.Values(i).co_alarm_state = "Ok" Then
-                                            Objet.value = True
-                                        Else
-                                            Objet.value = False
-                                        End If
-                                    Case "smoke_alarm_state"
-                                        If devlist.devices.smoke_co_alarms.Values(i).smoke_alarm_state = "Ok" Then
-                                            Objet.value = True
-                                        Else
-                                            Objet.value = False
-                                        End If
-                                End Select
-                            End If
-
-                        End If
-                    Next
-                End If
-
-                If devlist.devices.thermostats IsNot Nothing Then
-                    For i = 0 To devlist.devices.thermostats.Count - 1
-                        If Objet.adresse1 = "Thermostat " & devlist.devices.thermostats.Values(i).name Then
-
-                            If TypeOf (Objet.value) Is String Then
-                                Select Case Objet.modele
-
-                                    Case "locale"
-                                        Objet.value = devlist.devices.thermostats.Values(i).locale
-                                    Case "temperature_scale"
-                                        Objet.value = devlist.devices.thermostats.Values(i).temperature_scale
-                                    Case "name"
-                                        Objet.value = devlist.devices.thermostats.Values(i).name
-                                    Case "hvac_mode"
-                                        Objet.value = devlist.devices.thermostats.Values(i).hvac_mode
-                                    Case "name_long"
-                                        Objet.value = devlist.devices.thermostats.Values(i).name_long
-                                    Case "last_connection"
-                                        Objet.value = devlist.devices.thermostats.Values(i).last_connection
-                                    Case "all"
-
-                                End Select
-                            End If
-
-                            If TypeOf (Objet.value) Is Boolean Then
-                                Select Case Objet.modele
-
-                                    Case "is_using_emergency_heat"
-                                        Objet.value = devlist.devices.thermostats.Values(i).is_using_emergency_heat
-                                    Case "has_fan"
-                                        Objet.value = devlist.devices.thermostats.Values(i).has_fan
-                                    Case "has_leaf"
-                                        Objet.value = devlist.devices.thermostats.Values(i).has_leaf
-                                    Case "can_heat"
-                                        Objet.value = devlist.devices.thermostats.Values(i).can_heat
-                                    Case "can_cool"
-                                        Objet.value = devlist.devices.thermostats.Values(i).can_cool
-                                    Case "fan_timer_active"
-                                        Objet.value = devlist.devices.thermostats.Values(i).fan_timer_active
-                                    Case "is_online"
-                                        Objet.value = devlist.devices.thermostats.Values(i).is_online
-
-                                End Select
-                            End If
-
-                            If TypeOf (Objet.value) Is Double Or TypeOf (Objet.value) Is Integer Then
-                                Select Case Objet.modele
-
-                                    Case "humidity"
-                                        Objet.value = devlist.devices.thermostats.Values(i).humidity
-                                    Case "target_temperature_c"
-                                        Objet.value = devlist.devices.thermostats.Values(i).target_temperature_c
-                                    Case "target_temperature_f"
-                                        Objet.value = devlist.devices.thermostats.Values(i).target_temperature_f
-                                    Case "target_temperature_high_c"
-                                        Objet.value = devlist.devices.thermostats.Values(i).target_temperature_high_c
-                                    Case "target_temperature_high_f"
-                                        Objet.value = devlist.devices.thermostats.Values(i).target_temperature_high_f
-                                    Case "target_temperature_low_c"
-                                        Objet.value = devlist.devices.thermostats.Values(i).target_temperature_low_c
-                                    Case "target_temperature_low_f"
-                                        Objet.value = devlist.devices.thermostats.Values(i).target_temperature_low_f
-                                    Case "ambient_temperature_c"
-                                        Objet.value = devlist.devices.thermostats.Values(i).ambient_temperature_c
-                                    Case "ambient_temperature_f"
-                                        Objet.value = devlist.devices.thermostats.Values(i).ambient_temperature_f
-                                    Case "away_temperature_high_c"
-                                        Objet.value = devlist.devices.thermostats.Values(i).away_temperature_high_c
-                                    Case "away_temperature_high_f"
-                                        Objet.value = devlist.devices.thermostats.Values(i).away_temperature_high_f
-                                    Case "away_temperature_low_c"
-                                        Objet.value = devlist.devices.thermostats.Values(i).away_temperature_low_c
-                                    Case "away_temperature_low_f"
-                                        Objet.value = devlist.devices.thermostats.Values(i).away_temperature_low_f
-                                End Select
-                            End If
-
-                        End If
-                    Next
-                End If
-
-                WriteLog("DBG: Valeur enregistrée : " & Objet.Name & " -> " & Objet.value)
-
+                GetData(Objet)
             End If
 
         Catch ex As Exception
@@ -651,7 +512,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
     ''' <summary>Fonction lancée lors de la suppression d'un device</summary>
     ''' <param name="DeviceId">Objet représetant le device à interroger</param>
     ''' <remarks></remarks>
-    Public Sub DeleteDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.DeleteDevice
+    Public Sub DeleteDevice(ByVal DeviceId As String) Implements IDriver.DeleteDevice
         Try
 
         Catch ex As Exception
@@ -662,7 +523,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
     ''' <summary>Fonction lancée lors de l'ajout d'un device</summary>
     ''' <param name="DeviceId">Objet représetant le device à interroger</param>
     ''' <remarks></remarks>
-    Public Sub NewDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.NewDevice
+    Public Sub NewDevice(ByVal DeviceId As String) Implements IDriver.NewDevice
         Try
 
         Catch ex As Exception
@@ -694,7 +555,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
     ''' <remarks></remarks>
     Private Sub Add_LibelleDriver(ByVal Nom As String, ByVal Labelchamp As String, ByVal Tooltip As String, Optional ByVal Parametre As String = "")
         Try
-            Dim y0 As New HoMIDom.HoMIDom.Driver.cLabels
+            Dim y0 As New Driver.cLabels
             y0.LabelChamp = Labelchamp
             y0.NomChamp = UCase(Nom)
             y0.Tooltip = Tooltip
@@ -712,7 +573,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
     ''' <remarks></remarks>
     Private Sub Add_LibelleDevice(ByVal Nom As String, ByVal Labelchamp As String, ByVal Tooltip As String, Optional ByVal Parametre As String = "")
         Try
-            Dim ld0 As New HoMIDom.HoMIDom.Driver.cLabels
+            Dim ld0 As New Driver.cLabels
             ld0.LabelChamp = Labelchamp
             ld0.NomChamp = UCase(Nom)
             ld0.Tooltip = Tooltip
@@ -730,7 +591,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
     ''' <remarks></remarks>
     Private Sub Add_ParamAvance(ByVal nom As String, ByVal description As String, ByVal valeur As Object)
         Try
-            Dim x As New HoMIDom.HoMIDom.Driver.Parametre
+            Dim x As New Driver.Parametre
             x.Nom = nom
             x.Description = description
             x.Valeur = valeur
@@ -748,29 +609,18 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
             'liste des devices compatibles
             _DeviceSupport.Add(ListeDevices.METEO.ToString)
-            _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
-            _DeviceSupport.Add(ListeDevices.BAROMETRE.ToString)
             _DeviceSupport.Add(ListeDevices.BATTERIE.ToString)
+            _DeviceSupport.Add(ListeDevices.APPAREIL.ToString)
             _DeviceSupport.Add(ListeDevices.COMPTEUR.ToString)
             _DeviceSupport.Add(ListeDevices.CONTACT.ToString)
             _DeviceSupport.Add(ListeDevices.DETECTEUR.ToString)
-            _DeviceSupport.Add(ListeDevices.DIRECTIONVENT.ToString)
-            _DeviceSupport.Add(ListeDevices.ENERGIEINSTANTANEE.ToString)
-            _DeviceSupport.Add(ListeDevices.ENERGIETOTALE.ToString)
             _DeviceSupport.Add(ListeDevices.GENERIQUEBOOLEEN.ToString)
             _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE.ToString)
             _DeviceSupport.Add(ListeDevices.GENERIQUESTRING.ToString)
             _DeviceSupport.Add(ListeDevices.HUMIDITE.ToString)
-            _DeviceSupport.Add(ListeDevices.LAMPE.ToString)
-            _DeviceSupport.Add(ListeDevices.PLUIECOURANT.ToString)
-            _DeviceSupport.Add(ListeDevices.PLUIETOTAL.ToString)
             _DeviceSupport.Add(ListeDevices.SWITCH.ToString)
-            _DeviceSupport.Add(ListeDevices.TELECOMMANDE.ToString)
             _DeviceSupport.Add(ListeDevices.TEMPERATURE.ToString)
             _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE.ToString)
-            _DeviceSupport.Add(ListeDevices.UV.ToString)
-            _DeviceSupport.Add(ListeDevices.VITESSEVENT.ToString)
-            _DeviceSupport.Add(ListeDevices.VOLET.ToString)
 
             'Parametres avancés
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
@@ -807,14 +657,18 @@ Imports STRGS = Microsoft.VisualBasic.Strings
     Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
         ' Attente de 3s pour eviter le relancement de la procedure dans le laps de temps
         'System.Threading.Thread.Sleep(3000)
-        GetData()
+        'If cpt >= cptBeforeToken Then
+        'RefreshToken("Nest", "https://home.nest.com/login/oauth2")
+        'cpt = 0
+        'End If
+        ScanData()
     End Sub
 
 #End Region
 
 #Region "Fonctions internes"
 
-    Private Sub GetAccessToken()
+    Private Function GetAccessToken(ByVal clientOauth As String) As Boolean
 
         Try
 
@@ -826,30 +680,61 @@ Imports STRGS = Microsoft.VisualBasic.Strings
                 WriteLog("ERR: Erreur de lecture de debug : " & ex.Message)
             End Try
 
-            Dim fileName = My.Application.Info.DirectoryPath & "\config\reponse_accesstoken_Nest.json"
+            Dim fileName = My.Application.Info.DirectoryPath & "\config\reponse_accesstoken_" & clientOauth & ".json"
 
             If System.IO.File.Exists(fileName) Then
 
                 Dim stream = System.IO.File.ReadAllText(fileName)
-                Auth = Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(HoMIDom.HoMIDom.Authentication))
+                Auth = Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(Authentication))
                 'va chercher les module que si connecté
                 If Auth.expires_in > 0 Then
                     WriteLog("DBG: Token : " & Auth.access_token)
+                    Return True
+                    Exit Function
                 End If
-            End If
 
+            Else
+                WriteLog("ERR: GetAccessToken,  Le fichier " & fileName & " n'existe pas")
+            End If
+            Return False
         Catch ex As Exception
             WriteLog("ERR: GetAccessToken, Exception : " & ex.Message)
+            Return False
+        End Try
+    End Function
+
+    Private Sub GetRefreshToken(ByVal clientOauth As String, ByVal httpsOauth As String)
+        Try
+            Dim client As New Net.WebClient
+            Dim reqparm As New Specialized.NameValueCollection
+            reqparm.Add("client_id", _Server.GetClientFile(clientOauth).web.client_id)
+            reqparm.Add("client_secret", _Server.GetClientFile(clientOauth).web.client_secret)
+            reqparm.Add("refresh_token", Auth.refresh_token)
+            reqparm.Add("grant_type", "refresh_token")
+            Dim responsebytes = client.UploadValues(httpsOauth, "POST", reqparm)
+            Dim responsebody = (New System.Text.UTF8Encoding).GetString(responsebytes)
+            Auth = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(Authentication))
+
+            Dim stream = Newtonsoft.Json.JsonConvert.SerializeObject(Auth)
+            System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\config\reponse_accesstoken_" & clientOauth & ".json", stream)
+            If Auth.expires_in > 0 Then
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " RefreshToken : ", "Requête " & httpsOauth & " OK")
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " RefreshToken", "Connect : " & responsebody.ToString)
+            Else
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " RefreshToken", "Non connecté")
+            End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " RefreshToken", "Exception : " & ex.Message)
         End Try
     End Sub
 
-    Private Sub GetData()
+    Private Sub ScanData()
 
         Try
+line1:
             Dim IdLib As String = ""
             Dim client As New Net.WebClient
             Dim responsebody = client.DownloadString("https://developer-api.nest.com/?auth=" & Auth.access_token)
-            obj = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody)
             devlist = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(All))
 
             WriteLog("DBG: GetData : " & responsebody.ToString)
@@ -866,8 +751,8 @@ Imports STRGS = Microsoft.VisualBasic.Strings
                     detect.Add("is_manual_test_active", "GENERIQUEBOOLEAN")
                     detect.Add("last_manual_test_time", "GENERIQUESTRING")
                     For i = 0 To devlist.devices.smoke_co_alarms.Count - 1
-                        IdLib += "Detecteur " & devlist.devices.smoke_co_alarms.Values(i).name & "|"
-                        If i = devlist.devices.smoke_co_alarms.Count - 1 Then IdLib += "Autre"
+                        IdLib = "Detecteur " & devlist.devices.smoke_co_alarms.Values(i).name
+                        If i < devlist.devices.smoke_co_alarms.Count - 1 Then IdLib += "|"
                         WriteLog("DBG: Detecteur Fumée/Co2 : " & devlist.devices.smoke_co_alarms.Values(i).name & ", ID = " & devlist.devices.smoke_co_alarms.Values(i).device_id)
                         If _AutoDiscover Or _Server.GetModeDecouverte Then
                             For Each det In detect
@@ -909,8 +794,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
                     thermo.Add("is_online", "GENERIQUEBOOLEAN")
                     thermo.Add("last_connection", "GENERIQUESTRING")
                     For i = 0 To devlist.devices.thermostats.Count - 1
-                        IdLib += "Thermostat " & devlist.devices.thermostats.Values(i).name & "|"
-                        If i = devlist.devices.thermostats.Count - 1 Then IdLib += "Autre"
+                        If IdLib <> "" Then IdLib += "|"
+                        IdLib += "Thermostat " & devlist.devices.thermostats.Values(i).name
+                        If i < devlist.devices.thermostats.Count - 1 Then IdLib += "|"
                         WriteLog("DBG: Thermostat : " & devlist.devices.thermostats.Values(i).name & ", ID = " & devlist.devices.thermostats.Values(i).device_id)
                         If _AutoDiscover Or _Server.GetModeDecouverte Then
                             For Each det In thermo
@@ -927,7 +813,181 @@ Imports STRGS = Microsoft.VisualBasic.Strings
                 Add_LibelleDevice("ADRESSE1", "Nom du module", "Nom du module ", IdLib)
                 First = False
             End If
+            cpt += 1
+            cpt_restart = 0
+        Catch ex As Exception
 
+            cpt_restart += 1
+            If cpt_restart < 4 Then
+                'GetRefreshToken("Nest", "https://home.nest.com/login/oauth2")
+                GoTo line1
+            Else
+                WriteLog("ERR: Verifié que votre authentification est valide avec HoMIAdmiN dans HoMIDoM/Config")
+                Restart()
+            End If
+
+            WriteLog("DBG: ScanData, Exception : " & ex.Message)
+        End Try
+    End Sub
+
+
+    Private Sub GetData(ByVal Objet As Object)
+        Try
+            If devlist.devices.smoke_co_alarms IsNot Nothing Then
+                For i = 0 To devlist.devices.smoke_co_alarms.Count - 1
+                    If Objet.adresse1 = "Detecteur " & devlist.devices.smoke_co_alarms.Values(i).name Then
+
+                        If TypeOf (Objet.value) Is String Then
+                            Select Case Objet.modele
+
+                                Case "locale"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).locale
+                                Case "name"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).name
+                                Case "name_long"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).name_long
+                                Case "last_connection"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).last_connection
+                                Case "battery_health"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).battery_health
+                                Case "co_alarm_state"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).co_alarm_state
+                                Case "smoke_alarm_state"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).smoke_alarm_state
+                                Case "last_manual_test_time"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).last_manual_test_time
+                                Case "ui_color_state"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).ui_color_state
+                                Case "all"
+                                    Objet.value = "locale = " & devlist.devices.smoke_co_alarms.Values(i).locale & vbCrLf & _
+                                    "name = " & devlist.devices.smoke_co_alarms.Values(i).name & vbCrLf & _
+                                    "name_long = " & devlist.devices.smoke_co_alarms.Values(i).name_long & vbCrLf & _
+                                    "last_connection = " & devlist.devices.smoke_co_alarms.Values(i).last_connection & vbCrLf & _
+                                    "battery_health = " & devlist.devices.smoke_co_alarms.Values(i).battery_health & vbCrLf & _
+                                    "co_alarm_state = " & devlist.devices.smoke_co_alarms.Values(i).co_alarm_state & vbCrLf & _
+                                    "smoke_alarm_state = " & devlist.devices.smoke_co_alarms.Values(i).smoke_alarm_state & vbCrLf & _
+                                    "last_manual_test_time = " & devlist.devices.smoke_co_alarms.Values(i).last_manual_test_time & vbCrLf & _
+                                    "is_online = " & CStr(devlist.devices.smoke_co_alarms.Values(i).is_online) & vbCrLf & _
+                                    "is_manual_test_active = " & CStr(devlist.devices.smoke_co_alarms.Values(i).is_manual_test_active) & vbCrLf & _
+                                    "ui_color_state = " & devlist.devices.smoke_co_alarms.Values(i).ui_color_state
+
+                            End Select
+                        End If
+
+                        If TypeOf (Objet.value) Is Boolean Then
+                            Select Case Objet.modele
+
+                                Case "is_online"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).is_online
+                                Case "is_manual_test_active"
+                                    Objet.value = devlist.devices.smoke_co_alarms.Values(i).is_manual_test_active
+                                Case "battery_health"
+                                    If devlist.devices.smoke_co_alarms.Values(i).battery_health = "Ok" Then
+                                        Objet.value = True
+                                    Else
+                                        Objet.value = False
+                                    End If
+                                Case "co_alarm_state"
+                                    If devlist.devices.smoke_co_alarms.Values(i).co_alarm_state = "Ok" Then
+                                        Objet.value = True
+                                    Else
+                                        Objet.value = False
+                                    End If
+                                Case "smoke_alarm_state"
+                                    If devlist.devices.smoke_co_alarms.Values(i).smoke_alarm_state = "Ok" Then
+                                        Objet.value = True
+                                    Else
+                                        Objet.value = False
+                                    End If
+                            End Select
+                        End If
+
+                    End If
+                Next
+            End If
+
+            If devlist.devices.thermostats IsNot Nothing Then
+                For i = 0 To devlist.devices.thermostats.Count - 1
+                    If Objet.adresse1 = "Thermostat " & devlist.devices.thermostats.Values(i).name Then
+
+                        If TypeOf (Objet.value) Is String Then
+                            Select Case Objet.modele
+
+                                Case "locale"
+                                    Objet.value = devlist.devices.thermostats.Values(i).locale
+                                Case "temperature_scale"
+                                    Objet.value = devlist.devices.thermostats.Values(i).temperature_scale
+                                Case "name"
+                                    Objet.value = devlist.devices.thermostats.Values(i).name
+                                Case "hvac_mode"
+                                    Objet.value = devlist.devices.thermostats.Values(i).hvac_mode
+                                Case "name_long"
+                                    Objet.value = devlist.devices.thermostats.Values(i).name_long
+                                Case "last_connection"
+                                    Objet.value = devlist.devices.thermostats.Values(i).last_connection
+                                Case "all"
+
+                            End Select
+                        End If
+
+                        If TypeOf (Objet.value) Is Boolean Then
+                            Select Case Objet.modele
+
+                                Case "is_using_emergency_heat"
+                                    Objet.value = devlist.devices.thermostats.Values(i).is_using_emergency_heat
+                                Case "has_fan"
+                                    Objet.value = devlist.devices.thermostats.Values(i).has_fan
+                                Case "has_leaf"
+                                    Objet.value = devlist.devices.thermostats.Values(i).has_leaf
+                                Case "can_heat"
+                                    Objet.value = devlist.devices.thermostats.Values(i).can_heat
+                                Case "can_cool"
+                                    Objet.value = devlist.devices.thermostats.Values(i).can_cool
+                                Case "fan_timer_active"
+                                    Objet.value = devlist.devices.thermostats.Values(i).fan_timer_active
+                                Case "is_online"
+                                    Objet.value = devlist.devices.thermostats.Values(i).is_online
+
+                            End Select
+                        End If
+
+                        If TypeOf (Objet.value) Is Double Or TypeOf (Objet.value) Is Integer Then
+                            Select Case Objet.modele
+
+                                Case "humidity"
+                                    Objet.value = devlist.devices.thermostats.Values(i).humidity
+                                Case "target_temperature_c"
+                                    Objet.value = devlist.devices.thermostats.Values(i).target_temperature_c
+                                Case "target_temperature_f"
+                                    Objet.value = devlist.devices.thermostats.Values(i).target_temperature_f
+                                Case "target_temperature_high_c"
+                                    Objet.value = devlist.devices.thermostats.Values(i).target_temperature_high_c
+                                Case "target_temperature_high_f"
+                                    Objet.value = devlist.devices.thermostats.Values(i).target_temperature_high_f
+                                Case "target_temperature_low_c"
+                                    Objet.value = devlist.devices.thermostats.Values(i).target_temperature_low_c
+                                Case "target_temperature_low_f"
+                                    Objet.value = devlist.devices.thermostats.Values(i).target_temperature_low_f
+                                Case "ambient_temperature_c"
+                                    Objet.value = devlist.devices.thermostats.Values(i).ambient_temperature_c
+                                Case "ambient_temperature_f"
+                                    Objet.value = devlist.devices.thermostats.Values(i).ambient_temperature_f
+                                Case "away_temperature_high_c"
+                                    Objet.value = devlist.devices.thermostats.Values(i).away_temperature_high_c
+                                Case "away_temperature_high_f"
+                                    Objet.value = devlist.devices.thermostats.Values(i).away_temperature_high_f
+                                Case "away_temperature_low_c"
+                                    Objet.value = devlist.devices.thermostats.Values(i).away_temperature_low_c
+                                Case "away_temperature_low_f"
+                                    Objet.value = devlist.devices.thermostats.Values(i).away_temperature_low_f
+                            End Select
+                        End If
+
+                    End If
+                Next
+            End If
+
+            WriteLog("DBG: Valeur enregistrée : " & Objet.Name & " -> " & Objet.value)
         Catch ex As Exception
             WriteLog("ERR: GetData, Exception : " & ex.Message)
         End Try
