@@ -157,6 +157,9 @@
     <Compile Include="Control\uScenario.xaml.vb">
       <DependentUpon>uScenario.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Control\uSelectExp.xaml.vb">
+      <DependentUpon>uSelectExp.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Control\uTriggerDevice.xaml.vb">
       <DependentUpon>uTriggerDevice.xaml</DependentUpon>
     </Compile>
@@ -255,6 +258,10 @@
     <Page Include="Control\uScenario.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Control\uSelectExp.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Control\uTriggerDevice.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -637,7 +644,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_IncrementBeforeBuild="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UseGlobalSettings="True" />
+      <UserProperties BuildVersion_UseGlobalSettings="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_IncrementBeforeBuild="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
