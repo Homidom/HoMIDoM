@@ -390,20 +390,27 @@ Imports System.Xml
                 Exit Sub
             End If
 
+            Try ' lecture de la variable debug, permet de rafraichir la variable debug sans redemarrer le service
+                _DEBUG = _Parametres.Item(0).Valeur
+            Catch ex As Exception
+                _DEBUG = False
+                _Parametres.Item(0).Valeur = False
+                WriteLog("ERR: Erreur de lecture de debug : " & ex.Message)
+            End Try
+
             'Si internet n'est pas disponible on ne mets pas à jour les informations
             If My.Computer.Network.IsAvailable = False Then
                 WriteLog("ERR: READ, Pas de réseau! Lecture du périphérique impossible")
                 Exit Sub
             End If
 
-            '  GET_VALUES()
             Dim valeur As Object = Nothing
 
             Select Case Objet.Type
                 Case "LAMPE", "APPAREIL"
-                    Objet.Value = GET_VALUE(_urlIPX & "globalstatus.xml", _Username, _Password, "led" & (Objet.Adresse1 - 1))
+                    Objet.value = GET_VALUE(_urlIPX & "globalstatus.xml", _Username, _Password, "led" & (Objet.Adresse1 - 1))
                 Case "CONTACT"
-                    Objet.Value = GET_VALUE(_urlIPX & "globalstatus.xml", _Username, _Password, "btn" & Objet.Adresse1 - 1)
+                    Objet.value = GET_VALUE(_urlIPX & "globalstatus.xml", _Username, _Password, "btn" & Objet.Adresse1 - 1)
                 Case "COMPTEUR"
                     If String.IsNullOrEmpty(Objet.adresse2) Then
                         Objet.Value = GET_VALUE(_urlIPX & "globalstatus.xml", _Username, _Password, "count" & (Objet.Adresse1 - 1))
@@ -836,22 +843,23 @@ Imports System.Xml
             reader.WhitespaceHandling = WhitespaceHandling.Significant
             While reader.Read()
                 If reader.Name = Element Then
-                    result = reader.ReadString
-                    WriteLog("DBG: " & "Valeur trouvée  pour " & Element & " -> " & result)
-                    If IsNumeric(result) = False Then
-                        Select Case reader.ReadString
-                            Case LCase(reader.ReadString) = "up"
-                                result = 1
-                            Case LCase(reader.ReadString) = "dn"
-                                result = 0
+                    Dim valeurreader As String = reader.ReadString
+                    WriteLog("DBG: " & "Valeur trouvée  pour " & Element & " -> " & valeurreader)
+                    If Not IsNumeric(valeurreader) Then
+                        Select Case valeurreader
+                            Case "up"
+                                result = False
+                            Case "dn"
+                                result = True
                         End Select
                     Else
-                        result = Val(result)
+                        result = Val(valeurreader)
                     End If
+                    Exit While
                 End If
             End While
+            GET_VALUE = result
 
-            Return result
         Catch ex As Exception
             WriteLog("ERR: " & ex.Message)
             WriteLog("ERR: " & "GET Url: " & adrs)
