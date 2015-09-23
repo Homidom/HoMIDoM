@@ -93,10 +93,13 @@ Partial Public Class uDevice
                     'Affiche les propriétés du device
                     TxtNom.Text = x.Name
                     ChkEnable.IsChecked = x.Enable
+                    ChkHisto.IsChecked = x.IsHisto
                     ChKSolo.IsChecked = x.Solo
                     ChKLastEtat.IsChecked = x.LastEtat
                     ChKAllValue.IsChecked = x.AllValue
                     TxtUnit.Text = x.Unit
+                    TxtRefreshHisto.Text = x.RefreshHisto
+                    TxtPurge.Text = x.Purge
                     TxtPuissance.Text = x.Puissance
                     TxtDescript.Text = x.Description
                     If TxtPuissance.Text = "" Then TxtPuissance.Text = "0"
@@ -349,10 +352,10 @@ Partial Public Class uDevice
                     'TxtAdresse1.Visibility = Windows.Visibility.Collapsed
                     CbAdresse1.Visibility = Windows.Visibility.Visible
                 Else
+                    CbAdresse1.Tag = "Driver"
                     CbAdresse1.Text = ""
                     CbAdresse1.ItemsSource = Nothing
                     CbAdresse1.Items.Clear()
-                    CbAdresse1.Tag = Nothing
                     TxtAdresse1.Visibility = Windows.Visibility.Visible
                     CbAdresse1.Visibility = Windows.Visibility.Collapsed
                 End If
@@ -364,7 +367,7 @@ Partial Public Class uDevice
                             Case "ADRESSE1"
                                 If _Driver.LabelsDevice.Item(k).LabelChamp = "@" Then
                                     CbAdresse1.Visibility = Windows.Visibility.Collapsed
-                                    CbAdresse1.Tag = 0
+                                    CbAdresse1.Tag = "Driver"
                                     TxtAdresse1.Visibility = Windows.Visibility.Collapsed
                                     TxtAdresse1.Tag = 0
                                     LabelAdresse1.Visibility = Windows.Visibility.Collapsed
@@ -380,25 +383,25 @@ Partial Public Class uDevice
                                     If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Parametre) = False Then
                                         CbAdresse1.Items.Clear()
                                         Dim a() As String = _Driver.LabelsDevice.Item(k).Parametre.Split("|")
-                                        If a.Length > 0 Then
+                                        If a.Count > 1 Then
                                             For g As Integer = 0 To a.Length - 1
                                                 CbAdresse1.Items.Add(a(g))
                                             Next
                                             CbAdresse1.IsEditable = False
                                             CbAdresse1.Visibility = Windows.Visibility.Visible
-                                            CbAdresse1.Tag = 1
+                                            CbAdresse1.Tag = "Driver"
                                             TxtAdresse1.Visibility = Windows.Visibility.Collapsed
                                             TxtAdresse1.Tag = 0
                                         Else
                                             CbAdresse1.Visibility = Windows.Visibility.Collapsed
-                                            CbAdresse1.Tag = 0
+                                            CbAdresse1.Tag = "Driver"
                                             TxtAdresse1.Visibility = Windows.Visibility.Visible
                                             TxtAdresse1.Tag = 1
                                             TxtAdresse1.Text = a(0)
                                         End If
                                     Else
                                         CbAdresse1.Visibility = Windows.Visibility.Collapsed
-                                        CbAdresse1.Tag = 0
+                                        CbAdresse1.Tag = "Driver"
                                         TxtAdresse1.Visibility = Windows.Visibility.Visible
                                         TxtAdresse1.Tag = 1
                                     End If
@@ -866,12 +869,12 @@ Partial Public Class uDevice
                 '    _modele = x.Modele
                 'End If
                 If _Action = EAction.Modifier Then
-                    If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
+                    If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, ChkHisto.IsChecked, TxtRefreshHisto.Text, TxtPurge.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
                 Else
-                    retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
+                    retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, ChkHisto.IsChecked, TxtRefreshHisto.Text, TxtPurge.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
                 End If
             Else
-                retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
+                retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, ChkHisto.IsChecked, TxtRefreshHisto.Text, TxtPurge.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
             End If
 
             If retour = "98" Then
@@ -1055,12 +1058,12 @@ Partial Public Class uDevice
                     Exit Sub
                 End If
                 If _Action = EAction.Modifier Then
-                    If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
+                    If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, ChkHisto.IsChecked, TxtRefreshHisto.Text, TxtPurge.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
                 Else
-                    retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
+                    retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, ChkHisto.IsChecked, TxtRefreshHisto.Text, TxtPurge.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
                 End If
             Else
-                retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
+                retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, ChkHisto.IsChecked, TxtRefreshHisto.Text, TxtPurge.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
             End If
             If retour = "98" Then
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du device: " & TxtNom.Text & " existe déjà impossible de l'enregister", "ERREUR", "")
@@ -1229,38 +1232,54 @@ Partial Public Class uDevice
     End Sub
 
     Private Sub CbAdresse1_KeyUp(sender As Object, e As System.Windows.Input.KeyEventArgs) Handles CbAdresse1.KeyUp
-        If CbAdresse1.Tag = "WEATHERMETEO" Then
-             If CbAdresse1.Text <> "" And Left(CbAdresse1.SelectedValue, 4) <> "XXXX" Then TxtAdresse1.Text = CbAdresse1.SelectedValue
-        End If
+
+        Try
+            'If CbAdresse1.Tag = "WEATHERMETEO" Then
+            If CbAdresse1.SelectedValue <> "" And Left(CbAdresse1.SelectedValue, 4) <> "XXXX" Then TxtAdresse1.Text = CbAdresse1.SelectedValue
+            'Else
+            'TxtAdresse1.Text = CbAdresse1.SelectedValue
+            'End If
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur CbAdresse1_KeyUp: " & ex.ToString, "Erreur Admin", "CbAdresse1_KeyUp")
+        End Try
     End Sub
 
     Private Sub CbAdresse1_SelectionChanged(sender As System.Object, e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbAdresse1.SelectionChanged
-        'If CbAdresse1.Tag = "WEATHERMETEO" Then
-        If CbAdresse1.Text <> "" And Left(CbAdresse1.SelectedValue, 4) <> "XXXX" Then TxtAdresse1.Text = CbAdresse1.SelectedValue
-        'End If
+
+        Try
+
+            If CbAdresse1.SelectedValue <> "" And Left(CbAdresse1.SelectedValue, 4) <> "XXXX" Then TxtAdresse1.Text = CbAdresse1.SelectedValue
+           
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur CbAdresse1_SelectionChanged: " & ex.ToString, "Erreur Admin", "CbAdresse1_SelectionChanged")
+        End Try
     End Sub
 
     Private Sub TxtAdresse1_TextChanged(sender As System.Object, e As System.Windows.Controls.TextChangedEventArgs) Handles TxtAdresse1.TextChanged
-        If CbAdresse1.Tag = "WEATHERMETEO" Then
-            If TxtAdresse1.Text.Trim.Length >= 8 Then 'on cherche dans la liste quand on a tapait l'ID complet
-                Dim flagTrouv As Boolean = False
-                Dim idx As Integer = 0
+        Try
+            If CbAdresse1.Items.Count > 0 Then
+                If TxtAdresse1.Text.Trim.Length >= 8 Then 'on cherche dans la liste quand on a tapait l'ID complet
+                    Dim flagTrouv As Boolean = False
+                    Dim idx As Integer = 0
 
-                For Each item In CbAdresse1.Items
-                    If TxtAdresse1.Text.ToUpper.Trim = item.key.ToString.ToUpper.Trim Then
-                        flagTrouv = True
-                        Exit For
+                    For Each item In CbAdresse1.Items
+                        If TxtAdresse1.Text.ToUpper.Trim = item.ToString.ToUpper.Trim Then
+                            flagTrouv = True
+                            Exit For
+                        End If
+                        idx += 1
+                    Next
+
+                    If flagTrouv Then
+                        CbAdresse1.SelectedIndex = idx
+                    Else
+                        CbAdresse1.Text = ""
                     End If
-                    idx += 1
-                Next
-
-                If flagTrouv Then
-                    CbAdresse1.SelectedIndex = idx
-                Else
-                    CbAdresse1.Text = ""
                 End If
             End If
-        End If
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur TxtAdresse1_TextChanged: " & ex.ToString, "Erreur Admin", "TxtAdresse1_TextChanged")
+        End Try
     End Sub
 
 
@@ -1438,5 +1457,6 @@ Partial Public Class uDevice
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur BtnLearn1_Click: " & ex.ToString, "Erreur Admin", "BtnLearn2_Click")
         End Try
     End Sub
+
 End Class
 

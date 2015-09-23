@@ -129,7 +129,20 @@
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtRGBWoptionnal" Width="50" ToolTip="Optionnel de type string"></TextBox>
                             </StackPanel>
                         </StackPanel>
-
+                        <StackPanel Name="StackPanel1" Orientation="Horizontal" Height="39">
+                            <CheckBox Background="DarkGray" BorderBrush="Black" Content="Historisation" Foreground="White" IsChecked="True" Name="ChkHisto" ToolTip="Si non coché, le composant n'est pas utilisé dans HoMIDoM" VerticalContentAlignment="Center" Height="16" />
+                            <StackPanel Name="StackPanel2"></StackPanel>
+                            <StackPanel Margin="10,0,0,0" Name="StackPanel3"></StackPanel>
+                            <Label Content="Refresh historisation (sec):" Foreground="White" Name="Label5" VerticalContentAlignment="Center" />
+                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtRefreshHisto" Text="0" ToolTip="Composante RGBW Vert de 0 à 255" Width="50" />
+                            <Label Content="Temps avant purge (jour):" Foreground="White" Name="Label3" VerticalContentAlignment="Center" />
+                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtPurge" Text="0" ToolTip="Composante RGBW Rouge de 0 à 255" Width="50" />
+                            <StackPanel Margin="10,0,0,0" Name="StackPanel4"></StackPanel>
+                            <StackPanel Margin="10,0,0,0" Name="StackPanel5"></StackPanel>
+                            <StackPanel Margin="10,0,0,0" Name="StackPanel6"></StackPanel>
+                            <StackPanel Margin="10,0,0,0" Name="StackPanel7"></StackPanel>
+                            <StackPanel Margin="10,0,0,0" Name="StackPanel8"></StackPanel>
+                        </StackPanel>
                         <StackPanel Orientation="Horizontal" >
                              <StackPanel HorizontalAlignment="Left" Margin="0,7,0,0">
                                 <Label Content="Zones:" Foreground="White" />
@@ -168,7 +181,6 @@
                                     <TextBox Name="TxtVarValue" />
                                 </StackPanel>
                             </StackPanel>
-
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Name="StkID">
                             <Label Content="ID:" Foreground="LightGray" FontSize="10" />

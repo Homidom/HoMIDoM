@@ -73,6 +73,9 @@ Namespace HoMIDom
         Dim _temperature As Integer = 0 ' (LAMPE RGBW) use for HUE 0=Warm, 1=cold 
         Dim _speed As Integer = 0 ' (LAMPE RGBW) 0-100 setting of speed change of colours/ON/OFF... 
         Dim _optionnal As String = "" ' (LAMPE RGBW) optionnal depending on driver
+        Dim _IsHisto As Boolean = True
+        Dim _RefreshHisto As Double = 0
+        Dim _Purge As Double = 0
 
         ''' <summary>
         ''' Nom du device
@@ -992,6 +995,52 @@ Namespace HoMIDom
             End Get
             Set(ByVal value As String)
                 _optionnal = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''si =false, on ne prend pas en comtpe les historisations
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property IsHisto() As Boolean
+            Get
+                Return _IsHisto
+            End Get
+            Set(ByVal value As Boolean)
+                _IsHisto = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''temps en secondes entre chaque historisation
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Property RefreshHisto() As Double
+            Get
+                Return _RefreshHisto
+            End Get
+            Set(ByVal value As Double)
+                _RefreshHisto = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''temps en jour avant la purge de l'historique de ce composant
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        ''' 
+        Public Property Purge() As Double
+            Get
+                Return _Purge
+            End Get
+            Set(ByVal value As Double)
+                _Purge = value
             End Set
         End Property
 

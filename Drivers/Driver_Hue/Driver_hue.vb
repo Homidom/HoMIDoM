@@ -887,7 +887,7 @@ Imports Q42.HueApi
                 Propriete_hue.Add("speed", 0)
                 Propriete_hue.Add("optionnal", "")
 
-                gen.SaveDevice(_IdSrv, "", "Hue" + device.Name, device.ID.ToString(), True, False, _ID, "GENERIQUESTRING", 0, device.State.Hue.ToString(), "", device.State.ColorTemperature.ToString(), "Devices et Valeurs recuperées du Bridge Hue", 0, False, "0", "", 0, 9999, -9999, 0.0, Nothing, "", 0, True, Nothing, Propriete_hue)
+                gen.SaveDevice(_IdSrv, "", "Hue" + device.Name, device.ID.ToString(), True, False, _ID, "GENERIQUESTRING", 0, True, 0, 0, device.State.Hue.ToString(), "", device.State.ColorTemperature.ToString(), "Devices et Valeurs recuperées du Bridge Hue", 0, False, "0", "", 0, 9999, -9999, 0.0, Nothing, "", 0, True, Nothing, Propriete_hue)
 
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Driver " & Me.Nom & " démarré")
 

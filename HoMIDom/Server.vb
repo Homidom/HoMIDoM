@@ -296,12 +296,14 @@ Namespace HoMIDom
                         '------------------------------------------------------------------------------------------------
                         Try
                             'Ajout dans la BDD
-                            retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString("yyyy-MM-dd HH:mm:ss"), valeur)
-                            If Mid(retour, 1, 4) = "ERR:" Then
-                                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur Requete sqlite : " & retour)
-                            Else
-                                Device.CountHisto += 1
-                                ManagerSequences.AddSequences(Sequence.TypeOfSequence.HistoryChange, Nothing, Nothing, Nothing)
+                            If Device.isHisto Then
+                                retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString("yyyy-MM-dd HH:mm:ss"), valeur)
+                                If Mid(retour, 1, 4) = "ERR:" Then
+                                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur Requete sqlite : " & retour)
+                                Else
+                                    Device.CountHisto += 1
+                                    ManagerSequences.AddSequences(Sequence.TypeOfSequence.HistoryChange, Nothing, Nothing, Nothing)
+                                End If
                             End If
                         Catch ex As Exception
                             Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Historique Exception : " & ex.Message)
@@ -494,6 +496,7 @@ Namespace HoMIDom
 
                 MAJ_HeuresSoleil()
                 VerifIsWeekEnd()
+                VerifPurge()
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "Thread3h", "Exception: " & ex.ToString)
             End Try
@@ -757,6 +760,7 @@ Namespace HoMIDom
         Private Sub SaveRealTime()
             Try
                 If _SaveRealTime Then SaveConfig(_MonRepertoire & "\config\homidom.xml")
+
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "SaveRealTime", "Exception : " & ex.Message)
             End Try
@@ -1426,6 +1430,9 @@ Namespace HoMIDom
                                         End If
                                         If (Not list.Item(j).Attributes.GetNamedItem("solo") Is Nothing) Then .Solo = list.Item(j).Attributes.GetNamedItem("solo").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("lastetat") Is Nothing) Then .LastEtat = list.Item(j).Attributes.GetNamedItem("lastetat").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("ishisto") Is Nothing) Then .IsHisto = list.Item(j).Attributes.GetNamedItem("ishisto").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("refreshhisto") Is Nothing) Then .refreshhisto = list.Item(j).Attributes.GetNamedItem("refreshhisto").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("purge") Is Nothing) Then .purge = list.Item(j).Attributes.GetNamedItem("purge").Value
 
                                         'on recup les variables
                                         If list.Item(j).HasChildNodes = True Then
@@ -2341,6 +2348,15 @@ Namespace HoMIDom
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("lastetat")
                         writer.WriteValue(_ListDevices.Item(i).lastetat)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("ishisto")
+                        writer.WriteValue(_ListDevices.Item(i).isHisto)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("refreshhisto")
+                        writer.WriteValue(_ListDevices.Item(i).refreshhisto)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("purge")
+                        writer.WriteValue(_ListDevices.Item(i).purge)
                         writer.WriteEndAttribute()
 
                         '-- propriétés generique value --
@@ -6014,6 +6030,45 @@ Namespace HoMIDom
             End Try
         End Function
 
+        Private Function VerifPurge()
+
+            Try
+                Dim retour As String = ""
+                Dim Source As String = "Value"
+                Dim DateTime As DateTime
+                Dim IdDevice As String = ""
+
+                For Each _dev In _ListDrivers
+                    If _dev.Purge > 0 Then
+
+                        DateTime = (Convert.ToDateTime(Now.AddDays(_dev.Purge * -1))).ToString("yyyy-MM-dd HH:mm:ss") 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+                        IdDevice = _dev.ID
+                        'Suppression de la BDD
+                        'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+                        retour = sqlite_homidom.nonquery("DELETE FROM historiques WHERE device_id='" & IdDevice & "' AND dateheure<='" & DateTime & "'") '& "' AND source='" & Source  & "' AND valeur='" & Value 
+                        If Mid(retour, 1, 4) = "ERR:" Then
+                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteHisto", "Erreur Requete sqlite : " & retour)
+                        Else
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "DeleteHisto", "Purge des relevés : " & IdDevice & " supperieur au " & DateTime)
+                            'decrementation du nombre d'histo du composant
+                            If _dev IsNot Nothing Then
+                                _dev.CountHisto -= 1
+                                If _dev.CountHisto <= 0 Then _dev.CountHisto = 0
+                            End If
+                        End If
+                    End If
+
+                Next
+
+                Return 0
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteHisto", "Exception : " & ex.Message)
+                Return -1
+            End Try
+
+
+        End Function
+
 #End Region
 
 #Region "Audio"
@@ -7134,6 +7189,10 @@ Namespace HoMIDom
                         .AllValue = _ListDevices.Item(i).AllValue
                         .VariablesOfDevice = _ListDevices.Item(i).Variables
                         .CountHisto = _ListDevices.Item(i).CountHisto
+                        .IsHisto = _ListDevices.Item(i).isHisto
+                        .RefreshHisto = _ListDevices.Item(i).RefreshHisto
+                        .Purge = _ListDevices.Item(i).purge
+
                         If IsNumeric(_ListDevices.Item(i).valuelast) Then .ValueLast = _ListDevices.Item(i).valuelast
 
                         _listact = ListMethod(_ListDevices.Item(i).id)
@@ -7276,7 +7335,7 @@ Namespace HoMIDom
         ''' <param name="valuedef"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0, Optional ByVal lastEtat As Boolean = True, Optional ByVal correction As String = "0", Optional ByVal formatage As String = "", Optional ByVal precision As Double = 0, Optional ByVal valuemax As Double = 9999, Optional ByVal valuemin As Double = -9999, Optional ByVal valuedef As Double = 0, Optional ByVal Commandes As List(Of Telecommande.Commandes) = Nothing, Optional ByVal Unit As String = "", Optional ByVal Puissance As Integer = 0, Optional ByVal AllValue As Boolean = False, Optional ByVal Variables As Dictionary(Of String, String) = Nothing, Optional ByVal Proprietes As Dictionary(Of String, String) = Nothing) As String Implements IHoMIDom.SaveDevice
+        Public Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, ByVal Historisation As Boolean, ByVal RefreshHisto As Double, ByVal purge As Double, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0, Optional ByVal lastEtat As Boolean = True, Optional ByVal correction As String = "0", Optional ByVal formatage As String = "", Optional ByVal precision As Double = 0, Optional ByVal valuemax As Double = 9999, Optional ByVal valuemin As Double = -9999, Optional ByVal valuedef As Double = 0, Optional ByVal Commandes As List(Of Telecommande.Commandes) = Nothing, Optional ByVal Unit As String = "", Optional ByVal Puissance As Integer = 0, Optional ByVal AllValue As Boolean = False, Optional ByVal Variables As Dictionary(Of String, String) = Nothing, Optional ByVal Proprietes As Dictionary(Of String, String) = Nothing) As String Implements IHoMIDom.SaveDevice
             Try
                 'Vérification de l'Id du serveur pour accepter le traitement
                 If VerifIdSrv(IdSrv) = False Then
@@ -7438,6 +7497,9 @@ Namespace HoMIDom
                         .AllValue = AllValue
                         .Variables = Variables
                         .CountHisto = 0
+                        .isHisto = Historisation
+                        .RefreshHisto = RefreshHisto
+                        .Purge = purge
                     End With
 
                     Select Case UCase(type)
@@ -7504,6 +7566,9 @@ Namespace HoMIDom
                             _ListDevices.Item(i).Driver.newdevice(deviceId)
                             _ListDevices.Item(i).Unit = Unit
                             _ListDevices.Item(i).AllValue = AllValue
+                            _ListDevices.Item(i).isHisto = Historisation
+                            _ListDevices.Item(i).RefreshHisto = RefreshHisto
+                            _ListDevices.Item(i).Purge = purge
 
                             'si c'est un device de type double ou integer
                             If _ListDevices.Item(i).type = "BAROMETRE" _
@@ -7740,6 +7805,9 @@ Namespace HoMIDom
                         retour.Unit = _ListDevices.Item(i).Unit
                         retour.Puissance = _ListDevices.Item(i).Puissance
                         retour.AllValue = _ListDevices.Item(i).AllValue
+                        retour.IsHisto = _ListDevices.Item(i).isHisto
+                        retour.RefreshHisto = _ListDevices.Item(i).RefreshHisto
+                        retour.Purge = _ListDevices.Item(i).purge
 
                         Try
                             retour.Value = _ListDevices.Item(i).Value
@@ -8044,55 +8112,18 @@ Namespace HoMIDom
                 End If
 
                 Dim listresultat As New ArrayList
-                Dim TypeDevice As Device.ListeDevices
 
-                For i As Integer = 0 To _ListZones.Count - 1
-                    If _ListZones.Item(i).ID = ZoneID Or (String.IsNullOrEmpty(ZoneID)) Then
-                        For j As Integer = 0 To _ListDevices.Count - 1
-                            For k As Integer = 0 To _ListZones.Item(i).ListElement.Count - 1
-                                Select Case UCase(_ListDevices.Item(i).type)
-                                    Case "APPAREIL" : TypeDevice = Device.ListeDevices.APPAREIL  'modules pour diriger un appareil  ON/OFF
-                                    Case "AUDIO" : TypeDevice = Device.ListeDevices.AUDIO
-                                    Case "BAROMETRE" : TypeDevice = Device.ListeDevices.BAROMETRE  'pour stocker les valeur issu d'un barometre meteo ou web
-                                    Case "BATTERIE" : TypeDevice = Device.ListeDevices.BATTERIE
-                                    Case "COMPTEUR" : TypeDevice = Device.ListeDevices.COMPTEUR  'compteur DS2423, RFXPower...
-                                    Case "CONTACT" : TypeDevice = Device.ListeDevices.CONTACT  'detecteur de contact : switch 1-wire
-                                    Case "DETECTEUR" : TypeDevice = Device.ListeDevices.DETECTEUR  'tous detecteurs : mouvement, obscurite...
-                                    Case "DIRECTIONVENT" : TypeDevice = Device.ListeDevices.DIRECTIONVENT
-                                    Case "ENERGIEINSTANTANEE" : TypeDevice = Device.ListeDevices.ENERGIEINSTANTANEE
-                                    Case "ENERGIETOTALE" : TypeDevice = Device.ListeDevices.ENERGIETOTALE
-                                    Case "FREEBOX" : TypeDevice = Device.ListeDevices.FREEBOX
-                                    Case "GENERIQUEBOOLEEN" : TypeDevice = Device.ListeDevices.GENERIQUEBOOLEEN
-                                    Case "GENERIQUESTRING" : TypeDevice = Device.ListeDevices.GENERIQUESTRING
-                                    Case "GENERIQUEVALUE" : TypeDevice = Device.ListeDevices.GENERIQUEVALUE
-                                    Case "HUMIDITE" : TypeDevice = Device.ListeDevices.HUMIDITE
-                                    Case "LAMPE" : TypeDevice = Device.ListeDevices.LAMPE
-                                    Case "LAMPERGBW" : TypeDevice = Device.ListeDevices.LAMPERGBW
-                                    Case "METEO" : TypeDevice = Device.ListeDevices.METEO
-                                    Case "MULTIMEDIA" : TypeDevice = Device.ListeDevices.MULTIMEDIA
-                                    Case "PLUIECOURANT" : TypeDevice = Device.ListeDevices.PLUIECOURANT
-                                    Case "PLUIETOTAL" : TypeDevice = Device.ListeDevices.PLUIETOTAL
-                                    Case "SWITCH" : TypeDevice = Device.ListeDevices.SWITCH
-                                    Case "TELECOMMANDE" : TypeDevice = Device.ListeDevices.TELECOMMANDE
-                                    Case "TEMPERATURE" : TypeDevice = Device.ListeDevices.TEMPERATURE
-                                    Case "TEMPERATURECONSIGNE" : TypeDevice = Device.ListeDevices.TEMPERATURECONSIGNE
-                                    Case "UV" : TypeDevice = Device.ListeDevices.UV
-                                    Case "VITESSEVENT" : TypeDevice = Device.ListeDevices.VITESSEVENT
-                                    Case "VOLET" : TypeDevice = Device.ListeDevices.VOLET
-                                End Select
-                                If _ListDevices.Item(j).ID = _ListZones.Item(i).ListElement.Item(k).ElementID And _
-                                    (DeviceType = "" Or _ListDevices.Item(i).type = DeviceType.ToUpper() Or TypeDevice = DeviceType.ToUpper()) And _
-                                    _ListDevices.Item(j).Enable = Enable Then
-                                    listresultat.Add(_ListDevices.Item(j))
-                                End If
-                            Next
-                        Next
+                For Each dev In _ListDevices
+                    If ((String.IsNullOrEmpty(ZoneID)) Or dev.ID = ZoneID) And _
+                        ((String.IsNullOrEmpty(DeviceType)) Or dev.type = DeviceType.ToUpper()) And _
+                        dev.Enable = Enable Then
+                        listresultat.Add(dev)
                     End If
                 Next
 
                 Return listresultat
             Catch ex As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDeviceByZoneTypeDriver", "Exception : " & ex.Message)
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ReturnDeviceByZoneType", "Exception : " & ex.Message)
                 Return Nothing
             End Try
         End Function
@@ -10781,7 +10812,7 @@ Namespace HoMIDom
                 Return Nothing
             End Try
         End Function
-		
+
 #End Region
 
 #End Region

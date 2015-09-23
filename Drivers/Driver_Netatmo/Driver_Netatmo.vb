@@ -132,20 +132,25 @@ Imports HoMIDom.HoMIDom
     End Class
 
     Public Class dashboarddata
-        Public Temperature As Double
-        Public Humidity As Double
-        Public min_temp As Double
-        Public max_temp As Double
+        Public AbsolutePressure As Double
         Public CO2 As Integer
+        Public Humidity As Double
+        Public Noise As Integer
+        Public Pressure As Double
         Public Rain As Double
         Public sum_rain_24 As Double
         Public sum_rain_1 As Double
-        Public AbsolutePressure As Double
-        Public Noise As Integer
-        Public Pressure As Double
-        Public time_utc As Integer
+        Public Temperature As Double
         Public date_max_temp As Integer
         Public date_min_temp As Integer
+        Public max_temp As Double
+        Public min_temp As Double
+        Public WindAngle As Double
+        Public WindStrength As Double
+        Public GustAngle As Double
+        Public GustStrength As Double
+        Public WindHistoric As Double
+        Public time_utc As Integer
     End Class
 
     Class netatmodate
@@ -924,9 +929,15 @@ line1:
                     End If
                 Case "VITESSEVENT"
                     If nummodulealire = 99 Then
-                        objet.Value = devlist.body.devices.Item(0).dashboard_data.Pressure
+                        objet.Value = devlist.body.devices.Item(0).dashboard_data.WindStrength
                     Else
-                        objet.Value = devlist.body.modules.Item(nummodulealire).dashboard_data.Pressure
+                        objet.Value = devlist.body.modules.Item(nummodulealire).dashboard_data.WindStrength
+                    End If
+                Case "DIRECTIONVENT"
+                    If nummodulealire = 99 Then
+                        objet.Value = devlist.body.devices.Item(0).dashboard_data.WindAngle
+                    Else
+                        objet.Value = devlist.body.modules.Item(nummodulealire).dashboard_data.WindAngle
                     End If
                 Case "GENERIQUESTRING"
                     If nummodulealire = 99 Then
