@@ -59,15 +59,11 @@ Imports HoMIDom.HoMIDom
 
     'param avancé
     Dim _DEBUG As Boolean = False
-    Dim _ClientID As String = "abcdefghi0123456789"
-    Dim _ClientSecret As String = "abcdefghi0123456789"
-    Dim _Username As String = "homidom@homidom.com"
-    Dim _Password As String = "homi123456"
-    Dim _OauthSecret As Boolean = True
 
     Dim cptBeforeToken As Integer = 0
     Dim cpt As Integer = 0
     Dim cpt_restart As Integer
+    Dim First As Boolean = True
 
     Public Class DeviceList
         Public status As String
@@ -416,11 +412,6 @@ Imports HoMIDom.HoMIDom
             'récupération des paramétres avancés
             Try
                 _DEBUG = _Parametres.Item(0).Valeur
-                _ClientID = _Parametres.Item(1).Valeur
-                _ClientSecret = _Parametres.Item(2).Valeur
-                _Username = _Parametres.Item(3).Valeur
-                _Password = _Parametres.Item(4).Valeur
-                _OauthSecret = _Parametres.Item(5).Valeur
 
             Catch ex As Exception
                 _DEBUG = False
@@ -428,39 +419,33 @@ Imports HoMIDom.HoMIDom
                 WriteLog("ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut : " & ex.Message)
             End Try
 
-            If Not _OauthSecret Then
+            If GetAccessToken("Netatmo") Then
 
-                GetAccessTokenOld()
 
-            Else
-
-                If GetAccessToken("Netatmo") Then
+                If _Refresh > 0 Then
+                    If _Refresh < 60 Then
+                        _Refresh = 60
+                    End If
 
                     cptBeforeToken = (Auth.expires_in / _Refresh) - 2
 
-
-                    If _Refresh > 0 Then
-                        If _Refresh < 60 Then
-                            _Refresh = 60
-                        End If
-                        MyTimer.Interval = _Refresh * 1000
-                        MyTimer.Enabled = True
-                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                    End If
-
-
-                Else
-                    cpt_restart += 1
-                    If cpt_restart < 4 Then
-                        GetRefreshToken("Netatmo", "https://api.netatmo.net/oauth2/token")
-                        Start()
-                    Else
-                        _IsConnect = False
-                        WriteLog("Driver " & Me.Nom & " non démarré")
-                        WriteLog("ERR: Verifié que votre authentification est valide avec HoMIAdmiN dans HoMIDoM/Config")
-                    End If
-                    Exit Sub
+                    MyTimer.Interval = _Refresh * 1000
+                    MyTimer.Enabled = True
+                    AddHandler MyTimer.Elapsed, AddressOf TimerTick
                 End If
+
+
+            Else
+                cpt_restart += 1
+                If cpt_restart < 4 Then
+                    GetRefreshToken("Netatmo", "https://api.netatmo.net/oauth2/token")
+                    Start()
+                Else
+                    _IsConnect = False
+                    WriteLog("Driver " & Me.Nom & " non démarré")
+                    WriteLog("ERR: Verifié que votre authentification est valide avec HoMIAdmiN dans HoMIDoM/Config")
+                End If
+                Exit Sub
             End If
 
             If _Refresh > 0 Then
@@ -655,11 +640,6 @@ Imports HoMIDom.HoMIDom
 
             'Parametres avancés
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
-            Add_ParamAvance("ClientID", "ID client (Optionnel)", "abcdefghi0123456789")
-            Add_ParamAvance("ClientSecret", "Secret du client (Optionnel)", "abcdefghi0123456789")
-            Add_ParamAvance("Username", "Nom utilisateur(Optionnel)", "homidom@homidom.com")
-            Add_ParamAvance("Password", "Mot de passe (Optionnel)", "homi123456")
-            Add_ParamAvance("TokenUse", "Utilisation du token", True)
 
             'Libellé Driver
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
@@ -682,7 +662,7 @@ Imports HoMIDom.HoMIDom
     Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
         ' Attente de 3s pour eviter le relancement de la procedure dans le laps de temps
         'System.Threading.Thread.Sleep(3000)
-        If cpt >= cptBeforeToken And _OauthSecret Then
+        If cpt >= cptBeforeToken Then
             GetRefreshToken("Netatmo", "https://api.netatmo.net/oauth2/token")
             cpt = 0
         End If
@@ -757,7 +737,6 @@ Imports HoMIDom.HoMIDom
                     Return True
                     Exit Function
                 End If
-
             Else
                 WriteLog("ERR: GetAccessToken,  Le fichier " & fileName & " n'existe pas")
             End If
@@ -797,35 +776,38 @@ Imports HoMIDom.HoMIDom
 
         Try
 line1:
-            Dim IdLib As String = ""
             Dim client As New Net.WebClient
             Dim responsebody = client.DownloadString("https://api.netatmo.net/api/devicelist?access_token=" & Auth.access_token)
             devlist = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(DeviceList))
 
             WriteLog("DBG: ScanData : " & responsebody.ToString)
 
-            Dim i As Integer
-            WriteLog("DBG: Device : " & devlist.body.devices.Item(0).module_name & " | type -> " & devlist.body.devices.Item(0).type & ", ID = " & devlist.body.devices.Item(0)._id)
-            WriteLog("DBG: Nbre module : " & devlist.body.modules.Count)
-            For i = 0 To devlist.body.modules.Count - 1
-                WriteLog("DBG: Module : " & devlist.body.modules.Item(i).module_name & " | type -> " & devlist.body.modules.Item(i).type & ", ID = " & devlist.body.modules.Item(i)._id)
-                If i > 0 Then IdLib += "|"
+            If First Then
+                Dim IdLib As String = ""
+                Dim i As Integer
+                WriteLog("DBG: Device : " & devlist.body.devices.Item(0).module_name & " | type -> " & devlist.body.devices.Item(0).type & ", ID = " & devlist.body.devices.Item(0)._id)
                 IdLib += devlist.body.devices.Item(0).module_name
-            Next
-            If _OauthSecret Then cpt += 1
-            If _OauthSecret Then cpt_restart = 0
+                WriteLog("DBG: Nbre module : " & devlist.body.modules.Count)
+                For i = 0 To devlist.body.modules.Count - 1
+                    WriteLog("DBG: Module : " & devlist.body.modules.Item(i).module_name & " | type -> " & devlist.body.modules.Item(i).type & ", ID = " & devlist.body.modules.Item(i)._id)
+                    IdLib += "|"
+                    IdLib += devlist.body.modules.Item(i).module_name
+                Next
+                Add_LibelleDevice("ADRESSE1", "Nom du module", "Nom du module en respectant maj./minuscule", IdLib)
+                First = False
+            End If
+            cpt += 1
+            cpt_restart = 0
         Catch ex As Exception
             WriteLog("ERR: ScanData, Exception : " & ex.Message)
             ' recherche du device/module a interroger
-            If _OauthSecret Then
-                cpt_restart += 1
-                If cpt_restart < 4 Then
-                    GetRefreshToken("Netatmo", "https://api.netatmo.net/oauth2/token")
-                    GoTo line1
-                Else
-                    WriteLog("ERR: Verifié que votre authentification est valide avec HoMIAdmiN dans HoMIDoM/Config")
-                    Restart()
-                End If
+            cpt_restart += 1
+            If cpt_restart < 4 Then
+                GetRefreshToken("Netatmo", "https://api.netatmo.net/oauth2/token")
+                GoTo line1
+            Else
+                WriteLog("ERR: Verifié que votre authentification est valide avec HoMIAdmiN dans HoMIDoM/Config")
+                Restart()
             End If
         End Try
     End Sub
