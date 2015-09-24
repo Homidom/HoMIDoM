@@ -94,12 +94,15 @@ Partial Public Class uDevice
                     TxtNom.Text = x.Name
                     ChkEnable.IsChecked = x.Enable
                     ChkHisto.IsChecked = x.IsHisto
+                    ChkHisto.ToolTip = "Le composant doit-il etre historisé, cocher pour historiser"
                     ChKSolo.IsChecked = x.Solo
                     ChKLastEtat.IsChecked = x.LastEtat
                     ChKAllValue.IsChecked = x.AllValue
                     TxtUnit.Text = x.Unit
                     TxtRefreshHisto.Text = x.RefreshHisto
+                    TxtRefreshHisto.ToolTip = "Nombres de refresh avant d'enregistrer le composant dans l'historique, tout est historisé si 0 "
                     TxtPurge.Text = x.Purge
+                    TxtPurge.ToolTip = "Nombres de jours avant de supprimer le composant de l'historique, pas de suppression si 0"
                     TxtPuissance.Text = x.Puissance
                     TxtDescript.Text = x.Description
                     If TxtPuissance.Text = "" Then TxtPuissance.Text = "0"

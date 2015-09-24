@@ -297,12 +297,17 @@ Namespace HoMIDom
                         Try
                             'Ajout dans la BDD
                             If Device.isHisto Then
-                                retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString("yyyy-MM-dd HH:mm:ss"), valeur)
-                                If Mid(retour, 1, 4) = "ERR:" Then
-                                    Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur Requete sqlite : " & retour)
+                                If Device.countTempHisto = Device.RefreshHisto Or Device.RefreshHisto = 0 Then
+                                    retour = sqlite_homidom.nonquery("INSERT INTO historiques (device_id,source,dateheure,valeur) VALUES (@parameter0, @parameter1, @parameter2, @parameter3)", Device.ID, [Property], Now.ToString("yyyy-MM-dd HH:mm:ss"), valeur)
+                                    If Mid(retour, 1, 4) = "ERR:" Then
+                                        Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeviceChange", "Erreur Requete sqlite : " & retour)
+                                    Else
+                                        Device.CountHisto += 1
+                                        Device.countTempHisto = 1
+                                        ManagerSequences.AddSequences(Sequence.TypeOfSequence.HistoryChange, Nothing, Nothing, Nothing)
+                                    End If
                                 Else
-                                    Device.CountHisto += 1
-                                    ManagerSequences.AddSequences(Sequence.TypeOfSequence.HistoryChange, Nothing, Nothing, Nothing)
+                                    Device.countTempHisto += 1
                                 End If
                             End If
                         Catch ex As Exception
@@ -5471,7 +5476,6 @@ Namespace HoMIDom
                         If _dev.CountHisto <= 0 Then _dev.CountHisto = 0
                     End If
 
-
                 End If
 
                 Return 0
@@ -6049,7 +6053,7 @@ Namespace HoMIDom
                         If Mid(retour, 1, 4) = "ERR:" Then
                             Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteHisto", "Erreur Requete sqlite : " & retour)
                         Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "DeleteHisto", "Purge des relevés : " & IdDevice & " supperieur au " & DateTime)
+                            Log(TypeLog.INFO, TypeSource.SERVEUR, "DeleteHisto", "Purge des relevés : " & IdDevice & " superieur au " & DateTime)
                             'decrementation du nombre d'histo du composant
                             If _dev IsNot Nothing Then
                                 _dev.CountHisto -= 1
@@ -6057,7 +6061,6 @@ Namespace HoMIDom
                             End If
                         End If
                     End If
-
                 Next
 
                 Return 0
