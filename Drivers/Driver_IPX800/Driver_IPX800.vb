@@ -863,6 +863,7 @@ Imports System.Xml
         Catch ex As Exception
             WriteLog("ERR: " & ex.Message)
             WriteLog("ERR: " & "GET Url: " & adrs)
+            Return ""
         End Try
     End Function
 

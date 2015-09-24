@@ -805,7 +805,7 @@ Imports System.Xml
     Public Function QCsv(Server As String, Provider As String, NomBase As String, QuSql As String, Optional User As String = "", Optional Password As String = "") As String
 
         Try
-
+            Return ""
         Catch ex As Exception
             WriteLog("ERR: QCsv, Exception : " & ex.Message)
             QCsv = "False"

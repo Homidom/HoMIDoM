@@ -958,10 +958,12 @@ Imports System.Xml
                 getpollen = indicestr
             Catch ex As Exception
                 WriteLog("ERR: GetPollen, Exception : " & ex.Message)
+                Return ""
             End Try
 
         Catch ex As Exception
             WriteLog("ERR: GetPollen, Exception : " & ex.Message)
+            Return ""
         End Try
 
     End Function
@@ -997,15 +999,17 @@ Imports System.Xml
 
         Catch ex As Exception
             WriteLog("ERR: GetPollenRnsa, Exception : " & ex.Message)
+            Return ""
         End Try
 
     End Function
 
     Private Function Getsentinelle(departement As String, typeall As String)
         Try
-
+            Return ""
         Catch ex As Exception
             WriteLog("ERR: GetSentinelle, Exception : " & ex.Message)
+            Return ""
         End Try
 
     End Function
