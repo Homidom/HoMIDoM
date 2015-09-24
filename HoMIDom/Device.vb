@@ -236,7 +236,7 @@ Namespace HoMIDom
 
             Public Variables As New Dictionary(Of String, String)
 
-            <NonSerialized()> Public _CompteurTempHisto As Double
+            <NonSerialized()> Public _countTempHisto As Double
 
             ''' <summary>
             ''' Retourne la liste de tous les fichiers image (png ou jpg) présents sur le serveur
@@ -507,12 +507,12 @@ Namespace HoMIDom
             End Property
 
             'temps en jour avant la purge de l'historique de ce composant
-            Public Property CompteurTempHisto() As Double
+            Public Property countTempHisto() As Double
                 Get
-                    Return _CompteurTempHisto
+                    Return _countTempHisto
                 End Get
                 Set(ByVal value As Double)
-                    _CompteurTempHisto = value
+                    _countTempHisto = value
                 End Set
             End Property
 
