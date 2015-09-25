@@ -401,7 +401,6 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 
             If GetAccessToken("Nest") Then
 
-                cptBeforeToken = (Auth.expires_in / _Refresh) - 2
                 First = True
                 _IsConnect = True
 
@@ -409,6 +408,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
                     If _Refresh < 60 Then
                         _Refresh = 60
                     End If
+                    cptBeforeToken = (Auth.expires_in / _Refresh) - 2
                     MyTimer.Interval = _Refresh * 1000
                     MyTimer.Enabled = True
                     AddHandler MyTimer.Elapsed, AddressOf TimerTick

@@ -366,7 +366,6 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             End Try
 
             If GetAccessToken("GoogleCalendar") Then
-                cptBeforeToken = (Auth.expires_in / _Refresh) - 2
 
                 Dim client As New Net.WebClient
                 Dim responsebody = client.DownloadString("https://www.googleapis.com/calendar/v3/users/me/calendarList?access_token=" & Auth.access_token)
@@ -402,6 +401,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
                 Else
                     _IsConnect = True
                     If _Refresh > 0 Then
+                        cptBeforeToken = (Auth.expires_in / _Refresh) - 2
                         MyTimer.Interval = _Refresh * 1000
                         MyTimer.Enabled = True
                         AddHandler MyTimer.Elapsed, AddressOf TimerTick
