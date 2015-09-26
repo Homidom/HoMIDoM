@@ -410,7 +410,7 @@ Imports System.Xml
                 Case "LAMPE", "APPAREIL"
                     Objet.value = GET_VALUE(_urlIPX & "globalstatus.xml", _Username, _Password, "led" & (Objet.Adresse1 - 1))
                 Case "CONTACT"
-                    Objet.value = GET_VALUE(_urlIPX & "globalstatus.xml", _Username, _Password, "btn" & Objet.Adresse1 - 1)
+                    Objet.value = GET_VALUE(_urlIPX & "globalstatus.xml", _Username, _Password, "btn" & (Objet.Adresse1 - 1))
                 Case "COMPTEUR"
                     If String.IsNullOrEmpty(Objet.adresse2) Then
                         Objet.Value = GET_VALUE(_urlIPX & "globalstatus.xml", _Username, _Password, "count" & (Objet.Adresse1 - 1))
