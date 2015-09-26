@@ -20,7 +20,7 @@ Imports HoMIDom.HoMIDom
     Dim _ID As String = "71BAB1C8-B072-11E4-A32C-93901D5D46B0"
     Dim _Nom As String = "Netatmo"
     Dim _Enable As Boolean = False
-    Dim _Description As String = "Données Netatmo"
+    Dim _Description As String = "Données station météo Netatmo"
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "WEB"
     Dim _IsConnect As Boolean = False
@@ -434,7 +434,6 @@ Imports HoMIDom.HoMIDom
                     AddHandler MyTimer.Elapsed, AddressOf TimerTick
                 End If
 
-
             Else
                 cpt_restart += 1
                 If cpt_restart < 4 Then
@@ -448,21 +447,14 @@ Imports HoMIDom.HoMIDom
                 Exit Sub
             End If
 
-            If _Refresh > 0 Then
-                If _Refresh < 60 Then
-                    _Refresh = 60
-                End If
-                MyTimer.Interval = _Refresh * 1000
-                MyTimer.Enabled = True
-                AddHandler MyTimer.Elapsed, AddressOf TimerTick
-            End If
+			ScanData()
             _IsConnect = True
             cpt_restart = 0
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " démarré")
+            WriteLog("Driver " & Me.Nom & " démarré")
 
         Catch ex As Exception
             _IsConnect = False
-            WriteLog("ERR: Driver " & Me.Nom & " Erreur démarrage " & ex.Message)
+            WriteLog("ERR: START Driver " & Me.Nom & " Erreur démarrage " & ex.Message)
         End Try
     End Sub
 
@@ -473,7 +465,7 @@ Imports HoMIDom.HoMIDom
             _IsConnect = False
             WriteLog("Driver " & Me.Nom & " arrêté")
         Catch ex As Exception
-            WriteLog("ERR: Driver " & Me.Nom & " Erreur arrêt " & ex.Message)
+            WriteLog("ERR: STOP Driver " & Me.Nom & " Erreur arrêt " & ex.Message)
         End Try
     End Sub
 
@@ -498,11 +490,19 @@ Imports HoMIDom.HoMIDom
                 Exit Sub
             End If
 
-            GetData(Objet)
+            'récupération des paramétres avancés pour rafraichir l'affichage
+            Try
+                _DEBUG = _Parametres.Item(0).Valeur
+            Catch ex As Exception
+                _DEBUG = False
+                _Parametres.Item(0).Valeur = False
+                WriteLog("ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut : " & ex.Message)
+            End Try
+
+            If devlist IsNot Nothing Then GetData(Objet)
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", ex.Message)
-            WriteLog("ERR: Read, Exception : " & ex.Message)
+            WriteLog("ERR: READ, Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -663,55 +663,15 @@ Imports HoMIDom.HoMIDom
         ' Attente de 3s pour eviter le relancement de la procedure dans le laps de temps
         'System.Threading.Thread.Sleep(3000)
         If cpt >= cptBeforeToken Then
-            GetRefreshToken("Netatmo", "https://api.netatmo.net/oauth2/token")
+           GetRefreshToken("Netatmo", "https://api.netatmo.net/oauth2/token")
             cpt = 0
         End If
-
         ScanData()
-
     End Sub
 
 #End Region
 
 #Region "Fonctions internes"
-
-    Private Sub GetAccessTokenOld()
-
-        Try
-
-            Try ' lecture de la variable debug, permet de rafraichir la variable debug sans redemarrer le service
-                _DEBUG = _Parametres.Item(0).Valeur
-            Catch ex As Exception
-                _DEBUG = False
-                _Parametres.Item(0).Valeur = False
-                WriteLog("ERR: Erreur de lecture de debug : " & ex.Message)
-            End Try
-
-            Dim client As New Net.WebClient
-            Dim reqparm As New Specialized.NameValueCollection
-
-            reqparm.Add("grant_type", "password")
-            reqparm.Add("client_id", _Parametres.Item(1).valeur)
-            reqparm.Add("client_secret", _Parametres.Item(2).valeur)
-            reqparm.Add("username", _Parametres.Item(3).valeur)
-            reqparm.Add("password", _Parametres.Item(4).valeur)
-            reqparm.Add("scope", "read_station")
-            Dim responsebytes = client.UploadValues("https://api.netatmo.net/oauth2/token", "POST", reqparm)
-            Dim responsebody = (New System.Text.UTF8Encoding).GetString(responsebytes)
-            WriteLog("DBG: responsebody : " & responsebody.ToString)
-            Auth = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(Authentication))
-
-            'va chercher les module que si connecté
-            If Auth.expires_in > 0 Then
-                WriteLog("Requête https://api.netatmo.net/oauth2/token  OK")
-                WriteLog("DBG: Connect : " & responsebody.ToString)
-            Else
-                WriteLog("ERR: Connect, non connecté")
-            End If
-        Catch ex As Exception
-            WriteLog("ERR: GetListDevice, Exception : " & ex.Message)
-        End Try
-    End Sub
 
     Private Function GetAccessToken(ByVal clientOauth As String) As Boolean
 
@@ -749,26 +709,16 @@ Imports HoMIDom.HoMIDom
 
     Private Sub GetRefreshToken(ByVal clientOauth As String, ByVal httpsOauth As String)
         Try
-            Dim client As New Net.WebClient
-            Dim reqparm As New Specialized.NameValueCollection
-            reqparm.Add("client_id", _Server.GetClientFile(clientOauth).web.client_id)
-            reqparm.Add("client_secret", _Server.GetClientFile(clientOauth).web.client_secret)
-            reqparm.Add("refresh_token", Auth.refresh_token)
-            reqparm.Add("grant_type", "refresh_token")
-            Dim responsebytes = client.UploadValues(httpsOauth, "POST", reqparm)
-            Dim responsebody = (New System.Text.UTF8Encoding).GetString(responsebytes)
-            Auth = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(Authentication))
-
             Dim stream = Newtonsoft.Json.JsonConvert.SerializeObject(Auth)
             System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\config\reponse_accesstoken_" & clientOauth & ".json", stream)
             If Auth.expires_in > 0 Then
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " RefreshToken : ", "Requête " & httpsOauth & " OK")
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " RefreshToken", "Connect : " & responsebody.ToString)
+                WriteLog("DBG: " & Me.Nom & " RefreshToken :  Requête " & httpsOauth & " OK")
+
             Else
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " RefreshToken", "Non connecté")
+                WriteLog("DBG: " & Me.Nom & " RefreshToken Non connecté")
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " RefreshToken", "Exception : " & ex.Message)
+            WriteLog("ERR: " & Me.Nom & " RefreshToken" & ex.Message)
         End Try
     End Sub
 
@@ -813,23 +763,26 @@ line1:
     End Sub
 
     Private Sub GetData(ByVal objet As Object)
+
         Try
             'Si internet n'est pas disponible on ne mets pas à jour les informations
             If My.Computer.Network.IsAvailable = False Then
                 Exit Sub
             End If
 
-            Dim deviceIDalire, moduleIDalire As String
-            Dim nummodulealire As Integer
-            deviceIDalire = ""
-            moduleIDalire = ""
-            nummodulealire = 99
+            Dim Typealire As String = ""
+            Dim deviceIDalire As String = ""
+            Dim moduleIDalire As String = ""
+            Dim nummodulealire As Integer = 99
+
             If (objet.adresse1 = devlist.body.devices.Item(0).module_name) Then
                 deviceIDalire = devlist.body.devices.Item(0)._id
+                Typealire = devlist.body.devices.Item(0).type
             End If
             For i = 0 To devlist.body.modules.Count - 1
                 If objet.adresse1 = devlist.body.modules.Item(i).module_name Then
                     moduleIDalire = devlist.body.modules.Item(i)._id
+                    Typealire = devlist.body.modules.Item(i).type
                     nummodulealire = i
                     Exit For
                 End If
@@ -837,24 +790,14 @@ line1:
 
             ' nom de device non trouve
             If (deviceIDalire = "") And (moduleIDalire = "") Then
-                WriteLog("ERR: Pas de nom de device/module pour adresse1= " & objet.adresse1)
+                WriteLog("ERR: GetData=> Pas de nom de device/module pour adresse1= " & objet.adresse1)
                 Exit Sub
             End If
 
             'releve de la batterie device/module
-            If (objet.Type = "BATTERIE") And (moduleIDalire = "") Then
-                objet.Value = devlist.body.devices.Item(0).battery_vp
-                Exit Sub
-            End If
-            If (objet.Type = "BATTERIE") And (moduleIDalire <> "") Then
-                ' ne fais pas la différence entre module int et ext
-                objet.value = Format(((devlist.body.modules.Item(nummodulealire).battery_vp - 3600) * 100) / 2400, "#0")
-                Exit Sub
-            End If
-
             Select Case objet.Type
                 Case "METEO"
-                    If nummodulealire = 99 Then
+                    If Typealire = "NAMain" Then
                         objet.TemperatureActuel = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                         objet.HumiditeActuel = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                         objet.MinToday = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.min_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
@@ -865,64 +808,81 @@ line1:
                         objet.HumiditeActuel = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                         objet.MinToday = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.min_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                         objet.MaxToday = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.max_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        If Typealire = " NAModule2" Then
+                            objet.VentActuel = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.WindStrength), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        End If
                         Exit Sub
                     End If
+
+                Case "BATTERIE"
+                    Select Case Typealire
+                        Case "NAMain"
+                            objet.Value = devlist.body.devices.Item(0).battery_vp
+                        Case "NAModule4"
+                            objet.value = Format(((devlist.body.modules.Item(nummodulealire).battery_vp - 4200) * 100) / 1800, "#0")
+                        Case "NAModule1", "NAModule3"
+                            objet.value = Format(((devlist.body.modules.Item(nummodulealire).battery_vp - 3600) * 100) / 2400, "#0")
+                        Case "NAModule2"
+                            objet.value = Format(((devlist.body.modules.Item(nummodulealire).battery_vp - 3950) * 100) / 2050, "#0")
+                        Case "NATherm1"
+                            objet.value = Format(((devlist.body.modules.Item(nummodulealire).battery_vp - 3000) * 100) / 1500, "#0")
+                    End Select
                 Case "TEMPERATURE"
-                    If nummodulealire = 99 Then
+                    If Typealire = "NAMain" Then
                         objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     Else
                         objet.Value = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     End If
                 Case "HUMIDITE"
-                    If nummodulealire = 99 Then
+                    If Typealire = "NAMain" Then
                         objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     Else
                         objet.Value = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     End If
                 Case "BRUIT"
-                    If nummodulealire = 99 Then
+                    If Typealire = "NAMain" Then
                         objet.Value = devlist.body.devices.Item(0).dashboard_data.Noise
                     Else
                         objet.Value = devlist.body.modules.Item(nummodulealire).dashboard_data.Noise
                     End If
                 Case "CO2"
-                    If nummodulealire = 99 Then
+                    If Typealire = "NAMain" Then
                         objet.Value = devlist.body.devices.Item(0).dashboard_data.CO2
                     Else
                         objet.Value = devlist.body.modules.Item(nummodulealire).dashboard_data.CO2
                     End If
                 Case "PLUIETOTAL"
-                    If nummodulealire = 99 Then
+                    If Typealire = "NAMain" Then
                         objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.sum_rain_24), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     Else
                         objet.Value = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.sum_rain_24), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     End If
                 Case "PLUIECOURANT"
-                    If nummodulealire = 99 Then
+                    If Typealire = "NAMain" Then
                         objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.sum_rain_1), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     Else
                         objet.Value = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.sum_rain_1), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     End If
                 Case "BAROMETRE"
-                    If nummodulealire = 99 Then
+                    If Typealire = "NAMain" Then
                         objet.Value = devlist.body.devices.Item(0).dashboard_data.Pressure
                     Else
                         objet.Value = devlist.body.modules.Item(nummodulealire).dashboard_data.Pressure
                     End If
                 Case "VITESSEVENT"
-                    If nummodulealire = 99 Then
-                        objet.Value = devlist.body.devices.Item(0).dashboard_data.WindStrength
+                    If Typealire = "NAMain" Then
+                        objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.WindStrength), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     Else
-                        objet.Value = devlist.body.modules.Item(nummodulealire).dashboard_data.WindStrength
+                        objet.Value = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.WindStrength), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     End If
                 Case "DIRECTIONVENT"
-                    If nummodulealire = 99 Then
-                        objet.Value = devlist.body.devices.Item(0).dashboard_data.WindAngle
+                    If Typealire = "NAMain" Then
+                        objet.Value = DirVent(devlist.body.devices.Item(0).dashboard_data.WindAngle)
                     Else
-                        objet.Value = devlist.body.modules.Item(nummodulealire).dashboard_data.WindAngle
+                        objet.Value = DirVent(devlist.body.modules.Item(nummodulealire).dashboard_data.WindAngle)
                     End If
                 Case "GENERIQUESTRING"
-                    If nummodulealire = 99 Then
+                    If Typealire = "NAMain" Then
                         Select Case objet.adresse2.toUpper
                             Case "CO2"
                                 objet.Value = devlist.body.devices.Item(0).dashboard_data.CO2
@@ -938,14 +898,56 @@ line1:
                         End Select
                     End If
                 Case Else
-                    WriteLog("ERR: Pas de valeur enregistrée")
+                    WriteLog("ERR: GetData=> Pas de valeur enregistrée")
                     Exit Sub
             End Select
-            WriteLog("Valeur enregistrée : " & objet.Type & " -> " & objet.value)
+            WriteLog("DBG: Valeur enregistrée : " & objet.Type & " -> " & objet.value)
+
         Catch ex As Exception
-            WriteLog("ERR: GetData, Exception : " & ex.Message)
+            WriteLog("ERR: GetData=> Read, Exception : " & ex.Message)
         End Try
     End Sub
+
+    Private Function DirVent(ByVal direction As Integer) As String
+        Try
+            If direction > 348.75 Or direction < 11.26 Then
+                Return "N"
+            ElseIf direction < 33.76 Then
+                Return "NNE"
+            ElseIf direction < 56.26 Then
+                Return "NE"
+            ElseIf direction < 78.76 Then
+                Return "ENE"
+            ElseIf direction < 101.26 Then
+                Return "E"
+            ElseIf direction < 123.76 Then
+                Return "ESE"
+            ElseIf direction < 146.26 Then
+                Return "SE"
+            ElseIf direction < 168.76 Then
+                Return "SSE"
+            ElseIf direction < 191.26 Then
+                Return "S"
+            ElseIf direction < 213.76 Then
+                Return "SSW"
+            ElseIf direction < 236.26 Then
+                Return "SW"
+            ElseIf direction < 258.76 Then
+                Return "WSW"
+            ElseIf direction < 281.26 Then
+                Return "W"
+            ElseIf direction < 303.76 Then
+                Return "WNW"
+            ElseIf direction < 326.26 Then
+                Return "NW"
+            Else
+                Return "NNW"
+            End If
+        Catch ex As Exception
+            WriteLog("ERR: wrdirection : " & ex.Message)
+            Return "ERR: " & ex.Message
+        End Try
+    End Function
 
     Private Sub WriteLog(ByVal message As String)
         Try
