@@ -10771,17 +10771,69 @@ Namespace HoMIDom
 
 #Region "Autorisations"
 
+        Public Function GetAuthorizationUrl(ByVal type As String) As String Implements IHoMIDom.GetAuthorizationUrl
+
+            Select Case type
+                Case "Nest"
+                    Return String.Format("https://home.nest.com/login/oauth2?client_id=" _
+                                                     & GetClientFile(type).web.client_id & "&state=" & Rnd())
+
+                Case "Netatmo"
+                    Return String.Format("https://api.netatmo.net/oauth2/authorize?client_id=" _
+                                                     & GetClientFile(type).web.client_id _
+                                                     & "&redirect_uri=http://" & "localhost" & ":" & GetPortSOAP() & "/api/" & _IdSrv & "/command/Device/" & type & "/ON" _
+                                                     & "&scope=read_station" _
+                                                     & "&state=" & Rnd())
+                Case "GoogleCalendar"
+                    Return String.Format("https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/calendar&state=" _
+                                                     & Rnd() & "&access_type=offline&redirect_uri=" _
+                                                     & "http://" & "localhost" & ":" & GetPortSOAP() & "/api/" & _IdSrv & "/command/Device/" & type & "/ON" _
+                                                     & "&response_type=code&client_id=" _
+                                                     & GetClientFile(type).web.client_id _
+                                                     & "&approval_prompt=force")
+                Case Else
+                    Return ""
+                    Exit Function
+            End Select
+        End Function
         Public Function GetClientFile(ByVal type As String) As ClientOAuth2 Implements IHoMIDom.GetClientFile
             Try
-                Dim stream = System.IO.File.ReadAllText(My.Application.Info.DirectoryPath & "\config\client_secrets_" & type & ".json")
-                Return Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(ClientOAuth2))
+                Dim clientFileTemp As ClientOAuth2 = New ClientOAuth2
+                clientFileTemp.web = New web
+                clientFileTemp.web.redirect_uris = New List(Of String)
+
+                Select Case type
+                    Case "Nest"
+                        clientFileTemp.Nom = "https://api.home.nest.com/oauth2/access_token?"
+                        clientFileTemp.web.client_id = ""
+                        clientFileTemp.web.client_secret = ""
+                            
+                    Case "Netatmo"
+                        clientFileTemp.Nom = "https://api.netatmo.net/oauth2/token"
+                        clientFileTemp.web.client_id = ""
+                        clientFileTemp.web.client_secret = ""
+
+                    Case "GoogleCalendar"
+                        clientFileTemp.Nom = "https://www.googleapis.com/oauth2/v3/token"
+                        clientFileTemp.web.client_id = "425861022935-i5tef67vcufp3g0p763ij9fdt1p27g7q.apps.googleusercontent.com"
+                        clientFileTemp.web.client_secret = "IZSCuokhUUKbAt7G68jjJaut"
+                    Case Else
+                        clientFileTemp.Nom = ""
+                        clientFileTemp.web.client_id = ""
+                        clientFileTemp.web.client_secret = ""
+                End Select
+
+                clientFileTemp.web.redirect_uris.Add("http://" & "localhost" & ":" & GetPortSOAP() & "/api/" & _IdSrv & "/command/Device/" & type & "/ON")
+
+                Return clientFileTemp
+               
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetClient", "Exception : " & ex.Message)
                 Return Nothing
             End Try
         End Function
 
-        Public Function GetToken(ByVal clientOauth As String, ByVal httpsOauth As String, ByVal code As String) As Boolean Implements IHoMIDom.GetToken
+        Public Function GetToken(ByVal clientOauth As String, ByVal code As String) As Boolean Implements IHoMIDom.GetToken
             Try
                 Dim client As New Net.WebClient
                 Dim reqparm As New Specialized.NameValueCollection
@@ -10790,13 +10842,13 @@ Namespace HoMIDom
                 reqparm.Add("client_secret", GetClientFile(clientOauth).web.client_secret)
                 reqparm.Add("redirect_uri", GetClientFile(clientOauth).web.redirect_uris(0))
                 reqparm.Add("grant_type", "authorization_code")
-                Dim responsebytes = client.UploadValues(httpsOauth, "POST", reqparm)
+                Dim responsebytes = client.UploadValues(GetClientFile(clientOauth).Nom, "POST", reqparm)
                 Dim responsebody = (New System.Text.UTF8Encoding).GetString(responsebytes)
                 Dim Oauth As Authentication = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(Authentication))
                 Dim stream = Newtonsoft.Json.JsonConvert.SerializeObject(Oauth)
                 System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\config\reponse_accesstoken_" & clientOauth & ".json", stream)
                 If Oauth.expires_in > 0 Then
-                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "GetToken : ", "Requête " & httpsOauth & " OK")
+                    Log(TypeLog.DEBUG, TypeSource.SERVEUR, "GetToken : ", "Requête " & GetClientFile(clientOauth).Nom & " OK")
                     Log(TypeLog.DEBUG, TypeSource.SERVEUR, "GetToken", "Connect : " & responsebody.ToString)
                 Else
                     Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetToken", "Non connecté")

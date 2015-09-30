@@ -40,7 +40,7 @@ Partial Class HoMIServicE
                 AddHandler Console.CancelKeyPress, AddressOf myHandler
 
                 Dim service As New HoMIServicE
-                Dim args As String()
+                Dim args As String() = Nothing
                 service.OnStart(args)
                 'Console.WriteLine("Press any key to stop program")
                 'Console.Read()

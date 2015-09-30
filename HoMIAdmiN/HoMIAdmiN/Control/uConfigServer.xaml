@@ -389,7 +389,7 @@
                         </TabItem >
                         <TabItem Header="Autorisation">
                             <StackPanel HorizontalAlignment="left" Orientation="Vertical" VerticalAlignment="top">
-                                <GroupBox HorizontalAlignment="left" Margin="2" Name="GroupBox4" Width="700" Height="228">
+                                <GroupBox HorizontalAlignment="left" Margin="2" Name="GroupBox4" Width="700" Height="77">
                                     <GroupBox.Header>
                                         <Label Content="Demande d'autorisation OAuth2" FontWeight="Bold" Foreground="White" DataContext="{Binding}" />
                                     </GroupBox.Header>
@@ -404,35 +404,6 @@
                                                 </StackPanel>
                                             </Button>
                                         </StackPanel>
-                                        <GroupBox Name="GroupBoxClientSecret" Width="683" Height="156">
-                                            <GroupBox.Header>
-                                                <Label Content="Fichier client secret" FontWeight="Bold" Foreground="White" />
-                                            </GroupBox.Header>
-                                            <StackPanel>
-                                                <Label Content="Créer et sauvegarder le fichier de parametre client pour l'authentification OAuth2
-                                                       " FontSize="11" Foreground="Gray" Height="28" />
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Label Content="Client ID:" Foreground="White" Width="92" />
-                                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Name="TextBox1" Text="" TextAlignment="left" Width="200" />
-                                                    <Label Content="Client ID qui est dans votre compte d'authentification" FontSize="10" Foreground="Gray" Height="28" />
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Label Content="Client secret:" Foreground="White" Width="92" />
-                                                    <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" Name="TextBox2" Text="" TextAlignment="left" Width="200" />
-                                                    <Label Content="Client Secret qui est dans votre compte d'authentification" FontSize="10" Foreground="Gray" Height="28" />
-                                                </StackPanel>
-                                                <StackPanel Height="37" Orientation="Horizontal">
-                                                    <Button HorizontalAlignment="left" Margin="2" Name="Button2" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="197">
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <Image Source="/HoMIAdmiN;component/Images/Import_32.png" Width="16" />
-                                                            <Label Content="Créer le fichier client secret" Foreground="White" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch" />
-                                                        </StackPanel>
-                                                    </Button>
-                                                    <Label Content="Renseigner les 3 champs et faire Créer le fichier client secret" FontSize="10" Foreground="Gray" Height="28" />
-                                                </StackPanel>
-                                                <StackPanel Orientation="Horizontal"></StackPanel>
-                                            </StackPanel>
-                                        </GroupBox>
                                     </StackPanel>
                                 </GroupBox>
                             </StackPanel>

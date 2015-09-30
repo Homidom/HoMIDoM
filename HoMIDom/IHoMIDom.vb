@@ -1514,8 +1514,9 @@ Namespace HoMIDom
 
 #Region "Autorisations"
 
+        <OperationContract()> Function GetAuthorizationUrl(ByVal type As String) As String
         <OperationContract()> Function GetClientFile(ByVal type As String) As ClientOAuth2
-        <OperationContract()> Function GetToken(ByVal client As String, ByVal https As String, ByVal code As String) As Boolean
+        <OperationContract()> Function GetToken(ByVal client As String, ByVal code As String) As Boolean
         <OperationContract()> Function GetTokenFile(ByVal client As String) As Authentication
 
 #End Region

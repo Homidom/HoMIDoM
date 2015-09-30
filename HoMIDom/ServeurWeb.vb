@@ -10,6 +10,7 @@ Namespace HoMIDom
     Public Class ServeurWeb
         Shared _Srv As Server = Nothing
         Dim _PortWeb As Integer = 0
+        Dim ip As System.Net.IPAddress
         Dim _httpServer As HttpServer
         Dim _thread As Thread = Nothing
         Dim _IsStart As Boolean = False
@@ -191,15 +192,17 @@ Namespace HoMIDom
         Public MustInherit Class HttpServer
 
             Protected port As Integer
+            Protected ip As System.Net.IPAddress
             Private listener As TcpListener
             Private is_active As Boolean = True
 
-            Public Sub New(ByVal port As Integer)
+            Public Sub New(ByVal ip As System.Net.IPAddress, ByVal port As Integer)
                 Me.port = port
+                Me.ip = ip
             End Sub
 
             Public Sub listen()
-                listener = New TcpListener(port)
+                listener = New TcpListener(ip, port)
                 listener.Start()
                 While is_active
                     Dim s As TcpClient = listener.AcceptTcpClient()
@@ -216,8 +219,8 @@ Namespace HoMIDom
 
         Public Class MyHttpServer
             Inherits HttpServer
-            Public Sub New(ByVal port As Integer)
-                MyBase.New(port)
+            Public Sub New(ByVal ip As System.Net.IPAddress, ByVal port As Integer)
+                MyBase.New(ip, port)
             End Sub
             Public Overrides Sub handleGETRequest(ByVal p As HttpProcessor)
                 _Srv.Log(Server.TypeLog.DEBUG, Server.TypeSource.SERVEUR, "handleGETRequest", "request: " & p.http_url)
@@ -447,7 +450,7 @@ Namespace HoMIDom
 
         Public Function StartSrvWeb() As Integer
             Try
-                _httpServer = New MyHttpServer(_PortWeb)
+                _httpServer = New MyHttpServer(ip, _PortWeb)
                 _thread = New Thread(New ThreadStart(AddressOf _httpServer.listen))
                 _thread.Start()
                 _IsStart = True

@@ -1,7 +1,6 @@
 ﻿'Imports System.Windows.Controls.DataVisualization.Charting
 Imports System.Windows.Forms.DataVisualization.Charting
 Imports System.Windows.Forms.DataVisualization.Charting.Utilities
-Imports System.Data
 Imports HoMIDom.HoMIDom
 Imports System.Drawing
 Imports System.ComponentModel

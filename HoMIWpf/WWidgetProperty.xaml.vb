@@ -457,7 +457,7 @@ Public Class WWidgetProperty
     End Sub
 #End Region
 
-    Private Function ShowDialog(ByVal color As Nullable(Of System.Windows.Media.Color)) As Nullable(Of System.Windows.Media.Color)
+    Private Overloads Function ShowDialog(ByVal color As Nullable(Of System.Windows.Media.Color)) As Nullable(Of System.Windows.Media.Color)
         Try
             ' Instancier une boite de dilogue de Winform 
             Dim dialogBox As New System.Windows.Forms.ColorDialog()

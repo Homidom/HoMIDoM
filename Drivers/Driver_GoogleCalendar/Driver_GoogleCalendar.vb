@@ -422,7 +422,15 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             End If
             
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar Start", ex.Message & ex.Data.ToString)
+            cpt_restart += 1
+            If cpt_restart < 4 Then
+                GetRefreshToken("GoogleCalendar", "https://www.googleapis.com/oauth2/v3/token")
+                Start()
+            Else
+                _IsConnect = False
+                WriteLog("Driver " & Me.Nom & " non démarré")
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "GoogleCalendar Start", ex.Message & ex.Data.ToString)
+            End If
         End Try
     End Sub
 
