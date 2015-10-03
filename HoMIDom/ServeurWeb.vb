@@ -482,8 +482,12 @@ Namespace HoMIDom
         End Function
 
         Public Sub New(ByVal Server As Server, ByVal Port As Integer)
-            _Srv = Server
-            _PortWeb = Port
+            Try
+                _Srv = Server
+                _PortWeb = Port
+            Catch ex As Exception
+                _Srv.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ServeurWeb New", "Exception : " & ex.Message)
+            End Try
         End Sub
     End Class
 End Namespace
