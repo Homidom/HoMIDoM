@@ -322,6 +322,7 @@ Imports System.Xml
 
             'charge les codes departement pour les alertes meteo
              CodeDeptFR()
+            CodeDeptBE()
 
         Catch ex As Exception
             _IsConnect = False
@@ -545,13 +546,14 @@ Imports System.Xml
 
 #Region "Fonctions internes"
     Dim ListeDepFR As New Microsoft.VisualBasic.Collection()
+    Dim ListeDepBE As New Microsoft.VisualBasic.Collection()
     Dim ListePollen As New Microsoft.VisualBasic.Collection()
 
     Public Sub CodeDeptFR()
         Try
             ListeDepFR.Clear()
 
-            ListeDepFR.Add("Dep Inconnu", 0)
+            ListeDepFR.Add("Dep FR Inconnu", 0)
             ListeDepFR.Add("Ain", 1)
             ListeDepFR.Add("Aisne", 2)
             ListeDepFR.Add("Allier", 3)
@@ -653,6 +655,27 @@ Imports System.Xml
             WriteLog("ERR: CodeDeptFR, Exception : " & ex.Message)
         End Try
     End Sub
+    Public Sub CodeDeptBE()
+        WriteLog("DBG: CodeDeptBE, " & " departements charges")
+        Try
+            ListeDepBE.Clear()
+
+            ListeDepBE.Add("Dep BE Inconnu", "000")
+            ListeDepBE.Add("Luxembourg / Luxemburg", "001")
+            ListeDepBE.Add("Antwerpen / Anvers", "002")
+            ListeDepBE.Add("Oost Vlaanderen/Fl.Orientale", "003")
+            ListeDepBE.Add("Brabant", "004")
+            ListeDepBE.Add("Hainaut / Henegouwen", "005")
+            ListeDepBE.Add("Namur / Namen", "006")
+            ListeDepBE.Add("Limburg / Limbourg", "007")
+            ListeDepBE.Add("Liège / Luik", "008")
+            ListeDepBE.Add("West Vlaanderen/Fl.Occidentale", "009")
+            ListeDepBE.Add("Belgische Küste", "801")
+            WriteLog("DBG: CodeDeptBE, " & ListeDepBE.Count & " departements charges")
+        Catch ex As Exception
+            WriteLog("ERR: CodeDeptBE, Exception : " & ex.Message)
+        End Try
+    End Sub
 
     Public Sub CodePollen()
         Try
@@ -729,24 +752,34 @@ Imports System.Xml
 
 
     Function GetMeteo(departement As String, typeevent As String) As String
+
         Try
             Dim doc As New XmlDocument
             Dim nodes As XmlNodeList
             Dim wflag As String = ""
             Dim nivAlert As String = ""
-            Dim dept As String = ListeDepFR.Item(departement)
+            Dim dept As String = ""
             Dim dpt As String = ""
             Dim desc As String = ""
             Dim listalert As New List(Of String)
+            Dim stringurl As String = ""
 
             doc = New XmlDocument()
-            Dim url As New Uri("http://www.meteoalarm.eu/documents/rss/fr.rss")
+            If IsNumeric(departement) Then
+                stringurl = "http://www.meteoalarm.eu/documents/rss/fr.rss"
+                WriteLog("DBG: GetMeteo, Chargement de " & stringurl)
+                dept = ListeDepFR.Item(departement)
+            Else
+                stringurl = "http://www.meteoalarm.eu/documents/rss/" & LCase(Mid(departement, 1, 2)) & ".rss"
+                departement = Trim(Mid(departement, 3, Len(departement)))
+                WriteLog("DBG: GetMeteo, Chargement de " & stringurl & " dept : " & departement)
+                dept = ListeDepBE.Item(departement)
+            End If
 
-            WriteLog("DBG: Chargement de " & url.ToString)
+            WriteLog("DBG: GetMeteo, Departement demande => " & dept)
+            Dim url As New Uri(stringurl)
             Dim Request As HttpWebRequest = CType(HttpWebRequest.Create(url), System.Net.HttpWebRequest)
             Dim response As Net.HttpWebResponse = CType(Request.GetResponse(), Net.HttpWebResponse)
-
-            WriteLog("DBG: Departement demande => " & dept)
 
             doc.Load(response.GetResponseStream)
             nodes = doc.SelectNodes("/rss/channel/item")
@@ -874,6 +907,10 @@ Imports System.Xml
                 Dim Response As HttpWebResponse = Request.GetResponse()
 
                 WriteLog("DBG: GetPollen, response cookie.count : " & Response.Cookies.Count)
+                If Response.Cookies.Count = 0 Then
+                    WriteLog("DBG: GetPollen, site inaccesible " & url)
+                    Return "Pas de données"
+                End If
                 Dim tmpmoncook As String = Response.Cookies("MonCookie").Value
                 Dim tmpmonphpid As String = Response.Cookies("PHPSESSID").Value
                 Dim responsereader = New StreamReader(Response.GetResponseStream())
