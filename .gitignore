@@ -18,6 +18,9 @@ build/
 [Bb]in/
 [Oo]bj/
 
+#Nuget
+packages
+
 #############
 ## Windows detritus
 #############
