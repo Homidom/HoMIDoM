@@ -5,6 +5,7 @@ Imports HoMIDom.HoMIDom.Device
 Imports System.Text.RegularExpressions
 Imports STRGS = Microsoft.VisualBasic.Strings
 Imports HoMIDom.HoMIDom
+Imports HoMIOAuth2
 
 ' Auteur : jphomi sur une base HoMIDoM meteoweather
 ' Date : 01/03/2015
@@ -447,13 +448,14 @@ Imports HoMIDom.HoMIDom
                 Exit Sub
             End If
 
-			ScanData()
+            ScanData()
             _IsConnect = True
             cpt_restart = 0
             WriteLog("Driver " & Me.Nom & " démarré")
 
         Catch ex As Exception
             _IsConnect = False
+            WriteLog("Driver " & Me.Nom & " non démarré")
             WriteLog("ERR: START Driver " & Me.Nom & " Erreur démarrage " & ex.Message)
         End Try
     End Sub
@@ -663,7 +665,7 @@ Imports HoMIDom.HoMIDom
         ' Attente de 3s pour eviter le relancement de la procedure dans le laps de temps
         'System.Threading.Thread.Sleep(3000)
         If cpt >= cptBeforeToken Then
-           GetRefreshToken("Netatmo", "https://api.netatmo.net/oauth2/token")
+            GetRefreshToken("Netatmo", "https://api.netatmo.net/oauth2/token")
             cpt = 0
         End If
         ScanData()
@@ -702,22 +704,41 @@ Imports HoMIDom.HoMIDom
             End If
             Return False
         Catch ex As Exception
-            WriteLog("ERR: GetAccessToken, Exception : " & ex.Message)
-            Return False
+            cpt_restart += 1
+            If cpt_restart < 4 Then
+                GetRefreshToken("Netatmo", "https://api.netatmo.net/oauth2/token")
+                Return True
+            Else
+                WriteLog("ERR: Verifié que votre authentification est valide avec HoMIAdmiN dans HoMIDoM/Config")
+                WriteLog("ERR: GetAccessToken, Exception : " & ex.Message)
+                Return False
+            End If
+
         End Try
     End Function
 
     Private Sub GetRefreshToken(ByVal clientOauth As String, ByVal httpsOauth As String)
         Try
+            Dim client As New Net.WebClient
+            Dim reqparm As New Specialized.NameValueCollection
+            Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(_IdSrv, _Server.GetPortSOAP, "HoMIDoM")
+            reqparm.Add("refresh_token", Auth.refresh_token)
+            reqparm.Add("client_id", OAuth2.GetClientFile(clientOauth).web.client_id)
+            reqparm.Add("client_secret", OAuth2.GetClientFile(clientOauth).web.client_secret)
+            Dim responsebytes = client.UploadValues(httpsOauth, "POST", reqparm)
+            Dim responsebody = (New System.Text.UTF8Encoding).GetString(responsebytes)
+            Auth = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(Authentication))
+
             Dim stream = Newtonsoft.Json.JsonConvert.SerializeObject(Auth)
             System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\config\reponse_accesstoken_" & clientOauth & ".json", stream)
             If Auth.expires_in > 0 Then
-                WriteLog("DBG: " & Me.Nom & " RefreshToken :  Requête " & httpsOauth & " OK")
-
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " RefreshToken : ", "Requête " & httpsOauth & " OK")
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " RefreshToken", "Connect : " & responsebody.ToString)
             Else
-                WriteLog("DBG: " & Me.Nom & " RefreshToken Non connecté")
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " RefreshToken", "Non connecté")
             End If
         Catch ex As Exception
+
             WriteLog("ERR: " & Me.Nom & " RefreshToken" & ex.Message)
         End Try
     End Sub

@@ -5,6 +5,7 @@ Imports HoMIDom.HoMIDom.Device
 
 Imports System.Text.RegularExpressions
 Imports STRGS = Microsoft.VisualBasic.Strings
+Imports HoMIOAuth2
 
 ' Auteur : domomath35 sur une base HoMIDoM
 ' Date : 30/03/2015
@@ -413,7 +414,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
                     MyTimer.Enabled = True
                     AddHandler MyTimer.Elapsed, AddressOf TimerTick
                 End If
-                
+
                 cpt_restart = 0
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " démarré")
 
@@ -645,7 +646,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             Add_LibelleDevice("ADRESSE2", "@", "")
             Add_LibelleDevice("LASTCHANGEDUREE", "@", "")
 
-            
+
 
         Catch ex As Exception
             WriteLog("ERR: New, Exception : " & ex.Message)
@@ -707,8 +708,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
         Try
             Dim client As New Net.WebClient
             Dim reqparm As New Specialized.NameValueCollection
-            reqparm.Add("client_id", _Server.GetClientFile(clientOauth).web.client_id)
-            reqparm.Add("client_secret", _Server.GetClientFile(clientOauth).web.client_secret)
+            Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(_IdSrv, _Server.GetPortSOAP, "HoMIDoM")
+            reqparm.Add("client_id", OAuth2.GetClientFile(clientOauth).web.client_id)
+            reqparm.Add("client_secret", OAuth2.GetClientFile(clientOauth).web.client_secret)
             reqparm.Add("refresh_token", Auth.refresh_token)
             reqparm.Add("grant_type", "refresh_token")
             Dim responsebytes = client.UploadValues(httpsOauth, "POST", reqparm)

@@ -3,6 +3,7 @@ Imports System.IO
 Imports System.Threading
 Imports System.Globalization
 Imports System.Xml
+Imports HoMIDom
 
 Partial Public Class uConfigServer
     Public Event CloseMe(ByVal MyObject As Object)
@@ -598,7 +599,8 @@ Partial Public Class uConfigServer
 
     Private Sub ButtonAutor_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ButtonAutor.Click
         Try
-            Dim process__1 = Process.Start(myService.GetAuthorizationUrl(ComboBoxAPI.Text))
+            Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(IdSrv, myService.GetPortSOAP, "HoMIDoM")
+            Dim process__1 = Process.Start(OAuth2.GetAuthorizationUrl(ComboBoxAPI.Text))
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnAuthor_Click: " & ex.Message, "ERREUR", "")
         End Try

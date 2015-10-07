@@ -72,6 +72,11 @@
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="HoMIOAuth2, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dll_externes\Homidom-32bits\HoMIOAuth2.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Client">
       <HintPath>..\..\Dll_externes\Homidom-32bits\Microsoft.AspNet.SignalR.Client.dll</HintPath>
       <Private>False</Private>

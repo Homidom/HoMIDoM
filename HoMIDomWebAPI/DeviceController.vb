@@ -96,7 +96,8 @@ Public Class DeviceController
                 For Each pKey In parameters.AllKeys
                     If pKey = "code" Then
                         Dim code As String = parameters(pKey)
-                        HoMIDomAPI.CurrentServer.GetToken(id, code)
+                        Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(Me.ServerKey, HoMIDomAPI.CurrentServer.GetPortSOAP, "HoMIDoM")
+                        OAuth2.GetToken(id, code)
                         Return True
                         Exit Function
                     End If

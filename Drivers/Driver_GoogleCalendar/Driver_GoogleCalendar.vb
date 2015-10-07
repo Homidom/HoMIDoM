@@ -6,6 +6,7 @@ Imports HoMIDom.HoMIDom.Device
 
 Imports System.Text.RegularExpressions
 Imports STRGS = Microsoft.VisualBasic.Strings
+Imports HoMIOAuth2
 
 ' Auteur : Laurent/Mathieu
 ' Date : 19/04/2013  Creation du driver
@@ -48,7 +49,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
     Dim _DeviceCommandPlus As New List(Of Device.DeviceCommande)
     Dim _AutoDiscover As Boolean = False
 
-   
+
 #End Region
 
 #Region "Variables Internes"
@@ -420,7 +421,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
                     WriteLog("ERR: Verifié que votre authentification est valide avec HoMIAdmiN dans HoMIDoM/Config")
                 End If
             End If
-            
+
         Catch ex As Exception
             cpt_restart += 1
             If cpt_restart < 4 Then
@@ -711,8 +712,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
         Try
             Dim client As New Net.WebClient
             Dim reqparm As New Specialized.NameValueCollection
-            reqparm.Add("client_id", _Server.GetClientFile(clientOauth).web.client_id)
-            reqparm.Add("client_secret", _Server.GetClientFile(clientOauth).web.client_secret)
+            Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(_IdSrv, _Server.GetPortSOAP, "HoMIDoM")
+            reqparm.Add("client_id", OAuth2.GetClientFile(clientOauth).web.client_id)
+            reqparm.Add("client_secret", OAuth2.GetClientFile(clientOauth).web.client_secret)
             reqparm.Add("refresh_token", Auth.refresh_token)
             reqparm.Add("grant_type", "refresh_token")
             Dim responsebytes = client.UploadValues(httpsOauth, "POST", reqparm)
@@ -948,7 +950,7 @@ Line1:
                             Else
                                 If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Le composant " & Objet.name & " n'est pas valide pour cette évenement")
                             End If
-                               
+
                             If (_AutoDiscover Or _Server.GetModeDecouverte) And Not compFound Then
                                 If Not memAutodiscover.Contains(feedEntry.summary) Then
                                     WriteLog("DBG:AutoCreation du composant : Titre" & " à l'adresse " & feedEntry.summary)
