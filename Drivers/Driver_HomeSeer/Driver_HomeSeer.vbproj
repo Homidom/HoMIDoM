@@ -40,6 +40,7 @@
     <DocumentationFile>Driver_HomeSeer.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -50,6 +51,7 @@
     <DocumentationFile>Driver_HomeSeer.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
     <OptionExplicit>On</OptionExplicit>
@@ -64,23 +66,16 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HomeSeer2, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\HomeSeer2.dll</HintPath>
+    <Reference Include="HomeSeer2">
+      <HintPath>..\..\RELEASE\_DLLx86\Drivers\HomeSeer2.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="HoMIDom">
-      <HintPath>..\..\RELEASE\HoMIDom.dll</HintPath>
+    <Reference Include="HS2Util">
+      <HintPath>..\..\RELEASE\_DLLx86\Drivers\HS2Util.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="HS2Util, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\HS2Util.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Scheduler, Version=2.1.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\Scheduler.dll</HintPath>
+    <Reference Include="Scheduler">
+      <HintPath>..\..\RELEASE\_DLLx86\Drivers\Scheduler.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -158,6 +153,13 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\HoMIDom\HoMIDom.vbproj">
+      <Project>{1f0ce8b5-5ba9-4704-8b5e-52682635f803}</Project>
+      <Name>HoMIDom</Name>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>

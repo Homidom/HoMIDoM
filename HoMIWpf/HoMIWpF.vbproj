@@ -81,15 +81,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Jarloo.Calendar">
-      <HintPath>..\Dll_externes\HoMIWpF\Jarloo.Calendar.dll</HintPath>
+      <HintPath>..\RELEASE_HoMIWpF\Jarloo.Calendar.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Client">
-      <HintPath>..\Dll_externes\HoMIWpF\Microsoft.AspNet.SignalR.Client.dll</HintPath>
+      <HintPath>..\RELEASE_HoMIWpF\Microsoft.AspNet.SignalR.Client.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="MjpegProcessor">
-      <HintPath>..\Dll_externes\Homidom-32bits\MjpegProcessor.dll</HintPath>
+      <HintPath>..\RELEASE_HoMIWpF\MjpegProcessor.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -105,7 +105,7 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Controls.DataVisualization.Toolkit">
-      <HintPath>..\Dll_externes\HoMIWpF\System.Windows.Controls.DataVisualization.Toolkit.dll</HintPath>
+      <HintPath>..\RELEASE_HoMIWpF\System.Windows.Controls.DataVisualization.Toolkit.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Windows.Forms" />
@@ -115,7 +115,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="taglib-sharp">
-      <HintPath>..\Dll_externes\HoMIWpF\taglib-sharp.dll</HintPath>
+      <HintPath>..\RELEASE_HoMIWpF\taglib-sharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="WindowsBase">
@@ -133,11 +133,11 @@
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="WpfAnimatedGif">
-      <HintPath>..\Dll_externes\HoMIWpF\WpfAnimatedGif.dll</HintPath>
+      <HintPath>..\RELEASE_HoMIWpF\WpfAnimatedGif.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="WpfKb">
-      <HintPath>..\Dll_externes\HoMIWpF\WpfKb.dll</HintPath>
+      <HintPath>..\RELEASE_HoMIWpF\WpfKb.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>

@@ -64,28 +64,20 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="GSMCommServer, Version=1.21.0.0, Culture=neutral, PublicKeyToken=515d87df384dcc81, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\GSMCommServer.dll</HintPath>
+    <Reference Include="GSMCommServer">
+      <HintPath>..\..\RELEASE\Drivers\GSMCommServer.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="GSMCommShared, Version=1.21.0.0, Culture=neutral, PublicKeyToken=515d87df384dcc81, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\GSMCommShared.dll</HintPath>
+    <Reference Include="GSMCommShared">
+      <HintPath>..\..\RELEASE\Drivers\GSMCommShared.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="GSMCommunication, Version=1.21.0.0, Culture=neutral, PublicKeyToken=515d87df384dcc81, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\GSMCommunication.dll</HintPath>
+    <Reference Include="GSMCommunication">
+      <HintPath>..\..\RELEASE\Drivers\GSMCommunication.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="HoMIDom">
-      <HintPath>..\..\RELEASE\HoMIDom.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="PDUConverter, Version=1.21.0.0, Culture=neutral, PublicKeyToken=515d87df384dcc81, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\PDUConverter.dll</HintPath>
+    <Reference Include="PDUConverter">
+      <HintPath>..\..\RELEASE\Drivers\PDUConverter.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -164,10 +156,17 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\HoMIDom\HoMIDom.vbproj">
+      <Project>{1f0ce8b5-5ba9-4704-8b5e-52682635f803}</Project>
+      <Name>HoMIDom</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_IncrementBeforeBuild="True" BuildVersion_UseGlobalSettings="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="True" BuildVersion_IncrementBeforeBuild="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

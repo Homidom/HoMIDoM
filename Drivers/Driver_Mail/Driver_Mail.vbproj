@@ -64,20 +64,16 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HoMIDom">
-      <HintPath>..\..\RELEASE\HoMIDom.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="NLog">
-      <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\NLog.dll</HintPath>
+      <HintPath>..\..\RELEASE\Drivers\NLog.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="S22.Imap">
-      <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\S22.Imap.dll</HintPath>
+      <HintPath>..\..\RELEASE\Drivers\S22.Imap.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="S22.Pop3">
-      <HintPath>..\..\Dll_externes\Homidom-32bits\Drivers\S22.Pop3.dll</HintPath>
+      <HintPath>..\..\RELEASE\Drivers\S22.Pop3.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -156,10 +152,17 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\HoMIDom\HoMIDom.vbproj">
+      <Project>{1f0ce8b5-5ba9-4704-8b5e-52682635f803}</Project>
+      <Name>HoMIDom</Name>
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_IncrementBeforeBuild="True" BuildVersion_UseGlobalSettings="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" />
+      <UserProperties BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UseGlobalSettings="True" BuildVersion_IncrementBeforeBuild="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

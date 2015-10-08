@@ -64,25 +64,24 @@
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HoMIOAuth2, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dll_externes\Homidom-32bits\HoMIOAuth2.dll</HintPath>
+    <Reference Include="HoMIOAuth2">
+      <HintPath>..\RELEASE\HoMIOAuth2.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core">
-      <HintPath>..\Dll_externes\Homidom-32bits\Microsoft.AspNet.SignalR.Core.dll</HintPath>
+      <HintPath>..\RELEASE\Microsoft.AspNet.SignalR.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Owin">
-      <HintPath>..\Dll_externes\Homidom-32bits\Microsoft.AspNet.SignalR.Owin.dll</HintPath>
+      <HintPath>..\RELEASE\Microsoft.AspNet.SignalR.Owin.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.Owin.Hosting">
-      <HintPath>..\Dll_externes\Homidom-32bits\Microsoft.Owin.Hosting.dll</HintPath>
+      <HintPath>..\RELEASE\Microsoft.Owin.Hosting.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Owin">
-      <HintPath>..\Dll_externes\Homidom-32bits\Owin.dll</HintPath>
+      <HintPath>..\RELEASE\Owin.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -106,7 +105,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="WebApiContrib.Formatting.Jsonp">
-      <HintPath>..\Dll_externes\Homidom-32bits\WebApiContrib.Formatting.Jsonp.dll</HintPath>
+      <HintPath>..\RELEASE\WebApiContrib.Formatting.Jsonp.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
@@ -199,7 +198,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties BuildVersion_IncrementBeforeBuild="True" BuildVersion_UseGlobalSettings="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UpdateFileVersion="True" BuildVersion_UpdateAssemblyVersion="True" />
+      <UserProperties BuildVersion_UpdateAssemblyVersion="True" BuildVersion_UpdateFileVersion="True" BuildVersion_BuildVersioningStyle="None.None.Increment.None" BuildVersion_UseGlobalSettings="True" BuildVersion_IncrementBeforeBuild="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

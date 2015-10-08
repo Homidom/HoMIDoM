@@ -72,18 +72,17 @@
     <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HoMIOAuth2, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Dll_externes\Homidom-32bits\HoMIOAuth2.dll</HintPath>
+    <Reference Include="HoMIOAuth2">
+      <HintPath>..\..\RELEASE\HoMIOAuth2.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Client">
-      <HintPath>..\..\Dll_externes\Homidom-32bits\Microsoft.AspNet.SignalR.Client.dll</HintPath>
+      <HintPath>..\..\RELEASE\Microsoft.AspNet.SignalR.Client.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\Dll_externes\Homidom-32bits\Newtonsoft.Json.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\RELEASE\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System.Core">
@@ -95,7 +94,7 @@
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Windows.Controls.DataVisualization.Toolkit">
-      <HintPath>..\..\Dll_externes\Homidom-32bits\System.Windows.Controls.DataVisualization.Toolkit.dll</HintPath>
+      <HintPath>..\..\RELEASE\System.Windows.Controls.DataVisualization.Toolkit.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System.Windows.Forms" />
@@ -373,6 +372,7 @@
   </ItemGroup>
   <ItemGroup>
     <Import Include="System.Linq" />
+    <Import Include="System.Windows.Controls" />
     <Import Include="System.Xml.Linq" />
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="System" />
@@ -380,7 +380,6 @@
     <Import Include="System.Collections.Generic" />
     <Import Include="System.Diagnostics" />
     <Import Include="System.Windows" />
-    <Import Include="System.Windows.Controls" />
     <Import Include="System.Windows.Data" />
     <Import Include="System.Windows.Documents" />
     <Import Include="System.Windows.Input" />
