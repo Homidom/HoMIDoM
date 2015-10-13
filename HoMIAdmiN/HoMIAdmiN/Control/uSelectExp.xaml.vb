@@ -1,4 +1,7 @@
-﻿Public Class uSelectExp
+﻿
+Imports System.Globalization
+Imports System.Threading
+Public Class uSelectExp
 
     Public Event CloseMe(ByVal MyObject As Object)
 
@@ -120,7 +123,7 @@
     Private Sub BtnOK_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOK.Click
         Try
             ExportImperiHome()
-                RaiseEvent CloseMe(Me)
+            RaiseEvent CloseMe(Me)
 
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uSelectExp BtnOK_Click: " & ex.Message, "ERREUR", "")
@@ -240,7 +243,7 @@
 
 
     End Function
-   
+
     Private Function searchZone(ByVal idDevice As String) As String
 
         Dim idzone As String = ""
@@ -277,8 +280,8 @@
             Exit Function
         End If
 
-        If zoneList.rooms IsNot Nothing Then
-            For Each room As Room In zoneList.rooms
+        If ZoneList.rooms IsNot Nothing Then
+            For Each room As Room In ZoneList.rooms
                 If room.name = zoneName(idzone) Then
                     Return room.id
                     Exit Function
@@ -288,7 +291,7 @@
         cptRoom += 1
         tempRoom.id = "ROOM" & Format(cptRoom, "00")
         tempRoom.name = zoneName(idzone)
-        zoneList.rooms.Add(tempRoom)
+        ZoneList.rooms.Add(tempRoom)
         Return tempRoom.id
 
     End Function
@@ -296,6 +299,7 @@
     Private Function ParamByType(ByVal comp As HoMIDom.HoMIDom.TemplateDevice) As List(Of DeviceParam)
         Dim tempParams As List(Of DeviceParam) = New List(Of DeviceParam)
         Dim params(10) As DeviceParam
+        Thread.CurrentThread.CurrentCulture = New CultureInfo("en")
 
         Select Case comp.Type
 
@@ -309,28 +313,47 @@
                 params(0).key = "Level"
                 params(0).value = comp.Value
 
-            Case 16 '"LAMPE"
+            Case 16, 14 '"LAMPE", "GENERIQUEVALUE"
                 params(0) = New DeviceParam
                 params(0).key = "Level"
                 params(0).value = comp.Value
                 params(1) = New DeviceParam
                 params(1).key = "Status"
-                params(1).value = comp.Value
+                If comp.Value > 0 Then
+                    params(1).value = "1"
+                Else
+                    params(1).value = "0"
+                End If
 
-            Case 9 '"ENERGIEINSTANTANEE"
+            Case 4, 9 '"ENERGIEINSTANTANEE", "BATTERIE"
                 params(0) = New DeviceParam
                 params(0).key = "Watts"
                 params(0).value = comp.Value
+                params(0).unit = comp.Unit
+                params(0).graphable = comp.IsHisto
 
             Case 10 '"ENERGIETOTALE"
                 params(0) = New DeviceParam
                 params(0).key = "ConsoTotal"
                 params(0).value = comp.Value
+                params(0).unit = comp.Unit
+                params(0).graphable = comp.IsHisto
 
-            Case 15, 25, 3, 19, 21, 23, 7 '"HUMIDITE", "UV", "BAROMETRE, "PLUIECOURANT", "SWITCH", "TEMPERATURE", "DETECTEUR"
+            Case 15, 25, 3, 19, 23, 7 '"HUMIDITE", "UV", "BAROMETRE, "PLUIECOURANT", "TEMPERATURE", "DETECTEUR"
                 params(0) = New DeviceParam
                 params(0).key = "Value"
                 params(0).value = comp.Value
+                params(0).unit = comp.Unit
+                params(0).graphable = comp.IsHisto
+
+            Case 21 '"SWITCH"
+                params(0) = New DeviceParam
+                params(0).key = "Status"
+                If comp.Value = False Then
+                    params(0).value = "0"
+                Else
+                    params(0).value = "1"
+                End If
 
             Case 26 '"VITESSEVENT"
                 params(0) = New DeviceParam
@@ -372,11 +395,15 @@
 
         For i = 0 To params.Count - 1
             If params(i) IsNot Nothing Then
+                If params(i).value.Contains(","c) Then
+                    params(i).value.Replace(Chr(44), Chr(46))
+                End If
                 tempParams.Add(params(i))
             End If
         Next
 
         Return tempParams
+
     End Function
 
 End Class

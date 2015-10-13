@@ -774,7 +774,7 @@ Public Class DevicesController
                 params(0).key = "Level"
                 params(0).value = comp.Value
 
-            Case 16 '"LAMPE"
+            Case 16, 14 '"LAMPE", "GENERIQUEVALUE"
                 params(0) = New DeviceParam
                 params(0).key = "Level"
                 params(0).value = comp.Value
@@ -786,20 +786,26 @@ Public Class DevicesController
                     params(1).value = "0"
                 End If
 
-            Case 9 '"ENERGIEINSTANTANEE"
+            Case 4, 9 '"ENERGIEINSTANTANEE", "BATTERIE"
                 params(0) = New DeviceParam
                 params(0).key = "Watts"
                 params(0).value = comp.Value
+                params(0).unit = comp.Unit
+                params(0).graphable = comp.IsHisto
 
             Case 10 '"ENERGIETOTALE"
                 params(0) = New DeviceParam
                 params(0).key = "ConsoTotal"
                 params(0).value = comp.Value
+                params(0).unit = comp.Unit
+                params(0).graphable = comp.IsHisto
 
             Case 15, 25, 3, 19, 23, 7 '"HUMIDITE", "UV", "BAROMETRE, "PLUIECOURANT", "TEMPERATURE", "DETECTEUR"
                 params(0) = New DeviceParam
                 params(0).key = "Value"
                 params(0).value = comp.Value
+                params(0).unit = comp.Unit
+                params(0).graphable = comp.IsHisto
 
             Case 21 '"SWITCH"
                 params(0) = New DeviceParam
