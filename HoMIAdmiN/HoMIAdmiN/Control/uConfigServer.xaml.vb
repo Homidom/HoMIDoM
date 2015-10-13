@@ -273,6 +273,7 @@ Partial Public Class uConfigServer
                 ComboBoxAPI.Items.Add("GoogleCalendar")
                 ComboBoxAPI.Items.Add("Nest")
                 ComboBoxAPI.Items.Add("Netatmo")
+                AutorOption.Visibility = Windows.Visibility.Collapsed
 
             End If
 
@@ -601,6 +602,7 @@ Partial Public Class uConfigServer
         Try
             Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(IdSrv, myService.GetPortSOAP, "HoMIDoM")
             Dim process__1 = Process.Start(OAuth2.GetAuthorizationUrl(ComboBoxAPI.Text))
+            If ComboBoxAPI.Text = "Nest" Then AutorOption.Visibility = Windows.Visibility.Visible
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnAuthor_Click: " & ex.Message, "ERREUR", "")
         End Try
@@ -631,6 +633,11 @@ Partial Public Class uConfigServer
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uConfigServer UnloadControl: " & ex.ToString, "ERREUR", "")
         End Try
+    End Sub
+
+    Private Sub ButtonValAutor_Click(sender As Object, e As RoutedEventArgs) Handles ButtonValAutor.Click
+        Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(IdSrv, myService.GetPortSOAP, "HoMIDoM")
+        OAuth2.GetToken(ComboBoxAPI.Text, TextBoxAPI.Text)
     End Sub
 
 End Class

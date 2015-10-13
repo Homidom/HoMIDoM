@@ -130,7 +130,7 @@
     Private Function ImportImperiHome() As Boolean
 
 
-        Dim fileName = My.Application.Info.DirectoryPath & "\config\Imperihome\devices.json"
+        Dim fileName = My.Application.Info.DirectoryPath & "\Drivers\Imperihome\devices.json"
 
         If System.IO.File.Exists(fileName) Then
             Dim stream = System.IO.File.ReadAllText(fileName)
@@ -209,45 +209,35 @@
                 End If
             Next
         Next
+        Dim BasePath As System.IO.DirectoryInfo = New System.IO.DirectoryInfo(My.Application.Info.DirectoryPath & "\Drivers\")
+        Dim NewPath As System.IO.DirectoryInfo = New System.IO.DirectoryInfo("Imperihome")
+        Dim DitPath() As System.IO.DirectoryInfo
+        DitPath = BasePath.GetDirectories
+        If Not DitPath.Contains(NewPath) Then
+            BasePath.CreateSubdirectory("Imperihome")
+        End If
 
-        Dim stream = "<?php" & vbCrLf
+        Dim stream As String = ""
 
-        'stream &="($tempgarage = file_get_contents("http://192.168.0.90:7999/api/123456789/value/device/aaed77b5-a2ea-4aff-b37f-xxxxxxxxxx/Value"));" & vbCrLf
-        'stream &="($humigarage = file_get_contents("http://192.168.0.90:7999/api/123456789/value/device/b530e999-c328-4c82-8aec-xxxxxxxxxx/Value"));" & vbCrLf
-        'stream &="($detecgarage = file_get_contents("http://192.168.0.90:7999/api/123456789/value/device/233b4d1c-b3ba-4a60-bfe0-xxxxxxxxxx/Value"));" & vbCrLf
-        'stream &="($voletethan = file_get_contents("http://192.168.0.90:7999/api/123456789/value/device/52aa2fff-6e5c-4295-a55c-xxxxxxxxxx/Value")); //retour d'état volet" & vbCrLf
-
-        'stream &="$adresse = "http://".$_SERVER['SERVER_NAME'].$_SERVER["REQUEST_URI"]; //test l'url entrante" & vbCrLf
-        'stream &= "$_SESSION['adresse'] = $adresse;" & vbCrLf
-
-        'stream &="if ($adresse === "http://192.168.0.90/imperihome/devices/dev02/action/setLevel/0") { " & vbCrLf
-        'stream &="  $handle = fopen("http://192.168.0.90:7999/api/123456789/command/device/af554ab0-4302-417f-a537-xxxxxxxxx/off/", "r"); " & vbCrLf
-        'stream &= "} //fermeture volets" & vbCrLf
-
-        'stream &="if ($adresse === "/http://192.168.0.90/imperihome/devices/dev02/action/setLevel/100") { " & vbCrLf
-        'stream &="  $handle = fopen("http://192.168.0.90:7999/api/123456789/command/device/af554ab0-4302-417f-a537-xxxxxxxxxx/on/", "r"); " & vbCrLf
-        'stream &= "} //ouverture volets" & vbCrLf
-
-        'stream &= "echo ('" & vbCrLf
-        'stream &= Newtonsoft.Json.JsonConvert.SerializeObject(DevList)
-
-
-        System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\config\Imperihome\devices", stream)
+        stream = Newtonsoft.Json.JsonConvert.SerializeObject(DevList)
+        System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\Drivers\Imperihome\devices.json", stream)
 
         stream = Newtonsoft.Json.JsonConvert.SerializeObject(ZoneList)
-        System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\config\Imperihome\rooms", stream)
+        System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\Drivers\Imperihome\rooms.json", stream)
 
         SysInfo = New SystemInfo
         SysInfo.id = IdSrv
         SysInfo.apiversion = 1
         stream = Newtonsoft.Json.JsonConvert.SerializeObject(SysInfo)
-        System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\config\Imperihome\system", stream)
+        System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\Drivers\Imperihome\system.json", stream)
 
         Retour = New ActionFeedback
         Retour.success = True
         Retour.errormsg = "ok"
         stream = Newtonsoft.Json.JsonConvert.SerializeObject(Retour)
-        System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\config\Imperihome\action_ret", stream)
+        System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\Drivers\Imperihome\action_ret.json", stream)
+
+
 
     End Function
    

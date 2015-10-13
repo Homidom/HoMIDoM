@@ -366,7 +366,7 @@ Imports HoMIOAuth2
                 Exit Sub
             End Try
 
-            If GetAccessToken("GoogleCalendar") Then
+            If GetRefreshToken("GoogleCalendar", "https://www.googleapis.com/oauth2/v3/token") Then
 
                 Dim client As New Net.WebClient
                 Dim responsebody = client.DownloadString("https://www.googleapis.com/calendar/v3/users/me/calendarList?access_token=" & Auth.access_token)
@@ -419,6 +419,7 @@ Imports HoMIOAuth2
                     _IsConnect = False
                     WriteLog("Driver " & Me.Nom & " non démarré")
                     WriteLog("ERR: Verifié que votre authentification est valide avec HoMIAdmiN dans HoMIDoM/Config")
+                    cpt_restart = 0
                 End If
             End If
 
@@ -678,14 +679,6 @@ Imports HoMIOAuth2
 
         Try
 
-            Try ' lecture de la variable debug, permet de rafraichir la variable debug sans redemarrer le service
-                _DEBUG = _Parametres.Item(0).Valeur
-            Catch ex As Exception
-                _DEBUG = False
-                _Parametres.Item(0).Valeur = False
-                WriteLog("ERR: Erreur de lecture de debug : " & ex.Message)
-            End Try
-
             Dim fileName = My.Application.Info.DirectoryPath & "\config\reponse_accesstoken_" & clientOauth & ".json"
 
             If System.IO.File.Exists(fileName) Then
@@ -708,33 +701,38 @@ Imports HoMIOAuth2
         End Try
     End Function
 
-    Private Sub GetRefreshToken(ByVal clientOauth As String, ByVal httpsOauth As String)
+    Private Function GetRefreshToken(ByVal clientOauth As String, ByVal httpsOauth As String) As Boolean
         Try
-            Dim client As New Net.WebClient
-            Dim reqparm As New Specialized.NameValueCollection
-            Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(_IdSrv, _Server.GetPortSOAP, "HoMIDoM")
-            reqparm.Add("client_id", OAuth2.GetClientFile(clientOauth).web.client_id)
-            reqparm.Add("client_secret", OAuth2.GetClientFile(clientOauth).web.client_secret)
-            reqparm.Add("refresh_token", Auth.refresh_token)
-            reqparm.Add("grant_type", "refresh_token")
-            Dim responsebytes = client.UploadValues(httpsOauth, "POST", reqparm)
-            Dim responsebody = (New System.Text.UTF8Encoding).GetString(responsebytes)
-            Auth = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(Authentication))
+            If GetAccessToken("GoogleCalendar") Then
+                Dim client As New Net.WebClient
+                Dim reqparm As New Specialized.NameValueCollection
+                Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(_IdSrv, _Server.GetPortSOAP, "HoMIDoM")
+                reqparm.Add("client_id", OAuth2.GetClientFile(clientOauth).web.client_id)
+                reqparm.Add("client_secret", OAuth2.GetClientFile(clientOauth).web.client_secret)
+                reqparm.Add("refresh_token", Auth.refresh_token)
+                reqparm.Add("grant_type", "refresh_token")
+                Dim responsebytes = client.UploadValues(httpsOauth, "POST", reqparm)
+                Dim responsebody = (New System.Text.UTF8Encoding).GetString(responsebytes)
+                Auth = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(Authentication))
 
-            Dim stream = Newtonsoft.Json.JsonConvert.SerializeObject(Auth)
-            System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\config\reponse_accesstoken_" & clientOauth & ".json", stream)
-            If Auth.expires_in > 0 Then
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " RefreshToken : ", "Requête " & httpsOauth & " OK")
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " RefreshToken", "Connect : " & responsebody.ToString)
+                If Auth.expires_in > 0 And Auth.refresh_token <> Nothing Then
+                    Dim stream = Newtonsoft.Json.JsonConvert.SerializeObject(Auth)
+                    System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\config\reponse_accesstoken_" & clientOauth & ".json", stream)
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " RefreshToken : ", "Requête " & httpsOauth & " OK")
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " RefreshToken", "Connect : " & responsebody.ToString)
+                Else
+                    '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " RefreshToken", "Non connecté")
+                End If
+                Return True
             Else
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " RefreshToken", "Non connecté")
+                Return False
             End If
-
 
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " RefreshToken", "Exception : " & ex.Message)
+            Return False
         End Try
-    End Sub
+    End Function
 
     Private Sub ScanCalendar()
 
@@ -855,9 +853,9 @@ Line1:
                 GetRefreshToken("GoogleCalendar", "https://www.googleapis.com/oauth2/v3/token")
                 GoTo line1
             Else
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ScanCalendar", ex.Message)
                 WriteLog("ERR: Verifié que votre authentification est valide avec HoMIAdmiN dans HoMIDoM/Config")
-                Restart()
+                WriteLog("ERR: ScanData, Exception : " & ex.Message)
+                cpt_restart = 0
             End If
         End Try
 

@@ -6,6 +6,8 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 Imports System.Web.Http.SelfHost
 Imports System.Web.Http
 Imports System.Net.Http.Formatting
+Imports System.Globalization
+Imports System.Threading
 
 ' Auteur : domomath sur une base HoMIDoM
 ' Date : 04/10/2015
@@ -65,13 +67,13 @@ Imports System.Net.Http.Formatting
 #End Region
 
 #Region "Propriétés génériques"
-    Public WriteOnly Property IdSrv As String Implements HoMIDom.HoMIDom.IDriver.IdSrv
+    Public WriteOnly Property IdSrv As String Implements homidom.HoMIDom.IDriver.IdSrv
         Set(ByVal value As String)
             _IdSrv = value
         End Set
     End Property
 
-    Public Property COM() As String Implements HoMIDom.HoMIDom.IDriver.COM
+    Public Property COM() As String Implements homidom.HoMIDom.IDriver.COM
         Get
             Return _Com
         End Get
@@ -79,17 +81,17 @@ Imports System.Net.Http.Formatting
             _Com = value
         End Set
     End Property
-    Public ReadOnly Property Description() As String Implements HoMIDom.HoMIDom.IDriver.Description
+    Public ReadOnly Property Description() As String Implements homidom.HoMIDom.IDriver.Description
         Get
             Return _Description
         End Get
     End Property
-    Public ReadOnly Property DeviceSupport() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.DeviceSupport
+    Public ReadOnly Property DeviceSupport() As System.Collections.ArrayList Implements homidom.HoMIDom.IDriver.DeviceSupport
         Get
             Return _DeviceSupport
         End Get
     End Property
-    Public Property Parametres() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.Parametres
+    Public Property Parametres() As System.Collections.ArrayList Implements homidom.HoMIDom.IDriver.Parametres
         Get
             Return _Parametres
         End Get
@@ -98,7 +100,7 @@ Imports System.Net.Http.Formatting
         End Set
     End Property
 
-    Public Property LabelsDriver() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.LabelsDriver
+    Public Property LabelsDriver() As System.Collections.ArrayList Implements homidom.HoMIDom.IDriver.LabelsDriver
         Get
             Return _LabelsDriver
         End Get
@@ -106,7 +108,7 @@ Imports System.Net.Http.Formatting
             _LabelsDriver = value
         End Set
     End Property
-    Public Property LabelsDevice() As System.Collections.ArrayList Implements HoMIDom.HoMIDom.IDriver.LabelsDevice
+    Public Property LabelsDevice() As System.Collections.ArrayList Implements homidom.HoMIDom.IDriver.LabelsDevice
         Get
             Return _LabelsDevice
         End Get
@@ -117,9 +119,9 @@ Imports System.Net.Http.Formatting
 
 
 
-    Public Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object) Implements HoMIDom.HoMIDom.IDriver.DriverEvent
+    Public Event DriverEvent(ByVal DriveName As String, ByVal TypeEvent As String, ByVal Parametre As Object) Implements homidom.HoMIDom.IDriver.DriverEvent
 
-    Public Property Enable() As Boolean Implements HoMIDom.HoMIDom.IDriver.Enable
+    Public Property Enable() As Boolean Implements homidom.HoMIDom.IDriver.Enable
         Get
             Return _Enable
         End Get
@@ -127,12 +129,12 @@ Imports System.Net.Http.Formatting
             _Enable = value
         End Set
     End Property
-    Public ReadOnly Property ID() As String Implements HoMIDom.HoMIDom.IDriver.ID
+    Public ReadOnly Property ID() As String Implements homidom.HoMIDom.IDriver.ID
         Get
             Return _ID
         End Get
     End Property
-    Public Property IP_TCP() As String Implements HoMIDom.HoMIDom.IDriver.IP_TCP
+    Public Property IP_TCP() As String Implements homidom.HoMIDom.IDriver.IP_TCP
         Get
             Return _IP_TCP
         End Get
@@ -140,7 +142,7 @@ Imports System.Net.Http.Formatting
             _IP_TCP = value
         End Set
     End Property
-    Public Property IP_UDP() As String Implements HoMIDom.HoMIDom.IDriver.IP_UDP
+    Public Property IP_UDP() As String Implements homidom.HoMIDom.IDriver.IP_UDP
         Get
             Return _IP_UDP
         End Get
@@ -148,12 +150,12 @@ Imports System.Net.Http.Formatting
             _IP_UDP = value
         End Set
     End Property
-    Public ReadOnly Property IsConnect() As Boolean Implements HoMIDom.HoMIDom.IDriver.IsConnect
+    Public ReadOnly Property IsConnect() As Boolean Implements homidom.HoMIDom.IDriver.IsConnect
         Get
             Return _IsConnect
         End Get
     End Property
-    Public Property Modele() As String Implements HoMIDom.HoMIDom.IDriver.Modele
+    Public Property Modele() As String Implements homidom.HoMIDom.IDriver.Modele
         Get
             Return _Modele
         End Get
@@ -161,12 +163,12 @@ Imports System.Net.Http.Formatting
             _Modele = value
         End Set
     End Property
-    Public ReadOnly Property Nom() As String Implements HoMIDom.HoMIDom.IDriver.Nom
+    Public ReadOnly Property Nom() As String Implements homidom.HoMIDom.IDriver.Nom
         Get
             Return _Nom
         End Get
     End Property
-    Public Property Picture() As String Implements HoMIDom.HoMIDom.IDriver.Picture
+    Public Property Picture() As String Implements homidom.HoMIDom.IDriver.Picture
         Get
             Return _Picture
         End Get
@@ -174,7 +176,7 @@ Imports System.Net.Http.Formatting
             _Picture = value
         End Set
     End Property
-    Public Property Port_TCP() As String Implements HoMIDom.HoMIDom.IDriver.Port_TCP
+    Public Property Port_TCP() As String Implements homidom.HoMIDom.IDriver.Port_TCP
         Get
             Return _Port_TCP
         End Get
@@ -182,7 +184,7 @@ Imports System.Net.Http.Formatting
             _Port_TCP = value
         End Set
     End Property
-    Public Property Port_UDP() As String Implements HoMIDom.HoMIDom.IDriver.Port_UDP
+    Public Property Port_UDP() As String Implements homidom.HoMIDom.IDriver.Port_UDP
         Get
             Return _Port_UDP
         End Get
@@ -190,12 +192,12 @@ Imports System.Net.Http.Formatting
             _Port_UDP = value
         End Set
     End Property
-    Public ReadOnly Property Protocol() As String Implements HoMIDom.HoMIDom.IDriver.Protocol
+    Public ReadOnly Property Protocol() As String Implements homidom.HoMIDom.IDriver.Protocol
         Get
             Return _Protocol
         End Get
     End Property
-    Public Property Refresh() As Integer Implements HoMIDom.HoMIDom.IDriver.Refresh
+    Public Property Refresh() As Integer Implements homidom.HoMIDom.IDriver.Refresh
         Get
             Return _Refresh
         End Get
@@ -203,7 +205,7 @@ Imports System.Net.Http.Formatting
             _Refresh = value
         End Set
     End Property
-    Public Property Server() As HoMIDom.HoMIDom.Server Implements HoMIDom.HoMIDom.IDriver.Server
+    Public Property Server() As HoMIDom.HoMIDom.Server Implements homidom.HoMIDom.IDriver.Server
         Get
             Return _Server
         End Get
@@ -211,17 +213,17 @@ Imports System.Net.Http.Formatting
             _Server = value
         End Set
     End Property
-    Public ReadOnly Property Version() As String Implements HoMIDom.HoMIDom.IDriver.Version
+    Public ReadOnly Property Version() As String Implements homidom.HoMIDom.IDriver.Version
         Get
             Return _Version
         End Get
     End Property
-    Public ReadOnly Property OsPlatform() As String Implements HoMIDom.HoMIDom.IDriver.OsPlatform
+    Public ReadOnly Property OsPlatform() As String Implements homidom.HoMIDom.IDriver.OsPlatform
         Get
             Return _OsPlatform
         End Get
     End Property
-    Public Property StartAuto() As Boolean Implements HoMIDom.HoMIDom.IDriver.StartAuto
+    Public Property StartAuto() As Boolean Implements homidom.HoMIDom.IDriver.StartAuto
         Get
             Return _StartAuto
         End Get
@@ -229,7 +231,7 @@ Imports System.Net.Http.Formatting
             _StartAuto = value
         End Set
     End Property
-    Public Property AutoDiscover() As Boolean Implements HoMIDom.HoMIDom.IDriver.AutoDiscover
+    Public Property AutoDiscover() As Boolean Implements homidom.HoMIDom.IDriver.AutoDiscover
         Get
             Return _AutoDiscover
         End Get
@@ -285,7 +287,7 @@ Imports System.Net.Http.Formatting
     ''' <param name="Champ"></param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function VerifChamp(ByVal Champ As String, ByVal Value As Object) As String Implements HoMIDom.HoMIDom.IDriver.VerifChamp
+    Public Function VerifChamp(ByVal Champ As String, ByVal Value As Object) As String Implements homidom.HoMIDom.IDriver.VerifChamp
 
         Try
             Dim retour As String = "0"
@@ -305,7 +307,7 @@ Imports System.Net.Http.Formatting
 
     ''' <summary>Démarrer le driver</summary>
     ''' <remarks></remarks>
-    Public Sub Start() Implements HoMIDom.HoMIDom.IDriver.Start
+    Public Sub Start() Implements homidom.HoMIDom.IDriver.Start
         Try
             'récupération des paramétres avancés
             Try
@@ -364,7 +366,7 @@ Imports System.Net.Http.Formatting
 
     ''' <summary>Arrêter le du driver</summary>
     ''' <remarks></remarks>
-    Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
+    Public Sub [Stop]() Implements homidom.HoMIDom.IDriver.Stop
         Try
             _IsConnect = False
             WriteLog("Driver " & Me.Nom & " arrêté")
@@ -375,7 +377,7 @@ Imports System.Net.Http.Formatting
 
     ''' <summary>Re-Démarrer le du driver</summary>
     ''' <remarks></remarks>
-    Public Sub Restart() Implements HoMIDom.HoMIDom.IDriver.Restart
+    Public Sub Restart() Implements homidom.HoMIDom.IDriver.Restart
         [Stop]()
         Start()
     End Sub
@@ -383,7 +385,7 @@ Imports System.Net.Http.Formatting
     ''' <summary>Intérroger un device</summary>
     ''' <param name="Objet">Objet représetant le device à interroger</param>
     ''' <remarks>pas utilisé</remarks>
-    Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
+    Public Sub Read(ByVal Objet As Object) Implements homidom.HoMIDom.IDriver.Read
 
         Try
 
@@ -414,7 +416,7 @@ Imports System.Net.Http.Formatting
     ''' <param name="Parametre1"></param>
     ''' <param name="Parametre2"></param>
     ''' <remarks></remarks>
-    Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
+    Public Sub Write(ByVal Objet As Object, ByVal Command As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements homidom.HoMIDom.IDriver.Write
         Try
             If _Enable = False Then Exit Sub
 
@@ -431,7 +433,7 @@ Imports System.Net.Http.Formatting
     ''' <summary>Fonction lancée lors de la suppression d'un device</summary>
     ''' <param name="DeviceId">Objet représetant le device à interroger</param>
     ''' <remarks></remarks>
-    Public Sub DeleteDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.DeleteDevice
+    Public Sub DeleteDevice(ByVal DeviceId As String) Implements homidom.HoMIDom.IDriver.DeleteDevice
         Try
 
         Catch ex As Exception
@@ -442,7 +444,7 @@ Imports System.Net.Http.Formatting
     ''' <summary>Fonction lancée lors de l'ajout d'un device</summary>
     ''' <param name="DeviceId">Objet représetant le device à interroger</param>
     ''' <remarks></remarks>
-    Public Sub NewDevice(ByVal DeviceId As String) Implements HoMIDom.HoMIDom.IDriver.NewDevice
+    Public Sub NewDevice(ByVal DeviceId As String) Implements homidom.HoMIDom.IDriver.NewDevice
         Try
 
         Catch ex As Exception
@@ -550,7 +552,7 @@ Imports System.Net.Http.Formatting
     Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
         ' Attente de 3s pour eviter le relancement de la procedure dans le laps de temps
         'System.Threading.Thread.Sleep(3000)
-        
+
     End Sub
 
 #End Region
@@ -758,6 +760,7 @@ Public Class DevicesController
     Private Function ParamByType(ByVal comp As HoMIDom.HoMIDom.TemplateDevice) As List(Of DeviceParam)
         Dim tempParams As List(Of DeviceParam) = New List(Of DeviceParam)
         Dim params(10) As DeviceParam
+        Thread.CurrentThread.CurrentCulture = New CultureInfo("en")
 
         Select Case comp.Type
 
@@ -793,10 +796,19 @@ Public Class DevicesController
                 params(0).key = "ConsoTotal"
                 params(0).value = comp.Value
 
-            Case 15, 25, 3, 19, 21, 23, 7 '"HUMIDITE", "UV", "BAROMETRE, "PLUIECOURANT", "SWITCH", "TEMPERATURE", "DETECTEUR"
+            Case 15, 25, 3, 19, 23, 7 '"HUMIDITE", "UV", "BAROMETRE, "PLUIECOURANT", "TEMPERATURE", "DETECTEUR"
                 params(0) = New DeviceParam
                 params(0).key = "Value"
                 params(0).value = comp.Value
+
+            Case 21 '"SWITCH"
+                params(0) = New DeviceParam
+                params(0).key = "Status"
+                If comp.Value = False Then
+                    params(0).value = "0"
+                Else
+                    params(0).value = "1"
+                End If
 
             Case 26 '"VITESSEVENT"
                 params(0) = New DeviceParam
@@ -838,13 +850,15 @@ Public Class DevicesController
 
         For i = 0 To params.Count - 1
             If params(i) IsNot Nothing Then
+                If params(i).value.Contains(","c) Then
+                    params(i).value.Replace(Chr(44), Chr(46))
+                End If
                 tempParams.Add(params(i))
             End If
         Next
 
         Return tempParams
 
-        Return tempParams
     End Function
 
 End Class
