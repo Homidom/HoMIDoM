@@ -620,8 +620,8 @@ Global
 		{66D5DC1D-246B-49DA-9856-4ED68966D3C7}.Debug|x86.Build.0 = Debug|x86
 		{66D5DC1D-246B-49DA-9856-4ED68966D3C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66D5DC1D-246B-49DA-9856-4ED68966D3C7}.Release|Any CPU.Build.0 = Release|Any CPU
-		{66D5DC1D-246B-49DA-9856-4ED68966D3C7}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{66D5DC1D-246B-49DA-9856-4ED68966D3C7}.Release|Mixed Platforms.Build.0 = Release|x86
+		{66D5DC1D-246B-49DA-9856-4ED68966D3C7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{66D5DC1D-246B-49DA-9856-4ED68966D3C7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{66D5DC1D-246B-49DA-9856-4ED68966D3C7}.Release|x86.ActiveCfg = Release|x86
 		{66D5DC1D-246B-49DA-9856-4ED68966D3C7}.Release|x86.Build.0 = Release|x86
 		{25D01A09-60A9-4D63-B18F-CF54D158897C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -632,8 +632,8 @@ Global
 		{25D01A09-60A9-4D63-B18F-CF54D158897C}.Debug|x86.Build.0 = Debug|x86
 		{25D01A09-60A9-4D63-B18F-CF54D158897C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{25D01A09-60A9-4D63-B18F-CF54D158897C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{25D01A09-60A9-4D63-B18F-CF54D158897C}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{25D01A09-60A9-4D63-B18F-CF54D158897C}.Release|Mixed Platforms.Build.0 = Release|x86
+		{25D01A09-60A9-4D63-B18F-CF54D158897C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{25D01A09-60A9-4D63-B18F-CF54D158897C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{25D01A09-60A9-4D63-B18F-CF54D158897C}.Release|x86.ActiveCfg = Release|x86
 		{25D01A09-60A9-4D63-B18F-CF54D158897C}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
@@ -686,12 +686,13 @@ Global
 		{41C380BE-0028-4453-B69F-F1B709D5D391} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
 		{62C5EA60-2FE8-4F56-BC66-BE2D7B14CA5B} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
 		{66D5DC1D-246B-49DA-9856-4ED68966D3C7} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
+		{25D01A09-60A9-4D63-B18F-CF54D158897C} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_UpdateAssemblyVersion = True
-		BuildVersion_UpdateFileVersion = True
-		BuildVersion_BuildVersioningStyle = None.None.Increment.None
-		BuildVersion_UseGlobalSettings = True
 		BuildVersion_IncrementBeforeBuild = True
+		BuildVersion_UseGlobalSettings = True
+		BuildVersion_BuildVersioningStyle = None.None.Increment.None
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_UpdateAssemblyVersion = True
 	EndGlobalSection
 EndGlobal

@@ -1,7 +1,4 @@
-﻿
-Imports System.Globalization
-Imports System.Threading
-Public Class uSelectExp
+﻿Public Class uSelectExp
 
     Public Event CloseMe(ByVal MyObject As Object)
 
@@ -296,10 +293,11 @@ Public Class uSelectExp
 
     End Function
 
+
     Private Function ParamByType(ByVal comp As HoMIDom.HoMIDom.TemplateDevice) As List(Of DeviceParam)
         Dim tempParams As List(Of DeviceParam) = New List(Of DeviceParam)
         Dim params(10) As DeviceParam
-        Thread.CurrentThread.CurrentCulture = New CultureInfo("en")
+
 
         Select Case comp.Type
 
@@ -313,7 +311,7 @@ Public Class uSelectExp
                 params(0).key = "Level"
                 params(0).value = comp.Value
 
-            Case 16, 14 '"LAMPE", "GENERIQUEVALUE"
+            Case 16 '"LAMPE"
                 params(0) = New DeviceParam
                 params(0).key = "Level"
                 params(0).value = comp.Value
@@ -325,26 +323,20 @@ Public Class uSelectExp
                     params(1).value = "0"
                 End If
 
-            Case 4, 9 '"ENERGIEINSTANTANEE", "BATTERIE"
+            Case 9 '"ENERGIEINSTANTANEE"
                 params(0) = New DeviceParam
                 params(0).key = "Watts"
                 params(0).value = comp.Value
-                params(0).unit = comp.Unit
-                params(0).graphable = comp.IsHisto
 
             Case 10 '"ENERGIETOTALE"
                 params(0) = New DeviceParam
                 params(0).key = "ConsoTotal"
                 params(0).value = comp.Value
-                params(0).unit = comp.Unit
-                params(0).graphable = comp.IsHisto
 
             Case 15, 25, 3, 19, 23, 7 '"HUMIDITE", "UV", "BAROMETRE, "PLUIECOURANT", "TEMPERATURE", "DETECTEUR"
                 params(0) = New DeviceParam
                 params(0).key = "Value"
                 params(0).value = comp.Value
-                params(0).unit = comp.Unit
-                params(0).graphable = comp.IsHisto
 
             Case 21 '"SWITCH"
                 params(0) = New DeviceParam
