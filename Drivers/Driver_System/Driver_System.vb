@@ -743,7 +743,8 @@ Imports System.Runtime.InteropServices
             'Libellé Device
 
             '- adresse1=  type d'action : PING, INFO, UPDATE...
-            Add_LibelleDevice("ADRESSE1", "Paramètre (ou adresse virtuelle)", "Ping: <IP>-<Hostname>-<DomainName>, REGI: <Clé#Valeur> ,INFO-HDD: " & CheckHDD() & ", adresse virtuelle", "PING|INFO-ALL|INFO-MEMORY_USED|INFO-MEMORY_FREE|INFO-CPU|INFO-BATTERY_STATUS|INFO-BATTERY_PERCENT|INFO-HDD|WUAU|REGI")
+            'Add_LibelleDevice("ADRESSE1", "Paramètre (ou adresse virtuelle)", "Ping: <IP>-<Hostname>-<DomainName>, REGI: <Clé#Valeur> ,INFO-HDD: " & CheckHDD() & ", adresse virtuelle", "PING|INFO-ALL|INFO-MEMORY_USED|INFO-MEMORY_FREE|INFO-CPU|INFO-BATTERY_STATUS|INFO-BATTERY_PERCENT|INFO-HDD|WUAU|REGI")
+            Add_LibelleDevice("ADRESSE1", "Paramètre (ou adresse virtuelle)", "Ping: <IP>-<Hostname>-<DomainName>, REGI: <Clé#Valeur> ,INFO-HDD: " & CheckHDD() & ", adresse virtuelle", "")
             Add_LibelleDevice("ADRESSE2", "@", "")
 
             Add_LibelleDevice("SOLO", "@", "")
