@@ -1,0 +1,123 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+Driver_ImperiHome
+</name>
+</assembly>
+<members>
+<member name="M:Driver_ImperiHome.Driver_ImperiHome.GetCommandPlus">
+	<summary>
+ Retourne la liste des Commandes avancées
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_ImperiHome.Driver_ImperiHome.ExecuteCommand(System.Object,System.String,System.Object[])">
+	<summary>Execute une commande avancée</summary>
+	<param name="MyDevice">Objet représentant le Device </param>
+	<param name="Command">Nom de la commande avancée à éxécuter</param>
+	<param name="Param">tableau de paramétres</param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_ImperiHome.Driver_ImperiHome.VerifChamp(System.String,System.Object)">
+	<summary>
+ Permet de vérifier si un champ est valide
+ </summary>
+	<param name="Champ"></param>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:Driver_ImperiHome.Driver_ImperiHome.Start">
+	<summary>Démarrer le driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_ImperiHome.Driver_ImperiHome.Stop">
+	<summary>Arrêter le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_ImperiHome.Driver_ImperiHome.Restart">
+	<summary>Re-Démarrer le du driver</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_ImperiHome.Driver_ImperiHome.Read(System.Object)">
+	<summary>Intérroger un device</summary>
+	<param name="Objet">Objet représetant le device à interroger</param>
+	<remarks>pas utilisé</remarks>
+</member><member name="M:Driver_ImperiHome.Driver_ImperiHome.Write(System.Object,System.String,System.Object,System.Object)">
+	<summary>Commander un device</summary>
+	<param name="Objet">Objet représentant le device à interroger</param>
+	<param name="Command">La commande à passer</param>
+	<param name="Parametre1"></param>
+	<param name="Parametre2"></param>
+	<remarks></remarks>
+</member><member name="M:Driver_ImperiHome.Driver_ImperiHome.DeleteDevice(System.String)">
+	<summary>Fonction lancée lors de la suppression d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_ImperiHome.Driver_ImperiHome.NewDevice(System.String)">
+	<summary>Fonction lancée lors de l'ajout d'un device</summary>
+	<param name="DeviceId">Objet représetant le device à interroger</param>
+	<remarks></remarks>
+</member><member name="M:Driver_ImperiHome.Driver_ImperiHome.Add_DeviceCommande(System.String,System.String,System.Int32)">
+	<summary>ajout des commandes avancées pour les devices</summary>
+	<param name="nom">Nom de la commande avancée</param>
+	<param name="description">Description qui sera affichée dans l'admin</param>
+	<param name="nbparam">Nombre de parametres attendus</param>
+	<remarks></remarks>
+</member><member name="M:Driver_ImperiHome.Driver_ImperiHome.Add_LibelleDriver(System.String,System.String,System.String,System.String)">
+	<summary>ajout Libellé pour le Driver</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_ImperiHome.Driver_ImperiHome.Add_LibelleDevice(System.String,System.String,System.String,System.String)">
+	<summary>Ajout Libellé pour les Devices</summary>
+	<param name="nom">Nom du champ : HELP</param>
+	<param name="labelchamp">Nom à afficher : Aide, si = "@" alors le champ ne sera pas affiché</param>
+	<param name="tooltip">Tooltip à afficher au dessus du champs dans l'admin</param>
+	<remarks></remarks>
+</member><member name="M:Driver_ImperiHome.Driver_ImperiHome.Add_ParamAvance(System.String,System.String,System.Object)">
+	<summary>ajout de parametre avancés</summary>
+	<param name="nom">Nom du parametre (sans espace)</param>
+	<param name="description">Description du parametre</param>
+	<param name="valeur">Sa valeur</param>
+	<remarks></remarks>
+</member><member name="M:Driver_ImperiHome.Driver_ImperiHome.#ctor">
+	<summary>Creation d'un objet de type</summary>
+	<remarks></remarks>
+</member><member name="M:Driver_ImperiHome.Driver_ImperiHome.TimerTick(System.Object,System.Timers.ElapsedEventArgs)">
+	<summary>Si refresh &gt;0 gestion du timer</summary>
+	<remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
+</member><member name="T:Driver_ImperiHome.Driver_ImperiHome">
+	<summary>Driver ImperiHome API d'interface avec l'IHM ImperiHome</summary>
+	<remarks></remarks>
+</member><member name="T:Driver_ImperiHome.DeviceParam">
+	<summary>Class DeviceParam, Défini le type parametre de composant pour le client Imperihome</summary>
+</member><member name="T:Driver_ImperiHome.Device">
+	<summary>Class Device, Défini le type composant pour le client Imperihome</summary>
+</member><member name="T:Driver_ImperiHome.DeviceList">
+	<summary>Class DeviceList, Défini le type liste des composants pour le client Imperihome</summary>
+</member><member name="T:Driver_ImperiHome.Value">
+	<summary>Class Value, Défini le type valeur pour le client Imperihome</summary>
+</member><member name="T:Driver_ImperiHome.ValueList">
+	<summary>Class ValueList, Défini le type liste des valeur pour le client Imperihome</summary>
+</member><member name="T:Driver_ImperiHome.action_ret">
+	<summary>Class action_ret, Défini le type retour pour le client Imperihome</summary>
+</member><member name="T:Driver_ImperiHome.Room">
+	<summary>Class Room, Défini le type zone pour le client Imperihome</summary>
+</member><member name="T:Driver_ImperiHome.RoomsList">
+	<summary>Class RoomList, Défini le type liste des zones pour le client Imperihome</summary>
+</member><member name="T:Driver_ImperiHome.System1">
+	<summary>Class DeviceList, Défini le type liste des composants pour le client Imperihome</summary>
+</member><member name="P:Driver_ImperiHome.My.Resources.Resources.ResourceManager">
+	<summary>
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member><member name="P:Driver_ImperiHome.My.Resources.Resources.Culture">
+	<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="T:Driver_ImperiHome.My.Resources.Resources">
+	<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
+</member>
+</members>
+</doc>
