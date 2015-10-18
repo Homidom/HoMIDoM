@@ -3,6 +3,7 @@ Imports HoMIDom.HoMIDom.Server
 Imports HoMIDom.HoMIDom.Device
 
 Imports System.Text.RegularExpressions
+Imports System.Collections.Generic
 Imports STRGS = Microsoft.VisualBasic.Strings
 Imports System.Net
 Imports System.IO
@@ -11,8 +12,9 @@ Imports System.Xml
 ' Auteur : jphomi 
 ' Date : 01/06/2015
 
-''' <summary>Driver IPX800 recption/envoi commandes</summary>
-''' <remarks></remarks>
+
+''' <summary>Driver IPX800 reception/envoi commandes</summary>
+''' <remarks>Compatible IPX800_V4</remarks>
 <Serializable()> Public Class Driver_IPX800
     Implements HoMIDom.HoMIDom.IDriver
 
@@ -31,7 +33,7 @@ Imports System.Xml
     Dim _IP_UDP As String = "@"
     Dim _Port_UDP As String = "@"
     Dim _Com As String = "@"
-    Dim _Refresh As Integer = 0
+    Dim _Refresh As Integer = 600
     Dim _Modele As String = "IPX800"
     Dim _Version As String = My.Application.Info.Version.ToString
     Dim _OsPlatform As String = "3264"
@@ -49,7 +51,8 @@ Imports System.Xml
 
     'A ajouter dans les ppt du driver
     Dim _urlIPX As String = "http://192.168.0.0:80/"
-    Dim _IPXVersion As String = "3.0.0"
+    Dim _IPXVersion As String = ""
+    Dim _IPXSubVersion As String = "3.0.0"
 
     'param avancé
     Dim _DEBUG As Boolean = False
@@ -329,28 +332,39 @@ Imports System.Xml
 
             _urlIPX = "http://" & _IPAdress & ":" & _IPPort & "/"
 
-            Get_Config(_urlIPX & "globalstatus.xml", _Username, _Password)
+            'lance le time du driver, mini toutes les 10 minutes
+            If _Refresh = 0 Then _Refresh = 600
+            MyTimer.Interval = _Refresh * 1000
+            MyTimer.Enabled = True
+            AddHandler MyTimer.Elapsed, AddressOf TimerTick
 
-            Dim elmt As String
+            GET_VALUES(_urlIPX, _Username, _Password)
+            WriteLog("Version : " & _IPXVersion)
+            WriteLog("Nbre de données relevées : " & ValueIPX.Count)
 
-            Try
-                elmt = "version"
-                _IPXVersion = valueconfig.version
-                If _IPXVersion <> "" Then
-                    WriteLog("Nom : " & valueconfig.config_hostname)
-                    WriteLog("Version logicielle : " & _IPXVersion)
-                    _IsConnect = True
-                    WriteLog("Driver démarré")
-                Else
+            If _IPXVersion = "IPX800_V3" Then
+                Get_Config(_urlIPX & "globalstatus.xml", _Username, _Password)
+
+                Dim elmt As String
+                Try
+                    elmt = "version"
+                    _IPXSubVersion = valueconfig.version
+                    If _IPXSubVersion <> "" Then
+                        WriteLog("Nom : " & valueconfig.config_hostname)
+                        WriteLog("Version logicielle : " & _IPXSubVersion)
+                        _IsConnect = True
+                        WriteLog("Driver démarré")
+                    Else
+                        _IsConnect = False
+                        WriteLog("ERR: Driver " & Me.Nom & " Erreur démarrage, matériel introuvable ")
+                        WriteLog("Driver non démarré")
+                    End If
+                Catch ex As Exception
                     _IsConnect = False
-                    WriteLog("ERR: Driver " & Me.Nom & " Erreur démarrage, matériel introuvable ")
+                    WriteLog("ERR: Matériel non trouvé à l'adresse : " & _urlIPX)
                     WriteLog("Driver non démarré")
-                End If
-            Catch ex As Exception
-                _IsConnect = False
-                WriteLog("ERR: Matériel non trouvé à l'adresse : " & _urlIPX)
-                WriteLog("Driver non démarré")
-            End Try
+                End Try
+            End If
         Catch ex As Exception
             _IsConnect = False
             WriteLog("ERR: Driver " & Me.Nom & " Erreur démarrage " & ex.Message)
@@ -363,6 +377,7 @@ Imports System.Xml
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Try
             _IsConnect = False
+            MyTimer.Enabled = False
             WriteLog("Driver " & Me.Nom & " arrêté")
         Catch ex As Exception
             WriteLog("ERR: Driver " & Me.Nom & " Erreur arrêt " & ex.Message)
@@ -408,35 +423,44 @@ Imports System.Xml
 
             Select Case Objet.Type
                 Case "LAMPE", "APPAREIL"
-                    Objet.value = GET_VALUE(_urlIPX & "globalstatus.xml", _Username, _Password, "led" & (Objet.Adresse1 - 1))
+                    valeur = GET_VALUE("OUT" & Objet.Adresse1)
+                    If valeur <> "" Then Objet.Value = (valeur = 1)
                 Case "CONTACT"
-                    Objet.value = GET_VALUE(_urlIPX & "globalstatus.xml", _Username, _Password, "btn" & (Objet.Adresse1 - 1))
+                    valeur = GET_VALUE("IN" & Objet.Adresse1)
+                    If valeur <> "" Then Objet.Value = (valeur = 1)
                 Case "COMPTEUR"
                     If String.IsNullOrEmpty(Objet.adresse2) Then
-                        Objet.Value = GET_VALUE(_urlIPX & "globalstatus.xml", _Username, _Password, "count" & (Objet.Adresse1 - 1))
+                        valeur = GET_VALUE("C" & Objet.Adresse1)
+                        If valeur <> "" Then Objet.Value = valeur
                     Else
                         'permet de reinitialier un compteur
-                        Dim numpage As String = Int(Objet.adresse1 / 2) + 1
-                        If (InStr(Objet.adresse2, "inc=") > 0) Or (InStr(Objet.adresse2, "dec=") > 0) Then
-                            SEND_IPX800(_urlIPX & "protect/assignio/counter" & numpage & ".htm?num=" & Objet.adresse1 - 1 & "&" & Objet.adresse2, _Username, _Password)
+                        If _IPXVersion = "IPX800_V4" Then
+                            Select Case True
+                                Case InStr(Objet.adresse2, "inc=") > 0 : SEND_IPX800(_urlIPX & "api/xdevices.json?SetC" & Objet.adresse1 & "=+" & Objet.adresse2, _Username, _Password)
+                                Case InStr(Objet.adresse2, "dec=") > 0 : SEND_IPX800(_urlIPX & "api/xdevices.json?SetC" & Objet.adresse1 & "=-" & Objet.adresse2, _Username, _Password)
+                                Case (InStr(Objet.adresse2, "inc=") = 0) And (InStr(Objet.adresse2, "dec=") = 0) : SEND_IPX800(_urlIPX & "api/xdevices.json?SetC" & Objet.adresse1 & "=" & Objet.adresse2, _Username, _Password)
+                            End Select
                         Else
-                            SEND_IPX800(_urlIPX & "protect/assignio/counter" & numpage & ".htm?num=" & Objet.adresse1 - 1 & "&counter=" & Objet.adresse2, _Username, _Password)
+                            Dim numpage As String = Int(Objet.adresse1 / 2) + 1
+                            If (InStr(Objet.adresse2, "inc=") > 0) Or (InStr(Objet.adresse2, "dec=") > 0) Then
+                                SEND_IPX800(_urlIPX & "protect/assignio/counter" & numpage & ".htm?num=" & Objet.adresse1 - 1 & "&" & Objet.adresse2, _Username, _Password)
+                            Else
+                                SEND_IPX800(_urlIPX & "protect/assignio/counter" & numpage & ".htm?num=" & Objet.adresse1 - 1 & "&counter=" & Objet.adresse2, _Username, _Password)
+                            End If
                         End If
                         Objet.Value = Objet.adresse2
                     End If
                 Case "TEMPERATURE", "HUMIDITE", "ENERGIEINSTANTANEE"
-                    valeur = GET_VALUE(_urlIPX & "globalstatus.xml", _Username, _Password, "analog" & Mid(Objet.Adresse1, InStr(Objet.Adresse1, ":") + 1, 1) - 1)
-                    Objet.Value = Regex.Replace(CStr(valeur), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        ' valeur = GET_VALUE(_urlIPX & "globalstatus.xml", _Username, _Password, "analog" & Mid(Objet.Adresse1, InStr(Objet.Adresse1, ":") + 1, 1) - 1)
+                    valeur = GET_VALUE("AN" & Objet.Adresse1)
+                    If valeur <> "" Then Objet.Value = Regex.Replace(CStr(valeur), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                 Case "GENERIQUEVALUE"
-                    If InStr(Objet.Adresse1, "A:") = 0 Then
-                        Objet.Value = GET_VALUE(_urlIPX & "globalstatus.xml", _Username, _Password, Objet.Adresse1)
-                    Else
-                        valeur = GET_VALUE(_urlIPX & "globalstatus.xml", _Username, _Password, "analog" & Mid(Objet.Adresse1, InStr(Objet.Adresse1, ":") + 1, 1) - 1)
-                        Objet.Value = Regex.Replace(CStr(valeur), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                    End If
+                    valeur = GET_VALUE(Objet.Adresse1)
+                   If valeur <> "" Then Objet.Value = Regex.Replace(CStr(valeur), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                 Case "GENERIQUESTRING"
                     If String.IsNullOrEmpty(Objet.adresse2) Then
-                        Objet.Value = GET_VALUE(_urlIPX & "globalstatus.xml", _Username, _Password, Objet.Adresse1)
+                        valeur = GET_VALUE(Objet.Adresse1)
+                        If valeur <> "" Then Objet.Value = valeur
                     Else
                         SEND_IPX800(_urlIPX & Objet.adresse2, _Username, _Password)
                         Objet.Value = 1
@@ -445,9 +469,8 @@ Imports System.Xml
 
             WriteLog("DBG: Valeur enregistrée : " & Objet.Type & " -> " & Objet.value)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", ex.Message)
-            WriteLog("ERR: Read, Exception : " & ex.Message)
             WriteLog("ERR: Read, adresse1 : " & Objet.adresse1 & " - adresse2 : " & Objet.adresse2)
+            WriteLog("ERR: Read, Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -470,39 +493,55 @@ Imports System.Xml
 
             Try
                 Select Case Objet.Type
-                    Case "APPAREIL"
+                    Case "LAMPE", "APPAREIL"
                         Select Case Command
                             Case "ON"
-                                If _Version < "3.05.33" Then
-                                    SEND_IPX800(_urlIPX & "preset.htm?led" & Objet.adresse1 & "=1", _Username, _Password)
+                                If _IPXVersion = "IPX800_V4" Then
+                                    SEND_IPX800(_urlIPX & "api/xdevices.json?SetR=" & Objet.adresse1, _Username, _Password)
                                 Else
-                                    SEND_IPX800(_urlIPX & "preset.htm?set" & Objet.adresse1 & "=1", _Username, _Password)
+                                    If _Version < "3.05.33" Then
+                                        SEND_IPX800(_urlIPX & "preset.htm?led" & Objet.adresse1 & "=1", _Username, _Password)
+                                    Else
+                                        SEND_IPX800(_urlIPX & "preset.htm?set" & Objet.adresse1 & "=1", _Username, _Password)
+                                    End If
                                 End If
                                 Objet.value = True
                                 WriteLog("DBG: Write " & Objet.Type & " Adr : " & Objet.adresse1 & " -> ON")
-                                Exit Sub
                             Case "OFF"
-                                If _Version < "3.05.33" Then
-                                    SEND_IPX800(_urlIPX & "preset.htm?led" & Objet.adresse1 & "=0", _Username, _Password)
+                                If _IPXVersion = "IPX800_V4" Then
+                                    SEND_IPX800(_urlIPX & "api/xdevices.json?ClearR=" & Objet.adresse1, _Username, _Password)
                                 Else
-                                    SEND_IPX800(_urlIPX & "preset.htm?set" & Objet.adresse1 & "=0", _Username, _Password)
+                                    If _Version < "3.05.33" Then
+                                        SEND_IPX800(_urlIPX & "preset.htm?led" & Objet.adresse1 & "=0", _Username, _Password)
+                                    Else
+                                        SEND_IPX800(_urlIPX & "preset.htm?set" & Objet.adresse1 & "=0", _Username, _Password)
+                                    End If
                                 End If
                                 Objet.value = False
                                 WriteLog("DBG: Write " & Objet.Type & " Adr : " & Objet.adresse1 & " -> OFF")
-                                Exit Sub
                         End Select
+
                     Case "SWITCH"
                         Select Case Command
                             Case "ON"
-                                SEND_IPX800(_urlIPX & "preset.htm?RLY" & Objet.adresse1 & "=1", _Username, _Password)
-                                WriteLog("DBG: Write " & Objet.Type & " Adr : " & Objet.adresse1 & " -> Impulsion 0.1.0")
+                                If _IPXVersion = "IPX800_V4" Then
+                                    SEND_IPX800(_urlIPX & "api/xdevices.json?ToggleR=" & Objet.adresse1, _Username, _Password)
+                                Else
+                                    SEND_IPX800(_urlIPX & "preset.htm?RLY" & Objet.adresse1 & "=1", _Username, _Password)
+                                End If
+                                WriteLog("Write " & Objet.Type & " Adr : " & Objet.adresse1 & " -> Impulsion 0.1.0")
                             Case "OFF"
-                                SEND_IPX800(_urlIPX & "preset.htm?RLY" & Objet.adresse1 & "=0", _Username, _Password)
-                                WriteLog("DBG: Write " & Objet.Type & " Adr : " & Objet.adresse1 & " -> Impulsion 1.0.1")
+                                If _IPXVersion = "IPX800_V4" Then
+                                    SEND_IPX800(_urlIPX & "api/xdevices.json?ToggleR=" & Objet.adresse1, _Username, _Password)
+                                Else
+                                    SEND_IPX800(_urlIPX & "preset.htm?RLY" & Objet.adresse1 & "=0", _Username, _Password)
+                                End If
+                                WriteLog("Write " & Objet.Type & " Adr : " & Objet.adresse1 & " -> Impulsion 1.0.1")
                         End Select
                     Case Else
                         WriteLog("ERR: WRITE Erreur Write Type de composant non géré : " & Objet.Type.ToString)
                 End Select
+
             Catch ex As Exception
                 WriteLog("ERR: WRITE Erreur commande " & Command & " : " & ex.ToString)
             End Try
@@ -644,126 +683,19 @@ Imports System.Xml
         End Try
     End Sub
 
+
+    ''' <summary>Si refresh >0 gestion du timer</summary>
+    ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
+    Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
+        GET_VALUES(_urlIPX, _Username, _Password)
+    End Sub
+
 #End Region
 
 #Region "Fonctions internes"
 
-    Dim obj As Object
-    Dim valueinputs As listInputs
-    Dim valueoutputs As listOutputs
-    Dim valueanalog As listAnalog
-    Dim valuecount As listCount
     Dim valueconfig As New IpxConfig
-
-    Public Class valeur
-        Public _id As String
-        Public val As Object
-    End Class
-
-    Public Class listInputs
-        Public _IPX800_V3 As String
-        Public IN1 As Integer
-        Public IN2 As Integer
-        Public IN3 As Integer
-        Public IN4 As Integer
-        Public IN5 As Integer
-        Public IN6 As Integer
-        Public IN7 As Integer
-        Public IN8 As Integer
-        Public IN9 As Integer
-        Public IN10 As Integer
-        Public IN11 As Integer
-        Public IN12 As Integer
-        Public IN13 As Integer
-        Public IN14 As Integer
-        Public IN15 As Integer
-        Public IN16 As Integer
-        Public IN17 As Integer
-        Public IN18 As Integer
-        Public IN19 As Integer
-        Public IN20 As Integer
-        Public IN21 As Integer
-        Public IN22 As Integer
-        Public IN23 As Integer
-        Public IN24 As Integer
-        Public IN25 As Integer
-        Public IN26 As Integer
-        Public IN27 As Integer
-        Public IN28 As Integer
-        Public IN29 As Integer
-        Public IN30 As Integer
-        Public IN31 As Integer
-        Public IN32 As Integer
-        Public IN33 As Integer
-    End Class
-
-    Public Class listOutputs
-        Public _IPX800_V3 As String
-        Public OUT1 As Integer
-        Public OUT2 As Integer
-        Public OUT3 As Integer
-        Public OUT4 As Integer
-        Public OUT5 As Integer
-        Public OUT6 As Integer
-        Public OUT7 As Integer
-        Public OUT8 As Integer
-        Public OUT9 As Integer
-        Public OUT10 As Integer
-        Public OUT11 As Integer
-        Public OUT12 As Integer
-        Public OUT13 As Integer
-        Public OUT14 As Integer
-        Public OUT15 As Integer
-        Public OUT16 As Integer
-        Public OUT17 As Integer
-        Public OUT18 As Integer
-        Public OUT19 As Integer
-        Public OUT20 As Integer
-        Public OUT21 As Integer
-        Public OUT22 As Integer
-        Public OUT23 As Integer
-        Public OUT24 As Integer
-        Public OUT25 As Integer
-        Public OUT26 As Integer
-        Public OUT27 As Integer
-        Public OUT28 As Integer
-        Public OUT29 As Integer
-        Public OUT30 As Integer
-        Public OUT31 As Integer
-        Public OUT32 As Integer
-    End Class
-
-    Public Class listAnalog
-        Public _IPX800_V3 As String
-        Public AN1 As Integer
-        Public AN2 As Integer
-        Public AN3 As Integer
-        Public AN4 As Integer
-        Public AN5 As Integer
-        Public AN6 As Integer
-        Public AN7 As Integer
-        Public AN8 As Integer
-        Public AN9 As Integer
-        Public AN10 As Integer
-        Public AN11 As Integer
-        Public AN12 As Integer
-        Public AN13 As Integer
-        Public AN14 As Integer
-        Public AN15 As Integer
-        Public AN16 As Integer
-    End Class
-
-    Public Class listCount
-        Public _IPX800_V3 As String
-        Public C1 As Integer
-        Public C2 As Integer
-        Public C3 As Integer
-        Public C4 As Integer
-        Public C5 As Integer
-        Public C6 As Integer
-        Public C7 As Integer
-        Public C8 As Integer
-    End Class
+    Dim ValueIPX As New Microsoft.VisualBasic.Collection()
 
     Public Class IpxConfig
         Public config_hostname As String
@@ -782,13 +714,11 @@ Imports System.Xml
 
     Private Sub Get_Config(adrs As String, user As String, password As String)
 
-        Dim webclient As New WebClient
-        Dim cache As New CredentialCache
-        Dim str As String
-
         Try
-            cache.Add(New Uri(adrs), "Basic", New NetworkCredential(user, password))
-            webclient.Credentials = cache
+            Dim str As String
+
+            Dim webclient As New WebClient
+            webclient.Credentials = New NetworkCredential(user, password)
 
             Dim reader As XmlTextReader = New XmlTextReader(webclient.OpenRead(adrs))
             reader.WhitespaceHandling = WhitespaceHandling.Significant
@@ -827,87 +757,75 @@ Imports System.Xml
         End Try
     End Sub
 
-    Public Function GET_VALUE(adrs As String, user As String, password As String, ByVal Element As String) As Object
-
-        WriteLog("DBG: " & "GET Url: " & adrs)
-        Dim webclient As New WebClient
-        Dim cache As New CredentialCache
-
-        Try
-            Dim result As Object = Nothing
-            cache.Add(New Uri(adrs), "Basic", New NetworkCredential(user, password))
-            webclient.Credentials = cache
-
-            Dim reader As XmlTextReader = New XmlTextReader(webclient.OpenRead(adrs))
-            WriteLog("DBG: Acquisition fichier xml -> " & adrs)
-            reader.WhitespaceHandling = WhitespaceHandling.Significant
-            While reader.Read()
-                If reader.Name = Element Then
-                    Dim valeurreader As String = reader.ReadString
-                    WriteLog("DBG: " & "Valeur trouvée  pour " & Element & " -> " & valeurreader)
-                    If Not IsNumeric(valeurreader) Then
-                        Select Case valeurreader
-                            Case "up"
-                                result = False
-                            Case "dn"
-                                result = True
-                        End Select
-                    Else
-                        result = Val(valeurreader)
-                    End If
-                    Exit While
-                End If
-            End While
-            GET_VALUE = result
-
-        Catch ex As Exception
-            WriteLog("ERR: " & ex.Message)
-            WriteLog("ERR: " & "GET Url: " & adrs)
-            Return ""
-        End Try
-    End Function
-
     Private Sub GET_VALUES(adrs As String, user As String, password As String)
 
-        Dim webclient As New WebClient
-        Dim cache As New CredentialCache
-
         Try
+            ValueIPX.Clear()
+
             Dim client As New Net.WebClient
-            cache.Add(New Uri(adrs), "Basic", New NetworkCredential(user, password))
-            webclient.Credentials = cache
+            client.Credentials = New NetworkCredential(user, password)
 
-            adrs = _urlIPX & "api/xdevices.json?cmd=10"
-            Dim responsebody = client.DownloadString(Adrs)
-            obj = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody)
-            valueinputs = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(listInputs))
-            WriteLog("DBG: " & "GET_VALUES Url: " & Adrs)
+            adrs = _urlIPX & "api/xdevices.json?Get=all"
+            WriteLog("DBG: " & "GET_VALUES Url: " & adrs)
+            Dim responsebody = client.DownloadString(adrs)
             WriteLog("DBG: GetValue inputs : " & responsebody.ToString)
+            Dim jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(responsebody)
+            If jsonObj.Count > 1 Then  ' cas IPX800 V4
+                For numberkey = 0 To jsonObj.Count - 1
+                    ValueIPX.Add(jsonObj.Item(jsonObj.Keys(numberkey).ToString), jsonObj.Keys(numberkey).ToString)
+                    WriteLog("DBG: GetValue " & ValueIPX.Item(ValueIPX.Count))
+                Next
+                _IPXVersion = jsonObj.Item(jsonObj.Keys(0).ToString)
+            Else
+                'cas IPX800 V3
+                adrs = _urlIPX & "api/xdevices.json?cmd=10"
+                WriteLog("DBG: " & "GET_VALUES Url: " & adrs)
+                responsebody = client.DownloadString(adrs)
+                WriteLog("DBG: GetValue inputs : " & responsebody.ToString)
+                jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(responsebody)
+                For numberkey = 0 To jsonObj.Count - 1
+                    ValueIPX.Add(jsonObj.Item(jsonObj.Keys(numberkey).ToString), jsonObj.Keys(numberkey).ToString)
+                    WriteLog("DBG: GetValue " & ValueIPX.Item(ValueIPX.Count))
+                Next
+                _IPXVersion = jsonObj.Item(jsonObj.Keys(0).ToString)
 
-            Adrs = _urlIPX & "api/xdevices.json?cmd=20"
-            responsebody = client.DownloadString(Adrs)
-            obj = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody)
-            valueoutputs = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(listOutputs))
-            WriteLog("DBG: " & "GET_VALUES Url: " & Adrs)
-            WriteLog("DBG: GetValue outputs : " & responsebody.ToString)
+                adrs = _urlIPX & "api/xdevices.json?cmd=20"
+                WriteLog("DBG: " & "GET_VALUES Url: " & adrs)
+                responsebody = client.DownloadString(adrs)
+                WriteLog("DBG: GetValue inputs : " & responsebody.ToString)
+                jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(responsebody)
+                For numberkey = 1 To jsonObj.Count - 1
+                    ValueIPX.Add(jsonObj.Item(jsonObj.Keys(numberkey).ToString), jsonObj.Keys(numberkey).ToString)
+                    WriteLog("DBG: GetValue " & ValueIPX.Item(ValueIPX.Count))
+                Next
 
-            Adrs = _urlIPX & "api/xdevices.json?cmd=30"
-            responsebody = client.DownloadString(Adrs)
-            obj = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody)
-            valueanalog = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(listAnalog))
-            WriteLog("DBG: " & "GET_VALUES Url: " & Adrs)
-            WriteLog("DBG: GetValue analog : " & responsebody.ToString)
+                adrs = _urlIPX & "api/xdevices.json?cmd=30"
+                WriteLog("DBG: " & "GET_VALUES Url: " & adrs)
+                responsebody = client.DownloadString(adrs)
+                WriteLog("DBG: GetValue inputs : " & responsebody.ToString)
+                jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(responsebody)
+                For numberkey = 1 To jsonObj.Count - 1
+                    ValueIPX.Add(jsonObj.Item(jsonObj.Keys(numberkey).ToString), jsonObj.Keys(numberkey).ToString)
+                    WriteLog("DBG: GetValue " & ValueIPX.Item(ValueIPX.Count))
+                Next
 
-            Adrs = _urlIPX & "api/xdevices.json?cmd=40"
-            responsebody = client.DownloadString(Adrs)
-            obj = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody)
-            valuecount = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(listCount))
-            WriteLog("DBG: " & "GET_VALUES Url: " & Adrs)
-            WriteLog("DBG: GetValue count : " & responsebody.ToString)
-
+                adrs = _urlIPX & "api/xdevices.json?cmd=40"
+                WriteLog("DBG: " & "GET_VALUES Url: " & adrs)
+                responsebody = client.DownloadString(adrs)
+                WriteLog("DBG: GetValue inputs : " & responsebody.ToString)
+                jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(responsebody)
+                For numberkey = 1 To jsonObj.Count - 1
+                    ValueIPX.Add(jsonObj.Item(jsonObj.Keys(numberkey).ToString), jsonObj.Keys(numberkey).ToString)
+                    WriteLog("DBG: GetValue " & ValueIPX.Item(ValueIPX.Count) & " , " & jsonObj.Keys(numberkey).ToString)
+                Next
+            End If
+            If ValueIPX.Count < 89 Then
+                WriteLog("ERR : GetValue effectué, " & ValueIPX.Count & " données récupérées")
+                WriteLog("ERR : GetValue, le temps du refresh du driver est peut être trop faible")
+            End If
         Catch ex As Exception
             WriteLog("ERR: " & ex.Message)
-            WriteLog("ERR: " & "GET_VALUES Url: " & Adrs)
+            WriteLog("ERR: " & "GET_VALUES Url: " & adrs)
         End Try
     End Sub
 
@@ -934,6 +852,56 @@ Imports System.Xml
         End Try
     End Sub
 
+    Public Function GET_VALUE(key As String) As String
+        Try
+            Dim valeur As String = ValueIPX(key)
+            WriteLog("Get_Value, Key " & key & " => " & valeur)
+            Return valeur
+        Catch ex As Exception
+            WriteLog("DBG: " & "Get_Value, Key " & key)
+            WriteLog("DBG: " & ex.Message)
+            Return ""
+        End Try
+    End Function
+
+    Public Function GET_VALUEXML(adrs As String, user As String, password As String, ByVal Element As String) As Object
+
+        Try
+            WriteLog("DBG: " & "GET Url: " & adrs)
+            Dim result As Object = Nothing
+
+            Dim webclient As New WebClient
+            webclient.Credentials = New NetworkCredential(user, password)
+
+            Dim reader As XmlTextReader = New XmlTextReader(webclient.OpenRead(adrs))
+            WriteLog("DBG: Acquisition fichier xml -> " & adrs)
+            reader.WhitespaceHandling = WhitespaceHandling.Significant
+            While reader.Read()
+                If reader.Name = Element Then
+                    Dim valeurreader As String = reader.ReadString
+                    WriteLog("DBG: " & "Valeur trouvée  pour " & Element & " -> " & valeurreader)
+                    If Not IsNumeric(valeurreader) Then
+                        Select Case valeurreader
+                            Case "up"
+                                result = False
+                            Case "dn"
+                                result = True
+                        End Select
+                    Else
+                        result = Val(valeurreader)
+                    End If
+                    Exit While
+                End If
+            End While
+            GET_VALUEXML = result
+
+        Catch ex As Exception
+            WriteLog("ERR: " & "GET_VALUEXML Url: " & adrs)
+            WriteLog("ERR: " & ex.Message)
+            Return ""
+        End Try
+    End Function
+
     Private Sub WriteLog(ByVal message As String)
         Try
             'utilise la fonction de base pour loguer un event
@@ -950,7 +918,6 @@ Imports System.Xml
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " WriteLog", ex.Message)
         End Try
     End Sub
-
 #End Region
 
 End Class
