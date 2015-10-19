@@ -22,6 +22,7 @@ Public Class HoMIServicE
 
 
     Protected Overrides Sub OnStart(ByVal args() As String)
+        Dim processhomidomrunning As Boolean = False
         Try
             If (Environment.UserInteractive) Then
                 Dim largeur As Integer = Console.WindowWidth
@@ -41,78 +42,92 @@ Public Class HoMIServicE
                 Console.WriteLine(" ")
             End If
 
-            'Démarrage du serviceWeb
-            log("Service Web -> Démarrage")
+            'Check if another homiservice is already running
+            Dim processhomidom = Process.GetProcessesByName("homiservice")
 
-            'MyRep = "c:\homidom"
-            'MyRep = My.Application.Info.DirectoryPath
+            If processhomidom.Count > 1 Then
+                If (Environment.UserInteractive) Then
+                    Console.WriteLine(Now & " ANOTHER HOMISERVICE IS ALREADY RUNNING, EXIT.")
+                Else
+                    logerror("ANOTHER HOMISERVICE IS ALREADY RUNNING, EXIT.")
+                End If
+                processhomidomrunning = True
+            Else
 
-            Dim PortSOAP As String = LoadPort()
-            If PortSOAP = "" Or IsNumeric(PortSOAP) = False Then
-                PortSOAP = "7999"
-                logerror("Le fichier de config ou la balise portsoap n'ont pas été trouvé !")
-            End If
-            If _Addrip = "" Then
-                _Addrip = "localhost"
-                logerror("Le fichier de config ou la balise ip n'ont pas été trouvé, l'adresse par défaut sera localhost !")
-            End If
-            Dim baseAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/service")
-            Dim fileServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/fileServer")
-            log("Adresss SOAP: " & _Addrip & ":" & PortSOAP)
-            host = New ServiceHost(GetType(Server), baseAddress)
-            host.CloseTimeout = TimeSpan.FromMinutes(60)
-            host.OpenTimeout = TimeSpan.FromMinutes(60)
-            AddHandler host.Faulted, AddressOf HostFaulted
-            'AddHandler host.UnknownMessageReceived, AddressOf HostUnknown
-            host.Open()
-            log("Service Web -> Démarré : http://" & _Addrip & ":" & PortSOAP & "/service")
-            If (Environment.UserInteractive) Then Console.WriteLine("")
 
-            'Connexion au serveur
-            Dim myChannelFactory As ServiceModel.ChannelFactory(Of IHoMIDom) = Nothing
-            Try
-                log("Serveur Homidom -> Démarrage")
-                'Dim myadress As String = "http://" & Dns.GetHostName() & ":" & PortSOAP & "/service"
-                Dim myadress As String = "http://" & _Addrip & ":" & PortSOAP & "/service"
-                Dim binding As New ServiceModel.BasicHttpBinding
-                binding.MaxBufferPoolSize = 250000000
-                binding.MaxReceivedMessageSize = Integer.MaxValue
-                binding.MaxBufferSize = Integer.MaxValue
-                binding.ReaderQuotas.MaxArrayLength = 250000000
-                binding.ReaderQuotas.MaxNameTableCharCount = 250000000
-                binding.ReaderQuotas.MaxBytesPerRead = 250000000
-                binding.ReaderQuotas.MaxStringContentLength = 250000000
-                binding.SendTimeout = TimeSpan.FromMinutes(60)
-                binding.CloseTimeout = TimeSpan.FromMinutes(60)
-                binding.OpenTimeout = TimeSpan.FromMinutes(60)
-                binding.ReceiveTimeout = TimeSpan.FromMinutes(60)
-                myChannelFactory = New ServiceModel.ChannelFactory(Of IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
-                myService = myChannelFactory.CreateChannel()
-                'Démarrage du serveur pour charger la config
-                myService.Start()
-                log("Serveur HoMIDoM -> démarré")
-            Catch ex As Exception
-                myChannelFactory.Abort()
-                logerror("Erreur lors du démmarage du serveur HoMIDoM : " & ex.Message)
-            End Try
+                    'Démarrage du serviceWeb
+                    log("Service Web -> Démarrage")
 
-            'démmarage de l'API WEB
-            Dim apiServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP)
-            HoMIDomWebAPI.HoMIDomAPI.CurrentServer = Server.Instance
-            HoMIDomWebAPI.HoMIDomAPI.Start(apiServerAddress.ToString(), _IdSrv)
-            'log("API Web démarré : http://" & _Addrip & ":" & PortSOAP & "/api")
+                    'MyRep = "c:\homidom"
+                    'MyRep = My.Application.Info.DirectoryPath
 
-            'démarrage du serveur de fichier
-            hostFileServer = New ServiceHost(GetType(FileServer), fileServerAddress)
-            hostFileServer.Open()
-            log("Serveur de fichiers démarré : http://" & _Addrip & ":" & PortSOAP & "/fileServer")
+                    Dim PortSOAP As String = LoadPort()
+                    If PortSOAP = "" Or IsNumeric(PortSOAP) = False Then
+                        PortSOAP = "7999"
+                        logerror("Le fichier de config ou la balise portsoap n'ont pas été trouvé !")
+                    End If
+                    If _Addrip = "" Then
+                        _Addrip = "localhost"
+                        logerror("Le fichier de config ou la balise ip n'ont pas été trouvé, l'adresse par défaut sera localhost !")
+                    End If
+                    Dim baseAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/service")
+                    Dim fileServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP & "/fileServer")
+                    log("Adresss SOAP: " & _Addrip & ":" & PortSOAP)
+                    host = New ServiceHost(GetType(Server), baseAddress)
+                    host.CloseTimeout = TimeSpan.FromMinutes(60)
+                    host.OpenTimeout = TimeSpan.FromMinutes(60)
+                    AddHandler host.Faulted, AddressOf HostFaulted
+                    'AddHandler host.UnknownMessageReceived, AddressOf HostUnknown
+                    host.Open()
+                    log("Service Web -> Démarré : http://" & _Addrip & ":" & PortSOAP & "/service")
+                    If (Environment.UserInteractive) Then Console.WriteLine("")
 
-            'démarrage OK
-            If (Environment.UserInteractive) Then
-                Console.WriteLine(" ")
-                Console.WriteLine(Now & " INFO    ****   SERVEUR DEMARRE    ****")
-                Console.WriteLine(Now & " INFO    ******************************")
-                Console.WriteLine(" ")
+                    'Connexion au serveur
+                    Dim myChannelFactory As ServiceModel.ChannelFactory(Of IHoMIDom) = Nothing
+                    Try
+                        log("Serveur Homidom -> Démarrage")
+                        'Dim myadress As String = "http://" & Dns.GetHostName() & ":" & PortSOAP & "/service"
+                        Dim myadress As String = "http://" & _Addrip & ":" & PortSOAP & "/service"
+                        Dim binding As New ServiceModel.BasicHttpBinding
+                        binding.MaxBufferPoolSize = 250000000
+                        binding.MaxReceivedMessageSize = Integer.MaxValue
+                        binding.MaxBufferSize = Integer.MaxValue
+                        binding.ReaderQuotas.MaxArrayLength = 250000000
+                        binding.ReaderQuotas.MaxNameTableCharCount = 250000000
+                        binding.ReaderQuotas.MaxBytesPerRead = 250000000
+                        binding.ReaderQuotas.MaxStringContentLength = 250000000
+                        binding.SendTimeout = TimeSpan.FromMinutes(60)
+                        binding.CloseTimeout = TimeSpan.FromMinutes(60)
+                        binding.OpenTimeout = TimeSpan.FromMinutes(60)
+                        binding.ReceiveTimeout = TimeSpan.FromMinutes(60)
+                        myChannelFactory = New ServiceModel.ChannelFactory(Of IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
+                        myService = myChannelFactory.CreateChannel()
+                        'Démarrage du serveur pour charger la config
+                        myService.Start()
+                        log("Serveur HoMIDoM -> démarré")
+                    Catch ex As Exception
+                        myChannelFactory.Abort()
+                        logerror("Erreur lors du démmarage du serveur HoMIDoM : " & ex.Message)
+                    End Try
+
+                    'démmarage de l'API WEB
+                    Dim apiServerAddress As Uri = New Uri("http://" & _Addrip & ":" & PortSOAP)
+                    HoMIDomWebAPI.HoMIDomAPI.CurrentServer = Server.Instance
+                    HoMIDomWebAPI.HoMIDomAPI.Start(apiServerAddress.ToString(), _IdSrv)
+                    'log("API Web démarré : http://" & _Addrip & ":" & PortSOAP & "/api")
+
+                    'démarrage du serveur de fichier
+                    hostFileServer = New ServiceHost(GetType(FileServer), fileServerAddress)
+                    hostFileServer.Open()
+                    log("Serveur de fichiers démarré : http://" & _Addrip & ":" & PortSOAP & "/fileServer")
+
+                    'démarrage OK
+                    If (Environment.UserInteractive) Then
+                        Console.WriteLine(" ")
+                        Console.WriteLine(Now & " INFO    ****   SERVEUR DEMARRE    ****")
+                        Console.WriteLine(Now & " INFO    ******************************")
+                        Console.WriteLine(" ")
+                    End If
             End If
 
         Catch ex As Exception
@@ -135,7 +150,7 @@ Public Class HoMIServicE
                 Console.WriteLine("Press any key to stop program")
                 Console.WriteLine(" ")
                 Console.Read()
-                OnStop()
+                If (Not (processhomidomrunning)) Then OnStop()
                 Environment.Exit(0)
             End If
         Catch ex As Exception
