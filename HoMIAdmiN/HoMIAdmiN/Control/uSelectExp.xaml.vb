@@ -24,34 +24,34 @@
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
 
             typeDevice = New Dictionary(Of Integer, String)
-            typeDevice.Add(1, "DevDimmer")
-            typeDevice.Add(2, "DevMultiSwitch") '
-            typeDevice.Add(3, "DevPressure")
-            typeDevice.Add(4, "DevElectricity") '
-            typeDevice.Add(5, "DevElectricity") '
-            typeDevice.Add(6, "DevGenericSensor") '
-            typeDevice.Add(7, "DevGenericSensor")
-            typeDevice.Add(8, "DevWind")
-            typeDevice.Add(9, "DevElectricity")
-            typeDevice.Add(10, "DevElectricity")
-            typeDevice.Add(11, "DevMultiSwitch")
-            typeDevice.Add(12, "DevGenericSensor")
-            typeDevice.Add(13, "DevThermostat")
-            typeDevice.Add(14, "DevDimmer")
-            typeDevice.Add(15, "DevHygrometry")
-            typeDevice.Add(16, "DevDimmer")
-            typeDevice.Add(17, "DevMultiSwitch")
-            typeDevice.Add(18, "DevMultiSwitch")
-            typeDevice.Add(19, "DevRain")
-            typeDevice.Add(20, "DevRain")
-            typeDevice.Add(21, "DevSwitch")
-            typeDevice.Add(22, "DevMultiSwitch")
-            typeDevice.Add(23, "DevTemperature")
-            typeDevice.Add(24, "DevThermostat")
-            typeDevice.Add(25, "DevUV")
-            typeDevice.Add(26, "DevWind")
-            typeDevice.Add(27, "DevShutter")
-            typeDevice.Add(28, "DevRGBLight")
+            typeDevice.Add(1, "DevDimmer") 'APPAREIL = 1
+            typeDevice.Add(2, "DevMultiSwitch") 'AUDIO = 2
+            typeDevice.Add(3, "DevPressure") 'BAROMETRE = 3
+            typeDevice.Add(4, "DevElectricity")  'BATTERIE = 4
+            typeDevice.Add(5, "DevElectricity") 'COMPTEUR = 5
+            typeDevice.Add(6, "DevGenericSensor") 'CONTACT = 6
+            typeDevice.Add(7, "DevGenericSensor") 'DETECTEUR = 7
+            typeDevice.Add(8, "DevWind") 'DIRECTIONVENT = 8
+            typeDevice.Add(9, "DevElectricity") 'ENERGIEINSTANTANEE = 9
+            typeDevice.Add(10, "DevElectricity") 'ENERGIETOTALE = 10
+            typeDevice.Add(11, "DevMultiSwitch") 'FREEBOX = 11
+            typeDevice.Add(12, "DevGenericSensor") 'GENERIQUEBOOLEEN = 12
+            typeDevice.Add(13, "DevThermostat") 'GENERIQUESTRING = 13
+            typeDevice.Add(14, "DevDimmer") 'GENERIQUEVALUE = 14
+            typeDevice.Add(15, "DevHygrometry") 'HUMIDITE = 15
+            typeDevice.Add(16, "DevDimmer") 'LAMPE = 16
+            typeDevice.Add(17, "DevMultiSwitch") 'METEO = 17
+            typeDevice.Add(18, "DevMultiSwitch") 'MULTIMEDIA = 18
+            typeDevice.Add(19, "DevRain") 'PLUIECOURANT = 19
+            typeDevice.Add(20, "DevRain") 'PLUIETOTAL = 20
+            typeDevice.Add(21, "DevSwitch") 'Switch = 21
+            typeDevice.Add(22, "DevMultiSwitch") 'TELECOMMANDE = 22
+            typeDevice.Add(23, "DevTemperature") 'TEMPERATURE = 23
+            typeDevice.Add(24, "DevThermostat") 'TEMPERATURECONSIGNE = 24
+            typeDevice.Add(25, "DevUV") 'UV = 25
+            typeDevice.Add(26, "DevWind") 'VITESSEVENT = 26
+            typeDevice.Add(27, "DevShutter") 'VOLET = 27
+            typeDevice.Add(28, "DevRGBLight") 'LAMPERGBW = 28
 
             'device
             Dim importOk = ImportImperiHome()
