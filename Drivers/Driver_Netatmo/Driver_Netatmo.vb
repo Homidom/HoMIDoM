@@ -840,7 +840,9 @@ line1:
                             objet.Value = devlist.body.devices.Item(0).battery_vp
                         Case "NAModule4"
                             objet.value = Format(((devlist.body.modules.Item(nummodulealire).battery_vp - 4200) * 100) / 1800, "#0")
-                        Case "NAModule1", "NAModule3"
+                        Case "NAModule1"
+                            objet.value = Format(((devlist.body.modules.Item(nummodulealire).battery_vp - 3950) * 100) / 2440, "#0")
+                        Case "NAModule3"
                             objet.value = Format(((devlist.body.modules.Item(nummodulealire).battery_vp - 3600) * 100) / 2400, "#0")
                         Case "NAModule2"
                             objet.value = Format(((devlist.body.modules.Item(nummodulealire).battery_vp - 3950) * 100) / 2050, "#0")
