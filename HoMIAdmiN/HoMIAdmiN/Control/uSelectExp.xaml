@@ -13,8 +13,8 @@
         </Grid.ColumnDefinitions>
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" Grid.ColumnSpan="2" />
         <StackPanel Margin="1,53,0,0" Orientation="Horizontal" HorizontalAlignment="center" Width="656" Grid.Column="1">
-            <ListBox Name="ListBox1" Margin="3 " Background="DarkGray" BorderThickness="0" Foreground="White" HorizontalContentAlignment="Center"  MaxHeight="500" MinHeight="150" Width="280" Height="410" />
-            <ListBox Name="ListBox2" Margin="3 " Background="DarkGray" BorderThickness="0" Foreground="White" HorizontalContentAlignment="Center"  MaxHeight="500" MinHeight="150" Width="280" Height="410" />
+            <ListBox Name="ListBox1" Margin="3 " Background="DarkGray" BorderThickness="0" Foreground="White" HorizontalContentAlignment="left"  MaxHeight="500" MinHeight="150" Width="280" Height="410" />
+            <ListBox Name="ListBox2" Margin="3 " Background="DarkGray" BorderThickness="0" Foreground="White" HorizontalContentAlignment="left"  MaxHeight="500" MinHeight="150" Width="280" Height="410" />
             <StackPanel Margin="3 " Orientation="Vertical" VerticalAlignment="Bottom" >
                 <Button Width="70" Height="22" Margin="2" Name="BtnOK" Content="OK" Template="{DynamicResource GlassButton}" Foreground="White" />
                 <Button  Width="70" Height="22" Margin="2" Name="BtnCancel" Content="Annuler" Template="{DynamicResource GlassButton}" Foreground="White" />

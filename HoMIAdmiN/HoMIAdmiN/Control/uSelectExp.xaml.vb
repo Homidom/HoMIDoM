@@ -66,7 +66,7 @@
                 stk.Children.Add(x)
                 stk.HorizontalAlignment = HorizontalAlignment.Left
                 ListBox1.Items.Add(stk)
-                x.IsChecked = False
+                x.IsChecked = True
                 If importOk Then
                     For Each dev In allDevImperi.devices
                         If dev.name = device.Name Then
@@ -95,7 +95,7 @@
                 stk.Children.Add(x)
                 stk.HorizontalAlignment = HorizontalAlignment.Left
                 ListBox2.Items.Add(stk)
-                x.IsChecked = False
+                x.IsChecked = True
                 If importOk Then
                     For Each dev In allDevImperi.devices
                         If dev.name = macro.Nom Then
