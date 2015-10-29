@@ -2829,6 +2829,81 @@ Namespace HoMIDom
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "WriteListAction", "Exception : " & ex.Message)
             End Try
         End Sub
+
+        Public Function GetFrameworkVersionString() As String
+            Try
+                Dim CLRVersion As Version = System.Environment.Version
+
+                If (CLRVersion.Major = 4 & CLRVersion.Minor = 0) Then
+                    '4.0.30319.237   - 4.0
+                    '4.0.30319.17020 - 4.5 (Microsoft .NET Framework 4.5 Developer Preview)
+                    '4.0.30319.17379 - 4.5 (Microsoft .NET Framework 4.5 Consumer Preview)
+                    '4.0.30319.17626 - 4.5 (Microsoft .NET Framework 4.5 RC)
+                    '4.0.30319.17929 - 4.5 (Microsoft .NET Framework 4.5 RTM)
+                    '4.0.30319.18408 - 4.5.1 (Microsoft .NET Framework 4.5.1 RTM - Windows Vista/7 - KB2858728)
+                    '4.0.30319.34003 - 4.5.1 (Microsoft .NET Framework 4.5.1 RTM - Windows 8.1)
+                    '4.0.30319.34209 - 4.5.2 (Microsoft .NET Framework 4.5.2 May 2014 Update)
+                    '4.0.30319.42000 - 4.6 - In .NET Framework 4.6, the Environment.Version property returns the fixed version string 4.0.30319.42000
+
+                    If (CLRVersion >= New Version(4, 0, 30319, 42000)) Then
+                        Return "4.6"
+                    ElseIf (CLRVersion >= New Version(4, 0, 30319, 34209)) Then
+                        Return "4.5.2"
+                    ElseIf (CLRVersion >= New Version(4, 0, 30319, 18408)) Then
+                        Return "4.5.1"
+                    ElseIf (CLRVersion >= New Version(4, 0, 30319, 17020)) Then
+                        Return "4.5"
+                    End If
+                    Return "4.0"   '//4.0.30319.237
+                ElseIf (CLRVersion.Major = 2 & CLRVersion.Minor = 0) Then
+                    If (CLRVersion >= New Version(2, 0, 50727, 3521)) Then     '3.5.1
+                        '2.0.50727.3521 - 3.5.1 in Windows 7 Beta 2
+                        '2.0.50727.4016 - 3.5 SP1 in Windows Vista SP2 or Windows Server 2008 SP2
+                        '2.0.50727.4918 - 3.5.1 in Windows 7 RC or Windows Server 2008 R2
+                        Try
+                            System.Reflection.Assembly.Load("System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")
+                            If (Environment.OSVersion.Platform = PlatformID.Win32NT & Environment.OSVersion.Version.Major >= 6 & Environment.OSVersion.Version.Minor >= 1) Then Return "3.5.1"
+                            Return "3.5 SP1"
+                        Catch ex As Exception
+                        End Try
+                        Return "2.0 SP2"
+                    End If
+                    If (CLRVersion >= New Version(2, 0, 50727, 3053)) Then Return "3.5 SP1"
+                    If (CLRVersion >= New Version(2, 0, 50727, 1433)) Then
+                        '2.0 SP1 or 3.0 SP1 or 3.5
+                        Try
+                            System.Reflection.Assembly.Load("System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089")
+                            Return "3.5"
+                        Catch ex As Exception
+                        End Try
+
+                        Try
+                            System.Reflection.Assembly.Load("WindowsBase, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35")
+                            Return "3.0 SP1"
+                        Catch ex As Exception
+                        End Try
+
+                        Return "2.0 SP1"
+                    End If
+
+                    If (CLRVersion = New Version(2, 0, 50727, 312)) Then Return "3.0" 'Vista RTM
+
+                    '//2.0.50727.42 RTM - 2.0 or 3.0
+                    Try
+                        System.Reflection.Assembly.Load("WindowsBase, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35")
+                        Return "3.0"
+                    Catch ex As Exception
+                    End Try
+
+                    Return "2.0"
+                End If
+
+                Return CLRVersion.Major.ToString(System.Globalization.CultureInfo.InvariantCulture) + "." + CLRVersion.Minor.ToString(System.Globalization.CultureInfo.InvariantCulture)
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "ERREUR GetFrameworkVersionString", "Erreur lors de la récupération da la version du framework .net " & ex.Message)
+                Return ""
+            End Try
+        End Function
 #End Region
 
 #Region "Device"
@@ -3650,7 +3725,8 @@ Namespace HoMIDom
                 Else
                     Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Version de l'OS: " & My.Computer.Info.OSFullName.ToString & " 32 Bits")
                 End If
-                Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Version du Framework: " & System.Runtime.InteropServices.RuntimeEnvironment.GetSystemVersion())
+                'Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Version du Framework: " & System.Runtime.InteropServices.RuntimeEnvironment.GetSystemVersion())
+                Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Version du Framework: " & GetFrameworkVersionString() & " (" & System.Environment.Version.Major & "." & System.Environment.Version.Minor & "." & System.Environment.Version.Build & "." & System.Environment.Version.Revision & ")")
                 Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Répertoire utilisé: " & My.Application.Info.DirectoryPath.ToString)
 
                 'Log(TypeLog.INFO, TypeSource.SERVEUR, "INFO", "Adresse IP du serveur: " & System.Net.Dns.GetHostByName(My.Computer.Name).AddressList(0).ToString())
@@ -5151,6 +5227,18 @@ Namespace HoMIDom
                 Return System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetServerVersion", "Exception : " & ex.Message)
+                Return "ERR: Exception"
+            End Try
+        End Function
+
+        ''' <summary>Retourne la version du framework .net du serveur</summary>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        Public Function GetFrameworkNetServerVersion() As String Implements IHoMIDom.GetFrameworkNetServerVersion
+            Try
+                Return GetFrameworkVersionString()
+            Catch ex As Exception
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetFrameworkNetServerVersion", "Exception : " & ex.Message)
                 Return "ERR: Exception"
             End Try
         End Function

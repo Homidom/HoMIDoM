@@ -180,6 +180,12 @@ Namespace HoMIDom
         ''' <remarks></remarks>
         <OperationContract()> Function GetServerVersion() As String
 
+        ''' <summary>
+        ''' Retourne la version du framework .net du serveur
+        ''' </summary>
+        ''' <returns>Version du framework .net du serveur</returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function GetFrameworkNetServerVersion() As String
 
         ''' <summary>
         ''' Retourne l'heure du serveur

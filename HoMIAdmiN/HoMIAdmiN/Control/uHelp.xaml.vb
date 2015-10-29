@@ -35,7 +35,10 @@ Partial Public Class uHelp
             listesversionsprogrammes.Text &= " Port SOAP utilisé : " & myService.GetPortSOAP & vbCrLf
             listesversionsprogrammes.Text &= " Version Moteur SQLlite: " & myService.GetSqliteVersion & vbCrLf
             listesversionsprogrammes.Text &= " Version de la BDD: " & myService.GetSqliteBddVersion & vbCrLf
-            listesversionsprogrammes.Text &= " Version du frameWork: " & System.Runtime.InteropServices.RuntimeEnvironment.GetSystemVersion() & vbCrLf
+            'listesversionsprogrammes.Text &= " Version du frameWork: " & System.Runtime.InteropServices.RuntimeEnvironment.GetSystemVersion() & vbCrLf
+            listesversionsprogrammes.Text &= " Version du frameWork (admin): " & GetFrameworkVersionString() & " (" & System.Environment.Version.Major & "." & System.Environment.Version.Minor & "." & System.Environment.Version.Build & "." & System.Environment.Version.Revision & ")" & vbCrLf
+            listesversionsprogrammes.Text &= " Version du frameWork (serveur): " & myService.GetFrameworkNetServerVersion & vbCrLf
+
             If System.Environment.Is64BitOperatingSystem = True Then
                 listesversionsprogrammes.Text &= " Version de l'OS: " & My.Computer.Info.OSFullName.ToString & " 64 Bits" & vbCrLf
             Else
