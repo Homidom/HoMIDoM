@@ -5232,11 +5232,11 @@ Namespace HoMIDom
         End Function
 
         ''' <summary>Retourne la version du framework .net du serveur</summary>
-        ''' <returns></returns>
-        ''' <remarks></remarks>
+        ''' <returns>version du framework .net du serveur</returns>
+        ''' <remarks>exemple: 4.5.2 (4.0.30319.18502)</remarks>
         Public Function GetFrameworkNetServerVersion() As String Implements IHoMIDom.GetFrameworkNetServerVersion
             Try
-                Return GetFrameworkVersionString()
+                Return GetFrameworkVersionString() & "(" & System.Environment.Version.Major & "." & System.Environment.Version.Minor & "." & System.Environment.Version.Build & "." & System.Environment.Version.Revision & ")"
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetFrameworkNetServerVersion", "Exception : " & ex.Message)
                 Return "ERR: Exception"
