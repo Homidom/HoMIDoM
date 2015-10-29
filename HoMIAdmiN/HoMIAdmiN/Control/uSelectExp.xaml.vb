@@ -24,24 +24,24 @@
             ' Ajoutez une initialisation quelconque après l'appel InitializeComponent().
 
             typeDevice = New Dictionary(Of Integer, String)
-            typeDevice.Add(1, "DevDimmer") 'APPAREIL = 1
-            typeDevice.Add(2, "DevMultiSwitch") 'AUDIO = 2
+            typeDevice.Add(1, "DevDimmer") 'APPAREIL = 1 ?DevSwitch?
+            typeDevice.Add(2, "DevGenericSensor") 'AUDIO = 2
             typeDevice.Add(3, "DevPressure") 'BAROMETRE = 3
-            typeDevice.Add(4, "DevElectricity")  'BATTERIE = 4
-            typeDevice.Add(5, "DevElectricity") 'COMPTEUR = 5
+            typeDevice.Add(4, "DevGenericSensor")  'BATTERIE = 4
+            typeDevice.Add(5, "DevGenericSensor") 'COMPTEUR = 5
             typeDevice.Add(6, "DevGenericSensor") 'CONTACT = 6
             typeDevice.Add(7, "DevGenericSensor") 'DETECTEUR = 7
             typeDevice.Add(8, "DevWind") 'DIRECTIONVENT = 8
             typeDevice.Add(9, "DevElectricity") 'ENERGIEINSTANTANEE = 9
             typeDevice.Add(10, "DevElectricity") 'ENERGIETOTALE = 10
-            typeDevice.Add(11, "DevMultiSwitch") 'FREEBOX = 11
+            typeDevice.Add(11, "DevGenericSensor") 'FREEBOX = 11
             typeDevice.Add(12, "DevGenericSensor") 'GENERIQUEBOOLEEN = 12
-            typeDevice.Add(13, "DevThermostat") 'GENERIQUESTRING = 13
-            typeDevice.Add(14, "DevDimmer") 'GENERIQUEVALUE = 14
+            typeDevice.Add(13, "DevGenericSensor") 'GENERIQUESTRING = 13
+            typeDevice.Add(14, "DevGenericSensor") 'GENERIQUEVALUE = 14
             typeDevice.Add(15, "DevHygrometry") 'HUMIDITE = 15
             typeDevice.Add(16, "DevDimmer") 'LAMPE = 16
-            typeDevice.Add(17, "DevMultiSwitch") 'METEO = 17
-            typeDevice.Add(18, "DevMultiSwitch") 'MULTIMEDIA = 18
+            typeDevice.Add(17, "DevGenericSensor") 'METEO = 17
+            typeDevice.Add(18, "DevGenericSensor") 'MULTIMEDIA = 18
             typeDevice.Add(19, "DevRain") 'PLUIECOURANT = 19
             typeDevice.Add(20, "DevRain") 'PLUIETOTAL = 20
             typeDevice.Add(21, "DevSwitch") 'Switch = 21
@@ -158,25 +158,15 @@
                 For Each child As CheckBox In dev.Children
                     If child.IsChecked Then
                         cptDevice += 1
-
                         Dim comp = ReturnDeviceByID(child.ToolTip)
-
                         'device                    
-
                         Dim Temp As Device = New Device
-
                         Temp.id = "DEV" & Format(cptDevice, "000")
-
                         Temp.name = comp.Name
-
                         Temp.room = searchZone(comp.ID)
-
                         Temp.type = typeDevice(comp.Type)
-
                         Temp.params = ParamByType(comp)
-
                         DevList.devices.Add(Temp)
-
                     End If
                 Next
 
@@ -185,27 +175,18 @@
                 For Each child As CheckBox In dev.Children
                     If child.IsChecked Then
                         cptDevice += 1
-
                         Dim comp = myService.ReturnMacroById(IdSrv, child.ToolTip)
-
                         'macro
-
                         Dim Temp As Device = New Device
-
                         Temp.id = "DEV" & Format(cptDevice, "000")
-
                         Temp.name = comp.Nom
-
                         Temp.room = searchZone(comp.ID)
-
                         Temp.type = "DevScene"
-
                         Dim params As DeviceParam = New DeviceParam
                         params.key = "LastRun"
                         params.value = Now
                         Temp.params = New List(Of DeviceParam)
                         Temp.params.Add(params)
-
                         DevList.devices.Add(Temp)
                     End If
                 Next
