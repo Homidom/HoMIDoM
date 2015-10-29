@@ -57,16 +57,11 @@
             Dim importOk = ImportImperiHome()
             For Each device In myService.GetAllDevices(IdSrv)
 
-                Dim stk As New StackPanel
-                stk.Orientation = Orientation.Horizontal
                 Dim x As New CheckBox
                 x.Content = device.Name
                 x.ToolTip = device.ID
                 x.HorizontalAlignment = HorizontalAlignment.Left
-                stk.Children.Add(x)
-                stk.HorizontalAlignment = HorizontalAlignment.Left
-                ListBox1.Items.Add(stk)
-                x.IsChecked = True
+                x.IsChecked = False
                 If importOk Then
                     For Each dev In allDevImperi.devices
                         If dev.name = device.Name Then
@@ -74,6 +69,11 @@
                         End If
                     Next
                 End If
+                Dim stk As New StackPanel
+                stk.Orientation = Orientation.Horizontal
+                stk.Children.Add(x)
+                stk.HorizontalAlignment = HorizontalAlignment.Left
+                ListBoxDevices.Items.Add(stk)
                 x = Nothing
             Next
 
@@ -86,16 +86,11 @@
             'macro
 
             For Each macro In myService.GetAllMacros(IdSrv)
-                Dim stk As New StackPanel
-                stk.Orientation = Orientation.Horizontal
                 Dim x As New CheckBox
                 x.Content = macro.Nom
                 x.ToolTip = macro.ID
                 x.HorizontalAlignment = HorizontalAlignment.Left
-                stk.Children.Add(x)
-                stk.HorizontalAlignment = HorizontalAlignment.Left
-                ListBox2.Items.Add(stk)
-                x.IsChecked = True
+                x.IsChecked = False
                 If importOk Then
                     For Each dev In allDevImperi.devices
                         If dev.name = macro.Nom Then
@@ -103,6 +98,11 @@
                         End If
                     Next
                 End If
+                Dim stk As New StackPanel
+                stk.Orientation = Orientation.Horizontal
+                stk.Children.Add(x)
+                stk.HorizontalAlignment = HorizontalAlignment.Left
+                ListBoxMacros.Items.Add(stk)
                 x = Nothing
             Next
 
@@ -121,283 +121,317 @@
         Try
             ExportImperiHome()
             RaiseEvent CloseMe(Me)
-
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub uSelectExp BtnOK_Click: " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
     Private Function ImportImperiHome() As Boolean
+        Try
+            Dim fileName = My.Application.Info.DirectoryPath & "\Drivers\Imperihome\devices.json"
 
-
-        Dim fileName = My.Application.Info.DirectoryPath & "\Drivers\Imperihome\devices.json"
-
-        If System.IO.File.Exists(fileName) Then
-            Dim stream = System.IO.File.ReadAllText(fileName)
-            allDevImperi = Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(DeviceList))
-            Return True
-        Else
-            Return False
-        End If
-
+            If System.IO.File.Exists(fileName) Then
+                Dim stream = System.IO.File.ReadAllText(fileName)
+                allDevImperi = Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(DeviceList))
+                Return True
+            Else
+                Return False
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR ImportImperiHome: " & ex.ToString, "ERREUR", "ImportImperiHome")
+            Return Nothing
+        End Try
     End Function
 
     Private Function ExportImperiHome() As Boolean
+        Try
 
+            cptDevice = 0
+            cptRoom = 0
 
-        cptDevice = 0
-        cptRoom = 0
+            DevList = New DeviceList
+            DevList.devices = New List(Of Device)
+            ZoneList = New RoomList
+            ZoneList.rooms = New List(Of Room)
 
-        DevList = New DeviceList
-        DevList.devices = New List(Of Device)
-        ZoneList = New RoomList
-        ZoneList.rooms = New List(Of Room)
+            For Each dev As StackPanel In ListBoxDevices.Items
+                For Each child As CheckBox In dev.Children
+                    If child.IsChecked Then
+                        cptDevice += 1
 
-        For Each dev As StackPanel In ListBox1.Items
-            For Each child As CheckBox In dev.Children
-                If child.IsChecked Then
-                    cptDevice += 1
+                        Dim comp = ReturnDeviceByID(child.ToolTip)
 
-                    Dim comp = ReturnDeviceByID(child.ToolTip)
+                        'device                    
 
-                    'device                    
+                        Dim Temp As Device = New Device
 
-                    Dim Temp As Device = New Device
+                        Temp.id = "DEV" & Format(cptDevice, "000")
 
-                    Temp.id = "DEV" & Format(cptDevice, "000")
+                        Temp.name = comp.Name
 
-                    Temp.name = comp.Name
+                        Temp.room = searchZone(comp.ID)
 
-                    Temp.room = searchZone(comp.ID)
+                        Temp.type = typeDevice(comp.Type)
 
-                    Temp.type = typeDevice(comp.Type)
+                        Temp.params = ParamByType(comp)
 
-                    Temp.params = ParamByType(comp)
+                        DevList.devices.Add(Temp)
 
-                    DevList.devices.Add(Temp)
+                    End If
+                Next
 
-                End If
             Next
+            For Each dev As StackPanel In ListBoxMacros.Items
+                For Each child As CheckBox In dev.Children
+                    If child.IsChecked Then
+                        cptDevice += 1
 
-        Next
-        For Each dev As StackPanel In ListBox2.Items
-            For Each child As CheckBox In dev.Children
-                If child.IsChecked Then
-                    cptDevice += 1
+                        Dim comp = myService.ReturnMacroById(IdSrv, child.ToolTip)
 
-                    Dim comp = myService.ReturnMacroById(IdSrv, child.ToolTip)
+                        'macro
 
-                    'macro
+                        Dim Temp As Device = New Device
 
-                    Dim Temp As Device = New Device
+                        Temp.id = "DEV" & Format(cptDevice, "000")
 
-                    Temp.id = "DEV" & Format(cptDevice, "000")
+                        Temp.name = comp.Nom
 
-                    Temp.name = comp.Nom
+                        Temp.room = searchZone(comp.ID)
 
-                    Temp.room = searchZone(comp.ID)
+                        Temp.type = "DevScene"
 
-                    Temp.type = "DevScene"
+                        Dim params As DeviceParam = New DeviceParam
+                        params.key = "LastRun"
+                        params.value = Now
+                        Temp.params = New List(Of DeviceParam)
+                        Temp.params.Add(params)
 
-                    Dim params As DeviceParam = New DeviceParam
-                    params.key = "LastRun"
-                    params.value = Now
-                    Temp.params = New List(Of DeviceParam)
-                    Temp.params.Add(params)
-
-                    DevList.devices.Add(Temp)
-                End If
+                        DevList.devices.Add(Temp)
+                    End If
+                Next
             Next
-        Next
-        Dim BasePath As System.IO.DirectoryInfo = New System.IO.DirectoryInfo(My.Application.Info.DirectoryPath & "\Drivers\")
-        Dim NewPath As System.IO.DirectoryInfo = New System.IO.DirectoryInfo("Imperihome")
-        Dim DitPath() As System.IO.DirectoryInfo
-        DitPath = BasePath.GetDirectories
-        If Not DitPath.Contains(NewPath) Then
-            BasePath.CreateSubdirectory("Imperihome")
-        End If
+            Dim BasePath As System.IO.DirectoryInfo = New System.IO.DirectoryInfo(My.Application.Info.DirectoryPath & "\Drivers\")
+            Dim NewPath As System.IO.DirectoryInfo = New System.IO.DirectoryInfo("Imperihome")
+            Dim DitPath() As System.IO.DirectoryInfo
+            DitPath = BasePath.GetDirectories
+            If Not DitPath.Contains(NewPath) Then
+                BasePath.CreateSubdirectory("Imperihome")
+            End If
 
-        Dim stream As String = ""
+            Dim stream As String = ""
 
-        stream = Newtonsoft.Json.JsonConvert.SerializeObject(DevList)
-        System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\Drivers\Imperihome\devices.json", stream)
+            stream = Newtonsoft.Json.JsonConvert.SerializeObject(DevList)
+            System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\Drivers\Imperihome\devices.json", stream)
 
-        stream = Newtonsoft.Json.JsonConvert.SerializeObject(ZoneList)
-        System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\Drivers\Imperihome\rooms.json", stream)
+            stream = Newtonsoft.Json.JsonConvert.SerializeObject(ZoneList)
+            System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\Drivers\Imperihome\rooms.json", stream)
 
-        SysInfo = New SystemInfo
-        SysInfo.id = IdSrv
-        SysInfo.apiversion = 1
-        stream = Newtonsoft.Json.JsonConvert.SerializeObject(SysInfo)
-        System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\Drivers\Imperihome\system.json", stream)
+            SysInfo = New SystemInfo
+            SysInfo.id = IdSrv
+            SysInfo.apiversion = 1
+            stream = Newtonsoft.Json.JsonConvert.SerializeObject(SysInfo)
+            System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\Drivers\Imperihome\system.json", stream)
 
-        Retour = New ActionFeedback
-        Retour.success = True
-        Retour.errormsg = "ok"
-        stream = Newtonsoft.Json.JsonConvert.SerializeObject(Retour)
-        System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\Drivers\Imperihome\action_ret.json", stream)
+            Retour = New ActionFeedback
+            Retour.success = True
+            Retour.errormsg = "ok"
+            stream = Newtonsoft.Json.JsonConvert.SerializeObject(Retour)
+            System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\Drivers\Imperihome\action_ret.json", stream)
 
-
-
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "L'export de la configuration pour ImperHome a été effectué", "Export Vers ImperiHome", "ExportImperiHome")
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR ExportImperiHome: " & ex.ToString, "ERREUR", "ExportImperiHome")
+            Return Nothing
+        End Try
     End Function
 
     Private Function searchZone(ByVal idDevice As String) As String
-
-        Dim idzone As String = ""
-        Dim devZone As List(Of String)
-        For Each zones In zoneName
-            devZone = myService.GetDeviceInZone(IdSrv, zones.Key)
-            devZone.AddRange(myService.GetMacroInZone(IdSrv, zones.Key))
-            For Each iddev In devZone
-                If iddev = idDevice Then
-                    idzone = zones.Key
+        Try
+            Dim idzone As String = ""
+            Dim devZone As List(Of String)
+            For Each zones In zoneName
+                devZone = myService.GetDeviceInZone(IdSrv, zones.Key)
+                devZone.AddRange(myService.GetMacroInZone(IdSrv, zones.Key))
+                For Each iddev In devZone
+                    If iddev = idDevice Then
+                        idzone = zones.Key
+                        Exit For
+                    End If
+                Next
+                If idzone = zones.Key Then
                     Exit For
                 End If
             Next
-            If idzone = zones.Key Then
-                Exit For
+
+            Dim tempRoom As Room = New Room
+
+            If idzone = "" Then
+                If ZoneList.rooms IsNot Nothing Then
+                    For Each room As Room In ZoneList.rooms
+                        If room.name = "Reserve" Then
+                            Return room.id
+                            Exit Function
+                        End If
+                    Next
+                End If
+                tempRoom.id = "ROOM99" & Format(cptRoom, "00")
+                tempRoom.name = "Reserve"
+                ZoneList.rooms.Add(tempRoom)
+                Return tempRoom.id
+                Exit Function
             End If
-        Next
 
-        Dim tempRoom As Room = New Room
-
-        If idzone = "" Then
             If ZoneList.rooms IsNot Nothing Then
                 For Each room As Room In ZoneList.rooms
-                    If room.name = "Reserve" Then
+                    If room.name = zoneName(idzone) Then
                         Return room.id
                         Exit Function
                     End If
                 Next
             End If
-            tempRoom.id = "ROOM99" & Format(cptRoom, "00")
-            tempRoom.name = "Reserve"
+            cptRoom += 1
+            tempRoom.id = "ROOM" & Format(cptRoom, "00")
+            tempRoom.name = zoneName(idzone)
             ZoneList.rooms.Add(tempRoom)
             Return tempRoom.id
-            Exit Function
-        End If
-
-        If ZoneList.rooms IsNot Nothing Then
-            For Each room As Room In ZoneList.rooms
-                If room.name = zoneName(idzone) Then
-                    Return room.id
-                    Exit Function
-                End If
-            Next
-        End If
-        cptRoom += 1
-        tempRoom.id = "ROOM" & Format(cptRoom, "00")
-        tempRoom.name = zoneName(idzone)
-        ZoneList.rooms.Add(tempRoom)
-        Return tempRoom.id
-
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR searchZone: " & ex.ToString, "ERREUR", "searchZone")
+            Return ""
+        End Try
     End Function
 
 
     Private Function ParamByType(ByVal comp As HoMIDom.HoMIDom.TemplateDevice) As List(Of DeviceParam)
-        Dim tempParams As List(Of DeviceParam) = New List(Of DeviceParam)
-        Dim params(10) As DeviceParam
+        Try
+            Dim tempParams As List(Of DeviceParam) = New List(Of DeviceParam)
+            Dim params(10) As DeviceParam
 
 
-        Select Case comp.Type
+            Select Case comp.Type
 
-            Case 1 '"APPAREIL"
-                params(0) = New DeviceParam
-                params(0).key = "Status"
-                params(0).value = comp.Value
+                Case 1 '"APPAREIL"
+                    params(0) = New DeviceParam
+                    params(0).key = "Status"
+                    params(0).value = comp.Value
 
-            Case 27 '"VOLET"
-                params(0) = New DeviceParam
-                params(0).key = "Level"
-                params(0).value = comp.Value
+                Case 27 '"VOLET"
+                    params(0) = New DeviceParam
+                    params(0).key = "Level"
+                    params(0).value = comp.Value
 
-            Case 16 '"LAMPE"
-                params(0) = New DeviceParam
-                params(0).key = "Level"
-                params(0).value = comp.Value
-                params(1) = New DeviceParam
-                params(1).key = "Status"
-                If comp.Value > 0 Then
-                    params(1).value = "1"
-                Else
-                    params(1).value = "0"
+                Case 16 '"LAMPE"
+                    params(0) = New DeviceParam
+                    params(0).key = "Level"
+                    params(0).value = comp.Value
+                    params(1) = New DeviceParam
+                    params(1).key = "Status"
+                    If comp.Value > 0 Then
+                        params(1).value = "1"
+                    Else
+                        params(1).value = "0"
+                    End If
+
+                Case 9 '"ENERGIEINSTANTANEE"
+                    params(0) = New DeviceParam
+                    params(0).key = "Watts"
+                    params(0).value = comp.Value
+
+                Case 10 '"ENERGIETOTALE"
+                    params(0) = New DeviceParam
+                    params(0).key = "ConsoTotal"
+                    params(0).value = comp.Value
+
+                Case 15, 25, 3, 19, 23, 7 '"HUMIDITE", "UV", "BAROMETRE, "PLUIECOURANT", "TEMPERATURE", "DETECTEUR"
+                    params(0) = New DeviceParam
+                    params(0).key = "Value"
+                    params(0).value = comp.Value
+
+                Case 21 '"SWITCH"
+                    params(0) = New DeviceParam
+                    params(0).key = "Status"
+                    If comp.Value = False Then
+                        params(0).value = "0"
+                    Else
+                        params(0).value = "1"
+                    End If
+
+                Case 26 '"VITESSEVENT"
+                    params(0) = New DeviceParam
+                    params(0).key = "Speed"
+                    params(0).value = comp.Value
+
+                Case 8 ' "DIRECTIONVENT"
+                    params(0) = New DeviceParam
+                    params(0).key = "Direction"
+                    params(0).value = comp.Value
+
+                Case 20 '"PLUIETOTAL"
+                    params(0) = New DeviceParam
+                    params(0).key = "Accumulation"
+                    params(0).value = comp.Value
+
+                Case 24 '"TEMPERATURECONSIGNE"
+                    params(0) = New DeviceParam
+                    params(0).key = "cursetpoint"
+                    params(0).value = comp.Value
+
+                Case 28 '"LAMPERGBW"
+                    params(0) = New DeviceParam
+                    params(0).key = "Level"
+                    params(0).value = comp.Value
+                    params(1) = New DeviceParam
+                    params(1).key = "whitechannel"
+                    params(1).value = comp.temperature
+                    params(2) = New DeviceParam
+                    params(2).key = "color"
+                    params(2).value = comp.optionnal
+
+                Case Else
+                    params(0) = New DeviceParam
+                    params(0).key = "Value"
+                    params(0).value = comp.Value
+
+            End Select
+
+            For i = 0 To params.Count - 1
+                If params(i) IsNot Nothing Then
+                    If params(i).value.Contains(","c) Then
+                        params(i).value.Replace(Chr(44), Chr(46))
+                    End If
+                    tempParams.Add(params(i))
                 End If
+            Next
 
-            Case 9 '"ENERGIEINSTANTANEE"
-                params(0) = New DeviceParam
-                params(0).key = "Watts"
-                params(0).value = comp.Value
-
-            Case 10 '"ENERGIETOTALE"
-                params(0) = New DeviceParam
-                params(0).key = "ConsoTotal"
-                params(0).value = comp.Value
-
-            Case 15, 25, 3, 19, 23, 7 '"HUMIDITE", "UV", "BAROMETRE, "PLUIECOURANT", "TEMPERATURE", "DETECTEUR"
-                params(0) = New DeviceParam
-                params(0).key = "Value"
-                params(0).value = comp.Value
-
-            Case 21 '"SWITCH"
-                params(0) = New DeviceParam
-                params(0).key = "Status"
-                If comp.Value = False Then
-                    params(0).value = "0"
-                Else
-                    params(0).value = "1"
-                End If
-
-            Case 26 '"VITESSEVENT"
-                params(0) = New DeviceParam
-                params(0).key = "Speed"
-                params(0).value = comp.Value
-
-            Case 8 ' "DIRECTIONVENT"
-                params(0) = New DeviceParam
-                params(0).key = "Direction"
-                params(0).value = comp.Value
-
-            Case 20 '"PLUIETOTAL"
-                params(0) = New DeviceParam
-                params(0).key = "Accumulation"
-                params(0).value = comp.Value
-
-            Case 24 '"TEMPERATURECONSIGNE"
-                params(0) = New DeviceParam
-                params(0).key = "cursetpoint"
-                params(0).value = comp.Value
-
-            Case 28 '"LAMPERGBW"
-                params(0) = New DeviceParam
-                params(0).key = "Level"
-                params(0).value = comp.Value
-                params(1) = New DeviceParam
-                params(1).key = "whitechannel"
-                params(1).value = comp.temperature
-                params(2) = New DeviceParam
-                params(2).key = "color"
-                params(2).value = comp.optionnal
-
-            Case Else
-                params(0) = New DeviceParam
-                params(0).key = "Value"
-                params(0).value = comp.Value
-
-        End Select
-
-        For i = 0 To params.Count - 1
-            If params(i) IsNot Nothing Then
-                If params(i).value.Contains(","c) Then
-                    params(i).value.Replace(Chr(44), Chr(46))
-                End If
-                tempParams.Add(params(i))
-            End If
-        Next
-
-        Return tempParams
-
+            Return tempParams
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR ParamByType: " & ex.ToString, "ERREUR", "ParamByType")
+            Return Nothing
+        End Try
     End Function
 
+    Private Sub Chkselectdevices_CheckedUnchecked(sender As Object, e As RoutedEventArgs) Handles Chkselectdevices.Checked, Chkselectdevices.Unchecked
+        Try
+                For Each dev As StackPanel In ListBoxDevices.Items
+                    For Each child As CheckBox In dev.Children
+                        child.IsChecked = Chkselectdevices.IsChecked
+                    Next
+                Next
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Chkselectdevices_CheckedUnchecked: " & ex.ToString, "ERREUR", "Chkselectdevices_CheckedUnchecked")
+        End Try
+    End Sub
+
+    Private Sub Chkselectmacros_CheckedUnchecked(sender As Object, e As RoutedEventArgs) Handles Chkselectmacros.Checked, Chkselectmacros.Unchecked
+        Try
+            For Each dev As StackPanel In ListBoxMacros.Items
+                For Each child As CheckBox In dev.Children
+                    child.IsChecked = Chkselectmacros.IsChecked
+                Next
+            Next
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Chkselectmacros_CheckedUnchecked: " & ex.ToString, "ERREUR", "Chkselectmacros_CheckedUnchecked")
+        End Try
+    End Sub
 End Class
 
 ''' <summary>Class DeviceParam, Défini le type parametre de composant pour le client Imperihome</summary>
