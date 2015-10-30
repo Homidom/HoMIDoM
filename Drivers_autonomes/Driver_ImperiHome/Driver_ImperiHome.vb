@@ -623,26 +623,45 @@ Public Class DevicesController
             Dim allDev = Driver_ImperiHome.CurrentServer.GetAllDevices(Me.ServerKey)
             Dim allDevImperi As DeviceList = Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(DeviceList))
             Dim allHisto As Object = ""
+            Dim epoch As New DateTime(1970, 1, 1)
+            Dim dtstart As String = Format(epoch.AddSeconds(startDate / 1000), "yyyy-MM-dd hh:mm:ss")
+            Dim dtend As String = Format(epoch.AddSeconds(enddate / 1000), "yyyy-MM-dd hh:mm:ss")
+
             For Each devImperi In allDevImperi.devices
                 For Each dev In allDev
                     If dev.Name = devImperi.name Then
-                        allHisto = Driver_ImperiHome.CurrentServer.GetHistoDeviceSource(Me.ServerKey, dev.ID, "value", startDate, enddate)
+                        allHisto = Driver_ImperiHome.CurrentServer.GetHistoDeviceSource(Me.ServerKey, dev.ID, "Value", dtstart, dtend)
                     End If
                 Next
             Next
 
-            Dim Val As Value = New Value
-
-            For Each histo In allHisto
-                Val.Date = histo.DateTime
-                Val.Value = histo.Value
+            If allHisto.count > 0 Then
+                For Each histo In allHisto
+                    Dim Val As Value = New Value
+                    Val.date = date_to_long(histo.DateTime)
+                    Val.value = histo.Value
+                    allHistImperi.values.Add(Val)
+                Next
+            Else
+                Dim Val As Value = New Value
+                Val.Date = date_to_long(Now)
+                Val.Value = 0
                 allHistImperi.values.Add(Val)
-            Next
+            End If
+            stream = Newtonsoft.Json.JsonConvert.SerializeObject(allHistImperi)
+            System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\Drivers\Imperihome\histo.json", stream)
 
             Return allHistImperi
         Else
             Return "error"
         End If
+    End Function
+    Private Function date_to_long(ByVal dt As Date) As Long
+        'converti de  date et heure vers temps unix
+        Dim origin As New Date(1970, 1, 1)
+        Dim span As TimeSpan = dt - origin
+        Dim seconds As Double = span.TotalMilliseconds
+        Return CType(seconds, Long)
     End Function
 
     <HttpGet()>
@@ -900,8 +919,8 @@ End Class
 ''' <summary>Class Value, Défini le type valeur pour le client Imperihome</summary>
 <Serializable()> Public Class Value
 
-    Public Value As String = ""
-    Public [Date] As String = ""
+    Public [date] As Long
+    Public value As Double
 
 End Class
 
@@ -909,6 +928,9 @@ End Class
 <Serializable()> Public Class ValueList
 
     Public values As List(Of Value)
+    Sub New()
+        values = New List(Of Value)
+    End Sub
 
 End Class
 
