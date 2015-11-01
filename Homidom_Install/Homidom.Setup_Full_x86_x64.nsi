@@ -20,7 +20,7 @@
 ; --- Version du Framework .NET requis et URL de téléchargement
 !define DOT_MAJOR "4"
 !define DOT_MINOR "0"
-!define URL_DOTNET "http://download.microsoft.com/download/9/5/A/95A9616B-7A37-4AF6-BC36-D6EA96C8DAAE/dotNetFx40_Full_x86_x64.exe"
+!define URL_DOTNET "https://download.microsoft.com/download/C/3/A/C3A5200B-D33C-47E9-9D70-2F7C65DAAD94/NDP46-KB3045557-x86-x64-AllOS-ENU.exe"
 
 ; --- Dossier racine contenant les sources (relatif à l'emplacement du script NSIS)
 !define ROOT_DIR ".."
@@ -49,8 +49,9 @@ VIAddVersionKey "FileVersion" "${PRODUCT_VERSION}.${PRODUCT_BUILD}.${PRODUCT_REV
 
 ; --- inclusion du code de détection et de téléchargement du Framework .NET
 !include "includes\CheckDotNetInstalled.nsh"
-!include "includes\Redist.VC2010.nsh"
+!include "includes\Redist.VC10.nsh"
 !include "includes\Redist.VC11.nsh"
+!include "includes\Redist.VC12.nsh"
 
 ; MUI Settings
 !define MUI_ABORTWARNING
