@@ -628,11 +628,13 @@ Public Class DevicesController
             Dim dtend As String = Format(epoch.AddSeconds(enddate / 1000), "yyyy-MM-dd hh:mm:ss")
 
             For Each devImperi In allDevImperi.devices
-                For Each dev In allDev
-                    If dev.Name = devImperi.name Then
-                        allHisto = Driver_ImperiHome.CurrentServer.GetHistoDeviceSource(Me.ServerKey, dev.ID, "Value", dtstart, dtend)
-                    End If
-                Next
+                If id = devImperi.id Then
+                    For Each dev In allDev
+                        If dev.Name = devImperi.name Then
+                            allHisto = Driver_ImperiHome.CurrentServer.GetHistoDeviceSource(Me.ServerKey, dev.ID, "Value", dtstart, dtend)
+                        End If
+                    Next
+                End If
             Next
 
             If allHisto.count > 0 Then
