@@ -56,7 +56,13 @@ Imports HoMIOAuth2
 #Region "Variables internes"
 
     Dim Auth As Authentication
+    Dim devlist1 As DeviceList2
     Dim devlist As DeviceList
+    Dim meteolist As DeviceList
+    Dim thermlist As DeviceList
+
+    Dim thermostat As List(Of String) = New List(Of String)
+    Dim meteo As List(Of String) = New List(Of String)
 
     'param avancé
     Dim _DEBUG As Boolean = False
@@ -66,24 +72,18 @@ Imports HoMIOAuth2
     Dim cpt_restart As Integer
     Dim First As Boolean = True
 
-    Public Class DeviceList
+    Public Class DeviceList2
         Public status As String
-        Public body As body
+        Public body As body2
         Public time_exec As Double
     End Class
 
-    Public Class datasmodule
-        Public body As body
-        Public time_exec As String
-        Public time_server As String
+    Public Class body2
+        Public devices As List(Of devices2)
+        Public modules As List(Of modules2)
     End Class
 
-    Public Class body
-        Public devices As List(Of devices)
-        Public modules As List(Of modules)
-    End Class
-
-    Public Class modules
+    Public Class modules2
         Public _id As String
         Public battery_rint As Integer
         Public battery_vp As Integer
@@ -97,10 +97,10 @@ Imports HoMIOAuth2
         Public module_name As String
         Public rf_status As Integer
         Public type As String
-        Public dashboard_data As dashboarddata
+        Public dashboard_data As dashboarddata2
     End Class
 
-    Public Class devices
+    Public Class devices2
         Public _id As String
         Public access_code As String
         Public battery_rint As Integer
@@ -125,10 +125,10 @@ Imports HoMIOAuth2
         Public user_owner As String
         Public wifi_status As Integer
         Public streaming_key As String
-        Public dashboard_data As dashboarddata
+        Public dashboard_data As dashboarddata2
     End Class
 
-    Public Class dashboarddata
+    Public Class dashboarddata2
         Public AbsolutePressure As Double
         Public CO2 As Integer
         Public Humidity As Double
@@ -150,19 +150,177 @@ Imports HoMIOAuth2
         Public time_utc As Integer
     End Class
 
-    Class netatmodate
+    Public Class DeviceList
+        Public status As String
+        Public body As body
+        Public time_exec As Double
+        Public time_server As Long
+    End Class
+
+    Public Class datasmodule
+        Public body As body
+        Public time_exec As String
+        Public time_server As String
+    End Class
+
+    Public Class body
+        Public devices As List(Of Devices)
+        Public user As user
+    End Class
+
+    Public Class modules
+        Public _id As String
+        Public battery_rint As Integer
+        Public battery_vp As Integer
+        Public date_setup As netatmodate
+        Public firmware As Integer
+        Public last_alarm_stored As Integer
+        Public last_event_stored As Integer
+        Public last_message As Long
+        Public last_seen As Long
+        Public main_device As String
+        Public module_name As String
+        Public rf_status As Integer
+        Public type As String
+        Public therm_orientation As Integer
+        Public therm_relay_cmd As Integer
+        Public setpoint_history As List(Of setpoint_history)
+        Public last_therm_seen As Long
+        Public setpoint As setpoint
+        Public therm_program_list As List(Of therm_program_list)
+        Public measured As measured
+        Public dashboard_data As dashboarddata
+        Public data_type As List(Of String)
+    End Class
+
+    Public Class devices
+        Public _id As String
+        Public co2_calibrating As Boolean
+        Public access_code As String
+        Public battery_rint As Integer
+        Public battery_vp As Integer
+        Public date_creation As netatmodate
+        Public firmware As Integer
+        Public invitation_disable As Boolean
+        Public ip As String
+        Public last_alarm_stored As Integer
+        Public last_data_store As Object
+        Public last_event_stored As Integer
+        Public last_status_store As Long
+        Public last_upgrade As Integer
+        Public module_name As String
+        Public modules As List(Of modules)
+        Public netcom_transport As String
+        Public place As place
+        Public public_ext_data As Boolean
+        Public rf_amb_status As Integer
+        Public station_name As String
+        Public type As String
+        Public update_device As Boolean
+        Public user_owner As String
+        Public wifi_status As Integer
+        Public streaming_key As String
+        Public dashboard_data As dashboarddata
+        Public data_type As List(Of String)
+        Public udp_conn As Boolean
+        Public last_plug_seen As Long
+    End Class
+
+    Public Class dashboarddata
+        Public AbsolutePressure As Double
+        Public CO2 As Integer
+        Public Humidity As Double
+        Public Noise As Integer
+        Public Pressure As Double
+        Public Rain As Double
+        Public sum_rain_24 As Double
+        Public sum_rain_1 As Double
+        Public Temperature As Double
+        Public date_max_temp As Long
+        Public date_min_temp As Long
+        Public max_temp As Double
+        Public min_temp As Double
+        Public WindAngle As Integer
+        Public WindStrength As Integer
+        Public GustAngle As Integer
+        Public GustStrength As Integer
+        Public WindHistoric As List(Of WindHistoric)
+        Public date_max_wind_str As Long
+        Public max_wind_angle As Integer
+        Public max_wind_str As Integer
+        Public time_utc As Long
+    End Class
+
+    Public Class WindHistoric
+        Public WindAngle As Integer
+        Public WindStrength As Integer
+        Public time_utc As Long
+    End Class
+
+    Public Class netatmodate
         Public sec As Integer
         Public usec As Integer
     End Class
 
-    Class place
+    Public Class place
         Public altitude As Integer
         Public bssid As String
         Public city As String
         Public country As String
+        Public improveLocProposed As Boolean
         Public location As List(Of Double)
         Public timezone As String
         Public trust_location As Boolean
+    End Class
+
+    Public Class user
+        Public mail As String
+        Public administrative As administrative
+    End Class
+
+    Public Class administrative
+        Public reg_locale As String
+        Public lang As String
+        Public unit As Integer
+        Public windunit As Integer
+        Public pressureunit As Integer
+        Public feel_like_algo As Integer
+    End Class
+
+    Public Class setpoint_history
+        Public setpoint As setpoint
+        Public timestamp As Long
+    End Class
+
+    Public Class setpoint
+        Public setpoint_temp As Double
+        Public setpoint_endtime As Long
+        Public setpoint_mode As String
+    End Class
+
+    Public Class zones
+        Public type As Integer
+        Public temp As Integer
+        Public id As Integer
+    End Class
+
+    Public Class timetable
+        Public id As Integer
+        Public m_offset As Integer
+    End Class
+
+    Public Class therm_program_list
+        Public zones As List(Of zones)
+        Public timetable As List(Of timetable)
+        Public program_id As String
+        Public name As String
+        Public selected As Boolean
+    End Class
+
+    Public Class measured
+        Public time As Long
+        Public temperature As Double
+        Public setpoint_temp As Integer
     End Class
 
 #End Region
@@ -413,7 +571,7 @@ Imports HoMIOAuth2
             'récupération des paramétres avancés
             Try
                 _DEBUG = _Parametres.Item(0).Valeur
-
+                First = True
             Catch ex As Exception
                 _DEBUG = False
                 _Parametres.Item(0).Valeur = False
@@ -745,40 +903,88 @@ Imports HoMIOAuth2
     Private Sub ScanData()
 
         Try
-line1:
             Dim client As New Net.WebClient
-            Dim responsebody = client.DownloadString("https://api.netatmo.net/api/devicelist?access_token=" & Auth.access_token)
-            devlist = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(DeviceList))
+            Dim responsebody As String
 
-            WriteLog("DBG: ScanData : " & responsebody.ToString)
 
             If First Then
+                Try
+line1:
+                    responsebody = client.DownloadString("https://api.netatmo.net/api/devicelist?access_token=" & Auth.access_token)
+                Catch ex As Exception
+                    ' recherche du device/module a interroger
+                    cpt_restart += 1
+                    If cpt_restart < 4 Then
+                        GetRefreshToken("Netatmo", "https://api.netatmo.net/oauth2/token")
+                        GoTo line1
+                    Else
+                        WriteLog("ERR: Verifié que votre authentification est valide avec HoMIAdmiN dans HoMIDoM/Config")
+                        WriteLog("ERR: ScanData, Exception : " & ex.Message)
+                        cpt_restart = 0
+                        Exit Sub
+                    End If
+                End Try
+
+                meteo = New List(Of String)
+                thermostat = New List(Of String)
+
+                devlist1 = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(DeviceList2))
                 Dim IdLib As String = ""
-                Dim i As Integer
-                WriteLog("DBG: Device : " & devlist.body.devices.Item(0).module_name & " | type -> " & devlist.body.devices.Item(0).type & ", ID = " & devlist.body.devices.Item(0)._id)
-                IdLib += devlist.body.devices.Item(0).module_name
-                WriteLog("DBG: Nbre module : " & devlist.body.modules.Count)
-                For i = 0 To devlist.body.modules.Count - 1
-                    WriteLog("DBG: Module : " & devlist.body.modules.Item(i).module_name & " | type -> " & devlist.body.modules.Item(i).type & ", ID = " & devlist.body.modules.Item(i)._id)
-                    IdLib += "|"
-                    IdLib += devlist.body.modules.Item(i).module_name
+                For Each Device In devlist1.body.devices
+
+                    WriteLog("DBG: Device : " & Device.module_name & " | type -> " & Device.type & ", ID = " & Device._id)
+                    IdLib += Device.module_name
+
+                    If Device.type = "NAMain" Then
+                        meteo.Add(Device._id)
+                    End If
+                    If Device.type = "NAPlug" Then
+                        thermostat.Add(Device._id)
+                    End If
+
+                    WriteLog("DBG: Nbre module : " & Device.modules.Count)
+                    For Each _module In devlist1.body.modules
+                        WriteLog("DBG: Module : " & _module.module_name & " | type -> " & _module.type & ", ID = " & _module._id)
+                        IdLib += "|"
+                        IdLib += _module.module_name
+                    Next
                 Next
                 Add_LibelleDevice("ADRESSE1", "Nom du module", "Nom du module en respectant maj./minuscule", IdLib)
                 First = False
             End If
+
+            devlist = Nothing
+
+            'getthermostatsdata?access_token=[YOUR_ACCESS_TOKEN]&device_id=[RELAY_ID]
+            'setthermpoint?access_token=[YOURTOKEN]&device_id=[RELAY_ID]&module_id=[THERM_ID]&setpoint_mode=away
+            For Each _thermostat In thermostat
+                responsebody = client.DownloadString("https://api.netatmo.net/api/getthermostatsdata?access_token=" & Auth.access_token & "&device_id=" & _thermostat)
+                thermlist = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(DeviceList))
+                If devlist Is Nothing Then
+                    devlist = thermlist
+                Else
+                    devlist.body.devices.AddRange(thermlist.body.devices)
+                End If
+
+                WriteLog("DBG: ScanData : " & responsebody.ToString)
+            Next
+
+            'getstationsdata?access_token=[YOUR_ACCESS_TOKEN]&device_id=[DEVICE_ID]
+            For Each _meteo In meteo
+                responsebody = client.DownloadString("https://api.netatmo.net/api/getstationsdata?access_token=" & Auth.access_token & "&device_id=" & _meteo)
+                meteolist = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(DeviceList))
+                If devlist Is Nothing Then
+                    devlist = meteolist
+                Else
+                    devlist.body.devices.AddRange(meteolist.body.devices)
+                End If
+                WriteLog("DBG: ScanData : " & responsebody.ToString)
+            Next
+
             cpt += 1
             cpt_restart = 0
         Catch ex As Exception
-            ' recherche du device/module a interroger
-            cpt_restart += 1
-            If cpt_restart < 4 Then
-                GetRefreshToken("Netatmo", "https://api.netatmo.net/oauth2/token")
-                GoTo line1
-            Else
-                WriteLog("ERR: Verifié que votre authentification est valide avec HoMIAdmiN dans HoMIDoM/Config")
-                WriteLog("ERR: ScanData, Exception : " & ex.Message)
-                cpt_restart = 0
-            End If
+            WriteLog("ERR: ScanData, Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -799,10 +1005,10 @@ line1:
                 deviceIDalire = devlist.body.devices.Item(0)._id
                 Typealire = devlist.body.devices.Item(0).type
             End If
-            For i = 0 To devlist.body.modules.Count - 1
-                If objet.adresse1 = devlist.body.modules.Item(i).module_name Then
-                    moduleIDalire = devlist.body.modules.Item(i)._id
-                    Typealire = devlist.body.modules.Item(i).type
+            For i = 0 To devlist.body.devices.Item(0).modules.Count - 1
+                If objet.adresse1 = devlist.body.devices.Item(0).modules.Item(i).module_name Then
+                    moduleIDalire = devlist.body.devices.Item(0).modules.Item(i)._id
+                    Typealire = devlist.body.devices.Item(0).modules.Item(i).type
                     nummodulealire = i
                     Exit For
                 End If
@@ -824,12 +1030,12 @@ line1:
                         objet.MaxToday = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.max_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                         Exit Sub
                     Else
-                        objet.TemperatureActuel = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                        objet.HumiditeActuel = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                        objet.MinToday = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.min_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                        objet.MaxToday = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.max_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.TemperatureActuel = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.HumiditeActuel = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.MinToday = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.min_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.MaxToday = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.max_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                         If Typealire = " NAModule2" Then
-                            objet.VentActuel = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.WindStrength), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                            objet.VentActuel = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.WindStrength), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                         End If
                         Exit Sub
                     End If
@@ -839,69 +1045,67 @@ line1:
                         Case "NAMain"
                             objet.Value = devlist.body.devices.Item(0).battery_vp
                         Case "NAModule4"
-                            objet.value = Format(((devlist.body.modules.Item(nummodulealire).battery_vp - 4200) * 100) / 1800, "#0")
-                        Case "NAModule1"
-                            objet.value = Format(((devlist.body.modules.Item(nummodulealire).battery_vp - 3950) * 100) / 2440, "#0")
-                        Case "NAModule3"
-                            objet.value = Format(((devlist.body.modules.Item(nummodulealire).battery_vp - 3600) * 100) / 2400, "#0")
+                            objet.value = Format(((devlist.body.devices.Item(0).modules.Item(nummodulealire).battery_vp - 4200) * 100) / 1800, "#0")
+                        Case "NAModule1", "NAModule3"
+                            objet.value = Format(((devlist.body.devices.Item(0).modules.Item(nummodulealire).battery_vp - 3600) * 100) / 2400, "#0")
                         Case "NAModule2"
-                            objet.value = Format(((devlist.body.modules.Item(nummodulealire).battery_vp - 3950) * 100) / 2050, "#0")
+                            objet.value = Format(((devlist.body.devices.Item(0).modules.Item(nummodulealire).battery_vp - 3950) * 100) / 2050, "#0")
                         Case "NATherm1"
-                            objet.value = Format(((devlist.body.modules.Item(nummodulealire).battery_vp - 3000) * 100) / 1500, "#0")
+                            objet.value = Format(((devlist.body.devices.Item(0).modules.Item(nummodulealire).battery_vp - 3000) * 100) / 1500, "#0")
                     End Select
                 Case "TEMPERATURE"
                     If Typealire = "NAMain" Then
                         objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     Else
-                        objet.Value = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     End If
                 Case "HUMIDITE"
                     If Typealire = "NAMain" Then
                         objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     Else
-                        objet.Value = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     End If
                 Case "BRUIT"
                     If Typealire = "NAMain" Then
                         objet.Value = devlist.body.devices.Item(0).dashboard_data.Noise
                     Else
-                        objet.Value = devlist.body.modules.Item(nummodulealire).dashboard_data.Noise
+                        objet.Value = devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.Noise
                     End If
                 Case "CO2"
                     If Typealire = "NAMain" Then
                         objet.Value = devlist.body.devices.Item(0).dashboard_data.CO2
                     Else
-                        objet.Value = devlist.body.modules.Item(nummodulealire).dashboard_data.CO2
+                        objet.Value = devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.CO2
                     End If
                 Case "PLUIETOTAL"
                     If Typealire = "NAMain" Then
                         objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.sum_rain_24), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     Else
-                        objet.Value = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.sum_rain_24), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.sum_rain_24), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     End If
                 Case "PLUIECOURANT"
                     If Typealire = "NAMain" Then
                         objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.sum_rain_1), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     Else
-                        objet.Value = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.sum_rain_1), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.sum_rain_1), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     End If
                 Case "BAROMETRE"
                     If Typealire = "NAMain" Then
                         objet.Value = devlist.body.devices.Item(0).dashboard_data.Pressure
                     Else
-                        objet.Value = devlist.body.modules.Item(nummodulealire).dashboard_data.Pressure
+                        objet.Value = devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.Pressure
                     End If
                 Case "VITESSEVENT"
                     If Typealire = "NAMain" Then
                         objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.WindStrength), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     Else
-                        objet.Value = Regex.Replace(CStr(devlist.body.modules.Item(nummodulealire).dashboard_data.WindStrength), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.WindStrength), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     End If
                 Case "DIRECTIONVENT"
                     If Typealire = "NAMain" Then
                         objet.Value = DirVent(devlist.body.devices.Item(0).dashboard_data.WindAngle)
                     Else
-                        objet.Value = DirVent(devlist.body.modules.Item(nummodulealire).dashboard_data.WindAngle)
+                        objet.Value = DirVent(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.WindAngle)
                     End If
                 Case "GENERIQUESTRING"
                     If Typealire = "NAMain" Then
@@ -914,9 +1118,9 @@ line1:
                     Else
                         Select Case objet.adresse2.toUpper
                             Case "CO2"
-                                objet.Value = devlist.body.modules.Item(nummodulealire).dashboard_data.CO2
+                                objet.Value = devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.CO2
                             Case "NOISE"
-                                objet.Value = devlist.body.modules.Item(nummodulealire).dashboard_data.Noise
+                                objet.Value = devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.Noise
                         End Select
                     End If
                 Case Else
