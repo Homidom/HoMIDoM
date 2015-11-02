@@ -600,7 +600,7 @@ Partial Public Class uConfigServer
 
     Private Sub ButtonAutor_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles ButtonAutor.Click
         Try
-            Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(IdSrv, myService.GetPortSOAP, "HoMIDoM")
+            Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(IdSrv, myService.GetIPSOAP, myService.GetPortSOAP, "HoMIDoM")
             Dim process__1 = Process.Start(OAuth2.GetAuthorizationUrl(ComboBoxAPI.Text))
             If ComboBoxAPI.Text = "Nest" Then AutorOption.Visibility = Windows.Visibility.Visible
         Catch ex As Exception
@@ -636,7 +636,7 @@ Partial Public Class uConfigServer
     End Sub
 
     Private Sub ButtonValAutor_Click(sender As Object, e As RoutedEventArgs) Handles ButtonValAutor.Click
-        Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(IdSrv, myService.GetPortSOAP, "HoMIDoM")
+        Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(IdSrv, myService.GetIPSOAP, myService.GetPortSOAP, "HoMIDoM")
         OAuth2.GetToken(ComboBoxAPI.Text, TextBoxAPI.Text)
     End Sub
 

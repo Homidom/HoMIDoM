@@ -706,7 +706,7 @@ Imports HoMIOAuth2
             If GetAccessToken("GoogleCalendar") Then
                 Dim client As New Net.WebClient
                 Dim reqparm As New Specialized.NameValueCollection
-                Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(_IdSrv, _Server.GetPortSOAP, "HoMIDoM")
+                Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(_IdSrv, _Server.GetIPSOAP, _Server.GetPortSOAP, "HoMIDoM")
                 reqparm.Add("client_id", OAuth2.GetClientFile(clientOauth).web.client_id)
                 reqparm.Add("client_secret", OAuth2.GetClientFile(clientOauth).web.client_secret)
                 reqparm.Add("refresh_token", Auth.refresh_token)

@@ -682,6 +682,12 @@ Imports HoMIOAuth2
                 Exit Sub
             End If
 
+            'exemple'setthermpoint?access_token=[YOURTOKEN]&device_id=[RELAY_ID]&module_id=[THERM_ID]&setpoint_mode=away
+            If Command = "SETPOINT" Then
+                Dim client As New Net.WebClient
+                Dim responsebody = client.DownloadString("https://api.netatmo.net/api/setthermpoint?access_token=" & Auth.access_token & "&device_id=" & Objet.adresse1 & "&module_id=" & Objet.adresse2 & "&setpoint_mode" & Parametre1)
+            End If
+
         Catch ex As Exception
             WriteLog("ERR: Write, Exception : " & ex.Message)
         End Try
@@ -798,6 +804,9 @@ Imports HoMIOAuth2
             _DeviceSupport.Add(ListeDevices.HUMIDITE)
             _DeviceSupport.Add(ListeDevices.PLUIETOTAL)
             _DeviceSupport.Add(ListeDevices.GENERIQUESTRING)
+            _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE)
+
+            Add_DeviceCommande("SETPOINT", "Set un programme de thermostat", 1)
 
             'Parametres avancés
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
@@ -873,7 +882,7 @@ Imports HoMIOAuth2
             If GetAccessToken("Netatmo") Then
                 Dim client As New Net.WebClient
                 Dim reqparm As New Specialized.NameValueCollection
-                Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(_IdSrv, _Server.GetPortSOAP, "HoMIDoM")
+                Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(_IdSrv, _Server.GetIPSOAP, _Server.GetPortSOAP, "HoMIDoM")
                 reqparm.Add("grant_type", "refresh_token")
                 reqparm.Add("refresh_token", Auth.refresh_token)
                 reqparm.Add("client_id", OAuth2.GetClientFile(clientOauth).web.client_id)
@@ -997,25 +1006,26 @@ line1:
             End If
 
             Dim Typealire As String = ""
-            Dim deviceIDalire As String = ""
-            Dim moduleIDalire As String = ""
-            Dim nummodulealire As Integer = 99
+            Dim deviceIDalire As devices = Nothing
+            Dim moduleIDalire As modules = Nothing
 
-            If (objet.adresse1 = devlist.body.devices.Item(0).module_name) Then
-                deviceIDalire = devlist.body.devices.Item(0)._id
-                Typealire = devlist.body.devices.Item(0).type
-            End If
-            For i = 0 To devlist.body.devices.Item(0).modules.Count - 1
-                If objet.adresse1 = devlist.body.devices.Item(0).modules.Item(i).module_name Then
-                    moduleIDalire = devlist.body.devices.Item(0).modules.Item(i)._id
-                    Typealire = devlist.body.devices.Item(0).modules.Item(i).type
-                    nummodulealire = i
-                    Exit For
+
+            For Each _Dev In devlist.body.devices
+                If (objet.adresse1 = _Dev.module_name) Then
+                    deviceIDalire = _Dev
+                    Typealire = _Dev.type
                 End If
+                For Each _Mod In _Dev.modules
+                    If objet.adresse1 = _Mod.module_name Then
+                        moduleIDalire = _Mod
+                        Typealire = _Mod.type
+                        Exit For
+                    End If
+                Next
             Next
 
             ' nom de device non trouve
-            If (deviceIDalire = "") And (moduleIDalire = "") Then
+            If (deviceIDalire Is Nothing) And (moduleIDalire Is Nothing) Then
                 WriteLog("ERR: GetData=> Pas de nom de device/module pour adresse1= " & objet.adresse1)
                 Exit Sub
             End If
@@ -1024,105 +1034,116 @@ line1:
             Select Case objet.Type
                 Case "METEO"
                     If Typealire = "NAMain" Then
-                        objet.TemperatureActuel = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                        objet.HumiditeActuel = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                        objet.MinToday = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.min_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                        objet.MaxToday = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.max_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.TemperatureActuel = Regex.Replace(CStr(deviceIDalire.dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.HumiditeActuel = Regex.Replace(CStr(deviceIDalire.dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.MinToday = Regex.Replace(CStr(deviceIDalire.dashboard_data.min_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.MaxToday = Regex.Replace(CStr(deviceIDalire.dashboard_data.max_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                         Exit Sub
                     Else
-                        objet.TemperatureActuel = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                        objet.HumiditeActuel = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                        objet.MinToday = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.min_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                        objet.MaxToday = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.max_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.TemperatureActuel = Regex.Replace(CStr(moduleIDalire.dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.HumiditeActuel = Regex.Replace(CStr(moduleIDalire.dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.MinToday = Regex.Replace(CStr(moduleIDalire.dashboard_data.min_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.MaxToday = Regex.Replace(CStr(moduleIDalire.dashboard_data.max_temp), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                         If Typealire = " NAModule2" Then
-                            objet.VentActuel = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.WindStrength), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                            objet.VentActuel = Regex.Replace(CStr(moduleIDalire.dashboard_data.WindStrength), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                         End If
                         Exit Sub
                     End If
 
                 Case "BATTERIE"
                     Select Case Typealire
-                        Case "NAMain"
-                            objet.Value = devlist.body.devices.Item(0).battery_vp
+                        Case "NAMain", "NAPlug"
+                            objet.Value = deviceIDalire.battery_vp
                         Case "NAModule4"
-                            objet.value = Format(((devlist.body.devices.Item(0).modules.Item(nummodulealire).battery_vp - 4200) * 100) / 1800, "#0")
+                            objet.value = Format(((moduleIDalire.battery_vp - 4200) * 100) / 1800, "#0")
                         Case "NAModule1", "NAModule3"
-                            objet.value = Format(((devlist.body.devices.Item(0).modules.Item(nummodulealire).battery_vp - 3600) * 100) / 2400, "#0")
+                            objet.value = Format(((moduleIDalire.battery_vp - 3600) * 100) / 2400, "#0")
                         Case "NAModule2"
-                            objet.value = Format(((devlist.body.devices.Item(0).modules.Item(nummodulealire).battery_vp - 3950) * 100) / 2050, "#0")
+                            objet.value = Format(((moduleIDalire.battery_vp - 3950) * 100) / 2050, "#0")
                         Case "NATherm1"
-                            objet.value = Format(((devlist.body.devices.Item(0).modules.Item(nummodulealire).battery_vp - 3000) * 100) / 1500, "#0")
+                            objet.value = Format(((moduleIDalire.battery_vp - 3000) * 100) / 1500, "#0")
                     End Select
                 Case "TEMPERATURE"
-                    If Typealire = "NAMain" Then
-                        objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                    Else
-                        objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
-                    End If
+                    Select Case Typealire
+                        Case "NAMain"
+                            objet.Value = Regex.Replace(CStr(deviceIDalire.dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        Case "NATherm1"
+                            objet.Value = Regex.Replace(CStr(moduleIDalire.measured.temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        Case Else
+                            objet.Value = Regex.Replace(CStr(moduleIDalire.dashboard_data.Temperature), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                    End Select
                 Case "HUMIDITE"
                     If Typealire = "NAMain" Then
-                        objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.Value = Regex.Replace(CStr(deviceIDalire.dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     Else
-                        objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.Value = Regex.Replace(CStr(moduleIDalire.dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     End If
                 Case "BRUIT"
                     If Typealire = "NAMain" Then
-                        objet.Value = devlist.body.devices.Item(0).dashboard_data.Noise
+                        objet.Value = deviceIDalire.dashboard_data.Noise
                     Else
-                        objet.Value = devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.Noise
+                        objet.Value = moduleIDalire.dashboard_data.Noise
                     End If
                 Case "CO2"
                     If Typealire = "NAMain" Then
-                        objet.Value = devlist.body.devices.Item(0).dashboard_data.CO2
+                        objet.Value = deviceIDalire.dashboard_data.CO2
                     Else
-                        objet.Value = devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.CO2
+                        objet.Value = moduleIDalire.dashboard_data.CO2
                     End If
                 Case "PLUIETOTAL"
                     If Typealire = "NAMain" Then
-                        objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.sum_rain_24), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.Value = Regex.Replace(CStr(deviceIDalire.dashboard_data.sum_rain_24), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     Else
-                        objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.sum_rain_24), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.Value = Regex.Replace(CStr(moduleIDalire.dashboard_data.sum_rain_24), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     End If
                 Case "PLUIECOURANT"
                     If Typealire = "NAMain" Then
-                        objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.sum_rain_1), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.Value = Regex.Replace(CStr(deviceIDalire.dashboard_data.sum_rain_1), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     Else
-                        objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.sum_rain_1), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.Value = Regex.Replace(CStr(moduleIDalire.dashboard_data.sum_rain_1), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     End If
                 Case "BAROMETRE"
                     If Typealire = "NAMain" Then
-                        objet.Value = devlist.body.devices.Item(0).dashboard_data.Pressure
+                        objet.Value = deviceIDalire.dashboard_data.Pressure
                     Else
-                        objet.Value = devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.Pressure
+                        objet.Value = moduleIDalire.dashboard_data.Pressure
                     End If
                 Case "VITESSEVENT"
                     If Typealire = "NAMain" Then
-                        objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).dashboard_data.WindStrength), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.Value = Regex.Replace(CStr(deviceIDalire.dashboard_data.WindStrength), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     Else
-                        objet.Value = Regex.Replace(CStr(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.WindStrength), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                        objet.Value = Regex.Replace(CStr(moduleIDalire.dashboard_data.WindStrength), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     End If
                 Case "DIRECTIONVENT"
                     If Typealire = "NAMain" Then
-                        objet.Value = DirVent(devlist.body.devices.Item(0).dashboard_data.WindAngle)
+                        objet.Value = DirVent(deviceIDalire.dashboard_data.WindAngle)
                     Else
-                        objet.Value = DirVent(devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.WindAngle)
+                        objet.Value = DirVent(moduleIDalire.dashboard_data.WindAngle)
                     End If
                 Case "GENERIQUESTRING"
-                    If Typealire = "NAMain" Then
-                        Select Case objet.adresse2.toUpper
-                            Case "CO2"
-                                objet.Value = devlist.body.devices.Item(0).dashboard_data.CO2
-                            Case "NOISE"
-                                objet.Value = devlist.body.devices.Item(0).dashboard_data.Noise
-                        End Select
-                    Else
-                        Select Case objet.adresse2.toUpper
-                            Case "CO2"
-                                objet.Value = devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.CO2
-                            Case "NOISE"
-                                objet.Value = devlist.body.devices.Item(0).modules.Item(nummodulealire).dashboard_data.Noise
-                        End Select
-                    End If
+                    Select Case Typealire
+                        Case "NAMain"
+                            Select Case objet.adresse2.toUpper
+                                Case "CO2"
+                                    objet.Value = deviceIDalire.dashboard_data.CO2
+                                Case "NOISE"
+                                    objet.Value = deviceIDalire.dashboard_data.Noise
+                            End Select
+                        Case "NATherm1"
+                            objet.Value = moduleIDalire.setpoint.setpoint_mode & " - " & moduleIDalire.setpoint.setpoint_temp & " - " & moduleIDalire.setpoint.setpoint_endtime
+                        Case Else
+                            Select Case objet.adresse2.toUpper
+                                Case "CO2"
+                                    objet.Value = moduleIDalire.dashboard_data.CO2
+                                Case "NOISE"
+                                    objet.Value = moduleIDalire.dashboard_data.Noise
+                            End Select
+                    End Select
+                Case "TEMPERATURECONSIGNE"
+                    Select Case Typealire
+                        Case "NATherm1"
+                            objet.Value = moduleIDalire.measured.setpoint_temp
+                    End Select
                 Case Else
                     WriteLog("ERR: GetData=> Pas de valeur enregistrée")
                     Exit Sub

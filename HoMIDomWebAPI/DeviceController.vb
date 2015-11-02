@@ -88,7 +88,7 @@ Public Class DeviceController
 
     Private Function ExecuteCommandWithParams(id As String, command As String, parameters As System.Collections.Specialized.NameValueCollection) As Boolean
         Try
-		
+
             Dim action As DeviceAction = New DeviceAction() With {.Nom = command}
 
             If Not parameters Is Nothing And parameters.Count > 0 Then
@@ -96,7 +96,7 @@ Public Class DeviceController
                 For Each pKey In parameters.AllKeys
                     If pKey = "code" Then
                         Dim code As String = parameters(pKey)
-                        Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(Me.ServerKey, HoMIDomAPI.CurrentServer.GetPortSOAP, "HoMIDoM")
+                        Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(Me.ServerKey, HoMIDomAPI.CurrentServer.GetIPSOAP, HoMIDomAPI.CurrentServer.GetPortSOAP, "HoMIDoM")
                         OAuth2.GetToken(id, code)
                         Return True
                         Exit Function
