@@ -329,8 +329,8 @@
                 <TabItem Header="Composant">
                     <DockPanel >
                         <StackPanel Orientation="Horizontal" Name="StkMnu1" DockPanel.Dock="Bottom">
-                            <Label Margin="2" Name="CntDevice" Content="0 Device(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
-                            <Image Height="22" Margin="2" Name="RfrDev" Stretch="Fill" Width="22" Source="/HoMIAdmiN;component/Images/Refresh_32.png" Visibility="Visible" HorizontalAlignment="Right" ToolTip="Rafraichir les devices" />
+                            <Label Margin="2" Name="CntDevice" Content="0 Composant(s)" Foreground="Orange" VerticalContentAlignment="Bottom" />
+                            <Image Height="22" Margin="2" Name="RfrDev" Stretch="Fill" Width="22" Source="/HoMIAdmiN;component/Images/Refresh_32.png" Visibility="Visible" HorizontalAlignment="Right" ToolTip="Rafraichir la liste des composants" />
                             <Image Height="22" Margin="2" Name="TplDevImg" Stretch="Fill" Width="22" Source="/HoMIAdmiN;component/Images/Defaut_128.png" Visibility="Hidden" />
                         </StackPanel>
                         <TreeView Name="TreeViewDevice" Background="DimGray" Foreground="White" VerticalContentAlignment="Top" HorizontalAlignment="Stretch" Padding="0"/>

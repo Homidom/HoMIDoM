@@ -1100,7 +1100,7 @@ Class Window1
             ManagerDevices.LoadDevices()
 
             If _ListeDevices IsNot Nothing Then
-                CntDevice.Content = _ListeDevices.Count & " Device(s)"
+                CntDevice.Content = _ListeDevices.Count & " Composant(s)"
 
                 For Each Dev As TemplateDevice In _ListeDevices
                     Dim newchild As New TreeViewItem
