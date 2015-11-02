@@ -59,6 +59,7 @@ Imports System.Threading
 
     Private Shared serverhttp As HttpSelfHostServer
     Public Shared Property ServerKey() As String
+    Public Shared Property driverDebug As Boolean
     Private Shared homidom As IHoMIDom
 
     'param avancé
@@ -312,7 +313,7 @@ Imports System.Threading
             'récupération des paramétres avancés
             Try
                 _DEBUG = _Parametres.Item(0).Valeur
-
+                driverDebug = _DEBUG
             Catch ex As Exception
                 _DEBUG = False
                 _Parametres.Item(0).Valeur = False
@@ -624,8 +625,8 @@ Public Class DevicesController
             Dim allDevImperi As DeviceList = Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(DeviceList))
             Dim allHisto As Object = ""
             Dim epoch As New DateTime(1970, 1, 1)
-            Dim dtstart As String = Format(epoch.AddSeconds(startDate / 1000), "yyyy-MM-dd hh:mm:ss")
-            Dim dtend As String = Format(epoch.AddSeconds(enddate / 1000), "yyyy-MM-dd hh:mm:ss")
+            Dim dtstart As String = Format(epoch.AddSeconds(startDate / 1000), "yyyy-MM-dd HH:mm:ss")
+            Dim dtend As String = Format(epoch.AddSeconds(enddate / 1000), "yyyy-MM-dd HH:mm:ss")
 
             For Each devImperi In allDevImperi.devices
                 If id = devImperi.id Then
@@ -650,8 +651,11 @@ Public Class DevicesController
                 Val.Value = 0
                 allHistImperi.values.Add(Val)
             End If
-            stream = Newtonsoft.Json.JsonConvert.SerializeObject(allHistImperi)
-            System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\Drivers\Imperihome\histo.json", stream)
+
+            If Driver_ImperiHome.driverDebug Then
+                stream = Newtonsoft.Json.JsonConvert.SerializeObject(allHistImperi)
+                System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\Drivers\Imperihome\histo.json", stream)
+            End If
 
             Return allHistImperi
         Else
@@ -685,8 +689,13 @@ Public Class DevicesController
                 Next
             Next
 
+            If Driver_ImperiHome.driverDebug Then
+                stream = Newtonsoft.Json.JsonConvert.SerializeObject(allDevImperi)
+                System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\Drivers\Imperihome\devices_send.json", stream)
+            End If
+
             Return allDevImperi
-        Else
+
             Return "Error Device"
         End If
     End Function
