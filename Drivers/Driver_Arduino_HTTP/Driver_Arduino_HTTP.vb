@@ -471,6 +471,7 @@ Public Class Driver_Arduino_HTTP
             'http://ip/?homidom_READX
             'http://ip/?homidom_WRITV_X_xxx
             'http://ip/?homidom_CFG_X_TYPE (Type = 0 pour Input, 1 pour Output, 2 pour pwm et 3 pour One wire)
+            'http://ip/?homidom_CFGX_X_TYPE-X_TYPE-X_TYPE... (Type = 0 pour Input, 1 pour Output, 2 pour pwm et 3 pour One wire)
 
 
             Dim urlcommande As String = ""
@@ -484,6 +485,25 @@ Public Class Driver_Arduino_HTTP
                         WriteLog("ERR: WRITE CONFIG_TYPE_PIN : Ce type de PIN ne peut pas être configuré : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
                         Exit Sub
                 End Select
+            ElseIf Command = "CONFIG_TYPE_PINX" Then
+                urlcommande = "http://" & Objet.Adresse1 & "/?homidom_CFG_"
+
+                'get list of all composants with this IP adress (Objet.adresse1)
+                Dim listedevices As New ArrayList
+                listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_idsrv, Objet.adresse1, "", Me._ID, True)
+                For j = 0 To listedevices.Count
+                    Select Case UCase(listedevices.Item(j).Modele)
+                        Case "DIGITAL_IN" : urlcommande &= listedevices.Item(j).Adresse2 & "_0"
+                        Case "DIGITAL_OUT" : urlcommande &= listedevices.Item(j).Adresse2 & "_1"
+                        Case "DIGITAL_PWM" : urlcommande &= listedevices.Item(j).Adresse2 & "_2"
+                        Case "1WIRE" : urlcommande &= listedevices.Item(j).Adresse2 & "_3"
+                        Case Else
+                            WriteLog("ERR: WRITE CONFIG_TYPE_PIN : Ce type de PIN ne peut pas être configuré : " & listedevices.Item(j).Modele.ToString.ToUpper & " (" & listedevices.Item(j).Name & ")")
+                            Exit Sub
+                    End Select
+                    If j <> listedevices.Count Then urlcommande &= "-"
+                Next
+                
             ElseIf Command = "SETVAR" Then
                 If Not IsNothing(Parametre1) Then
                     Select Case UCase(Objet.Modele)
@@ -496,237 +516,268 @@ Public Class Driver_Arduino_HTTP
                     WriteLog("ERR: WRITE SETVAR : Il manque la valeur à passer à la variable en parametre : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
                     Exit Sub
                 End If
-            ElseIf Command = "READX" Then
-                urlcommande = "http://" & Objet.Adresse1 & "/?homidom_READX"
-            Else
-                Select Case UCase(Objet.Modele)
-                    Case "VARIABLE"
-                        Select Case Command
-                            Case "ON" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_WRITV_" & Objet.Adresse2 & "_1"
-                            Case "OFF" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_WRITV_" & Objet.Adresse2 & "_0"
-                            Case "DIM", "OUVERTURE", "PWM"
-                                If Not IsNothing(Parametre1) Then
-                                    If IsNumeric(Parametre1) Then
-                                        urlcommande = "http://" & Objet.Adresse1 & "/?homidom_WRITV_" & Objet.Adresse2 & "_" & CInt(Parametre1)
-                                    Else
-                                        WriteLog("ERR: WRITE VAR DIM Le parametre " & CStr(Parametre1) & " n'est pas un entier (" & Objet.Name & ")")
-                                        Exit Sub
-                                    End If
-                                Else
-                                    WriteLog("ERR: WRITE VAR DIM Il manque un parametre pour DIM (" & Objet.Name & ")")
-                                    Exit Sub
-                                End If
-                            Case Else
-                                'on lit la valeur par défault
-                                urlcommande = "http://" & Objet.Adresse1 & "/?homidom_READV_" & Objet.Adresse2
-                                Exit Sub
-                        End Select
-
-                    Case "ANALOG_IN" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_READA_" & Objet.Adresse2
-                    Case "DIGITAL_IN" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_READD_" & Objet.Adresse2
-                    Case "DIGITAL_OUT"
-                        Select Case Command
-                            Case "ON" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_ON_" & Objet.Adresse2
-                            Case "OFF" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_OFF_" & Objet.Adresse2
-                            Case Else
-                                WriteLog("ERR: WRITE : Commande invalide : " & Command & " (ON/OFF supporté sur une SORTIE Digital: DIGITAL_OUT)")
-                                Exit Sub
-                        End Select
-                    Case "DIGITAL_PWM"
-                        'Analogique write (0-255)
-                        'on convertit ON/OFF/DIM en DIM de 0 à 255 (commande PWM sur l'arduino)
-                        Select Case Command
-                            Case "ON" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_DIM_" & Objet.Adresse2 & "_255"
-                            Case "OFF" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_DIM_" & Objet.Adresse2 & "_0"
-                            Case "DIM", "OUVERTURE"
-                                If Not IsNothing(Parametre1) Then
-                                    If IsNumeric(Parametre1) Then
-                                        If (Parametre1 >= 0 And Parametre1 <= 100) Then
-                                            'Conversion du parametre de % (0 à 100) en 0 à 255
-                                            Parametre1 = CInt(Parametre1 * 255 / 100)
-                                            urlcommande = "http://" & Objet.Adresse1 & "/?homidom_DIM_" & Objet.Adresse2 & "_" & CInt(Parametre1)
+                    ElseIf Command = "READX" Then
+                    urlcommande = "http://" & Objet.Adresse1 & "/?homidom_READX"
+                    Else
+                    Select Case UCase(Objet.Modele)
+                        Case "VARIABLE"
+                            Select Case Command
+                                Case "ON" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_WRITV_" & Objet.Adresse2 & "_1"
+                                Case "OFF" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_WRITV_" & Objet.Adresse2 & "_0"
+                                Case "DIM", "OUVERTURE", "PWM"
+                                    If Not IsNothing(Parametre1) Then
+                                        If IsNumeric(Parametre1) Then
+                                            urlcommande = "http://" & Objet.Adresse1 & "/?homidom_WRITV_" & Objet.Adresse2 & "_" & CInt(Parametre1)
                                         Else
-                                            WriteLog("ERR: WRITE DIM Le parametre " & CStr(Parametre1) & " n'est pas un entier de 0 à 100 (" & Objet.Name & ")")
+                                            WriteLog("ERR: WRITE VAR DIM Le parametre " & CStr(Parametre1) & " n'est pas un entier (" & Objet.Name & ")")
                                             Exit Sub
                                         End If
                                     Else
-                                        WriteLog("ERR: WRITE DIM Le parametre " & CStr(Parametre1) & " n'est pas un entier (" & Objet.Name & ")")
+                                        WriteLog("ERR: WRITE VAR DIM Il manque un parametre pour DIM (" & Objet.Name & ")")
                                         Exit Sub
                                     End If
-                                Else
-                                    WriteLog("ERR: WRITE DIM Il manque un parametre (" & Objet.Name & ")")
+                                Case Else
+                                    'on lit la valeur par défault
+                                    urlcommande = "http://" & Objet.Adresse1 & "/?homidom_READV_" & Objet.Adresse2
                                     Exit Sub
-                                End If
-                            Case "PWM"
-                                If Not IsNothing(Parametre1) Then
-                                    If IsNumeric(Parametre1) Then
-                                        If CInt(Parametre1) > 255 Then Parametre1 = 255
-                                        If CInt(Parametre1) < 0 Then Parametre1 = 0
-                                        urlcommande = "http://" & Objet.Adresse1 & "/?homidom_DIM_" & Objet.Adresse2 & "_" & CInt(Parametre1)
+                            End Select
+
+                        Case "ANALOG_IN" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_READA_" & Objet.Adresse2
+                        Case "DIGITAL_IN" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_READD_" & Objet.Adresse2
+                        Case "DIGITAL_OUT"
+                            Select Case Command
+                                Case "ON" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_ON_" & Objet.Adresse2
+                                Case "OFF" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_OFF_" & Objet.Adresse2
+                                Case Else
+                                    WriteLog("ERR: WRITE : Commande invalide : " & Command & " (ON/OFF supporté sur une SORTIE Digital: DIGITAL_OUT)")
+                                    Exit Sub
+                            End Select
+                        Case "DIGITAL_PWM"
+                            'Analogique write (0-255)
+                            'on convertit ON/OFF/DIM en DIM de 0 à 255 (commande PWM sur l'arduino)
+                            Select Case Command
+                                Case "ON" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_DIM_" & Objet.Adresse2 & "_255"
+                                Case "OFF" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_DIM_" & Objet.Adresse2 & "_0"
+                                Case "DIM", "OUVERTURE"
+                                    If Not IsNothing(Parametre1) Then
+                                        If IsNumeric(Parametre1) Then
+                                            If (Parametre1 >= 0 And Parametre1 <= 100) Then
+                                                'Conversion du parametre de % (0 à 100) en 0 à 255
+                                                Parametre1 = CInt(Parametre1 * 255 / 100)
+                                                urlcommande = "http://" & Objet.Adresse1 & "/?homidom_DIM_" & Objet.Adresse2 & "_" & CInt(Parametre1)
+                                            Else
+                                                WriteLog("ERR: WRITE DIM Le parametre " & CStr(Parametre1) & " n'est pas un entier de 0 à 100 (" & Objet.Name & ")")
+                                                Exit Sub
+                                            End If
+                                        Else
+                                            WriteLog("ERR: WRITE DIM Le parametre " & CStr(Parametre1) & " n'est pas un entier (" & Objet.Name & ")")
+                                            Exit Sub
+                                        End If
                                     Else
-                                        WriteLog("ERR: WRITE DIM Le parametre " & CStr(Parametre1) & " n'est pas un entier (" & Objet.Name & ")")
+                                        WriteLog("ERR: WRITE DIM Il manque un parametre (" & Objet.Name & ")")
                                         Exit Sub
                                     End If
-                                Else
-                                    WriteLog("ERR: WRITE DIM Il manque un parametre (" & Objet.Name & ")")
+                                Case "PWM"
+                                    If Not IsNothing(Parametre1) Then
+                                        If IsNumeric(Parametre1) Then
+                                            If CInt(Parametre1) > 255 Then Parametre1 = 255
+                                            If CInt(Parametre1) < 0 Then Parametre1 = 0
+                                            urlcommande = "http://" & Objet.Adresse1 & "/?homidom_DIM_" & Objet.Adresse2 & "_" & CInt(Parametre1)
+                                        Else
+                                            WriteLog("ERR: WRITE DIM Le parametre " & CStr(Parametre1) & " n'est pas un entier (" & Objet.Name & ")")
+                                            Exit Sub
+                                        End If
+                                    Else
+                                        WriteLog("ERR: WRITE DIM Il manque un parametre (" & Objet.Name & ")")
+                                        Exit Sub
+                                    End If
+                                Case Else
+                                    WriteLog("ERR: Send AC : Commande invalide : " & Command & " (ON/OFF/DIM(x)/OUVERTURE(x)/PWM(x) supporté sur une DIGITAL_PWM)")
                                     Exit Sub
-                                End If
-                            Case Else
-                                WriteLog("ERR: Send AC : Commande invalide : " & Command & " (ON/OFF/DIM(x)/OUVERTURE(x)/PWM(x) supporté sur une DIGITAL_PWM)")
-                                Exit Sub
-                        End Select
-                    Case "1WIRE"
-                        WriteLog("le 1-wire n'est pas encore géré :" & Objet.Name)
-                        Exit Sub
-                    Case ""
-                        WriteLog("ERR: WRITE Pas de protocole d'emission pour " & Objet.Name)
-                        Exit Sub
-                    Case Else
-                        WriteLog("ERR: WRITE Protocole non géré : " & Objet.Modele.ToString.ToUpper)
-                        Exit Sub
-                End Select
-            End If
-
-            If urlcommande <> "" Then
-                If _DEBUG Then WriteLog("DBG: WRITE Composant " & Objet.Name & " URL : " & urlcommande)
-
-                Dim request As HttpWebRequest = WebRequest.Create(urlcommande)
-                request.Timeout = 3000
-                CType(request, HttpWebRequest).UserAgent = "Other"
-
-
-                'Dim response As WebResponse = request.GetResponse()
-                'If CType(response, HttpWebResponse).StatusCode = HttpStatusCode.OK Then
-                '    Dim dataStream As Stream = response.GetResponseStream()
-                '    Dim reader As New StreamReader(dataStream)
-                '    Dim responseFromServer As String = reader.ReadToEnd()
-                '    WriteLog("DBG: Commande passée à l arduino : " & urlcommande & " --> " & responseFromServer & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
-                'Else
-                '    WriteLog("DBG: Commande passée à l arduino : " & urlcommande & " --> Réponse incorrecte reçu : " & CType(response, HttpWebResponse).StatusCode & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
-                'End If
-
-
-                'Get a web response  
-                Dim response As WebResponse
-                Dim responseFromServer As String = ""
-                Try
-                    response = request.GetResponse()
-                    If CType(response, HttpWebResponse).StatusCode = HttpStatusCode.OK Then
-                        Dim dataStream As Stream = response.GetResponseStream()
-                        Dim reader As New StreamReader(dataStream)
-                        responseFromServer = reader.ReadToEnd().ToUpper
-                        WriteLog("DBG: Commande passée à l arduino " & Objet.Name & " : " & urlcommande & " --> " & responseFromServer & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
-                    Else
-                        WriteLog("ERR: Commande passée à l arduino " & Objet.Name & " : " & urlcommande & " --> Réponse incorrecte reçu : " & CType(response, HttpWebResponse).StatusCode & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
+                            End Select
+                        Case "1WIRE"
+                            WriteLog("le 1-wire n'est pas encore géré :" & Objet.Name)
+                            Exit Sub
+                        Case ""
+                            WriteLog("ERR: WRITE Pas de protocole d'emission pour " & Objet.Name)
+                            Exit Sub
+                        Case Else
+                            WriteLog("ERR: WRITE Protocole non géré : " & Objet.Modele.ToString.ToUpper)
+                            Exit Sub
+                    End Select
                     End If
-                    response.Close()
-                Catch ex As System.Net.WebException
-                    WriteLog("ERR: Commande passée à l arduino : " & urlcommande & " --> Erreur de communication : " & ex.Message.ToString)
 
-                    'If ex.Status = WebExceptionStatus.ProtocolError Then
-                    'end if
-                End Try
+                    If urlcommande <> "" Then
+                        If _DEBUG Then WriteLog("DBG: WRITE Composant " & Objet.Name & " URL : " & urlcommande)
 
-                'Traitement de la réponse
-                If responseFromServer = "" Then
-                    WriteLog("ERR: Pas de réponse de l'arduino " & Objet.Name & " : " & urlcommande)
-                Else
-                    'Analyse de la réponse: "command" "parametre" : "DIM 20" "ON" "120"
-                    If Command = "READX" Then
-                        Dim responsetab2 As String() = responseFromServer.Split("-")
-                        Dim numeropinD As Integer = 0
-                        Dim numeropinA As Integer = 0
-                        Dim listedevices As New ArrayList
-                        For i As Integer = 0 To responsetab2.Length
-                            If Left(responsetab2(i), 2) = "D=" Then
-                                'recherche si un composant avec cette IP Objet.adresse1 et le PIN numeropinD existe et si le type de PIN  est digital
+                        Dim request As HttpWebRequest = WebRequest.Create(urlcommande)
+                        request.Timeout = 3000
+                        CType(request, HttpWebRequest).UserAgent = "Other"
+
+
+                        'Dim response As WebResponse = request.GetResponse()
+                        'If CType(response, HttpWebResponse).StatusCode = HttpStatusCode.OK Then
+                        '    Dim dataStream As Stream = response.GetResponseStream()
+                        '    Dim reader As New StreamReader(dataStream)
+                        '    Dim responseFromServer As String = reader.ReadToEnd()
+                        '    WriteLog("DBG: Commande passée à l arduino : " & urlcommande & " --> " & responseFromServer & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
+                        'Else
+                        '    WriteLog("DBG: Commande passée à l arduino : " & urlcommande & " --> Réponse incorrecte reçu : " & CType(response, HttpWebResponse).StatusCode & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
+                        'End If
+
+
+                        'Get a web response  
+                        Dim response As WebResponse
+                        Dim responseFromServer As String = ""
+                        Try
+                            response = request.GetResponse()
+                            If CType(response, HttpWebResponse).StatusCode = HttpStatusCode.OK Then
+                                Dim dataStream As Stream = response.GetResponseStream()
+                                Dim reader As New StreamReader(dataStream)
+                                responseFromServer = reader.ReadToEnd().ToUpper
+                                WriteLog("DBG: Commande passée à l arduino " & Objet.Name & " : " & urlcommande & " --> " & responseFromServer & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
+                            Else
+                                WriteLog("ERR: Commande passée à l arduino " & Objet.Name & " : " & urlcommande & " --> Réponse incorrecte reçu : " & CType(response, HttpWebResponse).StatusCode & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
+                            End If
+                            response.Close()
+                        Catch ex As System.Net.WebException
+                            WriteLog("ERR: Commande passée à l arduino : " & urlcommande & " --> Erreur de communication : " & ex.Message.ToString)
+
+                            'If ex.Status = WebExceptionStatus.ProtocolError Then
+                            'end if
+                        End Try
+
+                        'Traitement de la réponse
+                        If responseFromServer = "" Then
+                            WriteLog("ERR: Pas de réponse de l'arduino " & Objet.Name & " : " & urlcommande)
+                        Else
+                            'Analyse de la réponse: "command" "parametre" : "DIM 20" "ON" "120"
+                            If Command = "READX" Then
+                                'response must be "A1=10-A2=5-D3=ON-D5=125...." 
+                                'separator : "-", 
+                                'type of PIN : D digital IN, O Digital out, A Analog IN
+                                'value after =
+
+                                Dim responsepin As String() = responseFromServer.Split("-")
+                                Dim PINtype As String = ""
+                                Dim PINnumber As String = ""
+                                Dim PINvalue As String = ""
+
+                                'get list of all composants with this IP adress (Objet.adresse1)
+                                Dim listedevices As New ArrayList
                                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_idsrv, Objet.adresse1, "", Me._ID, True)
 
+                                'for each PIN in the response, check if a device correspond in the listdevices and update it if needed
+                                For i As Integer = 0 To responsepin.Length
+                                    'A1=10 : type A, number 1, value 10
+                                    Dim responsepin2 As String() = responsepin(i).Split("=")
+                                    PINtype = Left(responsepin2(0), 1) 'D digital IN, O Digital out, A Analog IN
+                                    PINnumber = Right(responsepin2(0), responsepin2(0).Length - 1)
+                                    PINvalue = responsepin2(1) 'ON OFF 10 5...
+                                    WriteLog("DBG: " & Objet.Name & ": READX : Reponse reçu de larduino : " & PINtype & ":" & PINnumber & " - " & PINvalue)
 
-                                numeropinD += 1
-                            ElseIf Left(responsetab2(i), 2) = "A=" Then
-                                'recherche si un composant avec cette IP Objet.adresse1 et le PIN numeropinD existe et si le type de PIN  est analogique
-
-
-                                numeropinA += 1
+                                    'search for the right PIN NUMBER i = adresse2
+                                    For j = 0 To listedevices.Count
+                                        If PINnumber = (listedevices.Item(j).Adresse2 - 1) Then
+                                            'PIN Found, check if model is the same, then update value
+                                            If (PINtype = "D" And listedevices.Item(j).model = "DIGITAL_IN") Or (PINtype = "O" And listedevices.Item(j).model = "DIGITAL_OUT") Or (PINtype = "A" And listedevices.Item(j).model = "ANALOG_IN") Then
+                                                'update de la value suivant la commande et le type de composant
+                                                If TypeOf listedevices.Item(j).Value Is Boolean Then
+                                                    'composant est un booleen
+                                                    If PINvalue = "LOW" Or PINvalue = "OFF" Or PINvalue = "0" Or PINvalue = "FALSE" Or PINvalue = False Then listedevices.Item(j).Value = False Else listedevices.Item(j).Value = True
+                                                ElseIf TypeOf listedevices.Item(j).Value Is Long Or TypeOf listedevices.Item(j).Value Is Integer Or TypeOf listedevices.Item(j).Value Is Double Or TypeOf listedevices.Item(j).Value Is Single Then
+                                                    'composant est un nombre
+                                                    If IsNumeric(PINvalue) Then
+                                                        listedevices.Item(j).Value = PINvalue
+                                                    ElseIf PINvalue = "LOW" Or PINvalue = "OFF" Or PINvalue = "0" Or PINvalue = "FALSE" Or PINvalue = False Then
+                                                        listedevices.Item(j).Value = 0
+                                                    ElseIf PINvalue = "HIGH" Or PINvalue = "ON" Or PINvalue = "1" Or PINvalue = "True" Or PINvalue = True Then
+                                                        listedevices.Item(j).Value = 100
+                                                    Else
+                                                        WriteLog("ERR: La valeur reçu pour " & Objet.Name & " n'est pas un nombre: " & PINvalue)
+                                                    End If
+                                                Else
+                                                    'composant est un string
+                                                    listedevices.Item(j).Value = PINvalue
+                                                End If
+                                            Else
+                                                WriteLog("ERR: " & Objet.Name & ": READX : " & PINtype & ":" & PINnumber & " - " & PINvalue & "--> PIN Not found in Homidom with model DIGITAL_IN DIGITAL_OUT or ANALOG_IN")
+                                            End If
+                                        End If
+                                    Next
+                                Next
                             Else
-
-                            End If
-                        Next
-
-                    Else
-                        Dim responsetab2 As String() = responseFromServer.Split(" ")
-                        If responsetab2.Count = 1 Then
-                            responsetab2(0) = responsetab2(0).Replace(vbCrLf, "")
-                            responsetab2(0) = responsetab2(0).Replace(vbCr, "")
-                            responsetab2(0) = responsetab2(0).Replace(vbLf, "")
-                            If (UCase(Objet.Modele) = "VARIABLE" Or UCase(Objet.Modele) = "ANALOG_IN" Or UCase(Objet.Modele) = "DIGITAL_IN") Then
-                                'Analyse de la réponse (valeur lue): "20" "ON"
-                                WriteLog("DBG: " & Objet.Name & ": Reponse reçu de larduino : " & responsetab2(0))
-                                'update de la value suivant la commande et le type de composant
-                                If TypeOf Objet.Value Is Boolean Then
-                                    'composant est un booleen
-                                    If responsetab2(0) = "LOW" Or responsetab2(0) = "OFF" Or responsetab2(0) = "0" Or responsetab2(0) = "FALSE" Or responsetab2(0) = False Then Objet.Value = False Else Objet.Value = True
-                                ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Or TypeOf Objet.Value Is Single Then
-                                    'composant est un nombre
-                                    If IsNumeric(responsetab2(0)) Then
-                                        Objet.Value = responsetab2(0)
-                                    ElseIf responsetab2(0) = "LOW" Or responsetab2(0) = "OFF" Or responsetab2(0) = "0" Or responsetab2(0) = "FALSE" Or responsetab2(0) = False Then
-                                        Objet.Value = 0
-                                    ElseIf responsetab2(0) = "HIGH" Or responsetab2(0) = "ON" Or responsetab2(0) = "1" Or responsetab2(0) = "True" Or responsetab2(0) = True Then
-                                        Objet.Value = 100
+                                Dim responsetab2 As String() = responseFromServer.Split(" ")
+                                If responsetab2.Count = 1 Then
+                                    responsetab2(0) = responsetab2(0).Replace(vbCrLf, "")
+                                    responsetab2(0) = responsetab2(0).Replace(vbCr, "")
+                                    responsetab2(0) = responsetab2(0).Replace(vbLf, "")
+                                    WriteLog("DBG: " & Objet.Name & ": Reponse reçu de l arduino : " & responsetab2(0))
+                                    If (UCase(Objet.Modele) = "VARIABLE" Or UCase(Objet.Modele) = "ANALOG_IN" Or UCase(Objet.Modele) = "DIGITAL_IN") Then
+                                        'Analyse de la réponse (valeur lue): "20" "ON"
+                                        'update de la value suivant la commande et le type de composant
+                                        If TypeOf Objet.Value Is Boolean Then
+                                            'composant est un booleen
+                                            If responsetab2(0) = "LOW" Or responsetab2(0) = "OFF" Or responsetab2(0) = "0" Or responsetab2(0) = "FALSE" Or responsetab2(0) = False Then Objet.Value = False Else Objet.Value = True
+                                        ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Or TypeOf Objet.Value Is Single Then
+                                            'composant est un nombre
+                                            If IsNumeric(responsetab2(0)) Then
+                                                Objet.Value = responsetab2(0)
+                                            ElseIf responsetab2(0) = "LOW" Or responsetab2(0) = "OFF" Or responsetab2(0) = "0" Or responsetab2(0) = "FALSE" Or responsetab2(0) = False Then
+                                                Objet.Value = 0
+                                            ElseIf responsetab2(0) = "HIGH" Or responsetab2(0) = "ON" Or responsetab2(0) = "1" Or responsetab2(0) = "True" Or responsetab2(0) = True Then
+                                                Objet.Value = 100
+                                            Else
+                                                WriteLog("ERR: La valeur reçu pour " & Objet.Name & " n'est pas un nombre: " & responsetab2(0))
+                                            End If
+                                        Else
+                                            'composant est un string
+                                            Objet.Value = responsetab2(0)
+                                        End If
                                     Else
-                                        WriteLog("ERR: La valeur reçu pour " & Objet.Name & " n'est pas un nombre: " & responsetab2(0))
+                                        'update de la value suivant la commande et le type de composant
+                                        Select Case responsetab2(0)
+                                            Case "ON", "HIGH", "TRUE"
+                                                If TypeOf Objet.Value Is Boolean Then
+                                                    Objet.Value = True
+                                                ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
+                                                    Objet.Value = 100
+                                                Else
+                                                    Objet.Value = "ON"
+                                                End If
+                                            Case "OFF", "LOW", "FALSE"
+                                                If TypeOf Objet.Value Is Boolean Then
+                                                    Objet.Value = False
+                                                ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
+                                                    Objet.Value = 0
+                                                Else
+                                                    Objet.Value = "OFF"
+                                                End If
+                                            Case Else
+                                                WriteLog(Objet.Name & ": La valeur reçu de l arduino n'est pas utilisable : " & responsetab2(0))
+                                        End Select
                                     End If
                                 Else
-                                    'composant est un string
-                                    Objet.Value = responsetab2(0)
+                                    WriteLog("DBG: " & Objet.Name & ": Reponse reçu de l arduino : " & responsetab2(0) & "-" & responsetab2(1))
+                                    'update de la value suivant la commande et le type de composant
+                                    Select Case responsetab2(0)
+                                        Case "DIM"
+                                            If TypeOf Objet.Value Is Boolean Then
+                                                If CInt(responsetab2(1)) > 0 Then Objet.Value = True Else Objet.Value = False
+                                            ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
+                                                Objet.Value = CInt(responsetab2(1))
+                                            Else
+                                                Objet.Value = responsetab2(1)
+                                            End If
+                                        Case "CFG"
+                                            WriteLog(Objet.Name & ": Type de PIN configuré à " & Objet.Modele.ToString.ToUpper)
+                                        Case Else
+                                            WriteLog(Objet.Name & ": La commande reçu de l'aruino n'est pas utilisable : " & responsetab2(0).ToUpper & " - " & responsetab2(1).ToUpper)
+                                    End Select
                                 End If
-                            Else
-                                WriteLog("DBG: " & Objet.Name & ": Reponse reçu de l arduino : " & responsetab2(0))
-                                'update de la value suivant la commande et le type de composant
-                                Select Case responsetab2(0)
-                                    Case "ON", "HIGH", "TRUE"
-                                        If TypeOf Objet.Value Is Boolean Then
-                                            Objet.Value = True
-                                        ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
-                                            Objet.Value = 100
-                                        Else
-                                            Objet.Value = "ON"
-                                        End If
-                                    Case "OFF", "LOW", "FALSE"
-                                        If TypeOf Objet.Value Is Boolean Then
-                                            Objet.Value = False
-                                        ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
-                                            Objet.Value = 0
-                                        Else
-                                            Objet.Value = "OFF"
-                                        End If
-                                    Case Else
-                                        WriteLog(Objet.Name & ": La valeur reçu de l arduino n'est pas utilisable : " & responsetab2(0))
-                                End Select
                             End If
-                        Else
-                            WriteLog("DBG: " & Objet.Name & ": Reponse reçu de l arduino : " & responsetab2(0) & "-" & responsetab2(1))
-                            'update de la value suivant la commande et le type de composant
-                            Select Case responsetab2(0)
-                                Case "DIM"
-                                    If TypeOf Objet.Value Is Boolean Then
-                                        If CInt(responsetab2(1)) > 0 Then Objet.Value = True Else Objet.Value = False
-                                    ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Then
-                                        Objet.Value = CInt(responsetab2(1))
-                                    Else
-                                        Objet.Value = responsetab2(1)
-                                    End If
-                                Case "CFG"
-                                    WriteLog(Objet.Name & ": Type de PIN configuré à " & Objet.Modele.ToString.ToUpper)
-                                Case Else
-                                    WriteLog(Objet.Name & ": La commande reçu de l'aruino n'est pas utilisable : " & responsetab2(0).ToUpper & " - " & responsetab2(1).ToUpper)
-                            End Select
                         End If
                     End If
-                End If
-            End If
 
         Catch ex As Exception
             WriteLog("ERR: WRITE " & ex.ToString)
@@ -855,6 +906,7 @@ Public Class Driver_Arduino_HTTP
             add_devicecommande("PWM", "Envoyer une commande PWM avec une valeur de 0 à 255", 1)
             add_devicecommande("SETVAR", "Envoyer une valeur de type string à une variable sur l arduino", 1)
             add_devicecommande("READX", "Lire les valeurs de toutes les entrées de l'arduino et mettre tous les composants Homidom à jour", 1)
+            add_devicecommande("CONFIG_TYPE_PINX", "configurer le type de PIN sur l arduino suivant les propriétés du composant pour tous les composants associé à cet Arduino", 1)
 
             'Libellé Driver
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
