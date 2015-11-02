@@ -695,7 +695,7 @@ Public Class DevicesController
             End If
 
             Return allDevImperi
-
+        Else
             Return "Error Device"
         End If
     End Function
