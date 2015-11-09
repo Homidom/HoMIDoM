@@ -743,8 +743,11 @@ Public Class DevicesController
 
                                         Select Case command
                                             Case "setLevel", "setSetPoint"
-
-                                                action = New DeviceAction() With {.Nom = "DIM"}
+                                                If Dev1.Type = ListeDevices.VOLET Then
+                                                    action = New DeviceAction() With {.Nom = "OUVERTURE"}
+                                                Else
+                                                    action = New DeviceAction() With {.Nom = "DIM"}
+                                                End If
                                                 Dim devActionParameter As DeviceAction.Parametre = New DeviceAction.Parametre With {.Nom = "Value", .Value = param}
                                                 'devActionParameter = action.Parametres.Where(Function(t) t.Nom = param).FirstOrDefault()
                                                 action.Parametres.Add(devActionParameter)
@@ -787,113 +790,120 @@ Public Class DevicesController
 
     End Function
 
-    Private Function ParamByType(ByVal comp As HoMIDom.HoMIDom.TemplateDevice) As List(Of DeviceParam)
-        Dim tempParams As List(Of DeviceParam) = New List(Of DeviceParam)
-        Dim params(10) As DeviceParam
-        Thread.CurrentThread.CurrentCulture = New CultureInfo("en")
+    Private Function ParamByType(ByVal comp As HoMIDom.HoMIDom.TemplateDevice) As Object
 
-        Select Case comp.Type
+        Try
 
-            Case 1 '"APPAREIL"
-                params(0) = New DeviceParam
-                params(0).key = "Status"
-                params(0).value = comp.Value
+            Dim tempParams As List(Of DeviceParam) = New List(Of DeviceParam)
+            Dim params(10) As DeviceParam
+            Thread.CurrentThread.CurrentCulture = New CultureInfo("en")
 
-            Case 27 '"VOLET"
-                params(0) = New DeviceParam
-                params(0).key = "Level"
-                params(0).value = comp.Value
+            Select Case comp.Type
 
-            Case 16, 14 '"LAMPE", "GENERIQUEVALUE"
-                params(0) = New DeviceParam
-                params(0).key = "Level"
-                params(0).value = comp.Value
-                params(1) = New DeviceParam
-                params(1).key = "Status"
-                If comp.Value > 0 Then
-                    params(1).value = "1"
-                Else
-                    params(1).value = "0"
+                Case 1 '"APPAREIL"
+                    params(0) = New DeviceParam
+                    params(0).key = "Status"
+                    params(0).value = comp.Value
+
+                Case 27 '"VOLET"
+                    params(0) = New DeviceParam
+                    params(0).key = "Level"
+                    params(0).value = comp.Value
+
+                Case 16, 14 '"LAMPE", "GENERIQUEVALUE"
+                    params(0) = New DeviceParam
+                    params(0).key = "Level"
+                    params(0).value = comp.Value
+                    params(1) = New DeviceParam
+                    params(1).key = "Status"
+                    If comp.Value > 0 Then
+                        params(1).value = "1"
+                    Else
+                        params(1).value = "0"
+                    End If
+
+                Case 4, 9 '"ENERGIEINSTANTANEE"
+                    params(0) = New DeviceParam
+                    params(0).key = "Watts"
+                    params(0).value = comp.Value
+                    params(0).unit = comp.Unit
+                    params(0).graphable = comp.IsHisto
+
+                Case 10 '"ENERGIETOTALE"
+                    params(0) = New DeviceParam
+                    params(0).key = "ConsoTotal"
+                    params(0).value = comp.Value
+                    params(0).unit = comp.Unit
+                    params(0).graphable = comp.IsHisto
+
+                Case 15, 25, 3, 19, 23, 7 '"HUMIDITE", "UV", "BAROMETRE, "PLUIECOURANT", "TEMPERATURE", "DETECTEUR", "BATTERIE"
+                    params(0) = New DeviceParam
+                    params(0).key = "Value"
+                    params(0).value = comp.Value
+                    params(0).unit = comp.Unit
+                    params(0).graphable = comp.IsHisto
+
+                Case 21 '"SWITCH"
+                    params(0) = New DeviceParam
+                    params(0).key = "Status"
+                    If comp.Value = False Then
+                        params(0).value = "0"
+                    Else
+                        params(0).value = "1"
+                    End If
+
+                Case 26 '"VITESSEVENT"
+                    params(0) = New DeviceParam
+                    params(0).key = "Speed"
+                    params(0).value = comp.Value
+
+                Case 8 ' "DIRECTIONVENT"
+                    params(0) = New DeviceParam
+                    params(0).key = "Direction"
+                    params(0).value = comp.Value
+
+                Case 20 '"PLUIETOTAL"
+                    params(0) = New DeviceParam
+                    params(0).key = "Accumulation"
+                    params(0).value = comp.Value
+
+                Case 24 '"TEMPERATURECONSIGNE"
+                    params(0) = New DeviceParam
+                    params(0).key = "cursetpoint"
+                    params(0).value = comp.Value
+
+                Case 28 '"LAMPERGBW"
+                    params(0) = New DeviceParam
+                    params(0).key = "Level"
+                    params(0).value = comp.Value
+                    params(1) = New DeviceParam
+                    params(1).key = "whitechannel"
+                    params(1).value = comp.temperature
+                    params(2) = New DeviceParam
+                    params(2).key = "color"
+                    params(2).value = comp.optionnal
+
+                Case Else
+                    params(0) = New DeviceParam
+                    params(0).key = "Value"
+                    params(0).value = comp.Value
+
+            End Select
+
+            For i = 0 To params.Count - 1
+                If params(i) IsNot Nothing Then
+                    If params(i).value.Contains(","c) Then
+                        params(i).value.Replace(Chr(44), Chr(46))
+                    End If
+                    tempParams.Add(params(i))
                 End If
+            Next
 
-            Case 4, 9 '"ENERGIEINSTANTANEE", "BATTERIE"
-                params(0) = New DeviceParam
-                params(0).key = "Watts"
-                params(0).value = comp.Value
-                params(0).unit = comp.Unit
-                params(0).graphable = comp.IsHisto
+            Return tempParams
 
-            Case 10 '"ENERGIETOTALE"
-                params(0) = New DeviceParam
-                params(0).key = "ConsoTotal"
-                params(0).value = comp.Value
-                params(0).unit = comp.Unit
-                params(0).graphable = comp.IsHisto
-
-            Case 15, 25, 3, 19, 23, 7 '"HUMIDITE", "UV", "BAROMETRE, "PLUIECOURANT", "TEMPERATURE", "DETECTEUR"
-                params(0) = New DeviceParam
-                params(0).key = "Value"
-                params(0).value = comp.Value
-                params(0).unit = comp.Unit
-                params(0).graphable = comp.IsHisto
-
-            Case 21 '"SWITCH"
-                params(0) = New DeviceParam
-                params(0).key = "Status"
-                If comp.Value = False Then
-                    params(0).value = "0"
-                Else
-                    params(0).value = "1"
-                End If
-
-            Case 26 '"VITESSEVENT"
-                params(0) = New DeviceParam
-                params(0).key = "Speed"
-                params(0).value = comp.Value
-
-            Case 8 ' "DIRECTIONVENT"
-                params(0) = New DeviceParam
-                params(0).key = "Direction"
-                params(0).value = comp.Value
-
-            Case 20 '"PLUIETOTAL"
-                params(0) = New DeviceParam
-                params(0).key = "Accumulation"
-                params(0).value = comp.Value
-
-            Case 24 '"TEMPERATURECONSIGNE"
-                params(0) = New DeviceParam
-                params(0).key = "cursetpoint"
-                params(0).value = comp.Value
-
-            Case 28 '"LAMPERGBW"
-                params(0) = New DeviceParam
-                params(0).key = "Level"
-                params(0).value = comp.Value
-                params(1) = New DeviceParam
-                params(1).key = "whitechannel"
-                params(1).value = comp.temperature
-                params(2) = New DeviceParam
-                params(2).key = "color"
-                params(2).value = comp.optionnal
-
-            Case Else
-                params(0) = New DeviceParam
-                params(0).key = "Value"
-                params(0).value = comp.Value
-
-        End Select
-
-        For i = 0 To params.Count - 1
-            If params(i) IsNot Nothing Then
-                If params(i).value.Contains(","c) Then
-                    params(i).value.Replace(Chr(44), Chr(46))
-                End If
-                tempParams.Add(params(i))
-            End If
-        Next
-
-        Return tempParams
+        Catch ex As Exception
+            Return "Error"
+        End Try
 
     End Function
 
@@ -958,17 +968,22 @@ Public Class RoomsController
 
     <HttpGet()>
     Public Function GetValue() As Object
+        Try
 
-        Dim fileName = My.Application.Info.DirectoryPath & "\Drivers\Imperihome\rooms.json"
+            Dim fileName = My.Application.Info.DirectoryPath & "\Drivers\Imperihome\rooms.json"
 
-        If System.IO.File.Exists(fileName) Then
-            Dim stream = System.IO.File.ReadAllText(fileName)
-            Dim allZoneImperi As RoomsList = Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(RoomsList))
+            If System.IO.File.Exists(fileName) Then
+                Dim stream = System.IO.File.ReadAllText(fileName)
+                Dim allZoneImperi As RoomsList = Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(RoomsList))
 
-            Return allZoneImperi
-        Else
+                Return allZoneImperi
+            Else
+                Return "Le fichier rooms n'éxiste pas"
+            End If
+
+        Catch ex As Exception
             Return "Error"
-        End If
+        End Try
 
     End Function
 
@@ -994,16 +1009,20 @@ Public Class SystemController
 
     <HttpGet()>
     Public Function GetValue() As Object
+        Try
+            Dim fileName = My.Application.Info.DirectoryPath & "\Drivers\Imperihome\system.json"
 
-        Dim fileName = My.Application.Info.DirectoryPath & "\Drivers\Imperihome\system.json"
+            If System.IO.File.Exists(fileName) Then
+                Dim stream = System.IO.File.ReadAllText(fileName)
+                Dim system2 As System1 = Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(System1))
+                Return system2
+            Else
+                Return "Le fichier system n'éxiste pas"
+            End If
 
-        If System.IO.File.Exists(fileName) Then
-            Dim stream = System.IO.File.ReadAllText(fileName)
-            Dim system2 As System1 = Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(System1))
-            Return system2
-        Else
+        Catch ex As Exception
             Return "Error"
-        End If
+        End Try
 
     End Function
 
