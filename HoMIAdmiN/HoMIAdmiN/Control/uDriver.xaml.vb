@@ -355,7 +355,8 @@ Partial Public Class uDriver
         Try
             Dim startInfo As ProcessStartInfo = New ProcessStartInfo()
             startInfo.UseShellExecute = True
-            startInfo.FileName = "http://www.homidom.com/upload/documentation/HoMIDoM-Driver-" & TxtNom.Text & ".pdf"
+            'startInfo.FileName = "http://www.homidom.com/upload/documentation/HoMIDoM-Driver-" & TxtNom.Text & ".pdf"
+            startInfo.FileName = "http://www.homidom.com/drivers-c44.html"
             Process.Start(startInfo)
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDriver BtnHelp_Click: " & ex.ToString, "ERREUR", "")
