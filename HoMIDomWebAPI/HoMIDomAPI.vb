@@ -56,18 +56,14 @@ Public Class HoMIDomAPI
             Dim liveApiUrl As String = String.Format("http://*:{0}/live/", configUrl.Port)
             Dim config = New HttpSelfHostConfiguration(webApiUrl)
 
-            config.Routes.MapHttpRoute("DefaultApi", "{key}/{controller}/{id}", New With { _
-             .id = RouteParameter.[Optional]
-            })
-            config.Routes.MapHttpRoute("CommandApi", "{key}/command/{controller}/{id}/{command}", New With { _
-             .action = "ExecuteCommand"
-            })
-            config.Routes.MapHttpRoute("ValueApi", "{key}/value/{controller}/{id}/{field}", New With { _
-             .action = "GetValue"
-            })
+            config.Formatters.Remove(config.Formatters.XmlFormatter)
+
+            config.Routes.MapHttpRoute("DefaultApi", "{key}/{controller}/{id}", New With {.id = RouteParameter.Optional})
+            config.Routes.MapHttpRoute("CommandApi", "{key}/command/{controller}/{id}/{command}", New With {.action = "ExecuteCommand"})
+            config.Routes.MapHttpRoute("ValueApi", "{key}/value/{controller}/{id}/{field}", New With {.action = "GetValue"})
 
             ' Add jsonp formatter for cross domain call
-            config.Formatters(0) = New WebApiContrib.Formatting.Jsonp.JsonpMediaTypeFormatter(config.Formatters.XmlFormatter) ' Replace default JSON by JSONP formatter
+            config.Formatters(0) = New WebApiContrib.Formatting.Jsonp.JsonpMediaTypeFormatter(config.Formatters.JsonFormatter) ' Replace default JSON by JSONP formatter
 
             If (Environment.UserInteractive) Then Console.WriteLine(Now & " INFO    API Web démarrée sur l'adresse :  " & webApiUrl)
             server = New HttpSelfHostServer(config)
