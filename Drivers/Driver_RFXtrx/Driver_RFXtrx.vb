@@ -5389,6 +5389,15 @@ Imports System.Media
                 Case "DIM"
                     kar(LIGHTING2.cmnd) = 2
                     WriteRetourSend(adresse, "", CStr(dimlevel))
+
+                Case "OUVERTURE"
+                    If dimlevel = 0 Then
+                        kar(LIGHTING2.cmnd) = 0
+                        WriteRetourSend(adresse, "", "OFF")
+                    Else
+                        kar(LIGHTING2.cmnd) = 1
+                        WriteRetourSend(adresse, "", "ON")
+                    End If
                 Case Else
                     WriteLog("ERR: Send AC : Commande invalide : " & commande)
                     Exit Sub
