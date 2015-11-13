@@ -1015,6 +1015,7 @@ Public Class SystemController
             If System.IO.File.Exists(fileName) Then
                 Dim stream = System.IO.File.ReadAllText(fileName)
                 Dim system2 As System1 = Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(System1))
+                system2.id = ServerKey
                 Return system2
             Else
                 Return "Le fichier system n'éxiste pas"
