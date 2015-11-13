@@ -498,8 +498,9 @@ Public Class Driver_Arduino_HTTP
                         Case "DIGITAL_PWM" : urlcommande &= listedevices.Item(j).Adresse2 & "_2"
                         Case "1WIRE" : urlcommande &= listedevices.Item(j).Adresse2 & "_3"
                         Case Else
-                            WriteLog("ERR: WRITE CONFIG_TYPE_PIN : Ce type de PIN ne peut pas être configuré : " & listedevices.Item(j).Modele.ToString.ToUpper & " (" & listedevices.Item(j).Name & ")")
-                            Exit Sub
+                            'WriteLog("ERR: WRITE CONFIG_TYPE_PIN : Ce type de PIN ne peut pas être configuré : " & listedevices.Item(j).Modele.ToString.ToUpper & " (" & listedevices.Item(j).Name & ")")
+                            'Exit Sub
+                            'on ignore si le type n'est pas bon
                     End Select
                     If j <> listedevices.Count Then urlcommande &= "-"
                 Next
@@ -680,7 +681,7 @@ Public Class Driver_Arduino_HTTP
                             For j = 0 To (listedevices.Count - 1)
                                 If PINnumber = (listedevices.Item(j).Adresse2 - 1) Then
                                     'PIN Found, check if model is the same, then update value
-                                    If (PINtype = "D" And listedevices.Item(j).model = "DIGITAL_IN") Or (PINtype = "O" And listedevices.Item(j).model = "DIGITAL_OUT") Or (PINtype = "A" And listedevices.Item(j).model = "ANALOG_IN") Then
+                                    If (PINtype = "D" And listedevices.Item(j).modele = "DIGITAL_IN") Or (PINtype = "O" And listedevices.Item(j).modele = "DIGITAL_OUT") Or (PINtype = "A" And listedevices.Item(j).modele = "ANALOG_IN") Then
                                         'update de la value suivant la commande et le type de composant
                                         If TypeOf listedevices.Item(j).Value Is Boolean Then
                                             'composant est un booleen
