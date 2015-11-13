@@ -2421,7 +2421,7 @@ Public Class uWidgetEmpty
                     Case HoMIDom.HoMIDom.Device.ListeDevices.BATTERIE
                         If TypeOf Value Is Boolean Then
                             If Value = True Then GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-100.png" Else GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-0.png"
-                        ElseIf TypeOf Value Is Integer Or TypeOf Value Is Long Or TypeOf Value Is Single Or TypeOf Value Is Double Then
+                        ElseIf IsNumeric(Value) Then 'TypeOf Value Is Integer Or TypeOf Value Is Long Or TypeOf Value Is Single Or TypeOf Value Is Double Then
                             If CSng(Value) > 80 Then
                                 GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-100.png"
                             ElseIf CSng(Value) > 60 Then
@@ -2436,7 +2436,7 @@ Public Class uWidgetEmpty
                         Else
                             If STRGS.UCase(Value) = "LOW" Or STRGS.UCase(Value) = "0%" Then GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-0.png" Else GetStatusPicture = _MonRepertoire & "\Images\Devices\batterie-100.png"
                         End If
-                        
+
                     Case HoMIDom.HoMIDom.Device.ListeDevices.COMPTEUR
                         GetStatusPicture = _MonRepertoire & "\Images\Devices\compteur-defaut.png"
                     Case HoMIDom.HoMIDom.Device.ListeDevices.CONTACT

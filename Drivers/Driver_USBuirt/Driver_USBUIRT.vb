@@ -412,6 +412,43 @@ Imports UsbUirt
                         Exit Sub
                     End If
                 End If
+                If Commande = "OUVERTURE" Then
+                    If Parametre1 = 0 Then
+                        If String.IsNullOrEmpty(Objet.Adresse2) Then
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "La trame correspondant à OFF est vide pour le composant " & Objet.Name)
+                        Else
+                            Count = _Parametres.Item(0).Valeur
+                            If IsNumeric(_Parametres.Item(1).Valeur) Then
+                                If CInt(_Parametres.Item(1).Valeur) = 0 Then
+                                    _CodeFormat = UsbUirt.CodeFormat.Uuirt
+                                End If
+                                If CInt(_Parametres.Item(1).Valeur) = 1 Then
+                                    _CodeFormat = UsbUirt.CodeFormat.Pronto
+                                End If
+                            End If
+                            SendCodeIR(Objet.Adresse2, Count)
+                            Objet.Value = 0
+                            Exit Sub
+                        End If
+                    Else
+                        If String.IsNullOrEmpty(Objet.Adresse1) Then
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "La trame correspondant à ON est vide pour le composant " & Objet.Name)
+                        Else
+                            Count = _Parametres.Item(0).Valeur
+                            If IsNumeric(_Parametres.Item(1).Valeur) Then
+                                If CInt(_Parametres.Item(1).Valeur) = 0 Then
+                                    _CodeFormat = UsbUirt.CodeFormat.Uuirt
+                                End If
+                                If CInt(_Parametres.Item(1).Valeur) = 1 Then
+                                    _CodeFormat = UsbUirt.CodeFormat.Pronto
+                                End If
+                            End If
+                            SendCodeIR(Objet.Adresse1, Count)
+                            Objet.Value = 100
+                            Exit Sub
+                        End If
+                    End If
+                End If
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUIRT", "Impossible d'envoyer un code IR pour un type de device autre que MULTIMEDIA")
             End If
         Catch ex As Exception
