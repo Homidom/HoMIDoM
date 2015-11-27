@@ -491,7 +491,7 @@ Public Class Driver_Arduino_HTTP
                 'get list of all composants with this IP adress (Objet.adresse1)
                 Dim listedevices As New ArrayList
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_idsrv, Objet.adresse1, "", Me._ID, True)
-                For j = 0 To listedevices.Count
+                For j = 0 To (listedevices.Count - 1)
                     Select Case UCase(listedevices.Item(j).Modele)
                         Case "DIGITAL_IN" : urlcommande &= listedevices.Item(j).Adresse2 & "_0"
                         Case "DIGITAL_OUT" : urlcommande &= listedevices.Item(j).Adresse2 & "_1"
