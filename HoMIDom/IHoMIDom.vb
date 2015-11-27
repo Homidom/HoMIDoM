@@ -16,6 +16,7 @@ Namespace HoMIDom
 
 
 #Region "Serveur"
+
         ''' <summary>
         ''' Retourne: Sauvegader les backups et sauvegardes suivant différents fichiers
         ''' </summary>
@@ -529,9 +530,19 @@ Namespace HoMIDom
         ''' <returns>String si OK, String "ERR:..." si erreur</returns>          
         ''' <remarks></remarks>          
         <OperationContract()> Function ImportHisto(ByVal fichier As String, Optional ByVal separateur As String = ";") As String
+
+        ''' <summary>
+        ''' Retourne le nombre d'historiques purgé 
+        ''' <param name="IdSrv">L'ID du serveur doit être passé en paramètre pour exécuter cette fonction</param>
+        ''' </summary>        
+        ''' <returns>nombre historiques</returns>
+        ''' <remarks></remarks>
+        <OperationContract()> Function VerifPurge() As Integer
+
 #End Region
 
 #Region "Audio"
+        <OperationContract()> Function Parler(ByVal Message As String) As Boolean
 #End Region
 
 #Region "User"
@@ -772,7 +783,7 @@ Namespace HoMIDom
         ''' <param name="lastchangeduree">Dernière valeur</param>
         ''' <returns>ID du device créé ou modifié, 99 si ID du serveur erroné</returns>
         ''' <remarks></remarks>
-        <OperationContract()> Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, ByVal Historisation As Boolean, ByVal RefreshHisto As Double, ByVal purge As Double, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0, Optional ByVal lastEtat As Boolean = True, Optional ByVal correction As String = "0", Optional ByVal formatage As String = "", Optional ByVal precision As Double = 0, Optional ByVal valuemax As Double = 9999, Optional ByVal valuemin As Double = -9999, Optional ByVal valuedef As Double = 0, Optional ByVal Commandes As List(Of Telecommande.Commandes) = Nothing, Optional ByVal Unit As String = "", Optional ByVal Puissance As Integer = 0, Optional ByVal AllValue As Boolean = False, Optional ByVal Variables As Dictionary(Of String, String) = Nothing, Optional ByVal Proprietes As Dictionary(Of String, String) = Nothing) As String
+        <OperationContract()> Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, ByVal Historisation As Boolean, ByVal RefreshHisto As Double, ByVal purge As Double, ByVal moyjour As Double, ByVal moyheure As Double, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0, Optional ByVal lastEtat As Boolean = True, Optional ByVal correction As String = "0", Optional ByVal formatage As String = "", Optional ByVal precision As Double = 0, Optional ByVal valuemax As Double = 9999, Optional ByVal valuemin As Double = -9999, Optional ByVal valuedef As Double = 0, Optional ByVal Commandes As List(Of Telecommande.Commandes) = Nothing, Optional ByVal Unit As String = "", Optional ByVal Puissance As Integer = 0, Optional ByVal AllValue As Boolean = False, Optional ByVal Variables As Dictionary(Of String, String) = Nothing, Optional ByVal Proprietes As Dictionary(Of String, String) = Nothing) As String
 
 
         ''' <summary>

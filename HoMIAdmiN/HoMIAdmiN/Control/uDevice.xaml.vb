@@ -103,6 +103,10 @@ Partial Public Class uDevice
                     TxtRefreshHisto.ToolTip = "Nombres de refresh avant d'enregistrer le composant dans l'historique, tout est historisé si 0 "
                     TxtPurge.Text = x.Purge
                     TxtPurge.ToolTip = "Nombres de jours avant de supprimer le composant de l'historique, pas de suppression si 0"
+                    TxtMoyHeure.Text = x.MoyHeure
+                    TxtMoyHeure.ToolTip = "Nombres de jours avant de faire une moyenne heure du composant de l'historique, pas de moyenne si 0"
+                    TxtMoyJour.Text = x.MoyJour
+                    TxtMoyJour.ToolTip = "Nombres de jours avant de faire une moyenne jour du composant de l'historique, pas de moyenne si 0"
                     TxtPuissance.Text = x.Puissance
                     TxtDescript.Text = x.Description
                     If TxtPuissance.Text = "" Then TxtPuissance.Text = "0"
@@ -872,12 +876,12 @@ Partial Public Class uDevice
                 '    _modele = x.Modele
                 'End If
                 If _Action = EAction.Modifier Then
-                    If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, ChkHisto.IsChecked, TxtRefreshHisto.Text, TxtPurge.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
+                    If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, ChkHisto.IsChecked, TxtRefreshHisto.Text, TxtPurge.Text, TxtMoyJour.Text, TxtMoyHeure.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
                 Else
-                    retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, ChkHisto.IsChecked, TxtRefreshHisto.Text, TxtPurge.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
+                    retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, ChkHisto.IsChecked, TxtRefreshHisto.Text, TxtPurge.Text, TxtMoyJour.Text, TxtMoyHeure.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
                 End If
             Else
-                retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, ChkHisto.IsChecked, TxtRefreshHisto.Text, TxtPurge.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
+                retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, ChkHisto.IsChecked, TxtRefreshHisto.Text, TxtPurge.Text, TxtMoyJour.Text, TxtMoyHeure.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
             End If
 
             If retour = "98" Then
@@ -1061,12 +1065,12 @@ Partial Public Class uDevice
                     Exit Sub
                 End If
                 If _Action = EAction.Modifier Then
-                    If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, ChkHisto.IsChecked, TxtRefreshHisto.Text, TxtPurge.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
+                    If x IsNot Nothing Then retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, ChkHisto.IsChecked, TxtRefreshHisto.Text, TxtPurge.Text, TxtMoyJour.Text, TxtMoyHeure.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, x.Commandes, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
                 Else
-                    retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, ChkHisto.IsChecked, TxtRefreshHisto.Text, TxtPurge.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
+                    retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, ChkHisto.IsChecked, TxtRefreshHisto.Text, TxtPurge.Text, TxtMoyJour.Text, TxtMoyHeure.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
                 End If
             Else
-                retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, ChkHisto.IsChecked, TxtRefreshHisto.Text, TxtPurge.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
+                retour = myService.SaveDevice(IdSrv, _DeviceId, TxtNom.Text, TxtAdresse1.Text, ChkEnable.IsChecked, ChKSolo.IsChecked, _driverid, CbType.Text, TxtRefresh.Text, ChkHisto.IsChecked, TxtRefreshHisto.Text, TxtPurge.Text, TxtMoyJour.Text, TxtMoyHeure.Text, TxtAdresse2.Text, ImgDevice.Tag, _modele, TxtDescript.Text, TxtLastChangeDuree.Text, ChKLastEtat.IsChecked, TxtCorrection.Text, TxtFormatage.Text, TxtPrecision.Text, TxtValueMax.Text, TxtValueMin.Text, TxtValDef.Text, Nothing, TxtUnit.Text, TxtPuissance.Text, ChKAllValue.IsChecked, _ListVar, Proprietes)
             End If
             If retour = "98" Then
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Le nom du device: " & TxtNom.Text & " existe déjà impossible de l'enregister", "ERREUR", "")

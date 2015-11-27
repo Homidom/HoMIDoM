@@ -14,6 +14,7 @@
     Private zoneName As Dictionary(Of String, String)
 
     Private allDevImperi As DeviceList
+    Private allZoneImperi As RoomList
 
     Public Sub New()
 
@@ -35,9 +36,9 @@
             typeDevice.Add(9, "DevElectricity") 'ENERGIEINSTANTANEE = 9
             typeDevice.Add(10, "DevElectricity") 'ENERGIETOTALE = 10
             typeDevice.Add(11, "DevGenericSensor") 'FREEBOX = 11
-            typeDevice.Add(12, "DevGenericSensor") 'GENERIQUEBOOLEEN = 12
-            typeDevice.Add(13, "DevGenericSensor") 'GENERIQUESTRING = 13
-            typeDevice.Add(14, "DevGenericSensor") 'GENERIQUEVALUE = 14
+            typeDevice.Add(12, "DevDimmer") 'GENERIQUEBOOLEEN = 12
+            typeDevice.Add(13, "DevMultiSwitch") 'GENERIQUESTRING = 13
+            typeDevice.Add(14, "DevDimmer") 'GENERIQUEVALUE = 14
             typeDevice.Add(15, "DevHygrometry") 'HUMIDITE = 15
             typeDevice.Add(16, "DevDimmer") 'LAMPE = 16
             typeDevice.Add(17, "DevGenericSensor") 'METEO = 17
@@ -133,10 +134,22 @@
             If System.IO.File.Exists(fileName) Then
                 Dim stream = System.IO.File.ReadAllText(fileName)
                 allDevImperi = Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(DeviceList))
-                Return True
             Else
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR ImportImperiHome: Le fichier " & fileName & " n'existe pas", "ERREUR", "ImportImperiHome")
                 Return False
+                Exit Function
             End If
+            Dim fileName1 = My.Application.Info.DirectoryPath & "\Drivers\Imperihome\rooms.json"
+
+            If System.IO.File.Exists(fileName1) Then
+                Dim stream = System.IO.File.ReadAllText(fileName1)
+                allZoneImperi = Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(RoomList))
+            Else
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR ImportImperiHome: Le fichier " & fileName & " n'existe pas", "ERREUR", "ImportImperiHome")
+                Return False
+                Exit Function
+            End If
+            Return True
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR ImportImperiHome: " & ex.ToString, "ERREUR", "ImportImperiHome")
             Return Nothing
@@ -148,6 +161,8 @@
 
             cptDevice = 0
             cptRoom = 0
+            Dim idfind As String = ""
+            Dim memId As Integer = 0
 
             DevList = New DeviceList
             DevList.devices = New List(Of Device)
@@ -157,11 +172,23 @@
             For Each dev As StackPanel In ListBoxDevices.Items
                 For Each child As CheckBox In dev.Children
                     If child.IsChecked Then
-                        cptDevice += 1
                         Dim comp = ReturnDeviceByID(child.ToolTip)
-                        'device                    
+                        'device  
+                        idfind = ""
+                        memId = 0
                         Dim Temp As Device = New Device
-                        Temp.id = "DEV" & Format(cptDevice, "000")
+                        If allDevImperi IsNot Nothing Then
+                            For Each impdev In allDevImperi.devices
+                                If comp.Name = impdev.name Then idfind = impdev.id
+                                If CInt(Right(impdev.id, 3)) > memId Then memId = CInt(Right(impdev.id, 3))
+                            Next
+                        End If
+                        If idfind = "" Then
+                            cptDevice += 1
+                            Temp.id = "DEV" & Format(memId + cptDevice, "000")
+                        Else
+                            Temp.id = idfind
+                        End If
                         Temp.name = comp.Name
                         Temp.room = searchZone(comp.ID)
                         Temp.type = typeDevice(comp.Type)
@@ -174,11 +201,24 @@
             For Each dev As StackPanel In ListBoxMacros.Items
                 For Each child As CheckBox In dev.Children
                     If child.IsChecked Then
-                        cptDevice += 1
                         Dim comp = myService.ReturnMacroById(IdSrv, child.ToolTip)
                         'macro
+                        idfind = ""
+                        memId = 0
                         Dim Temp As Device = New Device
-                        Temp.id = "DEV" & Format(cptDevice, "000")
+
+                        If allDevImperi IsNot Nothing Then
+                            For Each impdev In allDevImperi.devices
+                                If comp.Nom = impdev.name Then idfind = impdev.id
+                                If CInt(Right(impdev.id, 3)) > memId Then memId = CInt(Right(impdev.id, 3))
+                            Next
+                        End If
+                        If idfind = "" Then
+                            cptDevice += 1
+                            Temp.id = "DEV" & Format(memId + cptDevice, "000")
+                        Else
+                            Temp.id = idfind
+                        End If
                         Temp.name = comp.Nom
                         Temp.room = searchZone(comp.ID)
                         Temp.type = "DevScene"
@@ -230,6 +270,7 @@
         Try
             Dim idzone As String = ""
             Dim devZone As List(Of String)
+            If ZoneList Is Nothing Then ZoneList = allZoneImperi
             For Each zones In zoneName
                 devZone = myService.GetDeviceInZone(IdSrv, zones.Key)
                 devZone.AddRange(myService.GetMacroInZone(IdSrv, zones.Key))
@@ -247,33 +288,29 @@
             Dim tempRoom As Room = New Room
 
             If idzone = "" Then
-                If ZoneList.rooms IsNot Nothing Then
-                    For Each room As Room In ZoneList.rooms
-                        If room.name = "Reserve" Then
-                            Return room.id
-                            Exit Function
-                        End If
-                    Next
-                End If
-                tempRoom.id = "ROOM99" & Format(cptRoom, "00")
+                tempRoom.id = "ROOM999"
                 tempRoom.name = "Reserve"
                 ZoneList.rooms.Add(tempRoom)
                 Return tempRoom.id
                 Exit Function
             End If
-
+            Dim idfind As String = ""
+            Dim memId As Integer = 0
             If ZoneList.rooms IsNot Nothing Then
                 For Each room As Room In ZoneList.rooms
                     If room.name = zoneName(idzone) Then
-                        Return room.id
-                        Exit Function
+                        If room.name = zoneName(idzone) Then idfind = room.id
+                        If CInt(Right(room.id, 3)) > memId Then memId = CInt(Right(room.id, 3))
                     End If
                 Next
             End If
-            cptRoom += 1
-            tempRoom.id = "ROOM" & Format(cptRoom, "00")
+            If idfind = "" Then
+                tempRoom.id = "ROOM" & Format(memId + 1, "000")
+                ZoneList.rooms.Add(tempRoom)
+            Else
+                tempRoom.id = idfind
+            End If
             tempRoom.name = zoneName(idzone)
-            ZoneList.rooms.Add(tempRoom)
             Return tempRoom.id
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR searchZone: " & ex.ToString, "ERREUR", "searchZone")

@@ -1438,6 +1438,8 @@ Namespace HoMIDom
                                         If (Not list.Item(j).Attributes.GetNamedItem("ishisto") Is Nothing) Then .IsHisto = list.Item(j).Attributes.GetNamedItem("ishisto").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("refreshhisto") Is Nothing) Then .refreshhisto = list.Item(j).Attributes.GetNamedItem("refreshhisto").Value
                                         If (Not list.Item(j).Attributes.GetNamedItem("purge") Is Nothing) Then .purge = list.Item(j).Attributes.GetNamedItem("purge").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("moyjour") Is Nothing) Then .moyjour = list.Item(j).Attributes.GetNamedItem("moyjour").Value
+                                        If (Not list.Item(j).Attributes.GetNamedItem("moyheure") Is Nothing) Then .moyheure = list.Item(j).Attributes.GetNamedItem("moyheure").Value
 
                                         'on recup les variables
                                         If list.Item(j).HasChildNodes = True Then
@@ -2362,6 +2364,12 @@ Namespace HoMIDom
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("purge")
                         writer.WriteValue(_ListDevices.Item(i).purge)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("moyjour")
+                        writer.WriteValue(_ListDevices.Item(i).moyjour)
+                        writer.WriteEndAttribute()
+                        writer.WriteStartAttribute("moyheure")
+                        writer.WriteValue(_ListDevices.Item(i).moyheure)
                         writer.WriteEndAttribute()
 
                         '-- propriétés generique value --
@@ -6122,30 +6130,151 @@ Namespace HoMIDom
             End Try
         End Function
 
-        Private Function VerifPurge()
+
+        Public Function VerifPurge() As Integer Implements IHoMIDom.VerifPurge
 
             Try
-                Dim retour As String = ""
+
                 Dim Source As String = "Value"
-                Dim DateTime As DateTime
-                Dim IdDevice As String = ""
+                Dim result As New List(Of Historisation)
+                Dim result1 As New List(Of Historisation)
+                Dim DateTime As String = ""
+                Dim DateStart As String = ""
 
                 For Each _dev In _ListDevices
                     If _dev.Purge > 0 Then
 
-                        DateTime = (Convert.ToDateTime(Now.AddDays(_dev.Purge * -1))).ToString("yyyy-MM-dd HH:mm:ss") 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
-                        IdDevice = _dev.ID
-                        'Suppression de la BDD
+                        result = New List(Of Historisation)
+                        DateTime = ""
+                        DateStart = ""
+
                         'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
-                        retour = sqlite_homidom.nonquery("DELETE FROM historiques WHERE device_id='" & IdDevice & "' AND dateheure<='" & DateTime & "'") '& "' AND source='" & Source  & "' AND valeur='" & Value 
-                        If Mid(retour, 1, 4) = "ERR:" Then
-                            Log(TypeLog.ERREUR, TypeSource.SERVEUR, "DeleteHisto", "Erreur Requete sqlite : " & retour)
+                        DateTime = Now.AddDays(_dev.Purge * -1).ToString("yyyy-MM-dd HH:mm:ss") 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+                        DateStart = "2010-01-01 01:01:01" 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+
+                        result = GetHistoDeviceSource(_IdSrv, _dev.ID, Source, DateStart, DateTime)
+
+                        If result IsNot Nothing Then
+                            For i As Integer = 0 To result.Count - 1
+
+                                'Suppression de la BDD
+                                DeleteHisto(_IdSrv, _dev.ID, result.Item(i).DateTime, result.Item(i).Value, Source)
+
+                                'decrementation du nombre d'histo du composant
+                                If _dev IsNot Nothing Then
+                                    _dev.CountHisto -= 1
+                                    If _dev.CountHisto <= 0 Then _dev.CountHisto = 0
+                                End If
+                            Next
+
+                        End If
+                    End If
+                    If _dev.MoyJour > 0 And (_dev.Purge > _dev.MoyJour Or _dev.Purge = 0) Then
+
+                        result = New List(Of Historisation)
+                        result1 = New List(Of Historisation)
+                        DateTime = ""
+                        DateStart = ""
+
+                        'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+                        DateTime = Now.AddDays(_dev.MoyJour * -1).ToString("yyyy-MM-dd HH:mm:ss") 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+                        If _dev.Purge > _dev.MoyJour Then
+                            DateStart = Now.AddDays(_dev.Purge * -1).ToString("yyyy-MM-dd HH:mm:ss") 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
                         Else
-                            Log(TypeLog.INFO, TypeSource.SERVEUR, "DeleteHisto", "Purge des relevés : " & IdDevice & " superieur au " & DateTime)
-                            'decrementation du nombre d'histo du composant
-                            If _dev IsNot Nothing Then
-                                _dev.CountHisto -= 1
-                                If _dev.CountHisto <= 0 Then _dev.CountHisto = 0
+                            DateStart = "2010-01-01 01:01:01" 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+                        End If
+
+                        result = GetHistoDeviceSource(_IdSrv, _dev.ID, Source, DateStart, DateTime)
+                        result1 = GetHistoDeviceSource(_IdSrv, _dev.ID, Source, DateStart, DateTime, "JOUR")
+
+                        If result IsNot Nothing And result1 IsNot Nothing And DateStart <> "" Then
+                            If result.Count > result1.Count Then
+                                For i As Integer = 0 To result.Count - 1
+
+                                    'Suppression de la BDD
+                                    DeleteHisto(_IdSrv, _dev.ID, result.Item(i).DateTime, result.Item(i).Value, Source)
+
+                                    'decrementation du nombre d'histo du composant
+                                    If _dev IsNot Nothing Then
+                                        _dev.CountHisto -= 1
+                                        If _dev.CountHisto <= 0 Then _dev.CountHisto = 0
+                                    End If
+                                Next
+                                For i As Integer = 0 To result1.Count - 1
+
+                                    'Ajout dans la BDD
+                                    AddHisto(_IdSrv, _dev.ID, result1.Item(i).DateTime, result1.Item(i).Value, Source)
+
+                                    'incrementation du nombre d'histo du composant
+                                    If _dev IsNot Nothing Then
+                                        _dev.CountHisto += 1
+                                    End If
+                                Next
+                            End If
+                        End If
+                    End If
+
+                    If _dev.MoyHeure > 0 And (_dev.MoyJour > _dev.MoyHeure Or _dev.MoyJour = 0) And ((_dev.Purge > _dev.MoyHeure And _dev.Purge > 0) Or _dev.Purge = 0) Then
+
+                        result = New List(Of Historisation)
+                        result1 = New List(Of Historisation)
+                        DateTime = ""
+                        DateStart = ""
+
+                        'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+                        DateTime = Now.AddDays(_dev.MoyHeure * -1).ToString("yyyy-MM-dd HH:mm:ss") 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+                        If _dev.MoyJour = 0 Then
+                            If _dev.Purge = 0 Then
+                                DateStart = "2010-01-01 01:01:01" 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+                            Else
+                                If _dev.Purge > _dev.MoyHeure Then
+                                    DateStart = Now.AddDays(_dev.Purge * -1).ToString("yyyy-MM-dd HH:mm:ss") 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+                                Else
+                                    DateStart = "2010-01-01 01:01:01" 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")									
+                                End If
+                            End If
+                        Else
+                            If _dev.MoyJour > _dev.MoyHeure Then
+                                DateStart = Now.AddDays(_dev.MoyJour * -1).ToString("yyyy-MM-dd HH:mm:ss") 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+                            Else
+                                If _dev.Purge = 0 Then
+                                    DateStart = "2010-01-01 01:01:01" 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+                                Else
+                                    If _dev.Purge > _dev.MoyHeure Then
+                                        DateStart = Now.AddDays(_dev.Purge * -1).ToString("yyyy-MM-dd HH:mm:ss") 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")
+                                    Else
+                                        DateStart = "2010-01-01 01:01:01" 'datetime doit etre au format ToString("yyyy-MM-dd HH:mm:ss")									
+                                    End If
+                                End If
+                            End If
+                        End If
+
+                        result = GetHistoDeviceSource(_IdSrv, _dev.ID, Source, DateStart, DateTime)
+                        result1 = GetHistoDeviceSource(_IdSrv, _dev.ID, Source, DateStart, DateTime, "HEURE")
+
+                        If result IsNot Nothing And result1 IsNot Nothing And DateStart <> "" Then
+                            If result.Count > result1.Count Then
+                                For i As Integer = 0 To result.Count - 1
+
+                                    'Suppression de la BDD
+                                    DeleteHisto(_IdSrv, _dev.ID, result.Item(i).DateTime, result.Item(i).Value, Source)
+
+                                    'decrementation du nombre d'histo du composant
+                                    If _dev IsNot Nothing Then
+                                        _dev.CountHisto -= 1
+                                        If _dev.CountHisto <= 0 Then _dev.CountHisto = 0
+                                    End If
+                                Next
+                                For i As Integer = 0 To result1.Count - 1
+
+                                    'Ajout dans la BDD
+                                    AddHisto(_IdSrv, _dev.ID, result1.Item(i).DateTime, result1.Item(i).Value, Source)
+
+                                    'incrementation du nombre d'histo du composant
+                                    If _dev IsNot Nothing Then
+                                        _dev.CountHisto += 1
+                                    End If
+                                Next
                             End If
                         End If
                     End If
@@ -6157,12 +6286,37 @@ Namespace HoMIDom
                 Return -1
             End Try
 
-
         End Function
+
 
 #End Region
 
 #Region "Audio"
+
+        Public Function Parler(ByVal Message As String) As Boolean Implements IHoMIDom.Parler
+            Try
+                Dim texte As String = Message
+                'remplace les balises par la valeur
+                'texte = texte.Replace("{time}", Now.ToShortTimeString)
+                'texte = texte.Replace("{date}", Now.ToLongDateString)
+                'texte = Decodestring(texte)
+
+                Dim lamachineaparler As New Speech.Synthesis.SpeechSynthesizer
+                Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "Parler", "Message: " & texte)
+                With lamachineaparler
+                    .SelectVoice(GetDefautVoice)
+                    '.SetOutputToWaveFile("C:\tet.wav")
+                    '.SetOutputToWaveFile(File)
+                    .SpeakAsync(texte)
+                End With
+
+                texte = Nothing
+                lamachineaparler = Nothing
+            Catch ex As Exception
+                Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "Parler", "Exception lors de l'annonce du message: " & Message & " : " & ex.ToString)
+            End Try
+        End Function
+
 #End Region
 
 #Region "SMTP"
@@ -7283,6 +7437,8 @@ Namespace HoMIDom
                         .IsHisto = _ListDevices.Item(i).isHisto
                         .RefreshHisto = _ListDevices.Item(i).RefreshHisto
                         .Purge = _ListDevices.Item(i).purge
+                        .MoyHeure = _ListDevices.Item(i).moyheure
+                        .MoyJour = _ListDevices.Item(i).moyjour
 
                         If IsNumeric(_ListDevices.Item(i).valuelast) Then .ValueLast = _ListDevices.Item(i).valuelast
 
@@ -7426,7 +7582,7 @@ Namespace HoMIDom
         ''' <param name="valuedef"></param>
         ''' <returns></returns>
         ''' <remarks></remarks>
-        Public Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, ByVal Historisation As Boolean, ByVal RefreshHisto As Double, ByVal purge As Double, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0, Optional ByVal lastEtat As Boolean = True, Optional ByVal correction As String = "0", Optional ByVal formatage As String = "", Optional ByVal precision As Double = 0, Optional ByVal valuemax As Double = 9999, Optional ByVal valuemin As Double = -9999, Optional ByVal valuedef As Double = 0, Optional ByVal Commandes As List(Of Telecommande.Commandes) = Nothing, Optional ByVal Unit As String = "", Optional ByVal Puissance As Integer = 0, Optional ByVal AllValue As Boolean = False, Optional ByVal Variables As Dictionary(Of String, String) = Nothing, Optional ByVal Proprietes As Dictionary(Of String, String) = Nothing) As String Implements IHoMIDom.SaveDevice
+        Public Function SaveDevice(ByVal IdSrv As String, ByVal deviceId As String, ByVal name As String, ByVal address1 As String, ByVal enable As Boolean, ByVal solo As Boolean, ByVal driverid As String, ByVal type As String, ByVal refresh As Integer, ByVal Historisation As Boolean, ByVal RefreshHisto As Double, ByVal purge As Double, ByVal moyjour As Double, ByVal moyheure As Double, Optional ByVal address2 As String = "", Optional ByVal image As String = "", Optional ByVal modele As String = "", Optional ByVal description As String = "", Optional ByVal lastchangeduree As Integer = 0, Optional ByVal lastEtat As Boolean = True, Optional ByVal correction As String = "0", Optional ByVal formatage As String = "", Optional ByVal precision As Double = 0, Optional ByVal valuemax As Double = 9999, Optional ByVal valuemin As Double = -9999, Optional ByVal valuedef As Double = 0, Optional ByVal Commandes As List(Of Telecommande.Commandes) = Nothing, Optional ByVal Unit As String = "", Optional ByVal Puissance As Integer = 0, Optional ByVal AllValue As Boolean = False, Optional ByVal Variables As Dictionary(Of String, String) = Nothing, Optional ByVal Proprietes As Dictionary(Of String, String) = Nothing) As String Implements IHoMIDom.SaveDevice
             Try
                 'Vérification de l'Id du serveur pour accepter le traitement
                 If VerifIdSrv(IdSrv) = False Then
@@ -7591,6 +7747,8 @@ Namespace HoMIDom
                         .isHisto = Historisation
                         .RefreshHisto = RefreshHisto
                         .Purge = purge
+                        .MoyJour = moyjour
+                        .MoyHeure = moyheure
                     End With
 
                     Select Case UCase(type)
@@ -7660,6 +7818,8 @@ Namespace HoMIDom
                             _ListDevices.Item(i).isHisto = Historisation
                             _ListDevices.Item(i).RefreshHisto = RefreshHisto
                             _ListDevices.Item(i).Purge = purge
+                            _ListDevices.Item(i).MoyJour = moyjour
+                            _ListDevices.Item(i).MoyHeure = moyheure
 
                             'si c'est un device de type double ou integer
                             If _ListDevices.Item(i).type = "BAROMETRE" _
@@ -7899,6 +8059,8 @@ Namespace HoMIDom
                         retour.IsHisto = _ListDevices.Item(i).isHisto
                         retour.RefreshHisto = _ListDevices.Item(i).RefreshHisto
                         retour.Purge = _ListDevices.Item(i).purge
+                        retour.MoyJour = _ListDevices.Item(i).moyjour
+                        retour.MoyHeure = _ListDevices.Item(i).moyheure
 
                         Try
                             retour.Value = _ListDevices.Item(i).Value

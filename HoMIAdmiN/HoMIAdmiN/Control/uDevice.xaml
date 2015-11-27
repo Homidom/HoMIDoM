@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="uDevice"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Tag="DEVICE" Margin="5">
- 
+
 
     <Grid Margin="1" Visibility="Visible" Background="#636060" Opacity="0.85">
         <Border Name="Border1" BorderBrush="Gray" BorderThickness="2" >
@@ -9,8 +9,8 @@
                 <Label Name="Label1" VerticalAlignment="Top" FontSize="24" FontStyle="Italic" Foreground="DarkOrange" HorizontalAlignment="Center">Composant</Label>
                 <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                     <StackPanel Orientation="Vertical" Margin="2" HorizontalAlignment="Left">
-                    <Label Name="Label2" Foreground="White">Nom:</Label>
-                    <StackPanel Orientation="Horizontal" >
+                        <Label Name="Label2" Foreground="White">Nom:</Label>
+                        <StackPanel Orientation="Horizontal" >
                             <TextBox Height="22" Name="TxtNom" Width="215" Foreground="White" Background="DarkGray" BorderBrush="Black" ToolTip="Obligatoire: Nom du composant"/>
                             <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Name="ChkEnable" IsChecked="True" ToolTip="Si non coché, le composant n'est pas utilisé dans HoMIDoM">Enable</CheckBox>
                             <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" Name="ChKSolo" IsChecked="True" ToolTip="Utiliser dans certains drivers pour permettre de mettre à jour plusieurs composants d'un seul coup si décoché.">Solo</CheckBox>
@@ -25,20 +25,20 @@
                                 <TextBox Name="TxtPuissance" Width="40" Height="22" Foreground="White" Background="DarkGray" BorderBrush="Black" ToolTip="Puissance du composant en Watt(ex: 10)">0</TextBox>
                             </StackPanel>
                         </StackPanel>
-                    <Label Foreground="White" Name="LabelDescription">Description:</Label>
+                        <Label Foreground="White" Name="LabelDescription">Description:</Label>
                         <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtDescript" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" Width="440" />
-                    <StackPanel Orientation="Horizontal" >
+                        <StackPanel Orientation="Horizontal" >
                             <StackPanel Name="StkDriver">
                                 <Label Foreground="White" Name="LabelDriver"  Width="215">Driver:</Label>
                                 <ComboBox Width="215" Name="CbDriver" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" ToolTip="Liste des drivers actifs"/>
                             </StackPanel>
-                            
+
                             <StackPanel Name="StkType" Margin="10,0,0,0">
                                 <Label Foreground="White" Name="LabelType">Type:</Label>
                                 <ComboBox HorizontalAlignment="Left" Name="CbType" Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" Height="25" IsReadOnly="True" ToolTip="IMPORTANT : Le type défini le type de valeur qu'il pourra stocker et les actions possibles."/>
                             </StackPanel>
                         </StackPanel>
-                    <StackPanel Orientation="Horizontal" >
+                        <StackPanel Orientation="Horizontal" >
                             <StackPanel Name="StkAdr1">
                                 <Label Foreground="White" Name="LabelAdresse1" Width="215" >Adresse1:</Label>
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtAdresse1" Width="215" Height="21.978" />
@@ -51,7 +51,7 @@
                                 <Button Name="BtnLearn2" Content="Apprendre" Foreground=" White" Template="{DynamicResource GlassButton}" Width="65" HorizontalAlignment=" Left" Height="25" Visibility="Visible" />
                             </StackPanel>
                         </StackPanel>
-                    <StackPanel Orientation="Horizontal" >
+                        <StackPanel Orientation="Horizontal" >
                             <StackPanel Margin="0,0,10,0" Name="StkModel">
                                 <Label Foreground="White" Name="LabelModele" HorizontalAlignment="Left" Visibility="Collapsed">Modele:</Label>
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtModele" Height="22" Width="215" Tag="1" Visibility="Collapsed" />
@@ -68,8 +68,8 @@
                                 <Label Foreground="White" Name="LabelLastChangeDuree" HorizontalAlignment="Left">LastChange Duree:</Label>
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtLastChangeDuree" Height="22" Width="70" ToolTip="Permet de mettre en erreur le composant si sa valeur n'a pas été modifié depuis x minutes" HorizontalAlignment="Left">0</TextBox>
                             </StackPanel>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Name="StkValueMINMAX">
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Name="StkValueMINMAX">
                             <StackPanel Name="StkValueMin">
                                 <Label Foreground="White" Name="LabelValueMin" Width="215">Value Min:</Label>
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtValueMin" Width="215">-99999</TextBox>
@@ -78,8 +78,8 @@
                                 <Label Foreground="White" Name="LabelValueMax">Value Max:</Label>
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtValueMax" Width="215">99999</TextBox>
                             </StackPanel>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal"  Name="StkValueDefaultPrecision">
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"  Name="StkValueDefaultPrecision">
                             <StackPanel Name="StkValueDef">
                                 <Label Foreground="White" Name="LabelValDef" Width="215" >Value Default:</Label>
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtValDef" Width="215" Text="0" />
@@ -88,8 +88,8 @@
                                 <Label Foreground="White" Name="LabelPrecision">Precision:</Label>
                                 <TextBox Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtPrecision" Height="22" Text="0" />
                             </StackPanel>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" Name="StkValueCorrectionFormatage">
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Name="StkValueCorrectionFormatage">
                             <StackPanel Name="StkCorrection">
                                 <Label Foreground="White" Name="LabelCorrection" Width="215">Correction:</Label>
                                 <TextBox Width="215" Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtCorrection" Height="22" ToolTip="Permet de corriger la valeur récupéré (-10 ou +3.5) et il est possible d'utiliser '&lt;composantxnom&gt;*3.5'">0</TextBox>
@@ -98,7 +98,7 @@
                                 <Label Foreground="White" Name="LabelFormatage" Width="76" HorizontalAlignment="Left">Formatage:</Label>
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtFormatage" HorizontalAlignment="Left" Width="214.5" />
                             </StackPanel>
-                    </StackPanel>
+                        </StackPanel>
                         <StackPanel Orientation="Horizontal" Name="StkRGBW">
                             <StackPanel Name="StkRGBW_red">
                                 <Label Foreground="White" Name="LabelRouge" Width="50">Rouge:</Label>
@@ -129,14 +129,18 @@
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtRGBWoptionnal" Width="50" ToolTip="Optionnel de type string"></TextBox>
                             </StackPanel>
                         </StackPanel>
-                        <StackPanel Name="StackPanel1" Orientation="Horizontal" Height="39">
+                        <StackPanel Name="StackPanel1" Orientation="Horizontal" Height="39" Width="760">
                             <CheckBox Background="DarkGray" BorderBrush="Black" Content="Historisation" Foreground="White" IsChecked="True" Name="ChkHisto" ToolTip="Si non coché, le composant n'est pas utilisé dans HoMIDoM" VerticalContentAlignment="Center" Height="16" />
                             <StackPanel Name="StackPanel2"></StackPanel>
                             <StackPanel Margin="10,0,0,0" Name="StackPanel3"></StackPanel>
-                            <Label Content="Refresh historisation (sec):" Foreground="White" Name="Label5" VerticalContentAlignment="Center" />
-                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtRefreshHisto" Text="0" ToolTip="Composante RGBW Vert de 0 à 255" Width="50" />
-                            <Label Content="Temps avant purge (jour):" Foreground="White" Name="Label3" VerticalContentAlignment="Center" />
-                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtPurge" Text="0" ToolTip="Composante RGBW Rouge de 0 à 255" Width="50" />
+                            <Label Content="Fréquence historisation:" Foreground="White" Name="Label5" VerticalContentAlignment="Center" />
+                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtRefreshHisto" Text="0" ToolTip="Fréquence d'historisation, nombre d'aquisition avant d'historiser: 5 = 1 historisation sur 5 aquisitions" Width="50" />
+                            <Label Content="Moyenne Heure (jour):" Foreground="White" x:Name="Label3" VerticalContentAlignment="Center" />
+                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtMoyHeure" Text="0" ToolTip="Nombre de jour avant de faire une moyenne heure" Width="50" />
+                            <Label Content="Moyenne Jour (jour):" Foreground="White" x:Name="Label3_Copy" VerticalContentAlignment="Center" Padding="5" HorizontalAlignment="Left" AllowDrop="True" />
+                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" x:Name="TxtMoyJour" Text="0" ToolTip="Nombre de jour avant de faire une moyenne jour" Width="50"  Margin="0,8,0,9" RenderTransformOrigin="0.536,0.558"  />
+                            <Label Content="Purge (jour):" Foreground="White" x:Name="Label3_Copy1" VerticalContentAlignment="Center" />
+                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" x:Name="TxtPurge" Text="0" ToolTip="Nombre de jour avant de faire une purge" Width="50"  Margin="0,8,0,9"  />
                             <StackPanel Margin="10,0,0,0" Name="StackPanel4"></StackPanel>
                             <StackPanel Margin="10,0,0,0" Name="StackPanel5"></StackPanel>
                             <StackPanel Margin="10,0,0,0" Name="StackPanel6"></StackPanel>
@@ -144,7 +148,7 @@
                             <StackPanel Margin="10,0,0,0" Name="StackPanel8"></StackPanel>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >
-                             <StackPanel HorizontalAlignment="Left" Margin="0,7,0,0">
+                            <StackPanel HorizontalAlignment="Left" Margin="0,7,0,0">
                                 <Label Content="Zones:" Foreground="White" />
                                 <Label Content="Visible" Foreground="White" FontSize="10" HorizontalContentAlignment="Right" />
                                 <ListBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="ListZone" Margin="5" Padding="2" Width="250" Height="120" ToolTip="Liste des zones pour lesquels le composant y est associé" />
@@ -174,7 +178,7 @@
                                     <Image Name="BtnApplyVar" Width="25" Height="25" Margin="5,0,0,0" Source="/HoMIAdmiN;component/Images/Refresh_32.png" ToolTip="Appliquer" Visibility="Collapsed" />
 
                                 </StackPanel>
-                                <StackPanel Name="StkVar" Visibility="Collapsed" >  
+                                <StackPanel Name="StkVar" Visibility="Collapsed" >
                                     <Label Content="Name:" Foreground="White" Visibility="Visible" />
                                     <TextBox Name="TxtVarName" />
                                     <Label Content="Valeur:" Foreground="White" Visibility="Visible" />
@@ -188,7 +192,9 @@
                         </StackPanel>
                     </StackPanel>
                     <StackPanel Margin="5" VerticalAlignment="top" HorizontalAlignment="right" Height="200">
-                        <Button Margin="2" Template="{DynamicResource GlassButton}" Name="BtnOK" Width="88.75" Foreground="White" ToolTip="Sauvegarder et Fermer la fenêtre"><TextBlock TextWrapping="Wrap" TextAlignment="center">Sauvegarder Fermer</TextBlock> </Button>
+                        <Button Margin="2" Template="{DynamicResource GlassButton}" Name="BtnOK" Width="88.75" Foreground="White" ToolTip="Sauvegarder et Fermer la fenêtre">
+                            <TextBlock TextWrapping="Wrap" TextAlignment="center">Sauvegarder Fermer</TextBlock>
+                        </Button>
                         <Button Margin="2" Height="25" Name="BtnClose" Template="{DynamicResource GlassButton}" Width="88.75" Foreground="White" ToolTip="Fermer la fenêtre sans sauvegarder">Annuler</Button>
                         <Button Margin="2" Height="25" Template="{DynamicResource GlassButton}" Name="BtnSave" Width="88.75" Foreground="White" ToolTip="Sauvegarder sans fermer la fenêtre">Sauvegarder</Button>
                         <Button Margin="2" Foreground="White" Height="25" Name="BtnTest" Template="{DynamicResource GlassButton}" Width="88.75" Visibility="Collapsed">Tester</Button>

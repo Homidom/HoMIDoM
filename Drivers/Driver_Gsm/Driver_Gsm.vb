@@ -1704,7 +1704,7 @@ Imports System.Threading
                                         Exit Sub
                                     End If
                                     If (listedevices.Count = 0) Then
-                                        gen.SaveDevice(_Idsrv, "", "GSM_" + sb.ToString(), entry.Number, True, False, _ID, "GENERIQUESTRING", 0, True, 0, 0, "", "", "", "Créé depuis le carnet d adresse du téléphone", 0, False, "0", "", 0, 9999, -9999, 0.0, Nothing, "", 0, True, Nothing, Nothing)
+                                        gen.SaveDevice(_Idsrv, "", "GSM_" + sb.ToString(), entry.Number, True, False, _ID, "GENERIQUESTRING", 0, True, 0, 0, 0, 0, "", "", "", "Créé depuis le carnet d adresse du téléphone", 0, False, "0", "", 0, 9999, -9999, 0.0, Nothing, "", 0, True, Nothing, Nothing)
                                     End If
                                 End If
 
@@ -1725,7 +1725,7 @@ Imports System.Threading
                                             Exit Sub
                                         End If
                                         If (listedevices.Count = 0) Then
-                                            gen.SaveDevice(_Idsrv, "", "GSM_" + stra, strb, True, False, _ID, "GENERIQUESTRING", 0, True, 0, 0, "", "", "", "Créé depuis le carnet d adresse du téléphone", 0, False, "0", "", 0, 9999, -9999, 0.0, Nothing, "", 0, True, Nothing, Nothing)
+                                            gen.SaveDevice(_Idsrv, "", "GSM_" + stra, strb, True, False, _ID, "GENERIQUESTRING", 0, True, 0, 0, 0, 0, "", "", "", "Créé depuis le carnet d adresse du téléphone", 0, False, "0", "", 0, 9999, -9999, 0.0, Nothing, "", 0, True, Nothing, Nothing)
                                         End If
                                     End If
                                 End If
