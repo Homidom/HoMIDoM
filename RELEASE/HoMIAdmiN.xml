@@ -1,0 +1,686 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+HoMIAdmiN
+</name>
+</assembly>
+<members>
+<member name="M:WpfApplication1.uMacro.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uMacro">
+	<summary>
+uMacro
+</summary>
+</member><member name="M:WpfApplication1.uSelectExp.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uSelectExp">
+	<summary>
+uSelectExp
+</summary>
+</member><member name="M:WpfApplication1.Window2.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.Window2">
+	<summary>
+Window2
+</summary>
+</member><member name="M:WpfApplication1.uTriggerTimer.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uTriggerTimer">
+	<summary>
+uTriggerTimer
+</summary>
+</member><member name="M:WpfApplication1.Window1.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.Window1">
+	<summary>
+Window1
+</summary>
+</member><member name="M:WpfApplication1.uElement.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uElement">
+	<summary>
+uElement
+</summary>
+</member><member name="M:WpfApplication1.WindowImg.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.WindowImg">
+	<summary>
+WindowImg
+</summary>
+</member><member name="M:WpfApplication1.uLog.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uLog">
+	<summary>
+uLog
+</summary>
+</member><member name="M:WpfApplication1.uVariables.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uVariables">
+	<summary>
+uVariables
+</summary>
+</member><member name="M:WpfApplication1.WActionParametrage.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.WActionParametrage">
+	<summary>
+WActionParametrage
+</summary>
+</member><member name="M:WpfApplication1.uTestDevice.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uTestDevice">
+	<summary>
+uTestDevice
+</summary>
+</member><member name="M:WpfApplication1.uHisto.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uHisto">
+	<summary>
+uHisto
+</summary>
+</member><member name="M:WpfApplication1.uDriver.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uDriver">
+	<summary>
+uDriver
+</summary>
+</member><member name="M:WpfApplication1.uHelp.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uHelp">
+	<summary>
+uHelp
+</summary>
+</member><member name="M:WpfApplication1.uScenario.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uScenario">
+	<summary>
+uScenario
+</summary>
+</member><member name="M:WpfApplication1.uUser.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uUser">
+	<summary>
+uUser
+</summary>
+</member><member name="M:WpfApplication1.uNewDevice.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uNewDevice">
+	<summary>
+uNewDevice
+</summary>
+</member><member name="M:WpfApplication1.uTriggerDevice.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uTriggerDevice">
+	<summary>
+uTriggerDevice
+</summary>
+</member><member name="M:WpfApplication1.uMainMenu.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uMainMenu">
+	<summary>
+uMainMenu
+</summary>
+</member><member name="M:WpfApplication1.uSelectElmt.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uSelectElmt">
+	<summary>
+uSelectElmt
+</summary>
+</member><member name="M:WpfApplication1.uCondition.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uCondition">
+	<summary>
+uCondition
+</summary>
+</member><member name="M:WpfApplication1.WTelecommande.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.WTelecommande">
+	<summary>
+WTelecommande
+</summary>
+</member><member name="M:WpfApplication1.Window3.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.Window3">
+	<summary>
+Window3
+</summary>
+</member><member name="M:WpfApplication1.uItemDevice.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uItemDevice">
+	<summary>
+uItemDevice
+</summary>
+</member><member name="M:WpfApplication1.uDevice.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uDevice">
+	<summary>
+uDevice
+</summary>
+</member><member name="M:WpfApplication1.uZone.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uZone">
+	<summary>
+uZone
+</summary>
+</member><member name="M:WpfApplication1.uAction.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uAction">
+	<summary>
+uAction
+</summary>
+</member><member name="M:WpfApplication1.WTelecommandeNew.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.WTelecommandeNew">
+	<summary>
+WTelecommandeNew
+</summary>
+</member><member name="M:WpfApplication1.uCtrlImgMnu.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uCtrlImgMnu">
+	<summary>
+uCtrlImgMnu
+</summary>
+</member><member name="M:WpfApplication1.uModuleSimple.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uModuleSimple">
+	<summary>
+uModuleSimple
+</summary>
+</member><member name="M:WpfApplication1.uConfigServer.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uConfigServer">
+	<summary>
+uConfigServer
+</summary>
+</member><member name="M:WpfApplication1.uReleve.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:WpfApplication1.uReleve">
+	<summary>
+uReleve
+</summary>
+</member><member name="M:WpfApplication1.Application.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="M:WpfApplication1.Application.Main">
+	<summary>
+Application Entry Point.
+</summary>
+</member><member name="T:WpfApplication1.Application">
+	<summary>
+Application
+</summary>
+</member><member name="M:WpfApplication1.WTelecommande.BtnNewCmd_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Nouvelle commande
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommande.BtnSaveCmd_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Sauvegarder commande
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommande.BtnDelCmd_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Supprimer une commande
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommande.BtnTstCmd_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Tester une commande
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommande.BtnLearn_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Apprendre une commande IR
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommande.ListCmd_SelectionChanged(System.Object,System.Windows.Controls.SelectionChangedEventArgs)">
+	<summary>
+ Changement de sélection d'une commande dans la liste
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommande.TxtCmdData_TextInput(System.Object,System.Windows.Input.TextCompositionEventArgs)">
+	<summary>
+ Valeur de data de la commande a changée
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommande.ImgCommande_MouseLeftButtonDown(System.Object,System.Windows.Input.MouseButtonEventArgs)">
+	<summary>
+ Clic sur image de la commande
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommande.BtnNewTemplate_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Nouveau template
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommande.BtnSaveTemplate_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Sauvegarder Template
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.Window1.Connect_Srv(System.String,System.String,System.String)">
+	<summary>
+ Sélection d'un serveur pour connexion dans le sous menu connexion ou au démarrage
+ </summary>
+	<param name="Name"></param>
+	<param name="IP"></param>
+	<param name="Port"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.Window1.OnMessageReceiveUDP(System.String)">
+	<summary>
+ Message UDP reçu
+ </summary>
+	<param name="Message"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.Window1.PageConnexion">
+	<summary>
+ Affiche la fenêtre de connexion
+ </summary>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.Window1.AffControlPage(System.Object)">
+	<summary>
+ Affiche le usercontrol et l'anime
+ </summary>
+	<param name="Objet"></param>
+	<remarks></remarks>
+</member><member name="P:WpfApplication1.ClServer.Nom">
+	<summary>
+ Nom du serveur
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:WpfApplication1.ClServer.Adresse">
+	<summary>
+ Adresse du serveur
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:WpfApplication1.ClServer.Defaut">
+	<summary>
+ True si l'adresse est celle utilisée par défaut
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:WpfApplication1.ClServer">
+	<summary>
+ Classe utilisée dans la liste des serveurs 
+ </summary>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.uDevice.BtnNewVar_MouseDown(System.Object,System.Windows.Input.MouseButtonEventArgs)">
+	<summary>
+ bouton nouvelle variable
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.uDevice.BtnDelVar_MouseDown(System.Object,System.Windows.Input.MouseButtonEventArgs)">
+	<summary>
+ Bouton supprimer variable
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.uDevice.BtnApplyVar_MouseDown(System.Object,System.Windows.Input.MouseButtonEventArgs)">
+	<summary>
+ Bouton appliquer variable
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommandeNew.BtnNewCmd_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Nouvelle commande
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommandeNew.BtnSaveCmd_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Sauvegarder commande
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommandeNew.BtnDelCmd_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Supprimer une commande
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommandeNew.BtnTstCmd_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Tester une commande
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommandeNew.BtnLearn_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Apprendre une commande IR
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommandeNew.ListCmd_SelectionChanged(System.Object,System.Windows.Controls.SelectionChangedEventArgs)">
+	<summary>
+ Changement de sélection d'une commande dans la liste
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommandeNew.TxtCmdData_TextInput(System.Object,System.Windows.Input.TextCompositionEventArgs)">
+	<summary>
+ Valeur de data de la commande a changée
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommandeNew.BtnNewTemplate_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Nouveau template
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommandeNew.BtnSaveTemplate_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Sauvegarder Template
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommandeNew.#ctor(System.String,System.String)">
+	<summary>
+	</summary>
+	<param name="TemplateName">Nom du template à afficher</param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.WTelecommandeNew.cbTemplate_SelectionChanged(System.Object,System.Windows.Controls.SelectionChangedEventArgs)">
+	<summary>
+ Sélection d'un template
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.Fonctions.AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog,System.String,System.String,System.String)">
+	<summary>
+ Affiche le message et connecté log dans le serveur
+ </summary>
+	<param name="Type"></param>
+	<param name="Message"></param>
+	<param name="Title"></param>
+	<param name="Fonction"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.Fonctions.Download(System.String,System.String,System.String)">
+	<summary>
+ Télécharge un fichier depuis le serveur
+ </summary>
+	<param name="IdServ">Id du serveur</param>
+	<param name="Fichier">Chemin local vers le fichier à envoyer, p.ex "C:\zik.mp3"</param>
+	<param name="Location">Endroit où stocker le fichier sur le serveur, p.ex. "Musique/zik.mp3"</param>
+	<returns>-1 en cas d'erreur, 0 en cas de réussite.</returns>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.Fonctions.Upload(System.String,System.String,System.String)">
+	<summary>
+ Envoi un fichier au serveur
+ </summary>
+	<param name="IdServ">Id du serveur</param>
+	<param name="Fichier">Chemin local vers le fichier à envoyer, p.ex "C:\zik.mp3"</param>
+	<param name="Location">Endroit où stocker le fichier sur le serveur, p.ex. "Musique/zik.mp3"</param>
+	<returns>-1 en cas d'erreur, 0 en cas de réussite.</returns>
+	<remarks></remarks>
+</member><member name="T:WpfApplication1.DeviceParam">
+	<summary>Class DeviceParam, Défini le type parametre de composant pour le client Imperihome</summary>
+</member><member name="T:WpfApplication1.Device">
+	<summary>Class Device, Défini le type composant pour le client Imperihome</summary>
+</member><member name="T:WpfApplication1.DeviceList">
+	<summary>Class DeviceList, Défini le type liste des composants pour le client Imperihome</summary>
+</member><member name="T:WpfApplication1.Room">
+	<summary>Class Room, Défini le type piece pour le client Imperihome</summary>
+</member><member name="T:WpfApplication1.RoomList">
+	<summary>Class RoomList, Défini le type liste des pieces pour le client Imperihome</summary>
+</member><member name="T:WpfApplication1.SystemInfo">
+	<summary>Class Room, Défini le type system pour le client Imperihome</summary>
+</member><member name="T:WpfApplication1.ActionFeedback">
+	<summary>Class Room, Défini le type retour pour le client Imperihome</summary>
+</member><member name="M:WpfApplication1.uVariables.BtnNew_MouseDown(System.Object,System.Windows.Input.MouseButtonEventArgs)">
+	<summary>
+ Nouvelle variable
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.uVariables.BtnCancel_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Bouton Annuler Editer/Nouvelle variable
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.uVariables.BtnEdit_MouseDown(System.Object,System.Windows.Input.MouseButtonEventArgs)">
+	<summary>
+ Editer/Modifier une variable
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:WpfApplication1.uVariables.BtnDelete_MouseDown(System.Object,System.Windows.Input.MouseButtonEventArgs)">
+	<summary>
+ Supprimer une variable
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="P:WpfApplication1.My.Resources.Resources.ResourceManager">
+	<summary>
+  Retourne l'instance ResourceManager mise en cache utilisée par cette classe.
+</summary>
+</member><member name="P:WpfApplication1.My.Resources.Resources.Culture">
+	<summary>
+  Remplace la propriété CurrentUICulture du thread actuel pour toutes
+  les recherches de ressources à l'aide de cette classe de ressource fortement typée.
+</summary>
+</member><member name="P:WpfApplication1.My.Resources.Resources.Defaut_Img">
+	<summary>
+  Recherche une ressource localisée de type System.Drawing.Bitmap.
+</summary>
+</member><member name="P:WpfApplication1.My.Resources.Resources.ExempleVBS">
+	<summary>
+  Recherche une chaîne localisée semblable à 'EXEMPLE *******************************************
+'***************************************************
+Imports System
+Imports System.IO
+Imports System.Windows.Forms
+Imports Microsoft.VisualBasic
+Imports Homidom                                                                  
+Namespace Dynam
+ 'Ne pas supprimer cette class
+ Public Class DynamicCode
+   
+  'Ne pas supprimer cette function 
+  Public Function ExecuteCode(paramarray prmParameters() as object) as object
+    Dim Serveur as Homidom.H [le reste de la chaîne a été tronqué]";.
+</summary>
+</member><member name="P:WpfApplication1.My.Resources.Resources.WeatherCityID_BE">
+	<summary>
+  Recherche une chaîne localisée semblable à XXXX0001;------- BELGIQUE --------
+
+BEXX0034;Aalst
+BEXX0035;Aalter
+BEXX0036;Aarschot
+BEXX0038;Aiseau
+BEXX0039;Alken
+BEXX0041;Amay
+BEXX0042;Ambleve
+BEXX0043;Andenne
+BEXX0001;Anderlecht
+BEXX0045;Anhee
+BEXX0002;Ans
+BEXX0046;Antoing
+BEXX0003;Anvers
+BEXX0047;Anzegem
+BEXX0048;Ardooie
+BEXX0050;Arlon
+BEXX0051;As
+BEXX0052;Asse
+BEXX0055;Ath
+BEXX0057;Avelgem
+BEXX0058;Awans
+BEXX0004;Aywaille
+BEXX0059;Balen
+BEXX0060;Basse Lasne
+BEXX0061;Bassenge
+BEXX0062;Bastogne
+BEXX0065;Beernem
+BEXX0066;Be [le reste de la chaîne a été tronqué]";.
+</summary>
+</member><member name="P:WpfApplication1.My.Resources.Resources.WeatherCityID_FR">
+	<summary>
+  Recherche une chaîne localisée semblable à XXXX0000;-------- FRANCE ---------
+FRXX1438;Abancourt
+FRXX0111;Abbeville
+FRXX1570;Ablon-sur-Seine
+FRXX5930;Abondant
+FRXX4851;Abscon
+FRXX1220;Achen
+FRXX5834;Achenheim
+FRXX5109;Acheres
+FRXX3754;Acheres-la-Foret
+FRXX1618;Acigne
+FRXX1542;Aeroport D'Orly
+FRXX4397;Agde
+FRXX0135;Agen
+FRXX2840;Agon-Coutainville
+FRXX3723;Aibes
+FRXX6269;Aigues-Vives
+FRXX2409;Aiguilles
+FRXX7004;Ailly-sur-Somme
+FRXX1137;Aimargues
+FRXX0328;Aire-sur-l'Adour
+FRXX0001;Aix-en-Provence
+FRXX0129;Ajaccio
+FRXX0002;Albi
+F [le reste de la chaîne a été tronqué]";.
+</summary>
+</member><member name="T:WpfApplication1.My.Resources.Resources">
+	<summary>
+  Une classe de ressource fortement typée destinée, entre autres, à la consultation des chaînes localisées.
+</summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Application">
+	<summary>
+ Retourne l'objet application pour l'application en cours d'exécution
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Computer">
+	<summary>
+ Retourne les informations relatives à l'ordinateur hôte.
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.User">
+	<summary>
+ Retourne les informations relatives à l'utilisateur actuel. Si vous souhaitez exécuter l'application avec les 
+ informations d'identification de l'utilisateur Windows, appelez My.User.InitializeWithWindowsUser().
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Log">
+	<summary>
+ Retourne le journal de l'application. L'écouteur peut être configuré par le fichier de configuration de l'application.
+ </summary>
+</member><member name="P:WpfApplication1.My.MyWpfExtension.Windows">
+	<summary>
+ Retourne la collection de fenêtres définie dans le projet.
+ </summary>
+</member><member name="T:WpfApplication1.My.MyWpfExtension">
+	<summary>
+ Module utilisé pour définir les propriétés qui sont disponibles dans l'espace de noms My pour WPF
+ </summary>
+	<remarks></remarks>
+</member>
+</members>
+</doc>
