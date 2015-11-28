@@ -230,6 +230,8 @@ Namespace HoMIDom
             Protected _IsHisto As Boolean = True
             Protected _RefreshHisto As Double = 0
             Protected _Purge As Double = 0
+            Protected _MoyJour As Double = 0
+            Protected _MoyHeure As Double = 0
 
             '<NonSerialized()> Protected _FirstTime As Boolean = True
             Public Commandes As New List(Of HoMIDom.Telecommande.Commandes)
@@ -503,6 +505,26 @@ Namespace HoMIDom
                 End Get
                 Set(ByVal value As Double)
                     _Purge = value
+                End Set
+            End Property
+
+            'temps en jour avant la moyenne jour de l'historique de ce composant
+            Public Property MoyJour() As Double
+                Get
+                    Return _MoyJour
+                End Get
+                Set(ByVal value As Double)
+                    _MoyJour = value
+                End Set
+            End Property
+
+            'temps en jour avant la moyenne heure de l'historique de ce composant
+            Public Property MoyHeure() As Double
+                Get
+                    Return _MoyHeure
+                End Get
+                Set(ByVal value As Double)
+                    _MoyHeure = value
                 End Set
             End Property
 

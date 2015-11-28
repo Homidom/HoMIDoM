@@ -76,6 +76,8 @@ Namespace HoMIDom
         Dim _IsHisto As Boolean = True
         Dim _RefreshHisto As Double = 0
         Dim _Purge As Double = 0
+        Dim _MoyJour As Double = 0
+        Dim _MoyHeure As Double = 0
 
         ''' <summary>
         ''' Nom du device
@@ -1041,6 +1043,38 @@ Namespace HoMIDom
             End Get
             Set(ByVal value As Double)
                 _Purge = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''temps en jour avant la moyenne jour de l'historique de ce composant
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        ''' 
+        Public Property MoyJour() As Double
+            Get
+                Return _MoyJour
+            End Get
+            Set(ByVal value As Double)
+                _MoyJour = value
+            End Set
+        End Property
+
+        ''' <summary>
+        '''temps en jour avant la moyenne heure de l'historique de ce composant
+        ''' </summary>
+        ''' <value></value>
+        ''' <returns></returns>
+        ''' <remarks></remarks>
+        ''' 
+        Public Property MoyHeure() As Double
+            Get
+                Return _MoyHeure
+            End Get
+            Set(ByVal value As Double)
+                _MoyHeure = value
             End Set
         End Property
 

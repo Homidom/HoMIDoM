@@ -136,7 +136,10 @@ Public Class Driver_ZWave
             COMMAND_CLASS_BASIC_WINDOW_COVERING = 80              ' 0x50
             COMMAND_CLASS_MTP_WINDOW_COVERING = 81                ' 0x51
             COMMAND_CLASS_CRC_16_ENCAP = 86                       ' 0x56
+            COMMAND_CLASS_DEVICE_RESET_LOCALLY = 90               ' 0x5A
             COMMAND_CLASS_CENTRAL_SCENE = 91                      ' 0x5B
+            COMMAND_CLASS_ZWAVE_PLUS_INFO = 94                     '0x5E
+            COMMAND_CLASS_ZWAVE_PLUS_INFO_V2 = 94                  '0x5E
             COMMAND_CLASS_MULTI_INSTANCE = 96                     ' 0x60
             COMMAND_CLASS_MULTI_INSTANCE_V2 = 96                  ' 0x60
             COMMAND_CLASS_DOOR_LOCK = 98                          ' 0x62
@@ -154,6 +157,7 @@ Public Class Driver_ZWave
             COMMAND_CLASS_LOCK = 118                              ' 0x76
             COMMAND_CLASS_NODE_NAMING = 119                       ' 0x77
             COMMAND_CLASS_FIRMWARE_UPDATE_MD = 122                ' 0x7A
+            COMMAND_CLASS_FIRMWARE_UPDATE_MD_V2 = 122             ' 0x7A
             COMMAND_CLASS_GROUPING_NAME = 123                     ' 0x7B
             COMMAND_CLASS_REMOTE_ASSOCIATION_ACTIVATE = 124       ' 0x7C
             COMMAND_CLASS_REMOTE_ASSOCIATION = 125                ' 0x7D
@@ -165,6 +169,7 @@ Public Class Driver_ZWave
             COMMAND_CLASS_ASSOCIATION = 133                       ' 0x85
             COMMAND_CLASS_ASSOCIATION_V2 = 133                    ' 0x85
             COMMAND_CLASS_VERSION = 134                           ' 0x86
+            COMMAND_CLASS_VERSION_V2 = 134                        ' 0x86
             COMMAND_CLASS_INDICATOR = 135                         ' 0x87
             COMMAND_CLASS_PROPRIETARY = 136                       ' 0x88
             COMMAND_CLASS_LANGUAGE = 137                          ' 0x89
@@ -1183,7 +1188,8 @@ Public Class Driver_ZWave
         Sub StartInclusionMode()
             WriteLog("Début de la séquence d'association.")
             ' modif jphomi 12/10/2015
-            ' m_manager.BeginControllerCommand(m_homeId, ZWControllerCommand.AddDevice, False, 1)
+            'm_manager.BeginControllerCommand(m_homeId, ZWControllerCommand.AddDevice, False, 1)
+            m_manager.AddNode(m_homeId, False)
 
         End Sub
         ''' <summary>
@@ -1194,6 +1200,7 @@ Public Class Driver_ZWave
             WriteLog("Début de la séquence désassociation.")
             ' modif jphomi 12/10/2015
             '           m_manager.BeginControllerCommand(m_homeId, ZWControllerCommand.RemoveDevice, False, 1)
+            m_manager.RemoveNode(m_homeId)
         End Sub
         ''' <summary>
         ''' Annule la commande en cours : permet de sortir du mode "inclusion/exclusion" *** experimental ***
@@ -1272,16 +1279,14 @@ Public Class Driver_ZWave
                                 Next
                             End If
                         End If
-                        ' AAAA
 
                     Case ZWNotification.Type.NodeAdded
-                        WriteLog("DBG: " & "NotificationHandler - NodeAdded sur node " & m_notification.GetNodeId())
-
                         ' Ajoute une nouveau noeud à notre liste
                         Dim node As New Node
                         ' Si ce n'est pas le controleur 
                         If m_notification.GetNodeId() <> m_manager.GetControllerNodeId(m_homeId) Then
                             '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Ajout d'un nouveau noeud  " & m_notification.GetNodeId())
+                            WriteLog("NotificationHandler - Ajout d'un nouveau noeud " & m_notification.GetNodeId())
                             node.ID = m_notification.GetNodeId()
                             node.HomeID = m_notification.GetHomeId()
                             m_nodeList.Add(node)
@@ -1290,7 +1295,7 @@ Public Class Driver_ZWave
 
                     Case ZWNotification.Type.NodeRemoved
                         If m_notification.GetNodeId() <> m_manager.GetControllerNodeId(m_homeId) Then
-                            WriteLog("DBG: " & "NotificationHandler - NodeRemovedsur node " & m_notification.GetNodeId())
+                            WriteLog("NotificationHandler - Suppression du noeud " & m_notification.GetNodeId())
                             For Each node As Node In m_nodeList
                                 If node.ID = m_notification.GetNodeId() Then
                                     m_nodeList.Remove(node)
@@ -1547,8 +1552,6 @@ Public Class Driver_ZWave
                             'on maj la value si la durée entre les deux receptions est > à 1.5s
                             If (DateTime.Now - Date.Parse(LocalDevice.LastChange)).TotalMilliseconds > 1500 Then
                                 ' Recuperation de la valeur en fonction du type
-
-
                                 Select Case m_valueID.GetType()
                                     Case 0 : m_manager.GetValueAsBool(m_valueID, ValeurRecue) 'm_manager.GetValueAsBool(TempValeur, LocalDevice.value)
                                     Case 1 : m_manager.GetValueAsByte(m_valueID, ValeurRecue) ' GetValueAsByte(TempValeur, LocalDevice.value)

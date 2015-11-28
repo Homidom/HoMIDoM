@@ -308,6 +308,7 @@ Class Window1
             myChannelFactory = New ServiceModel.ChannelFactory(Of HoMIDom.HoMIDom.IHoMIDom)(binding, New System.ServiceModel.EndpointAddress(myadress))
             myService = myChannelFactory.CreateChannel()
 
+
             If myChannelFactory.State <> CommunicationState.Opened Then
                 AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur lors de la connexion au serveur", "Erreur Admin", "")
                 IsConnect = False
@@ -1311,12 +1312,12 @@ Class Window1
                     AffControlPage(x)
                 Case 1 'Enable
                     Dim x As TemplateDevice = myService.ReturnDeviceByID(IdSrv, sender.uid)
-                    myService.SaveDevice(IdSrv, sender.uid, x.Name, x.Adresse1, True, x.Solo, x.DriverID, x.Type.ToString, x.Refresh, x.IsHisto, x.RefreshHisto, x.Purge)
+                    myService.SaveDevice(IdSrv, sender.uid, x.Name, x.Adresse1, True, x.Solo, x.DriverID, x.Type.ToString, x.Refresh, x.IsHisto, x.RefreshHisto, x.Purge, x.MoyJour, x.MoyHeure)
                     If IsConnect Then ManagerDevices.EnableDevice(sender.uid)
                     AffDevice()
                 Case 2 'Disable
                     Dim x As TemplateDevice = myService.ReturnDeviceByID(IdSrv, sender.uid)
-                    myService.SaveDevice(IdSrv, sender.uid, x.Name, x.Adresse1, False, x.Solo, x.DriverID, x.Type.ToString, x.Refresh, x.IsHisto, x.RefreshHisto, x.Purge)
+                    myService.SaveDevice(IdSrv, sender.uid, x.Name, x.Adresse1, False, x.Solo, x.DriverID, x.Type.ToString, x.Refresh, x.IsHisto, x.RefreshHisto, x.Purge, x.MoyJour, x.MoyHeure)
                     If IsConnect Then ManagerDevices.DisableDevice(sender.uid)
                     AffDevice()
                 Case 4 'Graphe
