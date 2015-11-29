@@ -129,18 +129,18 @@
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Left" Name="TxtRGBWoptionnal" Width="50" ToolTip="Optionnel de type string"></TextBox>
                             </StackPanel>
                         </StackPanel>
-                        <StackPanel Name="StackPanel1" Orientation="Horizontal" Height="39" Width="760">
+                        <StackPanel Name="StackPanel1" Orientation="Horizontal" Height="39" Width="721">
                             <CheckBox Background="DarkGray" BorderBrush="Black" Content="Historisation" Foreground="White" IsChecked="True" Name="ChkHisto" ToolTip="Si non coché, le composant n'est pas utilisé dans HoMIDoM" VerticalContentAlignment="Center" Height="16" />
                             <StackPanel Name="StackPanel2"></StackPanel>
                             <StackPanel Margin="10,0,0,0" Name="StackPanel3"></StackPanel>
                             <Label Content="Fréquence historisation:" Foreground="White" Name="Label5" VerticalContentAlignment="Center" />
-                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtRefreshHisto" Text="0" ToolTip="Fréquence d'historisation, nombre d'aquisition avant d'historiser: 5 = 1 historisation sur 5 aquisitions" Width="50" />
+                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtRefreshHisto" Text="0" ToolTip="Fréquence d'historisation, nombre d'aquisition avant d'historiser: 5 = 1 historisation sur 5 aquisitions" Width="42" Margin="0,8,0,9" />
                             <Label Content="Moyenne Heure (jour):" Foreground="White" x:Name="Label3" VerticalContentAlignment="Center" />
-                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtMoyHeure" Text="0" ToolTip="Nombre de jour avant de faire une moyenne heure" Width="50" />
+                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtMoyHeure" Text="0" ToolTip="Nombre de jour avant de faire une moyenne heure" Width="42" Margin="0,8,0,9" />
                             <Label Content="Moyenne Jour (jour):" Foreground="White" x:Name="Label3_Copy" VerticalContentAlignment="Center" Padding="5" HorizontalAlignment="Left" AllowDrop="True" />
-                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" x:Name="TxtMoyJour" Text="0" ToolTip="Nombre de jour avant de faire une moyenne jour" Width="50"  Margin="0,8,0,9" RenderTransformOrigin="0.536,0.558"  />
+                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" x:Name="TxtMoyJour" Text="0" ToolTip="Nombre de jour avant de faire une moyenne jour" Width="42"  Margin="0,8,0,9" RenderTransformOrigin="0.536,0.558"  />
                             <Label Content="Purge (jour):" Foreground="White" x:Name="Label3_Copy1" VerticalContentAlignment="Center" />
-                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" x:Name="TxtPurge" Text="0" ToolTip="Nombre de jour avant de faire une purge" Width="50"  Margin="0,8,0,9"  />
+                            <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" x:Name="TxtPurge" Text="0" ToolTip="Nombre de jour avant de faire une purge" Width="42"  Margin="0,8,0,9"  />
                             <StackPanel Margin="10,0,0,0" Name="StackPanel4"></StackPanel>
                             <StackPanel Margin="10,0,0,0" Name="StackPanel5"></StackPanel>
                             <StackPanel Margin="10,0,0,0" Name="StackPanel6"></StackPanel>
