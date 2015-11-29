@@ -1058,8 +1058,6 @@ Public Class Driver_ZWave
                 'ouverture du port
                 If Not _IsConnect Then
                     Try
-
-
                         ' Test d'ouveture du port Com du controleur 
                         port.PortName = numero
                         port.Open()
@@ -1123,17 +1121,18 @@ Public Class Driver_ZWave
                     If (Not (port Is Nothing)) Then ' The COM port exists.
                         ' Sauvegarde de la configuration du réseau
                         m_manager.WriteConfig(m_homeId)
+                        WriteLog("Close, sauvegarde de la config Zwave")
                         ' Fermeture du port du controleur 
-                        _IsConnect = False
                         Try
-                            If m_nodeList.Count Then
-                                For cpt As Byte = 0 To m_nodeList.Count - 1
-                                    m_nodeList.Remove(m_nodeList.ElementAt(cpt))
-                                Next
-
-                            End If
+                            WriteLog("Close, nbr de noeud à retirer => " & m_nodeList.Count)
+                            Dim node As Node
+                            While m_nodeList.Count > 0
+                                WriteLog("DBG: " & "Close, noeud " & m_nodeList.ElementAt(m_nodeList.Count - 1).ID & " / " & m_nodeList.ElementAt(m_nodeList.Count - 1).Label & " retiré")
+                                node = GetNode(m_homeId, m_nodeList.ElementAt(m_nodeList.Count - 1).ID)
+                                m_nodeList.Remove(node)
+                            End While
                         Catch ex As UnauthorizedAccessException
-                            Return ("Probleme lors de la suppression des noeuds" & m_nodeList.Count)
+                            Return ("ERR: Probleme lors de la suppression des noeuds" & m_nodeList.Count)
                         End Try
 
                         m_manager.RemoveDriver("\\.\" & _Com)
@@ -1143,11 +1142,14 @@ Public Class Driver_ZWave
                         port.Close()
                         m_homeId = Nothing
                         m_nodesReady = Nothing
+                        _IsConnect = False
                         Return ("Port " & _Com & " fermé")
                     Else
+                        _IsConnect = False
                         Return ("Port " & _Com & " n'existe pas")
                     End If
                 Else
+                    _IsConnect = False
                     Return ("Port " & _Com & "  est déjà fermé (port_ouvert=false)")
                 End If
                 ' Catch ex As UnauthorizedAccessException
@@ -1190,7 +1192,10 @@ Public Class Driver_ZWave
             ' modif jphomi 12/10/2015
             'm_manager.BeginControllerCommand(m_homeId, ZWControllerCommand.AddDevice, False, 1)
             m_manager.AddNode(m_homeId, False)
-
+        End Sub
+        Sub StartSecureInclusionMode()
+            WriteLog("Début de la séquence d'association sécurisée.")
+            m_manager.AddNode(m_homeId, True)
         End Sub
         ''' <summary>
         ''' Place le controller en mode "exclusion" *** experimental ***
