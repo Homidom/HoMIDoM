@@ -493,17 +493,18 @@ Public Class Driver_Arduino_HTTP
                 listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_idsrv, Objet.adresse1, "", Me._ID, True)
                 For j = 0 To (listedevices.Count - 1)
                     Select Case UCase(listedevices.Item(j).Modele)
-                        Case "DIGITAL_IN" : urlcommande &= listedevices.Item(j).Adresse2 & "_0"
-                        Case "DIGITAL_OUT" : urlcommande &= listedevices.Item(j).Adresse2 & "_1"
-                        Case "DIGITAL_PWM" : urlcommande &= listedevices.Item(j).Adresse2 & "_2"
-                        Case "1WIRE" : urlcommande &= listedevices.Item(j).Adresse2 & "_3"
+                        Case "DIGITAL_IN" : urlcommande &= listedevices.Item(j).Adresse2 & "-0_"
+                        Case "DIGITAL_OUT" : urlcommande &= listedevices.Item(j).Adresse2 & "-1_"
+                        Case "DIGITAL_PWM" : urlcommande &= listedevices.Item(j).Adresse2 & "-2_"
+                        Case "1WIRE" : urlcommande &= listedevices.Item(j).Adresse2 & "-3_"
                         Case Else
                             'WriteLog("ERR: WRITE CONFIG_TYPE_PIN : Ce type de PIN ne peut pas être configuré : " & listedevices.Item(j).Modele.ToString.ToUpper & " (" & listedevices.Item(j).Name & ")")
                             'Exit Sub
                             'on ignore si le type n'est pas bon
                     End Select
-                    If j <> listedevices.Count Then urlcommande &= "-"
                 Next
+                'If last character in url is "_", we remove it
+                If urlcommande.EndsWith("_") Then urlcommande = urlcommande.Substring(0, urlcommande.Length - 2)
                 
             ElseIf Command = "SETVAR" Then
                 If Not IsNothing(Parametre1) Then
@@ -674,8 +675,8 @@ Public Class Driver_Arduino_HTTP
                             Dim responsepin2 As String() = responsepin(i).Split("=")
                             PINtype = Left(responsepin2(0), 1) 'D digital IN, O Digital out, A Analog IN
                             PINnumber = Right(responsepin2(0), responsepin2(0).Length - 1)
-                            PINvalue = responsepin2(1) 'ON OFF 10 5...
-                            WriteLog("DBG: " & Objet.Name & ": READX : Reponse reçu de larduino : " & PINtype & ":" & PINnumber & " - " & PINvalue)
+                            PINvalue = responsepin2(1).ToUpper 'ON OFF 10 5...
+                            WriteLog("DBG: READX : Reponse reçu de larduino : " & PINtype & ":" & PINnumber & " - " & PINvalue)
 
                             'search for the right PIN NUMBER i = adresse2
                             For j = 0 To (listedevices.Count - 1)
@@ -685,24 +686,27 @@ Public Class Driver_Arduino_HTTP
                                         'update de la value suivant la commande et le type de composant
                                         If TypeOf listedevices.Item(j).Value Is Boolean Then
                                             'composant est un booleen
-                                            If PINvalue = "LOW" Or PINvalue = "OFF" Or PINvalue = "0" Or PINvalue = "FALSE" Or PINvalue = False Then listedevices.Item(j).Value = False Else listedevices.Item(j).Value = True
+                                            If PINvalue = "LOW" Or PINvalue = "OFF" Or PINvalue = "0" Or PINvalue = "FALSE" Then listedevices.Item(j).Value = False Else listedevices.Item(j).Value = True
+                                            WriteLog("DBG: READX : Boolean Pin Found and updated: " & listedevices.Item(j).name)
                                         ElseIf TypeOf listedevices.Item(j).Value Is Long Or TypeOf listedevices.Item(j).Value Is Integer Or TypeOf listedevices.Item(j).Value Is Double Or TypeOf listedevices.Item(j).Value Is Single Then
                                             'composant est un nombre
                                             If IsNumeric(PINvalue) Then
                                                 listedevices.Item(j).Value = PINvalue
-                                            ElseIf PINvalue = "LOW" Or PINvalue = "OFF" Or PINvalue = "0" Or PINvalue = "FALSE" Or PINvalue = False Then
+                                            ElseIf PINvalue = "LOW" Or PINvalue = "OFF" Or PINvalue = "0" Or PINvalue = "FALSE" Then
                                                 listedevices.Item(j).Value = 0
-                                            ElseIf PINvalue = "HIGH" Or PINvalue = "ON" Or PINvalue = "1" Or PINvalue = "True" Or PINvalue = True Then
+                                            ElseIf PINvalue = "HIGH" Or PINvalue = "ON" Or PINvalue = "1" Or PINvalue = "TRUE" Then
                                                 listedevices.Item(j).Value = 100
                                             Else
                                                 WriteLog("ERR: La valeur reçu pour " & Objet.Name & " n'est pas un nombre: " & PINvalue)
                                             End If
+                                            WriteLog("DBG: READX : Integer Pin Found and updated: " & listedevices.Item(j).name)
                                         Else
                                             'composant est un string
                                             listedevices.Item(j).Value = PINvalue
+                                            WriteLog("DBG: READX : String Pin Found and updated: " & listedevices.Item(j).name)
                                         End If
                                     Else
-                                        WriteLog("ERR: " & Objet.Name & ": READX : " & PINtype & ":" & PINnumber & " - " & PINvalue & "--> PIN Not found in Homidom with model DIGITAL_IN DIGITAL_OUT or ANALOG_IN")
+                                        'WriteLog("ERR: " & Objet.Name & ": READX : " & PINtype & ":" & PINnumber & " - " & PINvalue & "--> PIN Not found in Homidom with model DIGITAL_IN DIGITAL_OUT or ANALOG_IN")
                                     End If
                                 End If
                             Next
@@ -724,9 +728,9 @@ Public Class Driver_Arduino_HTTP
                                     'composant est un nombre
                                     If IsNumeric(responsetab2(0)) Then
                                         Objet.Value = responsetab2(0)
-                                    ElseIf responsetab2(0) = "LOW" Or responsetab2(0) = "OFF" Or responsetab2(0) = "0" Or responsetab2(0) = "FALSE" Or responsetab2(0) = False Then
+                                    ElseIf responsetab2(0) = "LOW" Or responsetab2(0) = "OFF" Or responsetab2(0) = "0" Or responsetab2(0) = "FALSE" Then
                                         Objet.Value = 0
-                                    ElseIf responsetab2(0) = "HIGH" Or responsetab2(0) = "ON" Or responsetab2(0) = "1" Or responsetab2(0) = "True" Or responsetab2(0) = True Then
+                                    ElseIf responsetab2(0) = "HIGH" Or responsetab2(0) = "ON" Or responsetab2(0) = "1" Or responsetab2(0) = "TRUE" Then
                                         Objet.Value = 100
                                     Else
                                         WriteLog("ERR: La valeur reçu pour " & Objet.Name & " n'est pas un nombre: " & responsetab2(0))
