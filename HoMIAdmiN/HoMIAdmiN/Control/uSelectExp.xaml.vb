@@ -36,9 +36,9 @@
             typeDevice.Add(9, "DevElectricity") 'ENERGIEINSTANTANEE = 9
             typeDevice.Add(10, "DevElectricity") 'ENERGIETOTALE = 10
             typeDevice.Add(11, "DevGenericSensor") 'FREEBOX = 11
-            typeDevice.Add(12, "DevDimmer") 'GENERIQUEBOOLEEN = 12
+            typeDevice.Add(12, "DevGenericSensor") 'GENERIQUEBOOLEEN = 12
             typeDevice.Add(13, "DevMultiSwitch") 'GENERIQUESTRING = 13
-            typeDevice.Add(14, "DevDimmer") 'GENERIQUEVALUE = 14
+            typeDevice.Add(14, "DevGenericSensor") 'GENERIQUEVALUE = 14
             typeDevice.Add(15, "DevHygrometry") 'HUMIDITE = 15
             typeDevice.Add(16, "DevDimmer") 'LAMPE = 16
             typeDevice.Add(17, "DevGenericSensor") 'METEO = 17
@@ -54,25 +54,67 @@
             typeDevice.Add(27, "DevShutter") 'VOLET = 27
             typeDevice.Add(28, "DevRGBLight") 'LAMPERGBW = 28
 
+
             'device
             Dim importOk = ImportImperiHome()
             For Each device In myService.GetAllDevices(IdSrv)
 
                 Dim x As New CheckBox
+                Dim y As New ComboBox
+
                 x.Content = device.Name
                 x.ToolTip = device.ID
                 x.HorizontalAlignment = HorizontalAlignment.Left
                 x.IsChecked = False
+
+                x.Width = 300
+                AddHandler x.Click, AddressOf ChkElement_Click
+
+                y.Items.Add("DevCamera")
+                y.Items.Add("DevCO2")
+                y.Items.Add("DevCO2Alert")
+                y.Items.Add("DevDimmer")
+                y.Items.Add("DevDoor")
+                y.Items.Add("DevElectricity")
+                y.Items.Add("DevFlood")
+                y.Items.Add("DevGenericSensor")
+                y.Items.Add("DevHygrometry")
+                y.Items.Add("DevLock")
+                y.Items.Add("DevLuminosity")
+                y.Items.Add("DevMotion")
+                y.Items.Add("DevMultiSwitch")
+                y.Items.Add("DevNoise")
+                y.Items.Add("DevPressure")
+                y.Items.Add("DevRain")
+                y.Items.Add("DevRGBLight")
+                y.Items.Add("DevScene")
+                y.Items.Add("DevShutter")
+                y.Items.Add("DevSmoke")
+                y.Items.Add("DevSwitch")
+                y.Items.Add("DevTemperature")
+                y.Items.Add("DevTempHygro")
+                y.Items.Add("DevThermostat")
+                y.Items.Add("DevUV")
+                y.Items.Add("DevWind")
+                y.HorizontalAlignment = HorizontalAlignment.Right
+                y.Text = typeDevice(device.Type)
                 If importOk Then
                     For Each dev In allDevImperi.devices
                         If dev.name = device.Name Then
                             x.IsChecked = True
+                            y.Text = dev.type
                         End If
                     Next
+                End If
+                If x.IsChecked = True Then
+                    y.Visibility = Windows.Visibility.Visible
+                Else
+                    y.Visibility = Windows.Visibility.Collapsed
                 End If
                 Dim stk As New StackPanel
                 stk.Orientation = Orientation.Horizontal
                 stk.Children.Add(x)
+                stk.Children.Add(y)
                 stk.HorizontalAlignment = HorizontalAlignment.Left
                 ListBoxDevices.Items.Add(stk)
                 x = Nothing
@@ -170,66 +212,67 @@
             ZoneList.rooms = New List(Of Room)
 
             For Each dev As StackPanel In ListBoxDevices.Items
-                For Each child As CheckBox In dev.Children
-                    If child.IsChecked Then
-                        Dim comp = ReturnDeviceByID(child.ToolTip)
-                        'device  
-                        idfind = ""
-                        memId = 0
-                        Dim Temp As Device = New Device
-                        If allDevImperi IsNot Nothing Then
-                            For Each impdev In allDevImperi.devices
-                                If comp.Name = impdev.name Then idfind = impdev.id
-                                If CInt(Right(impdev.id, 3)) > memId Then memId = CInt(Right(impdev.id, 3))
-                            Next
-                        End If
-                        If idfind = "" Then
-                            cptDevice += 1
-                            Temp.id = "DEV" & Format(memId + cptDevice, "000")
-                        Else
-                            Temp.id = idfind
-                        End If
-                        Temp.name = comp.Name
-                        Temp.room = searchZone(comp.ID)
-                        Temp.type = typeDevice(comp.Type)
-                        Temp.params = ParamByType(comp)
-                        DevList.devices.Add(Temp)
-                    End If
-                Next
 
+                Dim x As CheckBox = dev.Children.Item(0)
+                Dim y As ComboBox = dev.Children.Item(1)
+                If x.IsChecked Then
+                    Dim comp = ReturnDeviceByID(x.ToolTip)
+                    'device  
+                    idfind = ""
+                    memId = 0
+                    Dim Temp As Device = New Device
+                    If allDevImperi IsNot Nothing Then
+                        For Each impdev In allDevImperi.devices
+                            If comp.Name = impdev.name Then idfind = impdev.id
+                            If CInt(Right(impdev.id, 3)) > memId Then memId = CInt(Right(impdev.id, 3))
+                        Next
+                    End If
+                    If idfind = "" Then
+                        cptDevice += 1
+                        Temp.id = "DEV" & Format(memId + cptDevice, "000")
+                    Else
+                        Temp.id = idfind
+                    End If
+                    Temp.name = comp.Name
+                    Temp.room = searchZone(comp.ID)
+                    Temp.type = y.Text
+                    Temp.params = ParamByType(comp)
+                    DevList.devices.Add(Temp)
+                End If
             Next
-            For Each dev As StackPanel In ListBoxMacros.Items
-                For Each child As CheckBox In dev.Children
-                    If child.IsChecked Then
-                        Dim comp = myService.ReturnMacroById(IdSrv, child.ToolTip)
-                        'macro
-                        idfind = ""
-                        memId = 0
-                        Dim Temp As Device = New Device
 
-                        If allDevImperi IsNot Nothing Then
-                            For Each impdev In allDevImperi.devices
-                                If comp.Nom = impdev.name Then idfind = impdev.id
-                                If CInt(Right(impdev.id, 3)) > memId Then memId = CInt(Right(impdev.id, 3))
-                            Next
-                        End If
-                        If idfind = "" Then
-                            cptDevice += 1
-                            Temp.id = "DEV" & Format(memId + cptDevice, "000")
-                        Else
-                            Temp.id = idfind
-                        End If
-                        Temp.name = comp.Nom
-                        Temp.room = searchZone(comp.ID)
-                        Temp.type = "DevScene"
-                        Dim params As DeviceParam = New DeviceParam
-                        params.key = "LastRun"
-                        params.value = Now
-                        Temp.params = New List(Of DeviceParam)
-                        Temp.params.Add(params)
-                        DevList.devices.Add(Temp)
+            For Each dev As StackPanel In ListBoxMacros.Items
+
+                Dim z As CheckBox = dev.Children.Item(0)
+                If z.IsChecked Then
+                    Dim comp = myService.ReturnMacroById(IdSrv, z.ToolTip)
+                    'macro
+                    idfind = ""
+                    memId = 0
+                    Dim Temp As Device = New Device
+
+                    If allDevImperi IsNot Nothing Then
+                        For Each impdev In allDevImperi.devices
+                            If comp.Nom = impdev.name Then idfind = impdev.id
+                            If CInt(Right(impdev.id, 3)) > memId Then memId = CInt(Right(impdev.id, 3))
+                        Next
                     End If
-                Next
+                    If idfind = "" Then
+                        cptDevice += 1
+                        Temp.id = "DEV" & Format(memId + cptDevice, "000")
+                    Else
+                        Temp.id = idfind
+                    End If
+                    Temp.name = comp.Nom
+                    Temp.room = searchZone(comp.ID)
+                    Temp.type = "DevScene"
+                    Dim params As DeviceParam = New DeviceParam
+                    params.key = "LastRun"
+                    params.value = Now
+                    Temp.params = New List(Of DeviceParam)
+                    Temp.params.Add(params)
+                    DevList.devices.Add(Temp)
+                End If
             Next
             Dim BasePath As System.IO.DirectoryInfo = New System.IO.DirectoryInfo(My.Application.Info.DirectoryPath & "\Drivers\")
             Dim NewPath As System.IO.DirectoryInfo = New System.IO.DirectoryInfo("Imperihome")
@@ -265,6 +308,21 @@
             Return Nothing
         End Try
     End Function
+
+    Private Sub ChkElement_Click(ByVal sender As Object, ByVal e As System.Windows.RoutedEventArgs)
+        Try
+            For Each stk As StackPanel In ListBoxDevices.Items
+                Dim x As CheckBox = stk.Children.Item(0)
+                If x.IsChecked = True Then
+                    stk.Children.Item(1).Visibility = Windows.Visibility.Visible
+                Else
+                    stk.Children.Item(1).Visibility = Windows.Visibility.Collapsed
+                End If
+            Next
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uSelectExp ChkElement_Click: " & ex.ToString, "ERREUR", "")
+        End Try
+    End Sub
 
     Private Function searchZone(ByVal idDevice As String) As String
         Try
@@ -429,11 +487,17 @@
 
     Private Sub Chkselectdevices_CheckedUnchecked(sender As Object, e As RoutedEventArgs) Handles Chkselectdevices.Checked, Chkselectdevices.Unchecked
         Try
-                For Each dev As StackPanel In ListBoxDevices.Items
-                    For Each child As CheckBox In dev.Children
-                        child.IsChecked = Chkselectdevices.IsChecked
-                    Next
-                Next
+            For Each dev As StackPanel In ListBoxDevices.Items
+                'For Each child As CheckBox In dev.Children
+                Dim child As CheckBox = dev.Children.Item(0)
+                child.IsChecked = Chkselectdevices.IsChecked
+                If child.IsChecked Then
+                    dev.Children.Item(1).Visibility = Windows.Visibility.Visible
+                Else
+                    dev.Children.Item(1).Visibility = Windows.Visibility.Collapsed
+                End If
+                'Next
+            Next
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Chkselectdevices_CheckedUnchecked: " & ex.ToString, "ERREUR", "Chkselectdevices_CheckedUnchecked")
         End Try
@@ -442,14 +506,21 @@
     Private Sub Chkselectmacros_CheckedUnchecked(sender As Object, e As RoutedEventArgs) Handles Chkselectmacros.Checked, Chkselectmacros.Unchecked
         Try
             For Each dev As StackPanel In ListBoxMacros.Items
-                For Each child As CheckBox In dev.Children
-                    child.IsChecked = Chkselectmacros.IsChecked
-                Next
+                'For Each child As CheckBox In dev.Children
+                Dim child As CheckBox = dev.Children.Item(0)
+                child.IsChecked = Chkselectmacros.IsChecked
+                If child.IsChecked Then
+                    dev.Children.Item(1).Visibility = Windows.Visibility.Visible
+                Else
+                    dev.Children.Item(1).Visibility = Windows.Visibility.Collapsed
+                End If
+                'Next
             Next
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Chkselectmacros_CheckedUnchecked: " & ex.ToString, "ERREUR", "Chkselectmacros_CheckedUnchecked")
         End Try
     End Sub
+
 End Class
 
 ''' <summary>Class DeviceParam, Défini le type parametre de composant pour le client Imperihome</summary>

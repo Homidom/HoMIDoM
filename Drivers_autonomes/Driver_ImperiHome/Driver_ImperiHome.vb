@@ -332,7 +332,8 @@ Imports System.Threading
                  .id = RouteParameter.[Optional]
                 })
                 config.Routes.MapHttpRoute("CommandApi", "{key}/{controller}/{id}/action/{command}/{param}", New With { _
-                 .action = "ExecuteCommand"
+                .param = RouteParameter.[Optional], _
+                .action = "ExecuteCommand"
                 }) 'DevicesController
                 config.Routes.MapHttpRoute("ValueApi", "{key}/{controller}", New With { _
                  .action = "GetValue"
@@ -607,7 +608,7 @@ Public Class DevicesController
     Inherits BaseHoMIdomController
 
     <HttpGet()>
-    Public Function ExecuteCommand(ByVal id As String, ByVal command As String, ByVal param As String) As Boolean
+    Public Function ExecuteCommand(ByVal id As String, ByVal command As String, Optional ByVal param As String = "") As Boolean
         Me.ExecuteCommandWithParams(id, command, param)
         Return True
     End Function
@@ -711,7 +712,7 @@ Public Class DevicesController
 
                 Select Case command
 
-                    Case "lauchScene"
+                    Case "launchScene"
 
                         Dim Mac As Macro
                         Dim allMac = Driver_ImperiHome.CurrentServer.GetAllMacros(Me.ServerKey)
@@ -742,7 +743,7 @@ Public Class DevicesController
                                         Dev = Dev1
 
                                         Select Case command
-                                            Case "setLevel", "setSetPoint"
+                                            Case "setLevel"
                                                 If Dev1.Type = ListeDevices.VOLET Then
                                                     action = New DeviceAction() With {.Nom = "OUVERTURE"}
                                                 Else
@@ -750,6 +751,22 @@ Public Class DevicesController
                                                 End If
                                                 Dim devActionParameter As DeviceAction.Parametre = New DeviceAction.Parametre With {.Nom = "Value", .Value = param}
                                                 'devActionParameter = action.Parametres.Where(Function(t) t.Nom = param).FirstOrDefault()
+                                                action.Parametres.Add(devActionParameter)
+                                                Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
+
+                                            Case "setMode", "setSetPoint"
+                                                action = New DeviceAction() With {.Nom = "ExecuteCommand"}
+                                                Dim devActionCommand As DeviceAction.Parametre = Nothing
+                                                If command = "setSetPoint" Then
+                                                    devActionCommand = New DeviceAction.Parametre With {.Value = "SETPOINT"}
+                                                ElseIf command = "setMode" Then
+                                                    devActionCommand = New DeviceAction.Parametre With {.Value = "SETMODE"}
+                                                Else
+                                                    Return "error"
+                                                    Exit Function
+                                                End If
+                                                action.Parametres.Add(devActionCommand)
+                                                Dim devActionParameter As DeviceAction.Parametre = New DeviceAction.Parametre With {.Nom = "Value", .Value = param}
                                                 action.Parametres.Add(devActionParameter)
                                                 Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
 
@@ -810,7 +827,7 @@ Public Class DevicesController
                     params(0).key = "Level"
                     params(0).value = comp.Value
 
-                Case 16, 14 '"LAMPE", "GENERIQUEVALUE"
+                Case 16 '"LAMPE"
                     params(0) = New DeviceParam
                     params(0).key = "Level"
                     params(0).value = comp.Value
@@ -836,14 +853,14 @@ Public Class DevicesController
                     params(0).unit = comp.Unit
                     params(0).graphable = comp.IsHisto
 
-                Case 15, 25, 3, 19, 23, 7 '"HUMIDITE", "UV", "BAROMETRE, "PLUIECOURANT", "TEMPERATURE", "DETECTEUR", "BATTERIE"
+                Case 14, 15, 25, 3, 19, 23 ' "GENERIQUEVALUE", "HUMIDITE", "UV", "BAROMETRE, "PLUIECOURANT", "TEMPERATURE", "BATTERIE"
                     params(0) = New DeviceParam
                     params(0).key = "Value"
                     params(0).value = comp.Value
                     params(0).unit = comp.Unit
                     params(0).graphable = comp.IsHisto
 
-                Case 21 '"SWITCH"
+                Case 6, 7, 12, 21 ' "CONTACT", "DETECTEUR", "GENERIQUEBOOLEEN", "SWITCH"
                     params(0) = New DeviceParam
                     params(0).key = "Status"
                     If comp.Value = False Then
@@ -871,6 +888,28 @@ Public Class DevicesController
                     params(0) = New DeviceParam
                     params(0).key = "cursetpoint"
                     params(0).value = comp.Value
+                    ' Il est nécessaire de définir les deux valeurs sinon rien ne s'affiche dans Imperihome
+                    params(1) = New DeviceParam
+                    params(1).key = "curtemp"
+                    params(1).value = comp.Value
+                    ' Pour les modes de thermostat (p. ex. Auto / Manuel),
+                    ' on assume que:
+                    ' 1) La liste des modes est stockée
+                    ' dans la variable "modes" sous le format "Auto|Manuel"
+                    ' 2) Le mode actuel du device est stockée dans la variable
+                    ' "mode" du composant.
+                    For Each Var In comp.VariablesOfDevice
+                        If LCase(Var.Key) = "mode" Then
+                            params(2) = New DeviceParam
+                            params(2).key = "curmode"
+                            params(2).value = Var.Value
+                        End If
+                        If LCase(Var.Key) = "modes" Then
+                            params(3) = New DeviceParam
+                            params(3).key = "availablemodes"
+                            params(3).value = Var.Value.Replace("|", ",")
+                        End If
+                    Next
 
                 Case 28 '"LAMPERGBW"
                     params(0) = New DeviceParam
