@@ -101,6 +101,7 @@ Public Class Driver_ZWave
             COMMAND_CLASS_SWITCH_BINARY = 37                      ' 0x25
             COMMAND_CLASS_SWITCH_MULTILEVEL = 38                  ' 0x26
             COMMAND_CLASS_SWITCH_MULTILEVEL_V2 = 38               ' 0x26
+            COMMAND_CLASS_SWITCH_MULTILEVEL_V3 = 38               ' 0x26
             COMMAND_CLASS_SWITCH_ALL = 39                         ' 0x27
             COMMAND_CLASS_SWITCH_TOGGLE_BINARY = 40               ' 0x28
             COMMAND_CLASS_SWITCH_TOGGLE_MULTILEVEL = 41           ' 0x29
@@ -114,9 +115,11 @@ Public Class Driver_ZWave
             COMMAND_CLASS_SENSOR_MULTILEVEL = 49                  ' 0x31
             COMMAND_CLASS_SENSOR_MULTILEVEL_V2 = 49               ' 0x31
             COMMAND_CLASS_SENSOR_MULTILEVEL_V3 = 49               ' 0x31
+            COMMAND_CLASS_SENSOR_MULTILEVEL_V7 = 49               ' 0x31
             COMMAND_CLASS_METER = 50                              ' 0x32
             COMMAND_CLASS_METER_V2 = 50                           ' 0x32
             COMMAND_CLASS_METER_V3 = 50                           ' 0x32
+            COMMAND_CLASS_METER_V4 = 50                           ' 0x32
             COMMAND_CLASS_ZIP_ADV_SERVER = 51                     ' 0x33
             COMMAND_CLASS_ZIP_ADV_CLIENT = 52                     ' 0x34
             COMMAND_CLASS_METER_PULSE = 53                        ' 0x35
@@ -177,6 +180,8 @@ Public Class Driver_ZWave
             COMMAND_CLASS_TIME_PARAMETERS = 139                   ' 0x8B
             COMMAND_CLASS_GEOGRAPHIC_LOCATION = 140               ' 0x8C
             COMMAND_CLASS_COMPOSITE = 141                         ' 0x8D
+            COMMAND_CLASS_MULTI_CHANNEL_ASSOCIATION = 142         ' 0x8E
+            COMMAND_CLASS_MULTI_CHANNEL_ASSOCIATION_V2 = 142      ' 0x8E
             COMMAND_CLASS_MULTI_INSTANCE_ASSOCIATION = 142        ' 0x8E
             COMMAND_CLASS_MULTI_INSTANCE_ASSOCIATION_V2 = 142     ' 0x8E
             COMMAND_CLASS_MULTI_CMD = 143                         ' 0x8F
@@ -1245,7 +1250,7 @@ Public Class Driver_ZWave
 
                             Else
                                 ' Message si le noeud n'est pas le controleur
-                                If (node.ID <> m_manager.GetControllerNodeId(m_homeId)) Then _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", " Erreur dans ValueAdded : node " & m_notification.GetNodeId() & " non trouvé")
+                                If (node.ID <> m_manager.GetControllerNodeId(m_homeId)) Then WriteLog("DBG: " & "NotificationHandler - Erreur dans ValueAdded : node " & m_notification.GetNodeId() & " non trouvé")
                             End If
                         End If
 
@@ -1290,7 +1295,6 @@ Public Class Driver_ZWave
                         Dim node As New Node
                         ' Si ce n'est pas le controleur 
                         If m_notification.GetNodeId() <> m_manager.GetControllerNodeId(m_homeId) Then
-                            '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " NotificationHandler ", "Ajout d'un nouveau noeud  " & m_notification.GetNodeId())
                             WriteLog("NotificationHandler - Ajout d'un nouveau noeud " & m_notification.GetNodeId())
                             node.ID = m_notification.GetNodeId()
                             node.HomeID = m_notification.GetHomeId()
