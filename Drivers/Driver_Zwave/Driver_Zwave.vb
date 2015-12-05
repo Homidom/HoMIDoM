@@ -5,7 +5,7 @@ Imports HoMIDom.HoMIDom.Device
 Imports STRGS = Microsoft.VisualBasic.Strings
 Imports OpenZWaveDotNet
 Imports System.ComponentModel
-
+Imports System.Text.RegularExpressions
 
 
 Public Class Driver_ZWave
@@ -818,11 +818,11 @@ Public Class Driver_ZWave
                 WriteLog("DBG: " & "Write, Commande recue :" & Commande & " sur le noeud : " & Objet.Adresse1.ToString & " et de type " & Objet.Adresse2.ToString)
 
                 If IsNothing(NodeTemp) Then
-                    WriteLog("DBG: " & "Write, Noeud non trouvé avec l'adresse : " & Objet.Adresse1)
+                    WriteLog("ERR: " & "Write, Noeud non trouvé avec l'adresse : " & Objet.Adresse1)
                 Else
                     WriteLog("DBG: " & "Write, Noeud  trouvé avec l'adresse : " & Objet.Adresse1.ToString)
                     If NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_MULTILEVEL) Or NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY) Then
-                        WriteLog("ERR: " & "Write, Recherche de : dans l'adresse2 " & Objet.adresse2)
+                        WriteLog("DBG: " & "Write, Recherche de : dans l'adresse2 " & Objet.adresse2)
                         If InStr(Objet.adresse2, ":") Then
                             Dim ParaAdr2 = Split(Objet.adresse2, ":")
                             ValueTemp = GetValeur(NodeTemp, Trim(ParaAdr2(0)), Trim(ParaAdr2(1)))
@@ -830,7 +830,7 @@ Public Class Driver_ZWave
                                 WriteLog("ERR: " & "Write, Valeur non trouvée avec l'adresse : " & Objet.Adresse1 & " et " & Objet.Adresse2)
                                 Exit Sub
                             Else
-                                WriteLog("ERR: " & "Write, Valeur trouvée avec l'adresse : " & Objet.Adresse1 & " et " & Objet.Adresse2)
+                                WriteLog("DBG: " & "Write, Valeur trouvée avec l'adresse : " & Objet.Adresse1 & " et " & Objet.Adresse2)
                                 IsMultiLevel = True
                             End If
                         Else
@@ -1560,7 +1560,8 @@ Public Class Driver_ZWave
                                 Select Case m_valueID.GetType()
                                     Case 0 : m_manager.GetValueAsBool(m_valueID, ValeurRecue) 'm_manager.GetValueAsBool(TempValeur, LocalDevice.value)
                                     Case 1 : m_manager.GetValueAsByte(m_valueID, ValeurRecue) ' GetValueAsByte(TempValeur, LocalDevice.value)
-                                    Case 2 : m_manager.GetValueAsDecimal(m_valueID, ValeurRecue) ' GetValueAsDecimal(TempValeur, LocalDevice.value)
+                                    Case 2 : m_manager.GetValueAsString(m_valueID, ValeurRecue) ' GetValueAsDecimal(TempValeur, LocalDevice.value)
+                                        ValeurRecue = Regex.Replace(CStr(ValeurRecue), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                                     Case 3 : m_manager.GetValueAsInt(m_valueID, ValeurRecue) ' m_manager.GetValueAsInt(TempValeur, LocalDevice.value)
                                         '  Case 4 : m_manager.GetValueListItems(NodeTemp.Values(IndexTemp), LocalDevice.value) ; A voir + tard
                                     Case 6 : m_manager.GetValueAsShort(m_valueID, ValeurRecue) ' m_manager.GetValueAsShort(TempValeur, LocalDevice.value)
