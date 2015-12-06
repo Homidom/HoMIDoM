@@ -145,12 +145,15 @@ Public Class Driver_ZWave
             COMMAND_CLASS_ZWAVE_PLUS_INFO_V2 = 94                  '0x5E
             COMMAND_CLASS_MULTI_INSTANCE = 96                     ' 0x60
             COMMAND_CLASS_MULTI_INSTANCE_V2 = 96                  ' 0x60
+            COMMAND_CLASS_MULTI_INSTANCE_V4 = 96                  ' 0x60
             COMMAND_CLASS_DOOR_LOCK = 98                          ' 0x62
             COMMAND_CLASS_USER_CODE = 99                          ' 0x63
             COMMAND_CLASS_BARRIER_OPERATOR = 102                  ' 0x66
             COMMAND_CLASS_CONFIGURATION = 112                     ' 0x70
             COMMAND_CLASS_CONFIGURATION_V2 = 112                  ' 0x70
             COMMAND_CLASS_ALARM = 113                             ' 0x71
+            COMMAND_CLASS_ALARM_V4 = 113                          ' 0x71
+            COMMAND_CLASS_ALARM_V5 = 113                          ' 0x71
             COMMAND_CLASS_MANUFACTURER_SPECIFIC = 114             ' 0x72
             COMMAND_CLASS_MANUFACTURER_SPECIFIC_V2 = 114          ' 0x72
             COMMAND_CLASS_POWERLEVEL = 115                        ' 0x73
@@ -295,7 +298,7 @@ Public Class Driver_ZWave
 
             Public Property CommandClass() As List(Of CommandClass)
                 Get
-                    Return m_CommandClass
+                    Return m_commandClass
                 End Get
                 Set(ByVal value As List(Of CommandClass))
                     m_CommandClass = value
@@ -819,14 +822,16 @@ Public Class Driver_ZWave
                 End If
 
                 NodeTemp = GetNode(m_homeId, Objet.Adresse1)
-
                 WriteLog("DBG: " & "Write, Commande recue :" & Commande & " sur le noeud : " & Objet.Adresse1.ToString & " et de type " & Objet.Adresse2.ToString)
 
                 If IsNothing(NodeTemp) Then
                     WriteLog("ERR: " & "Write, Noeud non trouvé avec l'adresse : " & Objet.Adresse1)
                 Else
                     WriteLog("DBG: " & "Write, Noeud  trouvé avec l'adresse : " & Objet.Adresse1.ToString)
-                    If NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_MULTILEVEL) Or NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY) Then
+                    If NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_MULTILEVEL) Or
+                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_MULTILEVEL_V2) Or
+                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_MULTILEVEL_V3) Or
+                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY) Then
                         WriteLog("DBG: " & "Write, Recherche de : dans l'adresse2 " & Objet.adresse2)
                         If InStr(Objet.adresse2, ":") Then
                             Dim ParaAdr2 = Split(Objet.adresse2, ":")
