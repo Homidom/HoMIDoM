@@ -855,11 +855,11 @@ Imports System.Xml
     Public Function GET_VALUE(key As String) As String
         Try
             Dim valeur As String = ValueIPX(key)
-            WriteLog("Get_Value, Key " & key & " => " & valeur)
+            WriteLog("DBG: Get_Value, Key " & key & " => " & valeur)
             Return valeur
         Catch ex As Exception
-            WriteLog("DBG: " & "Get_Value, Key " & key)
-            WriteLog("DBG: " & ex.Message)
+            WriteLog("ERR: " & "Get_Value, Key " & key)
+            WriteLog("ERR: " & ex.Message)
             Return ""
         End Try
     End Function
