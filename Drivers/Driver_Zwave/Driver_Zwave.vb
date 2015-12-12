@@ -643,7 +643,25 @@ Public Class Driver_ZWave
             Try
                 Dim retour As String = "0"
 
+
                 Select Case UCase(Champ)
+                    Case "ADRESSE1"
+                        'verification que numero de noeud existe
+                        If _IsConnect Then
+                            Try
+                                Dim ValExist As Boolean = False
+                                Dim i As Integer
+                                For i = 0 To m_nodeList.Count - 1
+                                    If m_nodeList.ElementAt(i).ID = Value Then
+                                        ValExist = True
+                                        Exit For
+                                    End If
+                                Next
+                                If Not ValExist Then Return "Le noeud " & Value & " n'existe pas" & vbCrLf & "Vérifiez votre configuration"
+                            Catch ex As Exception
+                                Return ("ERR: VerifChamp, Probleme lors de la recherche de la liste des noeuds")
+                            End Try
+                        End If
                     Case "ADRESSE2"
                         ' Suppression des espaces inutiles
                         If InStr(Value, ":") Then
@@ -654,7 +672,7 @@ Public Class Driver_ZWave
                 End Select
                 Return retour
             Catch ex As Exception
-                Return "Une erreur est apparue lors de la vérification du champ " & Champ & ": " & ex.ToString
+                Return "ERR: VerifChamp, Une erreur est apparue lors de la vérification du champ " & Champ & ": " & ex.ToString
             End Try
         End Function
 
