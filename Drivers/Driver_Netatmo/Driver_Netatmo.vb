@@ -146,7 +146,7 @@ Imports HoMIOAuth2
         Public WindStrength As Double
         Public GustAngle As Double
         Public GustStrength As Double
-        Public WindHistoric As Double
+        Public WindHistoric As List(Of WindHistoric)
         Public time_utc As Integer
     End Class
 
@@ -894,10 +894,10 @@ Imports HoMIOAuth2
                 If Auth.expires_in > 0 And Auth.refresh_token <> Nothing Then
                     Dim stream = Newtonsoft.Json.JsonConvert.SerializeObject(Auth)
                     System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\config\reponse_accesstoken_" & clientOauth & ".json", stream)
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " RefreshToken : ", "Requête " & httpsOauth & " OK")
-                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " RefreshToken", "Connect : " & responsebody.ToString)
+                    WriteLog("DBG: " & Me.Nom & " RefreshToken, Requête " & httpsOauth & " OK")
+                    WriteLog("DBG: " & Me.Nom & " RefreshToken, Connect : " & responsebody.ToString)
                 Else
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " RefreshToken", "Non connecté")
+                    WriteLog("ERR: " & Me.Nom & " RefreshToken, Non connecté")
                 End If
                 Return True
             Else
