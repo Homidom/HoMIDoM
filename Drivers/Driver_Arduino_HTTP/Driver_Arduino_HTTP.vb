@@ -504,7 +504,7 @@ Public Class Driver_Arduino_HTTP
                     End Select
                 Next
                 'If last character in url is "_", we remove it
-                If urlcommande.EndsWith("_") Then urlcommande = urlcommande.Substring(0, urlcommande.Length - 2)
+                If urlcommande.EndsWith("_") Then urlcommande = urlcommande.Substring(0, urlcommande.Length - 1)
                 
             ElseIf Command = "SETVAR" Then
                 If Not IsNothing(Parametre1) Then
@@ -670,13 +670,13 @@ Public Class Driver_Arduino_HTTP
                         listedevices = _Server.ReturnDeviceByAdresse1TypeDriver(_idsrv, Objet.adresse1, "", Me._ID, True)
 
                         'for each PIN in the response, check if a device correspond in the listdevices and update it if needed
-                        For i As Integer = 0 To responsepin.Length
+                        For i As Integer = 0 To (responsepin.Length - 1)
                             'A1=10 : type A, number 1, value 10
                             Dim responsepin2 As String() = responsepin(i).Split("=")
                             PINtype = Left(responsepin2(0), 1) 'D digital IN, O Digital out, A Analog IN
                             PINnumber = Right(responsepin2(0), responsepin2(0).Length - 1)
                             PINvalue = responsepin2(1).ToUpper 'ON OFF 10 5...
-                            WriteLog("DBG: READX : Reponse reçu de larduino : " & PINtype & ":" & PINnumber & " - " & PINvalue)
+                            WriteLog("DBG: READX : Reponse reçu de larduino : " & PINtype & " : " & PINnumber & " - " & PINvalue)
 
                             'search for the right PIN NUMBER i = adresse2
                             For j = 0 To (listedevices.Count - 1)
