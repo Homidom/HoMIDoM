@@ -62,6 +62,10 @@ Public Class Driver_ZWave
         Dim _DEBUG As Boolean = False
         Dim _AFFICHELOG As Boolean = False
         Dim _STARTIDLETIME As Integer = 10
+        Dim _baudspeed As Integer = 57600
+        Dim _nbrebit As Integer = 8
+        Dim _parity As IO.Ports.Parity = IO.Ports.Parity.None
+        Dim _nbrebitstop As IO.Ports.StopBits = IO.Ports.StopBits.One
 
         'Ajoutés dans les ppt avancés dans New()
 
@@ -643,7 +647,25 @@ Public Class Driver_ZWave
             Try
                 Dim retour As String = "0"
 
+
                 Select Case UCase(Champ)
+                    Case "ADRESSE1"
+                        'verification que numero de noeud existe
+                        If _IsConnect Then
+                            Try
+                                Dim ValExist As Boolean = False
+                                Dim i As Integer
+                                For i = 0 To m_nodeList.Count - 1
+                                    If m_nodeList.ElementAt(i).ID = Value Then
+                                        ValExist = True
+                                        Exit For
+                                    End If
+                                Next
+                                If Not ValExist Then Return "Le noeud " & Value & " n'existe pas" & vbCrLf & "Vérifiez votre configuration"
+                            Catch ex As Exception
+                                Return ("ERR: VerifChamp, Probleme lors de la recherche de la liste des noeuds")
+                            End Try
+                        End If
                     Case "ADRESSE2"
                         ' Suppression des espaces inutiles
                         If InStr(Value, ":") Then
@@ -654,7 +676,7 @@ Public Class Driver_ZWave
                 End Select
                 Return retour
             Catch ex As Exception
-                Return "Une erreur est apparue lors de la vérification du champ " & Champ & ": " & ex.ToString
+                Return "ERR: VerifChamp, Une erreur est apparue lors de la vérification du champ " & Champ & ": " & ex.ToString
             End Try
         End Function
 
@@ -669,12 +691,39 @@ Public Class Driver_ZWave
                 _DEBUG = _Parametres.Item(0).Valeur
                 _AFFICHELOG = Parametres.Item(1).Valeur
                 If (Parametres.Count > 2) Then _STARTIDLETIME = Parametres.Item(2).Valeur
+                'parametrage port serie
+                Dim valuetmp As String
+                valuetmp = Parametres.Item(3).Valeur
+                Select Case Right(valuetmp, 1)
+                    Case "0"
+                        _nbrebitstop = IO.Ports.StopBits.None
+                    Case "1"
+                        _nbrebitstop = IO.Ports.StopBits.One
+                    Case "2"
+                        _nbrebitstop = IO.Ports.StopBits.Two
+                End Select
+                valuetmp = Left(valuetmp, Len(valuetmp) - 1)
+                Select Case Right(valuetmp, 1)
+                    Case "N"
+                        _parity = IO.Ports.Parity.None
+                    Case "E"
+                        _parity = IO.Ports.Parity.Even
+                    Case "O"
+                        _parity = IO.Ports.Parity.Odd
+                    Case "M"
+                        _parity = IO.Ports.Parity.Mark
+                    Case "S"
+                        _parity = IO.Ports.Parity.Space
+                End Select
+                valuetmp = Left(valuetmp, Len(valuetmp) - 1)
+                _nbrebit = Right(valuetmp, 1)
+                _baudspeed = Left(valuetmp, Len(valuetmp) - 1)
 
             Catch ex As Exception
                 _DEBUG = False
                 _AFFICHELOG = False
                 _STARTIDLETIME = 10
-                WriteLog("ERR: " & "Erreur dans les paramétres avancés. utilisation des valeurs par défaut" & ex.Message)
+                WriteLog("ERR: " & "Erreur dans les paramétres avancés. utilisation des valeurs par défaut " & ex.Message)
             End Try
 
             'ouverture du port suivant le Port Com
@@ -1022,6 +1071,7 @@ Public Class Driver_ZWave
                 Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
                 Add_ParamAvance("AfficheLog", "Afficher Log OpenZwave à l'écran (True/False)", True)
                 Add_ParamAvance("StartIdleTime", "Durée durant laquelle le driver ne traite aucun message lors de son démarrage (en secondes).", 10)
+                Add_ParamAvance("BaudRate", "Vitesse,Nbre bits, Parité, Nbre bit stop ( défaut 576008N1 )", "576008N1")
 
                 'ajout des commandes avancées pour les devices
                 Add_DeviceCommande("ALL_LIGHT_ON", "", 0)
@@ -1070,6 +1120,11 @@ Public Class Driver_ZWave
                     Try
                         ' Test d'ouveture du port Com du controleur 
                         port.PortName = numero
+                        port.BaudRate = _baudspeed
+                        port.DataBits = _nbrebit
+                        port.Parity = _parity
+                        port.StopBits = _nbrebitstop
+                        WriteLog("Ouvrir - Ouverture du port " & port.PortName & " à la vitesse " & port.BaudRate & port.DataBits & port.Parity.ToString & port.StopBits.ToString)
                         port.Open()
                         ' Le port existe ==> le controleur est present
                         If port.IsOpen() Then
