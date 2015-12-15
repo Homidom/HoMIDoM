@@ -5235,7 +5235,7 @@ Imports System.Media
             Dim temp As String = ""
 
             'verification format adresse
-            If Not (adresse.Length = 2) Then
+            If Not (adresse.Length = 2 Or adresse.Length = 3) Then
                 WriteLog("ERR: Send lighting1 : Adresse invalide : " & adresse)
                 Exit Sub
             End If
