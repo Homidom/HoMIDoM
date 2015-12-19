@@ -631,23 +631,31 @@ Public Class Driver_Arduino_HTTP
                 'Get a web response  
                 Dim response As WebResponse
                 Dim responseFromServer As String = ""
-                Try
-                    response = request.GetResponse()
-                    If CType(response, HttpWebResponse).StatusCode = HttpStatusCode.OK Then
-                        Dim dataStream As Stream = response.GetResponseStream()
-                        Dim reader As New StreamReader(dataStream)
-                        responseFromServer = reader.ReadToEnd().ToUpper
-                        WriteLog("DBG: Commande passée à l arduino " & Objet.Name & " : " & urlcommande & " --> " & responseFromServer & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
-                    Else
-                        WriteLog("ERR: Commande passée à l arduino " & Objet.Name & " : " & urlcommande & " --> Réponse incorrecte reçu : " & CType(response, HttpWebResponse).StatusCode & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
-                    End If
-                    response.Close()
-                Catch ex As System.Net.WebException
-                    WriteLog("ERR: Commande passée à l arduino : " & urlcommande & " --> Erreur de communication : " & ex.Message.ToString)
+                For retrycount As Integer = 0 To 2
+                    Try
+                        response = request.GetResponse()
+                        If CType(response, HttpWebResponse).StatusCode = HttpStatusCode.OK Then
+                            Dim dataStream As Stream = response.GetResponseStream()
+                            Dim reader As New StreamReader(dataStream)
+                            responseFromServer = reader.ReadToEnd().ToUpper
+                            WriteLog("DBG: Commande passée à l arduino " & Objet.Name & " : " & urlcommande & " --> " & responseFromServer & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
+                        Else
+                            WriteLog("ERR: Commande passée à l arduino " & Objet.Name & " : " & urlcommande & " --> Réponse incorrecte reçu : " & CType(response, HttpWebResponse).StatusCode & " (" & CType(response, HttpWebResponse).StatusDescription & ")")
+                        End If
+                        response.Close()
+                        Exit For
+                    Catch ex As System.Net.WebException
+                        WriteLog("ERR: Commande passée à l arduino : " & urlcommande & " --> Erreur de communication : " & ex.Message.ToString)
+                        If retrycount = 0 Then WriteLog("RETRY 1")
+                        If retrycount = 1 Then WriteLog("RETRY 2")
+                        If retrycount = 2 Then WriteLog("ERR: command send 3 times without success, exit")
 
-                    'If ex.Status = WebExceptionStatus.ProtocolError Then
-                    'end if
-                End Try
+
+                        'If ex.Status = WebExceptionStatus.ProtocolError Then
+                        'end if
+                    End Try
+                Next
+                
 
                 'Traitement de la réponse
                 If responseFromServer = "" Then
@@ -680,7 +688,7 @@ Public Class Driver_Arduino_HTTP
 
                             'search for the right PIN NUMBER i = adresse2
                             For j = 0 To (listedevices.Count - 1)
-                                If PINnumber = (listedevices.Item(j).Adresse2 - 1) Then
+                                If PINnumber = (listedevices.Item(j).Adresse2) Then
                                     'PIN Found, check if model is the same, then update value
                                     If (PINtype = "D" And listedevices.Item(j).modele = "DIGITAL_IN") Or (PINtype = "O" And listedevices.Item(j).modele = "DIGITAL_OUT") Or (PINtype = "A" And listedevices.Item(j).modele = "ANALOG_IN") Then
                                         'update de la value suivant la commande et le type de composant
@@ -711,6 +719,8 @@ Public Class Driver_Arduino_HTTP
                                 End If
                             Next
                         Next
+                    ElseIf Command = "CONFIG_TYPE_PINX" Then
+                        'no response to use
                     Else
                         Dim responsetab2 As String() = responseFromServer.Split(" ")
                         If responsetab2.Count = 1 Then

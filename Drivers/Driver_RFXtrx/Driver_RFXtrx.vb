@@ -5241,22 +5241,22 @@ Imports System.Media
             End If
             Select Case type
                 Case LIGHTING1.sTypeX10, LIGHTING1.sTypeARC, LIGHTING1.sTypeWaveman
-                    If CInt(adresse.Substring(1, 2)) > 16 Or (adresse.Substring(0, 1) <> "A" And adresse.Substring(0, 1) <> "B" And adresse.Substring(0, 1) <> "C" And adresse.Substring(0, 1) <> "D" And adresse.Substring(0, 1) <> "E" And adresse.Substring(0, 1) <> "F" And adresse.Substring(0, 1) <> "G" And adresse.Substring(0, 1) <> "H" And adresse.Substring(0, 1) <> "I" And adresse.Substring(0, 1) <> "J" And adresse.Substring(0, 1) <> "K" And adresse.Substring(0, 1) <> "L" And adresse.Substring(0, 1) <> "M" And adresse.Substring(0, 1) <> "N" And adresse.Substring(0, 1) <> "O" And adresse.Substring(0, 1) <> "P") Then
+                    If CInt(adresse.Substring(1, adresse.Length - 1)) > 16 Or (adresse.Substring(0, 1) <> "A" And adresse.Substring(0, 1) <> "B" And adresse.Substring(0, 1) <> "C" And adresse.Substring(0, 1) <> "D" And adresse.Substring(0, 1) <> "E" And adresse.Substring(0, 1) <> "F" And adresse.Substring(0, 1) <> "G" And adresse.Substring(0, 1) <> "H" And adresse.Substring(0, 1) <> "I" And adresse.Substring(0, 1) <> "J" And adresse.Substring(0, 1) <> "K" And adresse.Substring(0, 1) <> "L" And adresse.Substring(0, 1) <> "M" And adresse.Substring(0, 1) <> "N" And adresse.Substring(0, 1) <> "O" And adresse.Substring(0, 1) <> "P") Then
                         WriteLog("ERR: Send lighting1 : Adresse (X10, ARC, Waveman) invalide : " & adresse)
                         Exit Sub
                     End If
                 Case LIGHTING1.sTypeAB400D, LIGHTING1.sTypeIMPULS
-                    If CInt(adresse.Substring(1, 2)) > 64 Or (adresse.Substring(0, 1) <> "A" And adresse.Substring(0, 1) <> "B" And adresse.Substring(0, 1) <> "C" And adresse.Substring(0, 1) <> "D" And adresse.Substring(0, 1) <> "E" And adresse.Substring(0, 1) <> "F" And adresse.Substring(0, 1) <> "G" And adresse.Substring(0, 1) <> "H" And adresse.Substring(0, 1) <> "I" And adresse.Substring(0, 1) <> "J" And adresse.Substring(0, 1) <> "K" And adresse.Substring(0, 1) <> "L" And adresse.Substring(0, 1) <> "M" And adresse.Substring(0, 1) <> "N" And adresse.Substring(0, 1) <> "O" And adresse.Substring(0, 1) <> "P") Then
+                    If CInt(adresse.Substring(1, adresse.Length - 1)) > 64 Or (adresse.Substring(0, 1) <> "A" And adresse.Substring(0, 1) <> "B" And adresse.Substring(0, 1) <> "C" And adresse.Substring(0, 1) <> "D" And adresse.Substring(0, 1) <> "E" And adresse.Substring(0, 1) <> "F" And adresse.Substring(0, 1) <> "G" And adresse.Substring(0, 1) <> "H" And adresse.Substring(0, 1) <> "I" And adresse.Substring(0, 1) <> "J" And adresse.Substring(0, 1) <> "K" And adresse.Substring(0, 1) <> "L" And adresse.Substring(0, 1) <> "M" And adresse.Substring(0, 1) <> "N" And adresse.Substring(0, 1) <> "O" And adresse.Substring(0, 1) <> "P") Then
                         WriteLog("ERR: Send lighting1 : Adresse (ELRO AB400D, Impuls) invalide : " & adresse)
                         Exit Sub
                     End If
                 Case LIGHTING1.sTypeEMW200
-                    If CInt(adresse.Substring(1, 1)) > 4 Or (adresse.Substring(0, 1) <> "A" And adresse.Substring(0, 1) <> "B" And adresse.Substring(0, 1) <> "C") Then
+                    If CInt(adresse.Substring(1, adresse.Length - 1)) > 4 Or (adresse.Substring(0, 1) <> "A" And adresse.Substring(0, 1) <> "B" And adresse.Substring(0, 1) <> "C") Then
                         WriteLog("ERR: Send lighting1 : Adresse (EMW200) invalide : " & adresse)
                         Exit Sub
                     End If
                 Case LIGHTING1.sTypePhilips
-                    If CInt(adresse.Substring(1, 1)) > 8 Or (adresse.Substring(0, 1) <> "A" And adresse.Substring(0, 1) <> "B" And adresse.Substring(0, 1) <> "C" And adresse.Substring(0, 1) <> "D" And adresse.Substring(0, 1) <> "E" And adresse.Substring(0, 1) <> "F" And adresse.Substring(0, 1) <> "G" And adresse.Substring(0, 1) <> "H" And adresse.Substring(0, 1) <> "I" And adresse.Substring(0, 1) <> "J" And adresse.Substring(0, 1) <> "K" And adresse.Substring(0, 1) <> "L" And adresse.Substring(0, 1) <> "M" And adresse.Substring(0, 1) <> "N" And adresse.Substring(0, 1) <> "O" And adresse.Substring(0, 1) <> "P") Then
+                    If CInt(adresse.Substring(1, adresse.Length - 1)) > 8 Or (adresse.Substring(0, 1) <> "A" And adresse.Substring(0, 1) <> "B" And adresse.Substring(0, 1) <> "C" And adresse.Substring(0, 1) <> "D" And adresse.Substring(0, 1) <> "E" And adresse.Substring(0, 1) <> "F" And adresse.Substring(0, 1) <> "G" And adresse.Substring(0, 1) <> "H" And adresse.Substring(0, 1) <> "I" And adresse.Substring(0, 1) <> "J" And adresse.Substring(0, 1) <> "K" And adresse.Substring(0, 1) <> "L" And adresse.Substring(0, 1) <> "M" And adresse.Substring(0, 1) <> "N" And adresse.Substring(0, 1) <> "O" And adresse.Substring(0, 1) <> "P") Then
                         WriteLog("ERR: Send lighting1 : Adresse (ELRO AB400D, Impuls) invalide : " & adresse)
                         Exit Sub
                     End If
@@ -5267,7 +5267,7 @@ Imports System.Media
             kar(LIGHTING1.subtype) = CByte(type)
             kar(LIGHTING1.seqnbr) = bytSeqNbr
             kar(LIGHTING1.housecode) = convert_housecode(adresse.Substring(0, 1))
-            kar(LIGHTING1.unitcode) = CByte(adresse.Substring(1, 2))
+            kar(LIGHTING1.unitcode) = CByte(adresse.Substring(1, adresse.Length - 1))
 
             Select Case commande
                 Case "OFF"
