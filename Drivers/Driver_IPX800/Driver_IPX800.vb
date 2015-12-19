@@ -820,8 +820,8 @@ Imports System.Xml
                 Next
             End If
             If ValueIPX.Count < 89 Then
-                WriteLog("ERR : GetValue effectué, " & ValueIPX.Count & " données récupérées")
-                WriteLog("ERR : GetValue, le temps du refresh du driver est peut être trop faible")
+                WriteLog("ERR: GetValue effectué, " & ValueIPX.Count & " données récupérées")
+                WriteLog("ERR: GetValue, le temps du refresh du driver est peut être trop faible")
             End If
         Catch ex As Exception
             WriteLog("ERR: " & ex.Message)
