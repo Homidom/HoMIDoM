@@ -56,6 +56,7 @@ Imports HoMIOAuth2
 
     'Ajoutés dans les ppt avancés dans New()
     Dim _DEBUG As Boolean = False
+    Dim _DebugReponse As Boolean = False
     Dim _CalHomidomName As String
     Dim _CalFeriesName As String
 
@@ -351,6 +352,7 @@ Imports HoMIOAuth2
                 _DEBUG = _Parametres.Item(0).Valeur
                 _CalHomidomName = _Parametres.Item(1).Valeur
                 _CalFeriesName = _Parametres.Item(2).Valeur
+                _DebugReponse = _Parametres.Item(3).Valeur
 
                 If String.IsNullOrEmpty(_CalFeriesName) And String.IsNullOrEmpty(_CalHomidomName) Then
                     WriteLog("ERR: Veuillez renseigner un nom de calendrier dans les paramétres avancés.")
@@ -628,6 +630,7 @@ Imports HoMIOAuth2
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
             Add_ParamAvance("Calendrier Homidom", "Nom du calendrier réservé à HoMIDoM", "homidom")
             Add_ParamAvance("Calendrier Jours Fériés", "Nom du calendrier réservé aux jours fériés du pays", "")
+            Add_ParamAvance("Debug Reponse", "Activer le Debug de la reponse de GoogleCalendar (True/False)", False)
 
             Add_LibelleDevice("ADRESSE1", "Valeur à rechercher", "Titre de l'evenement à rechercher")
             Add_LibelleDevice("ADRESSE2", "Element à recuperer (Titre,Lieu,Description)", "Information de l'événement à retourner")
@@ -754,22 +757,30 @@ Line1:
             End If
 
             Dim client As New Net.WebClient
+            Dim client2 As New System.Net.Http.HttpClient
 
-            Dim xTimeMin = New System.DateTime(Now.AddMinutes(Math.Ceiling(Refresh / 60) * (-1)).Year, Now.AddMinutes(Math.Ceiling(Refresh / 60) * (-1)).Month, Now.AddMinutes(Math.Ceiling(Refresh / 60) * (-1)).Day, Now.AddMinutes(Math.Ceiling(Refresh / 60) * (-1)).Hour, Now.AddMinutes(Math.Ceiling(Refresh / 60) * (-1)).Minute, 0)
-            Dim xTimeMax = New System.DateTime(Now.AddMinutes(Math.Ceiling(Refresh / 60)).Year, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Month, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Day, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Hour, Now.AddMinutes(Math.Ceiling(Refresh / 60)).Minute, 0)
+            Dim xTimeMin = Format(New System.DateTime(Now.AddDays(-1).Year, Now.AddDays(-1).Month, Now.AddDays(-1).Day, Now.AddDays(-1).Hour, Now.AddDays(-1).Minute, 0), "yyyy-MM-ddTHH:mm:ssZ")
+            Dim xTimeMax = Format(New System.DateTime(Now.AddDays(1).Year, Now.AddDays(1).Month, Now.AddDays(1).Day, Now.AddDays(1).Hour, Now.AddDays(1).Minute, 0), "yyyy-MM-ddTHH:mm:ssZ")
+
+            WriteLog("DBG: ScanCalendar : TimeMin = " & xTimeMin.ToString)
+            WriteLog("DBG: ScanCalendar : TimeMax = " & xTimeMax.ToString)
 
             If Not String.IsNullOrEmpty(CalendarHomidom.id) Then
-                responsebody0 = client.DownloadString("https://www.googleapis.com/calendar/v3/calendars/" & CalendarHomidom.id & "/events?" & "maxResults=20&singleEvents=true&TimeMin=" & xTimeMin & "&TimeMax=" & xTimeMax & "&access_token=" & Auth.access_token)
+                Dim request = "https://www.googleapis.com/calendar/v3/calendars/" & CalendarHomidom.id & "/events?" & "TimeMin=" & xTimeMin & "&TimeMax=" & xTimeMax & "&maxResults=20&orderBy=startTime&singleEvents=true&access_token=" & Auth.access_token
+                responsebody0 = client.DownloadString(request)
                 calFeed(0) = (Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody0, GetType(eventsList)))
-                WriteLog("DBG: GetData : " & responsebody0.ToString)
+                WriteLog("DBG: ScanCalendar : Request = " & request.ToString)
+                If _DebugReponse Then WriteLog("DBG: ScanCalendar : Response = " & responsebody0.ToString)
             End If
 
             If Not String.IsNullOrEmpty(Calendarferies.id) Then
-                responsebody1 = client.DownloadString("https://www.googleapis.com/calendar/v3/calendars/" & Calendarferies.id & "/events?" & "maxResults=20&singleEvents=true&TimeMin=" & xTimeMin & "&TimeMax=" & xTimeMax & "&access_token=" & Auth.access_token)
+                Dim request = "https://www.googleapis.com/calendar/v3/calendars/" & CalendarHomidom.id & "/events?" & "TimeMin=" & xTimeMin & "&TimeMax=" & xTimeMax & "&maxResults=20&orderBy=startTime&singleEvents=true&access_token=" & Auth.access_token
+                responsebody1 = client.DownloadString(request)
                 calFeed(1) = (Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody1, GetType(eventsList)))
-                WriteLog("DBG: GetData : " & responsebody1.ToString)
+                WriteLog("DBG: ScanCalendar : Request = " & request.ToString)
+                If _DebugReponse Then WriteLog("DBG: ScanCalendar : Response = " & responsebody0.ToString)
             End If
-
+            'DELETE https://www.googleapis.com/calendar/v3/calendars/" & CalendarHomidom.id & "/events/
             For i = 0 To 1
                 If calFeed(i) IsNot Nothing Then
                     If calFeed(i).items.Count > 0 Then
@@ -840,6 +851,13 @@ Line1:
                             Else
                                 If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Evenement non retenu pour une commande : " & feedEntry.summary)
                             End If
+
+                            If feedEntry.end.dateTime.AddDays(1) < System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString Then
+                                Dim request = "https://www.googleapis.com/calendar/v3/calendars/" & CalendarHomidom.id & "/events/" & feedEntry.id & "?access_token=" & Auth.access_token
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Requete de suppression : " & request)
+                                client2.DeleteAsync(request)
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Evenement supprimé : " & feedEntry.id)
+                            End If
                         Next
                     End If
                 End If
@@ -864,15 +882,29 @@ Line1:
     Private Sub GetData(ByVal Objet As Object)
         Try
             ' Lancement de la requete de recherches des événements
+            
+            Dim elementFound As [event] = Nothing
+            Dim elementSet As Boolean = False
 
-            Dim elementFound As Boolean = False
             Dim compFound As Boolean = False
 
             For i = 0 To 1
                 If calFeed(i) IsNot Nothing Then
                     If calFeed(i).items.Count > 0 Then
 
-                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", " Nombres d'évenements trouvés: " & calFeed(i).items.Count)
+                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GetData", " Nombres d'évenements trouvés: " & calFeed(i).items.Count)
+
+                        Dim Minut As Integer = 0
+                        Dim Search As String = ""
+                        If InStr(Objet.Adresse2, ":") Then
+                            Dim Adr2 = Split(Objet.Adresse2, ":")
+                            If Adr2(1) <> "" Then
+                                Minut = CInt(Adr2(1))
+                            End If
+                            Search = Adr2(0)
+                        Else
+                            Search = Objet.Adresse2
+                        End If
 
                         ' Fetch the list of events
                         For Each feedEntry As [event] In calFeed(i).items
@@ -882,71 +914,20 @@ Line1:
                             If feedEntry.summary IsNot Nothing Then
                                 If ((feedEntry.summary.ToUpper = Objet.Adresse1.ToString.ToUpper) Or (feedEntry.summary.ToUpper = "Jours fériés en France")) Then
                                     compFound = True
-                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Le composant " & Objet.name & " est valide pour cette évenement")
-
-                                    Dim Minut As Integer = 0
-                                    Dim Search As String = ""
-                                    If InStr(Objet.Adresse2, ":") Then
-                                        Dim Adr2 = Split(Objet.Adresse2, ":")
-                                        If Adr2(1) <> "" Then
-                                            Minut = CInt(Adr2(1))
-                                        End If
-                                        Search = Adr2(0)
-                                    Else
-                                        Search = Objet.Adresse2
-                                    End If
-
+                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GetData", "Le composant " & Objet.name & " est valide pour cette évenement")
                                     If feedEntry.start.dateTime < System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString And _
                                            feedEntry.end.dateTime > System.DateTime.Today.AddMinutes(Minut).ToShortDateString & " " & System.DateTime.Now.AddMinutes(Minut).ToShortTimeString Then
                                         ' Un element etre trouvé 
-                                        elementFound = True
-                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Read", "Titre : " & feedEntry.summary & " Compte: " & feedEntry.id _
+                                        elementFound = feedEntry
+                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GetData", "Titre : " & feedEntry.summary & " Compte: " & feedEntry.id _
                                         & " Start: " & feedEntry.start.dateTime & " End: " & feedEntry.end.dateTime & " Now: " & System.DateTime.Today.ToShortDateString & " " & System.DateTime.Now.ToShortTimeString)
 
                                     End If
-
-                                    If elementFound Then
-
-                                        Select Case Objet.Type
-                                            Case "GENERIQUESTRING"
-
-                                                Select Case Search.ToString.ToUpper
-                                                    Case "TITRE"
-                                                        Objet.setValue(feedEntry.summary)
-
-                                                    Case "DESCRIPTION"
-                                                        Objet.setValue(feedEntry.description)
-
-                                                    Case "LIEU"
-                                                        Objet.setValue(feedEntry.location)
-
-                                                End Select
-
-                                            Case "GENERIQUEBOOLEEN"
-                                                Objet.setValue(True)
-
-                                            Case Else
-                                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur du type du composant de " & Objet.Adresse1)
-                                        End Select
-                                    Else
-                                        Select Case Objet.Type
-                                            Case "GENERIQUESTRING"
-                                                Objet.setValue("")
-
-                                            Case "GENERIQUEBOOLEEN"
-                                                Objet.setValue(False)
-
-                                            Case Else
-                                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Erreur du type du composant de " & Objet.Adresse1)
-                                        End Select
-                                        If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "La plage horaire du composant " & Objet.name & " n'est pas en cours")
-
-                                    End If
                                 Else
-                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Le composant " & Objet.name & " n'est pas valide pour cette évenement")
+                                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GetData", "Le composant " & Objet.name & " n'est pas valide pour cette évenement")
                                 End If
                             Else
-                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " ScanCalendar", "Le composant " & Objet.name & " n'est pas valide pour cette évenement")
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GetData", "Le composant " & Objet.name & " n'est pas valide pour cette évenement")
                             End If
 
                             If (_AutoDiscover Or _Server.GetModeDecouverte) And Not compFound Then
@@ -957,9 +938,48 @@ Line1:
                                 End If
                             End If
                             'Add_LibelleDevice("ADRESSE1", "Valeur à rechercher", "Titre de l'evenement à rechercher", "")
-                            compFound = False
-                            elementFound = False
                         Next
+                        If elementFound IsNot Nothing Then
+
+                            Select Case Objet.Type
+                                Case "GENERIQUESTRING"
+
+                                    Select Case Search.ToString.ToUpper
+                                        Case "TITRE"
+                                            Objet.setValue(elementFound.summary)
+
+                                        Case "DESCRIPTION"
+                                            Objet.setValue(elementFound.description)
+
+                                        Case "LIEU"
+                                            Objet.setValue(elementFound.location)
+
+                                    End Select
+
+                                Case "GENERIQUEBOOLEEN"
+                                    Objet.setValue(True)
+
+                                Case Else
+                                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GetData", "Erreur du type du composant de " & Objet.Adresse1)
+                            End Select
+
+                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GetData", "La plage horaire du composant " & Objet.name & " est en cours")
+                        Else
+                            Select Case Objet.Type
+                                Case "GENERIQUESTRING"
+                                    Objet.setValue("")
+
+                                Case "GENERIQUEBOOLEEN"
+                                    Objet.setValue(False)
+
+                                Case Else
+                                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " GetData", "Erreur du type du composant de " & Objet.Adresse1)
+                            End Select
+                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " GetData", "La plage horaire du composant " & Objet.name & " n'est pas en cours")
+
+                        End If
+                        compFound = False
+                        elementFound = Nothing
                     End If
                 End If
             Next

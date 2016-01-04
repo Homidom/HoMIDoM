@@ -1,0 +1,39 @@
+﻿<Window x:Class="WImperiParametrage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Paramétrer Action" ShowInTaskbar="True" WindowStyle="ToolWindow" Name="WActionDevice" WindowStartupLocation="CenterOwner" xmlns:my="clr-namespace:WpfApplication1" Topmost="False" SizeToContent="WidthAndHeight" ResizeMode="NoResize">
+
+    <Grid Background="#636060" >
+        <StackPanel Margin="2" Orientation="Horizontal"  >
+            <StackPanel Orientation="Vertical" >
+                <StackPanel Margin="5,5,0,5"  VerticalAlignment="TOP" HorizontalAlignment="Left" Orientation="Vertical" >
+
+                    <StackPanel Margin="5,5,0,5" x:Name="StkLb1" VerticalAlignment="TOP" HorizontalAlignment="Left" Orientation="Vertical" >
+                        
+                    </StackPanel>
+
+                    <StackPanel  VerticalAlignment="TOP" HorizontalAlignment="Left" Orientation="Horizontal" >
+                        <StackPanel Margin="5,5,0,5" x:Name="StkLb2" VerticalAlignment="TOP" HorizontalAlignment="Left" Orientation="Vertical" >
+                           
+                        </StackPanel>
+                        <StackPanel Margin="5,5,0,5" x:Name="StkCB2" VerticalAlignment="TOP" HorizontalAlignment="Left" Orientation="Vertical" >
+                          
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+                <StackPanel Margin="5,5,0,5"  VerticalAlignment="TOP" HorizontalAlignment="Left" Orientation="Horizontal" >            
+                    <StackPanel Margin="5,5,0,5" x:Name="StkLb" VerticalAlignment="TOP" HorizontalAlignment="Left" Orientation="Vertical" >
+                       
+                    </StackPanel>
+                    <StackPanel Margin="5,5,0,5" x:Name="StkCB" VerticalAlignment="TOP" HorizontalAlignment="Left" Orientation="Vertical" >
+                       
+                    </StackPanel>
+                    <StackPanel Margin="5,5,0,5" x:Name="StkCH" VerticalAlignment="TOP" HorizontalAlignment="Left" Orientation="Vertical" >
+
+                    </StackPanel>
+                </StackPanel>
+            </StackPanel>
+            <Button Content="Ok" Height="28" HorizontalAlignment="right" Margin="15" x:Name="BtnOk" VerticalAlignment="Top" Width="72" Template="{DynamicResource GlassButton}" Foreground="White" />
+        </StackPanel>
+    </Grid>
+</Window>

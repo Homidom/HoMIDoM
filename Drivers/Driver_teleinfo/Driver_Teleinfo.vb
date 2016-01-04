@@ -484,20 +484,12 @@ Public Class Driver_Teleinfo
                     Case "XBEE_2_COMPTEURS_CARTELECTRONIC"
                         Ftdi = New ftdi_cpt.Ftdi_cpt
                         Ftdi.Start(False, "Interface XBEE -> Compteur")
-                        If _SecondPort.ToLower <> "nothing" And TabCom.Contains(_SecondPort) Then
-                            MyTimer.Interval = _Parametres.Item(2).Valeur
-                            MyTimer.Enabled = True
-                        End If
                         'Threading.Thread.Sleep(4000)
                         Ftdi.cpt(icpt + 1)
 
                     Case "2_COMPTEURS_CARTELECTRONIC"
                         Ftdi = New ftdi_cpt.Ftdi_cpt
                         Ftdi.Start(False, "Interface USB -> Compteur")
-                        If _SecondPort.ToLower <> "nothing" And TabCom.Contains(_SecondPort) Then
-                            MyTimer.Interval = _Parametres.Item(2).Valeur
-                            MyTimer.Enabled = True
-                        End If
                         'Threading.Thread.Sleep(4000)
                         Ftdi.cpt(icpt + 1)
 
@@ -565,8 +557,19 @@ Public Class Driver_Teleinfo
                     _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo", retour)
                 End If
 
-                Select _Modele.ToUpper
-                    Case "XBEE_2_COMPTEURS_CARTELECTRONIC", "2_COMPTEURS_CARTELECTRONIC", "USBTIC_CARTELECTRONIC"
+                Select Case _Modele.ToUpper
+
+                    Case "USBTIC_CARTELECTRONIC"
+
+                    Case "XBEE_2_COMPTEURS_CARTELECTRONIC", "2_COMPTEURS_CARTELECTRONIC"
+                        If _SecondPort.ToLower <> "nothing" And TabCom.Contains(_SecondPort) Then
+                            If _Refresh > 0 Then
+                                MyTimer.Interval = _Parametres.Item(2).Valeur
+                                MyTimer.Enabled = True
+                                AddHandler MyTimer.Elapsed, AddressOf TimerTick
+                            End If
+                        End If
+
                     Case Else
                         If _SecondPort.ToLower <> "nothing" And TabCom.Contains(_SecondPort) Then
                             If (STRGS.Left(retour2, 4) = "ERR:") Then
@@ -575,6 +578,11 @@ Public Class Driver_Teleinfo
                                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo", "Driver non démarré : le second port : " & retour2)
                             Else
                                 TabCompteur(1).IsConnectPort = True
+                                If _Refresh > 0 Then
+                                    MyTimer.Interval = _Refresh * 1000
+                                    MyTimer.Enabled = True
+                                    AddHandler MyTimer.Elapsed, AddressOf TimerTick
+                                End If
                                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "TeleInfo", retour2)
                             End If
                         End If
@@ -597,6 +605,11 @@ Public Class Driver_Teleinfo
             ' Recherche de tous les ports ouverts
             Try
                 Dim index As Byte = 0
+                If _Refresh > 0 Then
+                    MyTimer.Enabled = False
+                    RemoveHandler MyTimer.Elapsed, AddressOf TimerTick
+                End If
+
                 For Each TeleInfoCpt In TabCompteur
                     If TeleInfoCpt.IsConnectPort Then
                         retour = fermer(TeleInfoCpt)
@@ -610,6 +623,8 @@ Public Class Driver_Teleinfo
                 If Modele.ToUpper = "USBTIC_CARTELECTRONIC" Or Modele.ToUpper = "2_COMPTEURS_CARTELECTRONIC" Or Modele.ToUpper = "XBEE_2_COMPTEURS_CARTELECTRONIC" Then Ftdi.cpt(0)
                 ' Effacement du tableau des compteurs
                 Array.Resize(TabCompteur, 1)
+
+                _IsConnect = False
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Teleinfo Stop", ex.Message)
             End Try
@@ -791,31 +806,37 @@ Public Class Driver_Teleinfo
 
         ''' <summary>Si refresh >0 gestion du timer</summary>
         ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
-        Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs) Handles MyTimer.Elapsed
-            If _Modele.ToUpper = "USBTIC_CARTELECTRONIC" Or _Modele.ToUpper = "2_COMPTEURS_CARTELECTRONIC" Or _Modele.ToUpper = "XBEE_2_COMPTEURS_CARTELECTRONIC" Then
+        Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
+            Try
 
-                Dim retour As String
+                If _Modele.ToUpper = "2_COMPTEURS_CARTELECTRONIC" Or _Modele.ToUpper = "XBEE_2_COMPTEURS_CARTELECTRONIC" Then
 
-                retour = fermer(TabCompteur(icpt))
+                    Dim retour As String
 
-                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "TeleInfo ", "Fermeture cpt : " & icpt + 1 & " ; " & retour)
+                    retour = fermer(TabCompteur(icpt))
 
-                Threading.Thread.Sleep(1000)
+                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "TeleInfo ", "Fermeture cpt : " & icpt + 1 & " ; " & retour)
 
-                icpt = icpt + 1
-                If icpt = 2 Then icpt = 0
-                Ftdi.cpt(icpt + 1)
+                    Threading.Thread.Sleep(1000)
 
-                Threading.Thread.Sleep(1000)
+                    icpt = icpt + 1
+                    If icpt = 2 Then icpt = 0
+                    Ftdi.cpt(icpt + 1)
 
-                retour = ouvrir(TabCompteur(icpt))
+                    Threading.Thread.Sleep(1000)
 
-                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "TeleInfo ", "Ouverture cpt : " & icpt + 1 & " ; " & retour)
+                    retour = ouvrir(TabCompteur(icpt))
 
+                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "TeleInfo ", "Ouverture cpt : " & icpt + 1 & " ; " & retour)
 
-            End If
+                End If
 
-
+            Catch ex As Exception
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "TeleInfo ", "Redemarrage sur erreur bascule cpt : " & ex.Message)
+                [Stop]()
+                Threading.Thread.Sleep(3000)
+                Start()
+            End Try
         End Sub
 
 #End Region
@@ -869,7 +890,6 @@ Public Class Driver_Teleinfo
                     AddHandler CptPort.SerialPort.DataReceived, New SerialDataReceivedEventHandler(AddressOf DataReceived)
 
                     CptPort.IsConnectPort = True
-                    _IsConnect = True
 
                     Return ("Port " & CptPort.port_name & " ouvert")
                 Else
@@ -884,6 +904,7 @@ Public Class Driver_Teleinfo
         ''' <remarks></remarks>
         Private Function fermer(ByVal CptPort As TeleInfo) As String
             Try
+
                 If CptPort.IsConnectPort Then
 
                     CptPort.SerialPort.DiscardInBuffer()
@@ -898,7 +919,6 @@ Public Class Driver_Teleinfo
                             'CptPort.SerialPort.Dispose()
                             CptPort.IsConnectPort = False
 
-                            _IsConnect = False
                             Return ("Port " & CptPort.port_name & " fermé")
                         Else
                             Return ("Port " & CptPort.port_name & "  est déjà fermé")
@@ -920,6 +940,9 @@ Public Class Driver_Teleinfo
         ''' <remarks></remarks>
         Private Sub DataReceived(ByVal sender As Object, ByVal e As SerialDataReceivedEventArgs)
             Try
+
+                If _Enable = False Then Exit Sub
+                If _IsConnect = False Then Exit Sub
 
                 Dim BufferIn(8192) As Byte
                 Dim count As Integer = 0

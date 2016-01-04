@@ -112,9 +112,17 @@ Namespace HoMIDom
                     y.Name = a
                     y.Start()
                     _ListThread.Add(y)
+                    y = Nothing
                 Next
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.SCRIPT, "Execute macro", ex.ToString)
+                _Server.Log(TypeLog.ERREUR, TypeSource.SCRIPT, "Execute macro", "Nombre de Thread total = " & _ListThread.Count & "/" & _ListThread.Capacity)
+                Dim x = ""
+                For Each thr In _ListThread
+                    x = thr.Name & " ; "
+                    If thr.IsAlive Then thr.Abort()
+                Next
+                _Server.Log(TypeLog.ERREUR, TypeSource.SCRIPT, "Execute macro", "Liste des thread : " & x)
             End Try
         End Sub
     End Class

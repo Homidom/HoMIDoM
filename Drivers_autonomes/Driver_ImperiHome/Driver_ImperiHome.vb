@@ -58,6 +58,7 @@ Imports System.Threading
 #Region "Variables internes"
 
     Private Shared serverhttp As HttpSelfHostServer
+    Private Shared _allDevImperi As DeviceList
     Public Shared Property ServerKey() As String
     Public Shared Property driverDebug As Boolean
     Private Shared homidom As IHoMIDom
@@ -345,7 +346,12 @@ Imports System.Threading
                 config.Formatters.Add(config.Formatters.JsonFormatter)
                 config.Formatters(0) = New JsonMediaTypeFormatter
                 config.Formatters(0).SupportedMediaTypes.Add(New System.Net.Http.Headers.MediaTypeHeaderValue("application/json"))
-
+                
+                fileName = My.Application.Info.DirectoryPath & "\Drivers\Imperihome\devices.json"
+                If System.IO.File.Exists(fileName) Then
+                    Dim stream = System.IO.File.ReadAllText(fileName)
+                    _allDevImperi = Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(DeviceList))
+                End If
                 WriteLog("Driver " & Me.Nom & " connecté avec l'adresse :  " & webApiUrl)
                 serverhttp = New HttpSelfHostServer(config)
                 serverhttp.OpenAsync()
@@ -570,6 +576,15 @@ Imports System.Threading
         End Set
     End Property
 
+    Public Shared Property AllDevImperi As DeviceList
+        Get
+            Return _allDevImperi
+        End Get
+        Set(ByVal value As DeviceList)
+            _allDevImperi = value
+        End Set
+    End Property
+
     Private Sub WriteLog(ByVal message As String)
         Try
             'utilise la fonction de base pour loguer un event
@@ -674,31 +689,43 @@ Public Class DevicesController
     <HttpGet()>
     Public Function GetValue() As Object
 
-        Dim fileName = My.Application.Info.DirectoryPath & "\Drivers\Imperihome\devices.json"
+        Dim allDev = Driver_ImperiHome.CurrentServer.GetAllDevices(Me.ServerKey)
 
+        Dim allDevImperiTemp As DeviceList = Nothing
+        Dim fileName = My.Application.Info.DirectoryPath & "\Drivers\Imperihome\devices.json"
         If System.IO.File.Exists(fileName) Then
             Dim stream = System.IO.File.ReadAllText(fileName)
-
-            Dim allDev = Driver_ImperiHome.CurrentServer.GetAllDevices(Me.ServerKey)
-            Dim allDevImperi As DeviceList = Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(DeviceList))
-
-            For Each devImperi In allDevImperi.devices
-                For Each dev In allDev
-                    If dev.Name = devImperi.name Then
-                        devImperi.params = ParamByType(dev)
-                    End If
-                Next
-            Next
-
-            If Driver_ImperiHome.driverDebug Then
-                stream = Newtonsoft.Json.JsonConvert.SerializeObject(allDevImperi)
-                System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\Drivers\Imperihome\devices_send.json", stream)
-            End If
-
-            Return allDevImperi
-        Else
-            Return "Error Device"
+            allDevImperiTemp = Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(DeviceList))
         End If
+
+        Dim find = New List(Of Device)
+        Dim memdev As Device = Nothing
+
+        For Each devImperi In allDevImperiTemp.devices
+            For Each dev In allDev
+                memdev = devImperi
+                If dev.Name = devImperi.name Then
+                    devImperi.params = ParamByType(dev, devImperi)
+                    memdev = Nothing
+                    Exit For
+                End If
+            Next
+            If memdev IsNot Nothing Then find.Add(memdev)
+        Next
+
+        If find.Count > 0 Then
+            For Each devfind In find
+                allDevImperiTemp.devices.Remove(devfind)
+            Next
+        End If
+
+        If Driver_ImperiHome.driverDebug Then
+            Dim stream = Newtonsoft.Json.JsonConvert.SerializeObject(allDevImperiTemp)
+            System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\Drivers\Imperihome\devices_send.json", stream)
+        End If
+
+        Return allDevImperiTemp
+
     End Function
 
     Private Function ExecuteCommandWithParams(ByVal id As String, ByVal command As String, ByVal param As String) As Object
@@ -733,6 +760,9 @@ Public Class DevicesController
                         Dim convCommand As Dictionary(Of String, String) = New Dictionary(Of String, String)
                         convCommand.Add("1", "ON")
                         convCommand.Add("0", "OFF")
+                        Dim convVolet As Dictionary(Of String, String) = New Dictionary(Of String, String)
+                        convVolet.Add("up", "OPEN")
+                        convVolet.Add("down", "CLOSE")
                         Dim action As DeviceAction
                         Dim Dev As TemplateDevice
                         Dim allDev = Driver_ImperiHome.CurrentServer.GetAllDevices(Me.ServerKey)
@@ -754,31 +784,49 @@ Public Class DevicesController
                                                 action.Parametres.Add(devActionParameter)
                                                 Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
 
-                                            Case "setMode", "setSetPoint"
-                                                action = New DeviceAction() With {.Nom = "ExecuteCommand"}
-                                                Dim devActionCommand As DeviceAction.Parametre = Nothing
-                                                If command = "setSetPoint" Then
-                                                    devActionCommand = New DeviceAction.Parametre With {.Value = "SETPOINT"}
-                                                ElseIf command = "setMode" Then
-                                                    devActionCommand = New DeviceAction.Parametre With {.Value = "SETMODE"}
-                                                Else
-                                                    Return "error"
-                                                    Exit Function
-                                                End If
-                                                action.Parametres.Add(devActionCommand)
-                                                Dim devActionParameter As DeviceAction.Parametre = New DeviceAction.Parametre With {.Nom = "Value", .Value = param}
+                                            Case "setMode", "setChoise"
+                                                
+                                                action = New DeviceAction() With {.Nom = "SETVALUE"}
+                                                Dim devActionParameter As DeviceAction.Parametre = Nothing
+                                                For Each Var In Dev1.VariablesOfDevice
+                                                    If param = Var.Key Then
+                                                        devActionParameter = New DeviceAction.Parametre With {.Nom = "Value", .Value = Var.Value}
+                                                    End If
+                                                Next
                                                 action.Parametres.Add(devActionParameter)
                                                 Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
 
-                                            Case "setStatus"
+                                            Case "setStatus", "setArmed"
 
                                                 action = New DeviceAction() With {.Nom = convCommand(param)}
                                                 Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
 
-                                            Case "pulseShutter", "stopShutter"
+                                            Case "setSetPoint"
+
+                                                action = New DeviceAction() With {.Nom = "SETVALUE"}
+                                                Dim devActionParameter As DeviceAction.Parametre = New DeviceAction.Parametre With {.Nom = "Value", .Value = param}
+                                                'devActionParameter = action.Parametres.Where(Function(t) t.Nom = param).FirstOrDefault()
+                                                action.Parametres.Add(devActionParameter)
+                                                Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
+
+                                            Case "pulseShutter"
+
+                                                action = New DeviceAction() With {.Nom = convVolet(param)}
+                                                Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
+
+                                            Case "pulse"
 
                                                 action = New DeviceAction() With {.Nom = "TOGGLE"}
                                                 Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
+
+                                            Case "setAck", "stopShutter"
+
+                                                action = New DeviceAction() With {.Nom = "OFF"}
+                                                Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
+
+                                            Case "setColor"
+                                                'Pas de commande homidom correspondante
+                                            Case Else
 
                                         End Select
                                         Exit For
@@ -807,141 +855,83 @@ Public Class DevicesController
 
     End Function
 
-    Private Function ParamByType(ByVal comp As HoMIDom.HoMIDom.TemplateDevice) As Object
-
+    Private Function ParamByType(ByVal comp0 As HoMIDom.HoMIDom.TemplateDevice, ByVal dev As Device) As List(Of DeviceParam)
         Try
+            Dim params As List(Of DeviceParam) = New List(Of DeviceParam)
 
-            Dim tempParams As List(Of DeviceParam) = New List(Of DeviceParam)
-            Dim params(10) As DeviceParam
-            Thread.CurrentThread.CurrentCulture = New CultureInfo("en")
+            Dim bComp0 As Boolean = True
+            Dim Comp As HoMIDom.HoMIDom.TemplateDevice = Nothing
 
-            Select Case comp.Type
-
-                Case 1 '"APPAREIL"
-                    params(0) = New DeviceParam
-                    params(0).key = "Status"
-                    params(0).value = comp.Value
-
-                Case 27 '"VOLET"
-                    params(0) = New DeviceParam
-                    params(0).key = "Level"
-                    params(0).value = comp.Value
-
-                Case 16 '"LAMPE"
-                    params(0) = New DeviceParam
-                    params(0).key = "Level"
-                    params(0).value = comp.Value
-                    params(1) = New DeviceParam
-                    params(1).key = "Status"
-                    If comp.Value > 0 Then
-                        params(1).value = "1"
+            If dev.params IsNot Nothing Then
+                For Each param In dev.params
+                    If bComp0 Then
+                        Comp = comp0
+                        bComp0 = False
                     Else
-                        params(1).value = "0"
+                        Comp = Driver_ImperiHome.CurrentServer.ReturnDeviceByID(ServerKey, param.value)
                     End If
 
-                Case 4, 9 '"ENERGIEINSTANTANEE"
-                    params(0) = New DeviceParam
-                    params(0).key = "Watts"
-                    params(0).value = comp.Value
-                    params(0).unit = comp.Unit
-                    params(0).graphable = comp.IsHisto
+                    If Comp IsNot Nothing And param.value <> "" Then
+                        Dim tempparam As DeviceParam = param
+                        If param.value.Length > 1 Then
+                            If TypeOf (Comp.Value) Is Boolean Then
+                                If Comp.Value = True Then
+                                    tempparam.value = "1"
+                                Else
+                                    tempparam.value = "0"
+                                End If
+                            Else
+                                If param.key = "Status" Then
+                                    If Comp.Value > 0 Then
+                                        tempparam.value = "1"
+                                    Else
+                                        tempparam.value = "0"
+                                    End If
+                                Else
+                                    tempparam.value = Comp.Value
+                                End If
+                            End If
+                            If Comp.VariablesOfDevice.Count > 1 Then
+                                If (param.key = "availablemodes" Or param.key = "Choices") Then
+                                    tempparam.value = ""
+                                    Dim i = 0
+                                    For Each Var In Comp.VariablesOfDevice
+                                        i += 1
+                                        tempparam.value &= Var.Key
+                                        If i < Comp.VariablesOfDevice.Count Then tempparam.value &= ","
+                                    Next
+                                End If
+                                If param.key = "curmode" Or (param.key = "value" And dev.type = "DevMultiSwitch") Then
+                                    For Each Var In Comp.VariablesOfDevice
+                                        If tempparam.value = Var.Value Then tempparam.value = Var.Key
+                                    Next
+                                End If
+                            End If
 
-                Case 10 '"ENERGIETOTALE"
-                    params(0) = New DeviceParam
-                    params(0).key = "ConsoTotal"
-                    params(0).value = comp.Value
-                    params(0).unit = comp.Unit
-                    params(0).graphable = comp.IsHisto
-
-                Case 14, 15, 25, 3, 19, 23 ' "GENERIQUEVALUE", "HUMIDITE", "UV", "BAROMETRE, "PLUIECOURANT", "TEMPERATURE", "BATTERIE"
-                    params(0) = New DeviceParam
-                    params(0).key = "Value"
-                    params(0).value = comp.Value
-                    params(0).unit = comp.Unit
-                    params(0).graphable = comp.IsHisto
-
-                Case 6, 7, 12, 21 ' "CONTACT", "DETECTEUR", "GENERIQUEBOOLEEN", "SWITCH"
-                    params(0) = New DeviceParam
-                    params(0).key = "Status"
-                    If comp.Value = False Then
-                        params(0).value = "0"
-                    Else
-                        params(0).value = "1"
+                            If param.unit <> "" Then tempparam.unit = Comp.Unit
+                            If param.graphable = True Then tempparam.graphable = Comp.IsHisto
+                        End If
+                        params.Add(tempparam)
                     End If
-
-                Case 26 '"VITESSEVENT"
-                    params(0) = New DeviceParam
-                    params(0).key = "Speed"
-                    params(0).value = comp.Value
-
-                Case 8 ' "DIRECTIONVENT"
-                    params(0) = New DeviceParam
-                    params(0).key = "Direction"
-                    params(0).value = comp.Value
-
-                Case 20 '"PLUIETOTAL"
-                    params(0) = New DeviceParam
-                    params(0).key = "Accumulation"
-                    params(0).value = comp.Value
-
-                Case 24 '"TEMPERATURECONSIGNE"
-                    params(0) = New DeviceParam
-                    params(0).key = "cursetpoint"
-                    params(0).value = comp.Value
-                    ' Il est nécessaire de définir les deux valeurs sinon rien ne s'affiche dans Imperihome
-                    params(1) = New DeviceParam
-                    params(1).key = "curtemp"
-                    params(1).value = comp.Value
-                    ' Pour les modes de thermostat (p. ex. Auto / Manuel),
-                    ' on assume que:
-                    ' 1) La liste des modes est stockée
-                    ' dans la variable "modes" sous le format "Auto|Manuel"
-                    ' 2) Le mode actuel du device est stockée dans la variable
-                    ' "mode" du composant.
-                    For Each Var In comp.VariablesOfDevice
-                        If LCase(Var.Key) = "mode" Then
-                            params(2) = New DeviceParam
-                            params(2).key = "curmode"
-                            params(2).value = Var.Value
-                        End If
-                        If LCase(Var.Key) = "modes" Then
-                            params(3) = New DeviceParam
-                            params(3).key = "availablemodes"
-                            params(3).value = Var.Value.Replace("|", ",")
-                        End If
-                    Next
-
-                Case 28 '"LAMPERGBW"
-                    params(0) = New DeviceParam
-                    params(0).key = "Level"
-                    params(0).value = comp.Value
-                    params(1) = New DeviceParam
-                    params(1).key = "whitechannel"
-                    params(1).value = comp.temperature
-                    params(2) = New DeviceParam
-                    params(2).key = "color"
-                    params(2).value = comp.optionnal
-
-                Case Else
-                    params(0) = New DeviceParam
-                    params(0).key = "Value"
-                    params(0).value = comp.Value
-
-            End Select
-
+                Next
+            End If
             For i = 0 To params.Count - 1
                 If params(i) IsNot Nothing Then
                     If params(i).value.Contains(","c) Then
-                        params(i).value.Replace(Chr(44), Chr(46))
+                        If (params(i).key <> "availablemodes" And params(i).key <> "curmode" And params(i).key <> "Choices") Then
+                            Dim tmpstr(2) As String
+                            tmpstr = Split(params(i).value, ",")
+                            params(i).value = tmpstr(0) & "." & tmpstr(1)
+                        End If
                     End If
-                    tempParams.Add(params(i))
                 End If
             Next
 
-            Return tempParams
+            Return params
 
         Catch ex As Exception
-            Return "Error"
+            Driver_ImperiHome.CurrentServer.Log(TypeLog.ERREUR, TypeSource.DRIVER, "Driver Imperihome", dev.name & " " & ex.Message)
+            Return Nothing
         End Try
 
     End Function

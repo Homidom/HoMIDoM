@@ -15,7 +15,7 @@
         <StackPanel Margin="0,53,0,0" Orientation="Horizontal" HorizontalAlignment="center" Width="800" Grid.Column="1">
             <StackPanel Orientation="vertical" >
                 <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" x:Name="Chkselectdevices" ToolTip="Selectionner/Déselectionner tous les Composants" Content="Select/Deselect All"/>
-                <ListBox x:Name="ListBoxDevices" Margin="4" Background="DarkGray" BorderThickness="0" Foreground="White" HorizontalContentAlignment="left"  MaxHeight="500" MaxWidth="400"  Width="400" Height="410" />
+                <ListBox x:Name="ListBoxDevices" Margin="4" Background="DarkGray" BorderThickness="0" Foreground="White" HorizontalContentAlignment="left"  MaxHeight="500" MaxWidth="350"  Width="350" Height="410" />
             </StackPanel>
             <StackPanel Orientation="vertical" >
                 <CheckBox Background="DarkGray" BorderBrush="Black" Foreground="White" Margin="5" x:Name="Chkselectmacros" ToolTip="Selectionner/Déselectionner toutes les Macros" Content="Select/Deselect All"/>

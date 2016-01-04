@@ -332,7 +332,7 @@ Namespace HoMIDom
                         If flag = True Then
                             For i As Integer = 0 To x.ListTrue.Count - 1
                                 Dim _action As New ThreadAction(_Server, x.ListTrue.Item(i), _NameMacro, _ID)
-                                Dim y As New Thread(AddressOf _Action.Execute)
+                                Dim y As New Thread(AddressOf _action.Execute)
                                 y.Name = _ID
                                 y.Start()
                                 _Server.GetListThread.Add(y)
@@ -420,7 +420,7 @@ Namespace HoMIDom
                         End If
                     Case Action.TypeAction.ActionSpeech
                         Dim x As Action.ActionSpeech = _Action
-                        Parler(Decodestring(x.Message))
+                        _Server.Parler(Decodestring(x.Message))
                     Case Action.TypeAction.ActionHttp
                         Dim x As Action.ActionHttp = _Action
                         Sendhttp(Decodestring(x.Commande))
@@ -450,6 +450,14 @@ Namespace HoMIDom
                 End Select
             Catch ex As Exception
                 If ex.ToString.Contains("ThreadAbortException") = False Then _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute", "Exception: " & ex.ToString)
+                _Server.Log(TypeLog.ERREUR, TypeSource.SCRIPT, "ThreadAction Execute", "Nombre de Thread total = " & _Server.GetListThread.Count & "/" & _Server.GetListThread.Capacity)
+                Dim x = ""
+                For Each thr In _Server.GetListThread
+                    x = thr.Name & " ; "
+                    If thr.IsAlive Then thr.Abort()
+                Next
+                _Server.Log(TypeLog.ERREUR, TypeSource.SCRIPT, "ThreadAction Execute", "Liste des thread : " & x)
+
             End Try
         End Sub
 
@@ -480,30 +488,6 @@ Namespace HoMIDom
                 reader.Close()
             Catch ex As Exception
                 _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "Sendhttp", "Exception lors de l'envoi de la commande http: " & ex.Message)
-            End Try
-        End Sub
-
-        Private Sub Parler(ByVal Message As String)
-            Try
-                Dim texte As String = Message
-                'remplace les balises par la valeur
-                'texte = texte.Replace("{time}", Now.ToShortTimeString)
-                'texte = texte.Replace("{date}", Now.ToLongDateString)
-                'texte = Decodestring(texte)
-
-                Dim lamachineaparler As New Speech.Synthesis.SpeechSynthesizer
-                _Server.Log(Server.TypeLog.DEBUG, Server.TypeSource.SCRIPT, "Parler", "Message: " & texte)
-                With lamachineaparler
-                    .SelectVoice(_Server.GetDefautVoice)
-                    '.SetOutputToWaveFile("C:\tet.wav")
-                    '.SetOutputToWaveFile(File)
-                    .SpeakAsync(texte)
-                End With
-
-                texte = Nothing
-                lamachineaparler = Nothing
-            Catch ex As Exception
-                _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SCRIPT, "Parler", "Exception lors de l'annonce du message: " & Message & " : " & ex.ToString)
             End Try
         End Sub
 

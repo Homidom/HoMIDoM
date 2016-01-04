@@ -350,6 +350,7 @@ Namespace HoMIDom
                 thr1.Priority = ThreadPriority.Highest
                 thr1.Start()
                 ListThread.Add(thr1)
+                thr1 = Nothing
 
                 '---- Actions à effectuer toutes les minutes ----
                 If ladate.Second = 0 Then
@@ -403,10 +404,12 @@ Namespace HoMIDom
 
             Catch ex2 As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception 3 : " & ex2.ToString & " --> Erreur du thread TimerSecTick, suppression de tous les threads en cours")
-
+                Dim x = ""
                 For Each thr In ListThread
+                    x = thr.Name & " ; "
                     If thr.IsAlive Then thr.Abort()
                 Next
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Liste des thread : " & x)
             End Try
             'End Try
         End Sub
