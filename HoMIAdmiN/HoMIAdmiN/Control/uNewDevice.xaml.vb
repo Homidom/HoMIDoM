@@ -154,7 +154,19 @@ Public Class uNewDevice
             Dim x As New NewDevice
             x.ID = txtID.Text
             x.IdDriver = txtDriver.Text
-            x.Name = txtName.Text
+            'enleve les caratère spéciaux
+            Dim Str As String = ""
+            For i = 0 To Len(txtName.Text) - 1
+                Select Case txtName.Text(i)
+                    Case "a" To "z" : Str += txtName.Text(i)
+                    Case "A" To "Z" : Str += txtName.Text(i)
+                    Case "0" To "9" : Str += txtName.Text(i)
+                    Case " " : Str += " "
+                    Case Else
+                        Str += " "
+                End Select
+            Next
+            x.Name = Trim(Str)
             x.Adresse1 = txtAdresse1.Text
             x.Adresse2 = txtAdresse2.Text
             x.Type = CbType.Text

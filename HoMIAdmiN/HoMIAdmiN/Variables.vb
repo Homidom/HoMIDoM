@@ -17,6 +17,7 @@ Module Variables
     Public _TableDBHisto As DataTable = Nothing
     Public thdUDPServer As System.Threading.Thread
     Public WithEvents ClientUDP As HoMIDom.HoMIDom.UDPClient
+    Public refreshtreeviewdevice As Boolean
 
     'Sequences
     Public _SequenceDriver As String 'N° de sequence en cours du dernier changement d'un driver

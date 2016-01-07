@@ -49,6 +49,7 @@
                                 <Label Foreground="White" Name="LabelAdresse2" >Adresse2:</Label>
                                 <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Name="TxtAdresse2" Height="21.978" Width="215" />
                                 <Button Name="BtnLearn2" Content="Apprendre" Foreground=" White" Template="{DynamicResource GlassButton}" Width="65" HorizontalAlignment=" Left" Height="25" Visibility="Visible" />
+                                <ComboBox Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" HorizontalAlignment=" Left" Name="CbAdresse2" Width="215" Height="25" Visibility="Collapsed" IsEditable="True" />
                             </StackPanel>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" >

@@ -403,7 +403,8 @@ Namespace HoMIDom
                 End If
 
             Catch ex2 As Exception
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception 3 : " & ex2.ToString & " --> Erreur du thread TimerSecTick, suppression de tous les threads en cours")
+                '                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception 3 : " & ex2.ToString & " --> Erreur du thread TimerSecTick, suppression de tous les threads en cours")
+
                 Dim x = ""
                 For Each thr In ListThread
                     x = thr.Name & " ; "
@@ -10250,7 +10251,7 @@ Namespace HoMIDom
                 Dim retour As String = ""
                 If String.IsNullOrEmpty(Requete) = True Then
                     If System.IO.File.Exists(_MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt") Then
-                        Dim SR As New StreamReader(_MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt")
+                        Dim SR As New StreamReader(_MonRepertoire & "\logs\log_" & DateAndTime.Now.ToString("yyyyMMdd") & ".txt", Encoding.GetEncoding("ISO-8859-1"))
                         retour = SR.ReadToEnd()
                         retour = HtmlDecode(retour)
                         SR.Close()
