@@ -986,6 +986,7 @@ Public Class Driver_Teleinfo
 
             Catch Ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Datareceived", "Exception : " & Ex.Message)
+                If Ex.Message = "Le port est fermé." Then Restart()
             End Try
         End Sub
 

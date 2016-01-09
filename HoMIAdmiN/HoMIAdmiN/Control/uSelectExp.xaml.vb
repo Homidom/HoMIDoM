@@ -192,7 +192,7 @@
                 Dim stream = System.IO.File.ReadAllText(fileName)
                 allDevImperi = Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(DeviceList))
             Else
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR ImportImperiHome: Le fichier " & fileName & " n'existe pas", "ERREUR", "ImportImperiHome")
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "Le fichier " & fileName & " n'existe pas, il va etre créé", "INFO", "ImportImperiHome")
                 Return False
                 Exit Function
             End If
@@ -202,7 +202,7 @@
                 Dim stream = System.IO.File.ReadAllText(fileName1)
                 allZoneImperi = Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(RoomList))
             Else
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "ERREUR ImportImperiHome: Le fichier " & fileName & " n'existe pas, il va etre créé", "INFO", "ImportImperiHome")
+                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.INFO, "Le fichier " & fileName & " n'existe pas, il va etre créé", "INFO", "ImportImperiHome")
                 Return False
                 Exit Function
             End If
