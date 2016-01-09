@@ -332,8 +332,10 @@ Namespace HoMIDom
                         If flag = True Then
                             For i As Integer = 0 To x.ListTrue.Count - 1
                                 Dim _action As New ThreadAction(_Server, x.ListTrue.Item(i), _NameMacro, _ID)
-                                Dim y As New Thread(AddressOf _action.Execute)
+                                Dim y As New Thread(AddressOf _Action.Execute)
                                 y.Name = _ID
+                                y.IsBackground = True
+                                y.Priority = ThreadPriority.Normal
                                 y.Start()
                                 _Server.GetListThread.Add(y)
                                 y = Nothing
@@ -343,6 +345,8 @@ Namespace HoMIDom
                                 Dim _action As New ThreadAction(_Server, x.ListFalse.Item(i), _NameMacro, _ID)
                                 Dim y As New Thread(AddressOf _Action.Execute)
                                 y.Name = _ID
+                                y.IsBackground = True
+                                y.Priority = ThreadPriority.Normal
                                 y.Start()
                                 _Server.GetListThread.Add(y)
                                 y = Nothing
@@ -450,14 +454,6 @@ Namespace HoMIDom
                 End Select
             Catch ex As Exception
                 If ex.ToString.Contains("ThreadAbortException") = False Then _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute", "Exception: " & ex.ToString)
-                _Server.Log(TypeLog.ERREUR, TypeSource.SCRIPT, "ThreadAction Execute", "Nombre de Thread total = " & _Server.GetListThread.Count & "/" & _Server.GetListThread.Capacity)
-                Dim x = ""
-                For Each thr In _Server.GetListThread
-                    x = thr.Name & " ; "
-                    If thr.IsAlive Then thr.Abort()
-                Next
-                _Server.Log(TypeLog.ERREUR, TypeSource.SCRIPT, "ThreadAction Execute", "Liste des thread : " & x)
-
             End Try
         End Sub
 

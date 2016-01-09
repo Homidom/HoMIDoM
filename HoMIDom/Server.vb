@@ -403,14 +403,11 @@ Namespace HoMIDom
                 End If
 
             Catch ex2 As Exception
-                '                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception 3 : " & ex2.ToString & " --> Erreur du thread TimerSecTick, suppression de tous les threads en cours")
+                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Exception 3 : " & ex2.ToString & " --> Erreur du thread TimerSecTick, suppression de tous les threads en cours")
 
-                Dim x = ""
                 For Each thr In ListThread
-                    x = thr.Name & " ; "
                     If thr.IsAlive Then thr.Abort()
                 Next
-                Log(TypeLog.ERREUR, TypeSource.SERVEUR, "TimerSecTick", "Liste des thread : " & x)
             End Try
             'End Try
         End Sub
