@@ -361,8 +361,7 @@ Imports System.Threading
             Else
                 _IsConnect = False
                 WriteLog("Driver " & Me.Nom & " non démarré")
-                WriteLog("ERR: Start Driver " & Me.Nom & " Le repertoire " & My.Application.Info.DirectoryPath & "\Drivers\Imperihome\ n'existe pas ou il n'a pas de fichier configuré.")
-                WriteLog("ERR: Start Driver " & Me.Nom & " Configurez les composants que vous souhaitez voir dans ImperiHome, allez dans HoMIAdmin, Configuration, Onglet Configuration, Bouton 'Export Imperi' ")
+                WriteLog("ERR: Start Driver " & Me.Nom & " Configurez les composants que vous souhaitez voir dans ImperiHome, allez dans HoMIAdmin, Configuration, Onglet Configuration, Bouton 'Export Imperihome' ")
             End If
 
         Catch ex As Exception
@@ -690,6 +689,7 @@ Public Class DevicesController
     Public Function GetValue() As Object
 
         Dim allDev = Driver_ImperiHome.CurrentServer.GetAllDevices(Me.ServerKey)
+        Dim allMac = Driver_ImperiHome.CurrentServer.GetAllMacros(Me.ServerKey)
 
         Dim allDevImperiTemp As DeviceList = Nothing
         Dim fileName = My.Application.Info.DirectoryPath & "\Drivers\Imperihome\devices.json"
@@ -698,27 +698,29 @@ Public Class DevicesController
             allDevImperiTemp = Newtonsoft.Json.JsonConvert.DeserializeObject(stream, GetType(DeviceList))
         End If
 
-        Dim find = New List(Of Device)
-        Dim memdev As Device = Nothing
-
+        Dim find As Boolean
         For Each devImperi In allDevImperiTemp.devices
+            find = False
             For Each dev In allDev
-                memdev = devImperi
                 If dev.Name = devImperi.name Then
                     devImperi.params = ParamByType(dev, devImperi)
-                    memdev = Nothing
+                    find = True
                     Exit For
                 End If
             Next
-            If memdev IsNot Nothing Then find.Add(memdev)
+            If Not find Then
+                For Each dev In allMac
+                    If dev.Nom = devImperi.name Then
+                        Dim params As List(Of DeviceParam) = New List(Of DeviceParam)
+                        params.Add(New DeviceParam)
+                        params(0).key = "LastRun"
+                        params(0).value = ""
+                        devImperi.params = params
+                        Exit For
+                    End If
+                Next
+            End If
         Next
-
-        If find.Count > 0 Then
-            For Each devfind In find
-                allDevImperiTemp.devices.Remove(devfind)
-            Next
-        End If
-
         If Driver_ImperiHome.driverDebug Then
             Dim stream = Newtonsoft.Json.JsonConvert.SerializeObject(allDevImperiTemp)
             System.IO.File.WriteAllText(My.Application.Info.DirectoryPath & "\Drivers\Imperihome\devices_send.json", stream)
@@ -768,13 +770,13 @@ Public Class DevicesController
                         Dim allDev = Driver_ImperiHome.CurrentServer.GetAllDevices(Me.ServerKey)
                         For Each devImperi In allDevImperi.devices
                             If id = devImperi.id Then
-                                For Each Dev1 In allDev
-                                    If devImperi.name = Dev1.Name Then
-                                        Dev = Dev1
 
-                                        Select Case command
-                                            Case "setLevel"
-                                                If Dev1.Type = ListeDevices.VOLET Then
+                                Select Case command
+                                    Case "setLevel"
+                                        For Each devparam In devImperi.params
+                                            If devparam.key = "Level" Then
+                                                Dev = Driver_ImperiHome.CurrentServer.ReturnDeviceByID(ServerKey, devparam.value)
+                                                If Dev.Type = ListeDevices.VOLET Then
                                                     action = New DeviceAction() With {.Nom = "OUVERTURE"}
                                                 Else
                                                     action = New DeviceAction() With {.Nom = "DIM"}
@@ -784,58 +786,97 @@ Public Class DevicesController
                                                 action.Parametres.Add(devActionParameter)
                                                 Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
 
-                                            Case "setMode", "setChoise"
-                                                
-                                                action = New DeviceAction() With {.Nom = "SETVALUE"}
-                                                Dim devActionParameter As DeviceAction.Parametre = Nothing
-                                                For Each Var In Dev1.VariablesOfDevice
-                                                    If param = Var.Key Then
-                                                        devActionParameter = New DeviceAction.Parametre With {.Nom = "Value", .Value = Var.Value}
-                                                    End If
-                                                Next
-                                                action.Parametres.Add(devActionParameter)
-                                                Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
+                                            End If
+                                        Next
+                                    Case "setMode", "setChoice"
 
-                                            Case "setStatus", "setArmed"
+                                        action = New DeviceAction() With {.Nom = "SETVALUE"}
+                                        Dim Dev2 As HoMIDom.HoMIDom.TemplateDevice = Nothing
+                                        Dim Dev3 As HoMIDom.HoMIDom.TemplateDevice = Nothing
+                                        For Each devparam In devImperi.params
+                                            If devparam.key = "availablemodes" Then
+                                                Dev2 = Driver_ImperiHome.CurrentServer.ReturnDeviceByID(ServerKey, devparam.value)
+                                            End If
+                                            If devparam.key = "curmode" Then
+                                                Dev3 = Driver_ImperiHome.CurrentServer.ReturnDeviceByID(ServerKey, devparam.value)
+                                            End If
+                                            If devparam.key = "Choices" Then
+                                                Dev2 = Driver_ImperiHome.CurrentServer.ReturnDeviceByID(ServerKey, devparam.value)
+                                            End If
+                                            If devparam.key = "Value" Then
+                                                Dev3 = Driver_ImperiHome.CurrentServer.ReturnDeviceByID(ServerKey, devparam.value)
+                                            End If
+                                        Next
+                                        Dim devActionParameter As DeviceAction.Parametre = Nothing
+                                        For Each Var In Dev2.VariablesOfDevice
+                                            If param = Var.Key Then
+                                                devActionParameter = New DeviceAction.Parametre With {.Nom = "Value", .Value = Var.Value}
+                                            End If
+                                        Next
+                                        action.Parametres.Add(devActionParameter)
+                                        Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev3.ID, action)
 
+                                    Case "setStatus", "setArmed"
+
+                                        For Each devparam In devImperi.params
+                                            If devparam.key = "Status" Or devparam.key = "Armed" Then
+                                                Dev = Driver_ImperiHome.CurrentServer.ReturnDeviceByID(ServerKey, devparam.value)
                                                 action = New DeviceAction() With {.Nom = convCommand(param)}
                                                 Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
+                                            End If
+                                        Next
 
-                                            Case "setSetPoint"
+                                    Case "setSetPoint"
 
+                                        For Each devparam In devImperi.params
+                                            If devparam.key = "cursetpoint" Then
+                                                Dev = Driver_ImperiHome.CurrentServer.ReturnDeviceByID(ServerKey, devparam.value)
                                                 action = New DeviceAction() With {.Nom = "SETVALUE"}
                                                 Dim devActionParameter As DeviceAction.Parametre = New DeviceAction.Parametre With {.Nom = "Value", .Value = param}
                                                 'devActionParameter = action.Parametres.Where(Function(t) t.Nom = param).FirstOrDefault()
                                                 action.Parametres.Add(devActionParameter)
                                                 Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
+                                            End If
+                                        Next
 
-                                            Case "pulseShutter"
+                                    Case "pulseShutter"
 
+                                        For Each devparam In devImperi.params
+                                            If devparam.key = "Level" Then
+                                                Dev = Driver_ImperiHome.CurrentServer.ReturnDeviceByID(ServerKey, devparam.value)
                                                 action = New DeviceAction() With {.Nom = convVolet(param)}
                                                 Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
+                                            End If
+                                        Next
 
-                                            Case "pulse"
+                                    Case "pulse"
 
+                                        For Each devparam In devImperi.params
+                                            If devparam.key = "Status" Then
+                                                Dev = Driver_ImperiHome.CurrentServer.ReturnDeviceByID(ServerKey, devparam.value)
                                                 action = New DeviceAction() With {.Nom = "TOGGLE"}
                                                 Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
+                                            End If
+                                        Next
 
-                                            Case "setAck", "stopShutter"
+                                    Case "setAck", "stopShutter"
 
-                                                action = New DeviceAction() With {.Nom = "OFF"}
-                                                Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
+                                                For Each devparam In devImperi.params
+                                                    If devparam.key = "Level" Or devparam.key = "Tripped" Then
+                                                        Dev = Driver_ImperiHome.CurrentServer.ReturnDeviceByID(ServerKey, devparam.value)
+                                                        action = New DeviceAction() With {.Nom = "OFF"}
+                                                        Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
+                                                    End If
+                                                Next
 
-                                            Case "setColor"
+                                    Case "setColor"
                                                 'Pas de commande homidom correspondante
-                                            Case Else
+                                    Case Else
 
-                                        End Select
-                                        Exit For
-                                    End If
-                                Next
+                                End Select
                                 Exit For
                             End If
                         Next
-
                 End Select
             End If
 

@@ -12,6 +12,9 @@
     Private allDevImperi As DeviceList
     Private allZoneImperi As RoomList
 
+    Private allDevice As List(Of HoMIDom.HoMIDom.TemplateDevice) = myService.GetAllDevices(IdSrv)
+    Private allMacro As List(Of HoMIDom.HoMIDom.Macro) = myService.GetAllMacros(IdSrv)
+
     Public Sub New()
 
         ' Cet appel est requis par le concepteur.
@@ -87,7 +90,7 @@
                 allDevImperi.devices = New List(Of Device)
             End If
 
-            For Each device In myService.GetAllDevices(IdSrv)
+            For Each device In allDevice
 
                 Dim x As New CheckBox
                 Dim z As New Button
@@ -135,7 +138,7 @@
 
             'macro
 
-            For Each macro In myService.GetAllMacros(IdSrv)
+            For Each macro In allMacro
                 Dim x As New CheckBox
                 x.Content = macro.Nom
                 x.ToolTip = macro.ID
@@ -144,7 +147,7 @@
                 AddHandler x.Unchecked, AddressOf ChkElement_Click
                 x.Height = 20
                 x.IsChecked = False
-                
+
                 Dim stk As New StackPanel
                 stk.Orientation = Orientation.Horizontal
                 stk.HorizontalAlignment = HorizontalAlignment.Left
@@ -222,6 +225,36 @@
             DitPath = BasePath.GetDirectories
             If Not DitPath.Contains(NewPath) Then
                 BasePath.CreateSubdirectory("Imperihome")
+            End If
+
+
+            Dim find = New List(Of Device)
+            Dim memdev As Device = Nothing
+
+            For Each devImperi In allDevImperi.devices
+                For Each dev In allDevice
+                    memdev = devImperi
+                    If dev.Name = devImperi.name Then
+                        memdev = Nothing
+                        Exit For
+                    End If
+                Next
+                If memdev IsNot Nothing Then
+                    For Each dev In allMacro
+                        memdev = devImperi
+                        If dev.Nom = devImperi.name Then
+                            memdev = Nothing
+                            Exit For
+                        End If
+                    Next
+                End If
+                If memdev IsNot Nothing Then find.Add(memdev)
+            Next
+
+            If find.Count > 0 Then
+                For Each devfind In find
+                    allDevImperi.devices.Remove(devfind)
+                Next
             End If
 
             Dim stream As String = ""
@@ -404,7 +437,7 @@
 
     Public Shared Function ParamByType(ByVal comp As HoMIDom.HoMIDom.TemplateDevice, type As String) As List(Of DeviceParam)
         Try
-            Dim tempParams As DeviceParam = New DeviceParam
+
             Dim params As List(Of DeviceParam) = New List(Of DeviceParam)
 
             Select Case type
