@@ -364,6 +364,9 @@ Public Class Driver_Arduino_HTTP
                 If (fi Is Nothing) Then WriteLog("DBG: READ TESTXXX  Could not access useUnsafeHeaderParsing field")
                 If (Not Convert.ToBoolean(fi.GetValue(obj))) Then fi.SetValue(obj, True)
 
+                'Add date and hour to urlcommand
+                urlcommande = urlcommande & "#" & Now.ToString("yyyyMMddHHmmss")
+
                 If _DEBUG Then WriteLog("DBG: READ Composant " & Objet.Name & " URL : " & urlcommande)
 
                 Dim request As HttpWebRequest = WebRequest.Create(urlcommande)
@@ -610,6 +613,10 @@ Public Class Driver_Arduino_HTTP
             End If
 
             If urlcommande <> "" Then
+
+                'Add date and hour to urlcommand
+                urlcommande = urlcommande & "#" & Now.ToString("yyyyMMddHHmmss")
+
                 If _DEBUG Then WriteLog("DBG: WRITE Composant " & Objet.Name & " URL : " & urlcommande)
 
                 Dim request As HttpWebRequest = WebRequest.Create(urlcommande)
@@ -655,7 +662,7 @@ Public Class Driver_Arduino_HTTP
                         'end if
                     End Try
                 Next
-                
+
 
                 'Traitement de la réponse
                 If responseFromServer = "" Then
