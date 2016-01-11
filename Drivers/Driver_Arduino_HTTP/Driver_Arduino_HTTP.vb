@@ -508,7 +508,7 @@ Public Class Driver_Arduino_HTTP
                 Next
                 'If last character in url is "_", we remove it
                 If urlcommande.EndsWith("_") Then urlcommande = urlcommande.Substring(0, urlcommande.Length - 1)
-                
+
             ElseIf Command = "SETVAR" Then
                 If Not IsNothing(Parametre1) Then
                     Select Case UCase(Objet.Modele)
@@ -619,9 +619,9 @@ Public Class Driver_Arduino_HTTP
 
                 If _DEBUG Then WriteLog("DBG: WRITE Composant " & Objet.Name & " URL : " & urlcommande)
 
-                Dim request As HttpWebRequest = WebRequest.Create(urlcommande)
-                request.Timeout = 3000
-                CType(request, HttpWebRequest).UserAgent = "Other"
+                'Dim request As HttpWebRequest = WebRequest.Create(urlcommande)
+                'request.Timeout = 3000
+                'CType(request, HttpWebRequest).UserAgent = "Other"
 
 
                 'Dim response As WebResponse = request.GetResponse()
@@ -636,10 +636,14 @@ Public Class Driver_Arduino_HTTP
 
 
                 'Get a web response  
-                Dim response As WebResponse
                 Dim responseFromServer As String = ""
                 For retrycount As Integer = 0 To 2
                     Try
+                        Dim request As HttpWebRequest = WebRequest.Create(urlcommande)
+                        request.Timeout = 3000
+                        CType(request, HttpWebRequest).UserAgent = "Other"
+
+                        Dim response As WebResponse
                         response = request.GetResponse()
                         If CType(response, HttpWebResponse).StatusCode = HttpStatusCode.OK Then
                             Dim dataStream As Stream = response.GetResponseStream()
