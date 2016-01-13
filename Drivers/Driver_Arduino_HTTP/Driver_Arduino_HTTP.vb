@@ -365,7 +365,7 @@ Public Class Driver_Arduino_HTTP
                 If (Not Convert.ToBoolean(fi.GetValue(obj))) Then fi.SetValue(obj, True)
 
                 'Add date and hour to urlcommand
-                urlcommande = urlcommande & "#" & Now.ToString("yyyyMMddHHmmss")
+                urlcommande = urlcommande & "__" & Now.ToString("yyyyMMddHHmmss")
 
                 If _DEBUG Then WriteLog("DBG: READ Composant " & Objet.Name & " URL : " & urlcommande)
 
@@ -615,7 +615,7 @@ Public Class Driver_Arduino_HTTP
             If urlcommande <> "" Then
 
                 'Add date and hour to urlcommand
-                urlcommande = urlcommande & "#" & Now.ToString("yyyyMMddHHmmss")
+                urlcommande = urlcommande & "__" & Now.ToString("yyyyMMddHHmmss")
 
                 If _DEBUG Then WriteLog("DBG: WRITE Composant " & Objet.Name & " URL : " & urlcommande)
 
