@@ -6,6 +6,9 @@ Imports STRGS = Microsoft.VisualBasic.Strings
 Imports OpenZWaveDotNet
 Imports System.ComponentModel
 Imports System.Text.RegularExpressions
+Imports System.Xml
+Imports System.Xml.XPath
+
 
 
 Public Class Driver_ZWave
@@ -62,10 +65,6 @@ Public Class Driver_ZWave
         Dim _DEBUG As Boolean = False
         Dim _AFFICHELOG As Boolean = False
         Dim _STARTIDLETIME As Integer = 10
-        Dim _baudspeed As Integer = 57600
-        Dim _nbrebit As Integer = 8
-        Dim _parity As IO.Ports.Parity = IO.Ports.Parity.None
-        Dim _nbrebitstop As IO.Ports.StopBits = IO.Ports.StopBits.One
 
         'Ajoutés dans les ppt avancés dans New()
 
@@ -74,9 +73,20 @@ Public Class Driver_ZWave
 
 #Region "Variables Internes"
         ' Variables de gestion du port COM
+        Dim _networkkey As String = "0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F,0x10"
+        Dim MyRep As String = System.IO.Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location)
+
+        ' variables port serie
         Private WithEvents port As New System.IO.Ports.SerialPort
         Private port_name As String = ""
-        Dim MyRep As String = System.IO.Path.GetDirectoryName(Reflection.Assembly.GetExecutingAssembly().Location)
+        Dim _baudspeed As Integer = 9600
+        Dim _nbrebit As Integer = 8
+        Dim _parity As IO.Ports.Parity = IO.Ports.Parity.None
+        Dim _nbrebitstop As IO.Ports.StopBits = IO.Ports.StopBits.One
+		
+		Dim _libelleadr1 as String = ""
+        Dim _libelleadr2 as String = ""
+
 
         ' -----------------   Ajout des declarations pour OpenZWave
         Private g_initFailed As Boolean = False
@@ -98,14 +108,18 @@ Public Class Driver_ZWave
         Enum CommandClass As Byte
             COMMAND_CLASS_NO_OPERATION = 0                        ' 0x00
             COMMAND_CLASS_BASIC = 32                              ' 0x20
+            COMMAND_CLASS_BASIC_V2 = 32                           ' 0x20
             COMMAND_CLASS_CONTROLLER_REPLICATION = 33             ' 0x21
             COMMAND_CLASS_APPLICATION_STATUS = 34                 ' 0x22
             COMMAND_CLASS_ZIP_SERVICES = 35                       ' 0x23
-            COMMAND_CLASS_ZIP_SERVER = 36                         ' 0x24
+            COMMAND_CLASS_ZIP_V2 = 35                             ' 0x23
+            COMMAND_CLASS_SECURITY_PANEL_MODE = 36                ' 0x24
             COMMAND_CLASS_SWITCH_BINARY = 37                      ' 0x25
+            COMMAND_CLASS_SWITCH_BINARY_V2 = 37                   ' 0x25
             COMMAND_CLASS_SWITCH_MULTILEVEL = 38                  ' 0x26
             COMMAND_CLASS_SWITCH_MULTILEVEL_V2 = 38               ' 0x26
             COMMAND_CLASS_SWITCH_MULTILEVEL_V3 = 38               ' 0x26
+            COMMAND_CLASS_SWITCH_MULTILEVEL_V4 = 38               ' 0x26
             COMMAND_CLASS_SWITCH_ALL = 39                         ' 0x27
             COMMAND_CLASS_SWITCH_TOGGLE_BINARY = 40               ' 0x28
             COMMAND_CLASS_SWITCH_TOGGLE_MULTILEVEL = 41           ' 0x29
@@ -113,49 +127,112 @@ Public Class Driver_ZWave
             COMMAND_CLASS_SCENE_ACTIVATION = 43                   ' 0x2B
             COMMAND_CLASS_SCENE_ACTUATOR_CONF = 44                ' 0x2C
             COMMAND_CLASS_SCENE_CONTROLLER_CONF = 45              ' 0x2D
-            COMMAND_CLASS_ZIP_CLIENT = 46                         ' 0x2E
-            COMMAND_CLASS_ZIP_ADV_SERVICES = 47                   ' 0x2F
+            COMMAND_CLASS_SECURITY_PANEL_ZONE = 46                ' 0x2E
+            COMMAND_CLASS_SECURITY_PANEL_ZONE_SENSOR = 47         ' 0x2F
             COMMAND_CLASS_SENSOR_BINARY = 48                      ' 0x30
+            COMMAND_CLASS_SENSOR_BINARY_V2 = 48                   ' 0x30
             COMMAND_CLASS_SENSOR_MULTILEVEL = 49                  ' 0x31
             COMMAND_CLASS_SENSOR_MULTILEVEL_V2 = 49               ' 0x31
             COMMAND_CLASS_SENSOR_MULTILEVEL_V3 = 49               ' 0x31
+            COMMAND_CLASS_SENSOR_MULTILEVEL_V4 = 49               ' 0x31
+            COMMAND_CLASS_SENSOR_MULTILEVEL_V5 = 49               ' 0x31
+            COMMAND_CLASS_SENSOR_MULTILEVEL_V6 = 49               ' 0x31
             COMMAND_CLASS_SENSOR_MULTILEVEL_V7 = 49               ' 0x31
             COMMAND_CLASS_METER = 50                              ' 0x32
             COMMAND_CLASS_METER_V2 = 50                           ' 0x32
             COMMAND_CLASS_METER_V3 = 50                           ' 0x32
             COMMAND_CLASS_METER_V4 = 50                           ' 0x32
             COMMAND_CLASS_ZIP_ADV_SERVER = 51                     ' 0x33
-            COMMAND_CLASS_ZIP_ADV_CLIENT = 52                     ' 0x34
+            COMMAND_CLASS_NETWORK_MANAGEMENT_INCLUSION = 52       ' 0x34
             COMMAND_CLASS_METER_PULSE = 53                        ' 0x35
+            COMMAND_CLASS_BASIC_TARIFF_INFO = 54                  ' 0x36
+            COMMAND_CLASS_HRV_STATUS = 55                         ' 0x37
             COMMAND_CLASS_THERMOSTAT_HEATING = 56                 ' 0x38
+            COMMAND_CLASS_HRV_CONTROL = 57                        ' 0x39
+            COMMAND_CLASS_DCP_CONFIG = 58                         ' 0x3A
+            COMMAND_CLASS_DCP_MONITOR = 59                        ' 0x3B
             COMMAND_CLASS_METER_TBL_CONFIG = 60                   ' 0x3C
             COMMAND_CLASS_METER_TBL_MONITOR = 61                  ' 0x3D
+            COMMAND_CLASS_METER_TBL_MONITOR_V2 = 61               ' 0x3D
             COMMAND_CLASS_METER_TBL_PUSH = 62                     ' 0x3E
+            COMMAND_CLASS_PREPAYMENT = 63                         ' 0x3F
             COMMAND_CLASS_THERMOSTAT_MODE = 64                    ' 0x40
+            COMMAND_CLASS_THERMOSTAT_MODE_V2 = 64                 ' 0x40
+            COMMAND_CLASS_THERMOSTAT_MODE_V3 = 64                 ' 0x40
+            COMMAND_CLASS_PREPAYMENT_ENCAPSULATION = 65           ' 0x41
             COMMAND_CLASS_THERMOSTAT_OPERATING_STATE = 66         ' 0x42
+            COMMAND_CLASS_THERMOSTAT_OPERATING_STATE_V2 = 66      ' 0x42
             COMMAND_CLASS_THERMOSTAT_SETPOINT = 67                ' 0x43
+            COMMAND_CLASS_THERMOSTAT_SETPOINT_V2 = 67             ' 0x43
+            COMMAND_CLASS_THERMOSTAT_SETPOINT_V3 = 67             ' 0x43
             COMMAND_CLASS_THERMOSTAT_FAN_MODE = 68                ' 0x44
+            COMMAND_CLASS_THERMOSTAT_FAN_MODE_V2 = 68             ' 0x44
+            COMMAND_CLASS_THERMOSTAT_FAN_MODE_V3 = 68             ' 0x44
+            COMMAND_CLASS_THERMOSTAT_FAN_MODE_V4 = 68             ' 0x44
             COMMAND_CLASS_THERMOSTAT_FAN_STATE = 69               ' 0x45
+            COMMAND_CLASS_THERMOSTAT_FAN_STATE_V2 = 69            ' 0x45
             COMMAND_CLASS_CLIMATE_CONTROL_SCHEDULE = 70           ' 0x46
             COMMAND_CLASS_THERMOSTAT_SETBACK = 71                 ' 0x47
+            COMMAND_CLASS_NOTIFICATION = 71                       ' 0x47
+            COMMAND_CLASS_NOTIFICATION_V2 = 71                    ' 0x47
+            COMMAND_CLASS_NOTIFICATION_V3 = 71                    ' 0x47
+            COMMAND_CLASS_NOTIFICATION_V4 = 71                    ' 0x47
+            COMMAND_CLASS_NOTIFICATION_V5 = 71                    ' 0x47
+            COMMAND_CLASS_RATE_TBL_CONFIG = 72                    ' 0x48
+            COMMAND_CLASS_RATE_TBL_MONITOR = 73                   ' 0x49
+            COMMAND_CLASS_TARIFF_CONFIG = 74                      ' 0x4A
+            COMMAND_CLASS_TARIFF_TBL_MONITOR = 75                 ' 0x4B
             COMMAND_CLASS_DOOR_LOCK_LOGGING = 76                  ' 0x4C
+            COMMAND_CLASS_NETWORK_MANAGEMENT_BASIC = 77           ' 0x4D
             COMMAND_CLASS_SCHEDULE_ENTRY_LOCK = 78                ' 0x4E
+            COMMAND_CLASS_SCHEDULE_ENTRY_LOCK_V2 = 78             ' 0x4E
+            COMMAND_CLASS_SCHEDULE_ENTRY_LOCK_V3 = 78             ' 0x4E
+            COMMAND_CLASS_ZIP_6LOWPAN = 79                        ' 0x4F
             COMMAND_CLASS_BASIC_WINDOW_COVERING = 80              ' 0x50
             COMMAND_CLASS_MTP_WINDOW_COVERING = 81                ' 0x51
+            COMMAND_CLASS_NETWORK_MANAGEMENT_PROXY = 82           ' 0x52
+            COMMAND_CLASS_SCHEDULE = 83                           ' 0x53
+            COMMAND_CLASS_NETWORK_MANAGEMENT_PRIMARY = 84         ' 0x54
+            COMMAND_CLASS_TRANSPORT_SERVICE = 85                  ' 0x55
+            COMMAND_CLASS_TRANSPORT_SERVICE_V2 = 85               ' 0x55
             COMMAND_CLASS_CRC_16_ENCAP = 86                       ' 0x56
+            COMMAND_CLASS_APPLICATION_CAPABILITY = 86             ' 0x57
+            COMMAND_CLASS_ZIP_ND = 88                             ' 0x58
+            COMMAND_CLASS_ASSOCIATION_GRP_INFO = 89               ' 0x59
+            COMMAND_CLASS_ASSOCIATION_GRP_INFO_V2 = 89            ' 0x59
             COMMAND_CLASS_DEVICE_RESET_LOCALLY = 90               ' 0x5A
             COMMAND_CLASS_CENTRAL_SCENE = 91                      ' 0x5B
-            COMMAND_CLASS_ZWAVE_PLUS_INFO = 94                     '0x5E
-            COMMAND_CLASS_ZWAVE_PLUS_INFO_V2 = 94                  '0x5E
+            COMMAND_CLASS_CENTRAL_SCENE_V2 = 91                   ' 0x5B
+            COMMAND_CLASS_IP_ASSOCIATION = 92                     ' 0x5C
+            COMMAND_CLASS_ANTITHEFT = 93                          ' 0x5D
+            COMMAND_CLASS_ANTITHEFT_V2 = 93                       ' 0x5D
+            COMMAND_CLASS_ZWAVE_PLUS_INFO = 94                    ' 0x5E
+            COMMAND_CLASS_ZWAVE_PLUS_INFO_V2 = 94                 ' 0x5E
+            COMMAND_CLASS_ZIP_GATEWAY = 95                        ' 0x5F
+            COMMAND_CLASS_MULTI_CHANNEL = 96                      ' 0x60
+            COMMAND_CLASS_MULTI_CHANNEL_V2 = 96                   ' 0x60
+            COMMAND_CLASS_MULTI_CHANNEL_V3 = 96                   ' 0x60
+            COMMAND_CLASS_MULTI_CHANNEL_V4 = 96                   ' 0x60
             COMMAND_CLASS_MULTI_INSTANCE = 96                     ' 0x60
             COMMAND_CLASS_MULTI_INSTANCE_V2 = 96                  ' 0x60
+            COMMAND_CLASS_MULTI_INSTANCE_V3 = 96                  ' 0x60
             COMMAND_CLASS_MULTI_INSTANCE_V4 = 96                  ' 0x60
+            COMMAND_CLASS_ZIP_PORTAL = 97                         ' 0x61
             COMMAND_CLASS_DOOR_LOCK = 98                          ' 0x62
+            COMMAND_CLASS_DOOR_LOCK_V2 = 98                       ' 0x62
+            COMMAND_CLASS_DOOR_LOCK_V3 = 98                       ' 0x62
             COMMAND_CLASS_USER_CODE = 99                          ' 0x63
+            COMMAND_CLASS_APPLIANCE = 100                         ' 0x64
+            COMMAND_CLASS_DMX = 101                               ' 0x65
             COMMAND_CLASS_BARRIER_OPERATOR = 102                  ' 0x66
+            COMMAND_CLASS_ZIP_NAMING = 104                        ' 0x68
+            COMMAND_CLASS_WINDOW_COVERING = 105                   ' 0x69
             COMMAND_CLASS_CONFIGURATION = 112                     ' 0x70
             COMMAND_CLASS_CONFIGURATION_V2 = 112                  ' 0x70
+            COMMAND_CLASS_CONFIGURATION_V3 = 112                  ' 0x70
             COMMAND_CLASS_ALARM = 113                             ' 0x71
+            COMMAND_CLASS_ALARM_V2 = 113                          ' 0x71
+            COMMAND_CLASS_ALARM_V3 = 113                          ' 0x71
             COMMAND_CLASS_ALARM_V4 = 113                          ' 0x71
             COMMAND_CLASS_ALARM_V5 = 113                          ' 0x71
             COMMAND_CLASS_MANUFACTURER_SPECIFIC = 114             ' 0x72
@@ -168,6 +245,8 @@ Public Class Driver_ZWave
             COMMAND_CLASS_NODE_NAMING = 119                       ' 0x77
             COMMAND_CLASS_FIRMWARE_UPDATE_MD = 122                ' 0x7A
             COMMAND_CLASS_FIRMWARE_UPDATE_MD_V2 = 122             ' 0x7A
+            COMMAND_CLASS_FIRMWARE_UPDATE_MD_V3 = 122             ' 0x7A
+            COMMAND_CLASS_FIRMWARE_UPDATE_MD_V4 = 122             ' 0x7A
             COMMAND_CLASS_GROUPING_NAME = 123                     ' 0x7B
             COMMAND_CLASS_REMOTE_ASSOCIATION_ACTIVATE = 124       ' 0x7C
             COMMAND_CLASS_REMOTE_ASSOCIATION = 125                ' 0x7D
@@ -184,13 +263,16 @@ Public Class Driver_ZWave
             COMMAND_CLASS_PROPRIETARY = 136                       ' 0x88
             COMMAND_CLASS_LANGUAGE = 137                          ' 0x89
             COMMAND_CLASS_TIME = 138                              ' 0x8A
+            COMMAND_CLASS_TIME_V2 = 138                           ' 0x8A
             COMMAND_CLASS_TIME_PARAMETERS = 139                   ' 0x8B
             COMMAND_CLASS_GEOGRAPHIC_LOCATION = 140               ' 0x8C
             COMMAND_CLASS_COMPOSITE = 141                         ' 0x8D
             COMMAND_CLASS_MULTI_CHANNEL_ASSOCIATION = 142         ' 0x8E
             COMMAND_CLASS_MULTI_CHANNEL_ASSOCIATION_V2 = 142      ' 0x8E
+            COMMAND_CLASS_MULTI_CHANNEL_ASSOCIATION_V3 = 142      ' 0x8E
             COMMAND_CLASS_MULTI_INSTANCE_ASSOCIATION = 142        ' 0x8E
             COMMAND_CLASS_MULTI_INSTANCE_ASSOCIATION_V2 = 142     ' 0x8E
+            COMMAND_CLASS_MULTI_INSTANCE_ASSOCIATION_V3 = 142     ' 0x8E
             COMMAND_CLASS_MULTI_CMD = 143                         ' 0x8F
             COMMAND_CLASS_ENERGY_PRODUCTION = 144                 ' 0x90
             COMMAND_CLASS_MANUFACTURER_PROPRIETARY = 145          ' 0x91
@@ -213,7 +295,7 @@ Public Class Driver_ZWave
             COMMAND_CLASS_NON_INTEROPERABLE = 240                 ' 0xF0
         End Enum
 
-        ' Denition d'un noeud Zwave 
+        ' Definition d'un noeud Zwave 
         <Serializable()> Public Class Node
 
             Dim m_id As Byte = 0
@@ -608,8 +690,6 @@ Public Class Driver_ZWave
 
                             Case "REQUESTNETWORKUPDATE"
                                 NodeTemp = GetNode(m_homeId, MyDevice.Adresse1)
-                                'jp homi 2/10/2015
-                                '                                m_manager.BeginControllerCommand(m_homeId, ZWControllerCommand.RequestNetworkUpdate, True, NodeTemp.ID)
                                 m_manager.RequestNetworkUpdate(m_homeId, NodeTemp.ID)
                                 WriteLog("DBG: " & "ExecuteCommand, Passage par la commande REQUESTNETWORKUPDATE = " & NodeTemp.Name)
 
@@ -621,6 +701,58 @@ Public Class Driver_ZWave
                                 Else
                                     WriteLog("ERR: " & "ExecuteCommand, Erreur dans la commande GETNUMGROUPS  pour le noeud " & NodeTemp.ID)
                                 End If
+
+                            Case "PRESSBOUTON"
+                                Dim RetourSet As Boolean
+                                Dim ValueTemp As ZWValueID = Nothing
+                                Dim ParaAdr2 = Split(MyDevice.adresse2, ":")
+                                NodeTemp = GetNode(m_homeId, MyDevice.Adresse1)
+                                ValueTemp = GetValeur(NodeTemp, Trim(ParaAdr2(0)), Trim(ParaAdr2(1)))
+                                If ValueTemp.GetType() = 5 Then        ' Uniquement Type Button
+                                    If Param(0) = 1 Then
+                                        RetourSet = m_manager.PressButton(ValueTemp)
+                                    ElseIf Param(0) = 0 Then
+                                        RetourSet = m_manager.ReleaseButton(ValueTemp)
+                                    End If
+                                    If RetourSet Then
+                                        WriteLog(Me.Nom & " ExecuteCommand, Parametre " & Param(0) & " modifié avec succès sur le noeud " & NodeTemp.ID)
+                                    Else
+                                        WriteLog("ERR: " & Me.Nom & " ExecuteCommand, Parametre " & Param(0) & " erreur de la modification sur le noeud " & NodeTemp.ID)
+                                    End If
+                                Else
+                                    WriteLog("ERR: " & Me.Nom & " ExecuteCommand, Parametre " & Param(0) & " erreur : Uniquement pour type Button " & NodeTemp.ID)
+                                End If
+                                WriteLog("DBG: " & Me.Nom & " ExecuteCommand, Passage par la commande PressBouton ")
+
+                            Case "SETLIST"
+                                Dim RetourSet As Boolean
+                                Dim ValueTemp As ZWValueID = Nothing
+                                Dim ParaAdr2 = Split(MyDevice.adresse2, ":")
+                                NodeTemp = GetNode(m_homeId, MyDevice.Adresse1)
+                                ValueTemp = GetValeur(NodeTemp, Trim(ParaAdr2(0)), Trim(ParaAdr2(1)))
+                                If ValueTemp.GetType() = 4 Then        ' Uniquement Type list
+                                    RetourSet = m_manager.SetValueListSelection(ValueTemp, Param(0))
+                                    If RetourSet Then
+                                        WriteLog("ExecuteCommand, Parametre " & Param(0) & " modifié avec succès sur le noeud " & NodeTemp.ID)
+                                    Else
+                                        WriteLog("ERR: ExecuteCommand, Parametre " & Param(0) & " erreur de la modification sur le noeud " & NodeTemp.ID)
+                                    End If
+                                Else
+                                    WriteLog("ERR: ExecuteCommand,Parametre " & Param(0) & " erreur : Uniquement pour type LIST " & NodeTemp.ID)
+                                End If
+                                WriteLog("DBG: " & Me.Nom & " ExecuteCommand, Passage par la commande SetList ")
+
+                            Case "SETNEWVAL"
+                                Dim ValueTemp As ZWValueID = Nothing
+                                Dim ParaAdr2 = Split(MyDevice.adresse2, ":")
+                                NodeTemp = GetNode(m_homeId, MyDevice.Adresse1)
+                                ValueTemp = GetValeur(NodeTemp, Trim(ParaAdr2(0)), Trim(ParaAdr2(1)))
+                                If (ValueTemp.GetType() = 1 Or ValueTemp.GetType() = 2 Or ValueTemp.GetType() = 3) Then        ' Uniquement Type Numérique
+                                    Write(MyDevice, "SETNEWVAL", Param(0), Param(1))
+                                Else
+                                    WriteLog("ERR: " & Me.Nom & " ExecuteCommand, Parametre " & Param(0) & " erreur : Uniquement pour type Byte, Integer , Decimal " & NodeTemp.ID)
+                                End If
+                                WriteLog("DBG: " & Me.Nom & " ExecuteCommand, Passage par la commande SetValeur ")
 
                             Case Else
                                 WriteLog("ERR: " & "ExecuteCommand, La commande " & texteCommande & " n'existe pas")
@@ -719,6 +851,8 @@ Public Class Driver_ZWave
                 _nbrebit = Right(valuetmp, 1)
                 _baudspeed = Left(valuetmp, Len(valuetmp) - 1)
 
+                _networkkey = Parametres.Item(4).Valeur
+
             Catch ex As Exception
                 _DEBUG = False
                 _AFFICHELOG = False
@@ -773,6 +907,8 @@ Public Class Driver_ZWave
                         ' Sauvegarde de la configuration 
                         m_manager.WriteConfig(m_homeId)
                         WriteLog("Start,  Sauvegarde de la config Zwave")
+						
+                        'Get_Config()
                     End If
                 Else
                     retour = "ERR: Port Com non défini. Impossible d'ouvrir le port !"
@@ -880,7 +1016,9 @@ Public Class Driver_ZWave
                     If NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_MULTILEVEL) Or
                         NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_MULTILEVEL_V2) Or
                         NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_MULTILEVEL_V3) Or
-                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY) Then
+                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_MULTILEVEL_V4) Or
+                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY) Or
+                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY_V2) Then
                         WriteLog("DBG: " & "Write, Recherche de : dans l'adresse2 " & Objet.adresse2)
                         If InStr(Objet.adresse2, ":") Then
                             Dim ParaAdr2 = Split(Objet.adresse2, ":")
@@ -906,7 +1044,8 @@ Public Class Driver_ZWave
 
                             Case "ON"
                                 If IsMultiLevel Then
-                                    If NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY) Then
+                                    If NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY) Or
+                                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY_V2) Then
                                         m_manager.SetValue(ValueTemp, True)
                                     Else
                                         Dim OnValue As Byte = Objet.ValueMax
@@ -919,7 +1058,8 @@ Public Class Driver_ZWave
 
                             Case "OFF"
                                 If IsMultiLevel Then
-                                    If NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY) Then
+                                    If NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY) Or
+                                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY_V2) Then
                                         m_manager.SetValue(ValueTemp, False)
                                     Else
                                         Dim OffValue As Byte = Objet.ValueMin
@@ -940,9 +1080,53 @@ Public Class Driver_ZWave
                                         m_manager.SetNodeLevel(m_homeId, NodeTemp.ID, ValDimmer)
                                     End If
                                 End If
-
                         End Select
                         WriteLog("DBG: " & "Write, Passage par la commande " & texteCommande)
+                    ElseIf (Objet.Type = "TEMPERATURECONSIGNE" Or Objet.Type = "GENERIQUEVALUE") Then   '    Or Objet.Type = "TEMPERATURE") Then
+                        texteCommande = UCase(Commande)
+
+                        Select Case UCase(Commande)
+                            Case "SETNEWVAL"     'Ecrire une valeur vers le device physique Wake Up Interval
+                                If Not (IsNothing(Parametre1)) Then
+                                    Dim ValDimmer As Single = Parametre1    'Integer
+
+                                    If InStr(Objet.Adresse2.ToString, "Wake-up Interval:") > 0 Then
+                                        If ValDimmer < 60 Then    'Pour Wake Up Interval
+                                            ValDimmer = 60
+                                        ElseIf ValDimmer > 86400 Then
+                                            ValDimmer = 86400
+                                        End If
+                                    End If
+                                    texteCommande = texteCommande & " avec valeur = " & Val(Parametre1) & " - " & ValDimmer
+
+                                    If IsMultiLevel Then
+                                        If InStr(Objet.Adresse2.ToString, "Wake-up Interval:") > 0 Then
+                                            m_manager.SetValue(ValueTemp, CInt(ValDimmer))
+
+                                        ElseIf InStr(Objet.Adresse2.ToString, "Basic:") > 0 Then
+                                            m_manager.SetValue(ValueTemp, CByte(ValDimmer))
+                                            ' m_manager.SetNodeLevel(m_homeId, NodeTemp.ID, CByte(ValDimmer))
+                                        Else
+                                            m_manager.SetValue(ValueTemp, ValDimmer)
+                                        End If
+                                    Else
+                                        m_manager.SetNodeLevel(m_homeId, NodeTemp.ID, CByte(ValDimmer))
+                                    End If
+                                End If
+
+                                'Case "SETPOINT"     'Ecrire une valeur vers le device Thermostat
+                                '    If Not (IsNothing(Parametre1)) Then
+
+                                '        Dim ValDimmer As Single = Parametre1
+                                '        texteCommande = texteCommande & " avec valeur = " & Val(Parametre1) & " - " & ValDimmer
+                                '        If IsMultiLevel Then
+                                '            m_manager.SetValue(ValueTemp, ValDimmer)
+                                '        Else
+                                '            m_manager.SetNodeLevel(m_homeId, NodeTemp.ID, CByte(ValDimmer))
+                                '        End If
+                                '    End If
+                        End Select
+
                     Else
                         WriteLog("ERR: " & "Write, Erreur: Le type " & Objet.Type.ToString & " à l'adresse " & Objet.Adresse1 & " n'est pas compatible")
                     End If
@@ -1071,12 +1255,16 @@ Public Class Driver_ZWave
                 Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
                 Add_ParamAvance("AfficheLog", "Afficher Log OpenZwave à l'écran (True/False)", True)
                 Add_ParamAvance("StartIdleTime", "Durée durant laquelle le driver ne traite aucun message lors de son démarrage (en secondes).", 10)
-                Add_ParamAvance("BaudRate", "Vitesse,Nbre bits, Parité, Nbre bit stop ( défaut 576008N1 )", "576008N1")
+                Add_ParamAvance("BaudRate", "Vitesse,Nbre bits, Parité, Nbre bit stop ( défaut 96008N1 )", "96008N1")
+                Add_ParamAvance("NetworkKey", "Clef pour réseau sécurisé", "0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A,0x0B,0x0C,0x0D,0x0E,0x0F,0x10")
 
                 'ajout des commandes avancées pour les devices
+                Add_DeviceCommande("SetNewVal", "Nouvelle valeur : Byte, Integer, Decimal : ", 1)
                 Add_DeviceCommande("ALL_LIGHT_ON", "", 0)
                 Add_DeviceCommande("ALL_LIGHT_OFF", "", 0)
                 Add_DeviceCommande("SetName", "Nom du composant", 0)
+                Add_DeviceCommande("SetList", "Valeur de la liste : ", 1)
+                Add_DeviceCommande("PressBouton", "Valeur : Byte, Integer, Decimal : ", 1)
                 Add_DeviceCommande("GetName", "Nom du composant", 0)
                 Add_DeviceCommande("SetConfigParam", "paramètre de configuration - Par1 : Index - Par2 : Valeur", 2)
                 Add_DeviceCommande("GetConfigParam", "paramètre de configuration - Par1 : Index", 1)
@@ -1153,6 +1341,12 @@ Public Class Driver_ZWave
                             m_options.AddOptionBool("IntervalBetweenPolls", True)
                             m_options.AddOptionBool("ValidateValueChanges", True)
 
+                            m_options.AddOptionString("NetworkKey", _networkkey, False)
+                            m_options.AddOptionBool("AssumeAwake", True)
+                            m_options.AddOptionBool("SuppressValueRefresh", True)
+                            m_options.AddOptionBool("PerformReturnRoutes", True)
+                            m_options.AddOptionBool("SaveConfiguration", True)
+
                             m_options.Lock()
                             m_manager.Create()
 
@@ -1226,7 +1420,7 @@ Public Class Driver_ZWave
 
 
 
-        ''' <summary>Reset le controleur Z-Wave avec les parametres d'Usine</summary>
+        ''' <summary>Reset le controleur Z-Wave avec les parametres d'Usine, hard reset</summary>
         ''' <remarks></remarks>
         Sub ResetControler()
             Try
@@ -1237,7 +1431,7 @@ Public Class Driver_ZWave
             End Try
         End Sub
 
-        ''' <summary>Reset le controleur Z-Wave sans effacer les parametres de configuration </summary>
+        ''' <summary>Reset le controleur Z-Wave sans effacer les parametres de configuration, soft reset </summary>
         ''' <remarks></remarks>
         Sub SoftReset()
             Try
@@ -1249,28 +1443,48 @@ Public Class Driver_ZWave
         End Sub
 
         ''' <summary>
-        ''' Place le controller en mode "inclusion" *** experimental ***
+        ''' Place le controller en mode "inclusion"
         ''' </summary>
         ''' <remarks></remarks>
         Sub StartInclusionMode()
             WriteLog("Début de la séquence d'association.")
-            ' modif jphomi 12/10/2015
-            'm_manager.BeginControllerCommand(m_homeId, ZWControllerCommand.AddDevice, False, 1)
             m_manager.AddNode(m_homeId, False)
         End Sub
+        ''' <summary>
+        ''' Place le controller en mode "inclusion securisée"
+        ''' </summary>
+        ''' <remarks></remarks>
         Sub StartSecureInclusionMode()
             WriteLog("Début de la séquence d'association sécurisée.")
+            RemoveFailedNode()  'preferable avant une inclusion sécurisée
             m_manager.AddNode(m_homeId, True)
         End Sub
         ''' <summary>
-        ''' Place le controller en mode "exclusion" *** experimental ***
+        ''' Place le controller en mode "exclusion"
         ''' </summary>
         ''' <remarks></remarks>
         Sub StartExclusionMode()
             WriteLog("Début de la séquence désassociation.")
-            ' modif jphomi 12/10/2015
-            '           m_manager.BeginControllerCommand(m_homeId, ZWControllerCommand.RemoveDevice, False, 1)
             m_manager.RemoveNode(m_homeId)
+        End Sub
+        ''' <summary>
+        ''' Suppresion des noeuds morts
+        ''' </summary>
+        ''' <remarks></remarks>
+        Sub RemoveFailedNode()
+            WriteLog("RemoveFailedNode, Nombre de noeud à analyser : " & m_nodeList.Count)
+            Try
+                Dim node As Node
+                Dim i As Integer
+                For i = 0 To m_nodeList.Count - 1
+                    WriteLog("DBG: " & "Suppression, noeud " & m_nodeList.ElementAt(m_nodeList.Count - 1).ID & " / " & m_nodeList.ElementAt(m_nodeList.Count - 1).Label & "?")
+                    node = GetNode(m_homeId, m_nodeList.ElementAt(m_nodeList.Count - 1).ID)
+                    m_manager.RemoveFailedNode(m_homeId, node.ID)
+                Next
+                WriteLog("RemoveFailedNode, Nombre de noeud présent aprés analyse :" & m_nodeList.Count)
+            Catch ex As Exception
+                WriteLog("ERR: RemoveFailedNode, Probleme lors de la suppression des noeuds")
+            End Try
         End Sub
         ''' <summary>
         ''' Annule la commande en cours : permet de sortir du mode "inclusion/exclusion" *** experimental ***
@@ -1280,8 +1494,6 @@ Public Class Driver_ZWave
             WriteLog("Annule la commande en cours.")
             m_manager.CancelControllerCommand(m_homeId)
         End Sub
-
-
 
         Sub ManagedControllerStateChangedHandler(ByVal m_controllerState As ZWControllerState)
             WriteLog("Controller State Change," & m_controllerState.ToString())
@@ -1440,6 +1652,9 @@ Public Class Driver_ZWave
 
                     Case ZWNotification.Type.AwakeNodesQueried
                         WriteLog("DBG: " & "NotificationHandler - AwakeNodesQueried")
+
+                    Case ZWNotification.Type.AllNodesQueriedSomeDead
+                        WriteLog("DBG: " & Me.Nom & " NotificationHandler - AllNodesQueriedSomeDead")
                     Case Else
                         WriteLog("DBG: " & "NotificationHandler - Une notification a été reçue : " & m_notification.[GetType]())
                 End Select
@@ -1587,6 +1802,12 @@ Public Class Driver_ZWave
                                 m_device.Type = ListeDevices.ENERGIETOTALE.ToString()
                             Case "Power".ToLower()
                                 m_device.Type = ListeDevices.ENERGIEINSTANTANEE.ToString()
+                            Case "Cooling 1".ToLower()
+                                m_device.Type = ListeDevices.TEMPERATURECONSIGNE.ToString()
+                            Case "Auto Changeover".ToLower()
+                                m_device.Type = ListeDevices.TEMPERATURECONSIGNE.ToString()
+                            Case "Heating 1".ToLower()
+                                m_device.Type = ListeDevices.TEMPERATURECONSIGNE.ToString()
                         End Select
 
                         'Vérification que le driver supporte bien ce type de composant
@@ -1605,6 +1826,9 @@ Public Class Driver_ZWave
                         ' *** TODO ***
                     End If
                 End If
+
+                Dim TEMP(10) As String   'a vérifier si 10 est suffisant ?
+                Dim Posit As Integer
 
                 ' Il existe au moins un composant utilisé avec cet Id
                 If m_devices.Count > 0 Then
@@ -1628,6 +1852,9 @@ Public Class Driver_ZWave
                                         ValeurRecue = Regex.Replace(CStr(ValeurRecue), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                                     Case 3 : m_manager.GetValueAsInt(m_valueID, ValeurRecue) ' m_manager.GetValueAsInt(TempValeur, LocalDevice.value)
                                         '  Case 4 : m_manager.GetValueListItems(NodeTemp.Values(IndexTemp), LocalDevice.value) ; A voir + tard
+                                    Case 4 : m_manager.GetValueListItems(m_valueID, TEMP)
+                                        m_manager.GetValueListSelection(m_valueID, Posit)
+                                        ValeurRecue = TEMP(Posit)
                                     Case 6 : m_manager.GetValueAsShort(m_valueID, ValeurRecue) ' m_manager.GetValueAsShort(TempValeur, LocalDevice.value)
                                     Case 7 : m_manager.GetValueAsString(m_valueID, ValeurRecue) ' m_manager.GetValueAsString(TempValeur, LocalDevice.value)
                                 End Select
@@ -1688,6 +1915,144 @@ Public Class Driver_ZWave
                 WriteLog("ERR: " & " Exception : " & ex.Message)
             End Try
         End Sub
+		
+        Function Get_Config() As Boolean
+            ' recupere les configarions des equipements et scenarios de jeedom
+
+            Try
+                Dim response As String = ""
+                Dim ficcfg As String = My.Application.Info.DirectoryPath & "\drivers\zwave\zwcfg_0x" & Convert.ToString(m_homeId, 16).ToString & ".xml"
+
+                'recherche des equipements
+                If m_nodeList.Count Then
+                    Dim NodeTempID As Byte
+                    For Each NodeTemp As Node In m_nodeList
+                        NodeTempID = NodeTemp.ID
+                        _libelleadr1 += NodeTemp.ID & " # " & " " & NodeTemp.Product & "|"
+
+                        '      GET_VALUEXML(ficcfg, NodeTemp.ID)
+                        LectureNoeudConfigXml(ficcfg, NodeTemp.ID)
+                    Next
+                    _libelleadr1 = Mid(_libelleadr1, 1, Len(_libelleadr1) - 1) 'enleve le dernier | pour eviter davoir une ligne vide a la fin
+                    Add_LibelleDevice("ADRESSE1", "Nom de l'équipement", "Nom de l'équipement", _libelleadr1)
+
+                End If
+                Return True
+            Catch ex As Exception
+                WriteLog("ERR: " & "GET_Config, " & ex.Message)
+                Return False
+            End Try
+        End Function
+        Function Get_ValueXML(ficxml As String, nodeid As String) As String
+
+            Try
+                If My.Computer.FileSystem.FileExists(ficxml) Then
+                    Dim reader As XmlTextReader = New XmlTextReader(ficxml)
+                    WriteLog("DBG: Acquisition fichier xml -> " & ficxml)
+                    reader.WhitespaceHandling = WhitespaceHandling.Significant
+                    While reader.Read()
+                        WriteLog(reader.ReadElementContentAsString)
+                        If (UCase(reader.Name) = "NODE") And (InStr(reader.Value, "id=""" & nodeid & """")) Then
+                            WriteLog(reader.Name)
+                            Dim valeurreader As String = reader.ReadString
+                            WriteLog("Valeur trouvée  pour " & nodeid & " -> " & valeurreader)
+                            Exit While
+                        End If
+                    End While
+                End If
+            Catch ex As Exception
+                WriteLog("ERR: " & "GET_VALUEXML Url: " & ficxml)
+                WriteLog("ERR: " & ex.Message)
+                Return ""
+            End Try
+        End Function
+
+        Function LectureNoeudConfigXml(fichierxml As String, valeur As String) As String
+            Try
+                If My.Computer.FileSystem.FileExists(fichierxml) Then
+                    WriteLog("DBG: Recherche dans le fichier " & fichierxml & " de la valeur " & valeur)
+                    '      Dim monStreamReader As System.IO.StreamReader = New System.IO.StreamReader(fichierxml)
+                    Dim xmlDoc As XmlDocument = New XmlDocument()
+                    xmlDoc.Load(fichierxml)
+
+
+
+                    'Create an XmlNamespaceManager for resolving namespaces.
+                    Dim nsmgr As XmlNamespaceManager = New XmlNamespaceManager(xmlDoc.NameTable)
+                    nsmgr.AddNamespace("Node", "http://code.google.com/p/open-zwave/")
+
+                    '                    Dim nodeList As XmlNodeList
+                    Dim root As XmlElement = xmlDoc.DocumentElement
+                    Dim nodeList As XmlNode = xmlDoc.SelectSingleNode("/Driver/Node", nsmgr)
+
+                    WriteLog("nodeList.InnerXml " & nodeList.InnerXml)
+                    'Dim isbn As XmlNode
+                    'For Each isbn In nodeList
+                    '    WriteLog("isbn.LocalName " & isbn.LocalName)
+                    '    WriteLog("isbn.Value " & isbn.Value)
+                    'Next
+
+
+                    Dim nodeElement As XmlNodeList = xmlDoc.GetElementsByTagName("Driver")
+                    Dim noeud, noeudEnf, noeudEnf2 As XmlNode
+                    Dim Nom As String = ""
+                    WriteLog("NodeElement.count " & nodeElement.Count)
+                    For Each noeud In nodeElement
+                        WriteLog("noeud.InnerXml " & noeud.InnerXml)
+                        '    For Each noeudEnf In noeud.ChildNodes
+                        '        WriteLog("noeud.ChildNodes.Count " & noeud.ChildNodes.Count)
+                        '        WriteLog("noeudEnf.LocalName " & noeudEnf.LocalName)
+                        '        WriteLog("noeudEnf.InnerText " & noeudEnf.InnerText)
+                        '        WriteLog("noeudEnf.InnerXml " & noeudEnf.InnerXml)
+                        '        'If noeudEnf.LocalName = "CommandClasses" Then
+                        '        '    For Each noeudEnf2 In noeudEnf.SelectSingleNode(noeudEnf.LocalName)
+                        '        '        WriteLog("noeudEnf2.LocalName " & noeudEnf2.LocalName)
+                        '        '        If noeudEnf2.LocalName = "CommandClass" Then
+                        '        '            Nom = noeudEnf2.InnerText
+                        '        '            WriteLog(Nom & "Value : " & Nom)
+                        '        '        End If
+                        '        '        WriteLog(Nom & "CommandClass : " & noeudEnf.InnerText)
+                        '        '    Next
+                        '        'End If
+
+                        '    Next
+                    Next
+
+                    ''                   Dim Nom As String = ""
+                    '                   Dim nodeid As String = ""
+                    '                   Dim i As Integer
+                    ''      WriteLog(xmlDoc.SelectNodes("//Node/CommandClasses").Count)
+                    'noeud = xmlDoc.SelectNodes("Node").ItemOf(3)
+
+                    'WriteLog(noeud.OuterXml)
+                    ''   WriteLog(noeud.Attributes.ItemOf("id").InnerText)
+
+                    'For i = 0 To xmlDoc.SelectNodes("//Node/Manufacturer").Count - 1 ' xmlDoc.GetElementsByTagName("Manufacturer").Count - 1
+                    '    '     WriteLog(xmlDoc.SelectSingleNode("//Node").Attributes.GetNamedItem("id").Value.ToString)
+                    '    WriteLog(i)
+                    '    'WriteLog(configElements.ToString)
+                    '    If configElements.Item(i).Value.ToString <> "" Then WriteLog(configElements.Item(i).Value.ToString)
+
+                    '    '       If xmlDoc.SelectSingleNode("//Node").Attributes.GetNamedItem("id").Value.ToString = valeur Then
+                    '    '
+                    '    '           WriteLog(xmlDoc.GetElementsByTagName("id").Item(i).Value.ToString)
+                    '    '          End If
+
+
+                    'Next i
+
+
+                    '             monStreamReader.Close()
+                Else
+                    WriteLog("ERR: " & "LectureNoeudConfigXml, fichier " & fichierxml & " introuvable")
+                    Return ""
+                End If
+
+            Catch ex As Exception
+                WriteLog("ERR: " & "LectureNoeudConfigXml, " & ex.Message)
+                Return ""
+            End Try
+        End Function
 
         ''' <summary>Simulate a Node</summary>
         Private Sub SimulNode()
