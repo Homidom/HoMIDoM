@@ -7,10 +7,10 @@
     </ProductVersion>
     <SchemaVersion>
     </SchemaVersion>
-    <ProjectGuid>{D32BFA72-0193-424A-8025-809A75C51CE2}</ProjectGuid>
+    <ProjectGuid>{8E61A745-C86C-4EF1-BDDF-F849CA47F52E}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>Driver_Alertes</RootNamespace>
-    <AssemblyName>Driver_Alertes</AssemblyName>
+    <RootNamespace>Driver_AlertesAtmo</RootNamespace>
+    <AssemblyName>Driver_AlertesAtmo</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Windows</MyType>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
@@ -22,7 +22,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>..\..\DEBUG\Drivers\</OutputPath>
-    <DocumentationFile>Driver_Alertes.xml</DocumentationFile>
+    <DocumentationFile>Driver_AlertesAtmo.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -32,7 +32,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>..\..\RELEASE\Drivers\</OutputPath>
-    <DocumentationFile>Driver_Alertes.xml</DocumentationFile>
+    <DocumentationFile>Driver_AlertesAtmo.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
@@ -72,7 +72,7 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Driver_Alertes.vb" />
+    <Compile Include="Driver_AlertesAtmo.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Application.Designer.vb">
       <AutoGen>True</AutoGen>

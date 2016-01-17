@@ -14,16 +14,16 @@ Imports System.Xml
 
 ''' <summary>Driver d'alertes meteo, allergie, pollution</summary>
 ''' <remarks></remarks>
-<Serializable()> Public Class Driver_Alertes
+<Serializable()> Public Class Driver_AlertesAtmo
     Implements HoMIDom.HoMIDom.IDriver
 
 #Region "Variables génériques"
     '!!!Attention les variables ci-dessous doivent avoir une valeur par défaut obligatoirement
     'aller sur l'adresse http://www.somacon.com/p113.php pour avoir un ID
     Dim _ID As String = "E50A222A-3A8E-11E5-9823-1B471E5D46B0"
-    Dim _Nom As String = "Alertes"
+    Dim _Nom As String = "AlertesAtmo"
     Dim _Enable As Boolean = False
-    Dim _Description As String = "Données d'alertes"
+    Dim _Description As String = "Données d'alertes atmosphériques"
     Dim _StartAuto As Boolean = False
     Dim _Protocol As String = "WEB"
     Dim _IsConnect As Boolean = False
@@ -33,7 +33,7 @@ Imports System.Xml
     Dim _Port_UDP As String = "@"
     Dim _Com As String = "@"
     Dim _Refresh As Integer = 0
-    Dim _Modele As String = "Alertes"
+    Dim _Modele As String = "AlertesAtmos"
     Dim _Version As String = My.Application.Info.Version.ToString
     Dim _OsPlatform As String = "3264"
     Dim _Picture As String = ""
@@ -60,6 +60,167 @@ Imports System.Xml
 
 #Region "Variables internes"
     Dim _Obj As Object = Nothing
+
+    Dim ListeDepFR As New Microsoft.VisualBasic.Collection()
+    Dim ListeDepBE As New Microsoft.VisualBasic.Collection()
+    Dim ListePollen As New Microsoft.VisualBasic.Collection()
+    Public Sub CodeDeptFR()
+        Try
+            ListeDepFR.Clear()
+
+            ListeDepFR.Add("Dep FR Inconnu", 0)
+            ListeDepFR.Add("Ain", 1)
+            ListeDepFR.Add("Aisne", 2)
+            ListeDepFR.Add("Allier", 3)
+            ListeDepFR.Add("Alpes se Haute Provence", 4)
+            ListeDepFR.Add("Hautes Alpes", 5)
+            ListeDepFR.Add("Alpes Maritimes", 6)
+            ListeDepFR.Add("Ardèche", 7)
+            ListeDepFR.Add("Ardennes", 8)
+            ListeDepFR.Add("Ariège", 9)
+            ListeDepFR.Add("Aube", 10)
+            ListeDepFR.Add("Aude", 11)
+            ListeDepFR.Add("Aveyron", 12)
+            ListeDepFR.Add("Bouches du Rhône", 13)
+            ListeDepFR.Add("Calvados", 14)
+            ListeDepFR.Add("Cantal", 15)
+            ListeDepFR.Add("Charente", 16)
+            ListeDepFR.Add("Charente Maritime", 17)
+            ListeDepFR.Add("Cher", 18)
+            ListeDepFR.Add("Corrèze", 19)
+            ListeDepFR.Add("Corse du Sud", "2A")
+            ListeDepFR.Add("Haute Corse", "2B")
+            ListeDepFR.Add("Côte d'Or", 21)
+            ListeDepFR.Add("Côtes d'Armor", 22)
+            ListeDepFR.Add("Creuse", 23)
+            ListeDepFR.Add("Dordogne", 24)
+            ListeDepFR.Add("Doubs", 25)
+            ListeDepFR.Add("Drôme", 26)
+            ListeDepFR.Add("Eure", 27)
+            ListeDepFR.Add("Eure et Loir", 28)
+            ListeDepFR.Add("Finistère", 29)
+            ListeDepFR.Add("Gard", 30)
+            ListeDepFR.Add("Haute Garonne", 31)
+            ListeDepFR.Add("Gers", 32)
+            ListeDepFR.Add("Gironde", 33)
+            ListeDepFR.Add("Hérault", 34)
+            ListeDepFR.Add("Ille et Vilaine", 35)
+            ListeDepFR.Add("Indre", 36)
+            ListeDepFR.Add("Indre et Loire", 37)
+            ListeDepFR.Add("Isère", 38)
+            ListeDepFR.Add("Jura", 39)
+            ListeDepFR.Add("Landes", 40)
+            ListeDepFR.Add("Loir et Cher", 41)
+            ListeDepFR.Add("Loire", 42)
+            ListeDepFR.Add("Haute Loire", 43)
+            ListeDepFR.Add("Loire Atlantique", 44)
+            ListeDepFR.Add("Loiret", 45)
+            ListeDepFR.Add("Lot", 46)
+            ListeDepFR.Add("Lot et Garonne", 47)
+            ListeDepFR.Add("Lozère", 48)
+            ListeDepFR.Add("Maine et Loire", 49)
+            ListeDepFR.Add("Manche", 50)
+            ListeDepFR.Add("Marne", 51)
+            ListeDepFR.Add("Haute Marne", 52)
+            ListeDepFR.Add("Mayenne", 53)
+            ListeDepFR.Add("Meurthe et Moselle", 54)
+            ListeDepFR.Add("Meuse", 55)
+            ListeDepFR.Add("Morbihan", 56)
+            ListeDepFR.Add("Moselle", 57)
+            ListeDepFR.Add("Nièvre", 58)
+            ListeDepFR.Add("Nord", 59)
+            ListeDepFR.Add("Oise", 60)
+            ListeDepFR.Add("Orne", 61)
+            ListeDepFR.Add("Pas de Calais", 62)
+            ListeDepFR.Add("Puy de Dôme", 63)
+            ListeDepFR.Add("Pyrénées Atlantiques", 64)
+            ListeDepFR.Add("Hautes Pyrénées", 65)
+            ListeDepFR.Add("Pyrénées Orientales", 66)
+            ListeDepFR.Add("Bas Rhin", 67)
+            ListeDepFR.Add("Haut Rhin", 68)
+            ListeDepFR.Add("Rhône", 69)
+            ListeDepFR.Add("Haute Saone", 70)
+            ListeDepFR.Add("Saône et Loire", 71)
+            ListeDepFR.Add("Sarthe", 72)
+            ListeDepFR.Add("Savoie", 73)
+            ListeDepFR.Add("Haute Savoie", 74)
+            ListeDepFR.Add("Paris", 75)
+            ListeDepFR.Add("Seine Maritime", 76)
+            ListeDepFR.Add("Seine et Marne", 77)
+            ListeDepFR.Add("Yvelines", 78)
+            ListeDepFR.Add("Deux Sèvres", 79)
+            ListeDepFR.Add("Somme", 80)
+            ListeDepFR.Add("Tarn", 81)
+            ListeDepFR.Add("Tarn et Garonne", 82)
+            ListeDepFR.Add("Var", 83)
+            ListeDepFR.Add("Vaucluse", 84)
+            ListeDepFR.Add("Vendée", 85)
+            ListeDepFR.Add("Vienne", 86)
+            ListeDepFR.Add("Haute Vienne", 87)
+            ListeDepFR.Add("Vosges", 88)
+            ListeDepFR.Add("Yonne", 89)
+            ListeDepFR.Add("Territoire de Belfort", 90)
+            ListeDepFR.Add("Essonne", 91)
+            ListeDepFR.Add("Hauts de Seine", 92)
+            ListeDepFR.Add("Seine Saint Denis", 93)
+            ListeDepFR.Add("Val de Marne", 94)
+            ListeDepFR.Add("Val d'Oise", 95)
+            WriteLog("DBG: CodeDeptFR, " & ListeDepFR.Count & " departements charges")
+        Catch ex As Exception
+            WriteLog("ERR: CodeDeptFR, Exception : " & ex.Message)
+        End Try
+    End Sub
+    Public Sub CodeDeptBE()
+        WriteLog("DBG: CodeDeptBE, " & " departements charges")
+        Try
+            ListeDepBE.Clear()
+
+            ListeDepBE.Add("Dep BE Inconnu", "000")
+            ListeDepBE.Add("Luxembourg / Luxemburg", "001")
+            ListeDepBE.Add("Antwerpen / Anvers", "002")
+            ListeDepBE.Add("Oost Vlaanderen/Fl.Orientale", "003")
+            ListeDepBE.Add("Brabant", "004")
+            ListeDepBE.Add("Hainaut / Henegouwen", "005")
+            ListeDepBE.Add("Namur / Namen", "006")
+            ListeDepBE.Add("Limburg / Limbourg", "007")
+            ListeDepBE.Add("Liège / Luik", "008")
+            ListeDepBE.Add("West Vlaanderen/Fl.Occidentale", "009")
+            ListeDepBE.Add("Belgische Küste", "801")
+            WriteLog("DBG: CodeDeptBE, " & ListeDepBE.Count & " departements charges")
+        Catch ex As Exception
+            WriteLog("ERR: CodeDeptBE, Exception : " & ex.Message)
+        End Try
+    End Sub
+
+    Public Sub CodePollen()
+        Try
+            ListePollen.Clear()
+
+            ListePollen.Add("AMBR", "AMBROISIE")
+            ListePollen.Add("ARMO", "ARMOISE")
+            ListePollen.Add("AULN", "AULNE")
+            ListePollen.Add("BOUL", "BOULEAU")
+            ListePollen.Add("CHAR", "CHARME")
+            ListePollen.Add("CHAT", "CHATAIGNIER")
+            ListePollen.Add("CHEN", "CHENE")
+            ListePollen.Add("CYPR", "CYPRES")
+            ListePollen.Add("FREN", "FRENE")
+            ListePollen.Add("HETR", "HETRE")
+            ListePollen.Add("GRAM", "GRAMINEES")
+            ListePollen.Add("NOIS", "NOISETIER")
+            ListePollen.Add("OLIV", "OLIVIER")
+            ListePollen.Add("OSEI", "OSEILLE")
+            ListePollen.Add("PARI", "PARIETAIRE")
+            ListePollen.Add("PEUP", "PEUPLIER")
+            ListePollen.Add("PLAN", "PLANTAIN")
+            ListePollen.Add("PLAT", "PLATANE")
+            ListePollen.Add("SAUL", "SAULE")
+            ListePollen.Add("TILL", "TILLEUL")
+            WriteLog("DBG: CodePollen, " & ListePollen.Count & " pollens charges")
+        Catch ex As Exception
+            WriteLog("ERR: CodePollen, Exception : " & ex.Message)
+        End Try
+    End Sub
 #End Region
 
 #Region "Propriétés génériques"
@@ -321,7 +482,7 @@ Imports System.Xml
             _IsConnect = True
 
             'charge les codes departement pour les alertes meteo
-             CodeDeptFR()
+            CodeDeptFR()
             CodeDeptBE()
 
         Catch ex As Exception
@@ -387,14 +548,18 @@ Imports System.Xml
 
             Select Case UCase(typealerte)
                 Case "POLLUTION"
-                    Objet.Value = GetPollution(UCase(ville))
+                    Dim alrt As String = GetPollution(UCase(ville))
+                    If alrt <> "" Then Objet.Value = alrt
                 Case "POLLEN"
                     If Len(departement) = 1 Then departement = "0" + departement
-                    Objet.Value = GetPollen(departement, Objet.Adresse2)
+                    Dim alrt As String = getpollen(departement, Objet.Adresse2)
+                    If alrt <> "" Then Objet.Value = alrt
                 Case "METEO"
-                    Objet.Value = GetMeteo(departement, Objet.Adresse2)
+                    Dim alrt As String = GetMeteo(departement, Objet.Adresse2)
+                    If alrt <> "" Then Objet.Value = alrt
                 Case "SANTE"
-                    Objet.Value = Getsentinelle(departement, Objet.Adresse2)
+                    Dim alrt As String = Getsentinelle(departement, Objet.Adresse2)
+                    If alrt <> "" Then Objet.Value = alrt
             End Select
 
         Catch ex As Exception
@@ -545,167 +710,6 @@ Imports System.Xml
 #End Region
 
 #Region "Fonctions internes"
-    Dim ListeDepFR As New Microsoft.VisualBasic.Collection()
-    Dim ListeDepBE As New Microsoft.VisualBasic.Collection()
-    Dim ListePollen As New Microsoft.VisualBasic.Collection()
-
-    Public Sub CodeDeptFR()
-        Try
-            ListeDepFR.Clear()
-
-            ListeDepFR.Add("Dep FR Inconnu", 0)
-            ListeDepFR.Add("Ain", 1)
-            ListeDepFR.Add("Aisne", 2)
-            ListeDepFR.Add("Allier", 3)
-            ListeDepFR.Add("Alpes se Haute Provence", 4)
-            ListeDepFR.Add("Hautes Alpes", 5)
-            ListeDepFR.Add("Alpes Maritimes", 6)
-            ListeDepFR.Add("Ardèche", 7)
-            ListeDepFR.Add("Ardennes", 8)
-            ListeDepFR.Add("Ariège", 9)
-            ListeDepFR.Add("Aube", 10)
-            ListeDepFR.Add("Aude", 11)
-            ListeDepFR.Add("Aveyron", 12)
-            ListeDepFR.Add("Bouches du Rhône", 13)
-            ListeDepFR.Add("Calvados", 14)
-            ListeDepFR.Add("Cantal", 15)
-            ListeDepFR.Add("Charente", 16)
-            ListeDepFR.Add("Charente Maritime", 17)
-            ListeDepFR.Add("Cher", 18)
-            ListeDepFR.Add("Corrèze", 19)
-            ListeDepFR.Add("Corse du Sud", "2A")
-            ListeDepFR.Add("Haute Corse", "2B")
-            ListeDepFR.Add("Côte d'Or", 21)
-            ListeDepFR.Add("Côtes d'Armor", 22)
-            ListeDepFR.Add("Creuse", 23)
-            ListeDepFR.Add("Dordogne", 24)
-            ListeDepFR.Add("Doubs", 25)
-            ListeDepFR.Add("Drôme", 26)
-            ListeDepFR.Add("Eure", 27)
-            ListeDepFR.Add("Eure et Loir", 28)
-            ListeDepFR.Add("Finistère", 29)
-            ListeDepFR.Add("Gard", 30)
-            ListeDepFR.Add("Haute Garonne", 31)
-            ListeDepFR.Add("Gers", 32)
-            ListeDepFR.Add("Gironde", 33)
-            ListeDepFR.Add("Hérault", 34)
-            ListeDepFR.Add("Ille et Vilaine", 35)
-            ListeDepFR.Add("Indre", 36)
-            ListeDepFR.Add("Indre et Loire", 37)
-            ListeDepFR.Add("Isère", 38)
-            ListeDepFR.Add("Jura", 39)
-            ListeDepFR.Add("Landes", 40)
-            ListeDepFR.Add("Loir et Cher", 41)
-            ListeDepFR.Add("Loire", 42)
-            ListeDepFR.Add("Haute Loire", 43)
-            ListeDepFR.Add("Loire Atlantique", 44)
-            ListeDepFR.Add("Loiret", 45)
-            ListeDepFR.Add("Lot", 46)
-            ListeDepFR.Add("Lot et Garonne", 47)
-            ListeDepFR.Add("Lozère", 48)
-            ListeDepFR.Add("Maine et Loire", 49)
-            ListeDepFR.Add("Manche", 50)
-            ListeDepFR.Add("Marne", 51)
-            ListeDepFR.Add("Haute Marne", 52)
-            ListeDepFR.Add("Mayenne", 53)
-            ListeDepFR.Add("Meurthe et Moselle", 54)
-            ListeDepFR.Add("Meuse", 55)
-            ListeDepFR.Add("Morbihan", 56)
-            ListeDepFR.Add("Moselle", 57)
-            ListeDepFR.Add("Nièvre", 58)
-            ListeDepFR.Add("Nord", 59)
-            ListeDepFR.Add("Oise", 60)
-            ListeDepFR.Add("Orne", 61)
-            ListeDepFR.Add("Pas de Calais", 62)
-            ListeDepFR.Add("Puy de Dôme", 63)
-            ListeDepFR.Add("Pyrénées Atlantiques", 64)
-            ListeDepFR.Add("Hautes Pyrénées", 65)
-            ListeDepFR.Add("Pyrénées Orientales", 66)
-            ListeDepFR.Add("Bas Rhin", 67)
-            ListeDepFR.Add("Haut Rhin", 68)
-            ListeDepFR.Add("Rhône", 69)
-            ListeDepFR.Add("Haute Saone", 70)
-            ListeDepFR.Add("Saône et Loire", 71)
-            ListeDepFR.Add("Sarthe", 72)
-            ListeDepFR.Add("Savoie", 73)
-            ListeDepFR.Add("Haute Savoie", 74)
-            ListeDepFR.Add("Paris", 75)
-            ListeDepFR.Add("Seine Maritime", 76)
-            ListeDepFR.Add("Seine et Marne", 77)
-            ListeDepFR.Add("Yvelines", 78)
-            ListeDepFR.Add("Deux Sèvres", 79)
-            ListeDepFR.Add("Somme", 80)
-            ListeDepFR.Add("Tarn", 81)
-            ListeDepFR.Add("Tarn et Garonne", 82)
-            ListeDepFR.Add("Var", 83)
-            ListeDepFR.Add("Vaucluse", 84)
-            ListeDepFR.Add("Vendée", 85)
-            ListeDepFR.Add("Vienne", 86)
-            ListeDepFR.Add("Haute Vienne", 87)
-            ListeDepFR.Add("Vosges", 88)
-            ListeDepFR.Add("Yonne", 89)
-            ListeDepFR.Add("Territoire de Belfort", 90)
-            ListeDepFR.Add("Essonne", 91)
-            ListeDepFR.Add("Hauts de Seine", 92)
-            ListeDepFR.Add("Seine Saint Denis", 93)
-            ListeDepFR.Add("Val de Marne", 94)
-            ListeDepFR.Add("Val d'Oise", 95)
-            WriteLog("DBG: CodeDeptFR, " & ListeDepFR.Count & " departements charges")
-        Catch ex As Exception
-            WriteLog("ERR: CodeDeptFR, Exception : " & ex.Message)
-        End Try
-    End Sub
-    Public Sub CodeDeptBE()
-        WriteLog("DBG: CodeDeptBE, " & " departements charges")
-        Try
-            ListeDepBE.Clear()
-
-            ListeDepBE.Add("Dep BE Inconnu", "000")
-            ListeDepBE.Add("Luxembourg / Luxemburg", "001")
-            ListeDepBE.Add("Antwerpen / Anvers", "002")
-            ListeDepBE.Add("Oost Vlaanderen/Fl.Orientale", "003")
-            ListeDepBE.Add("Brabant", "004")
-            ListeDepBE.Add("Hainaut / Henegouwen", "005")
-            ListeDepBE.Add("Namur / Namen", "006")
-            ListeDepBE.Add("Limburg / Limbourg", "007")
-            ListeDepBE.Add("Liège / Luik", "008")
-            ListeDepBE.Add("West Vlaanderen/Fl.Occidentale", "009")
-            ListeDepBE.Add("Belgische Küste", "801")
-            WriteLog("DBG: CodeDeptBE, " & ListeDepBE.Count & " departements charges")
-        Catch ex As Exception
-            WriteLog("ERR: CodeDeptBE, Exception : " & ex.Message)
-        End Try
-    End Sub
-
-    Public Sub CodePollen()
-        Try
-            ListePollen.Clear()
-
-            ListePollen.Add("AMBR", "AMBROISIE")
-            ListePollen.Add("ARMO", "ARMOISE")
-            ListePollen.Add("AULN", "AULNE")
-            ListePollen.Add("BOUL", "BOULEAU")
-            ListePollen.Add("CHAR", "CHARME")
-            ListePollen.Add("CHAT", "CHATAIGNIER")
-            ListePollen.Add("CHEN", "CHENE")
-            ListePollen.Add("CYPR", "CYPRES")
-            ListePollen.Add("FREN", "FRENE")
-            ListePollen.Add("HETR", "HETRE")
-            ListePollen.Add("GRAM", "GRAMINEES")
-            ListePollen.Add("NOIS", "NOISETIER")
-            ListePollen.Add("OLIV", "OLIVIER")
-            ListePollen.Add("OSEI", "OSEILLE")
-            ListePollen.Add("PARI", "PARIETAIRE")
-            ListePollen.Add("PEUP", "PEUPLIER")
-            ListePollen.Add("PLAN", "PLANTAIN")
-            ListePollen.Add("PLAT", "PLATANE")
-            ListePollen.Add("SAUL", "SAULE")
-            ListePollen.Add("TILL", "TILLEUL")
-            WriteLog("DBG: CodePollen, " & ListePollen.Count & " pollens charges")
-        Catch ex As Exception
-            WriteLog("ERR: CodePollen, Exception : " & ex.Message)
-        End Try
-    End Sub
 
     Function GetPollution(ville As String) As String
         Try
@@ -742,11 +746,11 @@ Imports System.Xml
                 End If
             Next
 
-            GetPollution = indice
+            Return indice
 
         Catch ex As Exception
             WriteLog("ERR: GetPollution, Exception : " & ex.Message)
-            GetPollution = 0
+            Return 0
         End Try
     End Function
 
@@ -860,14 +864,13 @@ Imports System.Xml
                 If Not i = listalert.Count - 1 Then nivAlert = nivAlert & Chr(13)
             Next
 
-            If nivAlert = "" Then
-                GetMeteo = "Pas de données"
-            Else : GetMeteo = nivAlert
-            End If
+            If nivAlert = "" Then WriteLog("ERR: GetMeteo, Pas de donnée")
+
+            Return nivAlert
 
         Catch ex As Exception
             WriteLog("ERR: GetMeteo, Exception : " & ex.Message)
-            GetMeteo = "Donnée inconnue"
+            Return "Donnée inconnue"
         End Try
     End Function
 
