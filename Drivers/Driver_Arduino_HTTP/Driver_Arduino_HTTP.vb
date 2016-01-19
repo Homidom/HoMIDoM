@@ -488,6 +488,26 @@ Public Class Driver_Arduino_HTTP
                         WriteLog("ERR: WRITE CONFIG_TYPE_PIN : Ce type de PIN ne peut pas être configuré : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
                         Exit Sub
                 End Select
+            ElseIf Command = "CONFIG_TYPE_PIN_PULLUP" Then
+                Select Case UCase(Objet.Modele)
+                    Case "DIGITAL_IN" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_CFGUP_" & Objet.Adresse2 & "_0"
+                    Case "DIGITAL_OUT" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_CFGUP_" & Objet.Adresse2 & "_1"
+                    Case "DIGITAL_PWM" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_CFGUP_" & Objet.Adresse2 & "_2"
+                    Case "1WIRE" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_CFGUP_" & Objet.Adresse2 & "_3"
+                    Case Else
+                        WriteLog("ERR: WRITE CONFIG_TYPE_PIN_PULLUP : Ce type de PIN ne peut pas être configuré : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
+                        Exit Sub
+                End Select
+            ElseIf Command = "CONFIG_TYPE_PIN_PULLDOWN" Then
+                Select Case UCase(Objet.Modele)
+                    Case "DIGITAL_IN" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_CFGDOWN_" & Objet.Adresse2 & "_0"
+                    Case "DIGITAL_OUT" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_CFGDOWN_" & Objet.Adresse2 & "_1"
+                    Case "DIGITAL_PWM" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_CFGDOWN_" & Objet.Adresse2 & "_2"
+                    Case "1WIRE" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_CFGDOWN_" & Objet.Adresse2 & "_3"
+                    Case Else
+                        WriteLog("ERR: WRITE CONFIG_TYPE_PIN_PULLDOWN : Ce type de PIN ne peut pas être configuré : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
+                        Exit Sub
+                End Select
             ElseIf Command = "CONFIG_TYPE_PINX" Then
                 urlcommande = "http://" & Objet.Adresse1 & "/?homidom_CFGX_"
 
@@ -548,7 +568,10 @@ Public Class Driver_Arduino_HTTP
                         End Select
 
                     Case "ANALOG_IN" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_READA_" & Objet.Adresse2
-                    Case "DIGITAL_IN" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_READD_" & Objet.Adresse2
+                    Case "DIGITAL_IN"
+                        'urlcommande = "http://" & Objet.Adresse1 & "/?homidom_READD_" & Objet.Adresse2
+                        WriteLog("ERR: WRITE : Commande invalide : " & Command & " (pas de commandes Write supportées pour un PIN de type DIGITAL_IN)")
+                        Exit Sub
                     Case "DIGITAL_OUT"
                         Select Case Command
                             Case "ON" : urlcommande = "http://" & Objet.Adresse1 & "/?homidom_ON_" & Objet.Adresse2
@@ -928,7 +951,9 @@ Public Class Driver_Arduino_HTTP
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
-            add_devicecommande("CONFIG_TYPE_PIN", "configurer le type de PIN sur l arduino suivant les propriétés du composant", 0)
+            add_devicecommande("CONFIG_TYPE_PIN", "configurer le type de PIN sur l arduino suivant les propriétés du composant sans PULL", 0)
+            add_devicecommande("CONFIG_TYPE_PIN_PULLUP", "configurer le type de PIN sur l arduino suivant les propriétés du composant + PULL UP", 0)
+            add_devicecommande("CONFIG_TYPE_PIN_PULLDOWN", "configurer le type de PIN sur l arduino suivant les propriétés du composant + PULL DOWN", 0)
             add_devicecommande("PWM", "Envoyer une commande PWM avec une valeur de 0 à 255", 1)
             add_devicecommande("SETVAR", "Envoyer une valeur de type string à une variable sur l arduino", 1)
             add_devicecommande("READX", "Lire les valeurs de toutes les entrées de l'arduino et mettre tous les composants Homidom à jour", 0)
