@@ -3,7 +3,7 @@
 Public Class WImperiParametrage
     Dim ListeDevices As List(Of TemplateDevice)
 
-    Dim memParam0 As String = ""
+    Dim memParam0 As DeviceParam = Nothing
     Dim _ObjDevice As Device = Nothing
 
     Dim Comp As TemplateDevice = New TemplateDevice
@@ -122,7 +122,7 @@ Public Class WImperiParametrage
     Private Sub CbxType_Change(ByVal sender As ComboBox, ByVal e As System.Windows.RoutedEventArgs)
         Try
             
-            If memParam0 <> sender.SelectedItem.key Then Init(sender)
+            If memParam0.key <> sender.SelectedItem.key Then Init(sender)
 
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Wimperi CbxType_Change: " & ex.ToString, "ERREUR", "")
@@ -143,36 +143,83 @@ Public Class WImperiParametrage
         End Try
     End Sub
 
+    Private Sub ChkElement_Click(ByVal sender As CheckBox, ByVal e As System.Windows.RoutedEventArgs)
+        Try
+
+            Dim stk As StackPanel = sender.Parent
+            For i = 1 To stk.Children.Count - 1
+                Dim ch As CheckBox = stk.Children.Item(i)
+                _ObjDevice.params(i).graphable = ch.IsChecked
+            Next
+
+        Catch ex As Exception
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur Wimperi CbxParam_Change: " & ex.ToString, "ERREUR", "")
+        End Try
+    End Sub
+
     Private Sub Init(Optional ByVal sender As ComboBox = Nothing)
         Try
 
             If sender IsNot Nothing Then
-                memParam0 = sender.SelectedItem.key
+                memParam0 = sender.SelectedItem
             Else
-                memParam0 = _ObjDevice.params(0).key
+                memParam0 = _ObjDevice.params(0)
             End If
             StkLb.Children.Clear()
             StkCB.Children.Clear()
+            StkCH.Children.Clear()
 
             Dim Lbl1 As New Label
             Dim Cb1 As New ComboBox
+            Dim Ch1 As New CheckBox
+
             Lbl1.Content = "Paramètre du composant"
             Lbl1.HorizontalAlignment = HorizontalAlignment.Left
             Lbl1.Foreground = New SolidColorBrush(Colors.White)
             Lbl1.Width = 250
             Lbl1.Height = 25
+
             Cb1.HorizontalAlignment = HorizontalAlignment.Right
             Cb1.Width = 200
             Cb1.Height = 25
             AddHandler Cb1.SelectionChanged, AddressOf CbxType_Change
 
-
             Cb1.ItemsSource = _ObjDevice.params
             Cb1.DisplayMemberPath = "key"
-            Cb1.Text = memParam0
+            Cb1.Text = memParam0.key
+
+            Ch1.Content = "Histo"
+            Ch1.HorizontalAlignment = HorizontalAlignment.Left
+            Ch1.Foreground = New SolidColorBrush(Colors.White)
+            Ch1.Width = 100
+            Ch1.Height = 25
+            
+            Select Case memParam0.key
+                Case "Speed", "Direction", "Value", "hygro", "temp", "Accumulation", "Watts", "ConsoTotal"
+                    Ch1.IsEnabled = True
+                    If _ObjDevice.type <> "DevMultiSwitch" Then
+                        If memParam0.graphable Then
+                            Ch1.IsChecked = True
+                        Else
+                            Ch1.IsChecked = False
+                        End If
+                    Else
+                        Ch1.IsChecked = False
+                        Ch1.IsEnabled = False
+                    End If
+                Case Else
+                    Ch1.IsChecked = False
+                    Ch1.IsEnabled = False
+            End Select
+            AddHandler Ch1.Checked, AddressOf ChkElement_Click
+            AddHandler Ch1.Unchecked, AddressOf ChkElement_Click
 
             StkLb.Children.Add(Lbl1)
             StkCB.Children.Add(Cb1)
+            StkCH.Children.Add(Ch1)
+            Lbl1 = Nothing
+            Cb1 = Nothing
+            Ch1 = Nothing
 
             Dim paramTemp As DeviceParam = New DeviceParam
             Dim paramsTemp As List(Of DeviceParam) = New List(Of DeviceParam)
@@ -181,7 +228,8 @@ Public Class WImperiParametrage
             For Each param In _ObjDevice.params
                 Dim x As New Label
                 Dim y As New ComboBox
-                If Not memParam0 = param.key Then
+                Dim z As New CheckBox
+                If Not memParam0.key = param.key Then
                     paramsTemp.Add(param)
                     x.Content = "Composant du paramètre " & param.key
                     x.HorizontalAlignment = HorizontalAlignment.Left
@@ -193,6 +241,11 @@ Public Class WImperiParametrage
                     y.Height = 25
                     y.ItemsSource = ListeDevices
                     y.DisplayMemberPath = "Name"
+                    z.Content = "Histo"
+                    z.HorizontalAlignment = HorizontalAlignment.Left
+                    z.Foreground = New SolidColorBrush(Colors.White)
+                    z.Width = 100
+                    z.Height = 25
                     For i As Integer = 0 To y.Items.Count - 1
                         y.Text = param.value
                         If param.value = y.Items(i).Id Then
@@ -201,10 +254,34 @@ Public Class WImperiParametrage
                         End If
                     Next
                     AddHandler y.SelectionChanged, AddressOf CbxParam_Change
+
+                    Select Case param.key
+                        Case "Speed", "Direction", "Value", "hygro", "temp", "Accumulation", "Watts", "ConsoTotal"
+                            z.IsEnabled = True
+                            If _ObjDevice.type <> "DevMultiSwitch" Then
+                                If param.graphable Then
+                                    z.IsChecked = True
+                                Else
+                                    z.IsChecked = False
+                                End If
+                            Else
+                                z.IsChecked = False
+                                z.IsEnabled = False
+                            End If
+                        Case Else
+                            z.IsChecked = False
+                            z.IsEnabled = False
+                    End Select
+                    AddHandler z.Checked, AddressOf ChkElement_Click
+                    AddHandler z.Unchecked, AddressOf ChkElement_Click
+
                     StkLb.Children.Add(x)
                     StkCB.Children.Add(y)
+                    StkCH.Children.Add(z)
                     x = Nothing
                     y = Nothing
+                    z = Nothing
+
                 Else
                     paramsTemp(0) = param
                 End If

@@ -192,26 +192,34 @@ Namespace HoMIDom
                                 Try
                                     'correction de la valeur testé suivant le type du composant
                                     If TypeOf retour Is Boolean Then
-                                        If retour2 = "ON" Then retour2 = True
-                                        If retour2 = "100" Then retour2 = True
-                                        If retour2 = "OFF" Then retour2 = False
-                                        If retour2 = "0" Then retour2 = False
+                                        If TypeOf retour Is Integer Then
+                                            If retour2 > 0 Then retour2 = True
+                                            If retour2 = 0 Then retour2 = False
+                                        End If
+                                        If TypeOf retour Is String Then
+                                            If retour2 = "ON" Then retour2 = True
+                                            If retour2 = "OFF" Then retour2 = True
+                                        End If
                                     End If
                                     If TypeOf retour Is Integer Or TypeOf retour Is Long Then
-                                        If retour2 = True Then retour2 = 100
-                                        If retour2 = False Then retour2 = 0
-                                        If retour2 = "ON" Then retour2 = 100
-                                        If retour2 = "OFF" Then retour2 = 0
+                                        If TypeOf retour2 Is Boolean Then
+                                            If retour2 = True Then retour2 = 100
+                                            If retour2 = False Then retour2 = 0
+                                        End If
+                                        If TypeOf retour2 Is String Then
+                                            If retour2 = "ON" Then retour2 = 100
+                                            If retour2 = "OFF" Then retour2 = 0
+                                        End If
                                     End If
-                                    'test
-                                    Select Case x.Conditions.Item(i).Condition
-                                        Case Action.TypeSigne.Egal : If retour = retour2 Then result = True Else result = False
-                                        Case Action.TypeSigne.Different : If retour <> retour2 Then result = True Else result = False
-                                        Case Action.TypeSigne.Inferieur : If retour < retour2 Then result = True Else result = False
-                                        Case Action.TypeSigne.InferieurEgal : If retour <= retour2 Then result = True Else result = False
-                                        Case Action.TypeSigne.Superieur : If retour > retour2 Then result = True Else result = False
-                                        Case Action.TypeSigne.SuperieurEgal : If retour >= retour2 Then result = True Else result = False
-                                    End Select
+                                        'test
+                                        Select Case x.Conditions.Item(i).Condition
+                                            Case Action.TypeSigne.Egal : If retour = retour2 Then result = True Else result = False
+                                            Case Action.TypeSigne.Different : If retour <> retour2 Then result = True Else result = False
+                                            Case Action.TypeSigne.Inferieur : If retour < retour2 Then result = True Else result = False
+                                            Case Action.TypeSigne.InferieurEgal : If retour <= retour2 Then result = True Else result = False
+                                            Case Action.TypeSigne.Superieur : If retour > retour2 Then result = True Else result = False
+                                            Case Action.TypeSigne.SuperieurEgal : If retour >= retour2 Then result = True Else result = False
+                                        End Select
                                 Catch ex As Exception
                                     _Server.Log(Server.TypeLog.ERREUR, Server.TypeSource.SERVEUR, "ThreadAction Execute Test", "Erreur dans le test de '" & retour & "' <-> '" & retour2 & "'  : " & ex.Message)
                                     result = False
@@ -332,24 +340,26 @@ Namespace HoMIDom
                         If flag = True Then
                             For i As Integer = 0 To x.ListTrue.Count - 1
                                 Dim _action As New ThreadAction(_Server, x.ListTrue.Item(i), _NameMacro, _ID)
-                                Dim y As New Thread(AddressOf _Action.Execute)
-                                y.Name = _ID
-                                y.IsBackground = True
-                                y.Priority = ThreadPriority.Normal
-                                y.Start()
-                                _Server.GetListThread.Add(y)
-                                y = Nothing
+                                'Dim y As New Thread(AddressOf _Action.Execute)
+                                'y.Name = _ID
+                                'y.IsBackground = True
+                                'y.Priority = ThreadPriority.Normal
+                                'y.Start()
+                                '_Server.GetListThread.Add(y)
+                                'y = Nothing
+                                ThreadPool.QueueUserWorkItem(AddressOf _action.Execute)
                             Next
                         Else
                             For i As Integer = 0 To x.ListFalse.Count - 1
                                 Dim _action As New ThreadAction(_Server, x.ListFalse.Item(i), _NameMacro, _ID)
-                                Dim y As New Thread(AddressOf _Action.Execute)
-                                y.Name = _ID
-                                y.IsBackground = True
-                                y.Priority = ThreadPriority.Normal
-                                y.Start()
-                                _Server.GetListThread.Add(y)
-                                y = Nothing
+                                'Dim y As New Thread(AddressOf _Action.Execute)
+                                'y.Name = _ID
+                                'y.IsBackground = True
+                                'y.Priority = ThreadPriority.Normal
+                                'y.Start()
+                                '_Server.GetListThread.Add(y)
+                                'y = Nothing
+                                ThreadPool.QueueUserWorkItem(AddressOf _action.Execute)
                             Next
                         End If
                     Case Action.TypeAction.ActionMacro

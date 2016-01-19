@@ -870,7 +870,26 @@ Public Class DevicesController
                                                 Next
 
                                     Case "setColor"
-                                                'Pas de commande homidom correspondante
+
+                                        For Each devparam In devImperi.params
+                                            If devparam.key = "color" Then
+                                                Dev = Driver_ImperiHome.CurrentServer.ReturnDeviceByID(ServerKey, devparam.value)
+                                                action = New DeviceAction() With {.Nom = "red"}
+                                                Dim devActionParameter As DeviceAction.Parametre = New DeviceAction.Parametre With {.Nom = "Value", .Value = Convert.ToInt32(Mid(param, 3, 2), 16)}
+                                                action.Parametres.Add(devActionParameter)
+                                                Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
+
+                                                action = New DeviceAction() With {.Nom = "green"}
+                                                devActionParameter = New DeviceAction.Parametre With {.Nom = "Value", .Value = Convert.ToInt32(Mid(param, 5, 2), 16)}
+                                                action.Parametres.Add(devActionParameter)
+                                                Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
+
+                                                action = New DeviceAction() With {.Nom = "blue"}
+                                                devActionParameter = New DeviceAction.Parametre With {.Nom = "Value", .Value = Convert.ToInt32(Mid(param, 7, 2), 16)}
+                                                action.Parametres.Add(devActionParameter)
+                                                Driver_ImperiHome.CurrentServer.ExecuteDeviceCommand(Me.ServerKey, Dev.ID, action)
+                                            End If
+                                        Next
                                     Case Else
 
                                 End Select

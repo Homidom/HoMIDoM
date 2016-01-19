@@ -67,14 +67,19 @@
             If allZoneImperi Is Nothing Then
                 allZoneImperi = New RoomList
                 allZoneImperi.rooms = New List(Of Room)
+            Else
+                Dim zoneFind = New List(Of Room)
+                For Each zone In allZoneImperi.rooms
+                    If zone.id = "ROOM999" Then zoneFind.Add(zone)
+                Next
+                For Each zone In zoneFind
+                    allZoneImperi.rooms.Remove(zone)
+                Next
             End If
-
             Dim tempRoom As Room = New Room
             tempRoom.id = "ROOM999"
             tempRoom.name = "Reserve"
-            If Not allZoneImperi.rooms.Contains(tempRoom) Then
-                allZoneImperi.rooms.Add(tempRoom)
-            End If
+            allZoneImperi.rooms.Add(tempRoom)
 
             For Each zones In zoneName
                 If Not devZone.Keys.Contains(zones.Key) Then
@@ -469,7 +474,7 @@
 
                     params.Add(New DeviceParam)
                     params(0).key = "Level"
-                    params(0).value = comp.Value
+                    params(0).value = comp.ID
                     params(0).unit = comp.Unit
 
                     params.Add(New DeviceParam)
