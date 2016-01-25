@@ -543,22 +543,6 @@ Public Class Driver_Arduino_USB
                 WriteLog("Le driver n'est pas démarré, impossible de communiquer avec la passerelle MySensors")
                 Exit Sub
             End If
-            If UCase(Command) = "ON" Then
-                Objet.Value = 100
-            End If
-            If UCase(Command) = "OFF" Then
-                Objet.Value = 0
-            End If
-            If UCase(Command) = "DIM" Then
-                If Parametre1 IsNot Nothing Then
-                    Objet.Value = Parametre1
-                End If
-            End If
-            If UCase(Command) = "OUVERTURE" Then
-                If Parametre1 IsNot Nothing Then
-                    Objet.Value = Parametre1
-                End If
-            End If
             '           If _DEBUG Then WriteLog("DBG: WRITE Device " & Objet.Name & " <-- " & Command)
             WriteLog("DBG: WRITE Device " & Objet.Name & " <-- " & Command)
 
