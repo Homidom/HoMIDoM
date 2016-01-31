@@ -147,7 +147,7 @@ Public Class WImperiParametrage
         Try
 
             Dim stk As StackPanel = sender.Parent
-            For i = 1 To stk.Children.Count - 1
+            For i = 0 To stk.Children.Count - 1
                 Dim ch As CheckBox = stk.Children.Item(i)
                 _ObjDevice.params(i).graphable = ch.IsChecked
             Next
