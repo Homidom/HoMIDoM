@@ -726,9 +726,9 @@ Imports System.Net.Sockets
                 'Case "OPEN", "CLOSE"
                     'If Parametre1 = 0 Then traitement("CLOSE", Objet.adresse2, Commande, True) Else traitement("OPEN", Objet.adresse2, Commande, True)
                 Case "DIM", "OUVERTURE"
-                    traitement(CStr(Parametre1), Objet.adresse2, Commande, True)
+                    traitement(CStr(Parametre1), Objet.adresse2, Commande, Objet.modele, True)
                 Case Else
-                    traitement(Commande, Objet.adresse2, Commande, True)
+                    traitement(Commande, Objet.adresse2, Commande, Objet.modele, True)
             End Select
             If Not flagWrite Then
                 flagWrite = True
@@ -1121,7 +1121,7 @@ Imports System.Net.Sockets
 
     ''' <summary>Traite les paquets reçus</summary>
     ''' <remarks></remarks>
-    Private Sub traitement(ByVal valeur As String, ByVal adresse As String, ByVal commande As String, ByVal erreursidevicepastrouve As Boolean)
+    Private Sub traitement(ByVal valeur As String, ByVal adresse As String, ByVal commande As String, ByVal modele As String, ByVal erreursidevicepastrouve As Boolean)
         If valeur <> "" Then
             Try
 
@@ -1133,29 +1133,30 @@ Imports System.Net.Sockets
                     Exit Sub
                 End If
                 'un device trouvé on maj la value
-                If (listedevices.Count = 1) Then
-                    'correction valeur pour correspondre au type de value
-                    If TypeOf listedevices.Item(0).Value Is Integer Then
-                        If valeur = "ON" Or valeur = "OPEN" Then
-                            listedevices.Item(0).Value = listedevices.Item(0).ValueMax
-                        ElseIf valeur = "OFF" Or valeur = "CLOSE" Then
-                            listedevices.Item(0).Value = listedevices.Item(0).ValueMin
-                        Else
-                            listedevices.Item(0).Value = valeur
+                If (listedevices.Count > 0) Then
+                    For Each Device As TemplateDevice In listedevices
+                        If Device.Modele = modele Then
+                            If TypeOf Device.Value Is Integer Then
+                                If valeur = "ON" Or valeur = "OPEN" Then
+                                    Device.Value = Device.ValueMax
+                                ElseIf valeur = "OFF" Or valeur = "CLOSE" Then
+                                    Device.Value = Device.ValueMin
+                                Else
+                                    Device.Value = valeur
+                                End If
+                            ElseIf TypeOf Device.Value Is Boolean Then
+                                If valeur = "ON" Or valeur = "OPEN" Then
+                                    Device.Value = True
+                                ElseIf valeur = "OFF" Or valeur = "CLOSE" Then
+                                    Device.Value = False
+                                Else
+                                    Device.Value = True
+                                End If
+                            Else
+                                Device.Value = valeur
+                            End If
                         End If
-                    ElseIf TypeOf listedevices.Item(0).Value Is Boolean Then
-                        If valeur = "ON" Or valeur = "OPEN" Then
-                            listedevices.Item(0).Value = True
-                        ElseIf valeur = "OFF" Or valeur = "CLOSE" Then
-                            listedevices.Item(0).Value = False
-                        Else
-                            listedevices.Item(0).Value = True
-                        End If
-                    Else
-                        listedevices.Item(0).Value = valeur
-                    End If
-                ElseIf (listedevices.Count > 1) Then
-                    _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Traitement", "Plusieurs devices correspondent à : " & adresse & ":" & valeur)
+                    Next
                 Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Traitement", "Device non trouvé : " & adresse & ":" & valeur)
 
