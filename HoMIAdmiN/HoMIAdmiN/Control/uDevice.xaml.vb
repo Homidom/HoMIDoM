@@ -745,50 +745,6 @@ Partial Public Class uDevice
         End Try
     End Sub
 
-    Private Sub TxtValDef_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtValDef.TextChanged
-        Try
-            If (String.IsNullOrEmpty(TxtValDef.Text)) Or (String.IsNullOrEmpty(TxtValDef.Text) = False And IsNumeric(TxtValDef.Text) = False) Then
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez saisir une valeur numérique")
-                TxtValDef.Text = 0
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDevice TxtValDef_TextChanged: " & ex.ToString, "ERREUR", "TxtValDef_TextChanged")
-        End Try
-    End Sub
-
-    Private Sub TxtPrecision_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtPrecision.TextChanged
-        Try
-            If (String.IsNullOrEmpty(TxtPrecision.Text)) Or (String.IsNullOrEmpty(TxtPrecision.Text) = False And IsNumeric(TxtPrecision.Text) = False) Then
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez saisir une valeur numérique")
-                TxtPrecision.Text = 0
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDevice TxtPrecision_TextChanged: " & ex.ToString, "ERREUR", "TxtPrecision_TextChanged")
-        End Try
-    End Sub
-
-    Private Sub TxtCorrection_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtCorrection.TextChanged
-        Try
-            If (String.IsNullOrEmpty(TxtCorrection.Text)) Or (String.IsNullOrEmpty(TxtCorrection.Text) = False And IsNumeric(TxtCorrection.Text) = False) Then
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez saisir une valeur numérique")
-                TxtCorrection.Text = 0
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDevice TxtCorrection_TextChanged: " & ex.ToString, "ERREUR", "TxtCorrection_TextChanged")
-        End Try
-    End Sub
-
-    Private Sub TxtFormatage_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtFormatage.TextChanged
-        Try
-            If (String.IsNullOrEmpty(TxtFormatage.Text)) Or (String.IsNullOrEmpty(TxtFormatage.Text) = False And IsNumeric(TxtFormatage.Text) = False) Then
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez saisir une valeur numérique")
-                TxtFormatage.Text = 0
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDevice TxtFormatage_TextChanged: " & ex.ToString, "ERREUR", "TxtFormatage_TextChanged")
-        End Try
-    End Sub
-
     Private Sub TxtRefreshHisto_TextChanged(ByVal sender As System.Object, ByVal e As System.Windows.Controls.TextChangedEventArgs) Handles TxtRefreshHisto.TextChanged
         Try
             If (String.IsNullOrEmpty(TxtRefreshHisto.Text)) Or (String.IsNullOrEmpty(TxtRefreshHisto.Text) = False And IsNumeric(TxtRefreshHisto.Text) = False) Then
