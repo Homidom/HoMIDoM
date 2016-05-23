@@ -8,6 +8,7 @@ Imports System.ComponentModel
 Imports System.Text.RegularExpressions
 Imports System.Xml
 Imports System.Xml.XPath
+Imports System.IO
 
 
 
@@ -84,9 +85,9 @@ Public Class Driver_ZWave
         Dim _parity As IO.Ports.Parity = IO.Ports.Parity.None
         Dim _nbrebitstop As IO.Ports.StopBits = IO.Ports.StopBits.One
 		
-		Dim _libelleadr1 as String = ""
-        Dim _libelleadr2 as String = ""
-
+        Dim _libelleadr1 As String = ""
+        Dim _libelleadr2 As String = ""
+        Dim _Adr1Txt As New ArrayList()
 
         ' -----------------   Ajout des declarations pour OpenZWave
         Private g_initFailed As Boolean = False
@@ -105,7 +106,7 @@ Public Class Driver_ZWave
             LogLevel_Internal
         End Enum
 
-        Enum CommandClass As Byte
+       Enum CommandClass As Byte
             COMMAND_CLASS_NO_OPERATION = 0                        ' 0x00
             COMMAND_CLASS_BASIC = 32                              ' 0x20
             COMMAND_CLASS_BASIC_V2 = 32                           ' 0x20
@@ -907,7 +908,8 @@ Public Class Driver_ZWave
                         ' Sauvegarde de la configuration 
                         m_manager.WriteConfig(m_homeId)
                         WriteLog("Start,  Sauvegarde de la config Zwave")
-						
+
+                        'Récupère la configuration en cours
                         'Get_Config()
                     End If
                 Else
@@ -1018,7 +1020,10 @@ Public Class Driver_ZWave
                         NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_MULTILEVEL_V3) Or
                         NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_MULTILEVEL_V4) Or
                         NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY) Or
-                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY_V2) Then
+                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY_V2) Or
+                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_DOOR_LOCK) Or
+                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_DOOR_LOCK_V2) Or
+                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_DOOR_LOCK_V3) Then
                         WriteLog("DBG: " & "Write, Recherche de : dans l'adresse2 " & Objet.adresse2)
                         If InStr(Objet.adresse2, ":") Then
                             Dim ParaAdr2 = Split(Objet.adresse2, ":")
@@ -1045,7 +1050,10 @@ Public Class Driver_ZWave
                             Case "ON"
                                 If IsMultiLevel Then
                                     If NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY) Or
-                                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY_V2) Then
+                                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY_V2) Or
+                                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_DOOR_LOCK) Or
+                                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_DOOR_LOCK_V2) Or
+                                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_DOOR_LOCK_V3) Then
                                         m_manager.SetValue(ValueTemp, True)
                                     Else
                                         Dim OnValue As Byte = Objet.ValueMax
@@ -1059,7 +1067,10 @@ Public Class Driver_ZWave
                             Case "OFF"
                                 If IsMultiLevel Then
                                     If NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY) Or
-                                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY_V2) Then
+                                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_SWITCH_BINARY_V2) Or
+                                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_DOOR_LOCK) Or
+                                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_DOOR_LOCK_V2) Or
+                                        NodeTemp.CommandClass.Contains(CommandClass.COMMAND_CLASS_DOOR_LOCK_V3) Then
                                         m_manager.SetValue(ValueTemp, False)
                                     Else
                                         Dim OffValue As Byte = Objet.ValueMin
@@ -1917,9 +1928,10 @@ Public Class Driver_ZWave
         End Sub
 		
         Function Get_Config() As Boolean
-            ' recupere les configarions des equipements et scenarios de jeedom
+            ' recupere les configurations des equipements 
 
             Try
+                m_manager.WriteConfig(m_homeId)
                 Dim response As String = ""
                 Dim ficcfg As String = My.Application.Info.DirectoryPath & "\drivers\zwave\zwcfg_0x" & Convert.ToString(m_homeId, 16).ToString & ".xml"
 
@@ -1928,14 +1940,20 @@ Public Class Driver_ZWave
                     Dim NodeTempID As Byte
                     For Each NodeTemp As Node In m_nodeList
                         NodeTempID = NodeTemp.ID
-                        _libelleadr1 += NodeTemp.ID & " # " & " " & NodeTemp.Product & "|"
+                        _libelleadr1 += NodeTemp.ID & " # " & NodeTemp.Product & "|"
+                        _Adr1Txt.Add(NodeTemp.ID & " # " & NodeTemp.Product)
 
-                        '      GET_VALUEXML(ficcfg, NodeTemp.ID)
-                        LectureNoeudConfigXml(ficcfg, NodeTemp.ID)
+                        'recherche des parametres de l'equipement
+                        response = LectureNoeudConfigXml(ficcfg, NodeTemp.ID)
+                        If response <> "" Then
+                            _libelleadr2 += response
+                        End If
                     Next
                     _libelleadr1 = Mid(_libelleadr1, 1, Len(_libelleadr1) - 1) 'enleve le dernier | pour eviter davoir une ligne vide a la fin
                     Add_LibelleDevice("ADRESSE1", "Nom de l'équipement", "Nom de l'équipement", _libelleadr1)
 
+                    _libelleadr2 = Mid(_libelleadr2, 1, Len(_libelleadr2) - 1) 'enleve le dernier | pour eviter davoir une ligne vide a la fin
+                    Add_LibelleDevice("ADRESSE2", "Param de l'équipement", "Param de l'équipement", _libelleadr2)
                 End If
                 Return True
             Catch ex As Exception
@@ -1943,106 +1961,56 @@ Public Class Driver_ZWave
                 Return False
             End Try
         End Function
-        Function Get_ValueXML(ficxml As String, nodeid As String) As String
-
-            Try
-                If My.Computer.FileSystem.FileExists(ficxml) Then
-                    Dim reader As XmlTextReader = New XmlTextReader(ficxml)
-                    WriteLog("DBG: Acquisition fichier xml -> " & ficxml)
-                    reader.WhitespaceHandling = WhitespaceHandling.Significant
-                    While reader.Read()
-                        WriteLog(reader.ReadElementContentAsString)
-                        If (UCase(reader.Name) = "NODE") And (InStr(reader.Value, "id=""" & nodeid & """")) Then
-                            WriteLog(reader.Name)
-                            Dim valeurreader As String = reader.ReadString
-                            WriteLog("Valeur trouvée  pour " & nodeid & " -> " & valeurreader)
-                            Exit While
-                        End If
-                    End While
-                End If
-            Catch ex As Exception
-                WriteLog("ERR: " & "GET_VALUEXML Url: " & ficxml)
-                WriteLog("ERR: " & ex.Message)
-                Return ""
-            End Try
-        End Function
 
         Function LectureNoeudConfigXml(fichierxml As String, valeur As String) As String
             Try
                 If My.Computer.FileSystem.FileExists(fichierxml) Then
                     WriteLog("DBG: Recherche dans le fichier " & fichierxml & " de la valeur " & valeur)
-                    '      Dim monStreamReader As System.IO.StreamReader = New System.IO.StreamReader(fichierxml)
-                    Dim xmlDoc As XmlDocument = New XmlDocument()
-                    xmlDoc.Load(fichierxml)
 
+                    Dim valnode As String = ""
+                    Dim readertmp As XmlReader
+                    Dim str As String = ""
+                    Dim strtmp As String = ""
 
+                    Dim xmldoc As XPathDocument = New XPathDocument(fichierxml)
+                    Dim nav As XPathNavigator = xmldoc.CreateNavigator()
 
-                    'Create an XmlNamespaceManager for resolving namespaces.
-                    Dim nsmgr As XmlNamespaceManager = New XmlNamespaceManager(xmlDoc.NameTable)
-                    nsmgr.AddNamespace("Node", "http://code.google.com/p/open-zwave/")
+                    nav.MoveToChild("Driver", "http://code.google.com/p/open-zwave/")
+                    Dim Nodes As XPathNodeIterator = nav.SelectChildren("", "http://code.google.com/p/open-zwave/")
 
-                    '                    Dim nodeList As XmlNodeList
-                    Dim root As XmlElement = xmlDoc.DocumentElement
-                    Dim nodeList As XmlNode = xmlDoc.SelectSingleNode("/Driver/Node", nsmgr)
-
-                    WriteLog("nodeList.InnerXml " & nodeList.InnerXml)
-                    'Dim isbn As XmlNode
-                    'For Each isbn In nodeList
-                    '    WriteLog("isbn.LocalName " & isbn.LocalName)
-                    '    WriteLog("isbn.Value " & isbn.Value)
-                    'Next
-
-
-                    Dim nodeElement As XmlNodeList = xmlDoc.GetElementsByTagName("Driver")
-                    Dim noeud, noeudEnf, noeudEnf2 As XmlNode
-                    Dim Nom As String = ""
-                    WriteLog("NodeElement.count " & nodeElement.Count)
-                    For Each noeud In nodeElement
-                        WriteLog("noeud.InnerXml " & noeud.InnerXml)
-                        '    For Each noeudEnf In noeud.ChildNodes
-                        '        WriteLog("noeud.ChildNodes.Count " & noeud.ChildNodes.Count)
-                        '        WriteLog("noeudEnf.LocalName " & noeudEnf.LocalName)
-                        '        WriteLog("noeudEnf.InnerText " & noeudEnf.InnerText)
-                        '        WriteLog("noeudEnf.InnerXml " & noeudEnf.InnerXml)
-                        '        'If noeudEnf.LocalName = "CommandClasses" Then
-                        '        '    For Each noeudEnf2 In noeudEnf.SelectSingleNode(noeudEnf.LocalName)
-                        '        '        WriteLog("noeudEnf2.LocalName " & noeudEnf2.LocalName)
-                        '        '        If noeudEnf2.LocalName = "CommandClass" Then
-                        '        '            Nom = noeudEnf2.InnerText
-                        '        '            WriteLog(Nom & "Value : " & Nom)
-                        '        '        End If
-                        '        '        WriteLog(Nom & "CommandClass : " & noeudEnf.InnerText)
-                        '        '    Next
-                        '        'End If
-
-                        '    Next
-                    Next
-
-                    ''                   Dim Nom As String = ""
-                    '                   Dim nodeid As String = ""
-                    '                   Dim i As Integer
-                    ''      WriteLog(xmlDoc.SelectNodes("//Node/CommandClasses").Count)
-                    'noeud = xmlDoc.SelectNodes("Node").ItemOf(3)
-
-                    'WriteLog(noeud.OuterXml)
-                    ''   WriteLog(noeud.Attributes.ItemOf("id").InnerText)
-
-                    'For i = 0 To xmlDoc.SelectNodes("//Node/Manufacturer").Count - 1 ' xmlDoc.GetElementsByTagName("Manufacturer").Count - 1
-                    '    '     WriteLog(xmlDoc.SelectSingleNode("//Node").Attributes.GetNamedItem("id").Value.ToString)
-                    '    WriteLog(i)
-                    '    'WriteLog(configElements.ToString)
-                    '    If configElements.Item(i).Value.ToString <> "" Then WriteLog(configElements.Item(i).Value.ToString)
-
-                    '    '       If xmlDoc.SelectSingleNode("//Node").Attributes.GetNamedItem("id").Value.ToString = valeur Then
-                    '    '
-                    '    '           WriteLog(xmlDoc.GetElementsByTagName("id").Item(i).Value.ToString)
-                    '    '          End If
-
-
-                    'Next i
-
-
-                    '             monStreamReader.Close()
+                    While Nodes.MoveNext()
+                        valnode = Nodes.Current.OuterXml
+                        ' recherche de l'id demandé
+                        If InStr(valnode, "Node id=""" & valeur & """") > 0 Then
+                            Dim reader As XmlReader = XmlReader.Create(New StringReader(valnode))
+                            reader.ReadToDescendant("CommandClasses")
+                            While reader.Read()
+                                Select Case reader.NodeType
+                                    Case XmlNodeType.Element
+                                        valnode = reader.ReadOuterXml
+                                        'recherche des value user
+                                        If InStr(valnode, "genre=""user""") > 0 Then
+                                            readertmp = XmlReader.Create(New StringReader(valnode))
+                                            While readertmp.Read()
+                                                Select Case readertmp.NodeType
+                                                    Case XmlNodeType.Element
+                                                        If readertmp.Name = "Value" Then
+                                                            strtmp = readertmp.Item("label") & ":" & readertmp.Item("instance")
+                                                            ' ne rajoute que si existe pas. Evite les doublons
+                                                            If InStr(str, strtmp) = 0 Then
+                                                                str += valeur & " #; " & strtmp & "|"
+                                                                WriteLog("DBG: Str : " & strtmp)
+                                                            End If
+                                                        End If
+                                                End Select
+                                            End While
+                                        End If
+                                End Select
+                            End While
+                            Exit While
+                        End If
+                    End While
+                    Return str
                 Else
                     WriteLog("ERR: " & "LectureNoeudConfigXml, fichier " & fichierxml & " introuvable")
                     Return ""
