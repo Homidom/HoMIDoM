@@ -773,7 +773,7 @@ Imports System.Xml
             If jsonObj.Count > 1 Then  ' cas IPX800 V4
                 For numberkey = 0 To jsonObj.Count - 1
                     ValueIPX.Add(jsonObj.Item(jsonObj.Keys(numberkey).ToString), jsonObj.Keys(numberkey).ToString)
-                    WriteLog("DBG: GetValue " & ValueIPX.Item(ValueIPX.Count))
+                    WriteLog("DBG: GetValue " & jsonObj.Keys(numberkey).ToString & " , " & ValueIPX.Item(ValueIPX.Count))
                 Next
                 _IPXVersion = jsonObj.Item(jsonObj.Keys(0).ToString)
             Else
@@ -785,7 +785,7 @@ Imports System.Xml
                 jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(responsebody)
                 For numberkey = 0 To jsonObj.Count - 1
                     ValueIPX.Add(jsonObj.Item(jsonObj.Keys(numberkey).ToString), jsonObj.Keys(numberkey).ToString)
-                    WriteLog("DBG: GetValue " & ValueIPX.Item(ValueIPX.Count))
+                    WriteLog("DBG: GetValue " & jsonObj.Keys(numberkey).ToString & " , " & ValueIPX.Item(ValueIPX.Count))
                 Next
                 _IPXVersion = jsonObj.Item(jsonObj.Keys(0).ToString)
 
@@ -796,7 +796,7 @@ Imports System.Xml
                 jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(responsebody)
                 For numberkey = 1 To jsonObj.Count - 1
                     ValueIPX.Add(jsonObj.Item(jsonObj.Keys(numberkey).ToString), jsonObj.Keys(numberkey).ToString)
-                    WriteLog("DBG: GetValue " & ValueIPX.Item(ValueIPX.Count))
+                    WriteLog("DBG: GetValue " & jsonObj.Keys(numberkey).ToString & " , " & ValueIPX.Item(ValueIPX.Count))
                 Next
 
                 adrs = _urlIPX & "api/xdevices.json?cmd=30"
@@ -806,7 +806,7 @@ Imports System.Xml
                 jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(responsebody)
                 For numberkey = 1 To jsonObj.Count - 1
                     ValueIPX.Add(jsonObj.Item(jsonObj.Keys(numberkey).ToString), jsonObj.Keys(numberkey).ToString)
-                    WriteLog("DBG: GetValue " & ValueIPX.Item(ValueIPX.Count))
+                    WriteLog("DBG: GetValue " & jsonObj.Keys(numberkey).ToString & " , " & ValueIPX.Item(ValueIPX.Count))
                 Next
 
                 adrs = _urlIPX & "api/xdevices.json?cmd=40"
@@ -816,7 +816,7 @@ Imports System.Xml
                 jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(responsebody)
                 For numberkey = 1 To jsonObj.Count - 1
                     ValueIPX.Add(jsonObj.Item(jsonObj.Keys(numberkey).ToString), jsonObj.Keys(numberkey).ToString)
-                    WriteLog("DBG: GetValue " & ValueIPX.Item(ValueIPX.Count) & " , " & jsonObj.Keys(numberkey).ToString)
+                    WriteLog("DBG: GetValue " & jsonObj.Keys(numberkey).ToString & " , " & ValueIPX.Item(ValueIPX.Count))
                 Next
             End If
             If ValueIPX.Count < 89 Then
