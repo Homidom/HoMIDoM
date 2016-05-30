@@ -1,0 +1,295 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Weather>
+  <label>
+    <eng>thunderstorm with light rain</eng>
+    <fr>orage avec faible pluie</fr>
+  </label>
+  <label>
+    <eng>thunderstorm with rain</eng>
+    <fr>orage avec pluie</fr>
+  </label>
+  <label>
+    <eng>thunderstorm with heavy rain</eng>
+    <fr>orage avec de fortes pluies</fr>
+  </label>
+  <label>
+    <eng>light thunderstorm</eng>
+    <fr>orage sec</fr>
+  </label>
+  <label>
+    <eng>thunderstorm</eng>
+    <fr>orage</fr>
+  </label>
+  <label>
+    <eng>heavy thunderstorm</eng>
+    <fr>orage violent</fr>
+  </label>
+  <label>
+    <eng>ragged thunderstorm</eng>
+    <fr>orageux</fr>
+  </label>
+  <label>
+    <eng>thunderstorm with light drizzle</eng>
+    <fr>orage avec petite bruine</fr>
+  </label>
+  <label>
+    <eng>thunderstorm with drizzle</eng>
+    <fr>orage avec bruine</fr>
+  </label>
+  <label>
+    <eng>thunderstorm with heavy drizzle</eng>
+    <fr>orage avec bruine intense</fr>
+  </label>
+  <label>
+    <eng>light intensity drizzle</eng>
+    <fr>faible bruine</fr>
+  </label>
+  <label>
+    <eng>drizzle</eng>
+    <fr>bruine</fr>
+  </label>
+  <label>
+    <eng>heavy intensity drizzle</eng>
+    <fr>bruine intense</fr>
+  </label>
+  <label>
+    <eng>light intensity drizzle rain</eng>
+    <fr>faible bruine pluie</fr>
+  </label>
+  <label>
+    <eng>drizzle rain</eng>
+    <fr>bruine pluie</fr>
+  </label>
+  <label>
+    <eng>heavy intensity drizzle rain</eng>
+    <fr>forte bruine pluie</fr>
+  </label>
+  <label>
+    <eng>shower rain and drizzle</eng>
+    <fr>pluie et bruine</fr>
+  </label>
+  <label>
+    <eng>heavy shower rain and drizzle</eng>
+    <fr>averse de pluie et bruine</fr>
+  </label>
+  <label>
+    <eng>shower drizzle</eng>
+    <fr>averse de bruine</fr>
+  </label>
+  <label>
+    <eng>light rain</eng>
+    <fr>petite pluie</fr>
+  </label>
+  <label>
+    <eng>moderate rain</eng>
+    <fr>pluie modérée</fr>
+  </label>
+  <label>
+    <eng>heavy intensity rain</eng>
+    <fr>forte pluie</fr>
+  </label>
+  <label>
+    <eng>very heavy rain</eng>
+    <fr>très forte pluie</fr>
+  </label>
+  <label>
+    <eng>extreme rain</eng>
+    <fr>pluie exceptionnelle</fr>
+  </label>
+  <label>
+    <eng>freezing rain</eng>
+    <fr>pluie verglaçante</fr>
+  </label>
+  <label>
+    <eng>light intensity shower rain</eng>
+    <fr>petite averse de pluie</fr>
+  </label>
+  <label>
+    <eng>shower rain</eng>
+    <fr>averse de pluie</fr>
+  </label>
+  <label>
+    <eng>heavy intensity shower rain</eng>
+    <fr>averse de forte pluie</fr>
+  </label>
+  <label>
+    <eng>ragged shower rain</eng>
+    <fr>pluvieux</fr>
+  </label>
+  <label>
+    <eng>light snow</eng>
+    <fr>faible chute de neige</fr>
+  </label>
+  <label>
+    <eng>snow</eng>
+    <fr>chute de neige</fr>
+  </label>
+  <label>
+    <eng>heavy snow</eng>
+    <fr>forte chute de neige</fr>
+  </label>
+  <label>
+    <eng>sleet</eng>
+    <fr>grésil</fr>
+  </label>
+  <label>
+    <eng>shower sleet</eng>
+    <fr>neige fondue</fr>
+  </label>
+  <label>
+    <eng>light rain and snow</eng>
+    <fr>petite pluie et neige mélée</fr>
+  </label>
+  <label>
+    <eng>rain and snow</eng>
+    <fr>pluie et neige mélée</fr>
+  </label>
+  <label>
+    <eng>light shower snow</eng>
+    <fr>petite averse de neige</fr>
+  </label>
+  <label>
+    <eng>shower snow</eng>
+    <fr>neige fondue</fr>
+  </label>
+  <label>
+    <eng>heavy shower snow</eng>
+    <fr>neige lourde fondante</fr>
+  </label>
+  <label>
+    <eng>mist</eng>
+    <fr>brouillard</fr>
+  </label>
+  <label>
+    <eng>smoke</eng>
+    <fr>fumée</fr>
+  </label>
+  <label>
+    <eng>haze</eng>
+    <fr>brume</fr>
+  </label>
+  <label>
+    <eng>sand, dust whirls</eng>
+    <fr>sable, poussières tourbillonnantes</fr>
+  </label>
+  <label>
+    <eng>fog</eng>
+    <fr>brouillard</fr>
+  </label>
+  <label>
+    <eng>sand</eng>
+    <fr>sable</fr>
+  </label>
+  <label>
+    <eng>dust</eng>
+    <fr>poussière</fr>
+  </label>
+  <label>
+    <eng>volcanic ash</eng>
+    <fr>cendre volcanique</fr>
+  </label>
+  <label>
+    <eng>squalls</eng>
+    <fr>grains</fr>
+  </label>
+  <label>
+    <eng>tornado</eng>
+    <fr>tornade</fr>
+  </label>
+  <label>
+    <eng>clear sky</eng>
+    <fr>ciel clair</fr>
+  </label>
+  <label>
+    <eng>few clouds</eng>
+    <fr>quelques nuages</fr>
+  </label>
+  <label>
+    <eng>scattered clouds</eng>
+    <fr>nuages ​​dispersés</fr>
+  </label>
+  <label>
+    <eng>broken clouds</eng>
+    <fr>nuages ​​brisés</fr>
+  </label>
+  <label>
+    <eng>overcast clouds</eng>
+    <fr>ciel couvert</fr>
+  </label>
+  <label>
+    <eng>tornado</eng>
+    <fr>tornade</fr>
+  </label>
+  <label>
+    <eng>tropical storm</eng>
+    <fr>tempête tropicale</fr>
+  </label>
+  <label>
+    <eng>hurricane</eng>
+    <fr>ouragan</fr>
+  </label>
+  <label>
+    <eng>cold</eng>
+    <fr>froid</fr>
+  </label>
+  <label>
+    <eng>hot</eng>
+    <fr>chaud</fr>
+  </label>
+  <label>
+    <eng>windy</eng>
+    <fr>venteux</fr>
+  </label>
+  <label>
+    <eng>hail</eng>
+    <fr>grèle</fr>
+  </label>
+  <label>
+    <eng>calm</eng>
+    <fr>calme</fr>
+  </label>
+  <label>
+    <eng>light breeze</eng>
+    <fr>brise légère</fr>
+  </label>
+  <label>
+    <eng>gentle breeze</eng>
+    <fr>petite brise</fr>
+  </label>
+  <label>
+    <eng>moderate breeze</eng>
+    <fr>brise modérée</fr>
+  </label>
+  <label>
+    <eng>fresh breeze</eng>
+    <fr>brise fraîche</fr>
+  </label>
+  <label>
+    <eng>strong breeze</eng>
+    <fr>forte brise</fr>
+  </label>
+  <label>
+    <eng>high wind, near gale</eng>
+    <fr>vent fort, proche de grand vent</fr>
+  </label>
+  <label>
+    <eng>gale</eng>
+    <fr>coup de vent</fr>
+  </label>
+  <label>
+    <eng>severe gale</eng>
+    <fr>sévère coup de vent</fr>
+  </label>
+  <label>
+    <eng>storm</eng>
+    <fr>orage</fr>
+  </label>
+  <label>
+    <eng>violent storm</eng>
+    <fr>tempête violente</fr>
+  </label>
+  <label>
+    <eng>hurricane</eng>
+    <fr>ouragan</fr>
+  </label>
+</Weather>
