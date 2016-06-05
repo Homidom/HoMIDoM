@@ -66,6 +66,7 @@ Imports System.Xml
 
 #Region "Variables internes"
     Dim _Obj As Object = Nothing
+    Dim _UpdateInProcess As Boolean = False
 #End Region
 
 #Region "Propriétés génériques"
@@ -760,14 +761,26 @@ Imports System.Xml
     Private Sub GET_VALUES(adrs As String, user As String, password As String)
 
         Try
-            ValueIPX.Clear()
+            ' quitte la procedure si process déja en cours sinon commence
+            'permet de gérer le temps de réponse de l'ipx
+            If _UpdateInProcess Then
+                Exit Sub
+            Else
+                _UpdateInProcess = True
+            End If
 
             Dim client As New Net.WebClient
             client.Credentials = New NetworkCredential(user, password)
 
+            ValueIPX.Clear()
             adrs = _urlIPX & "api/xdevices.json?Get=all"
             WriteLog("DBG: " & "GET_VALUES Url: " & adrs)
-            Dim responsebody = client.DownloadString(adrs)
+
+            Dim responsebody As String = ""
+
+            responsebody = client.DownloadString(adrs)
+            While client.IsBusy
+            End While
             WriteLog("DBG: GetValue inputs : " & responsebody.ToString)
             Dim jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(responsebody)
             If jsonObj.Count > 1 Then  ' cas IPX800 V4
@@ -781,10 +794,14 @@ Imports System.Xml
                 adrs = _urlIPX & "api/xdevices.json?cmd=10"
                 WriteLog("DBG: " & "GET_VALUES Url: " & adrs)
                 responsebody = client.DownloadString(adrs)
+                While client.IsBusy
+                End While
                 WriteLog("DBG: GetValue inputs : " & responsebody.ToString)
-                jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(responsebody)
+                jsonObj = (Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(responsebody))
                 For numberkey = 0 To jsonObj.Count - 1
-                    ValueIPX.Add(jsonObj.Item(jsonObj.Keys(numberkey).ToString), jsonObj.Keys(numberkey).ToString)
+                    If Not ValueIPX.Contains(jsonObj.Keys(numberkey).ToString) Then
+                        ValueIPX.Add(jsonObj.Item(jsonObj.Keys(numberkey).ToString), jsonObj.Keys(numberkey).ToString)
+                    End If
                     WriteLog("DBG: GetValue " & jsonObj.Keys(numberkey).ToString & " , " & ValueIPX.Item(ValueIPX.Count))
                 Next
                 _IPXVersion = jsonObj.Item(jsonObj.Keys(0).ToString)
@@ -792,40 +809,54 @@ Imports System.Xml
                 adrs = _urlIPX & "api/xdevices.json?cmd=20"
                 WriteLog("DBG: " & "GET_VALUES Url: " & adrs)
                 responsebody = client.DownloadString(adrs)
+                While client.IsBusy
+                End While
                 WriteLog("DBG: GetValue inputs : " & responsebody.ToString)
                 jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(responsebody)
                 For numberkey = 1 To jsonObj.Count - 1
-                    ValueIPX.Add(jsonObj.Item(jsonObj.Keys(numberkey).ToString), jsonObj.Keys(numberkey).ToString)
+                    If Not ValueIPX.Contains(jsonObj.Keys(numberkey).ToString) Then
+                        ValueIPX.Add(jsonObj.Item(jsonObj.Keys(numberkey).ToString), jsonObj.Keys(numberkey).ToString)
+                    End If
                     WriteLog("DBG: GetValue " & jsonObj.Keys(numberkey).ToString & " , " & ValueIPX.Item(ValueIPX.Count))
                 Next
 
                 adrs = _urlIPX & "api/xdevices.json?cmd=30"
                 WriteLog("DBG: " & "GET_VALUES Url: " & adrs)
                 responsebody = client.DownloadString(adrs)
+                While client.IsBusy
+                End While
                 WriteLog("DBG: GetValue inputs : " & responsebody.ToString)
                 jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(responsebody)
                 For numberkey = 1 To jsonObj.Count - 1
-                    ValueIPX.Add(jsonObj.Item(jsonObj.Keys(numberkey).ToString), jsonObj.Keys(numberkey).ToString)
+                    If Not ValueIPX.Contains(jsonObj.Keys(numberkey).ToString) Then
+                        ValueIPX.Add(jsonObj.Item(jsonObj.Keys(numberkey).ToString), jsonObj.Keys(numberkey).ToString)
+                    End If
                     WriteLog("DBG: GetValue " & jsonObj.Keys(numberkey).ToString & " , " & ValueIPX.Item(ValueIPX.Count))
                 Next
 
                 adrs = _urlIPX & "api/xdevices.json?cmd=40"
                 WriteLog("DBG: " & "GET_VALUES Url: " & adrs)
                 responsebody = client.DownloadString(adrs)
+                While client.IsBusy
+                End While
                 WriteLog("DBG: GetValue inputs : " & responsebody.ToString)
                 jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(responsebody)
                 For numberkey = 1 To jsonObj.Count - 1
-                    ValueIPX.Add(jsonObj.Item(jsonObj.Keys(numberkey).ToString), jsonObj.Keys(numberkey).ToString)
+                    If Not ValueIPX.Contains(jsonObj.Keys(numberkey).ToString) Then
+                        ValueIPX.Add(jsonObj.Item(jsonObj.Keys(numberkey).ToString), jsonObj.Keys(numberkey).ToString)
+                    End If
                     WriteLog("DBG: GetValue " & jsonObj.Keys(numberkey).ToString & " , " & ValueIPX.Item(ValueIPX.Count))
                 Next
             End If
             If ValueIPX.Count < 89 Then
-                WriteLog("ERR: GetValue effectué, " & ValueIPX.Count & " données récupérées")
-                WriteLog("ERR: GetValue, le temps du refresh du driver est peut être trop faible")
+                WriteLog("DBG: GetValue effectué, " & ValueIPX.Count & " données récupérées")
+                WriteLog("DBG: GetValue, le temps du refresh du driver est peut être trop faible")
             End If
+            _UpdateInProcess = False
         Catch ex As Exception
-            WriteLog("ERR: " & ex.Message)
             WriteLog("ERR: " & "GET_VALUES Url: " & adrs)
+            WriteLog("ERR: " & ex.Message)
+            _UpdateInProcess = False
         End Try
     End Sub
 
@@ -854,6 +885,10 @@ Imports System.Xml
 
     Public Function GET_VALUE(key As String) As String
         Try
+            'attend que l'update soit terminé
+            While _UpdateInProcess
+            End While
+
             Dim valeur As String = ValueIPX(key)
             WriteLog("DBG: Get_Value, Key " & key & " => " & valeur)
             Return valeur
