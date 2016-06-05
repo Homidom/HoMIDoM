@@ -85,8 +85,7 @@ Public Class Driver_ZWave
         Dim _parity As IO.Ports.Parity = IO.Ports.Parity.None
         Dim _nbrebitstop As IO.Ports.StopBits = IO.Ports.StopBits.One
 		
-		Dim _libelleadr1 as String = ""
-        Dim _libelleadr2 As String = ""
+        Dim _NomFileConfigZWave As String = ""
         Dim _Adr1Txt As New ArrayList()
         Dim _Getconfig As Boolean = False
 
@@ -919,11 +918,25 @@ Public Class Driver_ZWave
                                 WriteLog(String.Format("{0,-15}{1,-70}{2,30}", NodeTempID & ":" & NodeTemp.Name, NodeTemp.Manufacturer & "/" & NodeTemp.Product & "     V." & m_manager.GetNodeVersion(m_homeId, NodeTemp.ID), IsSleeping))
                             Next
                         End If
+
+                        _NomFileConfigZWave = My.Application.Info.DirectoryPath & "\drivers\zwave\zwcfg_0x" & Convert.ToString(m_homeId, 16).ToString & ".xml"
+                        'rajoute des 0 si nécessaire devant l'id du controleur pour avoir une chaine de 8 de long
+                        _NomFileConfigZWave.PadLeft(8, "0")
+
                         ' Sauvegarde de la configuration 
+                        Dim DateModif As String = FileDateTime(_NomFileConfigZWave)
                         WriteLog("Start,  Sauvegarde de la config Zwave")
                         m_manager.WriteConfig(m_homeId)
-
-                        If _Getconfig Then Get_Config()
+                        'boucle tant la date du fichier n'est pas modifiée
+                        While DateModif = FileDateTime(_NomFileConfigZWave)
+                        End While
+                        If _Getconfig Then
+                            Get_Config(_NomFileConfigZWave)
+                            'recharge la config toutes les 10 mn
+                            MyTimer.Interval = 600 * 1000
+                            MyTimer.Enabled = True
+                            AddHandler MyTimer.Elapsed, AddressOf TimerTick
+                        End If
 
                     End If
                 Else
@@ -949,6 +962,7 @@ Public Class Driver_ZWave
                 Else
                     WriteLog("Stop, Port " & _Com & " est déjà fermé")
                 End If
+                MyTimer.Enabled = False
 
             Catch ex As Exception
                 WriteLog("ERR: " & "Stop, " & ex.Message)
@@ -1330,9 +1344,21 @@ Public Class Driver_ZWave
         ''' <summary>Si refresh >0 gestion du timer</summary>
         ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
         Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
-
+            Try
+                'recharge la config
+                If _Getconfig Then
+                    Dim DateModif As String = FileDateTime(_NomFileConfigZWave)
+                    WriteLog("Timer,  Sauvegarde de la config Zwave")
+                    m_manager.WriteConfig(m_homeId)
+                    'boucle tant la date du fichier n'est pas modifiée
+                    While DateModif = FileDateTime(_NomFileConfigZWave)
+                    End While
+                    Get_Config(_NomFileConfigZWave)
+                End If
+            Catch ex As Exception
+                WriteLog("ERR: " & "TimerTick - " & ex.Message)
+            End Try
         End Sub
-
 #End Region
 
 #Region "Fonctions internes"
@@ -1729,8 +1755,16 @@ Public Class Driver_ZWave
                     If (valueID.GetNodeId() = node.ID) And (m_manager.GetValueLabel(valueID).ToLower = valueLabel.ToLower) Then
                         If ValueInstance Then
                             If valueID.GetInstance() = ValueInstance Then
-                                WriteLog("DBG: " & "GetValueID, Valeur trouvée  Index:" & ValueInstance)
-                                Return valueID
+                                WriteLog("DBG: " & "GetValueID, Valeur trouvée  Instance:" & ValueInstance)
+                                If (InStr(ValueInstance, ".") > 0) Then
+                                    Dim ValueIndex As Byte = Mid(ValueInstance, InStr(ValueInstance, ".") + 1, Len(ValueInstance))
+                                    If valueID.GetIndex() = ValueIndex Then
+                                        WriteLog("DBG: " & "GetValueID, Valeur trouvée  Index:" & ValueIndex)
+                                        Return valueID
+                                    End If
+                                Else
+                                    Return valueID
+                                End If
                             End If
                         Else
                             Return valueID
@@ -1985,15 +2019,17 @@ Public Class Driver_ZWave
             End Try
         End Sub
 		
-        Function Get_Config() As Boolean
+        Function Get_Config(nomfileconfig As String) As Boolean
             ' recupere les configurations des equipements 
 
             Try
-                Dim response As String = ""
-                Dim ficcfg As String = My.Application.Info.DirectoryPath & "\drivers\zwave\zwcfg_0x" & Convert.ToString(m_homeId, 16).ToString & ".xml"
-
                 'recherche des equipements
                 If m_nodeList.Count Then
+                    _Adr1Txt.Clear()
+                    Dim _libelleadr1 As String = ""
+                    Dim _libelleadr2 As String = ""
+                    '                    _libelleadr1 = ""
+                    '            _libelleadr2 = ""
                     Dim NodeTempID As Byte
                     For Each NodeTemp As Node In m_nodeList
                         NodeTempID = NodeTemp.ID
@@ -2002,7 +2038,8 @@ Public Class Driver_ZWave
                         WriteLog("DBG: _libelleadr1, " & _libelleadr1)
 
                         'recherche des parametres de l'equipement
-                        response = LectureNoeudConfigXml(ficcfg, NodeTemp.ID)
+                        Dim response As String = ""
+                        response = LectureNoeudConfigXml(nomfileconfig, NodeTemp.ID)
                         If response <> "" Then
                             _libelleadr2 += response
                             WriteLog("DBG: _libelleadr2, " & response)
