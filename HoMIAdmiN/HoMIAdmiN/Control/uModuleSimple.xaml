@@ -19,7 +19,7 @@
         <StackPanel Margin="12,90,12,12" >
             <StackPanel Orientation="Horizontal">
                 <Label Width="75" Content="Type :" HorizontalAlignment="Left" Name="Label2" VerticalAlignment="Top" Foreground="White" />
-                <ComboBox Height="25" HorizontalAlignment="Left" Name="CbType" VerticalAlignment="Top" Width="450" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" AllowDrop="True" ToolTip="Type de module simple à créer"></ComboBox>
+                <ComboBox Height="25" HorizontalAlignment="Left" Name="CbType" VerticalAlignment="Top" Width="450" Background="DarkGray" BorderBrush="Black" Foreground="#FF474646" BorderThickness="2" AllowDrop="True" ToolTip="Type de module simple à créer"></ComboBox>
             </StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                 <Label Width="75" Content="Nom :" Foreground="White" HorizontalAlignment="Left" Name="Label3" VerticalAlignment="Top" />
@@ -52,11 +52,11 @@
                         <StackPanel Name="StkOrdre" Orientation="vertical" Margin="0,0,0,5" Visibility="visible">
                             <StackPanel Name="StkComposant" Orientation="Horizontal" Margin="0,0,0,5" Visibility="Visible">
                                 <Label Width="150" Content="Composant :" Foreground="White" HorizontalAlignment="Left" Name="Label12" VerticalAlignment="Top" />
-                                <ComboBox Height="25" HorizontalAlignment="Left" Name="CbComposant" VerticalAlignment="Top" Width="450" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" AllowDrop="True" ToolTip="Composant qui recevra l'ordre : Lampe / Appareil / Volet..."></ComboBox>
+                                <ComboBox Height="25" HorizontalAlignment="Left" Name="CbComposant" VerticalAlignment="Top" Width="450" Background="DarkGray" BorderBrush="Black" Foreground="#FF474646" BorderThickness="2" AllowDrop="True" ToolTip="Composant qui recevra l'ordre : Lampe / Appareil / Volet..."></ComboBox>
                             </StackPanel>
                             <StackPanel Name="StkAction" Orientation="Horizontal" Margin="0,0,0,5" Visibility="visible">
                                 <Label Width="150" Content="Action :" Foreground="White" HorizontalAlignment="Left" Name="Label10" VerticalAlignment="Top" />
-                                <ComboBox Height="25" HorizontalAlignment="Left" Name="CbAction" VerticalAlignment="Top" Width="450" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" AllowDrop="True" ToolTip="Type de module simple à créer"/>
+                                <ComboBox Height="25" HorizontalAlignment="Left" Name="CbAction" VerticalAlignment="Top" Width="450" Background="DarkGray" BorderBrush="Black" Foreground="#FF474646" BorderThickness="2" AllowDrop="True" ToolTip="Type de module simple à créer"/>
                             </StackPanel>
                             <StackPanel Name="StkParametre" Orientation="Horizontal" Margin="0,0,0,5" Visibility="visible">   
                                 <Label Width="150" Content="Paramètre :" Foreground="White" HorizontalAlignment="Left" Name="Labelparametre" VerticalAlignment="Top" />

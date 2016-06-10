@@ -647,7 +647,7 @@
                 <StackPanel >
             <StackPanel Orientation="Horizontal" >
                 <Label Content="Template:" Width="75" Foreground="White" />
-                <ComboBox Width="150" Name="cbTemplate" />
+                            <ComboBox Width="150" Name="cbTemplate" Foreground="#FF474646" />
                 <Button Name="BtnNewTemplate" Width="25" Margin="2" Height="25" Content="+" Foreground="White" Template="{DynamicResource GlassButton}"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
@@ -731,7 +731,7 @@
          </StackPanel>
             
             <Canvas x:Name="Caneva_grid" HorizontalAlignment="Left" Margin="5" VerticalAlignment="Top" MinWidth="270" MinHeight="500" Background="#33FFFFFF">
-            <Rectangle x:Name="rectangle" Stroke="Black" RadiusX="20" RadiusY="20" RenderTransformOrigin="0.5,0.5" Width="70" d:LayoutOverrides="Margin" Height="70" >
+                <Rectangle x:Name="rectangle" Stroke="Black" RadiusX="20" RadiusY="20" RenderTransformOrigin="0.5,0.5"  Width="70" Height="70" >
                     <Rectangle.Fill>
                         <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
                             <LinearGradientBrush.RelativeTransform>

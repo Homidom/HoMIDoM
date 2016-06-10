@@ -22,11 +22,11 @@
                         <StackPanel >
                             <StackPanel Orientation="Horizontal" >
                                 <Label Content="Composant :" HorizontalAlignment="Left"  Name="Label4" VerticalAlignment="Top" Width="77" Foreground="White" />
-                                <ComboBox Height="25" HorizontalAlignment="Left"  Name="CbDevice" VerticalAlignment="Top" Width="174" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2"/>
+                                <ComboBox Height="25" HorizontalAlignment="Left"  Name="CbDevice" VerticalAlignment="Top" Width="174" Background="DarkGray" BorderBrush="Black" Foreground="#FF474646" BorderThickness="2"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                 <Label Content="Propriété :" Foreground="White"  HorizontalAlignment="Left"  Name="Label5" VerticalAlignment="Top" Width="77" />
-                                <ComboBox Height="25" HorizontalAlignment="Left"  Name="CbProperty" VerticalAlignment="Top" Width="174" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2"/>
+                                <ComboBox Height="25" HorizontalAlignment="Left"  Name="CbProperty" VerticalAlignment="Top" Width="174" Background="DarkGray" BorderBrush="Black" Foreground="#FF474646" BorderThickness="2"/>
                             </StackPanel>
                         </StackPanel>
 

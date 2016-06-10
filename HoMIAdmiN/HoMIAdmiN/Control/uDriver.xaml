@@ -24,7 +24,7 @@
                         <StackPanel Name="StkParam" Margin="10,0,0,0">
                             <Label Content="Paramètres avancés:" Foreground="White" HorizontalAlignment="Left" Name="Label14" VerticalAlignment="Top" Visibility="Visible" Width="125.493" />
                             <StackPanel Orientation="Horizontal" >
-                                <ComboBox Height="25" HorizontalAlignment="Left" Name="CbParam" VerticalAlignment="Top" Width="148" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2" AllowDrop="True"></ComboBox>
+                                <ComboBox Height="25" HorizontalAlignment="Left" Name="CbParam" VerticalAlignment="Top" Width="148" Background="DarkGray" BorderBrush="Black" Foreground="#FF474646" BorderThickness="2" AllowDrop="True"></ComboBox>
                                 <Label Content="=" Foreground="White" HorizontalAlignment="Right" Name="Label15" VerticalAlignment="Top" Visibility="Visible" Width="24" />
                                 <TextBox Height="25" HorizontalAlignment="Right" Name="TxtParam" VerticalAlignment="Top" Width="144" Background="DarkGray" BorderBrush="Black" Foreground="White" AllowDrop="True" />
                                 <Button Margin="15,0,0,0" Content="Ok" Foreground="White" Height="25" HorizontalAlignment="Right" Name="BtnOkParam" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="28" />
@@ -52,7 +52,7 @@
                     <StackPanel Orientation="Horizontal" >
                         <StackPanel Name="StkCom" Margin="0,0,10,0">
                             <Label Foreground="White"  HorizontalAlignment="Left"  Name="Label10" VerticalAlignment="Top">Port COM:</Label>
-                            <ComboBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="White" HorizontalAlignment="Left" Name="TxtCom" Width="84" IsEditable="True">0</ComboBox>
+                            <ComboBox Height="22" Background="DarkGray" BorderBrush="Black" Foreground="#FF474646" HorizontalAlignment="Left" x:Name="TxtCom" Width="84" AllowDrop="True"/>
                         </StackPanel>
                         <StackPanel Name="StkRefresh" Margin="0,0,10,0">
                             <Label Foreground="White"  Name="Label9" VerticalAlignment="Top" HorizontalAlignment="Left">Refresh (sec):</Label>
@@ -77,7 +77,7 @@
                             <StackPanel Margin="10,10,0,0">
                                 <StackPanel Orientation="Horizontal" >
                                     <Label Foreground="White" HorizontalAlignment="Left"  Name="Label13" VerticalAlignment="Top" Width="62">Fonction:</Label>
-                                    <ComboBox Height="25" HorizontalAlignment="Left" Name="CbCmd" VerticalAlignment="Top" Width="211" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2"/>
+                                    <ComboBox Height="25" HorizontalAlignment="Left" Name="CbCmd" VerticalAlignment="Top" Width="211" Background="DarkGray" BorderBrush="Black" Foreground="#FF474646" BorderThickness="2"/>
                                 </StackPanel>
                                 <StackPanel Margin="0,8,0,10">
                                     <StackPanel Orientation="Horizontal" >

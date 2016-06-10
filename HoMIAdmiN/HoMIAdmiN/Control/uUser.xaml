@@ -34,7 +34,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" >
                 <Label Foreground="White" Height="25" HorizontalAlignment="Left" Name="Label7" VerticalAlignment="Top" Width="80" Content="Profil :"></Label>
-                <ComboBox Height="25" Name="ComboProfil" VerticalAlignment="Top" Foreground="Black" SelectedIndex="0" Width="223" HorizontalAlignment="Left" TabIndex="5" Background="DarkGray" BorderBrush="Black" BorderThickness="2" OverridesDefaultStyle="False" ClipToBounds="False">
+                <ComboBox Height="25" Name="ComboProfil" VerticalAlignment="Top" Foreground="#FF474646" SelectedIndex="0" Width="223" HorizontalAlignment="Left" TabIndex="5" Background="DarkGray" BorderBrush="Black" BorderThickness="2" OverridesDefaultStyle="False" ClipToBounds="False">
                     <ComboBoxItem>Invité</ComboBoxItem>
                     <ComboBoxItem>Client</ComboBoxItem>
                     <ComboBoxItem>Administrateur</ComboBoxItem>

@@ -56,7 +56,7 @@
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="3">
                                     <Label Content="Type:" Foreground=" white" Width="80"/>
-                                    <ComboBox   Name="CbType"  SelectedIndex ="{Binding ElementName=DGW,Path=SelectedItem.Type}" Width="150" Foreground="White" Background="DarkGray" BorderBrush="Black" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" BorderThickness="2"/>
+                                    <ComboBox   Name="CbType"  SelectedIndex ="{Binding ElementName=DGW,Path=SelectedItem.Type}" Width="150" Foreground="#FF474646" Background="DarkGray" BorderBrush="Black" Height="24" VerticalAlignment="Top" HorizontalAlignment="Left" BorderThickness="2"/>
                                 </StackPanel>
                                 <StackPanel Orientation="Horizontal" Margin="3">
                                     <Label Content="Ignore:" Foreground=" white" Width="80"/>
@@ -89,7 +89,7 @@
                                     <Label Foreground="White" FontWeight="Bold">Mettre à jour un composant existant</Label>
                                 </GroupBox.Header>
                             <StackPanel Orientation="Horizontal">
-                                <ComboBox Margin="8" Name="CbComposants" Width="150" Foreground="White" Background="DarkGray" BorderBrush="Black" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" BorderThickness="2"/>
+                                <ComboBox Margin="8" Name="CbComposants" Width="150" Foreground="#FF474646" Background="DarkGray" BorderBrush="Black" Height="22" VerticalAlignment="Top" HorizontalAlignment="Left" BorderThickness="2"/>
                                 <Button  Content="Mettre à jour"  Width="80" Height="30" Margin="2" Name="BtnUpdateComposant" Template="{DynamicResource GlassButton}" Foreground=" white" ToolTip="Mettre à jour un composant existant depuis ce nouveau composant" />
                             </StackPanel>
                         </GroupBox>

@@ -120,7 +120,6 @@ Partial Public Class uDevice
                     CbType.IsEnabled = False
                     CbType.Foreground = System.Windows.Media.Brushes.Black
                     TxtAdresse1.Text = x.Adresse1
-                    'CbAdresse1.Text = x.Adresse1
                     TxtAdresse2.Text = x.Adresse2
                     CBModele.Text = x.Modele
                     TxtModele.Text = x.Modele
@@ -326,14 +325,12 @@ Partial Public Class uDevice
             Dim _Driver As Object = Nothing
             Me.ForceCursor = True
             'on cherche le driver
-
             If CbDriver.SelectedItem IsNot Nothing Then
                 For i As Integer = 0 To ListeDrivers.Count - 1
                     If ListeDrivers.Item(i).Nom = CbDriver.SelectedItem.ToString Then
                         _Driver = myService.ReturnDriverByID(IdSrv, ListeDrivers.Item(i).ID)
                         Exit For
                     End If
-
                 Next
             End If
 
@@ -401,7 +398,6 @@ Partial Public Class uDevice
                                         If a.Count > 1 Then
                                             For g As Integer = 0 To a.Length - 1
                                                 CbAdresse1.Items.Add(a(g))
-
                                             Next
                                             CbAdresse1.IsEditable = False
                                             CbAdresse1.Visibility = Windows.Visibility.Visible
@@ -1070,27 +1066,27 @@ Partial Public Class uDevice
                     '                    MsgBox("_Driver.nom " & _Driver.nom)
                     If _Driver.LabelsDevice.Count > 0 Then
                         'permet de lier l'adresse2 au choix de l'adresse1
+                        Dim tmpstr As String = Trim(Mid(CbAdresse1.SelectedValue, 1, InStr(CbAdresse1.SelectedValue, " #") + 1)) & ";"
+                        Dim a() As String
                         For k As Integer = 0 To _Driver.LabelsDevice.Count - 1
                             If UCase(_Driver.LabelsDevice.Item(k).NomChamp) = "ADRESSE2" Then
+                                CbAdresse2.Items.Clear()
                                 If String.IsNullOrEmpty(_Driver.LabelsDevice.Item(k).Parametre) = False Then
-                                    CbAdresse2.Items.Clear()
-                                    Dim a() As String = _Driver.LabelsDevice.Item(k).Parametre.Split("|")
-                                    If a.Count > 1 Then
-                                        For g As Integer = 0 To a.Length - 1
-                                            If InStr(a(g), "#;") > 0 Then  'permet de lier une valeur de adresse2 avec adresse1
-                                                If InStr(CbAdresse1.SelectedValue, Trim(Mid(a(g), 1, InStr(a(g), "#;") - 1))) > 0 Then
-                                                    CbAdresse2.Items.Add(Trim(Mid(a(g), InStr(a(g), "#;") + 2, Len(a(g)))))
-                                                End If
-                                            Else
-                                                CbAdresse2.Items.Add(a(g))
+                                    a = _Driver.LabelsDevice.Item(k).Parametre.Split("|")
+                                    For g As Integer = 0 To a.Length - 1
+                                        If InStr(a(g), "#;") > 0 Then  'permet de lier une valeur de adresse2 avec adresse1
+                                            If (InStr(a(g), tmpstr) > 0) And (Len(tmpstr) = Len(Trim(Mid(a(g), 1, InStr(a(g), " #;") + 2)))) Then
+                                                CbAdresse2.Items.Add(Trim(Mid(a(g), InStr(a(g), "#;") + 2)))
                                             End If
-
-                                        Next
-                                        Exit For
-                                    End If
+                                        Else
+                                            CbAdresse2.Items.Add(a(g))
+                                        End If
+                                    Next
+                                    Exit For
                                 End If
                             End If
                         Next
+                        Erase a
                     End If
                 End If
             End If
@@ -1155,6 +1151,8 @@ Partial Public Class uDevice
 
                     For Each item In CbAdresse2.Items
                         If TxtAdresse2.Text.ToUpper.Trim = item.ToString.ToUpper.Trim Then
+                            '  JPHomi permet daller sur lenregistrmeent avec syntaxe approchante
+                            ' If InStr(item.ToString.ToUpper.Trim, TxtAdresse2.Text.ToUpper.Trim) > 0 Then
                             flagTrouv = True
                             Exit For
                         End If

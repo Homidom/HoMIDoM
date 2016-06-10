@@ -57,7 +57,7 @@
                                 <DockPanel>
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0">
                                         <Label Content="Moyenne:" Foreground="White" />
-                                        <ComboBox Background="DarkGray" BorderBrush="Black" BorderThickness="2" Foreground="White" Name="ComboBoxMoyenne" SelectedIndex="0" Width="80" Height="24">
+                                        <ComboBox Background="DarkGray" BorderBrush="Black" BorderThickness="2" Foreground="#FF474646" Name="ComboBoxMoyenne" SelectedIndex="0" Width="80" Height="24">
                                             <ComboBoxItem Content="Aucune" />
                                             <ComboBoxItem Content="Heure" />
                                             <ComboBoxItem Content="Jour" />
@@ -65,7 +65,7 @@
                                         <Label Content="Max Data:" Foreground="White" />
                                         <TextBox Name="TxtMaxData" Width="40" Text="2000" Background="DarkGray" BorderBrush="Black" Foreground="White" Height="20" TextAlignment="Center" />
                                         <Label Content="BackColor:" Foreground="White" VerticalAlignment="Center" Margin="5,0,0,0" />
-                                        <ComboBox Name="CbBackColor" Width="80" Height="24" VerticalAlignment="Center" SelectedIndex="5" Background="DarkGray" BorderBrush="Black" Foreground="White" BorderThickness="2">
+                                        <ComboBox Name="CbBackColor" Width="80" Height="24" VerticalAlignment="Center" SelectedIndex="5" Background="DarkGray" BorderBrush="Black" Foreground="#FF474646" BorderThickness="2">
                                             <ComboBoxItem Content="Blanc" />
                                             <ComboBoxItem Content="Bleu" />
                                             <ComboBoxItem Content="Jaune" />
@@ -75,7 +75,7 @@
                                             <ComboBoxItem Content="Transparent" />
                                         </ComboBox>
                                         <Label Content="Zoom:" Foreground="White" />
-                                        <ComboBox Background="DarkGray" BorderBrush="Black" BorderThickness="2" Foreground="White" Height="24" Name="CbZoom" SelectedIndex="5" Width="91">
+                                        <ComboBox Background="DarkGray" BorderBrush="Black" BorderThickness="2" Foreground="#FF474646" Height="24" Name="CbZoom" SelectedIndex="5" Width="91">
                                             <ComboBoxItem Content="Aucun" IsSelected="True" />
                                             <ComboBoxItem Content="2 heures" />
                                             <ComboBoxItem Content="1 heure" />
