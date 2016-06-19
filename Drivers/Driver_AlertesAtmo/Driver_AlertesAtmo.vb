@@ -8,6 +8,8 @@ Imports System.Text
 Imports System.Text.RegularExpressions
 Imports STRGS = Microsoft.VisualBasic.Strings
 Imports System.Xml
+Imports System.Web
+
 
 ' Auteur : jphomi 
 ' Date : 01/09/2015
@@ -60,6 +62,54 @@ Imports System.Xml
 
 #Region "Variables internes"
     Dim _Obj As Object = Nothing
+
+    Dim DatasPollen As New Datapollen
+    Dim ValueIPX As New Microsoft.VisualBasic.Collection()
+    Dim DataPollenRnsa As DataPollen
+
+    Public Class DataPollen
+        Public httpCode As String
+        Public errorMessage As String
+        Public city As DataPollenCity
+        Public data As DataPollenDetail
+     End Class
+
+    Public Class DataPollenCity
+        Public departmentCode As String
+        Public name As String
+        Public zipCode As String
+        Public inseeCode As String
+        Public latitude As String
+        Public longitude As String
+    End Class
+    Public Class DataPollenDetail
+        Public alerts As List(Of DataPollenAlerts)
+        Public warns As List(Of DataPollenWarns)
+        Public zipCode As String
+        Public inseeCode As String
+        Public latitude As String
+        Public longitude As String
+    End Class
+
+    Public Class DataPollenAlerts
+        Public code As String
+        Public geolocated As String
+        Public pollens As List(Of PollensDetail)
+    End Class
+
+    Public Class DataPollenWarns
+        Public code As String
+        Public geolocated As String
+        Public pollens As List(Of PollensDetail)
+    End Class
+
+    Public Class PollensDetail
+        Public code As String
+        Public name As String
+        Public level As String
+        Public advice As String
+    End Class
+
 
     Dim ListeDepFR As New Microsoft.VisualBasic.Collection()
     Dim ListeDepBE As New Microsoft.VisualBasic.Collection()
@@ -207,6 +257,7 @@ Imports System.Xml
             ListePollen.Add("FREN", "FRENE")
             ListePollen.Add("HETR", "HETRE")
             ListePollen.Add("GRAM", "GRAMINEES")
+            ListePollen.Add("GRAM", "GRAMINEE")
             ListePollen.Add("NOIS", "NOISETIER")
             ListePollen.Add("OLIV", "OLIVIER")
             ListePollen.Add("OSEI", "OSEILLE")
@@ -216,7 +267,7 @@ Imports System.Xml
             ListePollen.Add("PLAT", "PLATANE")
             ListePollen.Add("SAUL", "SAULE")
             ListePollen.Add("TILL", "TILLEUL")
-            WriteLog("DBG: CodePollen, " & ListePollen.Count & " pollens charges")
+            WriteLog("DBG: CodePollen, " & ListePollen.Count & " pollens chargés")
         Catch ex As Exception
             WriteLog("ERR: CodePollen, Exception : " & ex.Message)
         End Try
@@ -873,172 +924,76 @@ Imports System.Xml
             Return "Donnée inconnue"
         End Try
     End Function
-
-    Private Function getpollen(departement As String, typeall As String)
+    Private Function getpollen(departement As String, parampollen As String)
         Try
             CodePollen()
-            WriteLog("DBG: GetPollen, parametres : Dept / pollen => " & departement & " / " & typeall)
+            WriteLog("DBG: GetPollen, parametres : Dept / pollen => " & departement & " / " & parampollen)
+            Dim pollenstr As String = parampollen
+            If pollenstr = "" Then pollenstr = "FRENE"
 
-            Dim pollenstr As String = typeall
-            If pollenstr = "" Then pollenstr = "FREN"
+            ' parametrage du pollen
+            Dim pollentmp As String = ""
+            Dim codpollen As String = ""
+            '            For i As Integer = 1 To 3
 
-            Dim reqparam As String = ""
-            Dim responsebodystr As String = ""
-
-            Try
-                ' connection au site et enregistrement cookie
-                reqparam = ""
-                Dim url As String = "http://www.stallergenes.fr/widget/iphone/index.php"
-                Dim postBytes As Byte() = Encoding.ASCII.GetBytes(reqparam)
-                Dim Request As HttpWebRequest = HttpWebRequest.Create(url)
-                request.ContentType = "application/x-www-form-urlencoded"
-                Request.Method = "POST"
-                Request.AllowAutoRedirect = False
-                Request.ProtocolVersion = HttpVersion.Version10
-                Request.KeepAlive = True
-                request.ContentLength = reqparam.Length
-                request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0"
-                Request.CookieContainer = New CookieContainer
-                request.Referer = "http://www.stallergenes.fr/widget/mini.html"
-                request.Host = "stallergenes.fr"
-                request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
-                request.Timeout = 5000
-
-                Dim requestStream As Stream = Request.GetRequestStream()
-                requestStream.Write(postBytes, 0, postBytes.Length)
-                requestStream.Close()
-                Dim Response As HttpWebResponse = Request.GetResponse()
-
-                WriteLog("DBG: GetPollen, response cookie.count : " & Response.Cookies.Count)
-                If Response.Cookies.Count = 0 Then
-                    WriteLog("DBG: GetPollen, site inaccesible " & url)
-                    Return "Pas de données"
-                End If
-                Dim tmpmoncook As String = Response.Cookies("MonCookie").Value
-                Dim tmpmonphpid As String = Response.Cookies("PHPSESSID").Value
-                Dim responsereader = New StreamReader(Response.GetResponseStream())
-                responsebodystr = responsereader.ReadToEnd()
-                responsereader.Close()
-
-
-                'recherche pollen enregistré dans la session précedente
-                reqparam = "maVar=ok"
-                url = "http://stallergenes.fr/widget/iphone/traitement/traitement_risques.php"
-                responsebodystr = getpollenrnsa(url, tmpmoncook, tmpmonphpid, reqparam)
-                WriteLog("DBG: responsebodypol => " & responsebodystr)
-
-                'suppression éventuelle des pollens paramétrés
-                Dim tmpbodystr As String = responsebodystr
-                For i As Integer = 0 To 2
-                    If (InStr(tmpbodystr, ".png")) Then
-                        Dim reqparamstr As String = Mid(tmpbodystr, InStr(tmpbodystr, ".png") - 5, 4)
-                        reqparam = "code_pollen=" & reqparamstr
-                        url = "http://stallergenes.fr/widget/iphone/traitement/suppresion2.php"
-                        responsebodystr = getpollenrnsa(url, tmpmoncook, tmpmonphpid, reqparam)
-                        WriteLog("DBG: responsebody sup pollen " & reqparamstr & " => " & responsebodystr)
-                        tmpbodystr = Mid(tmpbodystr, InStr(tmpbodystr, ".png") + 4, Len(tmpbodystr))
+            If InStr(pollenstr, ",") <> 0 Then
+                'cas general, plusieurs pollen
+                While InStr(pollenstr, ",") <> 0
+                    pollentmp = Mid(pollenstr, 1, InStr(pollenstr, ",") - 1)
+                    WriteLog("DBG: Getpollen pollentmp : " & pollentmp)
+                    If (pollentmp <> "") And ((ListePollen.Contains(UCase(pollentmp)))) Then
+                        If codpollen = "" Then
+                            codpollen = ListePollen.Item(UCase(pollentmp))
+                        Else
+                            codpollen = codpollen & "," & ListePollen.Item(UCase(pollentmp))
+                        End If
                     End If
-                Next
-
-                ' parametrage du pollen, max 3 pour tenir compte limitation du site
-                Dim pollentmp As String = ""
-                For i As Integer = 1 To 3
-                    If InStr(pollenstr, ",") Then
-                        pollentmp = Mid(pollenstr, 1, InStr(pollenstr, ",") - 1)
-                    Else
-                        pollentmp = Mid(pollenstr, 1, Len(pollenstr))
-                    End If
-                    If (ListePollen.Contains(UCase(pollentmp))) Then
-                        pollentmp = ListePollen.Item(UCase(pollentmp))
-                    Else
-                        Continue For
-                    End If
-                    reqparam = "pollen=" & pollentmp
-                    url = "http://stallergenes.fr/widget/iphone/traitement/traitement_pol.php"
-                    responsebodystr = getpollenrnsa(url, tmpmoncook, tmpmonphpid, reqparam)
-                    WriteLog("DBG: responsebody pollen " & pollenstr & " => " & responsebodystr)
-                    If InStr(pollenstr, ",") Then
+                    If InStr(pollenstr, ",") <> 0 Then 'enleve le premier pollen
                         pollenstr = Mid(pollenstr, InStr(pollenstr, ",") + 1, Len(pollenstr))
-                    Else
-                        Exit For
-                    End If
-                Next
-
-                ' parametrage du departement
-                reqparam = "departement=" & departement
-                url = "http://stallergenes.fr/widget/iphone/traitement/traitement_dept.php"
-                responsebodystr = getpollenrnsa(url, tmpmoncook, tmpmonphpid, reqparam)
-                WriteLog("DBG: responsebody dept " & departement & " => " & responsebodystr)
-
-                ' traitement du risque
-                reqparam = "maVar=ok"
-                url = "http://stallergenes.fr/widget/iphone/traitement/traitement_risques.php"
-                responsebodystr = getpollenrnsa(url, tmpmoncook, tmpmonphpid, reqparam)
-                WriteLog("DBG: responsebody => " & responsebodystr)
-
-                Dim indicestr As String = ""
-                Dim indicetmp As String = responsebodystr
-                Dim poltmp As String = ""
-                'While InStr(indicetmp, "src=\'imgs/alerte/") > 0
-                While InStr(indicetmp, "class=\'MonAlerte\'") > 0
-                    '                    indicetmp = Mid(indicetmp, InStr(indicetmp, "src=\'imgs/alerte/") + 18, Len(indicetmp))
-                    indicetmp = Mid(indicetmp, InStr(indicetmp, "class=\'MonAlerte\'") + 25, Len(indicetmp))
-                    poltmp = Mid(indicetmp, 1, InStr(indicetmp, "</span>") - 1)
-                    '                    indicetmp = Mid(indicetmp, InStr(indicetmp, "src=\'imgs/alerte/") + 18, Len(indicetmp))
-                    ' indicetmp = Mid(indicetmp, InStr(indicetmp, "class=\'MonAlerte\'") + 25, Len(indicetmp))
-                    indicetmp = Mid(indicetmp, InStr(indicetmp, "Niveau ") - 1, Len(indicetmp))
-                    indicestr = indicestr & poltmp & ", " & Mid(indicetmp, 1, InStr(indicetmp, "</span>") - 1)
-                    indicetmp = Mid(indicetmp, InStr(indicetmp, "</3</span>") + 7, Len(indicetmp))
-                    'If InStr(indicetmp, "src=\'imgs/alerte/") > 0 Then
-                    If InStr(indicetmp, "class=\'MonAlerte\'") > 0 Then
-                        indicestr = indicestr + vbCrLf
                     End If
                 End While
-                '                WriteLog("DBG: indice => " & indicestr)
-                getpollen = indicestr
+                'traite le dernier pollen
+                If (pollenstr <> "") And (InStr(pollenstr, ",") = 0) Then codpollen = codpollen & "," & ListePollen.Item(UCase(pollenstr))
+            Else
+                codpollen = ListePollen.Item(UCase(pollenstr))
+            End If
+
+            WriteLog("DBG: Getpollen codpollen : " & codpollen)
+            Try
+                Dim adrs As String = "http://api-pollens.stallergenes.fr/alerts/api/2.0/json?_dc=1465335925196&key=57082094f0dd01.18829603&dp=1465335925&dpu=1465333284&pollens=" & codpollen & "&departments=" & departement
+                WriteLog("DBG: Getpollen url : " & adrs)
+
+                Dim client As New Net.WebClient
+                Dim responsebody As String = ""
+                responsebody = WebUtility.HtmlDecode(client.DownloadString(adrs))
+                WriteLog("DBG: Getpollen reponse : " & responsebody)
+
+                DataPollenRnsa = Newtonsoft.Json.JsonConvert.DeserializeObject(responsebody, GetType(DataPollen))
+                If DataPollenRnsa.errorMessage = "OK" Then
+                    Dim indicestr As String = ""
+                    Dim i As Integer = 0
+                    For Each _alerts In DataPollenRnsa.data.alerts
+                        For Each _pollen In _alerts.pollens
+                            indicestr = indicestr & _pollen.name & ", Niveau " & _pollen.level & " / 3"
+                            i += 1  'evite d'avoir un saut de ligne à la fin
+                            If _alerts.pollens.Count = i Then
+                                indicestr = indicestr
+                            Else
+                                indicestr = indicestr & vbCrLf
+                            End If
+                        Next
+                    Next
+                    WriteLog("DBG: Getpollen DataPollenRnsa : " & indicestr)
+                    Return indicestr
+                Else
+                    Return ""
+                End If
             Catch ex As Exception
                 WriteLog("ERR: GetPollen, Exception : " & ex.Message)
                 Return ""
             End Try
-
         Catch ex As Exception
             WriteLog("ERR: GetPollen, Exception : " & ex.Message)
-            Return ""
-        End Try
-
-    End Function
-
-    Private Function getpollenrnsa(url As String, moncookie As String, monphpid As String, paramreq As String)
-
-        Try
-            Dim postBytes As Byte() = Encoding.ASCII.GetBytes(paramreq)
-            Dim Request As HttpWebRequest = HttpWebRequest.Create(url)
-            Request.ContentType = "application/x-www-form-urlencoded"
-            Request.Method = "POST"
-            Request.AllowAutoRedirect = False
-            Request.ProtocolVersion = HttpVersion.Version10
-            Request.KeepAlive = True
-            Request.ContentLength = paramreq.Length
-            Request.UserAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:39.0) Gecko/20100101 Firefox/39.0"
-            Request.CookieContainer = New CookieContainer
-            Request.CookieContainer.Add(New Uri(url), New Cookie("MonCookie", moncookie))
-            Request.CookieContainer.Add(New Uri(url), New Cookie("PHPSESSID", monphpid))
-            Request.Referer = "http://www.stallergenes.fr/widget/mini.html"
-            Request.Host = "stallergenes.fr"
-            Request.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
-            Request.Timeout = 5000
-
-            Dim requestStream As Stream = Request.GetRequestStream()
-            requestStream.Write(postBytes, 0, postBytes.Length)
-            requestStream.Close()
-            Dim Response As HttpWebResponse = Request.GetResponse()
-
-            Dim responsereader = New StreamReader(Response.GetResponseStream())
-            Return Replace(responsereader.ReadToEnd(), vbCrLf, "")
-            responsereader.Close()
-
-        Catch ex As Exception
-            WriteLog("ERR: GetPollenRnsa, Exception : " & ex.Message)
             Return ""
         End Try
 
