@@ -1494,7 +1494,6 @@ Public Class Driver_ZWave
         End Function
 
 
-
         ''' <summary>Reset le controleur Z-Wave avec les parametres d'Usine, hard reset</summary>
         ''' <remarks></remarks>
         Sub ResetControler()
@@ -1521,19 +1520,40 @@ Public Class Driver_ZWave
         ''' Place le controller en mode "inclusion"
         ''' </summary>
         ''' <remarks></remarks>
+        Sub CheckStateNode()
+            WriteLog("CheckStateNode, Nombre de noeud à analyser : " & m_nodeList.Count)
+            Try
+                Dim node As Node
+                Dim i As Integer
+
+                For i = 0 To m_nodeList.Count - 1
+                    node = GetNode(m_homeId, m_nodeList.ElementAt(i).ID)
+                    If (m_manager.IsNodeFailed(m_homeId, node.ID)) Then
+                        WriteLog("Noeud Mort : " & m_nodeList.ElementAt(i).ID & " / " & m_nodeList.ElementAt(i).Product & " -> " & m_nodeList.ElementAt(i).Label)
+                    Else
+                        WriteLog("Noeud Actif : " & m_nodeList.ElementAt(i).ID & " / " & m_nodeList.ElementAt(i).Product & " -> " & m_nodeList.ElementAt(i).Label)
+                    End If
+                Next
+            Catch ex As Exception
+                WriteLog("ERR: AffichedNode, Probleme lors de la suppression des noeuds")
+            End Try
+        End Sub
+
         Sub StartInclusionMode()
             WriteLog("Début de la séquence d'association.")
             m_manager.AddNode(m_homeId, False)
         End Sub
+
         ''' <summary>
         ''' Place le controller en mode "inclusion securisée"
         ''' </summary>
         ''' <remarks></remarks>
         Sub StartSecureInclusionMode()
             WriteLog("Début de la séquence d'association sécurisée.")
-            RemoveFailedNode()  'preferable avant une inclusion sécurisée
+            RemoveFailedNode(0)  'preferable avant une inclusion sécurisée
             m_manager.AddNode(m_homeId, True)
         End Sub
+
         ''' <summary>
         ''' Place le controller en mode "exclusion"
         ''' </summary>
@@ -1542,25 +1562,7 @@ Public Class Driver_ZWave
             WriteLog("Début de la séquence désassociation.")
             m_manager.RemoveNode(m_homeId)
         End Sub
-        ''' <summary>
-        ''' Suppresion des noeuds morts
-        ''' </summary>
-        ''' <remarks></remarks>
-        Sub RemoveFailedNode()
-            WriteLog("RemoveFailedNode, Nombre de noeud à analyser : " & m_nodeList.Count)
-            Try
-                Dim node As Node
-                Dim i As Integer
-                For i = 0 To m_nodeList.Count - 1
-                    WriteLog("DBG: " & "Suppression, noeud " & m_nodeList.ElementAt(m_nodeList.Count - 1).ID & " / " & m_nodeList.ElementAt(m_nodeList.Count - 1).Label & "?")
-                    node = GetNode(m_homeId, m_nodeList.ElementAt(m_nodeList.Count - 1).ID)
-                    m_manager.RemoveFailedNode(m_homeId, node.ID)
-                Next
-                WriteLog("RemoveFailedNode, Nombre de noeud présent aprés analyse :" & m_nodeList.Count)
-            Catch ex As Exception
-                WriteLog("ERR: RemoveFailedNode, Probleme lors de la suppression des noeuds")
-            End Try
-        End Sub
+
         ''' <summary>
         ''' Annule la commande en cours : permet de sortir du mode "inclusion/exclusion" *** experimental ***
         ''' </summary>
@@ -1568,6 +1570,59 @@ Public Class Driver_ZWave
         Sub StopAssociation()
             WriteLog("Annule la commande en cours.")
             m_manager.CancelControllerCommand(m_homeId)
+        End Sub
+
+        ''' <summary>
+        ''' Suppresion des noeuds morts
+        ''' </summary>
+        ''' <remarks></remarks>
+        Sub RemoveFailedNode(Optional ByVal NumNode As Byte = Nothing)
+            WriteLog("RemoveFailedNode, Nombre de noeud à analyser : " & m_nodeList.Count)
+            Try
+                Dim node As Node
+                Dim i As Integer
+                Dim Trouve As Boolean = False
+
+                If NumNode = Nothing Then NumNode = 0
+                'Supprime tous les noeuds Morts
+                If NumNode = 0 Then
+                    For i = 0 To m_nodeList.Count - 1
+                        node = GetNode(m_homeId, m_nodeList.ElementAt(i).ID)
+                        If (m_manager.IsNodeFailed(m_homeId, node.ID)) Then
+                            WriteLog("Noeud Mort : " & m_nodeList.ElementAt(i).ID & " / " & m_nodeList.ElementAt(i).Product & " -> " & m_nodeList.ElementAt(i).Label)
+                            If m_manager.RemoveFailedNode(m_homeId, node.ID) Then
+                                WriteLog("Noeud Supprimé : " & m_nodeList.ElementAt(i).ID & " / " & m_nodeList.ElementAt(i).Product)
+                            Else
+                                WriteLog("ERR: Probleme lors de la suppression du noeud : " & m_nodeList.ElementAt(i).ID & " / " & m_nodeList.ElementAt(i).Product & " -> " & m_nodeList.ElementAt(i).Label)
+                            End If
+                        Else
+                            WriteLog("Noeud actif : " & m_nodeList.ElementAt(i).ID & " / " & m_nodeList.ElementAt(i).Product & " -> " & m_nodeList.ElementAt(i).Label)
+                        End If
+                    Next
+                End If
+
+                'Supprime le noeud passé en paramètre
+                If NumNode > 1 Then
+                    For i = 0 To m_nodeList.Count - 1
+                        node = GetNode(m_homeId, m_nodeList.ElementAt(i).ID)
+                        If NumNode = node.ID Then
+                            Trouve = True
+                            If m_manager.RemoveFailedNode(m_homeId, node.ID) Then
+                                WriteLog("Noeud Supprimé : " & m_nodeList.ElementAt(i).ID & " / " & m_nodeList.ElementAt(i).Product & " -> " & m_nodeList.ElementAt(i).Product)
+                            Else
+                                WriteLog("ERR: Probleme lors de la suppression du noeud : " & m_nodeList.ElementAt(i).ID & " / " & m_nodeList.ElementAt(i).Product & " -> " & m_nodeList.ElementAt(i).Label)
+                            End If
+                            Exit For
+                        End If
+                    Next
+                    If Trouve = False Then
+                        WriteLog("ERR: RemoveFailedNode, Numéro du noeud incorrect : " & NumNode.ToString)
+                    End If
+                End If
+                ' WriteLog("RemoveFailedNode, Nombre de noeud présent aprés analyse :" & m_nodeList.Count)
+            Catch ex As Exception
+                WriteLog("ERR: RemoveFailedNode, Probleme lors de la suppression des noeuds")
+            End Try
         End Sub
 
         Sub ManagedControllerStateChangedHandler(ByVal m_controllerState As ZWControllerState)
@@ -1684,10 +1739,10 @@ Public Class Driver_ZWave
                                 WriteLog("DBG: " & "NotificationHandler - ID: " & node.ID & ", Nom: " & node.Name & ", Manufacturer: " & node.Manufacturer)
                                 WriteLog("DBG: " & "NotificationHandler - Produit: " & node.Product & ", Label : " & node.Label)
                                 WriteLog("DBG: " & "NotificationHandler - Nb noeuds: " & m_nodeList.Count & ", Location: " & node.Location & ", Nb values: " & node.Values.Count)
-                           Else
-                            ' Message si le noeud n'est pas le controleur
-                            WriteLog("ERR: " & "NotificationHandler - Erreur dans NodeNaming  : node " & m_notification.GetNodeId() & " non trouvé")
-                        End If
+                            Else
+                                ' Message si le noeud n'est pas le controleur
+                                WriteLog("ERR: " & "NotificationHandler - Erreur dans NodeNaming  : node " & m_notification.GetNodeId() & " non trouvé")
+                            End If
                         End If
 
 
@@ -2031,7 +2086,7 @@ Public Class Driver_ZWave
                 WriteLog("ERR: " & " Exception : " & ex.Message)
             End Try
         End Sub
-		
+
         Function Get_Config(nomfileconfig As String) As Boolean
             ' recupere les configurations des equipements 
 
