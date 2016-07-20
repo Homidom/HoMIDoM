@@ -520,7 +520,7 @@ Imports STRGS = Microsoft.VisualBasic.Strings
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
-            Add_LibelleDevice("ADRESSE1", "Info attendue", "Valeur à retourner ( StatutAC, StatutEC, TpsRestant, TpsCharge )", "StatutAC")
+            Add_LibelleDevice("ADRESSE1", "Info attendue", "Valeur à retourner ( StatutAC, StatutEC, TpsRestant, TpsCharge )", "StatutAC|StatutEC|TpsRestant|TpsCharge")
             Add_LibelleDevice("REFRESH", "Refresh en sec", "Minimum 600, valeur rafraicissement station", "600")
             ' Libellés Device inutiles
             Add_LibelleDevice("ADRESSE2", "@", "", "")
