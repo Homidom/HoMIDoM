@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<homidom>
+  <server portsoap="7999" ip="localhost" id="123456789" />
+  <HS adresse="" login="" password="" />
+  <tactile speedtouch="600" friction="0.75" />
+  <interface showsoleil="true" showtemperature="false" imgbackground="" />
+  <menus>
+    <menu nom="Maison" defaut="false" type="Zone" idelement="97da176d-abe9-45c2-85db-dc2e8adb2e48" visible="true" />
+    <menu nom="Salon" defaut="false" type="Zone" idelement="005147d9-a705-4d71-8f4d-8edc405c8a79" visible="true" />
+    <menu nom="test1" defaut="false" type="Zone" idelement="07545b50-42ab-48a9-b57f-e831641a8860" visible="true" />
+    <menu nom="Meteo" defaut="false" type="Meteo" icon="" />
+    <menu nom="Audio" defaut="false" type="LecteurMedia" icon="" />
+    <menu nom="Clubic" defaut="false" type="Internet" icon="" parametre0="http://clubic.fr" />
+  </menus>
+  <elements>
+    <element uid="a324bdf3-92c2-4ecb-88e0-6f5bfa092abe" id="" isempty="true" type="Web" caneditvalue="false" zoneid="97da176d-abe9-45c2-85db-dc2e8adb2e48" x="502" y="274" width="316" height="312" angle="0" showetiquette="true" showstatus="false" unite="" showpicture="true" picture="" etiquette="Google" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" url="http://google.fr" urlrss="http://google.fr" idmeteo="" idkeypad="">
+      <web />
+      <actions />
+      <visuels />
+    </element>
+    <element uid="94d19921-2a69-4ccb-ba81-1d825777a634" id="" isempty="true" type="Web" caneditvalue="false" zoneid="07545b50-42ab-48a9-b57f-e831641a8860" x="414" y="45" width="820" height="484" angle="0" showetiquette="false" showstatus="false" unite="" showpicture="true" picture="" etiquette="Widget 5" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" url="http://google.fr" urlrss="http://google.fr" idmeteo="" idkeypad="">
+      <web>
+        <httpbutton label="Test" url="http://yahoo.fr" width="40" height="30" />
+        <httpbutton label="Yahoo" url="www.yahoo.fr" width="45" height="35" />
+      </web>
+      <actions />
+      <visuels />
+    </element>
+    <element uid="03fca92b-e59c-4072-ae16-7378463cf591" id="" isempty="true" type="Rss" caneditvalue="false" zoneid="005147d9-a705-4d71-8f4d-8edc405c8a79" x="300" y="300" width="269" height="215" angle="0" showetiquette="true" showstatus="false" unite="" showpicture="true" picture="" etiquette="Widget 4" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" url="" urlrss="http://news.google.fr/news?pz=1&amp;cf=all&amp;ned=fr&amp;hl=fr&amp;output=rss" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="a70419a5-1c75-47e8-8fb5-afafa2706f05" id="" isempty="true" type="Empty" caneditvalue="false" zoneid="97da176d-abe9-45c2-85db-dc2e8adb2e48" x="53" y="226" width="75" height="117" angle="0" showetiquette="true" showstatus="false" unite="" showpicture="true" picture="" etiquette="Widget 8" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#00FFFFFF" colorstatus="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions>
+        <action type="gestureonclick" idobject="8efb097e-4c14-4d5e-bb83-95d32a5bc6c4" methode="Toggle" value="" sound="" />
+      </actions>
+      <visuels>
+        <visuel idobject="8efb097e-4c14-4d5e-bb83-95d32a5bc6c4" property="Value" value="0" image="c:\HoMIDom\DEBUG\images\Zones\Image\defaut.jpg" />
+        <visuel idobject="8efb097e-4c14-4d5e-bb83-95d32a5bc6c4" property="Value" value="100" image="c:\HoMIDom\DEBUG\images\Telecommande\YELLOW.png" />
+      </visuels>
+    </element>
+    <element uid="2ae2219d-dbdc-418d-b5ac-59c0969a537a" id="" isempty="true" type="Meteo" caneditvalue="false" zoneid="005147d9-a705-4d71-8f4d-8edc405c8a79" x="878" y="76" width="200" height="210" angle="0" showetiquette="true" showstatus="false" unite="" showpicture="true" picture="" etiquette="Widget 5" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" url="" urlrss="" idmeteo="dede347f-a73b-45be-957e-8443b3915346" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="66669f6d-6232-4f1d-8c44-c42530648c72" id="" isempty="true" type="KeyPad" caneditvalue="false" zoneid="97da176d-abe9-45c2-85db-dc2e8adb2e48" x="179" y="158" width="214" height="309" angle="0" showetiquette="true" showstatus="false" unite="" showpicture="true" picture="" etiquette="Variable" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="5cf02609-6169-4c9e-9bf3-ca4d4a64ba3f">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="d2f03d22-f094-4144-bf41-66d470a239b9" id="" isempty="true" type="Label" caneditvalue="false" zoneid="005147d9-a705-4d71-8f4d-8edc405c8a79" x="630" y="93" width="100" height="45" angle="0" showetiquette="true" showstatus="false" unite="" showpicture="true" picture="" etiquette="Test Label" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="d19ffdce-e5d5-4804-a0f3-c4622d62b188" id="" isempty="true" type="Label" caneditvalue="false" zoneid="005147d9-a705-4d71-8f4d-8edc405c8a79" x="133" y="208" width="100" height="20" angle="0" showetiquette="true" showstatus="false" unite="" showpicture="false" picture="" etiquette="Widget 8" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#00FFFFFF" colorstatus="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="5a9a6420-37a5-4068-882d-bef1bacce1cb" id="soleil01" isempty="false" type="Device" caneditvalue="false" zoneid="07545b50-42ab-48a9-b57f-e831641a8860" x="40" y="20" width="140" height="60" angle="0" showetiquette="true" showstatus="true" unite="" showpicture="true" picture="" etiquette="HOMI_Jour" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="222d27a2-1bd1-4f8a-8346-7bbe0bdb26ef" id="1976698e-3430-429c-b1bd-acd275e1c8b6" isempty="false" type="Device" caneditvalue="false" zoneid="07545b50-42ab-48a9-b57f-e831641a8860" x="190" y="20" width="140" height="60" angle="0" showetiquette="true" showstatus="true" unite="" showpicture="true" picture="D:\Cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\images\Devices\audio-defaut.png" etiquette="HP SdB" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="0cbed92f-8569-49a6-b84f-e86c4f2cea43" id="1976698e-3430-429c-b1bd-acd275e1c8b6" isempty="false" type="Device" caneditvalue="false" zoneid="005147d9-a705-4d71-8f4d-8edc405c8a79" x="40" y="20" width="140" height="60" angle="0" showetiquette="true" showstatus="true" unite="" showpicture="true" picture="D:\Cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\images\Devices\audio-defaut.png" etiquette="HP SdB" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="4e24a0e1-3e46-492f-b936-710f96a47025" id="3faa8af6-955b-43da-ba07-00b3176771af" isempty="false" type="Device" caneditvalue="false" zoneid="005147d9-a705-4d71-8f4d-8edc405c8a79" x="190" y="20" width="140" height="60" angle="0" showetiquette="true" showstatus="true" unite=" %" showpicture="true" picture="D:\Cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\images\Devices\humidite-defaut.png" etiquette="humidite SAM" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="e5af70b4-99ad-40f3-87f8-128714276188" id="a3ac5ce8-394d-4766-9686-cd6705f5e023" isempty="false" type="Device" caneditvalue="false" zoneid="005147d9-a705-4d71-8f4d-8edc405c8a79" x="340" y="20" width="140" height="60" angle="0" showetiquette="true" showstatus="false" unite="" showpicture="true" picture="D:\Cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\images\Devices\multimedia-defaut.png" etiquette="Freebox" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="1d907209-4012-4e84-ad10-5286c29f8e20" id="a3ac5ce8-394d-4766-9686-cd6705f5e023" isempty="false" type="Device" caneditvalue="false" zoneid="97da176d-abe9-45c2-85db-dc2e8adb2e48" x="40" y="20" width="140" height="60" angle="0" showetiquette="true" showstatus="false" unite="" showpicture="true" picture="D:\Cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\images\Devices\multimedia-defaut.png" etiquette="Freebox" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="cc103ec2-5703-4d3f-aa13-928aa8e65103" id="soleil01" isempty="false" type="Device" caneditvalue="false" zoneid="97da176d-abe9-45c2-85db-dc2e8adb2e48" x="190" y="20" width="140" height="60" angle="0" showetiquette="true" showstatus="true" unite="" showpicture="true" picture="D:\Cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\images\icones\composant_128.png" etiquette="HOMI_Jour" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="e20e49c3-cc3b-4351-9950-a91485a18324" id="8efb097e-4c14-4d5e-bb83-95d32a5bc6c4" isempty="false" type="Device" caneditvalue="false" zoneid="97da176d-abe9-45c2-85db-dc2e8adb2e48" x="340" y="20" width="140" height="60" angle="0" showetiquette="true" showstatus="true" unite=" %" showpicture="true" picture="D:\Cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\images\Devices\lampe-defaut.png" etiquette="lampe" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="3f70e8c1-079c-4a69-973a-c5548c011726" id="a6af87c4-31ca-4ad6-95f2-1d8f3ddf4d04" isempty="false" type="Device" caneditvalue="false" zoneid="97da176d-abe9-45c2-85db-dc2e8adb2e48" x="490" y="20" width="140" height="60" angle="0" showetiquette="true" showstatus="true" unite=" °" showpicture="true" picture="D:\Cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\images\icones\composant_128.png" etiquette="Thermostat" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="d3f98408-c670-4af0-8c31-8e234c0f1ed2" id="7f52527d-0b2e-492d-a09e-9382ffad5bfc" isempty="false" type="Device" caneditvalue="false" zoneid="97da176d-abe9-45c2-85db-dc2e8adb2e48" x="640" y="20" width="50" height="60" angle="0" showetiquette="true" showstatus="false" unite="" showpicture="true" picture="" etiquette="test2" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="577282cb-2ce0-450b-8fe6-bfe33b733758" id="e8dd562e-6bd6-476b-8ee7-af4b9f97c825" isempty="false" type="Device" caneditvalue="false" zoneid="97da176d-abe9-45c2-85db-dc2e8adb2e48" x="1076" y="176" width="140" height="222" angle="0" showetiquette="true" showstatus="true" unite="" showpicture="true" picture="D:\Cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\images\Devices\meteo-defaut.png" etiquette="Meteo Cormes" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" url="" urlrss="" idmeteo="e8dd562e-6bd6-476b-8ee7-af4b9f97c825" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="a06ddd93-8433-4e48-ac2a-6ed871e4f20e" id="84b5b2c7-0092-4731-bd53-0ea61e14fd9f" isempty="false" type="Device" caneditvalue="false" zoneid="97da176d-abe9-45c2-85db-dc2e8adb2e48" x="1155" y="12" width="140" height="60" angle="0" showetiquette="true" showstatus="true" unite="" showpicture="true" picture="D:\Cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\images\Devices\meteo-defaut.png" etiquette="Meteo Coulogne" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" url="" urlrss="" idmeteo="" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+    <element uid="486ad48d-ea2e-466b-85fd-939c53234321" id="dede347f-a73b-45be-957e-8443b3915346" isempty="false" type="Device" caneditvalue="false" zoneid="97da176d-abe9-45c2-85db-dc2e8adb2e48" x="328" y="84" width="140" height="60" angle="0" showetiquette="true" showstatus="true" unite="" showpicture="true" picture="D:\Cyber-SPA\PE - Perso\PERSO\HoMIDom\Source\DEBUG\images\Devices\meteo-defaut.png" etiquette="Meteo Dunkerque" defautlabelstatus="?" taillestatus="9" tailleetiquette="9" colorbackground="#FF000000" colorstatus="#FFFFFFFF" url="" urlrss="" idmeteo="dede347f-a73b-45be-957e-8443b3915346" idkeypad="">
+      <actions />
+      <visuels />
+    </element>
+  </elements>
+</homidom>

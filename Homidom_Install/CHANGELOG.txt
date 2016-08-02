@@ -1,3 +1,21 @@
+﻿2016-08-01
+[Installation]
+* Génération possible d'un installeur version "STABLE" ou "RELEASE".
+* Détection du .NETFramework 4.0 si absent, téléchargement et installation du .NET 4.6.1 (optionnel).
+* Détection des redistribuables VC++ 2008, 2010, 2013, installation si absent(s) (optionnel).
+* Intégration de tous les drivers et dll associées présents dans le dossier Drivers.
+* Création d'une tache planifiée pour lancer HoMIGuI à l'ouverture de session. (compatible tout OS).
+* Installation du client HoMIWpF (optionnel).
+* Suppression de tous les anciens raccourcis "HoMUGuI" sauf dans le menu démarrer - Programme\HoMIDoM.
+* Copie du répertoire "_DLLx86" pour un OS 32Bit.
+* Installation possible dans un répertoire autre que le répertoire par défaut (bug corrigé).
+* Répertoire par défaut modifié si détection d'une ancienne installation.
+* Personnalisation de l'installeur (Logo HoMIDoM).
+
+[Désinstallation]
+* Suppression de la tache planifiée.
+* Option "Supprimer tout" (décoché par défaut) dans le désinstalleur.
+
 2013-04-10
 ----------
 * Multi-langues "ready"

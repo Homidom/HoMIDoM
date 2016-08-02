@@ -108,8 +108,8 @@ Var "DOTNET_RETURN_CODE"
 
       lbl_continue:
         DetailPrint "$(DESC_INSTALLING) $(DESC_SHORTDOTNET)..."
-        Banner::show /NOUNLOAD "$(DESC_INSTALLING) $(DESC_SHORTDOTNET)..."
-        nsExec::ExecToStack '"$PLUGINSDIR\dotnetfx.exe" /q /c:"install.exe /noaspupgrade /q"'
+        Banner::show /NOUNLOAD /76 "Installation des pré-requis :" "$(DESC_INSTALLING) $(DESC_SHORTDOTNET)..."
+        nsExec::ExecToStack '"$PLUGINSDIR\dotnetfx.exe" /q /c:"install.exe /noaspupgrade /qb!"'
         pop $DOTNET_RETURN_CODE
         Banner::destroy
         SetRebootFlag true

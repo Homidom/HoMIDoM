@@ -1,6 +1,5 @@
-ï»¿
-!define URL_VC2013_X64 "https://download.microsoft.com/download/A/4/D/A4D9F1D3-6449-49EB-9A6E-902F61D8D14B/vcredist_x64.exe"
-!define URL_VC2013_X86 "https://download.microsoft.com/download/A/4/D/A4D9F1D3-6449-49EB-9A6E-902F61D8D14B/vcredist_x86.exe"
+!define URL_VC12_X64 "https://download.microsoft.com/download/A/4/D/A4D9F1D3-6449-49EB-9A6E-902F61D8D14B/vcredist_x64.exe"
+!define URL_VC12_X86 "https://download.microsoft.com/download/A/4/D/A4D9F1D3-6449-49EB-9A6E-902F61D8D14B/vcredist_x86.exe"
 
 ; Microsoft Visual C++ 2013 (12.0) Redistributable Package 
 
@@ -13,15 +12,16 @@ Var IsVC12RedistInstalled
 
 Function DownloadVC12Redist
  
-
       ; the following Goto and Label is for consistencey.
       Goto lbl_DownloadRequired
       lbl_DownloadRequired:
       DetailPrint "$(DESC_DOWNLOADING1) $(DESC_VC12_LABEL)..."
       MessageBox MB_ICONEXCLAMATION|MB_YESNO|MB_DEFBUTTON2 "$(DESC_VC12_DECISION)" /SD IDNO \
-        IDYES +2 IDNO 0
-      Abort
+        IDYES lbl_Download IDNO 0
+      !insertmacro Log_String "$(DESC_VC12_LABEL) Redistributable : Installation réfusée."
+      Goto lbl_NoDownloadRequired ;Abort
 
+      lbl_Download:
       nsisdl::download /TRANSLATE "$(DESC_DOWNLOADING)" "$(DESC_CONNECTING)" \
          "$(DESC_SECOND)" "$(DESC_MINUTE)" "$(DESC_HOUR)" "$(DESC_PLURAL)" \
          "$(DESC_PROGRESS)" "$(DESC_REMAINING)" \
@@ -29,11 +29,12 @@ Function DownloadVC12Redist
       Pop $0
       StrCmp "$0" "success" lbl_continue
       DetailPrint "$(DESC_DOWNLOADFAILED) $0"
-      Abort
+      Goto lbl_NoDownloadRequired ;Abort
 
       lbl_continue:
+        !insertmacro Log_String "$(DESC_VC12_LABEL) Redistributable : Téléchargement OK."
         DetailPrint "$(DESC_INSTALLING) $(DESC_VC12_LABEL)..."
-        Banner::show /NOUNLOAD "$(DESC_INSTALLING) $(DESC_VC12_LABEL)..."
+        Banner::show /NOUNLOAD /set 76 "Installation d'HoMIDoM :" "$(DESC_INSTALLING) $(DESC_VC12_LABEL)..."
         nsExec::ExecToStack '"$PLUGINSDIR\$VC12_Package" /q :a'
         pop $DOTNET_RETURN_CODE
         Banner::destroy
@@ -76,7 +77,6 @@ Function CheckVC12Redist
   ReadRegDWORD $VC12RedistRegKeyValue HKLM "$VC12_RegKey" "Install"
   IntCmp $VC12RedistRegKeyValue 1 VC12RegKeyFound
 
-
   ClearErrors
   StrCpy $VC12_RegKey "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\12.0\VC\Runtimes\x64"
   ReadRegDWORD $VC12RedistRegKeyValue HKLM "$VC12_RegKey" "Installed"
@@ -86,7 +86,6 @@ Function CheckVC12Redist
   StrCpy $VC12_RegKey "SOFTWARE\Microsoft\VisualStudio\12.0\VC\Runtimes\x64"
   ReadRegDWORD $VC12RedistRegKeyValue HKLM "$VC12_RegKey" "Installed"
   IntCmp $VC12RedistRegKeyValue 1 VC12RegKeyFound
-
 
   ClearErrors
   StrCpy $VC12_RegKey "SOFTWARE\Wow6432Node\Microsoft\VisualStudio\12.0\VC\Runtimes\x86"
@@ -98,22 +97,21 @@ Function CheckVC12Redist
   ReadRegDWORD $VC12RedistRegKeyValue HKLM "$VC12_RegKey" "Installed"
   IntCmp $VC12RedistRegKeyValue 1 VC12RegKeyFound
 
-  ${If} ${FileExists} "$SYSDIR\msvcr120.dll"
-    StrCpy $IsVC12RedistInstalled "1"
-  ${EndIf}
+  ;${If} ${FileExists} "$SYSDIR\msvcr120.dll"
+  ;  StrCpy $IsVC12RedistInstalled "1"
+  ;${EndIf}
 
-  !insertmacro Log_String "$(DESC_VC12_LABEL) :  pas de clÃ© de registre valide trouvÃ© ! vÃ©rification de la prÃ©sence de msvcr120.dll : $IsVC12RedistInstalled"
+  ;!insertmacro Log_String "$(DESC_VC12_LABEL) Redistributable KO :  Pas de clé de registre valide trouvée ! vérification de la présence de msvcr120.dll : $IsVC12RedistInstalled"
+  !insertmacro Log_String "$(DESC_VC12_LABEL) Redistributable KO :  Pas de clé de registre valide trouvée !"
+  ;call DownloadVC12Redist
   Goto exitVC12RedistCheck
 
 VC12RegKeyFound:
 
-  !insertmacro Log_String "$(DESC_VC12_LABEL) Redistributable : $VC12_RegKey => $VC12RedistRegKeyValue"
+  !insertmacro Log_String "$(DESC_VC12_LABEL) Redistributable OK : $VC12_RegKey => $VC12RedistRegKeyValue"
   StrCpy $IsVC12RedistInstalled "1"
 
-
-
 exitVC12RedistCheck:
-
 
 FunctionEnd
 
