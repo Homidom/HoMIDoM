@@ -8,7 +8,6 @@ Imports System.Net
 Imports System.Threading
 Imports System.Text
 
-
 ''' <summary>Driver OpenWeatherMap, le device doit indique sa ville dans son Adresse 1</summary>
 ''' <remarks></remarks>
 <Serializable()> Public Class Driver_OpenWeatherMap
@@ -53,6 +52,7 @@ Imports System.Text
     'param avancé
     Dim _DEBUG As Boolean = False
     Dim _AppID As String = ""
+    Dim _OrgIcon As Boolean = False
 
 #End Region
 
@@ -315,6 +315,12 @@ Imports System.Text
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " Lecture du paramètre AppID : " & _AppID)
             Catch ex As Exception
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " Une erreur est apparue lors de la lecture du paramètre AppID")
+            End Try
+            Try
+                _OrgIcon = _Parametres.Item(2).Valeur
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " Lecture du paramètre OrgIcon : " & _OrgIcon)
+            Catch ex As Exception
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " Une erreur est apparue lors de la lecture du paramètre OrgIcon")
             End Try
 
             _IsConnect = True
@@ -725,12 +731,8 @@ Imports System.Text
                     .WriteEndElement()
                     .Close()
                 End With
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Fichier OpenWeatherMap.xml a été créé !")
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Fichier OpenWeatherMap.xml a été créé !")
             End If
-
-            '        Catch ex As Exception
-            '            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Erreur gestion fichier OpenWeatherMap.xml : " & ex.ToString)
-            '            Return ""
 
         Catch ex As Exception
             _IsConnect = False
@@ -900,12 +902,14 @@ Imports System.Text
             'Parametres avancés
             Add_ParamAvance("Debug", "Activer le Debug complet (True/False)", False)
             Add_ParamAvance("AppID", "ID du Compte OpenWeatherMap.org", "")
+            Add_ParamAvance("OrgIcon", "Utiliser les icones météo d'OpenWeatherMap", False)
 
             'Libellé Driver
             Add_LibelleDriver("HELP", "Aide...", "Pas d'aide actuellement...")
 
             'Libellé Device
             Add_LibelleDevice("ADRESSE1", "Ville", "Ville dans OpenWeatherMap.org", "")
+            Add_LibelleDevice("ADRESSE2", "@", "", "")
             Add_LibelleDevice("MODELE", "@", "", "")
             Add_LibelleDevice("SOLO", "@", "")
             'Add_LibelleDevice("REFRESH", "Refresh (sec)", "Valeur de rafraîchissement de la mesure en secondes")
@@ -965,8 +969,12 @@ Imports System.Text
                             Case "weather"
                                 _Obj.ConditionActuel = _child.Attributes.GetNamedItem("value").Value
                                 _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Lecture du paramètre ConditionActuel : " & _Obj.ConditionActuel)
-                                '_Obj.IconActuel = _child.Attributes.GetNamedItem("icon").Value
-                                _Obj.IconActuel = GetIcon(_child.Attributes.GetNamedItem("number").Value)
+                                If _OrgIcon = True Then
+                                    _Obj.IconActuel = _child.Attributes.GetNamedItem("icon").Value
+                                Else
+                                    _Obj.IconActuel = GetIcon(_child.Attributes.GetNamedItem("number").Value)
+                                End If
+                                DonwloadIcon(_child.Attributes.GetNamedItem("icon").Value)
                                 _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Lecture du paramètre IconActuel : " & _Obj.IconActuel)
                             Case "humidity"
                                 _Obj.HumiditeActuel = Int(Replace(_child.Attributes.GetNamedItem("value").Value, ".", ","))
@@ -1022,14 +1030,11 @@ Imports System.Text
                             End Select
 
                             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Idx = " & idx & " Time : " & _child.Attributes.GetNamedItem("day").Value)
-                            '                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Test : " & _child.Name)
                             Select Case _child.Name
                                 Case "time"
                                     For Each _child2 As XmlNode In _child
-                                        '                                        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Test : " & _child2.Name)
                                         Select Case _child2.Name
                                             Case "temperature"
-                                                '            If IsNumeric(_child2.FirstChild.Value) Then
                                                 Select Case idx
                                                     Case 0
                                                         If _Obj IsNot Nothing Then
@@ -1060,48 +1065,64 @@ Imports System.Text
                                                             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temperature Min : " & _child2.Attributes.GetNamedItem("min").Value)
                                                         End If
                                                 End Select
-                                                '            End If
                                             Case "symbol"
-                                                '            If IsNumeric(_child2.FirstChild.Value) Then
+                                                'My.Computer.Network.DownloadFile("http://www.cohowinery.com/downloads/WineList.txt","C:\Documents and Settings\All Users\Documents\WineList.txt")
+                                                'If My.Computer.FileSystem.FileExists("c://Check.txt") Then
+                                                'MsgBox("File found.")
+                                                'Else
+                                                'MsgBox("File not found.")
+                                                'End If
+
                                                 Select Case idx
                                                     Case 0
                                                         If _Obj IsNot Nothing Then
-                                                            _Obj.IconToday = _child2.Attributes.GetNamedItem("var").Value
                                                             _Obj.ConditionToday = _child2.Attributes.GetNamedItem("name").Value
-                                                            '_Obj.IconToday = _child2.Attributes.GetNamedItem("var").Value
-                                                            _Obj.IconToday = GetIcon(_child2.Attributes.GetNamedItem("number").Value)
+                                                            If _OrgIcon = True Then
+                                                                _Obj.IconToday = _child2.Attributes.GetNamedItem("var").Value
+                                                            Else
+                                                                _Obj.IconToday = GetIcon(_child2.Attributes.GetNamedItem("number").Value)
+                                                            End If
+                                                            DonwloadIcon(_child2.Attributes.GetNamedItem("var").Value)
                                                             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Symbol : " & _child2.Attributes.GetNamedItem("var").Value)
                                                             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temp : " & _child2.Attributes.GetNamedItem("name").Value)
                                                         End If
                                                     Case 1
                                                         If _Obj IsNot Nothing Then
-                                                            _Obj.IconJ1 = _child2.Attributes.GetNamedItem("var").Value
                                                             _Obj.ConditionJ1 = _child2.Attributes.GetNamedItem("name").Value
-                                                            '_Obj.IconJ1 = _child2.Attributes.GetNamedItem("var").Value
-                                                            _Obj.IconJ1 = GetIcon(_child2.Attributes.GetNamedItem("number").Value)
+                                                            If _OrgIcon = True Then
+                                                                _Obj.IconJ1 = _child2.Attributes.GetNamedItem("var").Value
+                                                            Else
+                                                                _Obj.IconJ1 = GetIcon(_child2.Attributes.GetNamedItem("number").Value)
+                                                            End If
+                                                            DonwloadIcon(_child2.Attributes.GetNamedItem("var").Value)
                                                             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Symbol : " & _child2.Attributes.GetNamedItem("var").Value)
                                                             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temp : " & _child2.Attributes.GetNamedItem("name").Value)
                                                         End If
                                                     Case 2
                                                         If _Obj IsNot Nothing Then
-                                                            _Obj.IconJ2 = _child2.Attributes.GetNamedItem("var").Value
                                                             _Obj.ConditionJ2 = _child2.Attributes.GetNamedItem("name").Value
-                                                            '_Obj.IconJ2 = _child2.Attributes.GetNamedItem("var").Value
-                                                            _Obj.IconJ2 = GetIcon(_child2.Attributes.GetNamedItem("number").Value)
+                                                            If _OrgIcon = True Then
+                                                                _Obj.IconJ2 = _child2.Attributes.GetNamedItem("var").Value
+                                                            Else
+                                                                _Obj.IconJ2 = GetIcon(_child2.Attributes.GetNamedItem("number").Value)
+                                                            End If
+                                                            DonwloadIcon(_child2.Attributes.GetNamedItem("var").Value)
                                                             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Symbol : " & _child2.Attributes.GetNamedItem("var").Value)
                                                             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temp : " & _child2.Attributes.GetNamedItem("name").Value)
                                                         End If
                                                     Case 3
                                                         If _Obj IsNot Nothing Then
-                                                            _Obj.IconJ3 = _child2.Attributes.GetNamedItem("var").Value
                                                             _Obj.ConditionJ3 = _child2.Attributes.GetNamedItem("name").Value
-                                                            '_Obj.IconJ3 = _child2.Attributes.GetNamedItem("var").Value
-                                                            _Obj.IconJ3 = GetIcon(_child2.Attributes.GetNamedItem("number").Value)
+                                                            If _OrgIcon = True Then
+                                                                _Obj.IconJ3 = _child2.Attributes.GetNamedItem("var").Value
+                                                            Else
+                                                                _Obj.IconJ3 = GetIcon(_child2.Attributes.GetNamedItem("number").Value)
+                                                            End If
+                                                            DonwloadIcon(_child2.Attributes.GetNamedItem("var").Value)
                                                             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Symbol : " & _child2.Attributes.GetNamedItem("var").Value)
                                                             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temp : " & _child2.Attributes.GetNamedItem("name").Value)
                                                         End If
                                                 End Select
-                                                '            End If
                                         End Select
                                     Next
                             End Select
@@ -1248,7 +1269,6 @@ Imports System.Text
             Dim _return As String = ""
             Dim xReader As XmlReader
             Dim xDoc As XElement
-
             If System.IO.File.Exists(Server.GetRepertoireOfServer & "\Fichiers\OpenWeatherMap.xml") = True Then
                 xReader = XmlReader.Create(Server.GetRepertoireOfServer & "\Fichiers\OpenWeatherMap.xml")
                 xDoc = XElement.Load(xReader)
@@ -1272,6 +1292,19 @@ Imports System.Text
             Return ""
         End Try
     End Function
+
+    Public Function DonwloadIcon(Icon As String) As String
+        Try
+            If Not System.IO.File.Exists(Server.GetRepertoireOfServer & "\Images\Meteo\" & Icon & ".png") Then
+                My.Computer.Network.DownloadFile("http://openweathermap.org/img/w/" & Icon & ".png", Server.GetRepertoireOfServer & "\Images\Meteo\" & Icon & ".png")
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Téléchargement de http://openweathermap.org/img/w/" & Icon & ".png dans " & Server.GetRepertoireOfServer & "\Images\Meteo\" & Icon & ".png")
+            End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Téléchargement de http://openweathermap.org/img/w/" & Icon & ".png dans " & Server.GetRepertoireOfServer & "\Images\Meteo\" & Icon & ".png")
+        End Try
+        Return ""
+    End Function
+
 #End Region
 
 End Class
