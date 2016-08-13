@@ -10,8 +10,7 @@ set currentRelease=STABLE
 set nsisScriptName=Homidom.Setup_Full_x86_x64
 
 
-rem set makensis="tools\nsis-2.46\makensis.exe"
-set makensis="tools\nsis-2.51\makensis.exe"
+set makensis="tools\nsis-2.46\makensis.exe"
 set /p currentVersion=Numero de Version (xx.xx.0.0) [%currentVersion%]:
 set /p currentBuild=Numero de Build (%currentVersion%.xxx.0) [%currentBuild%]: 
 set /p currentRevision=Numero de Revision (%currentVersion%.%currentBuild%.xxxx) [%currentRevision%]: 
