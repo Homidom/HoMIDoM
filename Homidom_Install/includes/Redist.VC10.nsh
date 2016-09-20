@@ -38,7 +38,7 @@ Function DownloadVC10Redist
         DetailPrint "$(DESC_INSTALLING) $(DESC_VC10_LABEL)..."
         Banner::show /NOUNLOAD /set 76 "Installation d'HoMIDoM :" "$(DESC_INSTALLING) $(DESC_VC10_LABEL)..."
         nsExec::ExecToStack '"$PLUGINSDIR\$VC10_Package" /q :a'
-        pop $DOTNET_RETURN_CODE
+        ;pop $DOTNET_RETURN_CODE
         Banner::destroy
         SetRebootFlag true
         ; silence the compiler

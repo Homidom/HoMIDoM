@@ -66,36 +66,6 @@ Var SF_COMMONAPPDATA
 ;Var SF_MYPICTURES
 ;Var SF_COMMONPROGRAMFILES
 
-##############################################################################################
-# URL : https://msdn.microsoft.com/en-us/library/8z6watww(v=vs.110).aspx                         #
-#                                                                                                #
-# Versions préinstallée et installable en fonction de l'OS :                                     #
-#                                                                                                #
-# Windows 10 Insider Preview Build : Pré-Inst : 4.6.2 Preview                                    #
-# Windows 10 (Upd Nov 2015)        : Pré-Inst : 4.6.1 - Version-Max 4.6.1 & 4.6.2 Preview        #
-# Windows 10 (Upd Nov 2015)        : Pré-Inst : 4.6.1 - Version-Max 4.6.1 & 4.6.2 Preview        #
-# Windows 10                       : Pré-Inst : 4.6   - Version-Max 4.6.1                        #
-# Windows 8.1                      : Pré-Inst : 4.5.1 - Version-Max 4.6.1                        #
-# Windows 8                        : Pré-Inst : 4.5   - Version-Max 4.6.1 (Dernière version) !!! #
-# Windows 7 SP1                    : Pré-Inst : néant - Version-Max 4.6.1                        #
-# Windows Vista SP2                : Pré-Inst : néant - Version-Max 4.6   (Dernière version) !!! #
-# Windows XP                       : Pré-Inst : néant - Version-Max 4.0   (Dernière version) !!! #
-#                                                                                                #
-# Windows Server 2012 R2           : Pré-Inst : 4.5.1 - Version-Max 4.6.1                        #
-# Windows Server 2012 (Edt 64Bits) : Pré-Inst : 4.5   - Version-Max 4.6.1                        #
-# Windows Server 2008 R2 SP1       : Pré-Inst : néant - Version-Max 4.6.1                        #
-# Windows Server 2008 R2           : Pré-Inst : néant - Version-Max 4.6   (Dernière version) !!! #
-# Windows Server 2003 R2           : Pré-Inst : néant - Version-Max 4.0   (Dernière version) !!! #
-#                                                                                                #
-##################################################################################################
-
-; --- Version du Framework .NET requis et URL de téléchargement
-!define DOT_MAJOR "4"
-!define DOT_MINOR "0"
-;!define URL_DOTNET "https://download.microsoft.com/download/1/6/7/167F0D79-9317-48AE-AEDB-17120579F8E2/NDP451-KB2858728-x86-x64-AllOS-ENU.exe"
-;!define URL_DOTNET "https://download.microsoft.com/download/C/3/A/C3A5200B-D33C-47E9-9D70-2F7C65DAAD94/NDP46-KB3045557-x86-x64-AllOS-ENU.exe"
-!define URL_DOTNET "https://download.microsoft.com/download/E/4/1/E4173890-A24A-4936-9FC9-AF930FE3FA40/NDP461-KB3102436-x86-x64-AllOS-ENU.exe"
-
 ; --- Dossier racine contenant les sources (relatif à l'emplacement du script NSIS)
 !define ROOT_DIR ".."
 
@@ -123,7 +93,7 @@ VIAddVersionKey "FileVersion" "${PRODUCT_VERSION}.${PRODUCT_BUILD}.${PRODUCT_REV
 !include "includes\CustomLog.nsh"
 
 ; --- inclusion du code de détection et de téléchargement du Framework .NET
-!include "includes\CheckDotNetInstalled.nsh"
+!include "includes\DotNetChecker.nsh"
 
 ; --- inclusion du code de détection et de téléchargement des runtime Visual Studio 2010, 2012, 2013
 !include "includes\Redist.VC10.nsh"
@@ -321,7 +291,7 @@ Function .onInit
 
   ; --- Vérification de la version du Framework .NET
   !insertmacro Log_String "Vérification de la version du Framework .NET"
-  Call CheckDotNetInstalled
+  ;Call CheckDotNetInstalled
 
   ; --- détection de l'OS (32bits/64bits) & pré-configuration du dossier de destination
   ${If} ${RunningX64}
@@ -574,6 +544,35 @@ Section "" HoMIDoM_STOPSVC
   Call KillAllHomidomServices
 SectionEnd
 
+Section "" HoMIDoM_REQUIREMENT
+  !insertmacro Log_String "[HoMIDoM_REQUIREMENT]"
+##############################################################################################
+# URL : https://msdn.microsoft.com/en-us/library/8z6watww(v=vs.110).aspx                         #
+#                                                                                                #
+# Versions préinstallée et installable en fonction de l'OS :                                     #
+#                                                                                                #
+# Windows 10 Insider Preview Build : Pré-Inst : 4.6.2 Preview                                    #
+# Windows 10 (Upd Nov 2015)        : Pré-Inst : 4.6.1 - Version-Max 4.6.1 & 4.6.2 Preview        #
+# Windows 10 (Upd Nov 2015)        : Pré-Inst : 4.6.1 - Version-Max 4.6.1 & 4.6.2 Preview        #
+# Windows 10                       : Pré-Inst : 4.6   - Version-Max 4.6.1                        #
+# Windows 8.1                      : Pré-Inst : 4.5.1 - Version-Max 4.6.1                        #
+# Windows 8                        : Pré-Inst : 4.5   - Version-Max 4.6.1 (Dernière version) !!! #
+# Windows 7 SP1                    : Pré-Inst : néant - Version-Max 4.6.1                        #
+# Windows Vista SP2                : Pré-Inst : néant - Version-Max 4.6   (Dernière version) !!! #
+# Windows XP                       : Pré-Inst : néant - Version-Max 4.0   (Dernière version) !!! #
+#                                                                                                #
+# Windows Server 2012 R2           : Pré-Inst : 4.5.1 - Version-Max 4.6.1                        #
+# Windows Server 2012 (Edt 64Bits) : Pré-Inst : 4.5   - Version-Max 4.6.1                        #
+# Windows Server 2008 R2 SP1       : Pré-Inst : néant - Version-Max 4.6.1                        #
+# Windows Server 2008 R2           : Pré-Inst : néant - Version-Max 4.6   (Dernière version) !!! #
+# Windows Server 2003 R2           : Pré-Inst : néant - Version-Max 4.0   (Dernière version) !!! #
+#                                                                                                #
+##################################################################################################
+
+; --- Version du Framework .NET requis et URL de téléchargement
+  !insertmacro CheckNetFramework 452
+SectionEnd
+
 Section "" HoMIDoM_FRAMEWORK
 
   !insertmacro Log_String "[HoMIDoM_FRAMEWORK]"
@@ -581,6 +580,8 @@ Section "" HoMIDoM_FRAMEWORK
   ; Fichiers de base : requis par l'ensemble des applications de la solution
   ; Section obligatoire.
   SectionIn RO
+
+  SetOutPath "$INSTDIR"
 
   CreateDirectory "$INSTDIR"
   CreateDirectory "$INSTDIR\Bdd"
@@ -590,7 +591,9 @@ Section "" HoMIDoM_FRAMEWORK
   CreateDirectory "$INSTDIR\Logs"
   CreateDirectory "$INSTDIR\Templates"
   
-  SetOutPath "$INSTDIR"
+  ; Suppression de(s) driver(s) obselete(s)...
+  Delete /REBOOTOK $INSTDIR\Drivers\Driver_Weather.dll
+
   File "tools\hitb-1.0\win32\hitb.exe"
 ;  File "HoMIGuI.xml"
   File "..\${PRODUCT_RELEASE}\HoMIDom.DLL"

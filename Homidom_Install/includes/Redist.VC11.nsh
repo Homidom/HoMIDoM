@@ -36,7 +36,7 @@ Function DownloadVC11Redist
         DetailPrint "$(DESC_INSTALLING) $(DESC_VC11_LABEL)..."
         Banner::show /NOUNLOAD /set 76 "Installation d'HoMIDoM :" "$(DESC_INSTALLING) $(DESC_VC11_LABEL)..."
         nsExec::ExecToStack '"$PLUGINSDIR\$VC11_Package" /q :a'
-        pop $DOTNET_RETURN_CODE
+        ;pop $DOTNET_RETURN_CODE
         Banner::destroy
         SetRebootFlag true
         ; silence the compiler
