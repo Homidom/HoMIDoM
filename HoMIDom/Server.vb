@@ -675,7 +675,17 @@ Namespace HoMIDom
         Public Function GetSaint() As String
             Try
                 Dim lines() As String = My.Resources.Saint.Split(System.Environment.NewLine)
-                Return lines(Now.DayOfYear - 1).Replace(Chr(10), "")
+                Dim currentDate As DateTime = DateTime.Now
+                If DateTime.IsLeapYear(currentDate.Year) Then
+                    Return lines(Now.DayOfYear - 1).Replace(Chr(10), "")
+                Else
+                    If currentDate.Month > 2 Then
+                        Return lines(Now.DayOfYear).Replace(Chr(10), "")
+                    Else
+                        Return lines(Now.DayOfYear - 1).Replace(Chr(10), "")
+                    End If
+                End If
+
             Catch ex As Exception
                 Log(TypeLog.ERREUR, TypeSource.SERVEUR, "GetSaint", "Exception : " & ex.Message)
                 Return Nothing
