@@ -1033,6 +1033,7 @@ Class Window1
                                     Case uWidgetEmpty.TypeOfWidget.KeyPad.ToString : x.Type = uWidgetEmpty.TypeOfWidget.KeyPad
                                     Case uWidgetEmpty.TypeOfWidget.Label.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Label
                                     Case uWidgetEmpty.TypeOfWidget.Image.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Image
+                                    Case uWidgetEmpty.TypeOfWidget.Gauge.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Gauge
                                 End Select
                             Case "caneditvalue" : x.CanEditValue = list.Item(j).Attributes.Item(k).Value
                             Case "zoneid" : x.ZoneId = list.Item(j).Attributes.Item(k).Value
@@ -1540,6 +1541,11 @@ Class Window1
                         writer.WriteEndAttribute()
                         writer.WriteStartAttribute("showclavier")
                         writer.WriteValue(_ListElement.Item(i).ShowPassWord)
+                        writer.WriteEndAttribute()
+                    End If
+                    If _ListElement.Item(i).Type = uWidgetEmpty.TypeOfWidget.Gauge Then
+                        writer.WriteStartAttribute("idkeypad")
+                        writer.WriteValue(_ListElement.Item(i).IDKeyPad)
                         writer.WriteEndAttribute()
                     End If
                     writer.WriteStartAttribute("httprefresh")
@@ -2998,6 +3004,49 @@ Class Window1
             Canvas.SetTop(x, 300)
         Catch ex As Exception
             AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur NewWidgetKeyPad: " & ex.Message, "Erreur", "NewWidgetKeyPad")
+        End Try
+    End Sub
+
+    Private Sub NewWidgetGauge_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetGauge.Click
+        Try
+            ' Remettre à zéro les modes édition + déplacement
+            ChkMove.IsChecked = False
+            ChkEdit.IsChecked = False
+            Deplacement_Click(Me, e)
+
+            'Ajouter un nouveau Control
+            Dim x As New ContentControl
+            x.Width = 214
+            x.Height = 305
+            x.Style = mybuttonstyle
+            x.Tag = True
+            x.Uid = System.Guid.NewGuid.ToString()
+
+            'Ajoute l'élément dans la liste
+            Dim elmt As New uWidgetEmpty
+            elmt.Show = True
+            elmt.Uid = x.Uid
+            elmt.ZoneId = _CurrentIdZone
+            elmt.Width = 214
+            elmt.Height = 287
+            elmt.Rotation = 0
+            elmt.X = 300
+            elmt.Y = 300
+            elmt.IsEmpty = True
+            elmt.Type = uWidgetEmpty.TypeOfWidget.Gauge
+            elmt.ShowStatus = False
+            elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
+            elmt.ColorBackGround = New SolidColorBrush(Color.FromArgb(255, 0, 0, 0))
+            elmt.Visibility = Windows.Visibility.Visible
+            _ListElement.Add(elmt)
+
+            elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
+            x.Content = elmt
+            Canvas1.Children.Add(x)
+            Canvas.SetLeft(x, 300)
+            Canvas.SetTop(x, 300)
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur NewWidgetGauge: " & ex.Message, "Erreur", "NewWidgetGauge")
         End Try
     End Sub
 

@@ -193,6 +193,7 @@
                             <Label Width="120" Content="Composant:" Foreground="White"/>
                             <ComboBox Name="CbDeviceKeyPad" Width="200" />
                         </StackPanel>
+                            
                             <StackPanel Orientation="Horizontal" Name="StkMinMax" Visibility="Collapsed" >
                                 <StackPanel Orientation="Horizontal" >
                                     <Label Content="Min:" Foreground="White"/>

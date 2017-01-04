@@ -6,6 +6,7 @@ Imports System.Windows.Media.Animation
 Imports System.IO
 Imports STRGS = Microsoft.VisualBasic.Strings
 
+
 Public Class uWidgetEmpty
     Public Enum TypeOfWidget
         Empty = 0
@@ -20,6 +21,7 @@ Public Class uWidgetEmpty
         Moteur = 9
         Image = 10
         Prise = 11
+        Gauge = 12
         Device = 99
     End Enum
 
@@ -106,6 +108,9 @@ Public Class uWidgetEmpty
 
     'Variable Widget Prise
     Dim _PRISE As uPrise = Nothing
+
+    'Variables Widget Gauge
+    Dim _Gauge As uGauge = Nothing
 
     'Variable Min/Max
     Dim _Min As Integer
@@ -474,6 +479,13 @@ Public Class uWidgetEmpty
                         ShowStatus = False
                         ShowPicture = True
                         ShowEtiquette = False
+                    Case TypeOfWidget.Gauge
+                        CanEditValue = False
+                        StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
+                        StkTool.Visibility = Windows.Visibility.Visible
+                        _Gauge = New uGauge("")
+                        If _Show = False Then Exit Property
+                        StkTool.Children.Add(_Gauge)
                     Case Else
 
                 End Select
@@ -1269,6 +1281,9 @@ Public Class uWidgetEmpty
                         If Me.Type = TypeOfWidget.Volet And _VOLET IsNot Nothing Then
                             _VOLET.Value = _dev.Value
                         End If
+                        If Me.Type = TypeOfWidget.Gauge And _Gauge IsNot Nothing Then
+                            _Gauge.Value = _dev.Value
+                        End If
                         If Me.Type = TypeOfWidget.Moteur And _MOTEUR IsNot Nothing Then
                             If _dev.Value.GetType.ToString.ToUpper.Contains("BOOLEAN") Then
                                 If _dev.Value Then
@@ -1370,6 +1385,9 @@ Public Class uWidgetEmpty
                 Case TypeOfWidget.Camera
                     _Camera.Width = Me.ActualWidth
                     _Camera.Height = Me.ActualHeight
+                Case TypeOfWidget.Gauge
+                    _Gauge.Width = Me.ActualWidth
+                    _Gauge.Height = Me.ActualHeight
                 Case TypeOfWidget.Volet
                     _VOLET.Width = Me.ActualWidth
                     _VOLET.Height = Me.ActualHeight - 30
@@ -2319,6 +2337,8 @@ Public Class uWidgetEmpty
                     Exit Sub
                 Case TypeOfWidget.Label
                     Exit Sub
+                Case TypeOfWidget.Gauge
+                    Exit Sub
             End Select
 
             If ShowEtiquette And ShowPicture And Lbl.ActualHeight > 0 And Me.ActualHeight > 0 Then
@@ -2394,6 +2414,7 @@ Public Class uWidgetEmpty
             _VOLET = Nothing
             _MOTEUR = Nothing
             _PRISE = Nothing
+            _Gauge = Nothing
         Catch ex As Exception
             AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Unloaded: " & ex.Message, "Erreur", " uWidgetEmpty.Unloaded")
         End Try

@@ -1,4 +1,5 @@
-﻿Imports Microsoft.AspNet.SignalR.Client.Hubs
+﻿Imports System.Collections.Generic
+Imports Microsoft.AspNet.SignalR.Client.Hubs
 
 Public Class PushNotification
     Dim _Url As String
@@ -14,7 +15,7 @@ Public Class PushNotification
     End Sub
 
     Public Function Open() As Boolean
-        _Connection = New HubConnection(Me._Url)
+        _Connection = New HubConnection(_Url)
         _Connection.Headers.Add("sKey", Me._Key)
         Dim hub = _Connection.CreateHubProxy("NotificationHub")
         hub.On(Of String, String)("DeviceChanged", AddressOf Me.OnDeviceChanged)
