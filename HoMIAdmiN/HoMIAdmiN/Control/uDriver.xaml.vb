@@ -66,14 +66,35 @@ Partial Public Class uDriver
 
                 'on affiche les parametres avancées
                 If x.Parametres IsNot Nothing And x.Parametres.Count > 0 Then
-                    StkParam.Visibility = Windows.Visibility.Visible
-                    CbParam.Items.Clear()
-                    For k As Integer = 0 To x.Parametres.Count - 1
-                        CbParam.Items.Add(x.Parametres.Item(k).Nom)
-                        _ListParam.Add(x.Parametres.Item(k).Valeur)
+                    ParamAv.Visibility = Windows.Visibility.Visible
+                    StkPrmName.Children.Clear()
+                    StkPrmValue.Children.Clear()
+                    For Each prm As HoMIDom.HoMIDom.Driver.Parametre In x.Parametres
+                        Dim lbl As New Label
+                        With lbl
+                            .Foreground = Brushes.White
+                            .Width = 150
+                            .Content = prm.Nom & ":"
+                            .ToolTip = prm.Description
+                        End With
+                        StkPrmName.Children.Add(lbl)
+                        Dim txt As New TextBox
+                        With txt
+                            .Width = 150
+                            .Text = prm.Valeur
+                        End With
+                        _ListParam.Add(prm.Valeur)
+                        StkPrmValue.Children.Add(txt)
                     Next
+                    'StkParam.Visibility = Windows.Visibility.Visible
+                    'CbParam.Items.Clear()
+                    'For k As Integer = 0 To x.Parametres.Count - 1
+                    '    CbParam.Items.Add(x.Parametres.Item(k).Nom)
+                    '    _ListParam.Add(x.Parametres.Item(k).Valeur)
+                    'Next
                 Else
-                    StkParam.Visibility = Windows.Visibility.Collapsed
+                    'StkParam.Visibility = Windows.Visibility.Collapsed
+                    ParamAv.Visibility = Windows.Visibility.Collapsed
                 End If
 
                 TxtNom.Text = x.Nom
@@ -172,6 +193,14 @@ Partial Public Class uDriver
                     AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "L'adresse UDP doit être au format xx.xx.xx.xx", "Erreur port COM", "")
                     Exit Sub
                 End If
+            End If
+
+            If StkPrmName.Children.Count = _ListParam.Count And StkPrmValue.Children.Count = _ListParam.Count Then
+                For i = 0 To _ListParam.Count - 1
+                    Dim txt As TextBox = StkPrmValue.Children.Item(i)
+                    _ListParam.Item(i) = txt.Text
+                    txt = Nothing
+                Next
             End If
 
             'if all OK, save the driver and close window
@@ -327,28 +356,28 @@ Partial Public Class uDriver
         End Try
     End Sub
 
-    Private Sub CbParam_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbParam.SelectionChanged
-        Try
-            If CbParam.SelectedIndex >= 0 Then
-                CbParam.ToolTip = x.Parametres.Item(CbParam.SelectedIndex).Description
-                TxtParam.Text = _ListParam.Item(CbParam.SelectedIndex)
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDriver CbParam_SelectionChanged: " & ex.ToString, "ERREUR", "")
-        End Try
-    End Sub
+    'Private Sub CbParam_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbParam.SelectionChanged
+    '    Try
+    '        If CbParam.SelectedIndex >= 0 Then
+    '            CbParam.ToolTip = x.Parametres.Item(CbParam.SelectedIndex).Description
+    '            TxtParam.Text = _ListParam.Item(CbParam.SelectedIndex)
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDriver CbParam_SelectionChanged: " & ex.ToString, "ERREUR", "")
+    '    End Try
+    'End Sub
 
-    Private Sub BtnOkParam_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOkParam.Click
-        Try
-            If CbParam.SelectedIndex >= 0 And String.IsNullOrEmpty(TxtParam.Text) = False Then
-                _ListParam.Item(CbParam.SelectedIndex) = TxtParam.Text
-            Else
-                AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez sélectionner un paramètre ou saisir sa valeur", "Erreur", "")
-            End If
-        Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDriver BtnOkParam_Click: " & ex.ToString, "ERREUR", "")
-        End Try
-    End Sub
+    'Private Sub BtnOkParam_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOkParam.Click
+    '    Try
+    '        If CbParam.SelectedIndex >= 0 And String.IsNullOrEmpty(TxtParam.Text) = False Then
+    '            _ListParam.Item(CbParam.SelectedIndex) = TxtParam.Text
+    '        Else
+    '            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez sélectionner un paramètre ou saisir sa valeur", "Erreur", "")
+    '        End If
+    '    Catch ex As Exception
+    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDriver BtnOkParam_Click: " & ex.ToString, "ERREUR", "")
+    '    End Try
+    'End Sub
 
     Private Sub BtnHelp_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnHelp.Click
         'MessageBox.Show(BtnHelp.ToolTip, "Aide", MessageBoxButton.OK, MessageBoxImage.Question)
