@@ -4,6 +4,7 @@ Imports HoMIDom.HoMIDom.Device
 Imports System.IO.Ports
 Imports System.Xml
 Imports System.Globalization
+Imports System.Threading
 
 '************************************************
 'INFOS 
@@ -311,11 +312,6 @@ Public Class Driver_Energie
                         'Fixe la valeur du totaliseur journalier
                         If _LastDayEau <> Now.Day Or (_Cpt_EAU_First_Day = 0 And _cpt_EAU_Actuel > 0) Then
                             _Cpt_EAU_First_Day = _cpt_EAU_Actuel
-                            If _LastDayEau <> Now.Day Then
-                                _Cpt_EAU_Jm1 = _Cpt_EAU_First_Day
-                                _Cpt_EAU_First_Day = 0
-                                _LastDayEau = Now.Day
-                            End If
                         End If
 
                         'Pas de calcul si la valeur du compteur actuel = 0
@@ -357,11 +353,6 @@ Public Class Driver_Energie
                         'Fixe la valeur du totaliseur journalier
                         If _LastDayEDF <> Now.Day Or (_Cpt_EDF_First_Day = 0 And _cpt_EDF_Actuel > 0) Then
                             _Cpt_EDF_First_Day = _cpt_EDF_Actuel
-                            If _LastDayEDF <> Now.Day Then
-                                _Cpt_EDF_Jm1 = _Cpt_EDF_First_Day
-                                _Cpt_EDF_First_Day = 0
-                                _LastDayEDF = Now.Day
-                            End If
                         End If
 
                         'Pas de calcul si la valeur du compteur actuel = 0
@@ -441,11 +432,6 @@ Public Class Driver_Energie
                         'Fixe la valeur du totaliseur journalier
                         If _LastDayGAZ <> Now.Day Or (_Cpt_GAZ_First_Day = 0 And _cpt_GAZ_Actuel > 0) Then
                             _Cpt_GAZ_First_Day = _cpt_GAZ_Actuel
-                            If _LastDayGAZ <> Now.Day Then
-                                _Cpt_GAZ_Jm1 = _Cpt_GAZ_First_Day
-                                _Cpt_GAZ_First_Day = 0
-                                _LastDayGAZ = Now.Day
-                            End If
                         End If
 
                         'Pas de calcul si la valeur du compteur actuel = 0
@@ -584,6 +570,9 @@ Public Class Driver_Energie
                 _LastDayEDF = 0
                 _LastDayGAZ = 0
                 _IsConnect = True
+
+                MyTimer.Start()
+
                 _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Start", "Driver démarré")
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
@@ -611,6 +600,7 @@ Public Class Driver_Energie
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Try
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Stop", "Driver arrêté")
+            MyTimer.Stop()
             _IsConnect = False
             _LastDayEau = 0
             _LastDayEDF = 0
@@ -764,11 +754,34 @@ Public Class Driver_Energie
         Add_LibelleDevice("ADRESSE2", "@", "")
         Add_LibelleDevice("SOLO", "@", "")
         Add_LibelleDevice("MODELE", "@", "")
+
+        MyTimer.Interval = 60000
+        AddHandler MyTimer.Elapsed, AddressOf Minute
     End Sub
 #End Region
 
 #Region "Fonctions propres au driver"
-
+    Public Sub Minute()
+        Try
+            If _LastDayEau <> Now.Day Then
+                _Cpt_EAU_Jm1 = _Cpt_EAU_First_Day
+                _Cpt_EAU_First_Day = 0
+                _LastDayEau = Now.Day
+            End If
+            If _LastDayEDF <> Now.Day Then
+                _Cpt_EDF_Jm1 = _Cpt_EDF_First_Day
+                _Cpt_EDF_First_Day = 0
+                _LastDayEDF = Now.Day
+            End If
+            If _LastDayGAZ <> Now.Day Then
+                _Cpt_GAZ_Jm1 = _Cpt_GAZ_First_Day
+                _Cpt_GAZ_First_Day = 0
+                _LastDayGAZ = Now.Day
+            End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Minute", "Exception : " & ex.Message)
+        End Try
+    End Sub
 
 
 #End Region
