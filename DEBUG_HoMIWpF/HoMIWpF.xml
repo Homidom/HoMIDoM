@@ -106,6 +106,14 @@ uCtrlImgMnu
 	<summary>
 InitializeComponent
 </summary>
+</member><member name="M:HoMIWpF.uChart.InitializeComponent">
+	<summary>
+InitializeComponent
+</summary>
+</member><member name="T:HoMIWpF.uChart">
+	<summary>
+uChart
+</summary>
 </member><member name="M:HoMIWpF.keyboard.InitializeComponent">
 	<summary>
 InitializeComponent
@@ -189,6 +197,30 @@ InitializeComponent
 </member><member name="T:HoMIWpF.Window1">
 	<summary>
 Window1
+</summary>
+</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
+	<summary>
+CreateInstance
+</summary>
+</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
+	<summary>
+GetPropertyValue
+</summary>
+</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
+	<summary>
+SetPropertyValue
+</summary>
+</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
+	<summary>
+CreateDelegate
+</summary>
+</member><member name="M:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
+	<summary>
+AddEventHandler
+</summary>
+</member><member name="T:HoMIWpF.XamlGeneratedNamespace.GeneratedInternalTypeHelper">
+	<summary>
+GeneratedInternalTypeHelper
 </summary>
 </member><member name="M:HoMIWpF.uFreeBox.InitializeComponent">
 	<summary>
@@ -278,6 +310,68 @@ InitializeComponent
 	<summary>
 WWidgetProperty
 </summary>
+</member><member name="T:HoMIWpF.uChart.Periodes">
+	<summary>
+ Periode à afficher, à la journée, au mois à l'année
+ </summary>
+	<remarks></remarks>
+</member><member name="T:HoMIWpF.uChart.TypeCharts">
+	<summary>
+ Types de chart (line, column, bar..)
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIWpF.uChart.Redraw">
+	<summary>
+ Recharge le chart
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIWpF.uChart.GetData">
+	<summary>
+ Recupère les données
+ </summary>
+	<remarks></remarks>
+</member><member name="M:HoMIWpF.uChart.BtnJour_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Bouton Jour
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIWpF.uChart.BtnMois_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Bouton Mois
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIWpF.uChart.BtnAnnee_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Bouton Annee
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIWpF.uChart.BtnBar_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Bouton Graphe Bar
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIWpF.uChart.BtnColumn_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Bouton Graphe colonne
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:HoMIWpF.uChart.BtnLine_Click(System.Object,System.Windows.RoutedEventArgs)">
+	<summary>
+ Bouton Graphe Line
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
 </member><member name="T:HoMIWpF.Customcontrols.Colorpicker">
 	<summary>
  Interaction logic for Colorpicker.xaml
