@@ -22,6 +22,7 @@ Public Class uWidgetEmpty
         Image = 10
         Prise = 11
         Gauge = 12
+        Chart = 13
         Device = 99
     End Enum
 
@@ -111,6 +112,11 @@ Public Class uWidgetEmpty
 
     'Variables Widget Gauge
     Dim _Gauge As uGauge = Nothing
+
+    'Variables Chart
+    Dim _Chart As uChart = Nothing
+    Dim _Periode As Integer = 0
+    Dim _TypeChart As Integer = 0
 
     'Variable Min/Max
     Dim _Min As Integer
@@ -486,6 +492,17 @@ Public Class uWidgetEmpty
                         _Gauge = New uGauge("")
                         If _Show = False Then Exit Property
                         StkTool.Children.Add(_Gauge)
+                    Case TypeOfWidget.Chart
+                        CanEditValue = False
+                        StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
+                        StkTool.Visibility = Windows.Visibility.Visible
+                        _Chart = New uChart(Id)
+                        _Chart.Periode = Periode
+                        _Chart.TypeChart = TypeChart
+                        AddHandler _Chart.PeriodeChange, AddressOf PeriodeChange
+                        AddHandler _Chart.TypeChartChange, AddressOf TypeChartChange
+                        If _Show = False Then Exit Property
+                        StkTool.Children.Add(_Chart)
                     Case Else
 
                 End Select
@@ -1110,6 +1127,46 @@ Public Class uWidgetEmpty
     End Property
 #End Region
 
+#Region "Property Chart"
+    Public Property Periode As Integer
+        Get
+            Return _Periode
+        End Get
+        Set(value As Integer)
+            If _Periode <> value Then
+                If _Chart IsNot Nothing Then
+                    _Chart.Periode = value
+                End If
+                _Periode = value
+                SaveWidgetToLst()
+            End If
+        End Set
+    End Property
+
+    Public Property TypeChart As Integer
+        Get
+            Return _TypeChart
+        End Get
+        Set(value As Integer)
+            If _TypeChart <> value Then
+                If _Chart IsNot Nothing Then
+                    _Chart.TypeChart = value
+                End If
+                _TypeChart = value
+                SaveWidgetToLst()
+            End If
+        End Set
+    End Property
+
+    Sub PeriodeChange(e As uChart.Periodes)
+        Periode = e
+    End Sub
+
+    Sub TypeChartChange(e As uChart.TypeCharts)
+        TypeChart = e
+    End Sub
+#End Region
+
     Public Sub New()
 
         ' Cet appel est requis par le Concepteur Windows Form.
@@ -1284,6 +1341,9 @@ Public Class uWidgetEmpty
                         If Me.Type = TypeOfWidget.Gauge And _Gauge IsNot Nothing Then
                             _Gauge.Value = _dev.Value
                         End If
+                        If Me.Type = TypeOfWidget.Chart And _Chart IsNot Nothing Then
+                            _Chart.IDDevice = _dev.ID
+                        End If
                         If Me.Type = TypeOfWidget.Moteur And _MOTEUR IsNot Nothing Then
                             If _dev.Value.GetType.ToString.ToUpper.Contains("BOOLEAN") Then
                                 If _dev.Value Then
@@ -1388,6 +1448,9 @@ Public Class uWidgetEmpty
                 Case TypeOfWidget.Gauge
                     _Gauge.Width = Me.ActualWidth
                     _Gauge.Height = Me.ActualHeight
+                Case TypeOfWidget.Chart
+                    _Chart.Width = Me.ActualWidth
+                    _Chart.Height = Me.ActualHeight
                 Case TypeOfWidget.Volet
                     _VOLET.Width = Me.ActualWidth
                     _VOLET.Height = Me.ActualHeight - 30
@@ -2233,7 +2296,7 @@ Public Class uWidgetEmpty
                         ' sur l 'icône de la zone pour faire un refresh manuel
                         'frmMere.ShowZone(frmMere._CurrentIdZone)
                     End If
-                    X.Close()
+                    x.Close()
 
                 Catch ex As Exception
                     AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Stk1_MouseDown: " & ex.Message, "Erreur", " uWidgetEmpty.Stk1_MouseDown")
@@ -2312,6 +2375,19 @@ Public Class uWidgetEmpty
         End Try
     End Sub
 
+    Private Sub SaveWidgetToLst()
+        Try
+            For i As Integer = 0 To _ListElement.Count - 1
+                If _ListElement.Item(i).Uid = Me.Uid And _ListElement.Item(i).ZoneId = Me.ZoneId Then
+                    _ListElement.Item(i) = Me
+                    Exit For
+                End If
+            Next
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.SaveWidgetToLst: " & ex.ToString, "Erreur", " uWidgetEmpty.SaveWidgetToLst")
+        End Try
+    End Sub
+
     Private Sub uWidgetEmpty_SizeChanged(ByVal sender As Object, ByVal e As System.Windows.SizeChangedEventArgs) Handles Me.SizeChanged
         Try
             If _Show = False Then Exit Sub
@@ -2339,6 +2415,9 @@ Public Class uWidgetEmpty
                     Exit Sub
                 Case TypeOfWidget.Gauge
                     Exit Sub
+                Case TypeOfWidget.Chart
+                    _Chart.Width = Me.ActualWidth
+                    _Chart.Height = Me.ActualHeight
             End Select
 
             If ShowEtiquette And ShowPicture And Lbl.ActualHeight > 0 And Me.ActualHeight > 0 Then
@@ -2405,6 +2484,7 @@ Public Class uWidgetEmpty
                 RemoveHandler _dt.Tick, AddressOf dispatcherTimer_Tick
                 _dt = Nothing
             End If
+
             Image.Source = Nothing
             _Webbrowser = Nothing
             _RSS = Nothing
@@ -2415,6 +2495,7 @@ Public Class uWidgetEmpty
             _MOTEUR = Nothing
             _PRISE = Nothing
             _Gauge = Nothing
+            _Chart = Nothing
         Catch ex As Exception
             AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Unloaded: " & ex.Message, "Erreur", " uWidgetEmpty.Unloaded")
         End Try

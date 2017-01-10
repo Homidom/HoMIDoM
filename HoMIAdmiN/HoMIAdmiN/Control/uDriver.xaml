@@ -21,15 +21,7 @@
                             <Label Foreground="White" HorizontalAlignment="Left" Name="Label6" Width="215" VerticalAlignment="Top">Protocol:</Label>
                             <TextBox Background="DarkGray" BorderBrush="Black" Foreground="Black" HorizontalAlignment="Left" Name="TxtProtocol" Width="215" Height="22" VerticalAlignment="Top" IsEnabled="False" />
                         </StackPanel>
-                        <StackPanel Name="StkParam" Margin="10,0,0,0">
-                            <Label Content="Paramètres avancés:" Foreground="White" HorizontalAlignment="Left" Name="Label14" VerticalAlignment="Top" Visibility="Visible" Width="125.493" />
-                            <StackPanel Orientation="Horizontal" >
-                                <ComboBox Height="25" HorizontalAlignment="Left" Name="CbParam" VerticalAlignment="Top" Width="148" Background="DarkGray" BorderBrush="Black" Foreground="#FF474646" BorderThickness="2" AllowDrop="True"></ComboBox>
-                                <Label Content="=" Foreground="White" HorizontalAlignment="Right" Name="Label15" VerticalAlignment="Top" Visibility="Visible" Width="24" />
-                                <TextBox Height="25" HorizontalAlignment="Right" Name="TxtParam" VerticalAlignment="Top" Width="144" Background="DarkGray" BorderBrush="Black" Foreground="White" AllowDrop="True" />
-                                <Button Margin="15,0,0,0" Content="Ok" Foreground="White" Height="25" HorizontalAlignment="Right" Name="BtnOkParam" Template="{DynamicResource GlassButton}" VerticalAlignment="Top" Width="28" />
-                            </StackPanel>
-                        </StackPanel>
+                        <StackPanel Name="StkParam" Margin="10,0,0,0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" >
                         <StackPanel Name="StkAdrIP" Margin="0,0,10,0">
@@ -44,8 +36,8 @@
                             <Label Foreground="White" Name="Label7" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Left" Width="150">Adresse UDP:</Label>
                             <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" Name="TxtAdrUDP" VerticalAlignment="Top" Visibility="Visible" HorizontalAlignment="Right" Width="150"></TextBox>
                         </StackPanel>
-                        <StackPanel Name="StkPortUDP">
-                            <Label Foreground="White" HorizontalAlignment="Right" Name="Label16" VerticalAlignment="Top" Visibility="Visible">Port UDP:</Label>
+                        <StackPanel Name="StkPortUDP" >
+                            <Label Foreground="White" HorizontalAlignment="Left" Name="Label16" VerticalAlignment="Top" Visibility="Visible">Port UDP:</Label>
                             <TextBox Background="DarkGray" BorderBrush="Black" Foreground="White" Height="22" HorizontalAlignment="Right" Name="TxtPortUDP" VerticalAlignment="Top" Visibility="Visible" Width="70"></TextBox>
                         </StackPanel>
                     </StackPanel>
@@ -67,6 +59,17 @@
                             <TextBox Height="22" Background="DarkGray" Width="100 " BorderBrush="Black" Foreground="White" Name="TxtModele" />
                         </StackPanel> 
                     </StackPanel>
+                    <Expander Name="ParamAv" Header="Paramètres avancés" Visibility="Collapsed">
+                        <Expander.Foreground>
+                            <SolidColorBrush Color="White"/>
+                        </Expander.Foreground>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="200">
+                            <StackPanel Orientation="Horizontal" >
+                                <StackPanel Name="StkPrmName" Orientation="Vertical" />
+                                <StackPanel Name="StkPrmValue" Orientation="Vertical" />
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Expander>
                     <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
                         <Label HorizontalAlignment="Left" Name="Label12" VerticalAlignment="Bottom" Width="119" Foreground="White" Height="26">Fonctions avancées :</Label>
                         <Button Height="23" Name="BtnAv" Width="22" Template="{DynamicResource GlassButton}" Foreground="White">&gt;&gt;</Button>

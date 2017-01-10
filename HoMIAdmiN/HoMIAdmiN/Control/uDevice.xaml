@@ -155,6 +155,7 @@
                             <Expander.Foreground>
                                 <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.HighlightTextColorKey}}"/>
                             </Expander.Foreground>
+                            <ScrollViewer VerticalScrollBarVisibility=" Auto" MaxHeight="200">
                             <StackPanel Orientation="Horizontal" >
                                 <StackPanel HorizontalAlignment="Left" Margin="0,7,0,0">
                                     <Label Content="Zones:" Foreground="White" />
@@ -194,6 +195,7 @@
                                     </StackPanel>
                                 </StackPanel>
                             </StackPanel>
+                            </ScrollViewer>
                         </Expander>
                         <StackPanel Orientation="Horizontal" Name="StkID">
                             <Label Content="ID:" Foreground="LightGray" FontSize="10" />

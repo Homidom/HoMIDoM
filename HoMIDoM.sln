@@ -116,6 +116,8 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_AlertesAtmo", "Drive
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_OpenWeatherMap", "Drivers\Driver_OpenWeatherMap\Driver_OpenWeatherMap.vbproj", "{8DBBEEF9-7715-45C5-8F28-A4E5D0F6E188}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Energie", "Drivers\Driver_Energie\Driver_Energie.vbproj", "{D556B104-BB51-4A6E-ADEA-0BA93E1634C2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -624,6 +626,16 @@ Global
 		{8DBBEEF9-7715-45C5-8F28-A4E5D0F6E188}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{8DBBEEF9-7715-45C5-8F28-A4E5D0F6E188}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{8DBBEEF9-7715-45C5-8F28-A4E5D0F6E188}.Release|x86.ActiveCfg = Release|Any CPU
+		{D556B104-BB51-4A6E-ADEA-0BA93E1634C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D556B104-BB51-4A6E-ADEA-0BA93E1634C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D556B104-BB51-4A6E-ADEA-0BA93E1634C2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D556B104-BB51-4A6E-ADEA-0BA93E1634C2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D556B104-BB51-4A6E-ADEA-0BA93E1634C2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D556B104-BB51-4A6E-ADEA-0BA93E1634C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D556B104-BB51-4A6E-ADEA-0BA93E1634C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D556B104-BB51-4A6E-ADEA-0BA93E1634C2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D556B104-BB51-4A6E-ADEA-0BA93E1634C2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D556B104-BB51-4A6E-ADEA-0BA93E1634C2}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -674,12 +686,13 @@ Global
 		{25D01A09-60A9-4D63-B18F-CF54D158897C} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
 		{8E61A745-C86C-4EF1-BDDF-F849CA47F52E} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
 		{8DBBEEF9-7715-45C5-8F28-A4E5D0F6E188} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
+		{D556B104-BB51-4A6E-ADEA-0BA93E1634C2} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_IncrementBeforeBuild = True
-		BuildVersion_UseGlobalSettings = True
-		BuildVersion_BuildVersioningStyle = None.None.Increment.None
-		BuildVersion_UpdateFileVersion = True
 		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_BuildVersioningStyle = None.None.Increment.None
+		BuildVersion_UseGlobalSettings = True
+		BuildVersion_IncrementBeforeBuild = True
 	EndGlobalSection
 EndGlobal
