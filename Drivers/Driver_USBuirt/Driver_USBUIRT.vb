@@ -2,6 +2,8 @@
 Imports HoMIDom.HoMIDom.Device
 Imports HoMIDom.HoMIDom.Server
 Imports UsbUirt
+Imports UsbUirt.Enums
+Imports UsbUirt.EventArgs
 
 ' Auteur : Seb
 ' Date : 10/02/2011
@@ -50,19 +52,19 @@ Imports UsbUirt
 
 #Region "Variables internes"
     'variables propres à ce driver
-    <NonSerialized()> Dim mc As Controller 'var pour l'usb uirt
-    <NonSerialized()> Private learn_code_modifier As LearnCodeModifier = LearnCodeModifier.ForceStruct
-    <NonSerialized()> Private code_format As CodeFormat = CodeFormat.Uuirt
-    <NonSerialized()> Dim args As LearnCompletedEventArgs = Nothing 'arguments récup lors de l'apprentissage
+    '<NonSerialized()> Dim mc As UsbUirt.Driver  'var pour l'usb uirt
+    '<NonSerialized()> Private learn_code_modifier As LearnCodeModifier = LearnCodeModifier.ForceStruct
+    '<NonSerialized()> Private code_format As CodeFormat = CodeFormat.Uuirt
+    '<NonSerialized()> Dim args As LearnCompletedEventArgs = Nothing 'arguments récup lors de l'apprentissage
     <NonSerialized()> Dim Count As Integer = 1
     <NonSerialized()> Dim _CodeFormat As CodeFormat = CodeFormat.Uuirt
-    Private last_received_code As String        'dernier code recu
+    'Private last_received_code As String        'dernier code recu
 
-    Public Structure ircodeinfo
-        Public code_to_send As String
-        Public code_to_receive As String
-    End Structure
-
+    'Public Structure ircodeinfo
+    '    Public code_to_send As String
+    '    Public code_to_receive As String
+    'End Structure
+    <NonSerialized()> Dim _OldCode As String = String.Empty
 #End Region
 
 #Region "Propriétés génériques"
@@ -302,15 +304,24 @@ Imports UsbUirt
             Count = _Parametres.Item(0).Valeur
             If IsNumeric(_Parametres.Item(0).Valeur) Then
                 If CInt(_Parametres.Item(0).Valeur) = 0 Then
-                    _CodeFormat = UsbUirt.CodeFormat.Uuirt
+                    _CodeFormat = CodeFormat.Uuirt
                 End If
                 If CInt(_Parametres.Item(0).Valeur) = 1 Then
-                    _CodeFormat = UsbUirt.CodeFormat.Pronto
+                    _CodeFormat = CodeFormat.Pronto
                 End If
             End If
-            Me.mc = New Controller
-            'capte les events
-            AddHandler mc.Received, AddressOf handler_mc_received
+
+            aktProcess = curProcess.Receive
+            startMasterThread.Priority = Threading.ThreadPriority.Highest
+            startMasterThread.Start()
+            MyTimer.Interval = 100
+            AddHandler MyTimer.Elapsed, AddressOf TimerTick
+            MyTimer.Start()
+            'Me.mc = New UsbUirt.Driver
+            ''capte les events
+            'Dim receiver = New Receiver(mc)
+            'receiver.GenerateLegacyCodes = False
+            'AddHandler receiver.Received, AddressOf handler_mc_received
 
             _IsConnect = True
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "USBUIRT", "Driver démarré")
@@ -324,7 +335,10 @@ Imports UsbUirt
     ''' <remarks></remarks>
     Public Sub [Stop]() Implements HoMIDom.HoMIDom.IDriver.Stop
         Try
-            Me.mc = Nothing
+            MyTimer.Stop()
+            RemoveHandler MyTimer.Elapsed, AddressOf TimerTick
+            _abortAll = True
+            'Me.mc = Nothing
             _IsConnect = False
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "USBUIRT", "Driver arrêté")
         Catch ex As Exception
@@ -383,10 +397,10 @@ Imports UsbUirt
                         Count = _Parametres.Item(0).Valeur
                         If IsNumeric(_Parametres.Item(1).Valeur) Then
                             If CInt(_Parametres.Item(1).Valeur) = 0 Then
-                                _CodeFormat = UsbUirt.CodeFormat.Uuirt
+                                _CodeFormat = CodeFormat.Uuirt
                             End If
                             If CInt(_Parametres.Item(1).Valeur) = 1 Then
-                                _CodeFormat = UsbUirt.CodeFormat.Pronto
+                                _CodeFormat = CodeFormat.Pronto
                             End If
                         End If
                         SendCodeIR(Objet.Adresse1, Count)
@@ -401,10 +415,10 @@ Imports UsbUirt
                         Count = _Parametres.Item(0).Valeur
                         If IsNumeric(_Parametres.Item(1).Valeur) Then
                             If CInt(_Parametres.Item(1).Valeur) = 0 Then
-                                _CodeFormat = UsbUirt.CodeFormat.Uuirt
+                                _CodeFormat = CodeFormat.Uuirt
                             End If
                             If CInt(_Parametres.Item(1).Valeur) = 1 Then
-                                _CodeFormat = UsbUirt.CodeFormat.Pronto
+                                _CodeFormat = CodeFormat.Pronto
                             End If
                         End If
                         SendCodeIR(Objet.Adresse2, Count)
@@ -420,10 +434,10 @@ Imports UsbUirt
                             Count = _Parametres.Item(0).Valeur
                             If IsNumeric(_Parametres.Item(1).Valeur) Then
                                 If CInt(_Parametres.Item(1).Valeur) = 0 Then
-                                    _CodeFormat = UsbUirt.CodeFormat.Uuirt
+                                    _CodeFormat = CodeFormat.Uuirt
                                 End If
                                 If CInt(_Parametres.Item(1).Valeur) = 1 Then
-                                    _CodeFormat = UsbUirt.CodeFormat.Pronto
+                                    _CodeFormat = CodeFormat.Pronto
                                 End If
                             End If
                             SendCodeIR(Objet.Adresse2, Count)
@@ -437,10 +451,10 @@ Imports UsbUirt
                             Count = _Parametres.Item(0).Valeur
                             If IsNumeric(_Parametres.Item(1).Valeur) Then
                                 If CInt(_Parametres.Item(1).Valeur) = 0 Then
-                                    _CodeFormat = UsbUirt.CodeFormat.Uuirt
+                                    _CodeFormat = CodeFormat.Uuirt
                                 End If
                                 If CInt(_Parametres.Item(1).Valeur) = 1 Then
-                                    _CodeFormat = UsbUirt.CodeFormat.Pronto
+                                    _CodeFormat = CodeFormat.Pronto
                                 End If
                             End If
                             SendCodeIR(Objet.Adresse1, Count)
@@ -487,8 +501,8 @@ Imports UsbUirt
         Try
             Dim x As New DeviceCommande
             x.NameCommand = Nom
-            x.DescriptionCommand = description
-            x.CountParam = nbparam
+            x.DescriptionCommand = Description
+            x.CountParam = NbParam
             _DeviceCommandPlus.Add(x)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
@@ -581,7 +595,18 @@ Imports UsbUirt
     ''' <summary>Si refresh >0 gestion du timer</summary>
     ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
     Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
+        If String.IsNullOrEmpty(_RecCode) = False And _OldCode <> _RecCode Then
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "USBUirt TimerTick", "RecCode: " & _RecCode)
+            _OldCode = _RecCode
+        End If
 
+        If aktProcess = curProcess.Learn Then
+            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "USBUirt TimerTick", "LEARN: FREQ=" & _SignalFreq / 1000 & " kHz  QUALITY=" & _SignalQuality & "  PROGRESS=" & _LearnProgress & "%  CODE=" & _LearnedCode)
+        End If
+
+        If _TransmitError <> "" Then
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUirt TimerTick", "Erreur: " & _TransmitError)
+        End If
     End Sub
 
 #End Region
@@ -594,71 +619,78 @@ Imports UsbUirt
         If _IsConnect = False Then
             Return "ERREUR: Impossible d'apprendre le code IR le driver n'est pas connecté"
         Else
-            _FlagFinish = False
-            Dim x As ircodeinfo = Nothing
-            x = wait_for_code()
-            If String.IsNullOrEmpty(x.code_to_send) Then
-                Return String.Empty
-            Else
-                Dim f As Integer = 0
-                If _CodeFormat = CodeFormat.Pronto Then f = 1
-                If _CodeFormat = CodeFormat.Uuirt Then f = 0
-                Return "c=" & x.code_to_send & ";r=" & Count & ";f=" & f
-            End If
+            Try
+                aktProcess = curProcess.Learn
+                _SignalFreq = 0
+                _SignalQuality = 0
+                _LearnedCode = ""
+                _LearnProgress = 0
+                _LearnComplete = False
+
+                '_FlagFinish = False
+                'Dim x As ircodeinfo = Nothing
+                'x = wait_for_code()
+                'If String.IsNullOrEmpty(x.code_to_send) Then
+                '    Return String.Empty
+                'Else
+                '    Dim f As Integer = 0
+                '    If _CodeFormat = CodeFormat.Pronto Then f = 1
+                '    If _CodeFormat = CodeFormat.Uuirt Then f = 0
+                '    Return "c=" & x.code_to_send & ";r=" & Count & ";f=" & f
+                'End If
+
+            Catch ex As Exception
+                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "Erreur lors de l'apprentissage:" & ex.Message)
+            End Try
         End If
     End Function
 
     Dim _FlagFinish As Boolean = False
 
     'boucle qui attend kon recoive
-    <System.STAThread()> _
-    Private Function wait_for_code() As ircodeinfo
+    '<System.STAThread()> _
+    'Private Function wait_for_code() As ircodeinfo
+    '    Try
+    '        'handler
+    '        Me.args = Nothing
+    '        Dim learner = New Learner(mc)
+    '        AddHandler learner.Learning, AddressOf handler_mc_learning
 
-        'handler
-        AddHandler mc.Learning, AddressOf handler_mc_learning
-        AddHandler mc.LearnCompleted, AddressOf handler_mc_learning_completed
-        Me.args = Nothing
+    '        Using learnHelper = New LearnHelper()
+    '            AddHandler learnHelper.LearningComplete, AddressOf handler_mc_learning_completed
+    '            learnHelper.LearnAsync(Me._CodeFormat, Me.learn_code_modifier)
+    '        End Using
 
-        'lance l'apprentissage
-        Try
-            Try
-                Me.mc.LearnAsync(Me._CodeFormat, Me.learn_code_modifier, Me.args)
-                'Me.mc.Learn(Me.code_format, Me.learn_code_modifier, TimeSpan.Zero)
-            Catch ex As Exception
-                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "Erreur lors de l'apprentissage:" & ex.Message)
-                Return Nothing
-            End Try
+    '        'attend que ce soit appris
+    '        Dim timeout As Date = Now.AddSeconds(15)
 
-            'attend que ce soit appris
-            Dim timeout As Date = Now.AddSeconds(15)
+    '        Do While IsNothing(Me.args) And timeout > Now And _FlagFinish = False
+    '            Threading.Thread.Sleep(500)
+    '        Loop
 
-            Do While IsNothing(Me.args) And timeout > Now And _FlagFinish = False
-                Threading.Thread.Sleep(500)
-            Loop
+    '        'retourne le code
+    '        wait_for_code.code_to_send = Me.args.Code
+    '        wait_for_code.code_to_receive = last_received_code
 
-            'retourne le code
-            wait_for_code.code_to_send = Me.args.Code
-            wait_for_code.code_to_receive = last_received_code
+    '        'c appris ou non !!!
+    '        'RemoveHandler learner.Learning, AddressOf handler_mc_learning
+    '        'RemoveHandler LearnHelper.LearningCompleted, AddressOf handler_mc_learning_completed
 
-            'c appris ou non !!!
-            RemoveHandler mc.Learning, AddressOf handler_mc_learning
-            RemoveHandler mc.LearnCompleted, AddressOf handler_mc_learning_completed
+    '        Return wait_for_code
+    '    Catch ex As Exception
+    '        'c appris ou non !!!
+    '        'RemoveHandler Learner.Learning, AddressOf handler_mc_learning
+    '        'RemoveHandler LearnHelper.LearningComplete, AddressOf handler_mc_learning_completed
 
-            Return wait_for_code
-        Catch ex As Exception
-            'c appris ou non !!!
-            RemoveHandler mc.Learning, AddressOf handler_mc_learning
-            RemoveHandler mc.LearnCompleted, AddressOf handler_mc_learning_completed
+    '        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "Erreur lors de l'apprentissage:" & ex.Message)
+    '        Return Nothing
+    '    End Try
 
-            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "Erreur lors de l'apprentissage:" & ex.Message)
-            Return Nothing
-        End Try
-
-        ''retourne le code 17/03/2015
-        'wait_for_code.code_to_send = Me.args.Code
-        'wait_for_code.code_to_receive = last_received_code
-        'Return wait_for_code
-    End Function
+    '    ''retourne le code 17/03/2015
+    '    'wait_for_code.code_to_send = Me.args.Code
+    '    'wait_for_code.code_to_receive = last_received_code
+    '    'Return wait_for_code
+    'End Function
 
     ''' <summary>Emet un code infrarouge</summary>
     ''' <param name="ir_code"></param>
@@ -693,10 +725,10 @@ Imports UsbUirt
                             Dim _var As String = Mid(_tabl(i), 3, Len(_tabl(i)) - 2)
                             If IsNumeric(_var) Then
                                 If CInt(_var) = 0 Then
-                                    _CodeFormat = UsbUirt.CodeFormat.Uuirt
+                                    _CodeFormat = CodeFormat.Uuirt
                                 End If
                                 If CInt(_var) = 1 Then
-                                    _CodeFormat = UsbUirt.CodeFormat.Pronto
+                                    _CodeFormat = CodeFormat.Pronto
                                 End If
                             End If
                         End If
@@ -707,7 +739,13 @@ Imports UsbUirt
             If _CodeFormat = CodeFormat.Uuirt Then _format = "Uuirt"
             If _CodeFormat = CodeFormat.Pronto Then _format = "Pronto"
 
-            mc.Transmit(_ir_code, _CodeFormat, RepeatCount, TimeSpan.Zero)
+            'Using driver__1 = New Driver()
+            '    Dim transmitter = New Transmitter(driver__1)
+            '    AddHandler transmitter.TransmitCompleted, AddressOf OnTransmitComplete
+            '    transmitter.TransmitAsync(_ir_code, , Emitter.All, _CodeFormat, RepeatCount, 0)
+            'End Using
+
+            'mc.Transmit(_ir_code, _CodeFormat, RepeatCount, TimeSpan.Zero)
             _Server.Log(TypeLog.MESSAGE, TypeSource.DRIVER, "USBUIRT", "Code IR envoyé: " & _ir_code & " Repeat: " & RepeatCount & " Format:" & _format & " FromTrame:" & ir_code)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "USBUIRT", "Problème de transmission: " & ex.Message)
@@ -743,12 +781,24 @@ Imports UsbUirt
 
             If Repeat <= 0 Then Repeat = 1
 
-            mc.Transmit(Code, _myformat, Repeat, TimeSpan.Zero)
+            instantTransmit(Code)
+            'Using mc
+            '    Dim transmitter = New Transmitter(mc)
+            '    AddHandler transmitter.TransmitCompleted, AddressOf OnTransmitComplete
+            '    transmitter.TransmitAsync(Code, , Emitter.All, _myformat, Repeat, 0)
+            'End Using
+
+            ' mc.Transmit(Code, _myformat, Repeat, TimeSpan.Zero)
             _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " EnvoyerCommande", "Code IR envoyé: " & Code & " repeat: " & Repeat & " Format:" & _myformat.ToString)
         Catch ex As Exception
             _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " EnvoyerCommande", "Erreur: " & ex.ToString & vbCrLf & "Code=" & Code & "  Repeat=" & Repeat)
         End Try
     End Sub
+
+    'Private Sub OnTransmitComplete(sender As Object, e As TransmitCompletedEventArgs)
+    '    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " EnvoyerCommande", "OnTransmitComplete: " & e.Error.ToString)
+    'End Sub
+
 
     'handler code recu
     Private Sub handler_mc_received(ByVal sender As Object, ByVal e As ReceivedEventArgs)
@@ -819,38 +869,37 @@ Imports UsbUirt
 
             Catch ex As Exception
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " handler_mc_received", "Erreur : " & ex.ToString)
-        End Try
+            End Try
         End If
 
-
-        last_received_code = e.IRCode
+        'last_received_code = e.IRCode
         RaiseEvent DriverEvent(_Nom, "CODE_RECU", e.IRCode)
     End Sub
 
-    'handler en apprentissage
-    Private Sub handler_mc_learning(ByVal sender As Object, ByVal e As LearningEventArgs)
-        Try
-            If e.Progress >= 100 Then
-                _FlagFinish = True
-            End If
-            '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "Learning: " & e.Progress & " freq=" & e.CarrierFrequency & " quality=" & e.SignalQuality)
-        Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " handler_mc_learning", "Erreur : " & ex.ToString)
-        End Try
-    End Sub
+    ''handler en apprentissage
+    'Private Sub handler_mc_learning(ByVal sender As Object, ByVal e As LearningEventArgs)
+    '    Try
+    '        If e.Progress >= 100 Then
+    '            _FlagFinish = True
+    '        End If
+    '        '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "Learning: " & e.Progress & " freq=" & e.CarrierFrequency & " quality=" & e.SignalQuality)
+    '    Catch ex As Exception
+    '        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " handler_mc_learning", "Erreur : " & ex.ToString)
+    '    End Try
+    'End Sub
 
-    'handler a appris
-    Private Sub handler_mc_learning_completed(ByVal sender As Object, ByVal e As LearnCompletedEventArgs)
-        Try
-            args = e
-            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "Learning completed: " & e.Code)
-            _FlagFinish = True
-            'RaiseEvent DriverEvent(_Nom, "LEARN_TERMINE", e.Code)
-        Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " handler_mc_learning_completed", "Erreur : " & ex.ToString)
-        End Try
+    ''handler a appris
+    'Private Sub handler_mc_learning_completed(ByVal sender As Object, ByVal e As LearnCompletedEventArgs)
+    '    Try
+    '        args = e
+    '        _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "USBUIRT", "Learning completed: " & e.Code)
+    '        _FlagFinish = True
+    '        'RaiseEvent DriverEvent(_Nom, "LEARN_TERMINE", e.Code)
+    '    Catch ex As Exception
+    '        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " handler_mc_learning_completed", "Erreur : " & ex.ToString)
+    '    End Try
 
-    End Sub
+    'End Sub
 #End Region
 
 End Class
