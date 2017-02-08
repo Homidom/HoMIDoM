@@ -487,13 +487,13 @@ Public Class Driver_RFLink
                     '10;LicoClean;    => Erase the Living colors lamp address table 
                     '10;LicoShow;     => Show the Living colors lamp address table
                     '10;EEPClean;     => Clean all settings in EEPROM
-                    If (Command = "RFLink_Ctrl") Then
+                    If UCase(Command) = "RFLINKCTRL" Then
                         RFLinkCommand = "10;" & Parametre1 & ";"
                     End If
 
                 Case "RFLINK FULL CMD"
                     Select Case UCase(Command)
-                        Case "RFLinkFullCmd"
+                        Case "RFLINKFULLCMD"
                             RFLinkCommand = Parametre1
                         Case Else
                             WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
