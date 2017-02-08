@@ -50,32 +50,6 @@ Public Class Driver_RFLink
     'param avancé
     Dim _Ack As Byte
     Dim _DEBUG As Boolean = False
-    '    Dim _PARAMMODE_1_frequence As Integer = 2 '1 : type frequence (310, 315, 433, 868.30, 868.30 FSK, 868.35, 868.35 FSK, 868.95)
-    '    Dim _PARAMMODE_2_undec As Integer = 0 '2 : UNDEC
-    '    Dim _PARAMMODE_3_novatis As Integer = 0 '3 : novatis --> NOT USED ANYMORE 200
-    '    Dim _PARAMMODE_4_proguard As Integer = 1 '4 : proguard
-    '    Dim _PARAMMODE_5_fs20 As Integer = 1 '5 : FS20
-    '    Dim _PARAMMODE_6_lacrosse As Integer = 1 '6 : Lacrosse
-    '    Dim _PARAMMODE_7_hideki As Integer = 1 '7 : Hideki
-    '    Dim _PARAMMODE_8_ad As Integer = 1 '8 : AD
-    '    Dim _PARAMMODE_9_mertik As Integer = 1 '9 : Mertik 111111
-    '    Dim _PARAMMODE_10_visonic As Integer = 1 '10 : Visonic
-    '    Dim _PARAMMODE_11_ati As Integer = 1 '11 : ATI
-    '    Dim _PARAMMODE_12_oregon As Integer = 1 '12 : Oregon
-    '    Dim _PARAMMODE_13_meiantech As Integer = 1 '13 : Meiantech
-    '    Dim _PARAMMODE_14_heeu As Integer = 1 '14 : HEEU
-    '    Dim _PARAMMODE_15_ac As Integer = 1 '15 : AC
-    '    Dim _PARAMMODE_16_arc As Integer = 1 '16 : ARC
-    '    Dim _PARAMMODE_17_x10 As Integer = 1 '17 : X10 11111111
-    '    Dim _PARAMMODE_18_blindst0 As Integer = 0 '18 : BlindsT0
-    '    Dim _PARAMMODE_19_Imagintronix As Integer = 1 '19 : Imagintronix
-    '    Dim _PARAMMODE_20_sx As Integer = 1 '20 : SX
-    '    Dim _PARAMMODE_21_rsl As Integer = 1 '21 : RSL
-    '    Dim _PARAMMODE_22_lighting4 As Integer = 1 '22 : LIGHTING4
-    '    Dim _PARAMMODE_23_fineoffset As Integer = 1 '23 : FINEOFFSET
-    '    Dim _PARAMMODE_24_rubicson As Integer = 1 '24 : RUBICSON
-    '    Dim _PARAMMODE_25_ae As Integer = 1 '25 : AE
-    '    Dim _PARAMMODE_26_blindst1 As Integer = 1 '26 : BlindsT1
 
 #End Region
 
@@ -331,120 +305,6 @@ Public Class Driver_RFLink
                     _DEBUG = _Parametres.Item(0).Valeur
                     _BAUD = _Parametres.Item(1).Valeur
                     _RCVERROR = _Parametres.Item(2).Valeur
-                    '                    If CStr(_Parametres.Item(1).Valeur).Length = 26 Then
-                    '                        WriteLog("ERR: Anciens Paramétres avancés trouvés. Conversion de l'ancienne valeur au nouveau format. Veuillez vérifier que les nouveaux paramétres sont corrects.")
-                    '                        _PARAMMODE_1_frequence = _Parametres.Item(1).Valeur.Substring(0, 1)
-                    '                        _PARAMMODE_2_undec = _Parametres.Item(1).Valeur.Substring(1, 1)
-                    '                        _PARAMMODE_3_novatis = _Parametres.Item(1).Valeur.Substring(2, 1)
-                    '                        _PARAMMODE_4_proguard = _Parametres.Item(1).Valeur.Substring(3, 1)
-                    '                        _PARAMMODE_5_fs20 = _Parametres.Item(1).Valeur.Substring(4, 1)
-                    '                        _PARAMMODE_6_lacrosse = _Parametres.Item(1).Valeur.Substring(5, 1)
-                    '                        _PARAMMODE_7_hideki = _Parametres.Item(1).Valeur.Substring(6, 1)
-                    '                        _PARAMMODE_8_ad = _Parametres.Item(1).Valeur.Substring(7, 1)
-                    '                        _PARAMMODE_9_mertik = _Parametres.Item(1).Valeur.Substring(8, 1)
-                    '                        _PARAMMODE_10_visonic = _Parametres.Item(1).Valeur.Substring(9, 1)
-                    '                        _PARAMMODE_11_ati = _Parametres.Item(1).Valeur.Substring(10, 1)
-                    '                        _PARAMMODE_12_oregon = _Parametres.Item(1).Valeur.Substring(11, 1)
-                    '                        _PARAMMODE_13_meiantech = _Parametres.Item(1).Valeur.Substring(12, 1)
-                    '                        _PARAMMODE_14_heeu = _Parametres.Item(1).Valeur.Substring(13, 1)
-                    '                        _PARAMMODE_15_ac = _Parametres.Item(1).Valeur.Substring(14, 1)
-                    '                        _PARAMMODE_16_arc = _Parametres.Item(1).Valeur.Substring(15, 1)
-                    '                        _PARAMMODE_17_x10 = _Parametres.Item(1).Valeur.Substring(16, 1)
-                    '                        _PARAMMODE_18_blindst0 = _Parametres.Item(1).Valeur.Substring(17, 1)
-                    '                        _PARAMMODE_19_Imagintronix = _Parametres.Item(1).Valeur.Substring(18, 1)
-                    '                        _PARAMMODE_20_sx = _Parametres.Item(1).Valeur.Substring(19, 1)
-                    '                        _PARAMMODE_21_rsl = _Parametres.Item(1).Valeur.Substring(20, 1)
-                    '                        _PARAMMODE_22_lighting4 = _Parametres.Item(1).Valeur.Substring(21, 1)
-                    '                        _PARAMMODE_23_fineoffset = _Parametres.Item(1).Valeur.Substring(22, 1)
-                    '                        _PARAMMODE_24_rubicson = _Parametres.Item(1).Valeur.Substring(23, 1)
-                    '                        _PARAMMODE_25_ae = _Parametres.Item(1).Valeur.Substring(24, 1)
-                    '                        _PARAMMODE_26_blindst1 = _Parametres.Item(1).Valeur.Substring(25, 1)
-                    '
-                    '                        _Parametres.Item(1).Valeur = _PARAMMODE_1_frequence
-                    '                        _Parametres.Item(2).Valeur = _PARAMMODE_2_undec
-                    '                        _Parametres.Item(3).Valeur = _PARAMMODE_3_novatis
-                    '                        _Parametres.Item(4).Valeur = _PARAMMODE_4_proguard
-                    '                        _Parametres.Item(5).Valeur = _PARAMMODE_5_fs20
-                    '                        _Parametres.Item(6).Valeur = _PARAMMODE_6_lacrosse
-                    '                        _Parametres.Item(7).Valeur = _PARAMMODE_7_hideki
-                    '                        _Parametres.Item(8).Valeur = _PARAMMODE_8_ad
-                    '                        _Parametres.Item(9).Valeur = _PARAMMODE_9_mertik
-                    '                        _Parametres.Item(10).Valeur = _PARAMMODE_10_visonic
-                    '                        _Parametres.Item(11).Valeur = _PARAMMODE_11_ati
-                    '                        _Parametres.Item(12).Valeur = _PARAMMODE_12_oregon
-                    '                        _Parametres.Item(13).Valeur = _PARAMMODE_13_meiantech
-                    '                        _Parametres.Item(14).Valeur = _PARAMMODE_14_heeu
-                    '                        _Parametres.Item(15).Valeur = _PARAMMODE_15_ac
-                    '                        _Parametres.Item(16).Valeur = _PARAMMODE_16_arc
-                    '                        _Parametres.Item(17).Valeur = _PARAMMODE_17_x10
-                    '                        _Parametres.Item(18).Valeur = _PARAMMODE_18_blindst0
-                    '                        _Parametres.Item(19).Valeur = _PARAMMODE_19_Imagintronix
-                    '                        _Parametres.Item(20).Valeur = _PARAMMODE_20_sx
-                    '                        _Parametres.Item(21).Valeur = _PARAMMODE_21_rsl
-                    '                        _Parametres.Item(22).Valeur = _PARAMMODE_22_lighting4
-                    '                        _Parametres.Item(23).Valeur = _PARAMMODE_23_fineoffset
-                    '                        _Parametres.Item(24).Valeur = _PARAMMODE_24_rubicson
-                    '                        _Parametres.Item(25).Valeur = _PARAMMODE_25_ae
-                    '                        _Parametres.Item(26).Valeur = _PARAMMODE_26_blindst1
-                    '
-                    '                    ElseIf CStr(_Parametres.Item(1).Valeur).Length > 1 Then
-                    '                        WriteLog("ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut")
-                    '                        _Parametres.Item(1).Valeur = _PARAMMODE_1_frequence
-                    '                        _Parametres.Item(2).Valeur = _PARAMMODE_2_undec
-                    '                        _Parametres.Item(3).Valeur = _PARAMMODE_3_novatis
-                    '                        _Parametres.Item(4).Valeur = _PARAMMODE_4_proguard
-                    '                        _Parametres.Item(5).Valeur = _PARAMMODE_5_fs20
-                    '                        _Parametres.Item(6).Valeur = _PARAMMODE_6_lacrosse
-                    '                        _Parametres.Item(7).Valeur = _PARAMMODE_7_hideki
-                    '                        _Parametres.Item(8).Valeur = _PARAMMODE_8_ad
-                    '                        _Parametres.Item(9).Valeur = _PARAMMODE_9_mertik
-                    '                        _Parametres.Item(10).Valeur = _PARAMMODE_10_visonic
-                    '                        _Parametres.Item(11).Valeur = _PARAMMODE_11_ati
-                    '                        _Parametres.Item(12).Valeur = _PARAMMODE_12_oregon
-                    '                        _Parametres.Item(13).Valeur = _PARAMMODE_13_meiantech
-                    '                        _Parametres.Item(14).Valeur = _PARAMMODE_14_heeu
-                    '                        _Parametres.Item(15).Valeur = _PARAMMODE_15_ac
-                    '                        _Parametres.Item(16).Valeur = _PARAMMODE_16_arc
-                    '                        _Parametres.Item(17).Valeur = _PARAMMODE_17_x10
-                    '                        _Parametres.Item(18).Valeur = _PARAMMODE_18_blindst0
-                    '                        _Parametres.Item(19).Valeur = _PARAMMODE_19_Imagintronix
-                    '                        _Parametres.Item(20).Valeur = _PARAMMODE_20_sx
-                    '                        _Parametres.Item(21).Valeur = _PARAMMODE_21_rsl
-                    '                        _Parametres.Item(22).Valeur = _PARAMMODE_22_lighting4
-                    '                        _Parametres.Item(23).Valeur = _PARAMMODE_23_fineoffset
-                    '                        _Parametres.Item(24).Valeur = _PARAMMODE_24_rubicson
-                    '                        _Parametres.Item(25).Valeur = _PARAMMODE_25_ae
-                    '                        _Parametres.Item(26).Valeur = _PARAMMODE_26_blindst1
-                    '
-                    '                    Else
-                    '                        'situation normale, on recupere chaque parametre
-                    '                        _PARAMMODE_1_frequence = _Parametres.Item(1).Valeur
-                    '                        _PARAMMODE_2_undec = _Parametres.Item(2).Valeur
-                    '                        _PARAMMODE_3_novatis = _Parametres.Item(3).Valeur
-                    '                        _PARAMMODE_4_proguard = _Parametres.Item(4).Valeur
-                    '                        _PARAMMODE_5_fs20 = _Parametres.Item(5).Valeur
-                    '                        _PARAMMODE_6_lacrosse = _Parametres.Item(6).Valeur
-                    '                        _PARAMMODE_7_hideki = _Parametres.Item(7).Valeur
-                    '                        _PARAMMODE_8_ad = _Parametres.Item(8).Valeur
-                    '                        _PARAMMODE_9_mertik = _Parametres.Item(9).Valeur
-                    '                        _PARAMMODE_10_visonic = _Parametres.Item(10).Valeur
-                    '                        _PARAMMODE_11_ati = _Parametres.Item(11).Valeur
-                    '                        _PARAMMODE_12_oregon = _Parametres.Item(12).Valeur
-                    '                        _PARAMMODE_13_meiantech = _Parametres.Item(13).Valeur
-                    '                        _PARAMMODE_14_heeu = _Parametres.Item(14).Valeur
-                    '                        _PARAMMODE_15_ac = _Parametres.Item(15).Valeur
-                    '                        _PARAMMODE_16_arc = _Parametres.Item(16).Valeur
-                    '                        _PARAMMODE_17_x10 = _Parametres.Item(17).Valeur
-                    '                        _PARAMMODE_18_blindst0 = _Parametres.Item(18).Valeur
-                    '                        _PARAMMODE_19_Imagintronix = _Parametres.Item(19).Valeur
-                    '                        _PARAMMODE_20_sx = _Parametres.Item(20).Valeur
-                    '                        _PARAMMODE_21_rsl = _Parametres.Item(21).Valeur
-                    '                        _PARAMMODE_22_lighting4 = _Parametres.Item(22).Valeur
-                    '                        _PARAMMODE_23_fineoffset = _Parametres.Item(23).Valeur
-                    '                        _PARAMMODE_24_rubicson = _Parametres.Item(24).Valeur
-                    '                        _PARAMMODE_25_ae = _Parametres.Item(25).Valeur
-                    '                        _PARAMMODE_26_blindst1 = _Parametres.Item(26).Valeur
-                    '                    End If
 
                 Catch ex As Exception
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", "ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut" & ex.Message)
@@ -452,9 +312,6 @@ Public Class Driver_RFLink
                     _BAUD = 57600
                     _RCVERROR = True
                 End Try
-                '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " AdvParams", "_DEBUG " & _DEBUG)
-                '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " AdvParams", "_BAUD " & _BAUD)
-                '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " AdvParams", "_RCVERROR " & _RCVERROR)
                 _Ack = 0
                 '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " AdvParams", "_Ack " & _Ack)
 
@@ -603,22 +460,229 @@ Public Class Driver_RFLink
             Dim RFLinkCommand As String = ""
             Dim RFAdresse() As String
             RFAdresse = Objet.Adresse1.Split("-")
-            Select Case Command
-                Case "ON", "OFF", "ALLON", "ALLOFF", "UP", "DOWN"
-                    RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
-                Case "DIM"
-                    If Not IsNothing(Parametre1) Then
-                        Parametre1 = Hex(Parametre1)
-                        RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Objet.Parametre1 & ";"
-                    Else
-                        WriteLog("ERR: DIM Il manque un parametre pour (" & Objet.Name & ")")
-                        Exit Sub
+            Select Case UCase(Objet.Modele)
+                Case "RFLINK CTRL"
+                    'Special Control Commands - Send:   
+                    '--------------------------------   
+                    '10;REBOOT;       => Reboot RFLink Gateway hardware   
+                    '10;PING;         => a "keep alive" function. Is replied with: 20;99;PONG;   
+                    '10;VERSION;      => Version and build indicator. Is replied with: 20;99;"RFLink Gateway software version";    
+                    '10;RFDEBUG=ON;   => ON/OFF to Enable/Disable showing of RF packets. Is replied with: 20;99;RFDEBUG="state";   
+                    '10;RFUDEBUG=ON;  => ON/OFF to Enable/Disable showing of undecoded RF packets. Is replied with: 20;99;RFUDEBUG="state";  
+                    '10;QRFDEBUG=ON;  => ON/OFF to Enable/Disable showing of undecoded RF packets. Is replied with: 20;99;QRFDEBUG="state";   
+                    '                    QRFDEBUG is a faster version of RFUDEBUG but all pulse times are shown in hexadecimal and need to be multiplied by 30   
+                    '10;RTSCLEAN;     => Clean Rolling code table stored in internal EEPROM   
+                    '10;RTSRECCLEAN=9 => Clean Rolling code record number (value from 0 - 15)   
+                    '10;RTSSHOW;      => Show Rolling code table stored in internal EEPROM   
+                    '10;STATUS;       => Reports the status of the various modules that can be enabled/disabled   
+                    '                    20;B5;STATUS;setRF433=ON;NodoNRF=OFF;MilightNRF=ON;setLivingColors=ON;setAnsluta=OFF;setGPIO=OFF;   
+                    '10;setRF433=ON   => enable/disable scanning of received 433/868 mhz signals   
+                    '10;setGPIO=ON    => enable/disable scanning of IOPIN changes    
+                    '10;setBLE=ON     => enable/disable scanning of Bluetooth LE signals, requires an NRF24L01 wired for Milight use, not together with Milight/MySensors   
+                    '10;setMySensors=ON  => enable/disable scanning of MySensors signals, requires an NRF24L01 wired for Milight use, not together with Milight/BLE   
+                    '10;setMilight=ON => enable/disable scanning of Milight RF signals, requires an NRF24L01 wired for Milight use, not together with BLE/MySensors    
+                    '10;setNodoNRF=ON => enable/disable scanning of Nodo NRF signals, requires an NRF24L01 wired for Nodo use   
+                    '10;setANSLUTA=ON => enable/disable scanning of Ikea Ansluta signals, requires a CC2500, not together with Livingcolors   
+                    '10;setLIVINGCOLORS=O => enable/disable scanning of Living Colors Gen1 signals, requires a CC2500, not together with Ansluta   
+                    '10;LicoClean;    => Erase the Living colors lamp address table 
+                    '10;LicoShow;     => Show the Living colors lamp address table
+                    '10;EEPClean;     => Clean all settings in EEPROM
+                    If (Command = "RFLink_Ctrl") Then
+                        RFLinkCommand = "10;" & Parametre1 & ";"
                     End If
+
+                Case "RFLINK FULL CMD"
+                    Select Case UCase(Command)
+                        Case "RFLinkFullCmd"
+                            RFLinkCommand = Parametre1
+                        Case Else
+                            WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
+                            Exit Sub
+                    End Select
+
+                Case "AB400D", "BYRON", "BYRON MP", "HOMECONFORT", "FA500", "IKEA KOPPLA", "IMPLULS", "KAMBROOK", "KAKU", "POWERFIX", "UNITEC", "X10"
+                    '10;AB400D;00004d;1;OFF;     => Sartano     protocol;address;action (ON/OFF)
+                    '10;Byron;112233;01;OFF;     => Dyron SX    protocol;address;ringtone
+                    '10;BYRON;00009F;01;ON;      => Byron       protocol;address;chime number,command
+                    '10;HomeConfort;01b523;D3;ON;=> HomeConfort protocol;address;action (ON/OFF)
+                    '10;FA500;001b523;D3;ON;     => Flamingo    protocol;address;action (ON/OFF)
+                    '10;Ikea Koppla;000080;0;ON; => Koppla      protocol;address;action (ON/OFF) 
+                    '10;Impuls;00004d;1;OFF;     => Impuls      protocol;address;action (ON/OFF)
+                    '10;Kambrook;050325;a1;ON;   => Kambrook    protocol;address;unit/button number;action (ON/OFF)
+                    '10;Kaku;00004d;1;OFF;       => Kaku/ARC    protocol;address;action (ON/OFF)
+                    '10;Powerfix;000080;0;ON;    => Powerfix/Quigg/Chacon protocol;address;action (ON/OFF)
+                    '10;UNITEC;7796;01;ON;       => Unitec regular ON command
+                    '10;UNITEC;7796;01;PAIR;     => Unitec pair command to pair RFLink as a remote to a power switch 
+                    '10;X10;000041;1;OFF;        => X10         protocol;address;action (ON/OFF)
+                    'RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
+                    Select Case UCase(Command)
+                        Case "RFLINKCMD"
+                            If IsNothing(Parametre2) Then
+                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                            Else
+                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre2 & ";" & Parametre1 & ";"
+                            End If
+                        Case "ON", "OFF", "UP", "DOWN"
+                            RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
+                        Case "DIM"
+                            If Not IsNothing(Parametre1) Then
+                                Parametre1 = Hex(Parametre1)
+                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                            Else
+                                WriteLog("ERR: DIM Il manque un parametre pour (" & Objet.Name & ")")
+                                Exit Sub
+                            End If
+                        Case Else
+                            WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
+                            Exit Sub
+                    End Select
+
+                Case "BLYSS", "EURODOMEST", "CONRAD", "HOMEEASY", "CHUANGO", "FA20RF"
+                    '10;Eurodomest;123456;01;ON; => Eurodomest protocol;address;button number;action (ON/OFF/ALLON/ALLOFF)
+                    '10;Blyss;ff98;A1;OFF;       => Blyss protocol;address;button;action (ON/OFF/ALLON/ALLOFF)
+                    '10;Conrad;ff0607;1;OFF;     => Conrad RSL protocol, address, button number, action (ON/OFF/ALLON/ALLOFF)
+                    '10;HomeEasy;7900b100;3;ON;  => Home Easy protocol;address;action (ON/OFF/ALLON/ALLOFF)
+                    '10;Chuango;000080;2;ON;     => Chuango Protocol;address;action (ON/OFF/ALLON/ALLOFF)
+                    '10;FA20RF;67f570;1;ON;      => Flamingo FA20RF / FA21 / KD101 protocol, address, button number, action (ON/OFF/ALLON/ALLOFF)
+                    Select Case UCase(Command)
+                        Case "RFLINKCMD"
+                            If IsNothing(Parametre2) Then
+                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                            Else
+                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre2 & ";" & Parametre1 & ";"
+                            End If
+                        Case "ON", "OFF", "UP", "DOWN"
+                            RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
+                        Case "DIM"
+                            If Not IsNothing(Parametre1) Then
+                                Parametre1 = Hex(Parametre1)
+                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                            Else
+                                WriteLog("ERR: DIM Il manque un parametre pour (" & Objet.Name & ")")
+                                Exit Sub
+                            End If
+                        Case Else
+                            WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
+                            Exit Sub
+                    End Select
+
+                Case "DELTRONIC"
+                    '10;DELTRONIC;001c33;        => Deltronic protocol;address
+                    RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";"
+
+                Case "EV1527"
+                    '10;EV1527;000080;0;ON;      => EV1527 protocol;address;device 0x00-0x0f,action ON/OFF
+                    RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
+
+                Case "MERTIK"
+                    '10;MERTIK;64;UP;            => Mertik protocol, address, command
+                    RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & Command & ";"
+
+                Case "NEWKAKU"
+                    '10;NewKaku;00c142;1;ON;     => Newkaku/AC protocol;address (24 bits);button number (hexadecimal 0x0-0x0f);action (ON/OFF/ALLON/ALLOFF/15 - 1 to 15 for direct dim level)
+                    '10;NewKaku;128ac4d;1;OFF;   => Newkaku/AC protocol;address (28 bits);button number (hexadecimal 0x0-0x0f);action (ON/OFF/ALLON/ALLOFF/15 - 1 to 15 for direct dim level)
+                    Select Case UCase(Command)
+                        Case "RFLINKCMD"
+                            If IsNothing(Parametre2) Then
+                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                            Else
+                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre2 & ";" & Parametre1 & ";"
+                            End If
+                        Case "ON", "OFF", "UP", "DOWN"
+                            RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
+                        Case "DIM"
+                            If Not IsNothing(Parametre1) Then
+                                'Parametre1 = Hex(Parametre1)
+                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                            Else
+                                WriteLog("ERR: DIM Il manque un parametre pour (" & Objet.Name & ")")
+                                Exit Sub
+                            End If
+                        Case Else
+                            WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
+                            Exit Sub
+                    End Select
+
+                Case "RTS"
+                    '10;RTS;1a602a;0;ON;         => RTS protocol, address, command (zero is unused for now)
+                    '10;RTS;1b602b;0123;PAIR;    => Pairing for RTS rolling code:  RTS protocol, address, rolling code number, PAIR command
+                    '10;RTS;1b602b;0123;0;PAIR;  => Extended Pairing for RTS rolling code:  RTS protocol, address, rolling code number, eeprom record number, PAIR command
+                    Select Case UCase(Command)
+                        Case "RFLINKCMD"
+                            If IsNothing(Parametre2) Then
+                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                            Else
+                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre2 & ";" & Parametre1 & ";"
+                            End If
+                        Case "ON", "OFF", "UP", "DOWN"
+                            RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";0;" & Command & ";"
+                        Case "DIM"
+                            If Not IsNothing(Parametre1) Then
+                                Parametre1 = Hex(Parametre1)
+                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                            Else
+                                WriteLog("ERR: DIM Il manque un parametre pour (" & Objet.Name & ")")
+                                Exit Sub
+                            End If
+
+                        Case Else
+                            WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
+                            Exit Sub
+                    End Select
+
+                Case "SELECTPLUS"
+                    '10;Selectplus;001c33; => SelectPlus protocol;address
+                    RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";"
+
+                Case "MILIGHTV1"
+                    '10;MiLightv1;F746;00;3c00;ON;     => Milight v1 protocol;address;button/unit number;color & brightness;command (ON/OFF/ALLON/ALLOFF/DISCO+/DISCO-/MODE0 - MODE8 
+                    '10;MiLightv1;F746;01;34BC;PAIR;   => Milight v1 protocol;address;button/unit number;color & brightness -not relevant-; PAIR command 
+                    '10;MiLightv1;F746;01;34BC;UNPAIR; => Milight v1 protocol;address;button/unit number;color & brightness -not relevant-; UNPAIR command 
+                    '10;MiLightv1;F746;01;34BC;BRIGHT; => Milight v1 protocol;address;button/unit number;color & brightness; Set brightness
+                    '10;MiLightv1;F746;01;34BC;COLOR;  => Milight v1 protocol;address;button/unit number;color & brightness; Set color 
+                    Select Case UCase(Command)
+                        Case "RFLINKCMD"
+                            If IsNothing(Parametre2) Then
+                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                            Else
+                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre2 & ";" & Parametre1 & ";"
+                            End If
+                        Case "ON", "OFF", "UP", "DOWN"
+                            RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
+                        Case "DIM"
+                            If Not IsNothing(Parametre1) Then
+                                Parametre1 = Hex(Parametre1)
+                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                            Else
+                                WriteLog("ERR: DIM Il manque un parametre pour (" & Objet.Name & ")")
+                                Exit Sub
+                            End If
+                        Case Else
+                            WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
+                            Exit Sub
+                    End Select
+
                 Case Else
                     WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
                     Exit Sub
             End Select
-
+            'Select Case Command
+            'Case "ON", "OFF", "ALLON", "ALLOFF", "UP", "DOWN"
+            '    RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
+            'Case "DIM"
+            '    If Not IsNothing(Parametre1) Then
+            '        Parametre1 = Hex(Parametre1)
+            '        RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Objet.Parametre1 & ";"
+            '    Else
+            '        WriteLog("ERR: DIM Il manque un parametre pour (" & Objet.Name & ")")
+            '        Exit Sub
+            'End If
+            'Case "COMMANDE SPÉCIFIQUE"
+            '    RFLinkCommand = "10;" & Parametre1 & ";"
+            'Case Else
+            '    WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
+            '    Exit Sub
+            'End Select
             WriteLog("DBG: Commande passée au module RFLink : " & RFLinkCommand)
             serialPortObj.WriteLine(RFLinkCommand) ', 0, 8)
 
@@ -759,12 +823,15 @@ Public Class Driver_RFLink
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
+            add_devicecommande("RFLinkCtrl", "Commande de parametrage du module RFLink.", 2)
+            add_devicecommande("RFLinkFullCmd", "Permet d'utiliser une syntaxe de commande non supportée par HoMIDoM.", 1)
+            add_devicecommande("RFLinkCmd", "", 2)
 
             'Libellé Device
             Add_LibelleDevice("ADRESSE1", "ID du noeud RFLink", "Valeur de type numérique")
             Add_LibelleDevice("ADRESSE2", "@", "")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "Protocole RFLink", "Détail des protocoles utilisables dans la documentation du driver", "Aucun|AB400D|Byron|Byron MP|Blyss|Chuango|Conrad|DELTRONIC|Eurodomest|EV1527|FA20RF|FA500|HomeConfort|HomeEasy|Ikea Koppla|Impuls|Kaku|Kambrook|MERTIK|NewKaku|Powerfix|Selectplus|X10")
+            Add_LibelleDevice("MODELE", "Protocole RFLink", "Détail des protocoles utilisables dans la documentation du driver", "Aucun|RFLink Ctrl|RFLink Full Cmd|AB400D|Byron|Byron MP|Blyss|Chuango|Conrad|DELTRONIC|Eurodomest|EV1527|FA20RF|FA500|HomeConfort|HomeEasy|Ikea Koppla|Impuls|Kaku|Kambrook|MERTIK|NewKaku|Powerfix|RTS|Selectplus|X10")
             Add_LibelleDevice("REFRESH", "Refresh", "0")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
         Catch ex As Exception
@@ -842,6 +909,8 @@ Public Class Driver_RFLink
                             traitement(RF_Mode, RF_DataType, RF_ID, RF_Value)
                             If RF_DataType = "SWITCH" Then Exit For
                         Next
+                    ElseIf UBound(aryLine) = 3 Then
+                        _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom & " Datareceived", aryLine(2))
                     Else
                         _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Datareceived", "Format attendu incorrect")
                     End If
