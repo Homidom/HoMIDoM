@@ -392,7 +392,7 @@ Imports System.Runtime.InteropServices
     Public Sub Read(ByVal Objet As Object) Implements HoMIDom.HoMIDom.IDriver.Read
         Dim paramCommand As String = ""
         Try
-            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Read", "Composant: " & Objet.Name & " Action: " & Objet.modele.ToString & ", Paramètre: " & Objet.adresse1.ToString)
+            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "Read", "Composant: " & Objet.Name & " Action: " & Objet.Modele.ToString & ", Paramètre: " & Objet.Adresse1.ToString)
             If _Enable = False Then
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & "Read", "Erreur: Impossible de traiter la commande car le driver n'est pas activé (Enable)")
                 Exit Sub
@@ -402,19 +402,19 @@ Imports System.Runtime.InteropServices
                 Exit Sub
             End If
 
-            Select Case Left(Objet.modele.ToString.ToUpper, 4)
+            Select Case Left(Objet.Modele.ToString.ToUpper, 4)
                 Case "PING"
                     'Adresse2 contient le hostname ou l'ip
                     'Dim result As Boolean = My.Computer.Network.Ping(Objet.adresse2.ToString)
                     Dim ping As New System.Net.NetworkInformation.Ping
                     Dim reply As System.Net.NetworkInformation.PingReply
-                    reply = ping.Send(Objet.adresse1.ToString)
+                    reply = ping.Send(Objet.Adresse1.ToString)
 
                     If _DEBUG Then
                         If reply.Status = System.Net.NetworkInformation.IPStatus.Success Then
-                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "System", "Ping " & Objet.adresse1.ToString & " : OK : " & reply.RoundtripTime & "ms")
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "System", "Ping " & Objet.Adresse1.ToString & " : OK : " & reply.RoundtripTime & "ms")
                         Else
-                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "System", "Ping " & Objet.adresse1.ToString & " : NOK")
+                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "System", "Ping " & Objet.Adresse1.ToString & " : NOK")
                         End If
                     End If
 
@@ -425,12 +425,27 @@ Imports System.Runtime.InteropServices
                     Else
                         If reply.Status = System.Net.NetworkInformation.IPStatus.Success Then Objet.Value = "OK" Else Objet.Value = "NOK"
                     End If
-
+                Case "DRVR"
+                    Select Case Right(Objet.Modele.ToString.ToUpper, (Len(Objet.Modele.ToString.ToUpper) - 5))
+                        Case "START"
+                            Dim Temp_Driver As TemplateDriver = _Server.ReturnDriverByNom(_Idsrv, Objet.Adresse1.ToString)
+                            If Temp_Driver IsNot Nothing Then
+                                If TypeOf Objet.Value Is Boolean Then
+                                    If Temp_Driver.IsConnect Then Objet.Value = True Else Objet.Value = False
+                                ElseIf TypeOf Objet.Value Is String Then
+                                    If Temp_Driver.IsConnect Then Objet.Value = "OK" Else Objet.Value = "NOK"
+                                Else
+                                    If Temp_Driver.IsConnect Then Objet.Value = 1 Else Objet.Value = 0
+                                End If
+                            Else
+                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Le driver " & Objet.Adresse1.ToString() & " n'a pas été trouvé dans la liste des drivers. Composant: " & Objet.Name)
+                            End If
+                    End Select
                 Case "REGI"
                     'lire une valeur dans le registre
-                    If InStr(Objet.adresse1.ToString(), "#") > 0 Then
-                        Dim adresse_cle As String = Objet.adresse1.ToString().Split("#")(0)
-                        Dim adresse_valeur As String = Objet.adresse1.ToString().Split("#")(1)
+                    If InStr(Objet.Adresse1.ToString(), "#") > 0 Then
+                        Dim adresse_cle As String = Objet.Adresse1.ToString().Split("#")(0)
+                        Dim adresse_valeur As String = Objet.Adresse1.ToString().Split("#")(1)
 
                         If My.Computer.Registry.GetValue(adresse_cle, adresse_valeur, Nothing) Is Nothing Then
                             'la clé n'existe pas
@@ -446,7 +461,7 @@ Imports System.Runtime.InteropServices
                             End If
                         End If
                     Else
-                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Registre: la clé " & Objet.adresse1.ToString() & " n'est pas au bon format clé#valeur. Composant: " & Objet.Name)
+                        _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Registre: la clé " & Objet.Adresse1.ToString() & " n'est pas au bon format clé#valeur. Composant: " & Objet.Name)
                     End If
 
                 Case "INFO"
@@ -454,7 +469,7 @@ Imports System.Runtime.InteropServices
                     '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "AvailablePhysicalMemory:  " & System.Math.Round((My.Computer.Info.AvailablePhysicalMemory) / (1024 * 1024), 2).ToString & " Mo")
                     '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "TotalVirtualMemory:  " & System.Math.Round((My.Computer.Info.TotalVirtualMemory) / (1024 * 1024), 2).ToString & " Mo")
                     '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "AvailableVirtualMemory:  " & System.Math.Round((My.Computer.Info.AvailableVirtualMemory) / (1024 * 1024), 2).ToString & " Mo")
-                    Select Case Right(Objet.modele.ToString.ToUpper, (Len(Objet.modele.ToString.ToUpper) - 5))
+                    Select Case Right(Objet.Modele.ToString.ToUpper, (Len(Objet.Modele.ToString.ToUpper) - 5))
                         Case "ALL"
                             'MEMORY
                             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "System", "TotalPhysicalMemory:  " & System.Math.Round((My.Computer.Info.TotalPhysicalMemory) / (1024 * 1024), 2).ToString & " Mo")
@@ -557,9 +572,9 @@ Imports System.Runtime.InteropServices
 
                         Case "HDD"
                             'Adresse2 contient la lettre du disque "C:"
-                            Dim drv As New DriveInfo(Objet.adresse1.ToString)
+                            Dim drv As New DriveInfo(Objet.Adresse1.ToString)
                             If drv.IsReady Then
-                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "System", "HDD " & Objet.adresse1.ToString & ": " & CStr(CInt((drv.TotalFreeSpace / (1024 ^ 2)))) & " Mo Free")
+                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "System", "HDD " & Objet.Adresse1.ToString & ": " & CStr(CInt((drv.TotalFreeSpace / (1024 ^ 2)))) & " Mo Free")
                                 If TypeOf Objet.Value Is Boolean Then
                                     If (drv.TotalFreeSpace / (1024 ^ 2)) > 0 Then Objet.Value = True Else Objet.Value = False
                                 ElseIf TypeOf Objet.Value Is Long Or TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
@@ -568,11 +583,11 @@ Imports System.Runtime.InteropServices
                                     Objet.Value = CStr(CInt((drv.TotalFreeSpace / (1024 ^ 2)))) & " Mo Free"
                                 End If
                             Else
-                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & "System", "Impossible de trouver le disque " & Objet.adresse1.ToString)
+                                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & "System", "Impossible de trouver le disque " & Objet.Adresse1.ToString)
                             End If
                             drv = Nothing
                         Case Else
-                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "System", "Composant mal paramétré : " & Objet.adresse1.ToString.ToUpper)
+                            _Server.Log(Server.TypeLog.INFO, Server.TypeSource.DRIVER, "System", "Composant mal paramétré : " & Objet.Adresse1.ToString.ToUpper)
                     End Select
 
                 Case "WUAU"
@@ -730,7 +745,7 @@ Imports System.Runtime.InteropServices
             'Add_DeviceCommande("INFO", "Get System ALL/MEMORY_USED/MEMORY_FREE/CPU/BATTERY_STATUS/BATTERY_PERCENT/HDD", 0)
             'Add_DeviceCommande("WUAU", "Windows Updates", 0)
             Add_DeviceCommande("SHUTDOWN", "Arrêter le serveur", 0)
-            Add_DeviceCommande("REBOOT", "Arrêter le serveur", 0)
+            Add_DeviceCommande("REBOOT", "Redemmarrer le serveur", 0)
             Add_DeviceCommande("UPDATE", "Installer les Windows Updates", 0)
             Add_DeviceCommande("EXECUTE", "Lancer l'action associé", 0)
 
@@ -748,7 +763,7 @@ Imports System.Runtime.InteropServices
             Add_LibelleDevice("ADRESSE2", "@", "")
 
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "Type d'action", "PING, INFO-x, WUAU", "PING|INFO-ALL|INFO-MEMORY_USED|INFO-MEMORY_FREE|INFO-CPU|INFO-BATTERY_STATUS|INFO-BATTERY_PERCENT|INFO-HDD|WUAU|REGI")
+            Add_LibelleDevice("MODELE", "Type d'action", "PING, INFO-x, WUAU", "PING|DRVR-START|INFO-ALL|INFO-MEMORY_USED|INFO-MEMORY_FREE|INFO-CPU|INFO-BATTERY_STATUS|INFO-BATTERY_PERCENT|INFO-HDD|WUAU|REGI")
 
             'Add_LibelleDevice("REFRESH", "Refresh (sec)", "Valeur de rafraîchissement de la mesure en secondes")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")

@@ -614,46 +614,46 @@ Imports System.Net.Sockets
                 Exit Sub
             End If
             If CInt(Objet.Adresse1) > "-1" And Objet.Adresse1 <> "" Then
-                If (Objet.Model = "MX" And CInt(Objet.Adresse1) < adressReadMX + longReadMX And CInt(Objet.Adresse1) >= adressReadMX) Then
+                If (Objet.Modele = "MX" And CInt(Objet.Adresse1) < adressReadMX + longReadMX And CInt(Objet.Adresse1) >= adressReadMX) Then
 
-                    If TypeOf Objet.Value Is Boolean And dataMdbRMX(Objet.adresse1) > -1 And dataMdbRMX(Objet.adresse1) < 2 Then
-                        Objet.Value = CBool(dataMdbRMX(Objet.adresse1 - 1))
+                    If TypeOf Objet.Value Is Boolean And dataMdbRMX(Objet.Adresse1) > -1 And dataMdbRMX(Objet.Adresse1) < 2 Then
+                        Objet.Value = CBool(dataMdbRMX(Objet.Adresse1 - 1))
                     End If
                 Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "L'adresse du composant n'est pas dans la plage de lecture du driver")
 
                 End If
 
-                If (Objet.Model = "IX" And CInt(Objet.Adresse1) < adressReadIX + longReadIX And CInt(Objet.Adresse1) >= adressReadIX) Then
+                If (Objet.Modele = "IX" And CInt(Objet.Adresse1) < adressReadIX + longReadIX And CInt(Objet.Adresse1) >= adressReadIX) Then
 
-                    If TypeOf Objet.Value Is Boolean And dataMdbRIX(Objet.adresse1) > -1 And dataMdbRIX(Objet.adresse1) < 2 Then
-                        Objet.Value = CBool(dataMdbRIX(Objet.adresse1 - 1))
+                    If TypeOf Objet.Value Is Boolean And dataMdbRIX(Objet.Adresse1) > -1 And dataMdbRIX(Objet.Adresse1) < 2 Then
+                        Objet.Value = CBool(dataMdbRIX(Objet.Adresse1 - 1))
                     End If
                 Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "L'adresse du composant n'est pas dans la plage de lecture du driver")
 
                 End If
 
-                If (Objet.Model = "MW" And CInt(Objet.Adresse1) < adressReadMW + longReadMW And CInt(Objet.Adresse1) >= adressReadMW) Then
+                If (Objet.Modele = "MW" And CInt(Objet.Adresse1) < adressReadMW + longReadMW And CInt(Objet.Adresse1) >= adressReadMW) Then
 
                     If TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
-                        Objet.Value = dataMdbRMW(Objet.adresse1 - 1)
+                        Objet.Value = dataMdbRMW(Objet.Adresse1 - 1)
                     End If
-                    If TypeOf Objet.Value Is Boolean And dataMdbRMW(Objet.adresse1) > -1 And dataMdbRMW(Objet.adresse1) < 2 Then
-                        Objet.Value = CBool(dataMdbRMW(Objet.adresse1 - 1))
+                    If TypeOf Objet.Value Is Boolean And dataMdbRMW(Objet.Adresse1) > -1 And dataMdbRMW(Objet.Adresse1) < 2 Then
+                        Objet.Value = CBool(dataMdbRMW(Objet.Adresse1 - 1))
                     End If
                 Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "L'adresse du composant n'est pas dans la plage de lecture du driver")
 
                 End If
 
-                If (Objet.Model = "IW" And CInt(Objet.Adresse1) < adressReadIW + longReadIW And CInt(Objet.Adresse1) >= adressReadIW) Then
+                If (Objet.Modele = "IW" And CInt(Objet.Adresse1) < adressReadIW + longReadIW And CInt(Objet.Adresse1) >= adressReadIW) Then
 
                     If TypeOf Objet.Value Is Integer Or TypeOf Objet.Value Is Double Then
-                        Objet.Value = dataMdbRIW(Objet.adresse1 - 1)
+                        Objet.Value = dataMdbRIW(Objet.Adresse1 - 1)
                     End If
-                    If TypeOf Objet.Value Is Boolean And dataMdbRIW(Objet.adresse1) > -1 And dataMdbRIW(Objet.adresse1) < 2 Then
-                        Objet.Value = CBool(dataMdbRIW(Objet.adresse1 - 1))
+                    If TypeOf Objet.Value Is Boolean And dataMdbRIW(Objet.Adresse1) > -1 And dataMdbRIW(Objet.Adresse1) < 2 Then
+                        Objet.Value = CBool(dataMdbRIW(Objet.Adresse1 - 1))
                     End If
                 Else
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "L'adresse du composant n'est pas dans la plage de lecture du driver")
@@ -673,7 +673,7 @@ Imports System.Net.Sockets
     ''' <param name="Parametre2"></param>
     ''' <remarks></remarks>
     Public Sub Write(ByVal Objet As Object, ByVal Commande As String, Optional ByVal Parametre1 As Object = Nothing, Optional ByVal Parametre2 As Object = Nothing) Implements HoMIDom.HoMIDom.IDriver.Write
-       
+
         Dim sendtwice As Boolean = False
         Try
             If _Enable = False Then Exit Sub
@@ -687,7 +687,7 @@ Imports System.Net.Sockets
 
             If Objet.Adresse2 <> "-1" And Objet.Adresse2 <> "" Then
 
-                Select Case Objet.modele
+                Select Case Objet.Modele
                     Case "MX"
                         Parametre2 = 1
                         If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Debut d'ecriture MX ")
@@ -715,20 +715,20 @@ Imports System.Net.Sockets
 
                     End Select
 
-                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Valeur a ecrire : " & Parametre1 & " et memoire d'écriture = " & Objet.value & " et memoire de lecture = " & dataMdbRMW(Objet.Adresse2))
+                    If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Write", "Valeur a ecrire : " & Parametre1 & " et memoire d'écriture = " & Objet.Value & " et memoire de lecture = " & dataMdbRMW(Objet.Adresse2))
 
                 End If
 
             End If
             Select Case Commande
                 'Case "ON", "OFF"
-                    'If Parametre1 = 0 Then traitement("OFF", Objet.adresse2, Commande, True) Else traitement("ON", Objet.adresse2, Commande, True)
+                'If Parametre1 = 0 Then traitement("OFF", Objet.adresse2, Commande, True) Else traitement("ON", Objet.adresse2, Commande, True)
                 'Case "OPEN", "CLOSE"
-                    'If Parametre1 = 0 Then traitement("CLOSE", Objet.adresse2, Commande, True) Else traitement("OPEN", Objet.adresse2, Commande, True)
+                'If Parametre1 = 0 Then traitement("CLOSE", Objet.adresse2, Commande, True) Else traitement("OPEN", Objet.adresse2, Commande, True)
                 Case "DIM", "OUVERTURE"
-                    traitement(CStr(Parametre1), Objet.adresse2, Commande, Objet.modele, True)
+                    traitement(CStr(Parametre1), Objet.Adresse2, Commande, Objet.Modele, True)
                 Case Else
-                    traitement(Commande, Objet.adresse2, Commande, Objet.modele, True)
+                    traitement(Commande, Objet.Adresse2, Commande, Objet.Modele, True)
             End Select
             If Not flagWrite Then
                 flagWrite = True
@@ -1126,15 +1126,15 @@ Imports System.Net.Sockets
             Try
 
                 'Recherche si un device affecté
-                Dim listedevices As New ArrayList
-                listedevices = _Server.ReturnDeviceByAdresse2TypeDriver(_IdSrv, adresse, "", Me._ID, True)
-                If IsNothing(listedevices) Then
+                Dim listedevicesfind As New ArrayList
+                listedevicesfind = _Server.ReturnDeviceByAdresse2TypeDriver(_IdSrv, adresse, "", Me._ID, True)
+                If IsNothing(listedevicesfind) Then
                     _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Traitement", "Communication impossible avec le serveur, l'IDsrv est peut être erroné : " & _IdSrv)
                     Exit Sub
                 End If
                 'un device trouvé on maj la value
-                If (listedevices.Count > 0) Then
-                    For Each Device As TemplateDevice In listedevices
+                If (listedevicesfind.Count > 0) Then
+                    For Each Device In listedevicesfind
                         If Device.Modele = modele Then
                             If TypeOf Device.Value Is Integer Then
                                 If valeur = "ON" Or valeur = "OPEN" Then
@@ -1185,7 +1185,7 @@ Imports System.Net.Sockets
             For Each j As Object In listedevices
                 If j.Adresse2 <> "-1" And j.Adresse2 <> "" Then
                     adresse = j.Adresse2
-                        Select j.modele
+                    Select Case j.modele
                         Case "MW"
                             If testDatatableW(j) Then
                                 If nbsendMW > 0 Then
@@ -1211,85 +1211,85 @@ Imports System.Net.Sockets
                                             If j.value = True Then ecrire(j.adresse2, "ON", 1, 3)
                                             Exit Sub
                                         End If
-                                        End If
                                     End If
                                 End If
+                            End If
                         Case "MX"
-                                If testDatatableB(j) Then
-                                    If nbsendMX > 0 Then
-                                        If TypeOf j.Value Is Boolean Then
-                                            If j.Value <> dataMdbWMX(j.adresse2) Then
-                                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite MX ", "adress= " & j.adresse2 & " ; mWrite= " & dataMdbWMX(j.adresse2) & " ; value= " & j.Value & ") ; ")
-                                                dataMdbWMX(j.adresse2) = j.Value
-                                                flagWrite = True
-                                                If j.value = False Then ecrire(j.adresse2, "OFF", 0, 1)
-                                                If j.value = True Then ecrire(j.adresse2, "ON", 1, 1)
-                                                Exit Sub
-                                            End If
+                            If testDatatableB(j) Then
+                                If nbsendMX > 0 Then
+                                    If TypeOf j.Value Is Boolean Then
+                                        If j.Value <> dataMdbWMX(j.adresse2) Then
+                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite MX ", "adress= " & j.adresse2 & " ; mWrite= " & dataMdbWMX(j.adresse2) & " ; value= " & j.Value & ") ; ")
+                                            dataMdbWMX(j.adresse2) = j.Value
+                                            flagWrite = True
+                                            If j.value = False Then ecrire(j.adresse2, "OFF", 0, 1)
+                                            If j.value = True Then ecrire(j.adresse2, "ON", 1, 1)
+                                            Exit Sub
                                         End If
-                                        If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
-                                            If j.Value <> CInt(dataMdbWMX(j.adresse2)) Then
-                                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite MX ", "adress= " & j.adresse2 & " ; mWrite= " & CUShort(dataMdbWMX(j.adresse2)) & " ; value= " & j.Value & ") ; ")
+                                    End If
+                                    If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
+                                        If j.Value <> CInt(dataMdbWMX(j.adresse2)) Then
+                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite MX ", "adress= " & j.adresse2 & " ; mWrite= " & CUShort(dataMdbWMX(j.adresse2)) & " ; value= " & j.Value & ") ; ")
                                             If j.Value = 0 Then
                                                 dataMdbWMX(j.adresse2) = False
                                             Else
                                                 dataMdbWMX(j.adresse2) = True
                                             End If
-                                                flagWrite = True
-                                                If j.value = 0 Then
-                                                    ecrire(j.adresse2, "OFF", 0, 1)
-                                                Else
-                                                    ecrire(j.adresse2, "ON", 1, 1)
-                                                End If
-                                                Exit Sub
+                                            flagWrite = True
+                                            If j.value = 0 Then
+                                                ecrire(j.adresse2, "OFF", 0, 1)
+                                            Else
+                                                ecrire(j.adresse2, "ON", 1, 1)
                                             End If
+                                            Exit Sub
                                         End If
                                     End If
                                 End If
+                            End If
                         Case "QW"
-                                If testDatatableW(j) Then
-                                    If nbsendQW > 0 Then
-                                        If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
-                                            If j.Value <> dataMdbWQW(j.adresse2) Then
-                                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite QW ", "adress= " & j.adresse2 & " ; mWrite= " & dataMdbWQW(j.adresse2) & " ; value= " & j.Value & ") ; ")
-                                                dataMdbWQW(j.adresse2) = j.Value
-                                                flagWrite = True
-                                                ecrire(j.adresse2, "DIM", j.value, 4)
-                                                Exit Sub
-                                            End If
+                            If testDatatableW(j) Then
+                                If nbsendQW > 0 Then
+                                    If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
+                                        If j.Value <> dataMdbWQW(j.adresse2) Then
+                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite QW ", "adress= " & j.adresse2 & " ; mWrite= " & dataMdbWQW(j.adresse2) & " ; value= " & j.Value & ") ; ")
+                                            dataMdbWQW(j.adresse2) = j.Value
+                                            flagWrite = True
+                                            ecrire(j.adresse2, "DIM", j.value, 4)
+                                            Exit Sub
                                         End If
-                                        If TypeOf j.Value Is Boolean Then
-                                            If j.Value <> CBool(dataMdbWQW(j.adresse2)) Then
-                                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite QW ", "adress= " & j.adresse2 & " ; mWrite= " & CBool(dataMdbWQW(j.adresse2)) & " ; value= " & j.Value & ") ; ")
+                                    End If
+                                    If TypeOf j.Value Is Boolean Then
+                                        If j.Value <> CBool(dataMdbWQW(j.adresse2)) Then
+                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite QW ", "adress= " & j.adresse2 & " ; mWrite= " & CBool(dataMdbWQW(j.adresse2)) & " ; value= " & j.Value & ") ; ")
                                             If j.Value = False Then
                                                 dataMdbWQW(j.adresse2) = 0
                                             Else
                                                 dataMdbWQW(j.adresse2) = 1
                                             End If
-                                                flagWrite = True
-                                                If j.value = False Then ecrire(j.adresse2, "OFF", 0, 4)
-                                                If j.value = True Then ecrire(j.adresse2, "ON", 1, 4)
-                                                Exit Sub
-                                            End If
+                                            flagWrite = True
+                                            If j.value = False Then ecrire(j.adresse2, "OFF", 0, 4)
+                                            If j.value = True Then ecrire(j.adresse2, "ON", 1, 4)
+                                            Exit Sub
                                         End If
                                     End If
                                 End If
+                            End If
                         Case "QX"
-                                If testDatatableB(j) Then
-                                    If nbsendQX > 0 Then
-                                        If TypeOf j.Value Is Boolean Then
-                                            If j.Value <> dataMdbWQX(j.adresse2) Then
-                                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite QX ", "adress= " & j.adresse2 & " ; mWrite= " & dataMdbWQX(j.adresse2) & " ; value= " & j.Value & ") ; ")
-                                                dataMdbWQX(j.adresse2) = j.Value
-                                                flagWrite = True
-                                                If j.value = False Then ecrire(j.adresse2, "OFF", 0, 2)
-                                                If j.value = True Then ecrire(j.adresse2, "ON", 1, 2)
-                                                Exit Sub
-                                            End If
+                            If testDatatableB(j) Then
+                                If nbsendQX > 0 Then
+                                    If TypeOf j.Value Is Boolean Then
+                                        If j.Value <> dataMdbWQX(j.adresse2) Then
+                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite QX ", "adress= " & j.adresse2 & " ; mWrite= " & dataMdbWQX(j.adresse2) & " ; value= " & j.Value & ") ; ")
+                                            dataMdbWQX(j.adresse2) = j.Value
+                                            flagWrite = True
+                                            If j.value = False Then ecrire(j.adresse2, "OFF", 0, 2)
+                                            If j.value = True Then ecrire(j.adresse2, "ON", 1, 2)
+                                            Exit Sub
                                         End If
-                                        If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
-                                            If j.Value <> CInt(dataMdbWQX(j.adresse2)) Then
-                                                If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite QX ", "adress= " & j.adresse2 & " ; mWrite= " & CUShort(dataMdbWQX(j.adresse2)) & " ; value= " & j.Value & ") ; ")
+                                    End If
+                                    If TypeOf j.Value Is Integer Or TypeOf j.Value Is Double Then
+                                        If j.Value <> CInt(dataMdbWQX(j.adresse2)) Then
+                                            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Match TestWrite QX ", "adress= " & j.adresse2 & " ; mWrite= " & CUShort(dataMdbWQX(j.adresse2)) & " ; value= " & j.Value & ") ; ")
                                             If j.Value = 0 Then
                                                 dataMdbWQX(j.adresse2) = False
                                             Else

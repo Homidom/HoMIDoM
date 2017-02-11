@@ -263,7 +263,7 @@ Imports HoMIOAuth2
     End Class
 
     Public Class place
-        Public altitude As Integer
+        Public altitude As Double
         Public bssid As String
         Public city As String
         Public country As String
@@ -580,19 +580,6 @@ Imports HoMIOAuth2
 
             If GetRefreshToken("Netatmo", "https://api.netatmo.net/oauth2/token") Then
 
-
-                If _Refresh > 0 Then
-                    If _Refresh < 60 Then
-                        _Refresh = 60
-                    End If
-
-                    cptBeforeToken = (Auth.expires_in / _Refresh) - 2
-
-                    MyTimer.Interval = _Refresh * 1000
-                    MyTimer.Enabled = True
-                    AddHandler MyTimer.Elapsed, AddressOf TimerTick
-                End If
-
                 ScanData()
                 _IsConnect = True
                 cpt_restart = 0
@@ -612,6 +599,17 @@ Imports HoMIOAuth2
                 Exit Sub
             End If
 
+            If _Refresh > 0 Then
+                If _Refresh < 60 Then
+                    _Refresh = 60
+                End If
+
+                cptBeforeToken = (Auth.expires_in / _Refresh) - 2
+
+                MyTimer.Interval = _Refresh * 1000
+                MyTimer.Enabled = True
+                AddHandler MyTimer.Elapsed, AddressOf TimerTick
+            End If
         Catch ex As Exception
             _IsConnect = False
             WriteLog("Driver " & Me.Nom & " non démarré")
@@ -805,6 +803,7 @@ Imports HoMIOAuth2
             _DeviceSupport.Add(ListeDevices.PLUIETOTAL)
             _DeviceSupport.Add(ListeDevices.GENERIQUESTRING)
             _DeviceSupport.Add(ListeDevices.TEMPERATURECONSIGNE)
+            _DeviceSupport.Add(ListeDevices.GENERIQUEVALUE)
 
             Add_DeviceCommande("SETPOINT", "Set un programme de thermostat", 1)
 
@@ -836,7 +835,12 @@ Imports HoMIOAuth2
             GetRefreshToken("Netatmo", "https://api.netatmo.net/oauth2/token")
             cpt = 0
         End If
-        ScanData()
+        If Not IsConnect And Not First And Me.StartAuto Then
+            First = True
+            Start()
+        Else
+            ScanData()
+        End If
     End Sub
 
 #End Region
@@ -919,6 +923,7 @@ Imports HoMIOAuth2
             If First Then
                 Try
 line1:
+                    First = False
                     responsebody = client.DownloadString("https://api.netatmo.net/api/devicelist?access_token=" & Auth.access_token)
                 Catch ex As Exception
                     ' recherche du device/module a interroger
@@ -959,7 +964,6 @@ line1:
                     Next
                 Next
                 Add_LibelleDevice("ADRESSE1", "Nom du module", "Nom du module en respectant maj./minuscule", IdLib)
-                First = False
             End If
 
             devlist = Nothing
@@ -994,6 +998,7 @@ line1:
             cpt_restart = 0
         Catch ex As Exception
             WriteLog("ERR: ScanData, Exception : " & ex.Message)
+            Me.Stop()
         End Try
     End Sub
 
@@ -1001,7 +1006,7 @@ line1:
 
         Try
             'Si internet n'est pas disponible on ne mets pas à jour les informations
-            If My.Computer.Network.IsAvailable = False Then
+            If My.Computer.Network.IsAvailable = False And Not IsConnect Then
                 Exit Sub
             End If
 
@@ -1078,18 +1083,6 @@ line1:
                     Else
                         objet.Value = Regex.Replace(CStr(moduleIDalire.dashboard_data.Humidity), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
                     End If
-                Case "BRUIT"
-                    If Typealire = "NAMain" Then
-                        objet.Value = deviceIDalire.dashboard_data.Noise
-                    Else
-                        objet.Value = moduleIDalire.dashboard_data.Noise
-                    End If
-                Case "CO2"
-                    If Typealire = "NAMain" Then
-                        objet.Value = deviceIDalire.dashboard_data.CO2
-                    Else
-                        objet.Value = moduleIDalire.dashboard_data.CO2
-                    End If
                 Case "PLUIETOTAL"
                     If Typealire = "NAMain" Then
                         objet.Value = Regex.Replace(CStr(deviceIDalire.dashboard_data.sum_rain_24), "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
@@ -1120,7 +1113,7 @@ line1:
                     Else
                         objet.Value = DirVent(moduleIDalire.dashboard_data.WindAngle)
                     End If
-                Case "GENERIQUESTRING"
+                Case "GENERIQUEVALUE"
                     Select Case Typealire
                         Case "NAMain"
                             Select Case objet.adresse2.toUpper
@@ -1129,8 +1122,6 @@ line1:
                                 Case "NOISE"
                                     objet.Value = deviceIDalire.dashboard_data.Noise
                             End Select
-                        Case "NATherm1"
-                            objet.Value = moduleIDalire.setpoint.setpoint_mode & " - " & moduleIDalire.setpoint.setpoint_temp & " - " & moduleIDalire.setpoint.setpoint_endtime
                         Case Else
                             Select Case objet.adresse2.toUpper
                                 Case "CO2"
@@ -1138,6 +1129,11 @@ line1:
                                 Case "NOISE"
                                     objet.Value = moduleIDalire.dashboard_data.Noise
                             End Select
+                    End Select
+                Case "GENERIQUESTRING"
+                    Select Case Typealire
+                        Case "NATherm1"
+                            objet.Value = moduleIDalire.setpoint.setpoint_mode & " - " & moduleIDalire.setpoint.setpoint_temp & " - " & moduleIDalire.setpoint.setpoint_endtime
                     End Select
                 Case "TEMPERATURECONSIGNE"
                     Select Case Typealire

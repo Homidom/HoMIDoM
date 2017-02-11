@@ -342,8 +342,18 @@ Imports System.IO
                 Exit Sub
             End If
 
-            _IsConnect = True
-            WriteLog("Driver " & Me.Nom & " démarré")
+            Dim ping As New System.Net.NetworkInformation.Ping
+            Dim reply As System.Net.NetworkInformation.PingReply
+            reply = ping.Send("WES")
+
+            If reply.Status = System.Net.NetworkInformation.IPStatus.Success Then
+                _IsConnect = True
+                WriteLog("Driver " & Me.Nom & " démarré")
+            Else
+                _IsConnect = False
+                WriteLog("Driver " & Me.Nom & " non démarré")
+                WriteLog("Driver " & Me.Nom & " Serveur WES inaccessible sur le reseau")
+            End If
 
         Catch ex As Exception
             _IsConnect = False
@@ -601,7 +611,12 @@ Imports System.IO
     Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
         ' Attente de 3s pour eviter le relancement de la procedure dans le laps de temps
         'System.Threading.Thread.Sleep(3000)
-        ScanData()
+        If Me.StartAuto And Not IsConnect Then
+            Start()
+        End If
+        If IsConnect Then
+            ScanData()
+        End If
     End Sub
 
 #End Region
@@ -667,6 +682,7 @@ Imports System.IO
 
         Catch ex As Exception
             WriteLog("ERR: ScanData, Exception : " & ex.Message)
+            Me.Stop()
             Return False
         End Try
     End Function

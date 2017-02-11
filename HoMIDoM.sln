@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2013 for Windows Desktop
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_Foobar", "Drivers\Driver_Foobar\Driver_Foobar.vbproj", "{62C5EA60-2FE8-4F56-BC66-BE2D7B14CA5B}"
 EndProject
@@ -121,6 +121,10 @@ EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_RFLink", "Drivers_autonomes\Driver_RFLink\Driver_RFLink.vbproj", "{7FA0537C-BBCD-4F21-94B0-C94C9EE5333E}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_MySensors", "Drivers_autonomes\Driver_MySensors\Driver_MySensors.vbproj", "{793C295F-3626-4452-BD47-4B814C1BB44C}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_MyFox", "Drivers_autonomes\Driver_MyFox\Driver_MyFox.vbproj", "{FB81937A-A05A-4F07-AD6A-F643B241D7BE}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Driver_VMC", "Drivers_autonomes\Driver_VMC\Driver_VMC.vbproj", "{2CC567BC-F20A-4CE1-BD0C-F4EF1B723B2F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -660,12 +664,33 @@ Global
 		{793C295F-3626-4452-BD47-4B814C1BB44C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{793C295F-3626-4452-BD47-4B814C1BB44C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{793C295F-3626-4452-BD47-4B814C1BB44C}.Release|x86.ActiveCfg = Release|Any CPU
+		{FB81937A-A05A-4F07-AD6A-F643B241D7BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB81937A-A05A-4F07-AD6A-F643B241D7BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB81937A-A05A-4F07-AD6A-F643B241D7BE}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{FB81937A-A05A-4F07-AD6A-F643B241D7BE}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{FB81937A-A05A-4F07-AD6A-F643B241D7BE}.Debug|x86.ActiveCfg = Debug|x86
+		{FB81937A-A05A-4F07-AD6A-F643B241D7BE}.Debug|x86.Build.0 = Debug|x86
+		{FB81937A-A05A-4F07-AD6A-F643B241D7BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB81937A-A05A-4F07-AD6A-F643B241D7BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB81937A-A05A-4F07-AD6A-F643B241D7BE}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{FB81937A-A05A-4F07-AD6A-F643B241D7BE}.Release|Mixed Platforms.Build.0 = Release|x86
+		{FB81937A-A05A-4F07-AD6A-F643B241D7BE}.Release|x86.ActiveCfg = Release|x86
+		{FB81937A-A05A-4F07-AD6A-F643B241D7BE}.Release|x86.Build.0 = Release|x86
+		{2CC567BC-F20A-4CE1-BD0C-F4EF1B723B2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CC567BC-F20A-4CE1-BD0C-F4EF1B723B2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CC567BC-F20A-4CE1-BD0C-F4EF1B723B2F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2CC567BC-F20A-4CE1-BD0C-F4EF1B723B2F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2CC567BC-F20A-4CE1-BD0C-F4EF1B723B2F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2CC567BC-F20A-4CE1-BD0C-F4EF1B723B2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CC567BC-F20A-4CE1-BD0C-F4EF1B723B2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CC567BC-F20A-4CE1-BD0C-F4EF1B723B2F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2CC567BC-F20A-4CE1-BD0C-F4EF1B723B2F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2CC567BC-F20A-4CE1-BD0C-F4EF1B723B2F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{62C5EA60-2FE8-4F56-BC66-BE2D7B14CA5B} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
 		{B1154B53-619A-4878-8915-9A98904EEEF5} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
 		{E45EDD1D-4BED-4782-9050-D42EF782C28E} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
 		{B0602976-1274-4BDB-8158-9A655821E14D} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
@@ -706,6 +731,7 @@ Global
 		{7E92B3E9-0C1F-4FD0-BCB8-21A298735F5E} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
 		{FD7B7D66-9812-4583-81D5-C4A51C84C2B0} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
 		{41C380BE-0028-4453-B69F-F1B709D5D391} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
+		{62C5EA60-2FE8-4F56-BC66-BE2D7B14CA5B} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
 		{66D5DC1D-246B-49DA-9856-4ED68966D3C7} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
 		{25D01A09-60A9-4D63-B18F-CF54D158897C} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
 		{8E61A745-C86C-4EF1-BDDF-F849CA47F52E} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
@@ -713,12 +739,14 @@ Global
 		{D556B104-BB51-4A6E-ADEA-0BA93E1634C2} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
 		{7FA0537C-BBCD-4F21-94B0-C94C9EE5333E} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
 		{793C295F-3626-4452-BD47-4B814C1BB44C} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
+		{FB81937A-A05A-4F07-AD6A-F643B241D7BE} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
+		{2CC567BC-F20A-4CE1-BD0C-F4EF1B723B2F} = {A84FBDA1-CBD9-45E0-A3CC-7C0E7842D533}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		BuildVersion_IncrementBeforeBuild = True
-		BuildVersion_UseGlobalSettings = True
-		BuildVersion_BuildVersioningStyle = None.None.Increment.None
-		BuildVersion_UpdateFileVersion = True
 		BuildVersion_UpdateAssemblyVersion = True
+		BuildVersion_UpdateFileVersion = True
+		BuildVersion_BuildVersioningStyle = None.None.Increment.None
+		BuildVersion_UseGlobalSettings = True
+		BuildVersion_IncrementBeforeBuild = True
 	EndGlobalSection
 EndGlobal

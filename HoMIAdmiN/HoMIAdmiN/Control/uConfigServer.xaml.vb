@@ -270,9 +270,11 @@ Partial Public Class uConfigServer
                 Next
                 CbVoice.SelectedIndex = idx
 
-                ComboBoxAPI.Items.Add("GoogleCalendar")
-                ComboBoxAPI.Items.Add("Nest")
-                ComboBoxAPI.Items.Add("Netatmo")
+                Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(IdSrv, myService.GetIPSOAP, myService.GetPortSOAP, "HoMIDoM")
+                OAuth2.GetToken(ComboBoxAPI.Text, TextBoxAPI.Text)
+                For Each Str1 In OAuth2.list
+                    ComboBoxAPI.Items.Add(Str1)
+                Next
                 AutorOption.Visibility = Windows.Visibility.Collapsed
 
             End If
@@ -602,7 +604,12 @@ Partial Public Class uConfigServer
         Try
             Dim OAuth2 = New HoMIOAuth2.HoMIOAuth2(IdSrv, myService.GetIPSOAP, myService.GetPortSOAP, "HoMIDoM")
             Dim process__1 = Process.Start(OAuth2.GetAuthorizationUrl(ComboBoxAPI.Text))
-            If ComboBoxAPI.Text = "Nest" Then AutorOption.Visibility = Windows.Visibility.Visible
+            If ComboBoxAPI.Text = "Nest" Then
+                AutorOption.Visibility = Windows.Visibility.Visible
+            Else
+
+                AutorOption.Visibility = Windows.Visibility.Collapsed
+            End If
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub BtnAuthor_Click: " & ex.Message, "ERREUR", "")
         End Try
