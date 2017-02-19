@@ -487,9 +487,15 @@ Public Class Driver_RFLink
                     '10;LicoClean;    => Erase the Living colors lamp address table 
                     '10;LicoShow;     => Show the Living colors lamp address table
                     '10;EEPClean;     => Clean all settings in EEPROM
-                    If UCase(Command) = "RFLINKCTRL" Then
-                        RFLinkCommand = "10;" & Parametre1 & ";"
-                    End If
+                    Select Case UCase(Command)
+                        Case "RFLINKCTRL"
+                            RFLinkCommand = "10;" & Parametre1 & ";"
+                        Case "RFLINKFULLCMD"
+                            RFLinkCommand = Parametre1
+                        Case Else
+                            WriteLog("ERR: WRITE : La commande ne peut pas piloter le module RFLink : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
+                            Exit Sub
+                    End Select
 
                 Case "RFLINK FULL CMD"
                     Select Case UCase(Command)
@@ -500,114 +506,21 @@ Public Class Driver_RFLink
                             Exit Sub
                     End Select
 
-                Case "AB400D", "BYRON", "BYRON MP", "HOMECONFORT", "FA500", "IKEA KOPPLA", "IMPLULS", "KAMBROOK", "KAKU", "POWERFIX", "UNITEC", "X10"
-                    '10;AB400D;00004d;1;OFF;     => Sartano     protocol;address;action (ON/OFF)
-                    '10;Byron;112233;01;OFF;     => Dyron SX    protocol;address;ringtone
-                    '10;BYRON;00009F;01;ON;      => Byron       protocol;address;chime number,command
-                    '10;HomeConfort;01b523;D3;ON;=> HomeConfort protocol;address;action (ON/OFF)
-                    '10;FA500;001b523;D3;ON;     => Flamingo    protocol;address;action (ON/OFF)
-                    '10;Ikea Koppla;000080;0;ON; => Koppla      protocol;address;action (ON/OFF) 
-                    '10;Impuls;00004d;1;OFF;     => Impuls      protocol;address;action (ON/OFF)
-                    '10;Kambrook;050325;a1;ON;   => Kambrook    protocol;address;unit/button number;action (ON/OFF)
-                    '10;Kaku;00004d;1;OFF;       => Kaku/ARC    protocol;address;action (ON/OFF)
-                    '10;Powerfix;000080;0;ON;    => Powerfix/Quigg/Chacon protocol;address;action (ON/OFF)
-                    '10;UNITEC;7796;01;ON;       => Unitec regular ON command
-                    '10;UNITEC;7796;01;PAIR;     => Unitec pair command to pair RFLink as a remote to a power switch 
-                    '10;X10;000041;1;OFF;        => X10         protocol;address;action (ON/OFF)
-                    'RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
-                    Select Case UCase(Command)
-                        Case "RFLINKCMD"
-                            If IsNothing(Parametre2) Then
-                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
-                            Else
-                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre2 & ";" & Parametre1 & ";"
-                            End If
-                        Case "ON", "OFF", "UP", "DOWN"
-                            RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
-                        Case "DIM"
-                            If Not IsNothing(Parametre1) Then
-                                Parametre1 = Hex(Parametre1)
-                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
-                            Else
-                                WriteLog("ERR: DIM Il manque un parametre pour (" & Objet.Name & ")")
-                                Exit Sub
-                            End If
-                        Case Else
-                            WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
-                            Exit Sub
-                    End Select
-
-                Case "BLYSS", "EURODOMEST", "CONRAD", "HOMEEASY", "CHUANGO", "FA20RF"
-                    '10;Eurodomest;123456;01;ON; => Eurodomest protocol;address;button number;action (ON/OFF/ALLON/ALLOFF)
-                    '10;Blyss;ff98;A1;OFF;       => Blyss protocol;address;button;action (ON/OFF/ALLON/ALLOFF)
-                    '10;Conrad;ff0607;1;OFF;     => Conrad RSL protocol, address, button number, action (ON/OFF/ALLON/ALLOFF)
-                    '10;HomeEasy;7900b100;3;ON;  => Home Easy protocol;address;action (ON/OFF/ALLON/ALLOFF)
-                    '10;Chuango;000080;2;ON;     => Chuango Protocol;address;action (ON/OFF/ALLON/ALLOFF)
-                    '10;FA20RF;67f570;1;ON;      => Flamingo FA20RF / FA21 / KD101 protocol, address, button number, action (ON/OFF/ALLON/ALLOFF)
-                    Select Case UCase(Command)
-                        Case "RFLINKCMD"
-                            If IsNothing(Parametre2) Then
-                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
-                            Else
-                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre2 & ";" & Parametre1 & ";"
-                            End If
-                        Case "ON", "OFF", "UP", "DOWN"
-                            RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
-                        Case "DIM"
-                            If Not IsNothing(Parametre1) Then
-                                Parametre1 = Hex(Parametre1)
-                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
-                            Else
-                                WriteLog("ERR: DIM Il manque un parametre pour (" & Objet.Name & ")")
-                                Exit Sub
-                            End If
-                        Case Else
-                            WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
-                            Exit Sub
-                    End Select
-
                 Case "DELTRONIC"
                     '10;DELTRONIC;001c33;        => Deltronic protocol;address
                     RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";"
 
-                Case "EV1527"
-                    '10;EV1527;000080;0;ON;      => EV1527 protocol;address;device 0x00-0x0f,action ON/OFF
-                    RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
-
                 Case "MERTIK"
                     '10;MERTIK;64;UP;            => Mertik protocol, address, command
                     RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & Command & ";"
-
-                Case "NEWKAKU"
-                    '10;NewKaku;00c142;1;ON;     => Newkaku/AC protocol;address (24 bits);button number (hexadecimal 0x0-0x0f);action (ON/OFF/ALLON/ALLOFF/15 - 1 to 15 for direct dim level)
-                    '10;NewKaku;128ac4d;1;OFF;   => Newkaku/AC protocol;address (28 bits);button number (hexadecimal 0x0-0x0f);action (ON/OFF/ALLON/ALLOFF/15 - 1 to 15 for direct dim level)
-                    Select Case UCase(Command)
-                        Case "RFLINKCMD"
-                            If IsNothing(Parametre2) Then
-                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
-                            Else
-                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre2 & ";" & Parametre1 & ";"
-                            End If
-                        Case "ON", "OFF", "UP", "DOWN"
-                            RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
-                        Case "DIM"
-                            If Not IsNothing(Parametre1) Then
-                                'Parametre1 = Hex(Parametre1)
-                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
-                            Else
-                                WriteLog("ERR: DIM Il manque un parametre pour (" & Objet.Name & ")")
-                                Exit Sub
-                            End If
-                        Case Else
-                            WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
-                            Exit Sub
-                    End Select
 
                 Case "RTS"
                     '10;RTS;1a602a;0;ON;         => RTS protocol, address, command (zero is unused for now)
                     '10;RTS;1b602b;0123;PAIR;    => Pairing for RTS rolling code:  RTS protocol, address, rolling code number, PAIR command
                     '10;RTS;1b602b;0123;0;PAIR;  => Extended Pairing for RTS rolling code:  RTS protocol, address, rolling code number, eeprom record number, PAIR command
                     Select Case UCase(Command)
+                        Case "RFLINKFULLCMD"
+                            RFLinkCommand = Parametre1
                         Case "RFLINKCMD"
                             If IsNothing(Parametre2) Then
                                 RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
@@ -641,6 +554,8 @@ Public Class Driver_RFLink
                     '10;MiLightv1;F746;01;34BC;BRIGHT; => Milight v1 protocol;address;button/unit number;color & brightness; Set brightness
                     '10;MiLightv1;F746;01;34BC;COLOR;  => Milight v1 protocol;address;button/unit number;color & brightness; Set color 
                     Select Case UCase(Command)
+                        Case "RFLINKFULLCMD"
+                            RFLinkCommand = Parametre1
                         Case "RFLINKCMD"
                             If IsNothing(Parametre2) Then
                                 RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
@@ -663,26 +578,52 @@ Public Class Driver_RFLink
                     End Select
 
                 Case Else
-                    WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
-                    Exit Sub
+                    '10;AB400D;00004d;1;OFF;     => Sartano     protocol;address;action (ON/OFF)
+                    '10;Byron;112233;01;OFF;     => Dyron SX    protocol;address;ringtone
+                    '10;BYRON;00009F;01;ON;      => Byron       protocol;address;chime number,command
+                    '10;HomeConfort;01b523;D3;ON;=> HomeConfort protocol;address;action (ON/OFF)
+                    '10;EV1527;000080;0;ON;      => EV1527      protocol;address;device 0x00-0x0f,action ON/OFF
+                    '10;FA500;001b523;D3;ON;     => Flamingo    protocol;address;action (ON/OFF)
+                    '10;Ikea Koppla;000080;0;ON; => Koppla      protocol;address;action (ON/OFF) 
+                    '10;Impuls;00004d;1;OFF;     => Impuls      protocol;address;action (ON/OFF)
+                    '10;Kambrook;050325;a1;ON;   => Kambrook    protocol;address;unit/button number;action (ON/OFF)
+                    '10;Kaku;00004d;1;OFF;       => Kaku/ARC    protocol;address;action (ON/OFF)
+                    '10;NewKaku;00c142;1;ON;     => Newkaku/AC  protocol;address (24 bits);button number (hexadecimal 0x0-0x0f);action (ON/OFF/ALLON/ALLOFF/15 - 1 to 15 for direct dim level)
+                    '10;NewKaku;128ac4d;1;OFF;   => Newkaku/AC  protocol;address (28 bits);button number (hexadecimal 0x0-0x0f);action (ON/OFF/ALLON/ALLOFF/15 - 1 to 15 for direct dim level)
+                    '10;Powerfix;000080;0;ON;    => Powerfix/Quigg/Chacon protocol;address;action (ON/OFF)
+                    '10;UNITEC;7796;01;ON;       => Unitec regular ON command
+                    '10;UNITEC;7796;01;PAIR;     => Unitec pair command to pair RFLink as a remote to a power switch 
+                    '10;X10;000041;1;OFF;        => X10         protocol;address;action (ON/OFF)
+                    '10;Eurodomest;123456;01;ON; => Eurodomest protocol;address;button number;action (ON/OFF/ALLON/ALLOFF)
+                    '10;Blyss;ff98;A1;OFF;       => Blyss protocol;address;button;action (ON/OFF/ALLON/ALLOFF)
+                    '10;Conrad;ff0607;1;OFF;     => Conrad RSL protocol, address, button number, action (ON/OFF/ALLON/ALLOFF)
+                    '10;HomeEasy;7900b100;3;ON;  => Home Easy protocol;address;action (ON/OFF/ALLON/ALLOFF)
+                    '10;Chuango;000080;2;ON;     => Chuango Protocol;address;action (ON/OFF/ALLON/ALLOFF)
+                    '10;FA20RF;67f570;1;ON;      => Flamingo FA20RF / FA21 / KD101 protocol, address, button number, action (ON/OFF/ALLON/ALLOFF)
+                    Select Case UCase(Command)
+                        Case "RFLINKFULLCMD"
+                            RFLinkCommand = Parametre1
+                        Case "RFLINKCMD"
+                            If IsNothing(Parametre2) Then
+                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                            Else
+                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre2 & ";" & Parametre1 & ";"
+                            End If
+                        Case "ON", "OFF", "UP", "DOWN"
+                            RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
+                        Case "DIM"
+                            If Not IsNothing(Parametre1) Then
+                                Parametre1 = Hex(Parametre1)
+                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                            Else
+                                WriteLog("ERR: DIM Il manque un parametre pour (" & Objet.Name & ")")
+                                Exit Sub
+                            End If
+                        Case Else
+                            WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
+                            Exit Sub
+                    End Select
             End Select
-            'Select Case Command
-            'Case "ON", "OFF", "ALLON", "ALLOFF", "UP", "DOWN"
-            '    RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
-            'Case "DIM"
-            '    If Not IsNothing(Parametre1) Then
-            '        Parametre1 = Hex(Parametre1)
-            '        RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Objet.Parametre1 & ";"
-            '    Else
-            '        WriteLog("ERR: DIM Il manque un parametre pour (" & Objet.Name & ")")
-            '        Exit Sub
-            'End If
-            'Case "COMMANDE SPÉCIFIQUE"
-            '    RFLinkCommand = "10;" & Parametre1 & ";"
-            'Case Else
-            '    WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
-            '    Exit Sub
-            'End Select
             WriteLog("DBG: Commande passée au module RFLink : " & RFLinkCommand)
             serialPortObj.WriteLine(RFLinkCommand) ', 0, 8)
 
