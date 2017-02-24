@@ -282,9 +282,9 @@ Public Class Driver_RFLink
             Dim retour As String = "0"
             Select Case UCase(Champ)
                 Case "ADRESSE1"
-                    If Value = " " Then retour = "l'adresse est obligatoire"
-                    'Case "ADRESSE2"
-                    '   If Value = " " Then retour = "l'adresse est obligatoire"
+                    If Value = "" Then retour = "L'adresse du périphérique RFLink est obligatoire."
+                Case "ADRESSE2"
+                    If Value = "" Then retour = "est obligatoire."
             End Select
             Return retour
         Catch ex As Exception
@@ -401,26 +401,16 @@ Public Class Driver_RFLink
 
             'verification si adresse1 n'est pas vide
             If String.IsNullOrEmpty(Objet.Adresse1) Or Objet.Adresse1 = "" Then
-                WriteLog("ERR: WRITE l'adresse du noeud RFLink doit etre renseigné : " & Objet.Name)
+                WriteLog("ERR: WRITE l'adresse du périphérique RFLink doit etre renseigné : " & Objet.Name)
                 Exit Sub
             End If
 
-            '            'verification si adresse2 n'est pas vide
-            '            If String.IsNullOrEmpty(Objet.Adresse2) Or Objet.Adresse2 = "" Then
-            '                WriteLog("ERR: WRITE l'ID capteur/actionneur RFLink doit etre renseigné : " & Objet.Name)
-            '                Exit Sub
-            '            End If
-            '
-            '            Dim RFLinkCommand As String = ""
-            '            Select Case UCase(Objet.Modele)
-            '                '10/20;Protocol Name;Device Adress;Button Number;Action;
-            '                Case "Kaku"
-            '                    RFLinkCommand = "20;" + Objet.Modele + ";" + Objet.Adresse1 & ";1;"
-            '                Case Else
-            '                    WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
-            '                    Exit Sub
-            '            End Select
-            '
+            'verification si adresse2 n'est pas vide
+            If String.IsNullOrEmpty(Objet.Adresse2) Or Objet.Adresse2 = "" Then
+                WriteLog("ERR: WRITE le protocole du périphérique RFLink doit etre renseigné : " & Objet.Name)
+                Exit Sub
+            End If
+
             '            WriteLog("DBG: Commande passée à la passerelle RFLink : " & RFLinkCommand)
             '            serialPortObj.WriteLine(RFLinkCommand) ', 0, 8)
 
@@ -447,20 +437,20 @@ Public Class Driver_RFLink
 
             'verification si adresse1 n'est pas vide
             If String.IsNullOrEmpty(Objet.Adresse1) Or Objet.Adresse1 = "" Then
-                WriteLog("ERR: WRITE l'adresse du composant doit etre renseigné : " & Objet.Name)
+                WriteLog("ERR: WRITE l'adresse du périphérique doit etre renseigné : " & Objet.Name)
                 Exit Sub
             End If
 
             '            'verification si adresse2 n'est pas vide
-            '            If String.IsNullOrEmpty(Objet.Adresse2) Or Objet.Adresse2 = "" Then
-            '                WriteLog("ERR: WRITE l'adresse du composant doit etre renseigné : " & Objet.Name)
-            '                Exit Sub
-            '            End If
+            If String.IsNullOrEmpty(Objet.Adresse2) Or Objet.Adresse2 = "" Then
+                WriteLog("ERR: WRITE le protocole du périphérique doit etre renseigné : " & Objet.Name)
+                Exit Sub
+            End If
 
             Dim RFLinkCommand As String = ""
             Dim RFAdresse() As String
             RFAdresse = Objet.Adresse1.Split("-")
-            Select Case UCase(Objet.Modele)
+            Select Case UCase(Objet.Adresse2)
                 Case "RFLINK CTRL"
                     'Special Control Commands - Send:   
                     '--------------------------------   
@@ -493,7 +483,7 @@ Public Class Driver_RFLink
                         Case "RFLINKFULLCMD"
                             RFLinkCommand = Parametre1
                         Case Else
-                            WriteLog("ERR: WRITE : La commande ne peut pas piloter le module RFLink : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
+                            WriteLog("ERR: WRITE : La commande ne peut pas piloter le module RFLink : " & Objet.Adresse2.ToString & " (" & Objet.Name & ")")
                             Exit Sub
                     End Select
 
@@ -502,17 +492,17 @@ Public Class Driver_RFLink
                         Case "RFLINKFULLCMD"
                             RFLinkCommand = Parametre1
                         Case Else
-                            WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
+                            WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Adresse2.ToString & " (" & Objet.Name & ")")
                             Exit Sub
                     End Select
 
                 Case "DELTRONIC"
                     '10;DELTRONIC;001c33;        => Deltronic protocol;address
-                    RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";"
+                    RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";"
 
                 Case "MERTIK"
                     '10;MERTIK;64;UP;            => Mertik protocol, address, command
-                    RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & Command & ";"
+                    RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & Command & ";"
 
                 Case "RTS"
                     '10;RTS;1a602a;0;ON;         => RTS protocol, address, command (zero is unused for now)
@@ -522,30 +512,30 @@ Public Class Driver_RFLink
                         Case "RFLINKFULLCMD"
                             RFLinkCommand = Parametre1
                         Case "RFLINKCMD"
-                            If IsNothing(Parametre2) Then
-                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                            If Parametre2 = "" Then
+                                RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
                             Else
-                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre2 & ";" & Parametre1 & ";"
+                                RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre2 & ";" & Parametre1 & ";"
                             End If
                         Case "ON", "OFF", "UP", "DOWN"
-                            RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";0;" & Command & ";"
+                            RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";0;" & Command & ";"
                         Case "DIM"
                             If Not IsNothing(Parametre1) Then
                                 Parametre1 = Hex(Parametre1)
-                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                                RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
                             Else
                                 WriteLog("ERR: DIM Il manque un parametre pour (" & Objet.Name & ")")
                                 Exit Sub
                             End If
 
                         Case Else
-                            WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
+                            WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Adresse2.ToString & " (" & Objet.Name & ")")
                             Exit Sub
                     End Select
 
                 Case "SELECTPLUS"
                     '10;Selectplus;001c33; => SelectPlus protocol;address
-                    RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";"
+                    RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";"
 
                 Case "MILIGHTV1"
                     '10;MiLightv1;F746;00;3c00;ON;     => Milight v1 protocol;address;button/unit number;color & brightness;command (ON/OFF/ALLON/ALLOFF/DISCO+/DISCO-/MODE0 - MODE8 
@@ -557,23 +547,23 @@ Public Class Driver_RFLink
                         Case "RFLINKFULLCMD"
                             RFLinkCommand = Parametre1
                         Case "RFLINKCMD"
-                            If IsNothing(Parametre2) Then
-                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                            If Parametre2 = "" Then
+                                RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
                             Else
-                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre2 & ";" & Parametre1 & ";"
+                                RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre2 & ";" & Parametre1 & ";"
                             End If
                         Case "ON", "OFF", "UP", "DOWN"
-                            RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
+                            RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
                         Case "DIM"
                             If Not IsNothing(Parametre1) Then
                                 Parametre1 = Hex(Parametre1)
-                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                                RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
                             Else
                                 WriteLog("ERR: DIM Il manque un parametre pour (" & Objet.Name & ")")
                                 Exit Sub
                             End If
                         Case Else
-                            WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
+                            WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Adresse2.ToString & " (" & Objet.Name & ")")
                             Exit Sub
                     End Select
 
@@ -604,23 +594,23 @@ Public Class Driver_RFLink
                         Case "RFLINKFULLCMD"
                             RFLinkCommand = Parametre1
                         Case "RFLINKCMD"
-                            If IsNothing(Parametre2) Then
-                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                            If Parametre2 = "" Then
+                                RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
                             Else
-                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre2 & ";" & Parametre1 & ";"
+                                RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre2 & ";" & Parametre1 & ";"
                             End If
                         Case "ON", "OFF", "UP", "DOWN"
-                            RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
+                            RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
                         Case "DIM"
                             If Not IsNothing(Parametre1) Then
                                 Parametre1 = Hex(Parametre1)
-                                RFLinkCommand = "10;" & Objet.Modele & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                                RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
                             Else
                                 WriteLog("ERR: DIM Il manque un parametre pour (" & Objet.Name & ")")
                                 Exit Sub
                             End If
                         Case Else
-                            WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Modele.ToString.ToUpper & " (" & Objet.Name & ")")
+                            WriteLog("ERR: WRITE : Ce type de capteur/actionneur ne peut pas être piloté : " & Objet.Adresse2.ToString & " (" & Objet.Name & ")")
                             Exit Sub
                     End Select
             End Select
@@ -764,15 +754,15 @@ Public Class Driver_RFLink
 
             'ajout des commandes avancées pour les devices
             'add_devicecommande("COMMANDE", "DESCRIPTION", nbparametre)
-            add_devicecommande("RFLinkCtrl", "Commande de parametrage du module RFLink.", 2)
+            add_devicecommande("RFLinkCtrl", "Commande de parametrage du module RFLink.", 1)
             add_devicecommande("RFLinkFullCmd", "Permet d'utiliser une syntaxe de commande non supportée par HoMIDoM.", 1)
             add_devicecommande("RFLinkCmd", "", 2)
 
             'Libellé Device
-            Add_LibelleDevice("ADRESSE1", "ID du noeud RFLink", "Valeur de type numérique")
-            Add_LibelleDevice("ADRESSE2", "@", "")
+            Add_LibelleDevice("ADRESSE1", "Adresse du périphérique RFLink", "Valeur de type alphanumérique")
+            Add_LibelleDevice("ADRESSE2", "Protocole du périphérique RFLink", "Automatique si Autodécouvert, Utiliser ""RFLink Ctrl"" pour controler le module RFLink.")
             Add_LibelleDevice("SOLO", "@", "")
-            Add_LibelleDevice("MODELE", "Protocole RFLink", "Détail des protocoles utilisables dans la documentation du driver", "Aucun|RFLink Ctrl|RFLink Full Cmd|AB400D|Byron|Byron MP|Blyss|Chuango|Conrad|DELTRONIC|Eurodomest|EV1527|FA20RF|FA500|HomeConfort|HomeEasy|Ikea Koppla|Impuls|Kaku|Kambrook|MERTIK|NewKaku|Powerfix|RTS|Selectplus|X10")
+            'Add_LibelleDevice("MODELE", "Protocole RFLink", "Détail des protocoles utilisables dans la documentation du driver", "Aucun|RFLink Ctrl|RFLink Full Cmd|AB400D|Byron|Byron MP|Blyss|Chuango|Conrad|DELTRONIC|Eurodomest|EV1527|FA20RF|FA500|HomeConfort|HomeEasy|Ikea Koppla|Impuls|Kaku|Kambrook|MERTIK|NewKaku|Powerfix|RTS|Selectplus|X10")
             Add_LibelleDevice("REFRESH", "Refresh", "0")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
         Catch ex As Exception
@@ -847,7 +837,7 @@ Public Class Driver_RFLink
                                 RF_SubData = aryLine(index).Split("=")
                                 RF_Value = RF_SubData(1)
                             End If
-                            traitement(RF_Mode, RF_DataType, RF_ID, RF_Value)
+                            traitement(RF_Mode, RF_DataType, RF_ID, RF_Value, RF_Protocol)
                             If RF_DataType = "SWITCH" Then Exit For
                         Next
                     ElseIf UBound(aryLine) = 3 Then
@@ -865,7 +855,7 @@ Public Class Driver_RFLink
 
     ''' <summary>Traite les paquets reçus</summary>
     ''' <remarks></remarks>
-    Private Sub traitement(ByVal mode As String, ByVal type As String, ByVal adresse As String, ByVal valeur As String)
+    Private Sub traitement(ByVal mode As String, ByVal type As String, ByVal adresse As String, ByVal valeur As String, ByVal protocol As String)
         '    Private Sub traitement(ByVal msgtype As String, ByVal type As String, ByVal adresse As String, ByVal adresse2 As String, ByVal valeur As String)
         '    Private Sub traitement(ByVal adresse As String, ByVal valeur As String)
         Try
@@ -986,7 +976,7 @@ Public Class Driver_RFLink
                         If autodevice = True Then
                             If (_AutoDiscover Or _Server.GetModeDecouverte) Then
                                 _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom & " Process", "Device non trouvé, AutoCreation du composant : " & _Type & " " & adresse & " " & ":" & valeur)
-                                _Server.AddDetectNewDevice(adresse, _ID, homidom_type, "", valeur)
+                                _Server.AddDetectNewDevice(adresse, _ID, homidom_type, protocol, valeur)
                             Else
                                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Process", "Device non trouvé : " & _Type & " " & adresse & " " & ":" & valeur)
                             End If
