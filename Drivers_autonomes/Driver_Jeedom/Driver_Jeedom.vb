@@ -131,6 +131,7 @@ Imports System.Text
         Public unite As String
         Public isVisible As String
         Public value As String
+        Public currentvalue As String
         Public state As String
     End Class
     Public Class ScenarioList
@@ -552,15 +553,22 @@ Imports System.Text
                 WriteLog("ERR: Erreur dans les paramétres avancés. utilisation des valeur par défaut : " & ex.Message)
             End Try
 
-            _urlApiJeedom = "http://" & _IPAdressJeedom & ":" & _IPPortJeedom & "/jeedom/core/api/jeeApi.php?"""
+            _urlApiJeedom = "http://" & _IPAdressJeedom & ":" & _IPPortJeedom & "/core/api/jeeApi.php?"""
             WriteLog("Start, connection au serveur " & _urlAPIJeedom)
 
+            ' teste 2 cas car suivant les installation, pas la même url
             If Get_Config() Then
                 _IsConnect = True
-                WriteLog("Driver " & Me.Nom & " démarré avec succés")
+                WriteLog("Driver " & Me.Nom & " démarré avec succés à l'adresse " & _urlAPIJeedom)
             Else
-                _IsConnect = False
-                WriteLog("ERR: Driver " & Me.Nom & " Erreur démarrage ")
+                _urlApiJeedom = "http://" & _IPAdressJeedom & ":" & _IPPortJeedom & "/jeedom/core/api/jeeApi.php?"""
+                If Get_Config() Then
+                    _IsConnect = True
+                    WriteLog("Driver " & Me.Nom & " démarré avec succés à l'adresse " & _urlAPIJeedom)
+                Else
+                    _IsConnect = False
+                    WriteLog("ERR: Driver " & Me.Nom & " Erreur démarrage ")
+                End If
             End If
         Catch ex As Exception
             _IsConnect = False
@@ -621,9 +629,9 @@ Imports System.Text
                     idCom = Objet.adresse2
                 End If
             Else
-                idCom = Get_IdCmd(ideqLogic, Command)
+                idCom = Get_IdCmd(ideqLogic, idCom)
             End If
-            WriteLog("DBG: Read, lecture de l'info " & Command() & " pour appareil numero " & ideqLogic)
+            WriteLog("DBG: Read, lecture de l'info " & idCom & " pour l'appareil numero " & ideqLogic)
             'recupere les commandes de l'appareil pour avoir les dernières valeurs
 
             Dim valeur As String = Nothing
@@ -875,6 +883,7 @@ Imports System.Text
             Dim response As String = ""
             'recherche des equipements
             response = Get_RPC(_urlAPIJeedom, "eqLogic::all", "", "")
+            If response = "" Then Return False
             WriteLog("DBG: " & "GET_Config, response: " & response.ToString)
             Dim ResulteqLogic = Newtonsoft.Json.JsonConvert.DeserializeObject(response, GetType(ResulteqLogic))
             Me.eqLogicListe = ResulteqLogic.result
@@ -882,6 +891,7 @@ Imports System.Text
 
             'recherche des scenario
             response = Get_RPC(_urlAPIJeedom & "core/api/jeeApi.php?", "scenario::all", "", "")
+            If response = "" Then Return False
             WriteLog("DBG: " & "GET_Config, response: " & response.ToString)
             Dim ResultScenarion = Newtonsoft.Json.JsonConvert.DeserializeObject(response, GetType(ResultScenario))
             Me.ScenarioListe = ResultScenarion.result
@@ -902,6 +912,7 @@ Imports System.Text
         Try
             ' mise en forme des libellés equipement actifs pour adresse1
             Dim IdLib As String = ""
+
             Me.eqLogicCommandListeTotal.Clear()
             For i = 0 To eqLogicListe.Count - 1
                 If eqLogicListe.Item(i).isEnable = "0" Then Continue For
@@ -928,7 +939,7 @@ Imports System.Text
             For i = 0 To Me.eqLogicCommandListeTotal.Count - 1
                 For j = 0 To Me.eqLogicCommandListeTotal.Item(i).cmds.Count - 1
                     If eqLogicCommandListeTotal.Item(i).cmds.Item(j).type = "info" Then
-                        idCom += eqLogicCommandListeTotal.Item(i).cmds.Item(j).eqLogic_id & " # " & " #; " & eqLogicCommandListeTotal.Item(i).cmds.Item(j).id & " # " & eqLogicCommandListeTotal.Item(i).cmds.Item(j).name & " > " & eqLogicCommandListeTotal.Item(i).cmds.Item(j).type & "|"
+                        idCom += eqLogicCommandListeTotal.Item(i).cmds.Item(j).eqLogic_id & " #; " & eqLogicCommandListeTotal.Item(i).cmds.Item(j).id & " # " & eqLogicCommandListeTotal.Item(i).cmds.Item(j).name & " > " & eqLogicCommandListeTotal.Item(i).cmds.Item(j).type & "|"
                     End If
                 Next
             Next
@@ -936,8 +947,8 @@ Imports System.Text
             ' mise en forme des libellés scénarios pour adresse2
             For i = 0 To ScenarioListe.Count - 1
                 If ScenarioListe.Item(i).isActive = "0" Then Continue For
-                idCom += ScenarioListe.Item(i).id & " # " & " #; " & "1 # RUN > scénario" & "|"
-                idCom += ScenarioListe.Item(i).id & " # " & " #; " & "2 # STOP > scénario" & "|"
+                idCom += ScenarioListe.Item(i).id & " #; " & "1 # RUN > scénario" & "|"
+                idCom += ScenarioListe.Item(i).id & " #; " & "2 # STOP > scénario" & "|"
             Next
             idCom = Mid(idCom, 1, Len(idCom) - 1) 'enleve le dernier | pour eviter davoir une ligne vide a la fin
             Add_LibelleDevice("ADRESSE2", "Nom de la commande", "Nom de la commande", idCom)
@@ -1013,7 +1024,7 @@ Imports System.Text
                             Me.eqLogicCommandListe = resultcommand.result
                             For k = 0 To eqLogicCommandListe.cmds.Count - 1
                                 If Me.eqLogicCommandListe.cmds.Item(j).id = idcmd Then
-                                    Return Me.eqLogicCommandListe.cmds.Item(j).state
+                                    Return Me.eqLogicCommandListe.cmds.Item(j).currentvalue
                                     Exit Function
                                 End If
                             Next
