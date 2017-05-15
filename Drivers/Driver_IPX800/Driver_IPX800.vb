@@ -333,12 +333,6 @@ Imports System.Xml
 
             _urlIPX = "http://" & _IPAdress & ":" & _IPPort & "/"
 
-            'lance le time du driver, mini toutes les 10 minutes
-            If _Refresh = 0 Then _Refresh = 600
-            MyTimer.Interval = _Refresh * 1000
-            MyTimer.Enabled = True
-            AddHandler MyTimer.Elapsed, AddressOf TimerTick
-
             GET_VALUES(_urlIPX, _Username, _Password)
             WriteLog("Version : " & _IPXVersion)
             WriteLog("Nbre de données relevées : " & ValueIPX.Count)
@@ -355,6 +349,12 @@ Imports System.Xml
                         WriteLog("Version logicielle : " & _IPXSubVersion)
                         _IsConnect = True
                         WriteLog("Driver démarré")
+
+                        'lance le time du driver, mini toutes les 10 minutes
+                        If _Refresh = 0 Then _Refresh = 600
+                        MyTimer.Interval = _Refresh * 1000
+                        MyTimer.Enabled = True
+                        AddHandler MyTimer.Elapsed, AddressOf TimerTick
                     Else
                         _IsConnect = False
                         WriteLog("ERR: Driver " & Me.Nom & " Erreur démarrage, matériel introuvable ")
@@ -399,7 +399,10 @@ Imports System.Xml
 
         Try
 
-            If _Enable = False Then Exit Sub
+            If _Enable = False Then
+                WriteLog("ERR: READ, Le driver n'est pas démarré, impossible d'écrire sur le port")
+                Exit Sub
+            End If
 
             If _IsConnect = False Then
                 WriteLog("ERR: READ, Le driver n'est pas démarré, impossible d'écrire sur le port")
@@ -688,6 +691,12 @@ Imports System.Xml
     ''' <summary>Si refresh >0 gestion du timer</summary>
     ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
     Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
+        If (_Enable = False) Or (_IsConnect = False) Then
+            'arrete le timer du driver
+            MyTimer.Enabled = False
+            Exit Sub
+        End If
+
         GET_VALUES(_urlIPX, _Username, _Password)
     End Sub
 
