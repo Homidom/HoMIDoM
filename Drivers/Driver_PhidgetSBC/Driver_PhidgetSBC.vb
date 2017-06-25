@@ -319,17 +319,18 @@ Imports System.Text.RegularExpressions
             WriteLog("DBG: ServeurID demande : " & IP_TCP & ":" & Port_TCP & " / " & _NumeroUnit)
             phidgetIFK = New Phidgets.InterfaceKit()
             phidgetIFK.open(_NumeroUnit, IP_TCP, CInt(Port_TCP))
-            phidgetIFK.waitForAttachment(5000)
+            phidgetIFK.waitForAttachment()
             If phidgetIFK.Attached Then
-                WriteLog("SBC connecte : " & IP_TCP & ":" & Port_TCP & " -> " & _NumeroUnit)
+                WriteLog("SBC connecté : " & IP_TCP & ":" & Port_TCP & " -> " & _NumeroUnit)
+                WriteLog("Nom: " & phidgetIFK.Name)
+                WriteLog("Nombre d'entrees: " & phidgetIFK.inputs.Count.ToString())
+                WriteLog("Nombre de sorties digitales: " & phidgetIFK.outputs.Count.ToString())
+                WriteLog("Nombre de capteurs analogiques: " & phidgetIFK.sensors.Count.ToString())
                 _IsConnect = True
             End If
-            WriteLog("DBG: Nom: " & phidgetIFK.Name)
-            WriteLog("DBG: Nombre d'entrees: " & phidgetIFK.inputs.Count.ToString())
-            WriteLog("DBG: Nombre de sorties digitales: " & phidgetIFK.outputs.Count.ToString())
-            WriteLog("DBG: Nombre de capteurs analogiques: " & phidgetIFK.sensors.Count.ToString())
+
         Catch ex As Exception
-            WriteLog("ERR: Start Exception " & ex.Message)
+            WriteLog("ERR: Start, Exception " & ex.Message)
             _IsConnect = False
         End Try
     End Sub
@@ -347,7 +348,7 @@ Imports System.Text.RegularExpressions
             WriteLog("Driver arrêté")
             _IsConnect = False
         Catch ex As Exception
-            WriteLog("ERR: Erreur lors de l'arret du driver: " & ex.ToString)
+            WriteLog("ERR: Stop, Erreur lors de l'arret du driver: " & ex.ToString)
             _IsConnect = False
         End Try
     End Sub
@@ -376,7 +377,7 @@ Imports System.Text.RegularExpressions
             Catch ex As Exception
                 _DEBUG = False
                 _Parametres.Item(0).Valeur = False
-                WriteLog("ERR: Erreur de lecture de debug : " & ex.Message)
+                WriteLog("ERR: Read, Erreur de lecture de debug : " & ex.Message)
             End Try
 
             Dim typadr As String
@@ -536,7 +537,7 @@ Imports System.Text.RegularExpressions
             x.Valeur = valeur
             _Parametres.Add(x)
         Catch ex As Exception
-            WriteLog("ERR: add_devicecommande Exception : " & ex.Message)
+            WriteLog("ERR: add_paramavance Exception : " & ex.Message)
         End Try
     End Sub
 
@@ -591,14 +592,20 @@ Imports System.Text.RegularExpressions
     ''' <summary>Si refresh >0 gestion du timer</summary>
     ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
     Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
-
+        Try
+        Catch ex As Exception
+            WriteLog("ERR: " & Me.Nom & " TimerTick, " & ex.Message)
+        End Try
     End Sub
 
 #End Region
 
 #Region "Fonctions propres au driver"
     Private Sub phidgetIFK_Error(ByVal sender As Object, ByVal e As Phidgets.Events.ErrorEventArgs) Handles phidgetIFK.Error
-        WriteLog("ERR: Erreur: " & e.Description)
+        'datarange trop faible. Provoque des erreurs sans concequences en fonctionnement. Erreurs loguées en mode debug
+        If ((InStr("One or more data packets were lost", e.Description)) Or (Not InStr("sample overrun detected", e.Description))) And _DEBUG = False Then Return
+
+        WriteLog("ERR: Erreur : " & e.Description)
     End Sub
 
     'digital input change event handler... here we check or uncheck the corresponding input checkbox based on the index of
@@ -623,6 +630,9 @@ Imports System.Text.RegularExpressions
     ''' <remarks></remarks>
     Private Sub traitement(ByVal valeur As Boolean, ByVal adresse As String)
         Try
+
+            _DEBUG = Parametres.Item(0).Valeur
+
             'Recherche si un device affecté
             Dim listedevices As New ArrayList
             Dim typedevice As String
