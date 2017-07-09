@@ -1,0 +1,46 @@
+﻿2016-08-01
+[Installation]
+* Génération possible d'un installeur version "STABLE" ou "RELEASE".
+* Détection du .NETFramework 4.0 si absent, téléchargement et installation du .NET 4.6.1 (optionnel).
+* Détection des redistribuables VC++ 2008, 2010, 2013, installation si absent(s) (optionnel).
+* Intégration de tous les drivers et dll associées présents dans le dossier Drivers.
+* Création d'une tache planifiée pour lancer HoMIGuI à l'ouverture de session. (compatible tout OS).
+* Installation du client HoMIWpF (optionnel).
+* Suppression de tous les anciens raccourcis "HoMUGuI" sauf dans le menu démarrer - Programme\HoMIDoM.
+* Copie du répertoire "_DLLx86" pour un OS 32Bit.
+* Installation possible dans un répertoire autre que le répertoire par défaut (bug corrigé).
+* Répertoire par défaut modifié si détection d'une ancienne installation.
+* Personnalisation de l'installeur (Logo HoMIDoM).
+
+[Désinstallation]
+* Suppression de la tache planifiée.
+* Option "Supprimer tout" (décoché par défaut) dans le désinstalleur.
+
+2013-04-10
+----------
+* Multi-langues "ready"
+* Détection & télechargement du Framework .NET 4.0 Full (en,fr)
+* Bundle x86 + x64 - detection de l'OS et deploiement des DLL_externe correspondante
+* Detection d'une installation existante 
+* Arret des services et application en cours d'execution
+* (Re)démarrage du service après install/maj 
+
+
+2013-05-23 
+----------
+* Externalisation des drivers dans des fichiers "include" (~/includes/Driver_*.nsh)
+* Desactivation de la description détaillée des sections.
+* Suppression de la transparence su SplahScreen + Ajout d'un effet de fade-in/fade-out
+* Détection de la version précédement installée.
+* Ajout de profils d'installation pré-définis (Complete, Service uniquement, Admin uniquement)
+* Réorganisation des sections
+* Déplacement des drivers obligatoire dans la section "Service"
+* Ajout de la possibilité d'installer uniquement le service ou uniquement l'admin
+* Détection d'un installation existante faite avec l'ancien installeur (basé sur la présence de fichiers spécifiques)
+* Sauvegarde des fichiers de l'ancienne installation, Désinstallation de l'installation faite avec l'ancien installeur et réstauration des fichiers sauvegardé.
+
+
+
+
+
+
