@@ -1841,7 +1841,7 @@ Class Window1
 
             End If
         Catch ex As Exception
-            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub TreeView_MouseDoubleClick: " & ex.Message, "ERREUR", "")
+            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "ERREUR Sub TreeView_MouseDoubleClick : " & ex.Message, "ERREUR", "")
         End Try
     End Sub
 
