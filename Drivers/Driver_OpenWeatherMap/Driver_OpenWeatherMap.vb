@@ -7,6 +7,8 @@ Imports System.Xml
 Imports System.Net
 Imports System.Threading
 Imports System.Text
+Imports System.Text.RegularExpressions
+Imports STRGS = Microsoft.VisualBasic.Strings
 
 ''' <summary>Driver OpenWeatherMap, le device doit indique sa ville dans son Adresse 1</summary>
 ''' <remarks></remarks>
@@ -31,7 +33,7 @@ Imports System.Text
     Dim _Refresh As Integer = 0
     Dim _Modele As String = "OpenWeatherMap"
     Dim _Version As String = My.Application.Info.Version.ToString
-    Dim _OsPlatform As String = "3264" 'Pkateforme compatible 32 64 ou 3264
+    Dim _OsPlatform As String = "3264" 'Plateforme compatible 32 64 ou 3264
     Dim _Picture As String = ""
     Dim _Server As HoMIDom.HoMIDom.Server
     Dim _Device As HoMIDom.HoMIDom.Device
@@ -270,7 +272,8 @@ Imports System.Text
                 Return False
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "exception : " & ex.Message)
+            '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " ExecuteCommand", "exception : " & ex.Message)
+            WriteLog("ERR: ExecuteCommand, " & ex.Message)
             Return False
         End Try
     End Function
@@ -312,19 +315,24 @@ Imports System.Text
             End Try
             Try
                 _AppID = _Parametres.Item(1).Valeur
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " Lecture du paramètre AppID : " & _AppID)
+                '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " Lecture du paramètre AppID : " & _AppID)
+                WriteLog("Lecture du paramètre AppID : " & _AppID)
             Catch ex As Exception
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " Une erreur est apparue lors de la lecture du paramètre AppID")
+                '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " Une erreur est apparue lors de la lecture du paramètre AppID")
+                WriteLog("Une erreur est apparue lors de la lecture du paramètre AppID")
             End Try
             Try
                 _OrgIcon = _Parametres.Item(2).Valeur
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " Lecture du paramètre OrgIcon : " & _OrgIcon)
+                '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " Lecture du paramètre OrgIcon : " & _OrgIcon)
+                WriteLog("Lecture du paramètre OrgIcon : " & _OrgIcon)
             Catch ex As Exception
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " Une erreur est apparue lors de la lecture du paramètre OrgIcon")
+                '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " Une erreur est apparue lors de la lecture du paramètre OrgIcon")
+                WriteLog("Une erreur est apparue lors de la lecture du paramètre OrgIcon")
             End Try
 
             _IsConnect = True
-            _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " démarré")
+            '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " démarré")
+            WriteLog("Driver " & Me.Nom & " démarré")
 
             If _IsConnect Then
                 For Each _Dev As HoMIDom.HoMIDom.TemplateDevice In _Server.GetAllDevices(_IdSrv)
@@ -731,12 +739,14 @@ Imports System.Text
                     .WriteEndElement()
                     .Close()
                 End With
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Fichier OpenWeatherMap.xml a été créé !")
+                '_Server.Log(TypeLog.INFO, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Fichier OpenWeatherMap.xml a été créé !")
+                WriteLog("Fichier OpenWeatherMap.xml a été créé !")
             End If
 
         Catch ex As Exception
             _IsConnect = False
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", ex.Message)
+            '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Start", ex.Message)
+            WriteLog("ERR: Start, " & ex.Message)
         End Try
     End Sub
 
@@ -747,7 +757,8 @@ Imports System.Text
             _IsConnect = False
             _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, "Driver " & Me.Nom & " arrêté")
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Stop", ex.Message)
+            '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Stop", ex.Message)
+            WriteLog("ERR: Stop, " & ex.Message)
         End Try
     End Sub
 
@@ -770,11 +781,13 @@ Imports System.Text
                 Dim y As New Thread(AddressOf MAJ)
                 y.Start()
             Else
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Seul les composants de type meteo peuvent etre mis à jour. Les composants dépendants sont mis à jour automatiquement en même temps que la météo.")
+                '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", "Seul les composants de type meteo peuvent etre mis à jour. Les composants dépendants sont mis à jour automatiquement en même temps que la météo.")
+                WriteLog("ERR: Read, Seul les composants de type meteo peuvent etre mis à jour. Les composants dépendants sont mis à jour automatiquement en même temps que la météo.")
             End If
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", ex.Message)
+            '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Read", ex.Message)
+            WriteLog("ERR: Read, " & ex.Message)
         End Try
     End Sub
 
@@ -788,7 +801,8 @@ Imports System.Text
         Try
             If _Enable = False Then Exit Sub
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", ex.Message)
+            '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " Write", ex.Message)
+            WriteLog("ERR: Write, " & ex.Message)
         End Try
     End Sub
 
@@ -799,7 +813,8 @@ Imports System.Text
         Try
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " DeleteDevice", ex.Message)
+            '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " DeleteDevice", ex.Message)
+            WriteLog("ERR: DeleteDevice, " & ex.Message)
         End Try
     End Sub
 
@@ -810,7 +825,8 @@ Imports System.Text
         Try
 
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " NewDevice", ex.Message)
+            '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " NewDevice", ex.Message)
+            WriteLog("ERR: NewDevice, " & ex.Message)
         End Try
     End Sub
 
@@ -827,7 +843,8 @@ Imports System.Text
             x.CountParam = NbParam
             _DeviceCommandPlus.Add(x)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+            '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+            WriteLog("ERR: Add_DeviceCommande, " & ex.Message)
         End Try
     End Sub
 
@@ -845,7 +862,8 @@ Imports System.Text
             y0.Parametre = Parametre
             _LabelsDriver.Add(y0)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+            '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+            WriteLog("ERR: Add_LibelleDriver, " & ex.Message)
         End Try
     End Sub
 
@@ -863,7 +881,8 @@ Imports System.Text
             ld0.Parametre = Parametre
             _LabelsDevice.Add(ld0)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+            '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+            WriteLog("ERR: Add_LibelleDevice, " & ex.Message)
         End Try
     End Sub
 
@@ -880,7 +899,8 @@ Imports System.Text
             x.Valeur = valeur
             _Parametres.Add(x)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+            '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " add_devicecommande", "Exception : " & ex.Message)
+            WriteLog("ERR: Add_ParamAvance, " & ex.Message)
         End Try
     End Sub
 
@@ -915,14 +935,19 @@ Imports System.Text
             'Add_LibelleDevice("REFRESH", "Refresh (sec)", "Valeur de rafraîchissement de la mesure en secondes")
             'Add_LibelleDevice("LASTCHANGEDUREE", "LastChange Durée", "")
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " New", ex.Message)
+            '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " New", ex.Message)
+            WriteLog("ERR: New, " & ex.Message)
         End Try
     End Sub
 
     ''' <summary>Si refresh >0 gestion du timer</summary>
     ''' <remarks>PAS UTILISE CAR IL FAUT LANCER UN TIMER QUI LANCE/ARRETE CETTE FONCTION dans Start/Stop</remarks>
     Private Sub TimerTick(ByVal source As Object, ByVal e As System.Timers.ElapsedEventArgs)
-
+        Try
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " New", ex.Message)
+            WriteLog("ERR: TimerTick, " & ex.ToString)
+        End Try
     End Sub
 
 #End Region
@@ -963,39 +988,53 @@ Imports System.Text
                     For Each _child As XmlNode In node
                         Select Case _child.Name
                             Case "temperature"
-                                _Obj.TemperatureActuel = Int(Replace(_child.Attributes.GetNamedItem("value").Value, ".", ","))
-                                _StrTemp = Int(Replace(_child.Attributes.GetNamedItem("value").Value, ".", ","))
-                                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Lecture du paramètre TEMPERATURE : " & _StrTemp)
+                                '_Obj.TemperatureActuel = Int(Replace(_child.Attributes.GetNamedItem("value").Value, ".", ","))
+                                _Obj.TemperatureActuel = Regex.Replace(_child.Attributes.GetNamedItem("value").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                '_StrTemp = Int(Replace(_child.Attributes.GetNamedItem("value").Value, ".", ","))
+                                _StrTemp = Regex.Replace(_child.Attributes.GetNamedItem("value").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Lecture du paramètre TEMPERATURE : " & _StrTemp)
+                                WriteLog("DBG: MAJ, Lecture du paramètre TEMPERATURE : " & _StrTemp)
                             Case "weather"
                                 _Obj.ConditionActuel = _child.Attributes.GetNamedItem("value").Value
-                                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Lecture du paramètre ConditionActuel : " & _Obj.ConditionActuel)
+                                '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Lecture du paramètre ConditionActuel : " & _Obj.ConditionActuel)
+                                WriteLog("DBG: MAJ, Lecture du paramètre ConditionActuel : " & _Obj.ConditionActuel)
                                 If _OrgIcon = True Then
                                     _Obj.IconActuel = _child.Attributes.GetNamedItem("icon").Value
                                 Else
                                     _Obj.IconActuel = GetIcon(_child.Attributes.GetNamedItem("number").Value)
                                 End If
                                 DonwloadIcon(_child.Attributes.GetNamedItem("icon").Value)
-                                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Lecture du paramètre IconActuel : " & _Obj.IconActuel)
+                                '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Lecture du paramètre IconActuel : " & _Obj.IconActuel)
+                                WriteLog("DBG: MAJ, Lecture du paramètre IconActuel : " & _Obj.IconActuel)
                             Case "humidity"
-                                _Obj.HumiditeActuel = Int(Replace(_child.Attributes.GetNamedItem("value").Value, ".", ","))
-                                _StrHum = Int(Replace(_child.Attributes.GetNamedItem("value").Value, ".", ","))
-                                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Lecture du paramètre HUMIDITE : " & _StrHum)
+                                '  _Obj.HumiditeActuel = Int(Replace(_child.Attributes.GetNamedItem("value").Value, ".", ","))
+                                _Obj.HumiditeActuel = Regex.Replace(_child.Attributes.GetNamedItem("value").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                '_StrHum = Int(Replace(_child.Attributes.GetNamedItem("value").Value, ".", ","))
+                                _StrHum = Regex.Replace(_child.Attributes.GetNamedItem("value").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Lecture du paramètre HUMIDITE : " & _StrHum)
+                                WriteLog("DBG: MAJ, Lecture du paramètre HUMIDITE : " & _StrHum)
                             Case "pressure"
                                 _StrBar = _child.Attributes.GetNamedItem("value").Value
-                                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Lecture du paramètre BAROMETRE : " & _StrBar)
+                                ' _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Lecture du paramètre BAROMETRE : " & _StrBar)
+                                WriteLog("DBG: MAJ, Lecture du paramètre BAROMETRE : " & _StrBar)
                             Case "wind"
                                 For Each _child2 As XmlNode In _child
                                     Select Case _child2.Name
                                         Case "speed"
                                             If _Obj IsNot Nothing Then
-                                                _Obj.VentActuel = Int(Replace(_child2.Attributes.GetNamedItem("value").Value, ".", ",") * 3600 / 1000)
-                                                _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Lecture du paramètre VentActuel : " & _Obj.VentActuel)
+                                                '_Obj.VentActuel = Int(Replace(_child2.Attributes.GetNamedItem("value").Value, ".", ",") * 3600 / 1000)
+                                                _Obj.VentActuel = (Regex.Replace(_child2.Attributes.GetNamedItem("value").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator) * 3600 / 1000)
+                                                ' _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Lecture du paramètre VentActuel : " & _Obj.VentActuel)
+                                                WriteLog("DBG: MAJ, Lecture du paramètre VentActuel : " & _Obj.VentActuel)
                                             End If
-                                            _StrVitVent = Int(Replace(_child2.Attributes.GetNamedItem("value").Value, ".", ",") * 3600 / 1000)
-                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Lecture du paramètre VITESSEVENT : " & _StrVitVent)
+                                            '_StrVitVent = Int(Replace(_child2.Attributes.GetNamedItem("value").Value, ".", ",") * 3600 / 1000)
+                                            _StrVitVent = (Regex.Replace(_child2.Attributes.GetNamedItem("value").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator) * 3600 / 1000)
+                                            '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Lecture du paramètre VITESSEVENT : " & _StrVitVent)
+                                            WriteLog("DBG: MAJ, Lecture du paramètre VITESSEVENT : " & _StrVitVent)
                                         Case "direction"
                                             _StrDirVent = Replace(_child2.Attributes.GetNamedItem("code").Value, "W", "O")
-                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Lecture du paramètre DIRECTIONVENT : " & _StrDirVent)
+                                            '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Lecture du paramètre DIRECTIONVENT : " & _StrDirVent)
+                                            WriteLog("DBG: MAJ, Lecture du paramètre DIRECTIONVENT : " & _StrDirVent)
                                     End Select
                                 Next
                         End Select
@@ -1029,7 +1068,8 @@ Imports System.Text
                                 Case 3 : If _Obj IsNot Nothing Then _Obj.JourJ3 = TraduireJour(Mid(Now.AddDays(3).DayOfWeek.ToString, 1, 3))
                             End Select
 
-                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Idx = " & idx & " Time : " & _child.Attributes.GetNamedItem("day").Value)
+                            '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Idx = " & idx & " Time : " & _child.Attributes.GetNamedItem("day").Value)
+                            WriteLog("DBG: MAJ, Idx = " & idx & " Time : " & _child.Attributes.GetNamedItem("day").Value)
                             Select Case _child.Name
                                 Case "time"
                                     For Each _child2 As XmlNode In _child
@@ -1038,31 +1078,47 @@ Imports System.Text
                                                 Select Case idx
                                                     Case 0
                                                         If _Obj IsNot Nothing Then
-                                                            _Obj.MaxToday = Int(Replace(_child2.Attributes.GetNamedItem("max").Value, ".", ","))
-                                                            _Obj.MinToday = Int(Replace(_child2.Attributes.GetNamedItem("min").Value, ".", ","))
-                                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temperature Max : " & _child2.Attributes.GetNamedItem("max").Value)
-                                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temperature Min : " & _child2.Attributes.GetNamedItem("min").Value)
+                                                            '_Obj.MaxToday = Int(Replace(_child2.Attributes.GetNamedItem("max").Value, ".", ","))
+                                                            _Obj.MaxToday = Regex.Replace(_child2.Attributes.GetNamedItem("max").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                                            '_Obj.MinToday = Int(Replace(_child2.Attributes.GetNamedItem("min").Value, ".", ","))
+                                                            _Obj.MinToday = Regex.Replace(_child2.Attributes.GetNamedItem("min").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                                            '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temperature Max : " & _child2.Attributes.GetNamedItem("max").Value)
+                                                            '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temperature Min : " & _child2.Attributes.GetNamedItem("min").Value)
+                                                            WriteLog("DBG: MAJ, Temperature Max : " & _child2.Attributes.GetNamedItem("max").Value)
+                                                            WriteLog("DBG: MAJ, Temperature Min : " & _child2.Attributes.GetNamedItem("min").Value)
                                                         End If
                                                     Case 1
                                                         If _Obj IsNot Nothing Then
-                                                            _Obj.MaxJ1 = Int(Replace(_child2.Attributes.GetNamedItem("max").Value, ".", ","))
-                                                            _Obj.MinJ1 = Int(Replace(_child2.Attributes.GetNamedItem("min").Value, ".", ","))
-                                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temperature Max : " & _child2.Attributes.GetNamedItem("max").Value)
-                                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temperature Min : " & _child2.Attributes.GetNamedItem("min").Value)
+                                                            '_Obj.MaxJ1 = Int(Replace(_child2.Attributes.GetNamedItem("max").Value, ".", ","))
+                                                            _Obj.MaxJ1 = Regex.Replace(_child2.Attributes.GetNamedItem("max").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                                            '_Obj.MinJ1 = Int(Replace(_child2.Attributes.GetNamedItem("min").Value, ".", ","))
+                                                            _Obj.MinJ1 = Regex.Replace(_child2.Attributes.GetNamedItem("min").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                                            '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temperature Max : " & _child2.Attributes.GetNamedItem("max").Value)
+                                                            '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temperature Min : " & _child2.Attributes.GetNamedItem("min").Value)
+                                                            WriteLog("DBG: MAJ, Temperature Max : " & _child2.Attributes.GetNamedItem("max").Value)
+                                                            WriteLog("DBG: MAJ, Temperature Min : " & _child2.Attributes.GetNamedItem("min").Value)
                                                         End If
                                                     Case 2
                                                         If _Obj IsNot Nothing Then
-                                                            _Obj.MaxJ2 = Int(Replace(_child2.Attributes.GetNamedItem("max").Value, ".", ","))
-                                                            _Obj.MinJ2 = Int(Replace(_child2.Attributes.GetNamedItem("min").Value, ".", ","))
-                                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temperature Max : " & _child2.Attributes.GetNamedItem("max").Value)
-                                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temperature Min : " & _child2.Attributes.GetNamedItem("min").Value)
+                                                            '_Obj.MaxJ2 = Int(Replace(_child2.Attributes.GetNamedItem("max").Value, ".", ","))
+                                                            _Obj.MaxJ2 = Regex.Replace(_child2.Attributes.GetNamedItem("max").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                                            '_Obj.MinJ2 = Int(Replace(_child2.Attributes.GetNamedItem("min").Value, ".", ","))
+                                                            _Obj.MinJ2 = Regex.Replace(_child2.Attributes.GetNamedItem("min").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                                            '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temperature Max : " & _child2.Attributes.GetNamedItem("max").Value)
+                                                            '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temperature Min : " & _child2.Attributes.GetNamedItem("min").Value)
+                                                            WriteLog("DBG: MAJ, Temperature Max : " & _child2.Attributes.GetNamedItem("max").Value)
+                                                            WriteLog("DBG: MAJ, Temperature Min : " & _child2.Attributes.GetNamedItem("min").Value)
                                                         End If
                                                     Case 3
                                                         If _Obj IsNot Nothing Then
-                                                            _Obj.MaxJ3 = Int(Replace(_child2.Attributes.GetNamedItem("max").Value, ".", ","))
-                                                            _Obj.MinJ3 = Int(Replace(_child2.Attributes.GetNamedItem("min").Value, ".", ","))
-                                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temperature Max : " & _child2.Attributes.GetNamedItem("max").Value)
-                                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temperature Min : " & _child2.Attributes.GetNamedItem("min").Value)
+                                                            '_Obj.MaxJ3 = Int(Replace(_child2.Attributes.GetNamedItem("max").Value, ".", ","))
+                                                            _Obj.MaxJ3 = Regex.Replace(_child2.Attributes.GetNamedItem("max").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                                            '_Obj.MinJ3 = Int(Replace(_child2.Attributes.GetNamedItem("min").Value, ".", ","))
+                                                            _Obj.MinJ3 = Regex.Replace(_child2.Attributes.GetNamedItem("min").Value, "[.,]", System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator)
+                                                            ' _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temperature Max : " & _child2.Attributes.GetNamedItem("max").Value)
+                                                            '  _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temperature Min : " & _child2.Attributes.GetNamedItem("min").Value)
+                                                            WriteLog("DBG: MAJ, Temperature Max : " & _child2.Attributes.GetNamedItem("max").Value)
+                                                            WriteLog("DBG: MAJ, Temperature Min : " & _child2.Attributes.GetNamedItem("min").Value)
                                                         End If
                                                 End Select
                                             Case "symbol"
@@ -1083,8 +1139,10 @@ Imports System.Text
                                                                 _Obj.IconToday = GetIcon(_child2.Attributes.GetNamedItem("number").Value)
                                                             End If
                                                             DonwloadIcon(_child2.Attributes.GetNamedItem("var").Value)
-                                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Symbol : " & _child2.Attributes.GetNamedItem("var").Value)
-                                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temp : " & _child2.Attributes.GetNamedItem("name").Value)
+                                                            '  _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Symbol : " & _child2.Attributes.GetNamedItem("var").Value)
+                                                            '  _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temp : " & _child2.Attributes.GetNamedItem("name").Value)
+                                                            WriteLog("DBG: MAJ, Symbol : " & _child2.Attributes.GetNamedItem("var").Value)
+                                                            WriteLog("DBG: MAJ, Temp : " & _child2.Attributes.GetNamedItem("name").Value)
                                                         End If
                                                     Case 1
                                                         If _Obj IsNot Nothing Then
@@ -1095,8 +1153,10 @@ Imports System.Text
                                                                 _Obj.IconJ1 = GetIcon(_child2.Attributes.GetNamedItem("number").Value)
                                                             End If
                                                             DonwloadIcon(_child2.Attributes.GetNamedItem("var").Value)
-                                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Symbol : " & _child2.Attributes.GetNamedItem("var").Value)
-                                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temp : " & _child2.Attributes.GetNamedItem("name").Value)
+                                                            '  _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Symbol : " & _child2.Attributes.GetNamedItem("var").Value)
+                                                            '   _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temp : " & _child2.Attributes.GetNamedItem("name").Value)
+                                                            WriteLog("DBG: MAJ, Symbol : " & _child2.Attributes.GetNamedItem("var").Value)
+                                                            WriteLog("DBG: MAJ, Temp : " & _child2.Attributes.GetNamedItem("name").Value)
                                                         End If
                                                     Case 2
                                                         If _Obj IsNot Nothing Then
@@ -1107,8 +1167,10 @@ Imports System.Text
                                                                 _Obj.IconJ2 = GetIcon(_child2.Attributes.GetNamedItem("number").Value)
                                                             End If
                                                             DonwloadIcon(_child2.Attributes.GetNamedItem("var").Value)
-                                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Symbol : " & _child2.Attributes.GetNamedItem("var").Value)
-                                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temp : " & _child2.Attributes.GetNamedItem("name").Value)
+                                                            '  _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Symbol : " & _child2.Attributes.GetNamedItem("var").Value)
+                                                            '  _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temp : " & _child2.Attributes.GetNamedItem("name").Value)
+                                                            WriteLog("DBG: MAJ, Symbol : " & _child2.Attributes.GetNamedItem("var").Value)
+                                                            WriteLog("DBG: MAJ, Temp : " & _child2.Attributes.GetNamedItem("name").Value)
                                                         End If
                                                     Case 3
                                                         If _Obj IsNot Nothing Then
@@ -1119,8 +1181,10 @@ Imports System.Text
                                                                 _Obj.IconJ3 = GetIcon(_child2.Attributes.GetNamedItem("number").Value)
                                                             End If
                                                             DonwloadIcon(_child2.Attributes.GetNamedItem("var").Value)
-                                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Symbol : " & _child2.Attributes.GetNamedItem("var").Value)
-                                                            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temp : " & _child2.Attributes.GetNamedItem("name").Value)
+                                                            '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Symbol : " & _child2.Attributes.GetNamedItem("var").Value)
+                                                            '_Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Temp : " & _child2.Attributes.GetNamedItem("name").Value)
+                                                            WriteLog("DBG: MAJ, Symbol : " & _child2.Attributes.GetNamedItem("var").Value)
+                                                            WriteLog("DBG: MAJ, Temp : " & _child2.Attributes.GetNamedItem("name").Value)
                                                         End If
                                                 End Select
                                         End Select
@@ -1174,9 +1238,11 @@ Imports System.Text
             url = Nothing
             _Obj.LastChange = Now
 
-            If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "MAJ Meteo effectuée pour " & _Obj.name)
+            'If _DEBUG Then _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "MAJ Meteo effectuée pour " & _Obj.name)
+            WriteLog("DBG: MAJ, Meteo effectuée pour " & _Obj.name)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Erreur Lors de la MaJ de " & _Obj.name & " : " & ex.ToString)
+            '_Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Erreur Lors de la MaJ de " & _Obj.name & " : " & ex.ToString)
+            WriteLog("ERR: MAJ, Erreur Lors de la MaJ de " & _Obj.name & " : " & ex.ToString)
         End Try
     End Sub
 
@@ -1199,35 +1265,42 @@ Imports System.Text
             result = result.Replace(".gif", "")
             Return result
         Catch ex As Exception
+            WriteLog("ERR: ExtractFile, " & ex.ToString)
             Return Nothing
         End Try
     End Function
 
     Private Function TraduireJour(ByVal Jour As String) As String
-        TraduireJour = "?"
-        Select Case Jour
-            Case "Thu"
-                TraduireJour = "Jeu"
-            Case "Fri"
-                TraduireJour = "Ven"
-            Case "Sat"
-                TraduireJour = "Sam"
-            Case "Sun"
-                TraduireJour = "Dim"
-            Case "Mon"
-                TraduireJour = "Lun"
-            Case "Tue"
-                TraduireJour = "Mar"
-            Case "Wed"
-                TraduireJour = "Mer"
-        End Select
+        Try
+            TraduireJour = "?"
+            Select Case Jour
+                Case "Thu"
+                    TraduireJour = "Jeu"
+                Case "Fri"
+                    TraduireJour = "Ven"
+                Case "Sat"
+                    TraduireJour = "Sam"
+                Case "Sun"
+                    TraduireJour = "Dim"
+                Case "Mon"
+                    TraduireJour = "Lun"
+                Case "Tue"
+                    TraduireJour = "Mar"
+                Case "Wed"
+                    TraduireJour = "Mer"
+            End Select
+        Catch ex As Exception
+            WriteLog("ERR: TraduireJour, " & ex.ToString)
+            Return "?"
+        End Try
     End Function
 
     Private Function Traduire(ByVal txt As String) As String
         Try
             Return Traduct(txt)
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Traduire: " & ex.Message)
+            ' _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Traduire: " & ex.Message)
+            WriteLog("ERR: Traduire, " & ex.ToString)
             Return txt
         End Try
     End Function
@@ -1255,10 +1328,12 @@ Imports System.Text
                 Return _return
             Else
                 _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Fichier OpenWeatherMap.xml introuvable !")
+                WriteLog("ERR: Traduct, Fichier OpenWeatherMap.xml introuvable !")
                 Return ""
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Erreur Traduct: " & ex.ToString)
+            '     _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Erreur Traduct: " & ex.ToString)
+            WriteLog("ERR: Traduct, " & ex.ToString)
             Return ""
         End Try
     End Function
@@ -1283,12 +1358,14 @@ Imports System.Text
                 Next employee
                 Return _return
             Else
-                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Fichier OpenWeatherMap.xml introuvable !")
+                '                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Fichier OpenWeatherMap.xml introuvable !")
+                WriteLog("ERR: GetIcon, Fichier OpenWeatherMap.xml introuvable !")
                 Return ""
             End If
 
         Catch ex As Exception
-            _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Erreur GetIcon : " & ex.ToString)
+            '           _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Erreur GetIcon : " & ex.ToString)
+            WriteLog("ERR: GetIcon, " & ex.ToString)
             Return ""
         End Try
     End Function
@@ -1297,14 +1374,30 @@ Imports System.Text
         Try
             If Not System.IO.File.Exists(Server.GetRepertoireOfServer & "\Images\Meteo\" & Icon & ".png") Then
                 My.Computer.Network.DownloadFile("http://openweathermap.org/img/w/" & Icon & ".png", Server.GetRepertoireOfServer & "\Images\Meteo\" & Icon & ".png")
-                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Téléchargement de http://openweathermap.org/img/w/" & Icon & ".png dans " & Server.GetRepertoireOfServer & "\Images\Meteo\" & Icon & ".png")
+                WriteLog("Téléchargement de http://openweathermap.org/img/w/" & Icon & ".png dans " & Server.GetRepertoireOfServer & "\Images\Meteo\" & Icon & ".png")
             End If
         Catch ex As Exception
-            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, "METEO_OpenWeatherMap", "Téléchargement de http://openweathermap.org/img/w/" & Icon & ".png dans " & Server.GetRepertoireOfServer & "\Images\Meteo\" & Icon & ".png")
+            WriteLog("ERR: DonwloadIcon, Téléchargement de http://openweathermap.org/img/w/" & Icon & ".png dans " & Server.GetRepertoireOfServer & "\Images\Meteo\" & Icon & ".png")
         End Try
         Return ""
     End Function
 
+    Private Sub WriteLog(ByVal message As String)
+        Try
+            'utilise la fonction de base pour loguer un event
+            If STRGS.InStr(message, "DBG:") > 0 Then
+                If _DEBUG Then
+                    _Server.Log(TypeLog.DEBUG, TypeSource.DRIVER, Me.Nom, STRGS.Right(message, message.Length - 5))
+                End If
+            ElseIf STRGS.InStr(message, "ERR:") > 0 Then
+                _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom, STRGS.Right(message, message.Length - 5))
+            Else
+                _Server.Log(TypeLog.INFO, TypeSource.DRIVER, Me.Nom, message)
+            End If
+        Catch ex As Exception
+            _Server.Log(TypeLog.ERREUR, TypeSource.DRIVER, Me.Nom & " WriteLog", ex.Message)
+        End Try
+    End Sub
 #End Region
 
 End Class
