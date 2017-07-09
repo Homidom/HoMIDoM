@@ -17,7 +17,7 @@
                         <Label Name="LblMax" Content="##" Foreground="LightGray" MaxWidth="100" HorizontalAlignment="Center" HorizontalContentAlignment="Center" />
                     </StackPanel>
 
-                    <Label Name="LblTemp" DockPanel.Dock="Right" HorizontalContentAlignment="Center" Foreground=" White" FontSize="24" Content="##°"  Width="50"/>
+                    <Label Name="LblTemp" DockPanel.Dock="Right" HorizontalContentAlignment="Center" Foreground=" White" FontSize="24" Content="##.#°"  Width="68"/>
                     
                 </DockPanel >
                 <StackPanel Orientation="Horizontal" Margin="0,80,0,0">

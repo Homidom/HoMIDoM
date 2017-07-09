@@ -1,0 +1,23 @@
+﻿<UserControl x:Class="uThermostat"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"             
+             mc:Ignorable="d" Width="131" Height="198">
+    <Grid>
+        <StackPanel Orientation="Horizontal" Margin="0,0,1,0" >
+            <ProgressBar x:Name="ProgressBar1" Orientation="Vertical" Width="22" Foreground="Red" SmallChange="10" Margin="22,21,0,0" Height="123" VerticalAlignment="Top"  Background="#FF636060" BorderBrush="#FF636060" Value="60" />
+            <StackPanel Width="60" RenderTransformOrigin="0.842,0.446" Margin="25,21,0,0" >
+                <Button Template="{DynamicResource GlassButton}" x:Name="BtnUp" Height="67" Margin="12,0,7,0">
+                    <Image Source="/HoMIWpF;component/Images/bullet-fleche-vers-le-haut-32.png" />
+                </Button>
+                <Button Template="{DynamicResource GlassButton}" x:Name="BtnDown" Height="67" Margin="12,28,7,20">
+                    <Image Source="/HoMIWpF;component/Images/bullet-fleche-vers-le-bas-32.png" RenderTransformOrigin="0.269,2.923" />
+                </Button>
+            </StackPanel>
+        </StackPanel>
+        <Image HorizontalAlignment="Left" Height="198" Margin="-12,10,0,0" VerticalAlignment="Top" Width="92" Source="/HoMIWpF;component/Images/thermostat.png" RenderTransformOrigin="-2.781,0.109"/>
+        <Label Content="20" x:Name="Temp" Height="43" Margin="14,139,0,0" VerticalAlignment="Top" Width="41" RenderTransformOrigin="0.5,0.5" FontSize="24" FontWeight="Bold" Foreground="White" HorizontalAlignment="Left" BorderThickness="0"/>
+
+    </Grid>
+</UserControl>

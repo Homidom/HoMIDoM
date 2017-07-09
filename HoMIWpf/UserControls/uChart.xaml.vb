@@ -205,7 +205,7 @@ Public Class uChart
         Dim datestart As String = String.Empty
         Dim dateend As String = String.Empty
         Dim myData As New List(Of HoMIDom.HoMIDom.Historisation)
-
+ 
         Try
 
             SeriesLine = New SeriesCollection
@@ -213,21 +213,20 @@ Public Class uChart
             SeriesBar = New SeriesCollection
             AxisX = New Axis
 
-            Select Case Periode
+           Select Case Periode
                 Case Periodes.Jour
-                    datestart = Format(Now.Date, "yyyy/MM/dd") & " 0:0:0"
-                    dateend = Format(Now.Date, "yyyy/MM/dd") & " 23:59:59"
-                    myData = myService.GetHistoDeviceSource(IdSrv, _ID, "Value", datestart, dateend, "HEURE")
+                    datestart = Format(Now.Date, "yyyy-MM-dd") ' & " 0:0:0"
+                    dateend = Format(Now.Date.AddDays(1), "yyyy-MM-dd") ' & " 23:59:59"
+                    myData = myService.GetHistoDeviceSource(IdSrv, _ID, "Value", datestart, dateend, ComboBoxMoyenne.Text) '"HEURE")
                 Case Periodes.Mois
-                    datestart = Format(Now.Date.AddDays(-31), "yyyy/MM/dd") & " 0:0:0"
-                    dateend = Format(Now.Date, "yyyy/MM/dd") & " 23:59:59"
-                    myData = myService.GetHistoDeviceSource(IdSrv, _ID, "Value", datestart, dateend, "JOUR")
+                    datestart = Format(Now.Date.AddDays(-31), "yyyy-MM-dd") ' & " 0:0:0"
+                    dateend = Format(Now.Date, "yyyy-MM-dd") ' & " 23:59:59"
+                    myData = myService.GetHistoDeviceSource(IdSrv, _ID, "Value", datestart, dateend, ComboBoxMoyenne.Text) '"JOUR")
                 Case Periodes.Annee
-                    datestart = (Now.Year - 1).ToString & "-" & Now.Month & "-" & Now.Day & " 0:0:0" 'Format(Now.Date.AddYears(-1), "yyyy/MM/dd") & " 0:0:0"
-                    dateend = Format(Now.Date, "yyyy/MM/dd") & " 23:59:59"
+                    datestart = (Now.Year - 1).ToString & "-" & Now.Month & "-" & Now.Day ' & " 0:0:0" 'Format(Now.Date.AddYears(-1), "yyyy/MM/dd") & " 0:0:0"
+                    dateend = Format(Now.Date, "yyyy-MM-dd") ' & " 23:59:59"
                     myData = myService.GetHistoDeviceSource(IdSrv, _ID, "Value", datestart, dateend, "JOUR")
             End Select
-
             ''Dim datas As System.Data.DataTable = myService.RequeteSqLHisto(IdSrv, "Select * from historiques where device_id='" & _ID & "'")
             ''If datas IsNot Nothing Then
             ''    MessageBox.Show(datas.Rows.Count)
@@ -370,14 +369,23 @@ Public Class uChart
             MessageBox.Show("Erreur:" & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
         End Try
     End Sub
-
+    Private Sub ComboBoxMoyenne_SelectionChanged(sender As Object, e As RoutedEventArgs) Handles ComboBoxMoyenne.SelectionChanged
+        Try
+            If ComboBoxMoyenne.Text = "Jour" Then
+                ComboBoxMoyenne.Text = "Heure"
+            Else
+                ComboBoxMoyenne.Text = "Jour"
+            End If
+            GetData()
+            Redraw()
+        Catch ex As Exception
+            MessageBox.Show("Erreur:" & ex.Message, "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+        End Try
+    End Sub
 
 #End Region
 
-
-
 End Class
-
 Public Class Dataclass
     Implements INotifyPropertyChanged
 

@@ -5,32 +5,37 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
+             d:DesignHeight="300" Width="460">
+    <Grid Margin="0,0,-39,0">
         <StackPanel >
             <StackPanel Orientation="Horizontal" >
-                <Button Height="40" Margin="2,2,5,2" x:Name="BtnJour"  Width="40"  VerticalAlignment="Top"  Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" >
+                <Button Height="40" Margin="2,2,5,2" x:Name="BtnJour"  Width="40"  VerticalAlignment="Top"  Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" ToolTip="Affichage par Jour" >
                     <Image Source="/HoMIWpF;component/Images/calendar-day-512.png" />
                 </Button>
                 <Button Height="40" Margin="2,2,5,2" x:Name="BtnMois"  Width="40"  VerticalAlignment="Top"  Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" >
-                    <Image Source="/HoMIWpF;component/Images/calendar-month-512.png" />
+                    <Image Source="/HoMIWpF;component/Images/calendar-month-512.png" ToolTip="Affichage par Mois" />
                 </Button>
                 <Button Height="40" Margin="2,2,5,2" x:Name="BtnAnnee"  Width="40"  VerticalAlignment="Top"  Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" >
-                    <Image Source="/HoMIWpF;component/Images/Calendar-year-512.png" />
+                    <Image Source="/HoMIWpF;component/Images/Calendar-year-512.png" ToolTip="Affichage par Année" />
                 </Button>
                 <Button Height="40" Margin="20,2,5,2" x:Name="BtnBar"  Width="40"  VerticalAlignment="Top"  Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" >
-                    <Image Source="bar-chart-icon-30633.png" />
+                    <Image Source="/HoMIWpF;component/Images/bar-chart-icon-30633.png" ToolTip="Bar Horizontal" />
                 </Button>
                 <Button Height="40" Margin="2,2,5,2" x:Name="BtnColumn"  Width="40"  VerticalAlignment="Top"  Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" >
-                    <Image Source="/HoMIWpF;component/Images/bar_chart.png" />
+                    <Image Source="/HoMIWpF;component/Images/bar_chart.png" ToolTip="Bar Vertical" />
                 </Button>
                 <Button Height="40" Margin="2,2,5,2" x:Name="BtnLine"  Width="40"  VerticalAlignment="Top"  Foreground="#FFFFFFFF" Template="{DynamicResource GlassButton}" HorizontalAlignment="Right" >
-                    <Image Source="/HoMIWpF;component/Images/line_chart.png" />
+                    <Image Source="/HoMIWpF;component/Images/line_chart.png" ToolTip="Ligne" />
                 </Button>
             </StackPanel>
             <StackPanel Name="StkChart">
-                
+
             </StackPanel>
-        </StackPanel>  
+        </StackPanel>
+        <Label Content="Moyenne : " Foreground="Black" VerticalAlignment="Center" Margin="308,8,115,266" />
+        <ComboBox VerticalAlignment="Center" BorderBrush="White" BorderThickness="2" x:Name="ComboBoxMoyenne" SelectedIndex="1" Margin="370,10,10,268" IsReadOnly="True" Width="82">
+            <ComboBoxItem Content="Heure" />
+            <ComboBoxItem Content="Jour" />
+        </ComboBox>
     </Grid>
 </UserControl>

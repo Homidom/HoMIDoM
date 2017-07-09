@@ -120,7 +120,7 @@ Class Window1
             Return _ShowTimeFromServer
         End Get
         Set(ByVal value As Boolean)
-            _ShowTimeFromServer = False
+            _ShowTimeFromServer = value
         End Set
     End Property
 
@@ -1020,21 +1020,22 @@ Class Window1
                             Case "isempty" : x.IsEmpty = list.Item(j).Attributes.Item(k).Value
                             Case "type"
                                 Select Case list.Item(j).Attributes.Item(k).Value
-                                    Case uWidgetEmpty.TypeOfWidget.Empty.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Empty
-                                    Case uWidgetEmpty.TypeOfWidget.Device.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Device
-                                    Case uWidgetEmpty.TypeOfWidget.Media.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Media
-                                    Case uWidgetEmpty.TypeOfWidget.Web.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Web
                                     Case uWidgetEmpty.TypeOfWidget.Camera.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Camera
-                                    Case uWidgetEmpty.TypeOfWidget.Volet.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Volet
+                                    Case uWidgetEmpty.TypeOfWidget.Chart.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Chart
+                                    Case uWidgetEmpty.TypeOfWidget.Device.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Device
+                                    Case uWidgetEmpty.TypeOfWidget.Empty.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Empty
+                                    Case uWidgetEmpty.TypeOfWidget.Gauge.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Gauge
+                                    Case uWidgetEmpty.TypeOfWidget.Image.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Image
+                                    Case uWidgetEmpty.TypeOfWidget.KeyPad.ToString : x.Type = uWidgetEmpty.TypeOfWidget.KeyPad
+                                    Case uWidgetEmpty.TypeOfWidget.Label.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Label
+                                    Case uWidgetEmpty.TypeOfWidget.Media.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Media
+                                    Case uWidgetEmpty.TypeOfWidget.Meteo.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Meteo
                                     Case uWidgetEmpty.TypeOfWidget.Moteur.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Moteur
                                     Case uWidgetEmpty.TypeOfWidget.Prise.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Prise
                                     Case uWidgetEmpty.TypeOfWidget.Rss.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Rss
-                                    Case uWidgetEmpty.TypeOfWidget.Meteo.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Meteo
-                                    Case uWidgetEmpty.TypeOfWidget.KeyPad.ToString : x.Type = uWidgetEmpty.TypeOfWidget.KeyPad
-                                    Case uWidgetEmpty.TypeOfWidget.Label.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Label
-                                    Case uWidgetEmpty.TypeOfWidget.Image.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Image
-                                    Case uWidgetEmpty.TypeOfWidget.Gauge.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Gauge
-                                    Case uWidgetEmpty.TypeOfWidget.Chart.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Chart
+                                    Case uWidgetEmpty.TypeOfWidget.Thermostat.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Thermostat
+                                    Case uWidgetEmpty.TypeOfWidget.Volet.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Volet
+                                    Case uWidgetEmpty.TypeOfWidget.Web.ToString : x.Type = uWidgetEmpty.TypeOfWidget.Web
                                 End Select
                             Case "caneditvalue" : x.CanEditValue = list.Item(j).Attributes.Item(k).Value
                             Case "zoneid" : x.ZoneId = list.Item(j).Attributes.Item(k).Value
@@ -1102,6 +1103,7 @@ Class Window1
                             Case "httprefresh" : x.HttpRefresh = list.Item(j).Attributes.Item(k).Value
                             Case "periode" : x.Periode = list.Item(j).Attributes.Item(k).Value
                             Case "typechart" : x.TypeChart = list.Item(j).Attributes.Item(k).Value
+                            Case "thermostat" : x.IDKeyPad = list.Item(j).Attributes.Item(k).Value
                         End Select
                     Next
 
@@ -1562,7 +1564,11 @@ Class Window1
                         writer.WriteValue(_ListElement.Item(i).TypeChart)
                         writer.WriteEndAttribute()
                     End If
-
+                    If _ListElement.Item(i).Type = uWidgetEmpty.TypeOfWidget.Thermostat Then
+                        writer.WriteStartAttribute("thermostat")
+                        writer.WriteValue(_ListElement.Item(i).IDKeyPad)
+                        writer.WriteEndAttribute()
+                    End If
                     writer.WriteStartAttribute("httprefresh")
                     writer.WriteValue(_ListElement.Item(i).HttpRefresh)
                     writer.WriteEndAttribute()
@@ -1837,9 +1843,9 @@ Class Window1
         Try
             LblTime.Content = Now.ToLongDateString & " "
             If IsConnect And ShowTimeFromServer Then
-                LblTime.Content &= myService.GetTime
+                LblTime.Content &= myService.GetTime & " / Serveur"
             Else
-                LblTime.Content &= Now.ToLongTimeString
+                LblTime.Content &= Now.ToLongTimeString & "/ Local"
             End If
 
             If _AsTimeOutPage Then
@@ -3110,6 +3116,49 @@ Class Window1
         End Try
     End Sub
 
+    Private Sub NewWidgetThermostat_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetThermostat.Click
+        Try
+            ' Remettre à zéro les modes édition + déplacement
+            ChkMove.IsChecked = False
+            ChkEdit.IsChecked = False
+            Deplacement_Click(Me, e)
+
+            'Ajouter un nouveau Control
+            Dim x As New ContentControl
+            x.Width = 130
+            x.Height = 220
+            x.Style = mybuttonstyle
+            x.Tag = True
+            x.Uid = System.Guid.NewGuid.ToString()
+
+            'Ajoute l'élément dans la liste
+            Dim elmt As New uWidgetEmpty
+            elmt.Show = True
+            elmt.Uid = x.Uid
+            elmt.ZoneId = _CurrentIdZone
+            elmt.Width = 130
+            elmt.Height = 220
+            elmt.Rotation = 0
+            elmt.X = 300
+            elmt.Y = 300
+            elmt.IsEmpty = True
+            elmt.Type = uWidgetEmpty.TypeOfWidget.Thermostat
+            elmt.ShowStatus = False
+            elmt.Etiquette = "Widget " & Canvas1.Children.Count + 1
+            elmt.ColorBackGround = New SolidColorBrush(Color.FromArgb(255, 0, 0, 0))
+            elmt.Visibility = Windows.Visibility.Visible
+            _ListElement.Add(elmt)
+
+            elmt.IsHitTestVisible = True 'True:bouge pas False:Bouge
+            x.Content = elmt
+            Canvas1.Children.Add(x)
+            Canvas.SetLeft(x, 300)
+            Canvas.SetTop(x, 300)
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur NewWidgetThermostat: " & ex.Message, "Erreur", "NewWidgetThermostat")
+        End Try
+    End Sub
+
     Private Sub NewWidgetLabel_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles NewWidgetLabel.Click
         Try
             ' Remettre à zéro les modes édition + déplacement
@@ -3632,21 +3681,23 @@ Class Window1
             MnuMacro.Items.Clear()
             If IsConnect Then
                 For Each _mac As Macro In myService.GetAllMacros(IdSrv)
-                    Dim mnu As New MenuItem
-                    mnu.Tag = _mac.ID
-                    mnu.Header = _mac.Nom
-                    mnu.FontSize = 14
-                    mnu.Foreground = Brushes.White
-                    mnu.Height = 40
-                    mnu.Background = MnuMacro.Background
-                    Dim imagePath As String = "/HoMIWpF;component/Images/Macro_64.png"
-                    Dim icon As Image = New Image
-                    icon.Width = 32
-                    icon.Height = 32
-                    icon.Source = New BitmapImage(New Uri(imagePath, UriKind.RelativeOrAbsolute))
-                    mnu.Icon = icon
-                    AddHandler mnu.Click, AddressOf MnuExecuteMacro
-                    MnuMacro.Items.Add(mnu)
+                    If _mac.Enable Then ' n'affiche que les macros actives
+                        Dim mnu As New MenuItem
+                        mnu.Tag = _mac.ID
+                        mnu.Header = _mac.Nom
+                        mnu.FontSize = 14
+                        mnu.Foreground = Brushes.White
+                        mnu.Height = 40
+                        mnu.Background = MnuMacro.Background
+                        Dim imagePath As String = "/HoMIWpF;component/Images/Macro_64.png"
+                        Dim icon As Image = New Image
+                        icon.Width = 32
+                        icon.Height = 32
+                        icon.Source = New BitmapImage(New Uri(imagePath, UriKind.RelativeOrAbsolute))
+                        mnu.Icon = icon
+                        AddHandler mnu.Click, AddressOf MnuExecuteMacro
+                        MnuMacro.Items.Add(mnu)
+                    End If
                 Next
             End If
             MnuMacro.UpdateLayout()

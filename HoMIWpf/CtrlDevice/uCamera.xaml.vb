@@ -25,7 +25,8 @@ Public Class uCamera
                     _mjpeg.ParseStream(New Uri(_URL))
                 End If
             Catch ex As Exception
-                lbl.Text = "Erreur: " & ex.Message
+                '                lbl.Text = "Erreur: " & ex.Message
+                AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uCamera.URL : " & _URL & vbCr & ex.Message, "Erreur", "uCamera.URL")
                 lbl.Visibility = Windows.Visibility.Visible
             End Try
         End Set
