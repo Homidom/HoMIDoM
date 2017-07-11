@@ -531,14 +531,14 @@ Imports System.Xml
                                 If _IPXVersion = "IPX800_V4" Then
                                     SEND_IPX800(_urlIPX & "api/xdevices.json?ToggleR=" & Objet.adresse1, _Username, _Password)
                                 Else
-                                    SEND_IPX800(_urlIPX & "preset.htm?RLY" & Objet.adresse1 & "=1", _Username, _Password)
+                                    SEND_IPX800(_urlIPX & "preset.htm?set" & Objet.adresse1 & "=1", _Username, _Password)
                                 End If
                                 WriteLog("Write " & Objet.Type & " Adr : " & Objet.adresse1 & " -> Impulsion 0.1.0")
                             Case "OFF"
                                 If _IPXVersion = "IPX800_V4" Then
                                     SEND_IPX800(_urlIPX & "api/xdevices.json?ToggleR=" & Objet.adresse1, _Username, _Password)
                                 Else
-                                    SEND_IPX800(_urlIPX & "preset.htm?RLY" & Objet.adresse1 & "=0", _Username, _Password)
+                                    SEND_IPX800(_urlIPX & "preset.htm?set" & Objet.adresse1 & "=0", _Username, _Password)
                                 End If
                                 WriteLog("Write " & Objet.Type & " Adr : " & Objet.adresse1 & " -> Impulsion 1.0.1")
                         End Select
