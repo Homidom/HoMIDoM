@@ -26,7 +26,7 @@ Public Class uWMeteo
             If IsConnect = True Then
                 If String.IsNullOrEmpty(_Id) = False Then
                     Dim x As HoMIDom.HoMIDom.TemplateDevice
-                    If frmMere.MaJWidgetFromServer Then
+                    If (frmMere.MaJWidgetFromServer) And (IsConnect) Then
                         x = myService.ReturnDeviceByID(IdSrv, _Id)
                     Else
                         x = ReturnDeviceById(_Id)
@@ -35,27 +35,16 @@ Public Class uWMeteo
                     If x IsNot Nothing Then
 
                         LblVille.Content = x.Name
-                        'LblTemp.Content = x.TemperatureActuel & "°"
                         LblTemp.Content = Format(Val(x.TemperatureActuel), "#0.0") & "°"
-                        'LblMin.Content = "Min: " & x.MinToday & "°"
                         LblMin.Content = "Min: " & Format(Val(x.MinToday), "#0.0") & "°"
-                        'LblMinJ1.Content = x.MinToday & "°"
                         LblMinJ1.Content = Format(Val(x.MinToday), "#0.0") & "°"
-                        'LblMinJ2.Content = x.MinJ1 & "°"
                         LblMinJ2.Content = Format(Val(x.MinJ1), "#0.0") & "°"
-                        'LblMinJ3.Content = x.MinJ2 & "°"
                         LblMinJ3.Content = Format(Val(x.MinJ2), "#0.0") & "°"
-                        'LblMinJ4.Content = x.MinJ3 & "°"
                         LblMinJ4.Content = Format(Val(x.MinJ3), "#0.0") & "°"
-                        'LblMax.Content = "Max: " & x.MaxToday & "°"
                         LblMax.Content = "Max: " & Format(Val(x.MaxToday), "#0.0") & "°"
-                        'LblMaxJ1.Content = x.MaxToday & "°"
                         LblMaxJ1.Content = Format(Val(x.MaxToday), "#0.0") & "°"
-                        'LblMaxJ2.Content = x.MaxJ1 & "°"
                         LblMaxJ2.Content = Format(Val(x.MaxJ1), "#0.0") & "°"
-                        'LblMaxJ3.Content = x.MaxJ2 & "°"
                         LblMaxJ3.Content = Format(Val(x.MaxJ2), "#0.0") & "°"
-                        'LblMaxJ4.Content = x.MaxJ3 & "°"
                         LblMaxJ4.Content = Format(Val(x.MaxJ3), "#0.0") & "°"
                         LblJ1.Content = x.JourToday
                         LblJ2.Content = x.JourJ1

@@ -1787,6 +1787,7 @@ Class Window1
                 End If
             Catch ex As Exception
                 IsConnect = False
+                AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "ConnectToHomidom, Erreur lors de la connexion : " & ex.Message, "Erreur", "ConnectToHomidom")
             End Try
 
         Catch ex As Exception
@@ -1835,6 +1836,7 @@ Class Window1
         Catch ex As Exception
             dtstart.Stop()
             dtstart = Nothing
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "dispatcherTimerSart_Tick, Erreur: " & ex.Message, "Erreur", "dispatcherTimerSart_Tick")
         End Try
     End Sub
 
@@ -1842,8 +1844,32 @@ Class Window1
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
         Try
             LblTime.Content = Now.ToLongDateString & " "
+
+            'test si serveur est connecté apres deconnexion
+            If Not IsConnect Then
+                Try
+                    Dim client As New System.Net.WebClient
+                    Dim request As System.Net.HttpWebRequest = System.Net.HttpWebRequest.Create("http://" & IP & ":" & PortSOAP & "/service")
+                    Dim response As System.Net.HttpWebResponse = request.GetResponse()
+                    If response.StatusCode = System.Net.HttpStatusCode.OK Then
+                        IsConnect = True
+                        For Each icmnu In ListMnu
+                            If icmnu.Label = LblZone.Content Then
+                                IconMnuDoubleClick(icmnu, Nothing)
+                                Exit For
+                            End If
+                        Next
+                    End If
+                    client = Nothing
+                    request = Nothing
+                    response = Nothing
+                    FlagMsgDeconnect = Not IsConnect
+                Catch ex As Exception
+                End Try
+            End If
+
             If IsConnect And ShowTimeFromServer Then
-                LblTime.Content &= myService.GetTime & " / Serveur"
+                LblTime.Content &= myService.GetTime() & " / Serveur"
             Else
                 LblTime.Content &= Now.ToLongTimeString & "/ Local"
             End If
@@ -1858,6 +1884,9 @@ Class Window1
                         For Each icmnu In ListMnu
                             If icmnu.Label = _DefautPage Then
                                 IconMnuDoubleClick(icmnu, Nothing)
+                                Refresh_Zone()
+                                Refresh()
+
                                 Exit For
                             End If
                         Next
@@ -1869,13 +1898,14 @@ Class Window1
             If Now.Minute = 0 And Now.Second = 0 Then
                 HeureSoleilChanged()
             End If
-            'If Now.Second = 0 Then
-            '    'MaJ Liste des devices au moins toutes les minutes
-            '    Dim x As New Thread(AddressOf Refresh)
-            '    x.Priority = ThreadPriority.Highest
-            '    x.Start()
-            '    x = Nothing
+            'MaJ Liste des devices au moins toutes les minutes
+            '        If IsConnect And (Now.Second = 0) Then
+            'Dim x As New Thread(AddressOf Refresh)
+            'x.Priority = ThreadPriority.Highest
+            'x.Start()
+            'x = Nothing
             'End If
+
 
         Catch ex As Exception
             IsConnect = False
@@ -1886,11 +1916,11 @@ Class Window1
             End If
 
             Log(TypeLog.INFO, TypeSource.CLIENT, "DispatcherTimer", "DispatcherTimer: " & ex.Message)
-            LblTime.Content = Now.ToLongDateString & " " & Now.ToShortTimeString
+            '            LblTime.Content = Now.ToLongDateString & " " & Now.ToShortTimeString
             LblLeve.Content = "?"
             LblCouche.Content = "?"
 
-            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur: " & ex.Message, "Erreur")
+            ' AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur: " & ex.Message, "Erreur")
         End Try
     End Sub
 
@@ -1903,6 +1933,7 @@ Class Window1
             DesAff_TaskMnu()
             _TimeMouseDown = Now
             LblZone.Content = sender.Label
+            '           _zoneLabel = sender.Label
 
             For Each _ctl In _ListMnu
                 _ctl.IsSelect = False
@@ -2005,7 +2036,7 @@ Class Window1
 
     Private Sub Window1_Closing(ByVal sender As Object, ByVal e As System.ComponentModel.CancelEventArgs) Handles Me.Closing
         Try
-            'push.Close()
+            ' push.Close()
             myService = Nothing
             Log(TypeLog.INFO, TypeSource.CLIENT, "Client", "Fermeture de l'application")
         Catch ex As Exception
@@ -2804,7 +2835,7 @@ Class Window1
                 lbl.IsHitTestVisible = True
             Next
         Catch ex As Exception
-            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur Resize: " & ex.Message, "Erreur", "Resize")
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur MaJ_Element: " & ex.Message, "Erreur", "MaJ_Element")
         End Try
     End Sub
 

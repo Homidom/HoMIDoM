@@ -23,6 +23,7 @@ Public Class uWidgetEmpty
         Prise = 11
         Gauge = 12
         Chart = 13
+        Thermostat = 14
         Device = 99
     End Enum
 
@@ -117,6 +118,9 @@ Public Class uWidgetEmpty
     Dim _Chart As uChart = Nothing
     Dim _Periode As Integer = 0
     Dim _TypeChart As Integer = 0
+
+    'Variables Widget Thermostat                 
+    Dim _THERMOSTAT As uThermostat = Nothing
 
     'Variable Min/Max
     Dim _Min As Integer
@@ -503,6 +507,16 @@ Public Class uWidgetEmpty
                         AddHandler _Chart.TypeChartChange, AddressOf TypeChartChange
                         If _Show = False Then Exit Property
                         StkTool.Children.Add(_Chart)
+
+                    Case TypeOfWidget.Thermostat
+                        CanEditValue = False
+                        StkEmptyetDevice.Visibility = Windows.Visibility.Collapsed
+                        StkTool.Visibility = Windows.Visibility.Visible
+                        _THERMOSTAT = New uThermostat("")
+                        AddHandler _THERMOSTAT.ChangeValueThermo, AddressOf ChangeValueThermo
+                        If _Show = False Then Exit Property
+                        StkTool.Children.Add(_THERMOSTAT)
+
                     Case Else
 
                 End Select
@@ -617,6 +631,7 @@ Public Class uWidgetEmpty
                 _EtiquetteAlignement = value
                 Lbl.HorizontalContentAlignment = _EtiquetteAlignement
             Catch ex As Exception
+                AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.EtiquetteAlignement Set: " & ex.Message, "Erreur", " uWidgetEmpty.EtiquetteAlignement Set")
                 _EtiquetteAlignement = Windows.HorizontalAlignment.Center
                 Lbl.HorizontalContentAlignment = _EtiquetteAlignement
             End Try
@@ -1344,6 +1359,9 @@ Public Class uWidgetEmpty
                         If Me.Type = TypeOfWidget.Chart And _Chart IsNot Nothing Then
                             _Chart.IDDevice = _dev.ID
                         End If
+                        If Me.Type = TypeOfWidget.Thermostat And _THERMOSTAT IsNot Nothing Then
+                            _THERMOSTAT.Value = _dev.Value
+                        End If
                         If Me.Type = TypeOfWidget.Moteur And _MOTEUR IsNot Nothing Then
                             If _dev.Value.GetType.ToString.ToUpper.Contains("BOOLEAN") Then
                                 If _dev.Value Then
@@ -1417,6 +1435,7 @@ Public Class uWidgetEmpty
             End If
 
             Me.UpdateLayout()
+
         Catch ex As Exception
             AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.TraiteRefresh: " & ex.Message, "Erreur", " uWidgetEmpty.TraiteRefresh")
             _dt.Stop()
@@ -1425,7 +1444,7 @@ Public Class uWidgetEmpty
 
     Public Sub dispatcherTimer_Tick(ByVal sender As Object, ByVal e As EventArgs)
         Try
-            If _FlagBlock = False Then TraiteRefresh()
+            If (_FlagBlock = False) And (IsConnect) Then TraiteRefresh()
         Catch ex As Exception
             AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur dispatcherTimer_Tick: " & ex.Message, "Erreur", " dispatcherTimer_Tick")
         End Try
@@ -1451,6 +1470,9 @@ Public Class uWidgetEmpty
                 Case TypeOfWidget.Chart
                     _Chart.Width = Me.ActualWidth
                     _Chart.Height = Me.ActualHeight
+                Case TypeOfWidget.Thermostat
+                    _THERMOSTAT.Width = Me.ActualWidth
+                    _THERMOSTAT.Height = Me.ActualHeight - 20
                 Case TypeOfWidget.Volet
                     _VOLET.Width = Me.ActualWidth
                     _VOLET.Height = Me.ActualHeight - 30
@@ -1989,7 +2011,9 @@ Public Class uWidgetEmpty
             Dim y As New HoMIDom.HoMIDom.DeviceAction.Parametre
 
             If _dev IsNot Nothing Then
-                If _dev.Type <> HoMIDom.HoMIDom.Device.ListeDevices.VOLET Then
+                If _dev.Type = HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE Then
+                    x.Nom = "SETPOINT"
+                ElseIf _dev.Type <> HoMIDom.HoMIDom.Device.ListeDevices.VOLET Then
                     x.Nom = "DIM"
                 Else
                     x.Nom = "OUVERTURE"
@@ -2064,6 +2088,45 @@ Public Class uWidgetEmpty
                     _FlagBlock = True
                     myService.ChangeValueOfDevice(IdSrv, _dev.ID, _value)
                     _FlagBlock = False
+                End If
+            End If
+
+            If StkPopup.Children.Count > 0 Then
+                If Popup1.IsOpen = True Then
+                    Popup1.IsOpen = False
+                End If
+            End If
+        Catch ex As Exception
+            AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.ChangeValue: " & ex.Message, "Erreur", " uWidgetEmpty.ChangeValue")
+            _FlagBlock = False
+        End Try
+    End Sub
+
+    Private Sub ChangeValueThermo(ByVal Value As Integer)
+        Try
+            Dim _value As Object = Nothing
+            Dim _flag As Boolean = False
+
+            _CurrentValue = Nothing
+
+            If _dev IsNot Nothing And String.IsNullOrEmpty(Value) = False Then
+                If _dev.Type = HoMIDom.HoMIDom.Device.ListeDevices.GENERIQUEVALUE Or HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE Then
+                    If IsNumeric(Value) Then
+                        _value = Value
+                        _flag = True
+                    Else
+                        MessageBox.Show("Erreur: La valeur saisie doit être numérique", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error)
+                        _flag = False
+                    End If
+                End If
+
+                If _flag = True Then
+                    _FlagBlock = True
+                    myService.ChangeValueOfDevice(IdSrv, _dev.ID, _value)
+                    _FlagBlock = False
+                    '      If _dev.Type = HoMIDom.HoMIDom.Device.ListeDevices.TEMPERATURECONSIGNE Then
+                    ValueChange(Value)
+                    ' End If
                 End If
             End If
 
@@ -2418,6 +2481,11 @@ Public Class uWidgetEmpty
                 Case TypeOfWidget.Chart
                     _Chart.Width = Me.ActualWidth
                     _Chart.Height = Me.ActualHeight
+
+                Case TypeOfWidget.Thermostat
+                    _THERMOSTAT.Width = Me.ActualWidth
+                    _THERMOSTAT.Height = Me.ActualHeight - 20
+                    Exit Sub
             End Select
 
             If ShowEtiquette And ShowPicture And Lbl.ActualHeight > 0 And Me.ActualHeight > 0 Then
@@ -2484,7 +2552,6 @@ Public Class uWidgetEmpty
                 RemoveHandler _dt.Tick, AddressOf dispatcherTimer_Tick
                 _dt = Nothing
             End If
-
             Image.Source = Nothing
             _Webbrowser = Nothing
             _RSS = Nothing
@@ -2496,6 +2563,7 @@ Public Class uWidgetEmpty
             _PRISE = Nothing
             _Gauge = Nothing
             _Chart = Nothing
+            _THERMOSTAT = Nothing
         Catch ex As Exception
             AfficheMessageAndLog(FctLog.TypeLog.ERREUR, "Erreur uWidgetEmpty.Unloaded: " & ex.Message, "Erreur", " uWidgetEmpty.Unloaded")
         End Try
