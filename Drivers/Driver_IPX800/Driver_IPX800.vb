@@ -53,6 +53,8 @@ Imports System.Xml
     Dim _urlIPX As String = "http://192.168.0.0:80/"
     Dim _IPXVersion As String = ""
     Dim _IPXSubVersion As String = "3.0.0"
+    ' gestion compatibilité ancienne version
+    Dim _IPXOldVersion As Boolean = True
 
     'param avancé
     Dim _DEBUG As Boolean = False
@@ -345,8 +347,10 @@ Imports System.Xml
                     elmt = "version"
                     _IPXSubVersion = valueconfig.version
                     If _IPXSubVersion <> "" Then
+                        _IPXOldVersion = Int(Mid(_IPXSubVersion, Len(_IPXSubVersion) - 1, 2)) < 33
                         WriteLog("Nom : " & valueconfig.config_hostname)
                         WriteLog("Version logicielle : " & _IPXSubVersion)
+                        WriteLog("DBG: Ancienne version ( avant 3.05.33 ) : " & _IPXOldVersion)
                         _IsConnect = True
                         WriteLog("Driver démarré")
 
@@ -503,7 +507,7 @@ Imports System.Xml
                                 If _IPXVersion = "IPX800_V4" Then
                                     SEND_IPX800(_urlIPX & "api/xdevices.json?SetR=" & Objet.adresse1, _Username, _Password)
                                 Else
-                                    If _Version < "3.05.33" Then
+                                    If _IPXOldVersion Then
                                         SEND_IPX800(_urlIPX & "preset.htm?led" & Objet.adresse1 & "=1", _Username, _Password)
                                     Else
                                         SEND_IPX800(_urlIPX & "preset.htm?set" & Objet.adresse1 & "=1", _Username, _Password)
@@ -515,7 +519,7 @@ Imports System.Xml
                                 If _IPXVersion = "IPX800_V4" Then
                                     SEND_IPX800(_urlIPX & "api/xdevices.json?ClearR=" & Objet.adresse1, _Username, _Password)
                                 Else
-                                    If _Version < "3.05.33" Then
+                                    If _IPXOldVersion Then
                                         SEND_IPX800(_urlIPX & "preset.htm?led" & Objet.adresse1 & "=0", _Username, _Password)
                                     Else
                                         SEND_IPX800(_urlIPX & "preset.htm?set" & Objet.adresse1 & "=0", _Username, _Password)
@@ -533,14 +537,14 @@ Imports System.Xml
                                 Else
                                     SEND_IPX800(_urlIPX & "preset.htm?set" & Objet.adresse1 & "=1", _Username, _Password)
                                 End If
-                                WriteLog("Write " & Objet.Type & " Adr : " & Objet.adresse1 & " -> Impulsion 0.1.0")
+                                WriteLog("Write " & Objet.Type & " Adr : " & Objet.adresse1 & " -> ON")
                             Case "OFF"
                                 If _IPXVersion = "IPX800_V4" Then
                                     SEND_IPX800(_urlIPX & "api/xdevices.json?ToggleR=" & Objet.adresse1, _Username, _Password)
                                 Else
                                     SEND_IPX800(_urlIPX & "preset.htm?set" & Objet.adresse1 & "=0", _Username, _Password)
                                 End If
-                                WriteLog("Write " & Objet.Type & " Adr : " & Objet.adresse1 & " -> Impulsion 1.0.1")
+                                WriteLog("Write " & Objet.Type & " Adr : " & Objet.adresse1 & " -> OFF")
                         End Select
                     Case Else
                         WriteLog("ERR: WRITE Erreur Write Type de composant non géré : " & Objet.Type.ToString)
@@ -778,18 +782,17 @@ Imports System.Xml
                 _UpdateInProcess = True
             End If
 
-            Dim client As New Net.WebClient
-            client.Credentials = New NetworkCredential(user, password)
-
             ValueIPX.Clear()
             adrs = _urlIPX & "api/xdevices.json?Get=all"
             WriteLog("DBG: " & "GET_VALUES Url: " & adrs)
 
-            Dim responsebody As String = ""
+            Dim client As New Net.WebClient
+            client.Credentials = New NetworkCredential(user, password)
 
-            responsebody = client.DownloadString(adrs)
+            Dim responsebody As String = client.DownloadString(adrs)
             While client.IsBusy
             End While
+
             WriteLog("DBG: GetValue inputs : " & responsebody.ToString)
             Dim jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(Of Dictionary(Of String, String))(responsebody)
             If jsonObj.Count > 1 Then  ' cas IPX800 V4
