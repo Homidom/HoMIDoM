@@ -513,6 +513,11 @@ Namespace HoMIDom
                 objCompilerParameters.ReferencedAssemblies.Add("System.Windows.Forms.dll")
                 objCompilerParameters.ReferencedAssemblies.Add("Microsoft.VisualBasic.dll")
                 objCompilerParameters.ReferencedAssemblies.Add(My.Application.Info.DirectoryPath + "\Homidom.dll")
+                'ajout jphomi 11/2017
+                objCompilerParameters.ReferencedAssemblies.Add(My.Application.Info.DirectoryPath + "\System.Data.SQLite.dll")
+                objCompilerParameters.ReferencedAssemblies.Add(My.Application.Info.DirectoryPath + "\Newtonsoft.Json.dll")
+                objCompilerParameters.ReferencedAssemblies.Add(My.Application.Info.DirectoryPath + "\mysql.data.dll")
+
                 objCompilerParameters.GenerateInMemory = True
 
                 ' Get te source code and compile it.
