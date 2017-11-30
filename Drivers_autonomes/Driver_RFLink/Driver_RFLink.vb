@@ -521,8 +521,15 @@ Public Class Driver_RFLink
                             RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";0;" & Command & ";"
                         Case "DIM"
                             If Not IsNothing(Parametre1) Then
-                                Parametre1 = Hex(Parametre1)
-                                RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                                If Parametre1 > 15 Then
+                                    RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";0;ON;"
+                                    ' WriteRetourSend(Objet.Adresse1, "", Command)
+                                ElseIf Parametre1 = 0 Then
+                                    RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";0;OFF;"
+                                    ' WriteRetourSend(Objet.Adresse1, "", Command)
+                                Else
+                                    RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                                End If
                             Else
                                 WriteLog("ERR: DIM Il manque un parametre pour (" & Objet.Name & ")")
                                 Exit Sub
@@ -556,8 +563,15 @@ Public Class Driver_RFLink
                             RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
                         Case "DIM"
                             If Not IsNothing(Parametre1) Then
-                                Parametre1 = Hex(Parametre1)
-                                RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                                If Parametre1 > 15 Then
+                                    RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";0;ON;"
+                                    ' WriteRetourSend(Objet.Adresse1, "", Command)
+                                ElseIf Parametre1 = 0 Then
+                                    RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";0;OFF;"
+                                    ' WriteRetourSend(Objet.Adresse1, "", Command)
+                                Else
+                                    RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                                End If
                             Else
                                 WriteLog("ERR: DIM Il manque un parametre pour (" & Objet.Name & ")")
                                 Exit Sub
@@ -603,8 +617,15 @@ Public Class Driver_RFLink
                             RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Command & ";"
                         Case "DIM"
                             If Not IsNothing(Parametre1) Then
-                                Parametre1 = Hex(Parametre1)
-                                RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                                If Parametre1 > 15 Then
+                                    RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";0;ON;"
+                                    ' WriteRetourSend(Objet.Adresse1, "", Command)
+                                ElseIf Parametre1 = 0 Then
+                                    RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";0;OFF;"
+                                    ' WriteRetourSend(Objet.Adresse1, "", Command)
+                                Else
+                                    RFLinkCommand = "10;" & Objet.Adresse2 & ";" & RFAdresse(0) & ";" & RFAdresse(1) & ";" & Parametre1 & ";"
+                                End If
                             Else
                                 WriteLog("ERR: DIM Il manque un parametre pour (" & Objet.Name & ")")
                                 Exit Sub
