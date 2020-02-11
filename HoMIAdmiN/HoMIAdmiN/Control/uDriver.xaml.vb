@@ -74,26 +74,22 @@ Partial Public Class uDriver
                         With lbl
                             .Foreground = Brushes.White
                             .Width = 150
-                            .Content = prm.Nom & ":"
+                            .Height = 26        ' Modifier par JPS
+                            .Content = prm.Nom & " :"
                             .ToolTip = prm.Description
                         End With
                         StkPrmName.Children.Add(lbl)
                         Dim txt As New TextBox
                         With txt
-                            .Width = 150
+                            .Width = 350     '150
                             .Text = prm.Valeur
+                            .Height = 26        ' Modifier par JPS   26
+                            txt.VerticalContentAlignment = Windows.VerticalAlignment.Center  ' Modifier par JPS   26
                         End With
                         _ListParam.Add(prm.Valeur)
                         StkPrmValue.Children.Add(txt)
                     Next
-                    'StkParam.Visibility = Windows.Visibility.Visible
-                    'CbParam.Items.Clear()
-                    'For k As Integer = 0 To x.Parametres.Count - 1
-                    '    CbParam.Items.Add(x.Parametres.Item(k).Nom)
-                    '    _ListParam.Add(x.Parametres.Item(k).Valeur)
-                    'Next
                 Else
-                    'StkParam.Visibility = Windows.Visibility.Collapsed
                     ParamAv.Visibility = Windows.Visibility.Collapsed
                 End If
 
@@ -114,18 +110,9 @@ Partial Public Class uDriver
 
                 BtnHelp.Visibility = Windows.Visibility.Visible
                 BtnHelp.ToolTip = "Afficher l'aide en ligne au format PDF"
-                'If x.LabelsDriver.Count > 0 Then
-                '    For k As Integer = 0 To x.LabelsDriver.Count - 1
-                '        Select Case x.LabelsDriver.Item(k).NomChamp
-                '            Case "HELP"
-                '                BtnHelp.Visibility = Windows.Visibility.Visible
-                '                BtnHelp.ToolTip = x.LabelsDriver.Item(k).Tooltip
-                '        End Select
-                '    Next
-                'End If
 
                 'Fonctions avancées
-                If x.DeviceAction.Count = 0 Then
+                If (x.DeviceAction.Count = 0) Or (x.IsConnect = False) Then  'Modifier par JPS
                     Label12.Visibility = Windows.Visibility.Collapsed
                     BtnAv.Visibility = Windows.Visibility.Collapsed
                     GroupBox1.Visibility = Windows.Visibility.Collapsed
@@ -139,8 +126,6 @@ Partial Public Class uDriver
                 'si c'est le driver virtuel, on cache certains champs
                 If x.Nom = "Virtuel" Then
                     Label1.Content = "Driver SYSTEME"
-                    'ChkEnable.Visibility = Windows.Visibility.Collapsed
-                    'CbStartAuto.Visibility = Windows.Visibility.Collapsed
                     CbAutoDiscover.Visibility = Windows.Visibility.Collapsed
                     StkModele.Visibility = Windows.Visibility.Collapsed
                     StkRefresh.Visibility = Windows.Visibility.Collapsed
@@ -356,36 +341,14 @@ Partial Public Class uDriver
         End Try
     End Sub
 
-    'Private Sub CbParam_SelectionChanged(ByVal sender As Object, ByVal e As System.Windows.Controls.SelectionChangedEventArgs) Handles CbParam.SelectionChanged
-    '    Try
-    '        If CbParam.SelectedIndex >= 0 Then
-    '            CbParam.ToolTip = x.Parametres.Item(CbParam.SelectedIndex).Description
-    '            TxtParam.Text = _ListParam.Item(CbParam.SelectedIndex)
-    '        End If
-    '    Catch ex As Exception
-    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDriver CbParam_SelectionChanged: " & ex.ToString, "ERREUR", "")
-    '    End Try
-    'End Sub
-
-    'Private Sub BtnOkParam_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnOkParam.Click
-    '    Try
-    '        If CbParam.SelectedIndex >= 0 And String.IsNullOrEmpty(TxtParam.Text) = False Then
-    '            _ListParam.Item(CbParam.SelectedIndex) = TxtParam.Text
-    '        Else
-    '            AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Veuillez sélectionner un paramètre ou saisir sa valeur", "Erreur", "")
-    '        End If
-    '    Catch ex As Exception
-    '        AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDriver BtnOkParam_Click: " & ex.ToString, "ERREUR", "")
-    '    End Try
-    'End Sub
-
     Private Sub BtnHelp_Click(ByVal sender As System.Object, ByVal e As System.Windows.RoutedEventArgs) Handles BtnHelp.Click
         'MessageBox.Show(BtnHelp.ToolTip, "Aide", MessageBoxButton.OK, MessageBoxImage.Question)
         Try
             Dim startInfo As ProcessStartInfo = New ProcessStartInfo()
             startInfo.UseShellExecute = True
             'startInfo.FileName = "http://www.homidom.com/upload/documentation/HoMIDoM-Driver-" & TxtNom.Text & ".pdf"
-            startInfo.FileName = "http://www.homidom.com/drivers-c44.html"
+            'startInfo.FileName = "http://www.homidom.com/drivers-c44.html"
+            startInfo.FileName = "https://github.com/Homidom/HoMIDoM/blob/master/Documentations/HoMIDoM-Driver-" & TxtNom.Text & ".pdf"
             Process.Start(startInfo)
         Catch ex As Exception
             AfficheMessageAndLog(HoMIDom.HoMIDom.Server.TypeLog.ERREUR, "Erreur uDriver BtnHelp_Click: " & ex.ToString, "ERREUR", "")
@@ -400,7 +363,7 @@ Partial Public Class uDriver
             End If
 
             'create our match pattern
-            Dim pattern As String = "^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\." & _
+            Dim pattern As String = "^([1-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])(\." &
             "([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])){3}$"
             'create our Regular Expression object
             Dim check As New Text.RegularExpressions.Regex(pattern)
@@ -457,5 +420,5 @@ Partial Public Class uDriver
         MyBase.Finalize()
     End Sub
 
-    
+
 End Class
